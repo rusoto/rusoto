@@ -1,0 +1,26 @@
+[package]
+name = "rusoto"
+version = "0.1.0"
+authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>"]
+#build = "codegen/build.rs"
+
+[dependencies]
+xml-rs = "*"
+time = "*"
+openssl = "*"
+hyper = "0.6.1"
+url = "*"
+rustc-serialize = "*"
+regex = "0.1.8"
+
+
+[dependencies.xmlutil]
+git = "https://github.com/adimarco/xmlutil.git"
+
+#[build-dependencies]
+#regex = "0.1.8"
+#xml-rs = "*"
+
+#[build-dependencies.wsdlutil]
+#git = "https://github.com/adimarco/wsdlutil.git"
+#path = "/Users/adimarco/Documents/workspace/wsdlutil"
