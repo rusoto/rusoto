@@ -1,4 +1,5 @@
 use xmlutil::*;
+use signature::URIParseError;
 
 #[derive(Debug, Default)]
 pub struct ErrorResponse {
@@ -32,4 +33,25 @@ impl XmlParser for Error {
 		obj.detail = try!(string_field("Detail", stack));
 		Ok(obj)		
 	}		
+}
+
+
+#[derive(Debug)]
+pub struct AWSError(String);
+
+impl AWSError {
+	pub fn new<S>(msg:S) -> AWSError where S:Into<String>{
+		AWSError(msg.into())
+	}
+}
+
+impl From<URIParseError> for AWSError {
+        fn from(err: URIParseError) -> AWSError {
+                AWSError(format!("{:?}", err))
+        }
+}
+impl From<XmlParseError> for AWSError {
+        fn from(err: XmlParseError) -> AWSError {
+                AWSError(format!("{:?}", err))
+        }
 }

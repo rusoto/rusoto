@@ -16,6 +16,7 @@ extern crate xmlutil;
 pub mod credentials;
 pub mod error;
 pub mod sqs;
+pub mod request;
 
 
 
