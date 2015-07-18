@@ -6,6 +6,7 @@ from html2text import html2text
 from pprint import pprint
 
 shapes = {}
+operations = {}
 metadata = {}
 
 # map botocore primitives to rust primitives
@@ -37,10 +38,18 @@ def c_to_s(name):
 	s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
 	return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
+def documentation(shape, indent=""):
+	if 'documentation' in shape:
+		markdown = html2text(shape['documentation'])
+		markdown = re.sub(r"\n+$", r"", markdown)
+		markdown = re.sub(r"\n+", r"\n" + indent + "/// ", markdown)
+		print indent + "/// " + markdown
 
 # generate a rust declaration for a botocore shape
 def rust_type(name, shape):
 	shape_type = shape['type']
+
+	documentation(shape)
 
 	if shape_type == "structure":
 		rust_struct(name, shape)
@@ -60,10 +69,17 @@ def rust_type(name, shape):
 
 # generate a rust declaration for a botocore structure shape
 def rust_struct(name, shape):
-	print "\n#[derive(Debug, Default)]";
+
+	for (opname, op) in operations.iteritems():
+		if op['input']['shape'] == name:
+			documentation(op)
+
+	print "#[derive(Debug, Default)]";
 	if shape['members']:
 		print "pub struct " + name + " {"
 		for (mname, member) in shape['members'].iteritems():
+			if 'documentation' in member:
+				documentation(member,"\t")
 			rust_type =  member['shape']
 			if not is_required(shape, mname):
 				rust_type = "Option<" + rust_type + ">"
@@ -75,6 +91,7 @@ def rust_struct(name, shape):
 # generate rust code to encode a botocore shape into a map of query parameters
 def param_writer(name, shape):
 
+	print "/// Write a " + name + "'s contents to a SignedRequest"
 	print 'pub struct ' + name + 'Writer;'
 	print 'impl ' + name + 'Writer {'
 	print '\tpub fn write_params(params: &mut Params, name: &str, obj: &' + name + ') {'
@@ -123,8 +140,8 @@ def map_writer(shape):
 	print "\t\tlet mut index = 1;"
 	print "\t\tfor (key,value) in obj {"
 	print "\t\t\tlet prefix = &format!(\"{}.{}\", name, index);"			
-	print "\t\t\t" + shape['key']['shape'] + "Writer::write_params(params, &format!(\"{}.{}\", prefix, \"" + shape['key']['locationName'] + "\"), &key);"
-	print "\t\t\t" + shape['value']['shape'] + "Writer::write_params(params, &format!(\"{}.{}\", prefix, \"" + shape['value']['locationName'] + "\"), &value);"				
+	print "\t\t\t" + shape['key']['shape'] + "Writer::write_params(params, &format!(\"{}.{}\", prefix, \"" + shape_name(shape['key']) + "\"), &key);"
+	print "\t\t\t" + shape['value']['shape'] + "Writer::write_params(params, &format!(\"{}.{}\", prefix, \"" + shape_name(shape['value'])	 + "\"), &value);"				
 	print "\t\t\tindex += 1;"
 	print "\t\t}"
 
@@ -132,6 +149,7 @@ def map_writer(shape):
 def type_parser(name, shape):
 	shape_type = shape['type']
 	
+	print "/// Parse a " + name + " from XML"
 	print 'pub struct ' + name + 'Parser;'
 	print 'impl ' + name + 'Parser {'
 	print '\tpub fn parse_xml<\'a>(tag_name: &str, stack: &mut XmlStack) -> Result<' + name + ', XmlParseError> {'
@@ -152,13 +170,19 @@ def type_parser(name, shape):
 	print '\t}'
 	print '}'
 
+def shape_name(shape):
+	if 'locationName' in shape:
+		return shape['locationName']
+	else:
+		return shape['shape']
+
 # guts of the XML parser for map shapes
 def map_parser(shape):
 	print "\t\tlet mut obj = HashMap::new();"
 	print "\t\twhile try!(peek_at_name(stack)) == tag_name {"
 	print "\t\t\ttry!(start_element(tag_name, stack));"
-	print "\t\t\tlet key = try!(" + shape['key']['shape'] + "Parser::parse_xml(\"" + shape['key']['locationName'] + "\", stack));"
-	print "\t\t\tlet value = try!(" + shape['value']['shape'] + "Parser::parse_xml(\"" + shape['value']['locationName'] + "\", stack));"
+	print "\t\t\tlet key = try!(" + shape['key']['shape'] + "Parser::parse_xml(\"" + shape_name(shape['key']) + "\", stack));"
+	print "\t\t\tlet value = try!(" + shape['value']['shape'] + "Parser::parse_xml(\"" +shape_name(shape['value']) + "\", stack));"
 	print "\t\t\tobj.insert(key, value);"
 	print "\t\t\ttry!(end_element(tag_name, stack));"
 	print "\t\t}"
@@ -166,8 +190,8 @@ def map_parser(shape):
 # guts of the XML parser for list shapes
 def list_parser(shape):
 	print "\t\tlet mut obj = Vec::new();";
-	print "\t\twhile try!(peek_at_name(stack)) == \"" + shape['member']['locationName'] + "\" {"
-	print "\t\t\tobj.push(try!(" + shape['member']['shape'] + "Parser::parse_xml(\"" + shape['member']['locationName'] + "\", stack)));"	
+	print "\t\twhile try!(peek_at_name(stack)) == \"" + shape_name(shape['member']) + "\" {"
+	print "\t\t\tobj.push(try!(" + shape['member']['shape'] + "Parser::parse_xml(\"" + shape_name(shape['member']) + "\", stack)));"	
 	print "\t\t}"
 
 def is_required(shape, field_name):
@@ -178,7 +202,7 @@ def is_required(shape, field_name):
 
 # guts of the XML parser for struct shapes
 def struct_parser(name, shape):
-	children = shape['members']
+	children = shape['members']	
 	print '\t\tlet mut obj = ' + name + '::default();'
 	if children: 
 		print '\t\tloop {'
@@ -193,7 +217,7 @@ def get_location_name(name, child):
 
 	# list elements aren't wrapped in a parent tag, so use their member name
 	if child_shape['type'] == 'list':
-		tag_name = child_shape['member']['locationName']
+		tag_name = shape_name(child_shape['member'])
 	else:
 		if 'locationName' in child:
 			tag_name = child['locationName']
@@ -230,7 +254,8 @@ def request_method(operation):
 	input_name = operation['input']['shape']
 	input_type = shapes[input_name]
 	output_type = get_output_type(operation)
-	print "\nimpl AWSRequest<" + output_type+ "> for " + input_name + " {"
+
+	print "impl AWSRequest<" + output_type+ "> for " + input_name + " {"
 	print "\tfn execute(&self, creds: &AWSCredentials, region: &str) -> Result<" + output_type + ", AWSError> {"
 	print '\t\tlet mut request = SignedRequest::new("' + http['method'] + '", "' + metadata['endpointPrefix'] + '", region, "' + http['requestUri'] + '");'
 	print "\t\tlet mut params = Params::new();"
@@ -268,8 +293,10 @@ def main():
 		print "use std::str;"
 		global shapes	
 		global metadata
+		global operations
 		shapes = service['shapes']
 		metadata = service['metadata']
+		operations = service['operations']
 
 		for (name, shape) in shapes.iteritems():
 			rust_type(name, shape)			

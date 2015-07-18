@@ -10,12 +10,12 @@ extern crate url;
 extern crate rustc_serialize as serialize;
 extern crate xmlutil;
 
-
 #[macro_use] pub mod params;
 #[macro_use] pub mod signature;
 pub mod credentials;
 pub mod error;
 pub mod sqs;
+pub mod sns;
 pub mod request;
 
 

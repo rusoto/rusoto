@@ -9,7 +9,7 @@ use request::*;
 use xmlutil::*;
 use std::str::FromStr;
 
-// include the code generated from the SQS WSDL
+// include the code generated from the SQS botocore templates
 include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/sqs.rs"));
 
 pub struct SQSClient {
