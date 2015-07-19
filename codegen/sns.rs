@@ -14,10 +14,10 @@ pub struct GetSubscriptionAttributesResponse {
 	pub attributes: SubscriptionAttributesMap,
 }
 
-/// Parse a GetSubscriptionAttributesResponse from XML
-pub struct GetSubscriptionAttributesResponseParser;
+/// Parse GetSubscriptionAttributesResponse from XML
+struct GetSubscriptionAttributesResponseParser;
 impl GetSubscriptionAttributesResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetSubscriptionAttributesResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetSubscriptionAttributesResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetSubscriptionAttributesResponse::default();
 		loop {
@@ -32,30 +32,30 @@ impl GetSubscriptionAttributesResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a GetSubscriptionAttributesResponse's contents to a SignedRequest
-pub struct GetSubscriptionAttributesResponseWriter;
+/// Write GetSubscriptionAttributesResponse contents to a SignedRequest
+struct GetSubscriptionAttributesResponseWriter;
 impl GetSubscriptionAttributesResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetSubscriptionAttributesResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetSubscriptionAttributesResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		SubscriptionAttributesMapWriter::write_params(params, &(prefix.to_string() + "Attributes"), &obj.attributes);
 	}
 }
 pub type Binary = Vec<u8>;
-/// Parse a Binary from XML
-pub struct BinaryParser;
+/// Parse Binary from XML
+struct BinaryParser;
 impl BinaryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Binary, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Binary, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack)).into_bytes();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a Binary's contents to a SignedRequest
-pub struct BinaryWriter;
+/// Write Binary contents to a SignedRequest
+struct BinaryWriter;
 impl BinaryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Binary) {
+	fn write_params(params: &mut Params, name: &str, obj: &Binary) {
 		params.put(name, str::from_utf8(&obj).unwrap());
 	}
 }
@@ -84,10 +84,10 @@ pub struct MessageAttributeValue {
 	pub binary_value: Option<Binary>,
 }
 
-/// Parse a MessageAttributeValue from XML
-pub struct MessageAttributeValueParser;
+/// Parse MessageAttributeValue from XML
+struct MessageAttributeValueParser;
 impl MessageAttributeValueParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeValue, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeValue, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = MessageAttributeValue::default();
 		loop {
@@ -110,10 +110,10 @@ impl MessageAttributeValueParser {
 		Ok(obj)
 	}
 }
-/// Write a MessageAttributeValue's contents to a SignedRequest
-pub struct MessageAttributeValueWriter;
+/// Write MessageAttributeValue contents to a SignedRequest
+struct MessageAttributeValueWriter;
 impl MessageAttributeValueWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
+	fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "DataType"), &obj.data_type);
@@ -126,23 +126,16 @@ impl MessageAttributeValueWriter {
 	}
 }
 /// Input for Unsubscribe action.
-/// Deletes a subscription. If the subscription requires authentication for
-/// deletion, only the owner of the subscription or the topic's owner can
-/// unsubscribe, and an AWS signature is required. If the `Unsubscribe` call does
-/// not require authentication and the requester is not the subscription owner, a
-/// final cancellation message is delivered to the endpoint, so that the endpoint
-/// owner can easily resubscribe to the topic if the `Unsubscribe` request was
-/// unintended.
 #[derive(Debug, Default)]
 pub struct UnsubscribeInput {
 	/// The ARN of the subscription to be deleted.
 	pub subscription_arn: subscriptionARN,
 }
 
-/// Parse a UnsubscribeInput from XML
-pub struct UnsubscribeInputParser;
+/// Parse UnsubscribeInput from XML
+struct UnsubscribeInputParser;
 impl UnsubscribeInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<UnsubscribeInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<UnsubscribeInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = UnsubscribeInput::default();
 		loop {
@@ -157,20 +150,20 @@ impl UnsubscribeInputParser {
 		Ok(obj)
 	}
 }
-/// Write a UnsubscribeInput's contents to a SignedRequest
-pub struct UnsubscribeInputWriter;
+/// Write UnsubscribeInput contents to a SignedRequest
+struct UnsubscribeInputWriter;
 impl UnsubscribeInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &UnsubscribeInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &UnsubscribeInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		subscriptionARNWriter::write_params(params, &(prefix.to_string() + "SubscriptionArn"), &obj.subscription_arn);
 	}
 }
 pub type TopicAttributesMap = HashMap<attributeName,attributeValue>;
-/// Parse a TopicAttributesMap from XML
-pub struct TopicAttributesMapParser;
+/// Parse TopicAttributesMap from XML
+struct TopicAttributesMapParser;
 impl TopicAttributesMapParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TopicAttributesMap, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TopicAttributesMap, XmlParseError> {
 		let mut obj = HashMap::new();
 		while try!(peek_at_name(stack)) == tag_name {
 			try!(start_element(tag_name, stack));
@@ -182,10 +175,10 @@ impl TopicAttributesMapParser {
 		Ok(obj)
 	}
 }
-/// Write a TopicAttributesMap's contents to a SignedRequest
-pub struct TopicAttributesMapWriter;
+/// Write TopicAttributesMap contents to a SignedRequest
+struct TopicAttributesMapWriter;
 impl TopicAttributesMapWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TopicAttributesMap) {
+	fn write_params(params: &mut Params, name: &str, obj: &TopicAttributesMap) {
 		let mut index = 1;
 		for (key,value) in obj {
 			let prefix = &format!("{}.{}", name, index);
@@ -196,10 +189,10 @@ impl TopicAttributesMapWriter {
 	}
 }
 pub type DelegatesList = Vec<delegate>;
-/// Parse a DelegatesList from XML
-pub struct DelegatesListParser;
+/// Parse DelegatesList from XML
+struct DelegatesListParser;
 impl DelegatesListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DelegatesList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DelegatesList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "delegate" {
 			obj.push(try!(delegateParser::parse_xml("delegate", stack)));
@@ -207,10 +200,10 @@ impl DelegatesListParser {
 		Ok(obj)
 	}
 }
-/// Write a DelegatesList's contents to a SignedRequest
-pub struct DelegatesListWriter;
+/// Write DelegatesList contents to a SignedRequest
+struct DelegatesListWriter;
 impl DelegatesListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DelegatesList) {
+	fn write_params(params: &mut Params, name: &str, obj: &DelegatesList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -220,16 +213,6 @@ impl DelegatesListWriter {
 	}
 }
 /// Input for ListEndpointsByPlatformApplication action.
-/// Lists the endpoints and endpoint attributes for devices in a supported push
-/// notification service, such as GCM and APNS. The results for
-/// `ListEndpointsByPlatformApplication` are paginated and return a limited list
-/// of endpoints, up to 100. If additional records are available after the first
-/// page results, then a NextToken string will be returned. To receive the next
-/// page, you call `ListEndpointsByPlatformApplication` again using the NextToken
-/// string received from the previous call. When there are no more records to
-/// return, NextToken will be null. For more information, see [Using Amazon SNS
-/// Mobile Push
-/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 #[derive(Debug, Default)]
 pub struct ListEndpointsByPlatformApplicationInput {
 	/// NextToken string is used when calling ListEndpointsByPlatformApplication
@@ -240,10 +223,10 @@ pub struct ListEndpointsByPlatformApplicationInput {
 	pub platform_application_arn: String,
 }
 
-/// Parse a ListEndpointsByPlatformApplicationInput from XML
-pub struct ListEndpointsByPlatformApplicationInputParser;
+/// Parse ListEndpointsByPlatformApplicationInput from XML
+struct ListEndpointsByPlatformApplicationInputParser;
 impl ListEndpointsByPlatformApplicationInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListEndpointsByPlatformApplicationInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListEndpointsByPlatformApplicationInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListEndpointsByPlatformApplicationInput::default();
 		loop {
@@ -262,10 +245,10 @@ impl ListEndpointsByPlatformApplicationInputParser {
 		Ok(obj)
 	}
 }
-/// Write a ListEndpointsByPlatformApplicationInput's contents to a SignedRequest
-pub struct ListEndpointsByPlatformApplicationInputWriter;
+/// Write ListEndpointsByPlatformApplicationInput contents to a SignedRequest
+struct ListEndpointsByPlatformApplicationInputWriter;
 impl ListEndpointsByPlatformApplicationInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListEndpointsByPlatformApplicationInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListEndpointsByPlatformApplicationInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.next_token {
@@ -275,10 +258,10 @@ impl ListEndpointsByPlatformApplicationInputWriter {
 	}
 }
 pub type SubscriptionAttributesMap = HashMap<attributeName,attributeValue>;
-/// Parse a SubscriptionAttributesMap from XML
-pub struct SubscriptionAttributesMapParser;
+/// Parse SubscriptionAttributesMap from XML
+struct SubscriptionAttributesMapParser;
 impl SubscriptionAttributesMapParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SubscriptionAttributesMap, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SubscriptionAttributesMap, XmlParseError> {
 		let mut obj = HashMap::new();
 		while try!(peek_at_name(stack)) == tag_name {
 			try!(start_element(tag_name, stack));
@@ -290,10 +273,10 @@ impl SubscriptionAttributesMapParser {
 		Ok(obj)
 	}
 }
-/// Write a SubscriptionAttributesMap's contents to a SignedRequest
-pub struct SubscriptionAttributesMapWriter;
+/// Write SubscriptionAttributesMap contents to a SignedRequest
+struct SubscriptionAttributesMapWriter;
 impl SubscriptionAttributesMapWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SubscriptionAttributesMap) {
+	fn write_params(params: &mut Params, name: &str, obj: &SubscriptionAttributesMap) {
 		let mut index = 1;
 		for (key,value) in obj {
 			let prefix = &format!("{}.{}", name, index);
@@ -309,10 +292,10 @@ pub struct TopicLimitExceededException {
 	pub message: string,
 }
 
-/// Parse a TopicLimitExceededException from XML
-pub struct TopicLimitExceededExceptionParser;
+/// Parse TopicLimitExceededException from XML
+struct TopicLimitExceededExceptionParser;
 impl TopicLimitExceededExceptionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TopicLimitExceededException, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TopicLimitExceededException, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = TopicLimitExceededException::default();
 		loop {
@@ -327,20 +310,20 @@ impl TopicLimitExceededExceptionParser {
 		Ok(obj)
 	}
 }
-/// Write a TopicLimitExceededException's contents to a SignedRequest
-pub struct TopicLimitExceededExceptionWriter;
+/// Write TopicLimitExceededException contents to a SignedRequest
+struct TopicLimitExceededExceptionWriter;
 impl TopicLimitExceededExceptionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TopicLimitExceededException) {
+	fn write_params(params: &mut Params, name: &str, obj: &TopicLimitExceededException) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		stringWriter::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
 pub type SubscriptionsList = Vec<Subscription>;
-/// Parse a SubscriptionsList from XML
-pub struct SubscriptionsListParser;
+/// Parse SubscriptionsList from XML
+struct SubscriptionsListParser;
 impl SubscriptionsListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SubscriptionsList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SubscriptionsList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "Subscription" {
 			obj.push(try!(SubscriptionParser::parse_xml("Subscription", stack)));
@@ -348,10 +331,10 @@ impl SubscriptionsListParser {
 		Ok(obj)
 	}
 }
-/// Write a SubscriptionsList's contents to a SignedRequest
-pub struct SubscriptionsListWriter;
+/// Write SubscriptionsList contents to a SignedRequest
+struct SubscriptionsListWriter;
 impl SubscriptionsListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SubscriptionsList) {
+	fn write_params(params: &mut Params, name: &str, obj: &SubscriptionsList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -360,20 +343,20 @@ impl SubscriptionsListWriter {
 		}
 	}
 }
-/// Parse a String from XML
-pub struct StringParser;
+/// Parse String from XML
+struct StringParser;
 impl StringParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<String, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<String, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a String's contents to a SignedRequest
-pub struct StringWriter;
+/// Write String contents to a SignedRequest
+struct StringWriter;
 impl StringWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &String) {
+	fn write_params(params: &mut Params, name: &str, obj: &String) {
 		params.put(name, obj);
 	}
 }
@@ -387,10 +370,10 @@ pub struct GetEndpointAttributesResponse {
 	pub attributes: MapStringToString,
 }
 
-/// Parse a GetEndpointAttributesResponse from XML
-pub struct GetEndpointAttributesResponseParser;
+/// Parse GetEndpointAttributesResponse from XML
+struct GetEndpointAttributesResponseParser;
 impl GetEndpointAttributesResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetEndpointAttributesResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetEndpointAttributesResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetEndpointAttributesResponse::default();
 		loop {
@@ -405,20 +388,16 @@ impl GetEndpointAttributesResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a GetEndpointAttributesResponse's contents to a SignedRequest
-pub struct GetEndpointAttributesResponseWriter;
+/// Write GetEndpointAttributesResponse contents to a SignedRequest
+struct GetEndpointAttributesResponseWriter;
 impl GetEndpointAttributesResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetEndpointAttributesResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetEndpointAttributesResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MapStringToStringWriter::write_params(params, &(prefix.to_string() + "Attributes"), &obj.attributes);
 	}
 }
 /// Input for SetPlatformApplicationAttributes action.
-/// Sets the attributes of the platform application object for the supported push
-/// notification services, such as APNS and GCM. For more information, see [Using
-/// Amazon SNS Mobile Push
-/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 #[derive(Debug, Default)]
 pub struct SetPlatformApplicationAttributesInput {
 	/// A map of the platform application attributes. Attributes in this map include
@@ -434,10 +413,10 @@ pub struct SetPlatformApplicationAttributesInput {
 	pub platform_application_arn: String,
 }
 
-/// Parse a SetPlatformApplicationAttributesInput from XML
-pub struct SetPlatformApplicationAttributesInputParser;
+/// Parse SetPlatformApplicationAttributesInput from XML
+struct SetPlatformApplicationAttributesInputParser;
 impl SetPlatformApplicationAttributesInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetPlatformApplicationAttributesInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetPlatformApplicationAttributesInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SetPlatformApplicationAttributesInput::default();
 		loop {
@@ -456,10 +435,10 @@ impl SetPlatformApplicationAttributesInputParser {
 		Ok(obj)
 	}
 }
-/// Write a SetPlatformApplicationAttributesInput's contents to a SignedRequest
-pub struct SetPlatformApplicationAttributesInputWriter;
+/// Write SetPlatformApplicationAttributesInput contents to a SignedRequest
+struct SetPlatformApplicationAttributesInputWriter;
 impl SetPlatformApplicationAttributesInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SetPlatformApplicationAttributesInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &SetPlatformApplicationAttributesInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MapStringToStringWriter::write_params(params, &(prefix.to_string() + "Attributes"), &obj.attributes);
@@ -476,10 +455,10 @@ pub struct ListSubscriptionsResponse {
 	pub subscriptions: SubscriptionsList,
 }
 
-/// Parse a ListSubscriptionsResponse from XML
-pub struct ListSubscriptionsResponseParser;
+/// Parse ListSubscriptionsResponse from XML
+struct ListSubscriptionsResponseParser;
 impl ListSubscriptionsResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListSubscriptionsResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListSubscriptionsResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListSubscriptionsResponse::default();
 		loop {
@@ -498,10 +477,10 @@ impl ListSubscriptionsResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a ListSubscriptionsResponse's contents to a SignedRequest
-pub struct ListSubscriptionsResponseWriter;
+/// Write ListSubscriptionsResponse contents to a SignedRequest
+struct ListSubscriptionsResponseWriter;
 impl ListSubscriptionsResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListSubscriptionsResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListSubscriptionsResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		nextTokenWriter::write_params(params, &(prefix.to_string() + "NextToken"), &obj.next_token);
@@ -518,10 +497,10 @@ pub struct ListTopicsResponse {
 	pub next_token: nextToken,
 }
 
-/// Parse a ListTopicsResponse from XML
-pub struct ListTopicsResponseParser;
+/// Parse ListTopicsResponse from XML
+struct ListTopicsResponseParser;
 impl ListTopicsResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListTopicsResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListTopicsResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListTopicsResponse::default();
 		loop {
@@ -540,10 +519,10 @@ impl ListTopicsResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a ListTopicsResponse's contents to a SignedRequest
-pub struct ListTopicsResponseWriter;
+/// Write ListTopicsResponse contents to a SignedRequest
+struct ListTopicsResponseWriter;
 impl ListTopicsResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListTopicsResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListTopicsResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		TopicsListWriter::write_params(params, &(prefix.to_string() + "Topic"), &obj.topics);
@@ -551,28 +530,28 @@ impl ListTopicsResponseWriter {
 	}
 }
 pub type topicName = String;
-/// Parse a topicName from XML
-pub struct topicNameParser;
+/// Parse topicName from XML
+struct topicNameParser;
 impl topicNameParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<topicName, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<topicName, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a topicName's contents to a SignedRequest
-pub struct topicNameWriter;
+/// Write topicName contents to a SignedRequest
+struct topicNameWriter;
 impl topicNameWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &topicName) {
+	fn write_params(params: &mut Params, name: &str, obj: &topicName) {
 		params.put(name, obj);
 	}
 }
 pub type ListOfPlatformApplications = Vec<PlatformApplication>;
-/// Parse a ListOfPlatformApplications from XML
-pub struct ListOfPlatformApplicationsParser;
+/// Parse ListOfPlatformApplications from XML
+struct ListOfPlatformApplicationsParser;
 impl ListOfPlatformApplicationsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListOfPlatformApplications, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListOfPlatformApplications, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "PlatformApplication" {
 			obj.push(try!(PlatformApplicationParser::parse_xml("PlatformApplication", stack)));
@@ -580,10 +559,10 @@ impl ListOfPlatformApplicationsParser {
 		Ok(obj)
 	}
 }
-/// Write a ListOfPlatformApplications's contents to a SignedRequest
-pub struct ListOfPlatformApplicationsWriter;
+/// Write ListOfPlatformApplications contents to a SignedRequest
+struct ListOfPlatformApplicationsWriter;
 impl ListOfPlatformApplicationsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListOfPlatformApplications) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListOfPlatformApplications) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -599,10 +578,10 @@ pub struct SubscriptionLimitExceededException {
 	pub message: string,
 }
 
-/// Parse a SubscriptionLimitExceededException from XML
-pub struct SubscriptionLimitExceededExceptionParser;
+/// Parse SubscriptionLimitExceededException from XML
+struct SubscriptionLimitExceededExceptionParser;
 impl SubscriptionLimitExceededExceptionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SubscriptionLimitExceededException, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SubscriptionLimitExceededException, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SubscriptionLimitExceededException::default();
 		loop {
@@ -617,30 +596,30 @@ impl SubscriptionLimitExceededExceptionParser {
 		Ok(obj)
 	}
 }
-/// Write a SubscriptionLimitExceededException's contents to a SignedRequest
-pub struct SubscriptionLimitExceededExceptionWriter;
+/// Write SubscriptionLimitExceededException contents to a SignedRequest
+struct SubscriptionLimitExceededExceptionWriter;
 impl SubscriptionLimitExceededExceptionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SubscriptionLimitExceededException) {
+	fn write_params(params: &mut Params, name: &str, obj: &SubscriptionLimitExceededException) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		stringWriter::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
 pub type string = String;
-/// Parse a string from XML
-pub struct stringParser;
+/// Parse string from XML
+struct stringParser;
 impl stringParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<string, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<string, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a string's contents to a SignedRequest
-pub struct stringWriter;
+/// Write string contents to a SignedRequest
+struct stringWriter;
 impl stringWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &string) {
+	fn write_params(params: &mut Params, name: &str, obj: &string) {
 		params.put(name, obj);
 	}
 }
@@ -660,10 +639,10 @@ pub struct GetTopicAttributesResponse {
 	pub attributes: TopicAttributesMap,
 }
 
-/// Parse a GetTopicAttributesResponse from XML
-pub struct GetTopicAttributesResponseParser;
+/// Parse GetTopicAttributesResponse from XML
+struct GetTopicAttributesResponseParser;
 impl GetTopicAttributesResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetTopicAttributesResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetTopicAttributesResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetTopicAttributesResponse::default();
 		loop {
@@ -678,10 +657,10 @@ impl GetTopicAttributesResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a GetTopicAttributesResponse's contents to a SignedRequest
-pub struct GetTopicAttributesResponseWriter;
+/// Write GetTopicAttributesResponse contents to a SignedRequest
+struct GetTopicAttributesResponseWriter;
 impl GetTopicAttributesResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetTopicAttributesResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetTopicAttributesResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		TopicAttributesMapWriter::write_params(params, &(prefix.to_string() + "Attributes"), &obj.attributes);
@@ -694,10 +673,10 @@ pub struct CreatePlatformApplicationResponse {
 	pub platform_application_arn: String,
 }
 
-/// Parse a CreatePlatformApplicationResponse from XML
-pub struct CreatePlatformApplicationResponseParser;
+/// Parse CreatePlatformApplicationResponse from XML
+struct CreatePlatformApplicationResponseParser;
 impl CreatePlatformApplicationResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreatePlatformApplicationResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreatePlatformApplicationResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreatePlatformApplicationResponse::default();
 		loop {
@@ -712,30 +691,30 @@ impl CreatePlatformApplicationResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a CreatePlatformApplicationResponse's contents to a SignedRequest
-pub struct CreatePlatformApplicationResponseWriter;
+/// Write CreatePlatformApplicationResponse contents to a SignedRequest
+struct CreatePlatformApplicationResponseWriter;
 impl CreatePlatformApplicationResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CreatePlatformApplicationResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &CreatePlatformApplicationResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "PlatformApplicationArn"), &obj.platform_application_arn);
 	}
 }
 pub type topicARN = String;
-/// Parse a topicARN from XML
-pub struct topicARNParser;
+/// Parse topicARN from XML
+struct topicARNParser;
 impl topicARNParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<topicARN, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<topicARN, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a topicARN's contents to a SignedRequest
-pub struct topicARNWriter;
+/// Write topicARN contents to a SignedRequest
+struct topicARNWriter;
 impl topicARNWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &topicARN) {
+	fn write_params(params: &mut Params, name: &str, obj: &topicARN) {
 		params.put(name, obj);
 	}
 }
@@ -745,10 +724,10 @@ pub struct AuthorizationErrorException {
 	pub message: string,
 }
 
-/// Parse a AuthorizationErrorException from XML
-pub struct AuthorizationErrorExceptionParser;
+/// Parse AuthorizationErrorException from XML
+struct AuthorizationErrorExceptionParser;
 impl AuthorizationErrorExceptionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AuthorizationErrorException, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AuthorizationErrorException, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AuthorizationErrorException::default();
 		loop {
@@ -763,17 +742,16 @@ impl AuthorizationErrorExceptionParser {
 		Ok(obj)
 	}
 }
-/// Write a AuthorizationErrorException's contents to a SignedRequest
-pub struct AuthorizationErrorExceptionWriter;
+/// Write AuthorizationErrorException contents to a SignedRequest
+struct AuthorizationErrorExceptionWriter;
 impl AuthorizationErrorExceptionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AuthorizationErrorException) {
+	fn write_params(params: &mut Params, name: &str, obj: &AuthorizationErrorException) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		stringWriter::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
 /// Input for RemovePermission action.
-/// Removes a statement from a topic's access control policy.
 #[derive(Debug, Default)]
 pub struct RemovePermissionInput {
 	/// The ARN of the topic whose access control policy you wish to modify.
@@ -782,10 +760,10 @@ pub struct RemovePermissionInput {
 	pub label: label,
 }
 
-/// Parse a RemovePermissionInput from XML
-pub struct RemovePermissionInputParser;
+/// Parse RemovePermissionInput from XML
+struct RemovePermissionInputParser;
 impl RemovePermissionInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<RemovePermissionInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<RemovePermissionInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = RemovePermissionInput::default();
 		loop {
@@ -804,10 +782,10 @@ impl RemovePermissionInputParser {
 		Ok(obj)
 	}
 }
-/// Write a RemovePermissionInput's contents to a SignedRequest
-pub struct RemovePermissionInputWriter;
+/// Write RemovePermissionInput contents to a SignedRequest
+struct RemovePermissionInputWriter;
 impl RemovePermissionInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &RemovePermissionInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &RemovePermissionInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		topicARNWriter::write_params(params, &(prefix.to_string() + "TopicArn"), &obj.topic_arn);
@@ -821,10 +799,10 @@ pub struct CreateTopicResponse {
 	pub topic_arn: topicARN,
 }
 
-/// Parse a CreateTopicResponse from XML
-pub struct CreateTopicResponseParser;
+/// Parse CreateTopicResponse from XML
+struct CreateTopicResponseParser;
 impl CreateTopicResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateTopicResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateTopicResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreateTopicResponse::default();
 		loop {
@@ -839,20 +817,20 @@ impl CreateTopicResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a CreateTopicResponse's contents to a SignedRequest
-pub struct CreateTopicResponseWriter;
+/// Write CreateTopicResponse contents to a SignedRequest
+struct CreateTopicResponseWriter;
 impl CreateTopicResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CreateTopicResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &CreateTopicResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		topicARNWriter::write_params(params, &(prefix.to_string() + "TopicArn"), &obj.topic_arn);
 	}
 }
 pub type ListOfEndpoints = Vec<Endpoint>;
-/// Parse a ListOfEndpoints from XML
-pub struct ListOfEndpointsParser;
+/// Parse ListOfEndpoints from XML
+struct ListOfEndpointsParser;
 impl ListOfEndpointsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListOfEndpoints, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListOfEndpoints, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "Endpoint" {
 			obj.push(try!(EndpointParser::parse_xml("Endpoint", stack)));
@@ -860,10 +838,10 @@ impl ListOfEndpointsParser {
 		Ok(obj)
 	}
 }
-/// Write a ListOfEndpoints's contents to a SignedRequest
-pub struct ListOfEndpointsWriter;
+/// Write ListOfEndpoints contents to a SignedRequest
+struct ListOfEndpointsWriter;
 impl ListOfEndpointsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListOfEndpoints) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListOfEndpoints) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -881,10 +859,10 @@ pub struct PlatformApplication {
 	pub platform_application_arn: String,
 }
 
-/// Parse a PlatformApplication from XML
-pub struct PlatformApplicationParser;
+/// Parse PlatformApplication from XML
+struct PlatformApplicationParser;
 impl PlatformApplicationParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PlatformApplication, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PlatformApplication, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PlatformApplication::default();
 		loop {
@@ -903,10 +881,10 @@ impl PlatformApplicationParser {
 		Ok(obj)
 	}
 }
-/// Write a PlatformApplication's contents to a SignedRequest
-pub struct PlatformApplicationWriter;
+/// Write PlatformApplication contents to a SignedRequest
+struct PlatformApplicationWriter;
 impl PlatformApplicationWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PlatformApplication) {
+	fn write_params(params: &mut Params, name: &str, obj: &PlatformApplication) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MapStringToStringWriter::write_params(params, &(prefix.to_string() + "Attributes"), &obj.attributes);
@@ -914,38 +892,38 @@ impl PlatformApplicationWriter {
 	}
 }
 pub type protocol = String;
-/// Parse a protocol from XML
-pub struct protocolParser;
+/// Parse protocol from XML
+struct protocolParser;
 impl protocolParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<protocol, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<protocol, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a protocol's contents to a SignedRequest
-pub struct protocolWriter;
+/// Write protocol contents to a SignedRequest
+struct protocolWriter;
 impl protocolWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &protocol) {
+	fn write_params(params: &mut Params, name: &str, obj: &protocol) {
 		params.put(name, obj);
 	}
 }
 pub type label = String;
-/// Parse a label from XML
-pub struct labelParser;
+/// Parse label from XML
+struct labelParser;
 impl labelParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<label, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<label, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a label's contents to a SignedRequest
-pub struct labelWriter;
+/// Write label contents to a SignedRequest
+struct labelWriter;
 impl labelWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &label) {
+	fn write_params(params: &mut Params, name: &str, obj: &label) {
 		params.put(name, obj);
 	}
 }
@@ -956,10 +934,10 @@ pub struct InvalidParameterException {
 	pub message: string,
 }
 
-/// Parse a InvalidParameterException from XML
-pub struct InvalidParameterExceptionParser;
+/// Parse InvalidParameterException from XML
+struct InvalidParameterExceptionParser;
 impl InvalidParameterExceptionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidParameterException, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidParameterException, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InvalidParameterException::default();
 		loop {
@@ -974,31 +952,16 @@ impl InvalidParameterExceptionParser {
 		Ok(obj)
 	}
 }
-/// Write a InvalidParameterException's contents to a SignedRequest
-pub struct InvalidParameterExceptionWriter;
+/// Write InvalidParameterException contents to a SignedRequest
+struct InvalidParameterExceptionWriter;
 impl InvalidParameterExceptionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &InvalidParameterException) {
+	fn write_params(params: &mut Params, name: &str, obj: &InvalidParameterException) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		stringWriter::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
 /// Input for CreatePlatformApplication action.
-/// Creates a platform application object for one of the supported push
-/// notification services, such as APNS and GCM, to which devices and mobile apps
-/// may register. You must specify PlatformPrincipal and PlatformCredential
-/// attributes when using the `CreatePlatformApplication` action. The
-/// PlatformPrincipal is received from the notification service. For
-/// APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM,
-/// PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client
-/// id". The PlatformCredential is also received from the notification service.
-/// For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM,
-/// PlatformCredential is "API key". For ADM, PlatformCredential is "client
-/// secret". The PlatformApplicationArn that is returned when using
-/// `CreatePlatformApplication` is then used as an attribute for the
-/// `CreatePlatformEndpoint` action. For more information, see [Using Amazon SNS
-/// Mobile Push
-/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 #[derive(Debug, Default)]
 pub struct CreatePlatformApplicationInput {
 	/// The following platforms are supported: ADM (Amazon Device Messaging), APNS
@@ -1014,10 +977,10 @@ pub struct CreatePlatformApplicationInput {
 	pub attributes: MapStringToString,
 }
 
-/// Parse a CreatePlatformApplicationInput from XML
-pub struct CreatePlatformApplicationInputParser;
+/// Parse CreatePlatformApplicationInput from XML
+struct CreatePlatformApplicationInputParser;
 impl CreatePlatformApplicationInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreatePlatformApplicationInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreatePlatformApplicationInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreatePlatformApplicationInput::default();
 		loop {
@@ -1040,10 +1003,10 @@ impl CreatePlatformApplicationInputParser {
 		Ok(obj)
 	}
 }
-/// Write a CreatePlatformApplicationInput's contents to a SignedRequest
-pub struct CreatePlatformApplicationInputWriter;
+/// Write CreatePlatformApplicationInput contents to a SignedRequest
+struct CreatePlatformApplicationInputWriter;
 impl CreatePlatformApplicationInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CreatePlatformApplicationInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &CreatePlatformApplicationInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "Platform"), &obj.platform);
@@ -1052,11 +1015,6 @@ impl CreatePlatformApplicationInputWriter {
 	}
 }
 /// Input for CreateTopic action.
-/// Creates a topic to which notifications can be published. Users can create at
-/// most 3000 topics. For more information, see
-/// [http://aws.amazon.com/sns](http://aws.amazon.com/sns/). This action is
-/// idempotent, so if the requester already owns a topic with the specified name,
-/// that topic's ARN is returned without creating a new topic.
 #[derive(Debug, Default)]
 pub struct CreateTopicInput {
 	/// The name of the topic you want to create.
@@ -1066,10 +1024,10 @@ pub struct CreateTopicInput {
 	pub name: topicName,
 }
 
-/// Parse a CreateTopicInput from XML
-pub struct CreateTopicInputParser;
+/// Parse CreateTopicInput from XML
+struct CreateTopicInputParser;
 impl CreateTopicInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateTopicInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateTopicInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreateTopicInput::default();
 		loop {
@@ -1084,47 +1042,44 @@ impl CreateTopicInputParser {
 		Ok(obj)
 	}
 }
-/// Write a CreateTopicInput's contents to a SignedRequest
-pub struct CreateTopicInputWriter;
+/// Write CreateTopicInput contents to a SignedRequest
+struct CreateTopicInputWriter;
 impl CreateTopicInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CreateTopicInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &CreateTopicInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		topicNameWriter::write_params(params, &(prefix.to_string() + "Name"), &obj.name);
 	}
 }
 pub type action = String;
-/// Parse a action from XML
-pub struct actionParser;
+/// Parse action from XML
+struct actionParser;
 impl actionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<action, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<action, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a action's contents to a SignedRequest
-pub struct actionWriter;
+/// Write action contents to a SignedRequest
+struct actionWriter;
 impl actionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &action) {
+	fn write_params(params: &mut Params, name: &str, obj: &action) {
 		params.put(name, obj);
 	}
 }
 /// Input for DeleteEndpoint action.
-/// Deletes the endpoint from Amazon SNS. This action is idempotent. For more
-/// information, see [Using Amazon SNS Mobile Push
-/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 #[derive(Debug, Default)]
 pub struct DeleteEndpointInput {
 	/// EndpointArn of endpoint to delete.
 	pub endpoint_arn: String,
 }
 
-/// Parse a DeleteEndpointInput from XML
-pub struct DeleteEndpointInputParser;
+/// Parse DeleteEndpointInput from XML
+struct DeleteEndpointInputParser;
 impl DeleteEndpointInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteEndpointInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteEndpointInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteEndpointInput::default();
 		loop {
@@ -1139,27 +1094,26 @@ impl DeleteEndpointInputParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteEndpointInput's contents to a SignedRequest
-pub struct DeleteEndpointInputWriter;
+/// Write DeleteEndpointInput contents to a SignedRequest
+struct DeleteEndpointInputWriter;
 impl DeleteEndpointInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteEndpointInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteEndpointInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "EndpointArn"), &obj.endpoint_arn);
 	}
 }
 /// Input for GetSubscriptionAttributes.
-/// Returns all of the properties of a subscription.
 #[derive(Debug, Default)]
 pub struct GetSubscriptionAttributesInput {
 	/// The ARN of the subscription whose properties you want to get.
 	pub subscription_arn: subscriptionARN,
 }
 
-/// Parse a GetSubscriptionAttributesInput from XML
-pub struct GetSubscriptionAttributesInputParser;
+/// Parse GetSubscriptionAttributesInput from XML
+struct GetSubscriptionAttributesInputParser;
 impl GetSubscriptionAttributesInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetSubscriptionAttributesInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetSubscriptionAttributesInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetSubscriptionAttributesInput::default();
 		loop {
@@ -1174,38 +1128,38 @@ impl GetSubscriptionAttributesInputParser {
 		Ok(obj)
 	}
 }
-/// Write a GetSubscriptionAttributesInput's contents to a SignedRequest
-pub struct GetSubscriptionAttributesInputWriter;
+/// Write GetSubscriptionAttributesInput contents to a SignedRequest
+struct GetSubscriptionAttributesInputWriter;
 impl GetSubscriptionAttributesInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetSubscriptionAttributesInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetSubscriptionAttributesInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		subscriptionARNWriter::write_params(params, &(prefix.to_string() + "SubscriptionArn"), &obj.subscription_arn);
 	}
 }
 pub type messageStructure = String;
-/// Parse a messageStructure from XML
-pub struct messageStructureParser;
+/// Parse messageStructure from XML
+struct messageStructureParser;
 impl messageStructureParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<messageStructure, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<messageStructure, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a messageStructure's contents to a SignedRequest
-pub struct messageStructureWriter;
+/// Write messageStructure contents to a SignedRequest
+struct messageStructureWriter;
 impl messageStructureWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &messageStructure) {
+	fn write_params(params: &mut Params, name: &str, obj: &messageStructure) {
 		params.put(name, obj);
 	}
 }
 pub type ActionsList = Vec<action>;
-/// Parse a ActionsList from XML
-pub struct ActionsListParser;
+/// Parse ActionsList from XML
+struct ActionsListParser;
 impl ActionsListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ActionsList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ActionsList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "action" {
 			obj.push(try!(actionParser::parse_xml("action", stack)));
@@ -1213,10 +1167,10 @@ impl ActionsListParser {
 		Ok(obj)
 	}
 }
-/// Write a ActionsList's contents to a SignedRequest
-pub struct ActionsListWriter;
+/// Write ActionsList contents to a SignedRequest
+struct ActionsListWriter;
 impl ActionsListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ActionsList) {
+	fn write_params(params: &mut Params, name: &str, obj: &ActionsList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1226,20 +1180,20 @@ impl ActionsListWriter {
 	}
 }
 pub type subject = String;
-/// Parse a subject from XML
-pub struct subjectParser;
+/// Parse subject from XML
+struct subjectParser;
 impl subjectParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<subject, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<subject, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a subject's contents to a SignedRequest
-pub struct subjectWriter;
+/// Write subject contents to a SignedRequest
+struct subjectWriter;
 impl subjectWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &subject) {
+	fn write_params(params: &mut Params, name: &str, obj: &subject) {
 		params.put(name, obj);
 	}
 }
@@ -1250,10 +1204,10 @@ pub struct CreateEndpointResponse {
 	pub endpoint_arn: String,
 }
 
-/// Parse a CreateEndpointResponse from XML
-pub struct CreateEndpointResponseParser;
+/// Parse CreateEndpointResponse from XML
+struct CreateEndpointResponseParser;
 impl CreateEndpointResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateEndpointResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateEndpointResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreateEndpointResponse::default();
 		loop {
@@ -1268,10 +1222,10 @@ impl CreateEndpointResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a CreateEndpointResponse's contents to a SignedRequest
-pub struct CreateEndpointResponseWriter;
+/// Write CreateEndpointResponse contents to a SignedRequest
+struct CreateEndpointResponseWriter;
 impl CreateEndpointResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CreateEndpointResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &CreateEndpointResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "EndpointArn"), &obj.endpoint_arn);
@@ -1283,10 +1237,10 @@ pub struct NotFoundException {
 	pub message: string,
 }
 
-/// Parse a NotFoundException from XML
-pub struct NotFoundExceptionParser;
+/// Parse NotFoundException from XML
+struct NotFoundExceptionParser;
 impl NotFoundExceptionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<NotFoundException, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<NotFoundException, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = NotFoundException::default();
 		loop {
@@ -1301,20 +1255,16 @@ impl NotFoundExceptionParser {
 		Ok(obj)
 	}
 }
-/// Write a NotFoundException's contents to a SignedRequest
-pub struct NotFoundExceptionWriter;
+/// Write NotFoundException contents to a SignedRequest
+struct NotFoundExceptionWriter;
 impl NotFoundExceptionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &NotFoundException) {
+	fn write_params(params: &mut Params, name: &str, obj: &NotFoundException) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		stringWriter::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
 /// Input for SetEndpointAttributes action.
-/// Sets the attributes for an endpoint for a device on one of the supported push
-/// notification services, such as GCM and APNS. For more information, see [Using
-/// Amazon SNS Mobile Push
-/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 #[derive(Debug, Default)]
 pub struct SetEndpointAttributesInput {
 	/// A map of the endpoint attributes. Attributes in this map include the
@@ -1327,10 +1277,10 @@ pub struct SetEndpointAttributesInput {
 	pub endpoint_arn: String,
 }
 
-/// Parse a SetEndpointAttributesInput from XML
-pub struct SetEndpointAttributesInputParser;
+/// Parse SetEndpointAttributesInput from XML
+struct SetEndpointAttributesInputParser;
 impl SetEndpointAttributesInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetEndpointAttributesInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetEndpointAttributesInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SetEndpointAttributesInput::default();
 		loop {
@@ -1349,10 +1299,10 @@ impl SetEndpointAttributesInputParser {
 		Ok(obj)
 	}
 }
-/// Write a SetEndpointAttributesInput's contents to a SignedRequest
-pub struct SetEndpointAttributesInputWriter;
+/// Write SetEndpointAttributesInput contents to a SignedRequest
+struct SetEndpointAttributesInputWriter;
 impl SetEndpointAttributesInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SetEndpointAttributesInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &SetEndpointAttributesInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MapStringToStringWriter::write_params(params, &(prefix.to_string() + "Attributes"), &obj.attributes);
@@ -1360,20 +1310,16 @@ impl SetEndpointAttributesInputWriter {
 	}
 }
 /// Input for GetPlatformApplicationAttributes action.
-/// Retrieves the attributes of the platform application object for the supported
-/// push notification services, such as APNS and GCM. For more information, see
-/// [Using Amazon SNS Mobile Push
-/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 #[derive(Debug, Default)]
 pub struct GetPlatformApplicationAttributesInput {
 	/// PlatformApplicationArn for GetPlatformApplicationAttributesInput.
 	pub platform_application_arn: String,
 }
 
-/// Parse a GetPlatformApplicationAttributesInput from XML
-pub struct GetPlatformApplicationAttributesInputParser;
+/// Parse GetPlatformApplicationAttributesInput from XML
+struct GetPlatformApplicationAttributesInputParser;
 impl GetPlatformApplicationAttributesInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetPlatformApplicationAttributesInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetPlatformApplicationAttributesInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetPlatformApplicationAttributesInput::default();
 		loop {
@@ -1388,49 +1334,34 @@ impl GetPlatformApplicationAttributesInputParser {
 		Ok(obj)
 	}
 }
-/// Write a GetPlatformApplicationAttributesInput's contents to a SignedRequest
-pub struct GetPlatformApplicationAttributesInputWriter;
+/// Write GetPlatformApplicationAttributesInput contents to a SignedRequest
+struct GetPlatformApplicationAttributesInputWriter;
 impl GetPlatformApplicationAttributesInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetPlatformApplicationAttributesInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetPlatformApplicationAttributesInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "PlatformApplicationArn"), &obj.platform_application_arn);
 	}
 }
 pub type nextToken = String;
-/// Parse a nextToken from XML
-pub struct nextTokenParser;
+/// Parse nextToken from XML
+struct nextTokenParser;
 impl nextTokenParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<nextToken, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<nextToken, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a nextToken's contents to a SignedRequest
-pub struct nextTokenWriter;
+/// Write nextToken contents to a SignedRequest
+struct nextTokenWriter;
 impl nextTokenWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &nextToken) {
+	fn write_params(params: &mut Params, name: &str, obj: &nextToken) {
 		params.put(name, obj);
 	}
 }
 /// Input for CreatePlatformEndpoint action.
-/// Creates an endpoint for a device and mobile app on one of the supported push
-/// notification services, such as GCM and APNS. `CreatePlatformEndpoint` requires
-/// the PlatformApplicationArn that is returned from `CreatePlatformApplication`.
-/// The EndpointArn that is returned when using `CreatePlatformEndpoint` can then
-/// be used by the `Publish` action to send a message to a mobile app or by the
-/// `Subscribe` action for subscription to a topic. The `CreatePlatformEndpoint`
-/// action is idempotent, so if the requester already owns an endpoint with the
-/// same device token and attributes, that endpoint's ARN is returned without
-/// creating a new endpoint. For more information, see [Using Amazon SNS Mobile
-/// Push
-/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
-/// When using `CreatePlatformEndpoint` with Baidu, two attributes must be
-/// provided: ChannelId and UserId. The token field must also contain the
-/// ChannelId. For more information, see [Creating an Amazon SNS Endpoint for Baid
-/// u](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html).
 #[derive(Debug, Default)]
 pub struct CreatePlatformEndpointInput {
 	/// For a list of attributes, see [SetEndpointAttributes](http://docs.aws.amazon.c
@@ -1450,10 +1381,10 @@ pub struct CreatePlatformEndpointInput {
 	pub custom_user_data: Option<String>,
 }
 
-/// Parse a CreatePlatformEndpointInput from XML
-pub struct CreatePlatformEndpointInputParser;
+/// Parse CreatePlatformEndpointInput from XML
+struct CreatePlatformEndpointInputParser;
 impl CreatePlatformEndpointInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreatePlatformEndpointInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreatePlatformEndpointInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreatePlatformEndpointInput::default();
 		loop {
@@ -1480,10 +1411,10 @@ impl CreatePlatformEndpointInputParser {
 		Ok(obj)
 	}
 }
-/// Write a CreatePlatformEndpointInput's contents to a SignedRequest
-pub struct CreatePlatformEndpointInputWriter;
+/// Write CreatePlatformEndpointInput contents to a SignedRequest
+struct CreatePlatformEndpointInputWriter;
 impl CreatePlatformEndpointInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CreatePlatformEndpointInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &CreatePlatformEndpointInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.attributes {
@@ -1505,10 +1436,10 @@ pub struct Endpoint {
 	pub endpoint_arn: String,
 }
 
-/// Parse a Endpoint from XML
-pub struct EndpointParser;
+/// Parse Endpoint from XML
+struct EndpointParser;
 impl EndpointParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Endpoint, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Endpoint, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = Endpoint::default();
 		loop {
@@ -1527,10 +1458,10 @@ impl EndpointParser {
 		Ok(obj)
 	}
 }
-/// Write a Endpoint's contents to a SignedRequest
-pub struct EndpointWriter;
+/// Write Endpoint contents to a SignedRequest
+struct EndpointWriter;
 impl EndpointWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Endpoint) {
+	fn write_params(params: &mut Params, name: &str, obj: &Endpoint) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MapStringToStringWriter::write_params(params, &(prefix.to_string() + "Attributes"), &obj.attributes);
@@ -1538,33 +1469,24 @@ impl EndpointWriter {
 	}
 }
 pub type attributeValue = String;
-/// Parse a attributeValue from XML
-pub struct attributeValueParser;
+/// Parse attributeValue from XML
+struct attributeValueParser;
 impl attributeValueParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<attributeValue, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<attributeValue, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a attributeValue's contents to a SignedRequest
-pub struct attributeValueWriter;
+/// Write attributeValue contents to a SignedRequest
+struct attributeValueWriter;
 impl attributeValueWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &attributeValue) {
+	fn write_params(params: &mut Params, name: &str, obj: &attributeValue) {
 		params.put(name, obj);
 	}
 }
 /// Input for ListPlatformApplications action.
-/// Lists the platform application objects for the supported push notification
-/// services, such as APNS and GCM. The results for `ListPlatformApplications` are
-/// paginated and return a limited list of applications, up to 100. If additional
-/// records are available after the first page results, then a NextToken string
-/// will be returned. To receive the next page, you call
-/// `ListPlatformApplications` using the NextToken string received from the
-/// previous call. When there are no more records to return, NextToken will be
-/// null. For more information, see [Using Amazon SNS Mobile Push
-/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 #[derive(Debug, Default)]
 pub struct ListPlatformApplicationsInput {
 	/// NextToken string is used when calling ListPlatformApplications action to
@@ -1572,10 +1494,10 @@ pub struct ListPlatformApplicationsInput {
 	pub next_token: String,
 }
 
-/// Parse a ListPlatformApplicationsInput from XML
-pub struct ListPlatformApplicationsInputParser;
+/// Parse ListPlatformApplicationsInput from XML
+struct ListPlatformApplicationsInputParser;
 impl ListPlatformApplicationsInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListPlatformApplicationsInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListPlatformApplicationsInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListPlatformApplicationsInput::default();
 		loop {
@@ -1590,10 +1512,10 @@ impl ListPlatformApplicationsInputParser {
 		Ok(obj)
 	}
 }
-/// Write a ListPlatformApplicationsInput's contents to a SignedRequest
-pub struct ListPlatformApplicationsInputWriter;
+/// Write ListPlatformApplicationsInput contents to a SignedRequest
+struct ListPlatformApplicationsInputWriter;
 impl ListPlatformApplicationsInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListPlatformApplicationsInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListPlatformApplicationsInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "NextToken"), &obj.next_token);
@@ -1607,10 +1529,10 @@ pub struct PublishResponse {
 	pub message_id: messageId,
 }
 
-/// Parse a PublishResponse from XML
-pub struct PublishResponseParser;
+/// Parse PublishResponse from XML
+struct PublishResponseParser;
 impl PublishResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PublishResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PublishResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PublishResponse::default();
 		loop {
@@ -1625,30 +1547,30 @@ impl PublishResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a PublishResponse's contents to a SignedRequest
-pub struct PublishResponseWriter;
+/// Write PublishResponse contents to a SignedRequest
+struct PublishResponseWriter;
 impl PublishResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PublishResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &PublishResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		messageIdWriter::write_params(params, &(prefix.to_string() + "MessageId"), &obj.message_id);
 	}
 }
 pub type attributeName = String;
-/// Parse a attributeName from XML
-pub struct attributeNameParser;
+/// Parse attributeName from XML
+struct attributeNameParser;
 impl attributeNameParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<attributeName, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<attributeName, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a attributeName's contents to a SignedRequest
-pub struct attributeNameWriter;
+/// Write attributeName contents to a SignedRequest
+struct attributeNameWriter;
 impl attributeNameWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &attributeName) {
+	fn write_params(params: &mut Params, name: &str, obj: &attributeName) {
 		params.put(name, obj);
 	}
 }
@@ -1659,10 +1581,10 @@ pub struct ConfirmSubscriptionResponse {
 	pub subscription_arn: subscriptionARN,
 }
 
-/// Parse a ConfirmSubscriptionResponse from XML
-pub struct ConfirmSubscriptionResponseParser;
+/// Parse ConfirmSubscriptionResponse from XML
+struct ConfirmSubscriptionResponseParser;
 impl ConfirmSubscriptionResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ConfirmSubscriptionResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ConfirmSubscriptionResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ConfirmSubscriptionResponse::default();
 		loop {
@@ -1677,29 +1599,25 @@ impl ConfirmSubscriptionResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a ConfirmSubscriptionResponse's contents to a SignedRequest
-pub struct ConfirmSubscriptionResponseWriter;
+/// Write ConfirmSubscriptionResponse contents to a SignedRequest
+struct ConfirmSubscriptionResponseWriter;
 impl ConfirmSubscriptionResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ConfirmSubscriptionResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &ConfirmSubscriptionResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		subscriptionARNWriter::write_params(params, &(prefix.to_string() + "SubscriptionArn"), &obj.subscription_arn);
 	}
 }
-/// Deletes a topic and all its subscriptions. Deleting a topic might prevent some
-/// messages previously sent to the topic from being delivered to subscribers.
-/// This action is idempotent, so deleting a topic that does not exist does not
-/// result in an error.
 #[derive(Debug, Default)]
 pub struct DeleteTopicInput {
 	/// The ARN of the topic you want to delete.
 	pub topic_arn: topicARN,
 }
 
-/// Parse a DeleteTopicInput from XML
-pub struct DeleteTopicInputParser;
+/// Parse DeleteTopicInput from XML
+struct DeleteTopicInputParser;
 impl DeleteTopicInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteTopicInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteTopicInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteTopicInput::default();
 		loop {
@@ -1714,21 +1632,16 @@ impl DeleteTopicInputParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteTopicInput's contents to a SignedRequest
-pub struct DeleteTopicInputWriter;
+/// Write DeleteTopicInput contents to a SignedRequest
+struct DeleteTopicInputWriter;
 impl DeleteTopicInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteTopicInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteTopicInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		topicARNWriter::write_params(params, &(prefix.to_string() + "TopicArn"), &obj.topic_arn);
 	}
 }
 /// Input for ConfirmSubscription action.
-/// Verifies an endpoint owner's intent to receive messages by validating the
-/// token sent to the endpoint by an earlier `Subscribe` action. If the token is
-/// valid, the action creates a new subscription and returns its Amazon Resource
-/// Name (ARN). This call requires an AWS signature only when the
-/// `AuthenticateOnUnsubscribe` flag is set to "true".
 #[derive(Debug, Default)]
 pub struct ConfirmSubscriptionInput {
 	/// Short-lived token sent to an endpoint during the `Subscribe` action.
@@ -1742,10 +1655,10 @@ pub struct ConfirmSubscriptionInput {
 	pub topic_arn: topicARN,
 }
 
-/// Parse a ConfirmSubscriptionInput from XML
-pub struct ConfirmSubscriptionInputParser;
+/// Parse ConfirmSubscriptionInput from XML
+struct ConfirmSubscriptionInputParser;
 impl ConfirmSubscriptionInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ConfirmSubscriptionInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ConfirmSubscriptionInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ConfirmSubscriptionInput::default();
 		loop {
@@ -1768,10 +1681,10 @@ impl ConfirmSubscriptionInputParser {
 		Ok(obj)
 	}
 }
-/// Write a ConfirmSubscriptionInput's contents to a SignedRequest
-pub struct ConfirmSubscriptionInputWriter;
+/// Write ConfirmSubscriptionInput contents to a SignedRequest
+struct ConfirmSubscriptionInputWriter;
 impl ConfirmSubscriptionInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ConfirmSubscriptionInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &ConfirmSubscriptionInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		tokenWriter::write_params(params, &(prefix.to_string() + "Token"), &obj.token);
@@ -1788,10 +1701,10 @@ pub struct PlatformApplicationDisabledException {
 	pub message: string,
 }
 
-/// Parse a PlatformApplicationDisabledException from XML
-pub struct PlatformApplicationDisabledExceptionParser;
+/// Parse PlatformApplicationDisabledException from XML
+struct PlatformApplicationDisabledExceptionParser;
 impl PlatformApplicationDisabledExceptionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PlatformApplicationDisabledException, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PlatformApplicationDisabledException, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PlatformApplicationDisabledException::default();
 		loop {
@@ -1806,10 +1719,10 @@ impl PlatformApplicationDisabledExceptionParser {
 		Ok(obj)
 	}
 }
-/// Write a PlatformApplicationDisabledException's contents to a SignedRequest
-pub struct PlatformApplicationDisabledExceptionWriter;
+/// Write PlatformApplicationDisabledException contents to a SignedRequest
+struct PlatformApplicationDisabledExceptionWriter;
 impl PlatformApplicationDisabledExceptionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PlatformApplicationDisabledException) {
+	fn write_params(params: &mut Params, name: &str, obj: &PlatformApplicationDisabledException) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		stringWriter::write_params(params, &(prefix.to_string() + "message"), &obj.message);
@@ -1822,10 +1735,10 @@ pub struct InvalidParameterValueException {
 	pub message: string,
 }
 
-/// Parse a InvalidParameterValueException from XML
-pub struct InvalidParameterValueExceptionParser;
+/// Parse InvalidParameterValueException from XML
+struct InvalidParameterValueExceptionParser;
 impl InvalidParameterValueExceptionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidParameterValueException, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidParameterValueException, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InvalidParameterValueException::default();
 		loop {
@@ -1840,66 +1753,62 @@ impl InvalidParameterValueExceptionParser {
 		Ok(obj)
 	}
 }
-/// Write a InvalidParameterValueException's contents to a SignedRequest
-pub struct InvalidParameterValueExceptionWriter;
+/// Write InvalidParameterValueException contents to a SignedRequest
+struct InvalidParameterValueExceptionWriter;
 impl InvalidParameterValueExceptionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &InvalidParameterValueException) {
+	fn write_params(params: &mut Params, name: &str, obj: &InvalidParameterValueException) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		stringWriter::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
 pub type authenticateOnUnsubscribe = String;
-/// Parse a authenticateOnUnsubscribe from XML
-pub struct authenticateOnUnsubscribeParser;
+/// Parse authenticateOnUnsubscribe from XML
+struct authenticateOnUnsubscribeParser;
 impl authenticateOnUnsubscribeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<authenticateOnUnsubscribe, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<authenticateOnUnsubscribe, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a authenticateOnUnsubscribe's contents to a SignedRequest
-pub struct authenticateOnUnsubscribeWriter;
+/// Write authenticateOnUnsubscribe contents to a SignedRequest
+struct authenticateOnUnsubscribeWriter;
 impl authenticateOnUnsubscribeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &authenticateOnUnsubscribe) {
+	fn write_params(params: &mut Params, name: &str, obj: &authenticateOnUnsubscribe) {
 		params.put(name, obj);
 	}
 }
 pub type messageId = String;
-/// Parse a messageId from XML
-pub struct messageIdParser;
+/// Parse messageId from XML
+struct messageIdParser;
 impl messageIdParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<messageId, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<messageId, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a messageId's contents to a SignedRequest
-pub struct messageIdWriter;
+/// Write messageId contents to a SignedRequest
+struct messageIdWriter;
 impl messageIdWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &messageId) {
+	fn write_params(params: &mut Params, name: &str, obj: &messageId) {
 		params.put(name, obj);
 	}
 }
 /// Input for GetEndpointAttributes action.
-/// Retrieves the endpoint attributes for a device on one of the supported push
-/// notification services, such as GCM and APNS. For more information, see [Using
-/// Amazon SNS Mobile Push
-/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 #[derive(Debug, Default)]
 pub struct GetEndpointAttributesInput {
 	/// EndpointArn for GetEndpointAttributes input.
 	pub endpoint_arn: String,
 }
 
-/// Parse a GetEndpointAttributesInput from XML
-pub struct GetEndpointAttributesInputParser;
+/// Parse GetEndpointAttributesInput from XML
+struct GetEndpointAttributesInputParser;
 impl GetEndpointAttributesInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetEndpointAttributesInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetEndpointAttributesInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetEndpointAttributesInput::default();
 		loop {
@@ -1914,20 +1823,16 @@ impl GetEndpointAttributesInputParser {
 		Ok(obj)
 	}
 }
-/// Write a GetEndpointAttributesInput's contents to a SignedRequest
-pub struct GetEndpointAttributesInputWriter;
+/// Write GetEndpointAttributesInput contents to a SignedRequest
+struct GetEndpointAttributesInputWriter;
 impl GetEndpointAttributesInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetEndpointAttributesInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetEndpointAttributesInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "EndpointArn"), &obj.endpoint_arn);
 	}
 }
 /// Input for ListSubscriptionsByTopic action.
-/// Returns a list of the subscriptions to a specific topic. Each call returns a
-/// limited list of subscriptions, up to 100. If there are more subscriptions, a
-/// `NextToken` is also returned. Use the `NextToken` parameter in a new
-/// `ListSubscriptionsByTopic` call to get further results.
 #[derive(Debug, Default)]
 pub struct ListSubscriptionsByTopicInput {
 	/// Token returned by the previous `ListSubscriptionsByTopic` request.
@@ -1936,10 +1841,10 @@ pub struct ListSubscriptionsByTopicInput {
 	pub topic_arn: topicARN,
 }
 
-/// Parse a ListSubscriptionsByTopicInput from XML
-pub struct ListSubscriptionsByTopicInputParser;
+/// Parse ListSubscriptionsByTopicInput from XML
+struct ListSubscriptionsByTopicInputParser;
 impl ListSubscriptionsByTopicInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListSubscriptionsByTopicInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListSubscriptionsByTopicInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListSubscriptionsByTopicInput::default();
 		loop {
@@ -1958,10 +1863,10 @@ impl ListSubscriptionsByTopicInputParser {
 		Ok(obj)
 	}
 }
-/// Write a ListSubscriptionsByTopicInput's contents to a SignedRequest
-pub struct ListSubscriptionsByTopicInputWriter;
+/// Write ListSubscriptionsByTopicInput contents to a SignedRequest
+struct ListSubscriptionsByTopicInputWriter;
 impl ListSubscriptionsByTopicInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListSubscriptionsByTopicInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListSubscriptionsByTopicInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.next_token {
@@ -1978,10 +1883,10 @@ pub struct SubscribeResponse {
 	pub subscription_arn: subscriptionARN,
 }
 
-/// Parse a SubscribeResponse from XML
-pub struct SubscribeResponseParser;
+/// Parse SubscribeResponse from XML
+struct SubscribeResponseParser;
 impl SubscribeResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SubscribeResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SubscribeResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SubscribeResponse::default();
 		loop {
@@ -1996,38 +1901,38 @@ impl SubscribeResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a SubscribeResponse's contents to a SignedRequest
-pub struct SubscribeResponseWriter;
+/// Write SubscribeResponse contents to a SignedRequest
+struct SubscribeResponseWriter;
 impl SubscribeResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SubscribeResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &SubscribeResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		subscriptionARNWriter::write_params(params, &(prefix.to_string() + "SubscriptionArn"), &obj.subscription_arn);
 	}
 }
 pub type message = String;
-/// Parse a message from XML
-pub struct messageParser;
+/// Parse message from XML
+struct messageParser;
 impl messageParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<message, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<message, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a message's contents to a SignedRequest
-pub struct messageWriter;
+/// Write message contents to a SignedRequest
+struct messageWriter;
 impl messageWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &message) {
+	fn write_params(params: &mut Params, name: &str, obj: &message) {
 		params.put(name, obj);
 	}
 }
 pub type TopicsList = Vec<Topic>;
-/// Parse a TopicsList from XML
-pub struct TopicsListParser;
+/// Parse TopicsList from XML
+struct TopicsListParser;
 impl TopicsListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TopicsList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TopicsList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "Topic" {
 			obj.push(try!(TopicParser::parse_xml("Topic", stack)));
@@ -2035,10 +1940,10 @@ impl TopicsListParser {
 		Ok(obj)
 	}
 }
-/// Write a TopicsList's contents to a SignedRequest
-pub struct TopicsListWriter;
+/// Write TopicsList contents to a SignedRequest
+struct TopicsListWriter;
 impl TopicsListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TopicsList) {
+	fn write_params(params: &mut Params, name: &str, obj: &TopicsList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -2054,10 +1959,10 @@ pub struct EndpointDisabledException {
 	pub message: string,
 }
 
-/// Parse a EndpointDisabledException from XML
-pub struct EndpointDisabledExceptionParser;
+/// Parse EndpointDisabledException from XML
+struct EndpointDisabledExceptionParser;
 impl EndpointDisabledExceptionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EndpointDisabledException, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EndpointDisabledException, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = EndpointDisabledException::default();
 		loop {
@@ -2072,28 +1977,26 @@ impl EndpointDisabledExceptionParser {
 		Ok(obj)
 	}
 }
-/// Write a EndpointDisabledException's contents to a SignedRequest
-pub struct EndpointDisabledExceptionWriter;
+/// Write EndpointDisabledException contents to a SignedRequest
+struct EndpointDisabledExceptionWriter;
 impl EndpointDisabledExceptionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &EndpointDisabledException) {
+	fn write_params(params: &mut Params, name: &str, obj: &EndpointDisabledException) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		stringWriter::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
 /// Input for GetTopicAttributes action.
-/// Returns all of the properties of a topic. Topic properties returned might
-/// differ based on the authorization of the user.
 #[derive(Debug, Default)]
 pub struct GetTopicAttributesInput {
 	/// The ARN of the topic whose properties you want to get.
 	pub topic_arn: topicARN,
 }
 
-/// Parse a GetTopicAttributesInput from XML
-pub struct GetTopicAttributesInputParser;
+/// Parse GetTopicAttributesInput from XML
+struct GetTopicAttributesInputParser;
 impl GetTopicAttributesInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetTopicAttributesInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetTopicAttributesInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetTopicAttributesInput::default();
 		loop {
@@ -2108,66 +2011,66 @@ impl GetTopicAttributesInputParser {
 		Ok(obj)
 	}
 }
-/// Write a GetTopicAttributesInput's contents to a SignedRequest
-pub struct GetTopicAttributesInputWriter;
+/// Write GetTopicAttributesInput contents to a SignedRequest
+struct GetTopicAttributesInputWriter;
 impl GetTopicAttributesInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetTopicAttributesInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetTopicAttributesInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		topicARNWriter::write_params(params, &(prefix.to_string() + "TopicArn"), &obj.topic_arn);
 	}
 }
 pub type account = String;
-/// Parse a account from XML
-pub struct accountParser;
+/// Parse account from XML
+struct accountParser;
 impl accountParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<account, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<account, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a account's contents to a SignedRequest
-pub struct accountWriter;
+/// Write account contents to a SignedRequest
+struct accountWriter;
 impl accountWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &account) {
+	fn write_params(params: &mut Params, name: &str, obj: &account) {
 		params.put(name, obj);
 	}
 }
 pub type endpoint = String;
-/// Parse a endpoint from XML
-pub struct endpointParser;
+/// Parse endpoint from XML
+struct endpointParser;
 impl endpointParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<endpoint, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<endpoint, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a endpoint's contents to a SignedRequest
-pub struct endpointWriter;
+/// Write endpoint contents to a SignedRequest
+struct endpointWriter;
 impl endpointWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &endpoint) {
+	fn write_params(params: &mut Params, name: &str, obj: &endpoint) {
 		params.put(name, obj);
 	}
 }
 pub type subscriptionARN = String;
-/// Parse a subscriptionARN from XML
-pub struct subscriptionARNParser;
+/// Parse subscriptionARN from XML
+struct subscriptionARNParser;
 impl subscriptionARNParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<subscriptionARN, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<subscriptionARN, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a subscriptionARN's contents to a SignedRequest
-pub struct subscriptionARNWriter;
+/// Write subscriptionARN contents to a SignedRequest
+struct subscriptionARNWriter;
 impl subscriptionARNWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &subscriptionARN) {
+	fn write_params(params: &mut Params, name: &str, obj: &subscriptionARN) {
 		params.put(name, obj);
 	}
 }
@@ -2181,10 +2084,10 @@ pub struct ListSubscriptionsByTopicResponse {
 	pub subscriptions: SubscriptionsList,
 }
 
-/// Parse a ListSubscriptionsByTopicResponse from XML
-pub struct ListSubscriptionsByTopicResponseParser;
+/// Parse ListSubscriptionsByTopicResponse from XML
+struct ListSubscriptionsByTopicResponseParser;
 impl ListSubscriptionsByTopicResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListSubscriptionsByTopicResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListSubscriptionsByTopicResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListSubscriptionsByTopicResponse::default();
 		loop {
@@ -2203,10 +2106,10 @@ impl ListSubscriptionsByTopicResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a ListSubscriptionsByTopicResponse's contents to a SignedRequest
-pub struct ListSubscriptionsByTopicResponseWriter;
+/// Write ListSubscriptionsByTopicResponse contents to a SignedRequest
+struct ListSubscriptionsByTopicResponseWriter;
 impl ListSubscriptionsByTopicResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListSubscriptionsByTopicResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListSubscriptionsByTopicResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		nextTokenWriter::write_params(params, &(prefix.to_string() + "NextToken"), &obj.next_token);
@@ -2214,10 +2117,10 @@ impl ListSubscriptionsByTopicResponseWriter {
 	}
 }
 pub type MapStringToString = HashMap<String,String>;
-/// Parse a MapStringToString from XML
-pub struct MapStringToStringParser;
+/// Parse MapStringToString from XML
+struct MapStringToStringParser;
 impl MapStringToStringParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MapStringToString, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MapStringToString, XmlParseError> {
 		let mut obj = HashMap::new();
 		while try!(peek_at_name(stack)) == tag_name {
 			try!(start_element(tag_name, stack));
@@ -2229,10 +2132,10 @@ impl MapStringToStringParser {
 		Ok(obj)
 	}
 }
-/// Write a MapStringToString's contents to a SignedRequest
-pub struct MapStringToStringWriter;
+/// Write MapStringToString contents to a SignedRequest
+struct MapStringToStringWriter;
 impl MapStringToStringWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MapStringToString) {
+	fn write_params(params: &mut Params, name: &str, obj: &MapStringToString) {
 		let mut index = 1;
 		for (key,value) in obj {
 			let prefix = &format!("{}.{}", name, index);
@@ -2252,10 +2155,10 @@ pub struct ListEndpointsByPlatformApplicationResponse {
 	pub next_token: String,
 }
 
-/// Parse a ListEndpointsByPlatformApplicationResponse from XML
-pub struct ListEndpointsByPlatformApplicationResponseParser;
+/// Parse ListEndpointsByPlatformApplicationResponse from XML
+struct ListEndpointsByPlatformApplicationResponseParser;
 impl ListEndpointsByPlatformApplicationResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListEndpointsByPlatformApplicationResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListEndpointsByPlatformApplicationResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListEndpointsByPlatformApplicationResponse::default();
 		loop {
@@ -2274,18 +2177,16 @@ impl ListEndpointsByPlatformApplicationResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a ListEndpointsByPlatformApplicationResponse's contents to a SignedRequest
-pub struct ListEndpointsByPlatformApplicationResponseWriter;
+/// Write ListEndpointsByPlatformApplicationResponse contents to a SignedRequest
+struct ListEndpointsByPlatformApplicationResponseWriter;
 impl ListEndpointsByPlatformApplicationResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListEndpointsByPlatformApplicationResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListEndpointsByPlatformApplicationResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ListOfEndpointsWriter::write_params(params, &(prefix.to_string() + "Endpoint"), &obj.endpoints);
 		StringWriter::write_params(params, &(prefix.to_string() + "NextToken"), &obj.next_token);
 	}
 }
-/// Adds a statement to a topic's access control policy, granting access for the
-/// specified AWS accounts to the specified actions.
 #[derive(Debug, Default)]
 pub struct AddPermissionInput {
 	/// The action you want to allow for the specified principal(s).
@@ -2301,10 +2202,10 @@ pub struct AddPermissionInput {
 	pub label: label,
 }
 
-/// Parse a AddPermissionInput from XML
-pub struct AddPermissionInputParser;
+/// Parse AddPermissionInput from XML
+struct AddPermissionInputParser;
 impl AddPermissionInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AddPermissionInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AddPermissionInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AddPermissionInput::default();
 		loop {
@@ -2331,10 +2232,10 @@ impl AddPermissionInputParser {
 		Ok(obj)
 	}
 }
-/// Write a AddPermissionInput's contents to a SignedRequest
-pub struct AddPermissionInputWriter;
+/// Write AddPermissionInput contents to a SignedRequest
+struct AddPermissionInputWriter;
 impl AddPermissionInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AddPermissionInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &AddPermissionInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ActionsListWriter::write_params(params, &(prefix.to_string() + "action"), &obj.action_name);
@@ -2343,20 +2244,16 @@ impl AddPermissionInputWriter {
 		labelWriter::write_params(params, &(prefix.to_string() + "Label"), &obj.label);
 	}
 }
-/// Returns a list of the requester's topics. Each call returns a limited list of
-/// topics, up to 100. If there are more topics, a `NextToken` is also returned.
-/// Use the `NextToken` parameter in a new `ListTopics` call to get further
-/// results.
 #[derive(Debug, Default)]
 pub struct ListTopicsInput {
 	/// Token returned by the previous `ListTopics` request.
 	pub next_token: nextToken,
 }
 
-/// Parse a ListTopicsInput from XML
-pub struct ListTopicsInputParser;
+/// Parse ListTopicsInput from XML
+struct ListTopicsInputParser;
 impl ListTopicsInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListTopicsInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListTopicsInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListTopicsInput::default();
 		loop {
@@ -2371,25 +2268,16 @@ impl ListTopicsInputParser {
 		Ok(obj)
 	}
 }
-/// Write a ListTopicsInput's contents to a SignedRequest
-pub struct ListTopicsInputWriter;
+/// Write ListTopicsInput contents to a SignedRequest
+struct ListTopicsInputWriter;
 impl ListTopicsInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListTopicsInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListTopicsInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		nextTokenWriter::write_params(params, &(prefix.to_string() + "NextToken"), &obj.next_token);
 	}
 }
 /// Input for Publish action.
-/// Sends a message to all of a topic's subscribed endpoints. When a `messageId`
-/// is returned, the message has been saved and Amazon SNS will attempt to deliver
-/// it to the topic's subscribers shortly. The format of the outgoing message to
-/// each subscribed endpoint depends on the notification protocol selected.
-/// To use the `Publish` action for sending a message to a mobile endpoint, such
-/// as an app on a Kindle device or mobile phone, you must specify the
-/// EndpointArn. The EndpointArn is returned when making a call with the
-/// `CreatePlatformEndpoint` action. The second example below shows a request and
-/// response for publishing to a mobile endpoint.
 #[derive(Debug, Default)]
 pub struct PublishInput {
 	/// Set `MessageStructure` to `json` if you want to send a different message for
@@ -2443,10 +2331,10 @@ pub struct PublishInput {
 	pub message_attributes: Option<MessageAttributeMap>,
 }
 
-/// Parse a PublishInput from XML
-pub struct PublishInputParser;
+/// Parse PublishInput from XML
+struct PublishInputParser;
 impl PublishInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PublishInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PublishInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PublishInput::default();
 		loop {
@@ -2481,10 +2369,10 @@ impl PublishInputParser {
 		Ok(obj)
 	}
 }
-/// Write a PublishInput's contents to a SignedRequest
-pub struct PublishInputWriter;
+/// Write PublishInput contents to a SignedRequest
+struct PublishInputWriter;
 impl PublishInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PublishInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &PublishInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.message_structure {
@@ -2513,10 +2401,10 @@ pub struct Topic {
 	pub topic_arn: topicARN,
 }
 
-/// Parse a Topic from XML
-pub struct TopicParser;
+/// Parse Topic from XML
+struct TopicParser;
 impl TopicParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Topic, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Topic, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = Topic::default();
 		loop {
@@ -2531,10 +2419,10 @@ impl TopicParser {
 		Ok(obj)
 	}
 }
-/// Write a Topic's contents to a SignedRequest
-pub struct TopicWriter;
+/// Write Topic contents to a SignedRequest
+struct TopicWriter;
 impl TopicWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Topic) {
+	fn write_params(params: &mut Params, name: &str, obj: &Topic) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		topicARNWriter::write_params(params, &(prefix.to_string() + "TopicArn"), &obj.topic_arn);
@@ -2550,10 +2438,10 @@ pub struct ListPlatformApplicationsResponse {
 	pub platform_applications: ListOfPlatformApplications,
 }
 
-/// Parse a ListPlatformApplicationsResponse from XML
-pub struct ListPlatformApplicationsResponseParser;
+/// Parse ListPlatformApplicationsResponse from XML
+struct ListPlatformApplicationsResponseParser;
 impl ListPlatformApplicationsResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListPlatformApplicationsResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListPlatformApplicationsResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListPlatformApplicationsResponse::default();
 		loop {
@@ -2572,10 +2460,10 @@ impl ListPlatformApplicationsResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a ListPlatformApplicationsResponse's contents to a SignedRequest
-pub struct ListPlatformApplicationsResponseWriter;
+/// Write ListPlatformApplicationsResponse contents to a SignedRequest
+struct ListPlatformApplicationsResponseWriter;
 impl ListPlatformApplicationsResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListPlatformApplicationsResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListPlatformApplicationsResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "NextToken"), &obj.next_token);
@@ -2583,7 +2471,6 @@ impl ListPlatformApplicationsResponseWriter {
 	}
 }
 /// Input for SetSubscriptionAttributes action.
-/// Allows a subscription owner to set an attribute of the topic to a new value.
 #[derive(Debug, Default)]
 pub struct SetSubscriptionAttributesInput {
 	/// The name of the attribute you want to set. Only a subset of the subscriptions
@@ -2596,10 +2483,10 @@ pub struct SetSubscriptionAttributesInput {
 	pub subscription_arn: subscriptionARN,
 }
 
-/// Parse a SetSubscriptionAttributesInput from XML
-pub struct SetSubscriptionAttributesInputParser;
+/// Parse SetSubscriptionAttributesInput from XML
+struct SetSubscriptionAttributesInputParser;
 impl SetSubscriptionAttributesInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetSubscriptionAttributesInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetSubscriptionAttributesInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SetSubscriptionAttributesInput::default();
 		loop {
@@ -2622,10 +2509,10 @@ impl SetSubscriptionAttributesInputParser {
 		Ok(obj)
 	}
 }
-/// Write a SetSubscriptionAttributesInput's contents to a SignedRequest
-pub struct SetSubscriptionAttributesInputWriter;
+/// Write SetSubscriptionAttributesInput contents to a SignedRequest
+struct SetSubscriptionAttributesInputWriter;
 impl SetSubscriptionAttributesInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SetSubscriptionAttributesInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &SetSubscriptionAttributesInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		attributeNameWriter::write_params(params, &(prefix.to_string() + "AttributeName"), &obj.attribute_name);
@@ -2636,10 +2523,10 @@ impl SetSubscriptionAttributesInputWriter {
 	}
 }
 pub type MessageAttributeMap = HashMap<String,MessageAttributeValue>;
-/// Parse a MessageAttributeMap from XML
-pub struct MessageAttributeMapParser;
+/// Parse MessageAttributeMap from XML
+struct MessageAttributeMapParser;
 impl MessageAttributeMapParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeMap, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeMap, XmlParseError> {
 		let mut obj = HashMap::new();
 		while try!(peek_at_name(stack)) == tag_name {
 			try!(start_element(tag_name, stack));
@@ -2651,10 +2538,10 @@ impl MessageAttributeMapParser {
 		Ok(obj)
 	}
 }
-/// Write a MessageAttributeMap's contents to a SignedRequest
-pub struct MessageAttributeMapWriter;
+/// Write MessageAttributeMap contents to a SignedRequest
+struct MessageAttributeMapWriter;
 impl MessageAttributeMapWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeMap) {
+	fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeMap) {
 		let mut index = 1;
 		for (key,value) in obj {
 			let prefix = &format!("{}.{}", name, index);
@@ -2665,20 +2552,16 @@ impl MessageAttributeMapWriter {
 	}
 }
 /// Input for DeletePlatformApplication action.
-/// Deletes a platform application object for one of the supported push
-/// notification services, such as APNS and GCM. For more information, see [Using
-/// Amazon SNS Mobile Push
-/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 #[derive(Debug, Default)]
 pub struct DeletePlatformApplicationInput {
 	/// PlatformApplicationArn of platform application object to delete.
 	pub platform_application_arn: String,
 }
 
-/// Parse a DeletePlatformApplicationInput from XML
-pub struct DeletePlatformApplicationInputParser;
+/// Parse DeletePlatformApplicationInput from XML
+struct DeletePlatformApplicationInputParser;
 impl DeletePlatformApplicationInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeletePlatformApplicationInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeletePlatformApplicationInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeletePlatformApplicationInput::default();
 		loop {
@@ -2693,30 +2576,30 @@ impl DeletePlatformApplicationInputParser {
 		Ok(obj)
 	}
 }
-/// Write a DeletePlatformApplicationInput's contents to a SignedRequest
-pub struct DeletePlatformApplicationInputWriter;
+/// Write DeletePlatformApplicationInput contents to a SignedRequest
+struct DeletePlatformApplicationInputWriter;
 impl DeletePlatformApplicationInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeletePlatformApplicationInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeletePlatformApplicationInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "PlatformApplicationArn"), &obj.platform_application_arn);
 	}
 }
 pub type delegate = String;
-/// Parse a delegate from XML
-pub struct delegateParser;
+/// Parse delegate from XML
+struct delegateParser;
 impl delegateParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<delegate, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<delegate, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a delegate's contents to a SignedRequest
-pub struct delegateWriter;
+/// Write delegate contents to a SignedRequest
+struct delegateWriter;
 impl delegateWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &delegate) {
+	fn write_params(params: &mut Params, name: &str, obj: &delegate) {
 		params.put(name, obj);
 	}
 }
@@ -2731,10 +2614,10 @@ pub struct GetPlatformApplicationAttributesResponse {
 	pub attributes: MapStringToString,
 }
 
-/// Parse a GetPlatformApplicationAttributesResponse from XML
-pub struct GetPlatformApplicationAttributesResponseParser;
+/// Parse GetPlatformApplicationAttributesResponse from XML
+struct GetPlatformApplicationAttributesResponseParser;
 impl GetPlatformApplicationAttributesResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetPlatformApplicationAttributesResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetPlatformApplicationAttributesResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetPlatformApplicationAttributesResponse::default();
 		loop {
@@ -2749,30 +2632,26 @@ impl GetPlatformApplicationAttributesResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a GetPlatformApplicationAttributesResponse's contents to a SignedRequest
-pub struct GetPlatformApplicationAttributesResponseWriter;
+/// Write GetPlatformApplicationAttributesResponse contents to a SignedRequest
+struct GetPlatformApplicationAttributesResponseWriter;
 impl GetPlatformApplicationAttributesResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetPlatformApplicationAttributesResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetPlatformApplicationAttributesResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MapStringToStringWriter::write_params(params, &(prefix.to_string() + "Attributes"), &obj.attributes);
 	}
 }
 /// Input for ListSubscriptions action.
-/// Returns a list of the requester's subscriptions. Each call returns a limited
-/// list of subscriptions, up to 100. If there are more subscriptions, a
-/// `NextToken` is also returned. Use the `NextToken` parameter in a new
-/// `ListSubscriptions` call to get further results.
 #[derive(Debug, Default)]
 pub struct ListSubscriptionsInput {
 	/// Token returned by the previous `ListSubscriptions` request.
 	pub next_token: nextToken,
 }
 
-/// Parse a ListSubscriptionsInput from XML
-pub struct ListSubscriptionsInputParser;
+/// Parse ListSubscriptionsInput from XML
+struct ListSubscriptionsInputParser;
 impl ListSubscriptionsInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListSubscriptionsInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListSubscriptionsInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListSubscriptionsInput::default();
 		loop {
@@ -2787,10 +2666,10 @@ impl ListSubscriptionsInputParser {
 		Ok(obj)
 	}
 }
-/// Write a ListSubscriptionsInput's contents to a SignedRequest
-pub struct ListSubscriptionsInputWriter;
+/// Write ListSubscriptionsInput contents to a SignedRequest
+struct ListSubscriptionsInputWriter;
 impl ListSubscriptionsInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListSubscriptionsInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListSubscriptionsInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		nextTokenWriter::write_params(params, &(prefix.to_string() + "NextToken"), &obj.next_token);
@@ -2802,10 +2681,10 @@ pub struct InternalErrorException {
 	pub message: string,
 }
 
-/// Parse a InternalErrorException from XML
-pub struct InternalErrorExceptionParser;
+/// Parse InternalErrorException from XML
+struct InternalErrorExceptionParser;
 impl InternalErrorExceptionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InternalErrorException, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InternalErrorException, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InternalErrorException::default();
 		loop {
@@ -2820,10 +2699,10 @@ impl InternalErrorExceptionParser {
 		Ok(obj)
 	}
 }
-/// Write a InternalErrorException's contents to a SignedRequest
-pub struct InternalErrorExceptionWriter;
+/// Write InternalErrorException contents to a SignedRequest
+struct InternalErrorExceptionWriter;
 impl InternalErrorExceptionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &InternalErrorException) {
+	fn write_params(params: &mut Params, name: &str, obj: &InternalErrorException) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		stringWriter::write_params(params, &(prefix.to_string() + "message"), &obj.message);
@@ -2844,10 +2723,10 @@ pub struct Subscription {
 	pub subscription_arn: subscriptionARN,
 }
 
-/// Parse a Subscription from XML
-pub struct SubscriptionParser;
+/// Parse Subscription from XML
+struct SubscriptionParser;
 impl SubscriptionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Subscription, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Subscription, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = Subscription::default();
 		loop {
@@ -2878,10 +2757,10 @@ impl SubscriptionParser {
 		Ok(obj)
 	}
 }
-/// Write a Subscription's contents to a SignedRequest
-pub struct SubscriptionWriter;
+/// Write Subscription contents to a SignedRequest
+struct SubscriptionWriter;
 impl SubscriptionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Subscription) {
+	fn write_params(params: &mut Params, name: &str, obj: &Subscription) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		accountWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
@@ -2892,7 +2771,6 @@ impl SubscriptionWriter {
 	}
 }
 /// Input for SetTopicAttributes action.
-/// Allows a topic owner to set an attribute of the topic to a new value.
 #[derive(Debug, Default)]
 pub struct SetTopicAttributesInput {
 	/// The name of the attribute you want to set. Only a subset of the topic's
@@ -2905,10 +2783,10 @@ pub struct SetTopicAttributesInput {
 	pub topic_arn: topicARN,
 }
 
-/// Parse a SetTopicAttributesInput from XML
-pub struct SetTopicAttributesInputParser;
+/// Parse SetTopicAttributesInput from XML
+struct SetTopicAttributesInputParser;
 impl SetTopicAttributesInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetTopicAttributesInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetTopicAttributesInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SetTopicAttributesInput::default();
 		loop {
@@ -2931,10 +2809,10 @@ impl SetTopicAttributesInputParser {
 		Ok(obj)
 	}
 }
-/// Write a SetTopicAttributesInput's contents to a SignedRequest
-pub struct SetTopicAttributesInputWriter;
+/// Write SetTopicAttributesInput contents to a SignedRequest
+struct SetTopicAttributesInputWriter;
 impl SetTopicAttributesInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SetTopicAttributesInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &SetTopicAttributesInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		attributeNameWriter::write_params(params, &(prefix.to_string() + "AttributeName"), &obj.attribute_name);
@@ -2945,28 +2823,24 @@ impl SetTopicAttributesInputWriter {
 	}
 }
 pub type token = String;
-/// Parse a token from XML
-pub struct tokenParser;
+/// Parse token from XML
+struct tokenParser;
 impl tokenParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<token, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<token, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a token's contents to a SignedRequest
-pub struct tokenWriter;
+/// Write token contents to a SignedRequest
+struct tokenWriter;
 impl tokenWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &token) {
+	fn write_params(params: &mut Params, name: &str, obj: &token) {
 		params.put(name, obj);
 	}
 }
 /// Input for Subscribe action.
-/// Prepares to subscribe an endpoint by sending the endpoint a confirmation
-/// message. To actually create a subscription, the endpoint owner must call the
-/// `ConfirmSubscription` action with the token from the confirmation message.
-/// Confirmation tokens are valid for three days.
 #[derive(Debug, Default)]
 pub struct SubscribeInput {
 	/// The endpoint that you want to receive notifications. Endpoints vary by
@@ -2992,10 +2866,10 @@ pub struct SubscribeInput {
 	pub topic_arn: topicARN,
 }
 
-/// Parse a SubscribeInput from XML
-pub struct SubscribeInputParser;
+/// Parse SubscribeInput from XML
+struct SubscribeInputParser;
 impl SubscribeInputParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SubscribeInput, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SubscribeInput, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SubscribeInput::default();
 		loop {
@@ -3018,10 +2892,10 @@ impl SubscribeInputParser {
 		Ok(obj)
 	}
 }
-/// Write a SubscribeInput's contents to a SignedRequest
-pub struct SubscribeInputWriter;
+/// Write SubscribeInput contents to a SignedRequest
+struct SubscribeInputWriter;
 impl SubscribeInputWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SubscribeInput) {
+	fn write_params(params: &mut Params, name: &str, obj: &SubscribeInput) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.endpoint {
@@ -3040,6 +2914,15 @@ impl<'a> SNSClient<'a> {
 	pub fn new(creds: &'a AWSCredentials, region: &'a str) -> SNSClient<'a> {
 		SNSClient { creds: creds, region: region }
 	}
+	/// Lists the platform application objects for the supported push notification
+	/// services, such as APNS and GCM. The results for `ListPlatformApplications` are
+	/// paginated and return a limited list of applications, up to 100. If additional
+	/// records are available after the first page results, then a NextToken string
+	/// will be returned. To receive the next page, you call
+	/// `ListPlatformApplications` using the NextToken string received from the
+	/// previous call. When there are no more records to return, NextToken will be
+	/// null. For more information, see [Using Amazon SNS Mobile Push
+	/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 	pub fn list_platform_applications(&self, input: &ListPlatformApplicationsInput) -> Result<ListPlatformApplicationsResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3058,6 +2941,10 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Sets the attributes of the platform application object for the supported push
+	/// notification services, such as APNS and GCM. For more information, see [Using
+	/// Amazon SNS Mobile Push
+	/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 	pub fn set_platform_application_attributes(&self, input: &SetPlatformApplicationAttributesInput) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3076,6 +2963,10 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Returns a list of the subscriptions to a specific topic. Each call returns a
+	/// limited list of subscriptions, up to 100. If there are more subscriptions, a
+	/// `NextToken` is also returned. Use the `NextToken` parameter in a new
+	/// `ListSubscriptionsByTopic` call to get further results.
 	pub fn list_subscriptions_by_topic(&self, input: &ListSubscriptionsByTopicInput) -> Result<ListSubscriptionsByTopicResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3094,6 +2985,10 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Returns a list of the requester's subscriptions. Each call returns a limited
+	/// list of subscriptions, up to 100. If there are more subscriptions, a
+	/// `NextToken` is also returned. Use the `NextToken` parameter in a new
+	/// `ListSubscriptions` call to get further results.
 	pub fn list_subscriptions(&self, input: &ListSubscriptionsInput) -> Result<ListSubscriptionsResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3112,6 +3007,11 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Verifies an endpoint owner's intent to receive messages by validating the
+	/// token sent to the endpoint by an earlier `Subscribe` action. If the token is
+	/// valid, the action creates a new subscription and returns its Amazon Resource
+	/// Name (ARN). This call requires an AWS signature only when the
+	/// `AuthenticateOnUnsubscribe` flag is set to "true".
 	pub fn confirm_subscription(&self, input: &ConfirmSubscriptionInput) -> Result<ConfirmSubscriptionResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3130,6 +3030,7 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Allows a topic owner to set an attribute of the topic to a new value.
 	pub fn set_topic_attributes(&self, input: &SetTopicAttributesInput) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3148,6 +3049,10 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Sets the attributes for an endpoint for a device on one of the supported push
+	/// notification services, such as GCM and APNS. For more information, see [Using
+	/// Amazon SNS Mobile Push
+	/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 	pub fn set_endpoint_attributes(&self, input: &SetEndpointAttributesInput) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3166,6 +3071,8 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Adds a statement to a topic's access control policy, granting access for the
+	/// specified AWS accounts to the specified actions.
 	pub fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3184,6 +3091,13 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes a subscription. If the subscription requires authentication for
+	/// deletion, only the owner of the subscription or the topic's owner can
+	/// unsubscribe, and an AWS signature is required. If the `Unsubscribe` call does
+	/// not require authentication and the requester is not the subscription owner, a
+	/// final cancellation message is delivered to the endpoint, so that the endpoint
+	/// owner can easily resubscribe to the topic if the `Unsubscribe` request was
+	/// unintended.
 	pub fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3202,6 +3116,7 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Returns all of the properties of a subscription.
 	pub fn get_subscription_attributes(&self, input: &GetSubscriptionAttributesInput) -> Result<GetSubscriptionAttributesResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3220,6 +3135,21 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Creates an endpoint for a device and mobile app on one of the supported push
+	/// notification services, such as GCM and APNS. `CreatePlatformEndpoint` requires
+	/// the PlatformApplicationArn that is returned from `CreatePlatformApplication`.
+	/// The EndpointArn that is returned when using `CreatePlatformEndpoint` can then
+	/// be used by the `Publish` action to send a message to a mobile app or by the
+	/// `Subscribe` action for subscription to a topic. The `CreatePlatformEndpoint`
+	/// action is idempotent, so if the requester already owns an endpoint with the
+	/// same device token and attributes, that endpoint's ARN is returned without
+	/// creating a new endpoint. For more information, see [Using Amazon SNS Mobile
+	/// Push
+	/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
+	/// When using `CreatePlatformEndpoint` with Baidu, two attributes must be
+	/// provided: ChannelId and UserId. The token field must also contain the
+	/// ChannelId. For more information, see [Creating an Amazon SNS Endpoint for Baid
+	/// u](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html).
 	pub fn create_platform_endpoint(&self, input: &CreatePlatformEndpointInput) -> Result<CreateEndpointResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3238,6 +3168,7 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Removes a statement from a topic's access control policy.
 	pub fn remove_permission(&self, input: &RemovePermissionInput) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3256,6 +3187,11 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Creates a topic to which notifications can be published. Users can create at
+	/// most 3000 topics. For more information, see
+	/// [http://aws.amazon.com/sns](http://aws.amazon.com/sns/). This action is
+	/// idempotent, so if the requester already owns a topic with the specified name,
+	/// that topic's ARN is returned without creating a new topic.
 	pub fn create_topic(&self, input: &CreateTopicInput) -> Result<CreateTopicResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3274,6 +3210,7 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Allows a subscription owner to set an attribute of the topic to a new value.
 	pub fn set_subscription_attributes(&self, input: &SetSubscriptionAttributesInput) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3292,6 +3229,21 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Creates a platform application object for one of the supported push
+	/// notification services, such as APNS and GCM, to which devices and mobile apps
+	/// may register. You must specify PlatformPrincipal and PlatformCredential
+	/// attributes when using the `CreatePlatformApplication` action. The
+	/// PlatformPrincipal is received from the notification service. For
+	/// APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM,
+	/// PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client
+	/// id". The PlatformCredential is also received from the notification service.
+	/// For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM,
+	/// PlatformCredential is "API key". For ADM, PlatformCredential is "client
+	/// secret". The PlatformApplicationArn that is returned when using
+	/// `CreatePlatformApplication` is then used as an attribute for the
+	/// `CreatePlatformEndpoint` action. For more information, see [Using Amazon SNS
+	/// Mobile Push
+	/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 	pub fn create_platform_application(&self, input: &CreatePlatformApplicationInput) -> Result<CreatePlatformApplicationResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3310,6 +3262,10 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Retrieves the attributes of the platform application object for the supported
+	/// push notification services, such as APNS and GCM. For more information, see
+	/// [Using Amazon SNS Mobile Push
+	/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 	pub fn get_platform_application_attributes(&self, input: &GetPlatformApplicationAttributesInput) -> Result<GetPlatformApplicationAttributesResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3328,6 +3284,15 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Sends a message to all of a topic's subscribed endpoints. When a `messageId`
+	/// is returned, the message has been saved and Amazon SNS will attempt to deliver
+	/// it to the topic's subscribers shortly. The format of the outgoing message to
+	/// each subscribed endpoint depends on the notification protocol selected.
+	/// To use the `Publish` action for sending a message to a mobile endpoint, such
+	/// as an app on a Kindle device or mobile phone, you must specify the
+	/// EndpointArn. The EndpointArn is returned when making a call with the
+	/// `CreatePlatformEndpoint` action. The second example below shows a request and
+	/// response for publishing to a mobile endpoint.
 	pub fn publish(&self, input: &PublishInput) -> Result<PublishResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3346,6 +3311,16 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Lists the endpoints and endpoint attributes for devices in a supported push
+	/// notification service, such as GCM and APNS. The results for
+	/// `ListEndpointsByPlatformApplication` are paginated and return a limited list
+	/// of endpoints, up to 100. If additional records are available after the first
+	/// page results, then a NextToken string will be returned. To receive the next
+	/// page, you call `ListEndpointsByPlatformApplication` again using the NextToken
+	/// string received from the previous call. When there are no more records to
+	/// return, NextToken will be null. For more information, see [Using Amazon SNS
+	/// Mobile Push
+	/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 	pub fn list_endpoints_by_platform_application(&self, input: &ListEndpointsByPlatformApplicationInput) -> Result<ListEndpointsByPlatformApplicationResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3364,6 +3339,10 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Retrieves the endpoint attributes for a device on one of the supported push
+	/// notification services, such as GCM and APNS. For more information, see [Using
+	/// Amazon SNS Mobile Push
+	/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 	pub fn get_endpoint_attributes(&self, input: &GetEndpointAttributesInput) -> Result<GetEndpointAttributesResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3382,6 +3361,9 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes the endpoint from Amazon SNS. This action is idempotent. For more
+	/// information, see [Using Amazon SNS Mobile Push
+	/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 	pub fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3400,6 +3382,10 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes a platform application object for one of the supported push
+	/// notification services, such as APNS and GCM. For more information, see [Using
+	/// Amazon SNS Mobile Push
+	/// Notifications](http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html).
 	pub fn delete_platform_application(&self, input: &DeletePlatformApplicationInput) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3418,6 +3404,8 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Returns all of the properties of a topic. Topic properties returned might
+	/// differ based on the authorization of the user.
 	pub fn get_topic_attributes(&self, input: &GetTopicAttributesInput) -> Result<GetTopicAttributesResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3436,6 +3424,10 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Prepares to subscribe an endpoint by sending the endpoint a confirmation
+	/// message. To actually create a subscription, the endpoint owner must call the
+	/// `ConfirmSubscription` action with the token from the confirmation message.
+	/// Confirmation tokens are valid for three days.
 	pub fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3454,6 +3446,10 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes a topic and all its subscriptions. Deleting a topic might prevent some
+	/// messages previously sent to the topic from being delivered to subscribers.
+	/// This action is idempotent, so deleting a topic that does not exist does not
+	/// result in an error.
 	pub fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
@@ -3472,6 +3468,10 @@ impl<'a> SNSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Returns a list of the requester's topics. Each call returns a limited list of
+	/// topics, up to 100. If there are more topics, a `NextToken` is also returned.
+	/// Use the `NextToken` parameter in a new `ListTopics` call to get further
+	/// results.
 	pub fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();

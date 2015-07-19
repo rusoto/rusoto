@@ -75,10 +75,6 @@ def rust_type(name, shape):
 # generate a rust declaration for a botocore structure shape
 def rust_struct(name, shape):
 
-	for (opname, op) in operations.iteritems():
-		if 'input' in op and op['input']['shape'] == name:
-			documentation(op)
-
 	print "#[derive(Debug, Default)]";
 	if shape['members']:
 		print "pub struct " + name + " {"
@@ -96,10 +92,10 @@ def rust_struct(name, shape):
 # generate rust code to encode a botocore shape into a map of query parameters
 def param_writer(name, shape):
 
-	print "/// Write a " + name + "'s contents to a SignedRequest"
-	print 'pub struct ' + name + 'Writer;'
+	print "/// Write " + name + " contents to a SignedRequest"
+	print 'struct ' + name + 'Writer;'
 	print 'impl ' + name + 'Writer {'
-	print '\tpub fn write_params(params: &mut Params, name: &str, obj: &' + name + ') {'
+	print '\tfn write_params(params: &mut Params, name: &str, obj: &' + name + ') {'
 
 	shape_type = shape['type']
 
@@ -154,10 +150,10 @@ def map_writer(shape):
 def type_parser(name, shape):
 	shape_type = shape['type']
 	
-	print "/// Parse a " + name + " from XML"
-	print 'pub struct ' + name + 'Parser;'
+	print "/// Parse " + name + " from XML"
+	print 'struct ' + name + 'Parser;'
 	print 'impl ' + name + 'Parser {'
-	print '\tpub fn parse_xml<\'a>(tag_name: &str, stack: &mut XmlStack) -> Result<' + name + ', XmlParseError> {'
+	print '\tfn parse_xml<\'a>(tag_name: &str, stack: &mut XmlStack) -> Result<' + name + ', XmlParseError> {'
 
 	if shape_type == 'map':
 		map_parser(shape)
@@ -262,6 +258,8 @@ def request_method(operation):
 	input_name = operation['input']['shape']
 	input_type = shapes[input_name]
 	output_type = get_output_type(operation)
+
+	documentation(operation,"\t")
 
 	print "\tpub fn " + c_to_s(operation['name']) + "(&self, input: &" + input_name + ") -> Result<" + output_type + ", AWSError> {"
 	print '\t\tlet mut request = SignedRequest::new("' + http['method'] + '", "' + metadata['endpointPrefix'] + '", &self.region, "' + http['requestUri'] + '");'

@@ -4,39 +4,39 @@ use std::str;
 #[derive(Debug, Default)]
 pub struct UnsupportedOperation;
 
-/// Parse a UnsupportedOperation from XML
-pub struct UnsupportedOperationParser;
+/// Parse UnsupportedOperation from XML
+struct UnsupportedOperationParser;
 impl UnsupportedOperationParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<UnsupportedOperation, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<UnsupportedOperation, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = UnsupportedOperation::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a UnsupportedOperation's contents to a SignedRequest
-pub struct UnsupportedOperationWriter;
+/// Write UnsupportedOperation contents to a SignedRequest
+struct UnsupportedOperationWriter;
 impl UnsupportedOperationWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &UnsupportedOperation) {
+	fn write_params(params: &mut Params, name: &str, obj: &UnsupportedOperation) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
 }
 pub type Binary = Vec<u8>;
-/// Parse a Binary from XML
-pub struct BinaryParser;
+/// Parse Binary from XML
+struct BinaryParser;
 impl BinaryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Binary, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Binary, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack)).into_bytes();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a Binary's contents to a SignedRequest
-pub struct BinaryWriter;
+/// Write Binary contents to a SignedRequest
+struct BinaryWriter;
 impl BinaryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Binary) {
+	fn write_params(params: &mut Params, name: &str, obj: &Binary) {
 		params.put(name, str::from_utf8(&obj).unwrap());
 	}
 }
@@ -46,20 +46,20 @@ impl BinaryWriter {
 #[derive(Debug, Default)]
 pub struct PurgeQueueInProgress;
 
-/// Parse a PurgeQueueInProgress from XML
-pub struct PurgeQueueInProgressParser;
+/// Parse PurgeQueueInProgress from XML
+struct PurgeQueueInProgressParser;
 impl PurgeQueueInProgressParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PurgeQueueInProgress, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PurgeQueueInProgress, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PurgeQueueInProgress::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a PurgeQueueInProgress's contents to a SignedRequest
-pub struct PurgeQueueInProgressWriter;
+/// Write PurgeQueueInProgress contents to a SignedRequest
+struct PurgeQueueInProgressWriter;
 impl PurgeQueueInProgressWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PurgeQueueInProgress) {
+	fn write_params(params: &mut Params, name: &str, obj: &PurgeQueueInProgress) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -92,10 +92,10 @@ pub struct MessageAttributeValue {
 	pub string_list_values: Option<StringList>,
 }
 
-/// Parse a MessageAttributeValue from XML
-pub struct MessageAttributeValueParser;
+/// Parse MessageAttributeValue from XML
+struct MessageAttributeValueParser;
 impl MessageAttributeValueParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeValue, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeValue, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = MessageAttributeValue::default();
 		loop {
@@ -126,10 +126,10 @@ impl MessageAttributeValueParser {
 		Ok(obj)
 	}
 }
-/// Write a MessageAttributeValue's contents to a SignedRequest
-pub struct MessageAttributeValueWriter;
+/// Write MessageAttributeValue contents to a SignedRequest
+struct MessageAttributeValueWriter;
 impl MessageAttributeValueWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
+	fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.binary_list_values {
@@ -148,10 +148,10 @@ impl MessageAttributeValueWriter {
 	}
 }
 pub type MessageAttributeNameList = Vec<MessageAttributeName>;
-/// Parse a MessageAttributeNameList from XML
-pub struct MessageAttributeNameListParser;
+/// Parse MessageAttributeNameList from XML
+struct MessageAttributeNameListParser;
 impl MessageAttributeNameListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeNameList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeNameList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "MessageAttributeName" {
 			obj.push(try!(MessageAttributeNameParser::parse_xml("MessageAttributeName", stack)));
@@ -159,10 +159,10 @@ impl MessageAttributeNameListParser {
 		Ok(obj)
 	}
 }
-/// Write a MessageAttributeNameList's contents to a SignedRequest
-pub struct MessageAttributeNameListWriter;
+/// Write MessageAttributeNameList contents to a SignedRequest
+struct MessageAttributeNameListWriter;
 impl MessageAttributeNameListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeNameList) {
+	fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeNameList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -171,13 +171,6 @@ impl MessageAttributeNameListWriter {
 		}
 	}
 }
-/// Sets the value of one or more queue attributes. When you change a queue's
-/// attributes, the change can take up to 60 seconds for most of the attributes to
-/// propagate throughout the SQS system. Changes made to the
-/// `MessageRetentionPeriod` attribute can take up to 15 minutes.
-/// Going forward, new attributes might be added. If you are writing code that
-/// calls this action, we recommend that you structure your code so that it can
-/// handle new attributes gracefully.
 #[derive(Debug, Default)]
 pub struct SetQueueAttributesRequest {
 	/// The URL of the Amazon SQS queue to take action on.
@@ -195,10 +188,10 @@ pub struct SetQueueAttributesRequest {
 	pub attributes: AttributeMap,
 }
 
-/// Parse a SetQueueAttributesRequest from XML
-pub struct SetQueueAttributesRequestParser;
+/// Parse SetQueueAttributesRequest from XML
+struct SetQueueAttributesRequestParser;
 impl SetQueueAttributesRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetQueueAttributesRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetQueueAttributesRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SetQueueAttributesRequest::default();
 		loop {
@@ -217,40 +210,16 @@ impl SetQueueAttributesRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a SetQueueAttributesRequest's contents to a SignedRequest
-pub struct SetQueueAttributesRequestWriter;
+/// Write SetQueueAttributesRequest contents to a SignedRequest
+struct SetQueueAttributesRequestWriter;
 impl SetQueueAttributesRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SetQueueAttributesRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &SetQueueAttributesRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
 		AttributeMapWriter::write_params(params, &(prefix.to_string() + "Attribute"), &obj.attributes);
 	}
 }
-/// Gets attributes for the specified queue. The following attributes are
-/// supported:
-///   * `All` \- returns all values.
-///   * `ApproximateNumberOfMessages` \- returns the approximate number of visible messages in a queue. For more information, see [Resources Required to Process Messages](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/ApproximateNumber.html) in the _Amazon SQS Developer Guide_.
-///   * `ApproximateNumberOfMessagesNotVisible` \- returns the approximate number of messages that are not timed-out and not deleted. For more information, see [Resources Required to Process Messages](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/ApproximateNumber.html) in the _Amazon SQS Developer Guide_.
-///   * `VisibilityTimeout` \- returns the visibility timeout for the queue. For more information about visibility timeout, see [Visibility Timeout](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AboutVT.html) in the _Amazon SQS Developer Guide_.
-///   * `CreatedTimestamp` \- returns the time when the queue was created (epoch time in seconds).
-///   * `LastModifiedTimestamp` \- returns the time when the queue was last changed (epoch time in seconds).
-///   * `Policy` \- returns the queue's policy.
-///   * `MaximumMessageSize` \- returns the limit of how many bytes a message can contain before Amazon SQS rejects it.
-///   * `MessageRetentionPeriod` \- returns the number of seconds Amazon SQS retains a message.
-///   * `QueueArn` \- returns the queue's Amazon resource name (ARN).
-///   * `ApproximateNumberOfMessagesDelayed` \- returns the approximate number of messages that are pending to be added to the queue.
-///   * `DelaySeconds` \- returns the default delay on the queue in seconds.
-///   * `ReceiveMessageWaitTimeSeconds` \- returns the time for which a ReceiveMessage call will wait for a message to arrive.
-///   * `RedrivePolicy` \- returns the parameters for dead letter queue functionality of the source queue. For more information about RedrivePolicy and dead letter queues, see [Using Amazon SQS Dead Letter Queues](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/SQSDeadLetterQueue.html) in the _Amazon SQS Developer Guide_.
-/// Going forward, new attributes might be added. If you are writing code that
-/// calls this action, we recommend that you structure your code so that it can
-/// handle new attributes gracefully. Some API actions take lists of parameters.
-/// These lists are specified using the `param.n` notation. Values of `n` are
-/// integers starting from 1. For example, a parameter list with two elements
-/// looks like this:
-/// `&Attribute.1=this`
-/// `&Attribute.2=that`
 #[derive(Debug, Default)]
 pub struct GetQueueAttributesRequest {
 	/// The URL of the Amazon SQS queue to take action on.
@@ -259,10 +228,10 @@ pub struct GetQueueAttributesRequest {
 	pub attribute_names: Option<AttributeNameList>,
 }
 
-/// Parse a GetQueueAttributesRequest from XML
-pub struct GetQueueAttributesRequestParser;
+/// Parse GetQueueAttributesRequest from XML
+struct GetQueueAttributesRequestParser;
 impl GetQueueAttributesRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueAttributesRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueAttributesRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetQueueAttributesRequest::default();
 		loop {
@@ -281,10 +250,10 @@ impl GetQueueAttributesRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a GetQueueAttributesRequest's contents to a SignedRequest
-pub struct GetQueueAttributesRequestWriter;
+/// Write GetQueueAttributesRequest contents to a SignedRequest
+struct GetQueueAttributesRequestWriter;
 impl GetQueueAttributesRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetQueueAttributesRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetQueueAttributesRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
@@ -305,10 +274,10 @@ pub struct SendMessageBatchResult {
 	pub failed: BatchResultErrorEntryList,
 }
 
-/// Parse a SendMessageBatchResult from XML
-pub struct SendMessageBatchResultParser;
+/// Parse SendMessageBatchResult from XML
+struct SendMessageBatchResultParser;
 impl SendMessageBatchResultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchResult, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageBatchResult::default();
 		loop {
@@ -327,37 +296,16 @@ impl SendMessageBatchResultParser {
 		Ok(obj)
 	}
 }
-/// Write a SendMessageBatchResult's contents to a SignedRequest
-pub struct SendMessageBatchResultWriter;
+/// Write SendMessageBatchResult contents to a SignedRequest
+struct SendMessageBatchResultWriter;
 impl SendMessageBatchResultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchResult) {
+	fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchResult) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		SendMessageBatchResultEntryListWriter::write_params(params, &(prefix.to_string() + "SendMessageBatchResultEntry"), &obj.successful);
 		BatchResultErrorEntryListWriter::write_params(params, &(prefix.to_string() + "BatchResultErrorEntry"), &obj.failed);
 	}
 }
-/// Creates a new queue, or returns the URL of an existing one. When you request
-/// `CreateQueue`, you provide a name for the queue. To successfully create a new
-/// queue, you must provide a name that is unique within the scope of your own
-/// queues.
-/// If you delete a queue, you must wait at least 60 seconds before creating a
-/// queue with the same name.
-/// You may pass one or more attributes in the request. If you do not provide a
-/// value for any attribute, the queue will have the default value for that
-/// attribute. Permitted attributes are the same that can be set using
-/// SetQueueAttributes.
-/// Use GetQueueUrl to get a queue's URL. GetQueueUrl requires only the
-/// `QueueName` parameter.
-/// If you provide the name of an existing queue, along with the exact names and
-/// values of all the queue's attributes, `CreateQueue` returns the queue URL for
-/// the existing queue. If the queue name, attribute names, or attribute values do
-/// not match an existing queue, `CreateQueue` returns an error.
-/// Some API actions take lists of parameters. These lists are specified using the
-/// `param.n` notation. Values of `n` are integers starting from 1. For example, a
-/// parameter list with two elements looks like this:
-/// `&Attribute.1=this`
-/// `&Attribute.2=that`
 #[derive(Debug, Default)]
 pub struct CreateQueueRequest {
 	/// A map of attributes with their corresponding values.
@@ -374,10 +322,10 @@ pub struct CreateQueueRequest {
 	pub queue_name: String,
 }
 
-/// Parse a CreateQueueRequest from XML
-pub struct CreateQueueRequestParser;
+/// Parse CreateQueueRequest from XML
+struct CreateQueueRequestParser;
 impl CreateQueueRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateQueueRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateQueueRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreateQueueRequest::default();
 		loop {
@@ -396,10 +344,10 @@ impl CreateQueueRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a CreateQueueRequest's contents to a SignedRequest
-pub struct CreateQueueRequestWriter;
+/// Write CreateQueueRequest contents to a SignedRequest
+struct CreateQueueRequestWriter;
 impl CreateQueueRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CreateQueueRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &CreateQueueRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.attributes {
@@ -408,8 +356,6 @@ impl CreateQueueRequestWriter {
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueName"), &obj.queue_name);
 	}
 }
-/// Revokes any permissions in the queue policy that matches the specified `Label`
-/// parameter. Only the owner of the queue can remove permissions.
 #[derive(Debug, Default)]
 pub struct RemovePermissionRequest {
 	/// The URL of the Amazon SQS queue to take action on.
@@ -419,10 +365,10 @@ pub struct RemovePermissionRequest {
 	pub label: String,
 }
 
-/// Parse a RemovePermissionRequest from XML
-pub struct RemovePermissionRequestParser;
+/// Parse RemovePermissionRequest from XML
+struct RemovePermissionRequestParser;
 impl RemovePermissionRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<RemovePermissionRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<RemovePermissionRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = RemovePermissionRequest::default();
 		loop {
@@ -441,10 +387,10 @@ impl RemovePermissionRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a RemovePermissionRequest's contents to a SignedRequest
-pub struct RemovePermissionRequestWriter;
+/// Write RemovePermissionRequest contents to a SignedRequest
+struct RemovePermissionRequestWriter;
 impl RemovePermissionRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &RemovePermissionRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &RemovePermissionRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
@@ -462,10 +408,10 @@ pub struct DeleteMessageBatchRequestEntry {
 	pub id: String,
 }
 
-/// Parse a DeleteMessageBatchRequestEntry from XML
-pub struct DeleteMessageBatchRequestEntryParser;
+/// Parse DeleteMessageBatchRequestEntry from XML
+struct DeleteMessageBatchRequestEntryParser;
 impl DeleteMessageBatchRequestEntryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchRequestEntry, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchRequestEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteMessageBatchRequestEntry::default();
 		loop {
@@ -484,38 +430,16 @@ impl DeleteMessageBatchRequestEntryParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteMessageBatchRequestEntry's contents to a SignedRequest
-pub struct DeleteMessageBatchRequestEntryWriter;
+/// Write DeleteMessageBatchRequestEntry contents to a SignedRequest
+struct DeleteMessageBatchRequestEntryWriter;
 impl DeleteMessageBatchRequestEntryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequestEntry) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequestEntry) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "ReceiptHandle"), &obj.receipt_handle);
 		StringWriter::write_params(params, &(prefix.to_string() + "Id"), &obj.id);
 	}
 }
-/// Delivers up to ten messages to the specified queue. This is a batch version of
-/// SendMessage. The result of the send action on each message is reported
-/// individually in the response. The maximum allowed individual message size is
-/// 256 KB (262,144 bytes).
-/// The maximum total payload size (i.e., the sum of all a batch's individual
-/// message lengths) is also 256 KB (262,144 bytes).
-/// If the `DelaySeconds` parameter is not specified for an entry, the default for
-/// the queue is used.
-/// The following list shows the characters (in Unicode) that are allowed in your
-/// message, according to the W3C XML specification. For more information, go to
-/// <http://www.faqs.org/rfcs/rfc1321.html>. If you send any characters that are
-/// not included in the list, your request will be rejected.
-/// #x9 | #xA | #xD | [#x20 to #xD7FF] | [#xE000 to #xFFFD] | [#x10000 to
-/// #x10FFFF]
-/// Because the batch request can result in a combination of successful and
-/// unsuccessful actions, you should check for batch errors even when the call
-/// returns an HTTP status code of 200.  Some API actions take lists of
-/// parameters. These lists are specified using the `param.n` notation. Values of
-/// `n` are integers starting from 1. For example, a parameter list with two
-/// elements looks like this:
-/// `&Attribute.1=this`
-/// `&Attribute.2=that`
 #[derive(Debug, Default)]
 pub struct SendMessageBatchRequest {
 	/// The URL of the Amazon SQS queue to take action on.
@@ -524,10 +448,10 @@ pub struct SendMessageBatchRequest {
 	pub entries: SendMessageBatchRequestEntryList,
 }
 
-/// Parse a SendMessageBatchRequest from XML
-pub struct SendMessageBatchRequestParser;
+/// Parse SendMessageBatchRequest from XML
+struct SendMessageBatchRequestParser;
 impl SendMessageBatchRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageBatchRequest::default();
 		loop {
@@ -546,10 +470,10 @@ impl SendMessageBatchRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a SendMessageBatchRequest's contents to a SignedRequest
-pub struct SendMessageBatchRequestWriter;
+/// Write SendMessageBatchRequest contents to a SignedRequest
+struct SendMessageBatchRequestWriter;
 impl SendMessageBatchRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
@@ -567,10 +491,10 @@ pub struct ChangeMessageVisibilityBatchResult {
 	pub failed: BatchResultErrorEntryList,
 }
 
-/// Parse a ChangeMessageVisibilityBatchResult from XML
-pub struct ChangeMessageVisibilityBatchResultParser;
+/// Parse ChangeMessageVisibilityBatchResult from XML
+struct ChangeMessageVisibilityBatchResultParser;
 impl ChangeMessageVisibilityBatchResultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchResult, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ChangeMessageVisibilityBatchResult::default();
 		loop {
@@ -589,10 +513,10 @@ impl ChangeMessageVisibilityBatchResultParser {
 		Ok(obj)
 	}
 }
-/// Write a ChangeMessageVisibilityBatchResult's contents to a SignedRequest
-pub struct ChangeMessageVisibilityBatchResultWriter;
+/// Write ChangeMessageVisibilityBatchResult contents to a SignedRequest
+struct ChangeMessageVisibilityBatchResultWriter;
 impl ChangeMessageVisibilityBatchResultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchResult) {
+	fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchResult) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ChangeMessageVisibilityBatchResultEntryListWriter::write_params(params, &(prefix.to_string() + "ChangeMessageVisibilityBatchResultEntry"), &obj.successful);
@@ -606,10 +530,10 @@ pub struct CreateQueueResult {
 	pub queue_url: String,
 }
 
-/// Parse a CreateQueueResult from XML
-pub struct CreateQueueResultParser;
+/// Parse CreateQueueResult from XML
+struct CreateQueueResultParser;
 impl CreateQueueResultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateQueueResult, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateQueueResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreateQueueResult::default();
 		loop {
@@ -624,23 +548,15 @@ impl CreateQueueResultParser {
 		Ok(obj)
 	}
 }
-/// Write a CreateQueueResult's contents to a SignedRequest
-pub struct CreateQueueResultWriter;
+/// Write CreateQueueResult contents to a SignedRequest
+struct CreateQueueResultWriter;
 impl CreateQueueResultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CreateQueueResult) {
+	fn write_params(params: &mut Params, name: &str, obj: &CreateQueueResult) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
 	}
 }
-/// Deletes the messages in a queue specified by the **queue URL**.
-/// When you use the `PurgeQueue` API, the deleted messages in the queue cannot be
-/// retrieved.
-/// When you purge a queue, the message deletion process takes up to 60 seconds.
-/// All messages sent to the queue before calling `PurgeQueue` will be deleted;
-/// messages sent to the queue while it is being purged may be deleted. While the
-/// queue is being purged, messages sent to the queue before `PurgeQueue` was
-/// called may be received, but will be deleted within the next minute.
 #[derive(Debug, Default)]
 pub struct PurgeQueueRequest {
 	/// The queue URL of the queue to delete the messages from when using the
@@ -648,10 +564,10 @@ pub struct PurgeQueueRequest {
 	pub queue_url: String,
 }
 
-/// Parse a PurgeQueueRequest from XML
-pub struct PurgeQueueRequestParser;
+/// Parse PurgeQueueRequest from XML
+struct PurgeQueueRequestParser;
 impl PurgeQueueRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PurgeQueueRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PurgeQueueRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PurgeQueueRequest::default();
 		loop {
@@ -666,10 +582,10 @@ impl PurgeQueueRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a PurgeQueueRequest's contents to a SignedRequest
-pub struct PurgeQueueRequestWriter;
+/// Write PurgeQueueRequest contents to a SignedRequest
+struct PurgeQueueRequestWriter;
 impl PurgeQueueRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PurgeQueueRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &PurgeQueueRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
@@ -679,20 +595,20 @@ impl PurgeQueueRequestWriter {
 #[derive(Debug, Default)]
 pub struct ReceiptHandleIsInvalid;
 
-/// Parse a ReceiptHandleIsInvalid from XML
-pub struct ReceiptHandleIsInvalidParser;
+/// Parse ReceiptHandleIsInvalid from XML
+struct ReceiptHandleIsInvalidParser;
 impl ReceiptHandleIsInvalidParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ReceiptHandleIsInvalid, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ReceiptHandleIsInvalid, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ReceiptHandleIsInvalid::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a ReceiptHandleIsInvalid's contents to a SignedRequest
-pub struct ReceiptHandleIsInvalidWriter;
+/// Write ReceiptHandleIsInvalid contents to a SignedRequest
+struct ReceiptHandleIsInvalidWriter;
 impl ReceiptHandleIsInvalidWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ReceiptHandleIsInvalid) {
+	fn write_params(params: &mut Params, name: &str, obj: &ReceiptHandleIsInvalid) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -701,37 +617,24 @@ impl ReceiptHandleIsInvalidWriter {
 #[derive(Debug, Default)]
 pub struct InvalidAttributeName;
 
-/// Parse a InvalidAttributeName from XML
-pub struct InvalidAttributeNameParser;
+/// Parse InvalidAttributeName from XML
+struct InvalidAttributeNameParser;
 impl InvalidAttributeNameParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidAttributeName, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidAttributeName, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InvalidAttributeName::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a InvalidAttributeName's contents to a SignedRequest
-pub struct InvalidAttributeNameWriter;
+/// Write InvalidAttributeName contents to a SignedRequest
+struct InvalidAttributeNameWriter;
 impl InvalidAttributeNameWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &InvalidAttributeName) {
+	fn write_params(params: &mut Params, name: &str, obj: &InvalidAttributeName) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
 }
-/// Changes the visibility timeout of multiple messages. This is a batch version
-/// of ChangeMessageVisibility. The result of the action on each message is
-/// reported individually in the response. You can send up to 10
-/// ChangeMessageVisibility requests with each `ChangeMessageVisibilityBatch`
-/// action.
-/// Because the batch request can result in a combination of successful and
-/// unsuccessful actions, you should check for batch errors even when the call
-/// returns an HTTP status code of 200. Some API actions take lists of parameters.
-/// These lists are specified using the `param.n` notation. Values of `n` are
-/// integers starting from 1. For example, a parameter list with two elements
-/// looks like this:
-/// `&Attribute.1=this`
-/// `&Attribute.2=that`
 #[derive(Debug, Default)]
 pub struct ChangeMessageVisibilityBatchRequest {
 	/// The URL of the Amazon SQS queue to take action on.
@@ -741,10 +644,10 @@ pub struct ChangeMessageVisibilityBatchRequest {
 	pub entries: ChangeMessageVisibilityBatchRequestEntryList,
 }
 
-/// Parse a ChangeMessageVisibilityBatchRequest from XML
-pub struct ChangeMessageVisibilityBatchRequestParser;
+/// Parse ChangeMessageVisibilityBatchRequest from XML
+struct ChangeMessageVisibilityBatchRequestParser;
 impl ChangeMessageVisibilityBatchRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ChangeMessageVisibilityBatchRequest::default();
 		loop {
@@ -763,10 +666,10 @@ impl ChangeMessageVisibilityBatchRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a ChangeMessageVisibilityBatchRequest's contents to a SignedRequest
-pub struct ChangeMessageVisibilityBatchRequestWriter;
+/// Write ChangeMessageVisibilityBatchRequest contents to a SignedRequest
+struct ChangeMessageVisibilityBatchRequestWriter;
 impl ChangeMessageVisibilityBatchRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
@@ -774,10 +677,10 @@ impl ChangeMessageVisibilityBatchRequestWriter {
 	}
 }
 pub type MessageAttributeMap = HashMap<String,MessageAttributeValue>;
-/// Parse a MessageAttributeMap from XML
-pub struct MessageAttributeMapParser;
+/// Parse MessageAttributeMap from XML
+struct MessageAttributeMapParser;
 impl MessageAttributeMapParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeMap, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeMap, XmlParseError> {
 		let mut obj = HashMap::new();
 		while try!(peek_at_name(stack)) == tag_name {
 			try!(start_element(tag_name, stack));
@@ -789,10 +692,10 @@ impl MessageAttributeMapParser {
 		Ok(obj)
 	}
 }
-/// Write a MessageAttributeMap's contents to a SignedRequest
-pub struct MessageAttributeMapWriter;
+/// Write MessageAttributeMap contents to a SignedRequest
+struct MessageAttributeMapWriter;
 impl MessageAttributeMapWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeMap) {
+	fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeMap) {
 		let mut index = 1;
 		for (key,value) in obj {
 			let prefix = &format!("{}.{}", name, index);
@@ -802,38 +705,6 @@ impl MessageAttributeMapWriter {
 		}
 	}
 }
-/// Retrieves one or more messages, with a maximum limit of 10 messages, from the
-/// specified queue. Long poll support is enabled by using the `WaitTimeSeconds`
-/// parameter. For more information, see [Amazon SQS Long Poll](http://docs.aws.am
-/// azon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html)
-/// in the _Amazon SQS Developer Guide_.
-/// Short poll is the default behavior where a weighted random set of machines is
-/// sampled on a `ReceiveMessage` call. This means only the messages on the
-/// sampled machines are returned. If the number of messages in the queue is small
-/// (less than 1000), it is likely you will get fewer messages than you requested
-/// per `ReceiveMessage` call. If the number of messages in the queue is extremely
-/// small, you might not receive any messages in a particular `ReceiveMessage`
-/// response; in which case you should repeat the request.
-/// For each message returned, the response includes the following:
-///   * Message body 
-///   * MD5 digest of the message body. For information about MD5, go to <http://www.faqs.org/rfcs/rfc1321.html>. 
-///   * Message ID you received when you sent the message to the queue. 
-///   * Receipt handle. 
-///   * Message attributes. 
-///   * MD5 digest of the message attributes. 
-/// The receipt handle is the identifier you must provide when deleting the
-/// message. For more information, see [Queue and Message Identifiers](http://docs
-/// .aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/ImportantIdenti
-/// fiers.html) in the _Amazon SQS Developer Guide_.
-/// You can provide the `VisibilityTimeout` parameter in your request, which will
-/// be applied to the messages that Amazon SQS returns in the response. If you do
-/// not include the parameter, the overall visibility timeout for the queue is
-/// used for the returned messages. For more information, see [Visibility Timeout]
-/// (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/Abo
-/// utVT.html) in the _Amazon SQS Developer Guide_.
-/// Going forward, new attributes might be added. If you are writing code that
-/// calls this action, we recommend that you structure your code so that it can
-/// handle new attributes gracefully.
 #[derive(Debug, Default)]
 pub struct ReceiveMessageRequest {
 	/// The URL of the Amazon SQS queue to take action on.
@@ -875,10 +746,10 @@ pub struct ReceiveMessageRequest {
 	pub attribute_names: Option<AttributeNameList>,
 }
 
-/// Parse a ReceiveMessageRequest from XML
-pub struct ReceiveMessageRequestParser;
+/// Parse ReceiveMessageRequest from XML
+struct ReceiveMessageRequestParser;
 impl ReceiveMessageRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ReceiveMessageRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ReceiveMessageRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ReceiveMessageRequest::default();
 		loop {
@@ -913,10 +784,10 @@ impl ReceiveMessageRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a ReceiveMessageRequest's contents to a SignedRequest
-pub struct ReceiveMessageRequestWriter;
+/// Write ReceiveMessageRequest contents to a SignedRequest
+struct ReceiveMessageRequestWriter;
 impl ReceiveMessageRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ReceiveMessageRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &ReceiveMessageRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
@@ -944,10 +815,10 @@ pub struct ReceiveMessageResult {
 	pub messages: MessageList,
 }
 
-/// Parse a ReceiveMessageResult from XML
-pub struct ReceiveMessageResultParser;
+/// Parse ReceiveMessageResult from XML
+struct ReceiveMessageResultParser;
 impl ReceiveMessageResultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ReceiveMessageResult, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ReceiveMessageResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ReceiveMessageResult::default();
 		loop {
@@ -962,37 +833,37 @@ impl ReceiveMessageResultParser {
 		Ok(obj)
 	}
 }
-/// Write a ReceiveMessageResult's contents to a SignedRequest
-pub struct ReceiveMessageResultWriter;
+/// Write ReceiveMessageResult contents to a SignedRequest
+struct ReceiveMessageResultWriter;
 impl ReceiveMessageResultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ReceiveMessageResult) {
+	fn write_params(params: &mut Params, name: &str, obj: &ReceiveMessageResult) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MessageListWriter::write_params(params, &(prefix.to_string() + "Message"), &obj.messages);
 	}
 }
-/// Parse a String from XML
-pub struct StringParser;
+/// Parse String from XML
+struct StringParser;
 impl StringParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<String, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<String, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a String's contents to a SignedRequest
-pub struct StringWriter;
+/// Write String contents to a SignedRequest
+struct StringWriter;
 impl StringWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &String) {
+	fn write_params(params: &mut Params, name: &str, obj: &String) {
 		params.put(name, obj);
 	}
 }
 pub type ChangeMessageVisibilityBatchRequestEntryList = Vec<ChangeMessageVisibilityBatchRequestEntry>;
-/// Parse a ChangeMessageVisibilityBatchRequestEntryList from XML
-pub struct ChangeMessageVisibilityBatchRequestEntryListParser;
+/// Parse ChangeMessageVisibilityBatchRequestEntryList from XML
+struct ChangeMessageVisibilityBatchRequestEntryListParser;
 impl ChangeMessageVisibilityBatchRequestEntryListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchRequestEntryList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchRequestEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ChangeMessageVisibilityBatchRequestEntry" {
 			obj.push(try!(ChangeMessageVisibilityBatchRequestEntryParser::parse_xml("ChangeMessageVisibilityBatchRequestEntry", stack)));
@@ -1000,10 +871,10 @@ impl ChangeMessageVisibilityBatchRequestEntryListParser {
 		Ok(obj)
 	}
 }
-/// Write a ChangeMessageVisibilityBatchRequestEntryList's contents to a SignedRequest
-pub struct ChangeMessageVisibilityBatchRequestEntryListWriter;
+/// Write ChangeMessageVisibilityBatchRequestEntryList contents to a SignedRequest
+struct ChangeMessageVisibilityBatchRequestEntryListWriter;
 impl ChangeMessageVisibilityBatchRequestEntryListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequestEntryList) {
+	fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequestEntryList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1013,10 +884,10 @@ impl ChangeMessageVisibilityBatchRequestEntryListWriter {
 	}
 }
 pub type SendMessageBatchResultEntryList = Vec<SendMessageBatchResultEntry>;
-/// Parse a SendMessageBatchResultEntryList from XML
-pub struct SendMessageBatchResultEntryListParser;
+/// Parse SendMessageBatchResultEntryList from XML
+struct SendMessageBatchResultEntryListParser;
 impl SendMessageBatchResultEntryListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchResultEntryList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchResultEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "SendMessageBatchResultEntry" {
 			obj.push(try!(SendMessageBatchResultEntryParser::parse_xml("SendMessageBatchResultEntry", stack)));
@@ -1024,10 +895,10 @@ impl SendMessageBatchResultEntryListParser {
 		Ok(obj)
 	}
 }
-/// Write a SendMessageBatchResultEntryList's contents to a SignedRequest
-pub struct SendMessageBatchResultEntryListWriter;
+/// Write SendMessageBatchResultEntryList contents to a SignedRequest
+struct SendMessageBatchResultEntryListWriter;
 impl SendMessageBatchResultEntryListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchResultEntryList) {
+	fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchResultEntryList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1036,17 +907,6 @@ impl SendMessageBatchResultEntryListWriter {
 		}
 	}
 }
-/// Delivers a message to the specified queue. With Amazon SQS, you now have the
-/// ability to send large payload messages that are up to 256KB (262,144 bytes) in
-/// size. To send large payloads, you must use an AWS SDK that supports SigV4
-/// signing. To verify whether SigV4 is supported for an AWS SDK, check the SDK
-/// release notes.
-/// The following list shows the characters (in Unicode) allowed in your message,
-/// according to the W3C XML specification. For more information, go to
-/// <http://www.w3.org/TR/REC-xml/#charsets> If you send any characters not
-/// included in the list, your request will be rejected.
-/// #x9 | #xA | #xD | [#x20 to #xD7FF] | [#xE000 to #xFFFD] | [#x10000 to
-/// #x10FFFF]
 #[derive(Debug, Default)]
 pub struct SendMessageRequest {
 	/// The URL of the Amazon SQS queue to take action on.
@@ -1066,10 +926,10 @@ pub struct SendMessageRequest {
 	pub message_attributes: Option<MessageAttributeMap>,
 }
 
-/// Parse a SendMessageRequest from XML
-pub struct SendMessageRequestParser;
+/// Parse SendMessageRequest from XML
+struct SendMessageRequestParser;
 impl SendMessageRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageRequest::default();
 		loop {
@@ -1096,10 +956,10 @@ impl SendMessageRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a SendMessageRequest's contents to a SignedRequest
-pub struct SendMessageRequestWriter;
+/// Write SendMessageRequest contents to a SignedRequest
+struct SendMessageRequestWriter;
 impl SendMessageRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SendMessageRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &SendMessageRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
@@ -1131,10 +991,10 @@ pub struct SendMessageBatchResultEntry {
 	pub message_id: String,
 }
 
-/// Parse a SendMessageBatchResultEntry from XML
-pub struct SendMessageBatchResultEntryParser;
+/// Parse SendMessageBatchResultEntry from XML
+struct SendMessageBatchResultEntryParser;
 impl SendMessageBatchResultEntryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchResultEntry, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchResultEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageBatchResultEntry::default();
 		loop {
@@ -1161,10 +1021,10 @@ impl SendMessageBatchResultEntryParser {
 		Ok(obj)
 	}
 }
-/// Write a SendMessageBatchResultEntry's contents to a SignedRequest
-pub struct SendMessageBatchResultEntryWriter;
+/// Write SendMessageBatchResultEntry contents to a SignedRequest
+struct SendMessageBatchResultEntryWriter;
 impl SendMessageBatchResultEntryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchResultEntry) {
+	fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchResultEntry) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "MD5OfMessageBody"), &obj.md5_of_message_body);
@@ -1176,10 +1036,10 @@ impl SendMessageBatchResultEntryWriter {
 	}
 }
 pub type DeleteMessageBatchResultEntryList = Vec<DeleteMessageBatchResultEntry>;
-/// Parse a DeleteMessageBatchResultEntryList from XML
-pub struct DeleteMessageBatchResultEntryListParser;
+/// Parse DeleteMessageBatchResultEntryList from XML
+struct DeleteMessageBatchResultEntryListParser;
 impl DeleteMessageBatchResultEntryListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchResultEntryList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchResultEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "DeleteMessageBatchResultEntry" {
 			obj.push(try!(DeleteMessageBatchResultEntryParser::parse_xml("DeleteMessageBatchResultEntry", stack)));
@@ -1187,10 +1047,10 @@ impl DeleteMessageBatchResultEntryListParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteMessageBatchResultEntryList's contents to a SignedRequest
-pub struct DeleteMessageBatchResultEntryListWriter;
+/// Write DeleteMessageBatchResultEntryList contents to a SignedRequest
+struct DeleteMessageBatchResultEntryListWriter;
 impl DeleteMessageBatchResultEntryListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchResultEntryList) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchResultEntryList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1200,10 +1060,10 @@ impl DeleteMessageBatchResultEntryListWriter {
 	}
 }
 pub type StringList = Vec<String>;
-/// Parse a StringList from XML
-pub struct StringListParser;
+/// Parse StringList from XML
+struct StringListParser;
 impl StringListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<StringList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<StringList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "StringListValue" {
 			obj.push(try!(StringParser::parse_xml("StringListValue", stack)));
@@ -1211,10 +1071,10 @@ impl StringListParser {
 		Ok(obj)
 	}
 }
-/// Write a StringList's contents to a SignedRequest
-pub struct StringListWriter;
+/// Write StringList contents to a SignedRequest
+struct StringListWriter;
 impl StringListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &StringList) {
+	fn write_params(params: &mut Params, name: &str, obj: &StringList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1224,10 +1084,10 @@ impl StringListWriter {
 	}
 }
 pub type BatchResultErrorEntryList = Vec<BatchResultErrorEntry>;
-/// Parse a BatchResultErrorEntryList from XML
-pub struct BatchResultErrorEntryListParser;
+/// Parse BatchResultErrorEntryList from XML
+struct BatchResultErrorEntryListParser;
 impl BatchResultErrorEntryListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchResultErrorEntryList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchResultErrorEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "BatchResultErrorEntry" {
 			obj.push(try!(BatchResultErrorEntryParser::parse_xml("BatchResultErrorEntry", stack)));
@@ -1235,10 +1095,10 @@ impl BatchResultErrorEntryListParser {
 		Ok(obj)
 	}
 }
-/// Write a BatchResultErrorEntryList's contents to a SignedRequest
-pub struct BatchResultErrorEntryListWriter;
+/// Write BatchResultErrorEntryList contents to a SignedRequest
+struct BatchResultErrorEntryListWriter;
 impl BatchResultErrorEntryListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &BatchResultErrorEntryList) {
+	fn write_params(params: &mut Params, name: &str, obj: &BatchResultErrorEntryList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1252,53 +1112,24 @@ impl BatchResultErrorEntryListWriter {
 #[derive(Debug, Default)]
 pub struct InvalidBatchEntryId;
 
-/// Parse a InvalidBatchEntryId from XML
-pub struct InvalidBatchEntryIdParser;
+/// Parse InvalidBatchEntryId from XML
+struct InvalidBatchEntryIdParser;
 impl InvalidBatchEntryIdParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidBatchEntryId, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidBatchEntryId, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InvalidBatchEntryId::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a InvalidBatchEntryId's contents to a SignedRequest
-pub struct InvalidBatchEntryIdWriter;
+/// Write InvalidBatchEntryId contents to a SignedRequest
+struct InvalidBatchEntryIdWriter;
 impl InvalidBatchEntryIdWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &InvalidBatchEntryId) {
+	fn write_params(params: &mut Params, name: &str, obj: &InvalidBatchEntryId) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
 }
-/// Changes the visibility timeout of a specified message in a queue to a new
-/// value. The maximum allowed timeout value you can set the value to is 12 hours.
-/// This means you can't extend the timeout of a message in an existing queue to
-/// more than a total visibility timeout of 12 hours. (For more information
-/// visibility timeout, see [Visibility Timeout](http://docs.aws.amazon.com/AWSSim
-/// pleQueueService/latest/SQSDeveloperGuide/AboutVT.html) in the _Amazon SQS
-/// Developer Guide_.)
-/// For example, let's say you have a message and its default message visibility
-/// timeout is 30 minutes. You could call `ChangeMessageVisiblity` with a value of
-/// two hours and the effective timeout would be two hours and 30 minutes. When
-/// that time comes near you could again extend the time out by calling
-/// ChangeMessageVisiblity, but this time the maximum allowed timeout would be 9
-/// hours and 30 minutes.
-/// There is a 120,000 limit for the number of inflight messages per queue.
-/// Messages are inflight after they have been received from the queue by a
-/// consuming component, but have not yet been deleted from the queue. If you
-/// reach the 120,000 limit, you will receive an OverLimit error message from
-/// Amazon SQS. To help avoid reaching the limit, you should delete the messages
-/// from the queue after they have been processed. You can also increase the
-/// number of queues you use to process the messages.
-/// If you attempt to set the `VisibilityTimeout` to an amount more than the
-/// maximum time left, Amazon SQS returns an error. It will not automatically
-/// recalculate and increase the timeout to the maximum time remaining. Unlike
-/// with a queue, when you change the visibility timeout for a specific message,
-/// that timeout value is applied immediately but is not saved in memory for that
-/// message. If you don't delete a message after it is received, the visibility
-/// timeout for the message the next time it is received reverts to the original
-/// timeout value, not the value you set with the `ChangeMessageVisibility`
-/// action.
 #[derive(Debug, Default)]
 pub struct ChangeMessageVisibilityRequest {
 	/// The URL of the Amazon SQS queue to take action on.
@@ -1311,10 +1142,10 @@ pub struct ChangeMessageVisibilityRequest {
 	pub visibility_timeout: Integer,
 }
 
-/// Parse a ChangeMessageVisibilityRequest from XML
-pub struct ChangeMessageVisibilityRequestParser;
+/// Parse ChangeMessageVisibilityRequest from XML
+struct ChangeMessageVisibilityRequestParser;
 impl ChangeMessageVisibilityRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ChangeMessageVisibilityRequest::default();
 		loop {
@@ -1337,10 +1168,10 @@ impl ChangeMessageVisibilityRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a ChangeMessageVisibilityRequest's contents to a SignedRequest
-pub struct ChangeMessageVisibilityRequestWriter;
+/// Write ChangeMessageVisibilityRequest contents to a SignedRequest
+struct ChangeMessageVisibilityRequestWriter;
 impl ChangeMessageVisibilityRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
@@ -1349,10 +1180,10 @@ impl ChangeMessageVisibilityRequestWriter {
 	}
 }
 pub type ChangeMessageVisibilityBatchResultEntryList = Vec<ChangeMessageVisibilityBatchResultEntry>;
-/// Parse a ChangeMessageVisibilityBatchResultEntryList from XML
-pub struct ChangeMessageVisibilityBatchResultEntryListParser;
+/// Parse ChangeMessageVisibilityBatchResultEntryList from XML
+struct ChangeMessageVisibilityBatchResultEntryListParser;
 impl ChangeMessageVisibilityBatchResultEntryListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchResultEntryList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchResultEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ChangeMessageVisibilityBatchResultEntry" {
 			obj.push(try!(ChangeMessageVisibilityBatchResultEntryParser::parse_xml("ChangeMessageVisibilityBatchResultEntry", stack)));
@@ -1360,10 +1191,10 @@ impl ChangeMessageVisibilityBatchResultEntryListParser {
 		Ok(obj)
 	}
 }
-/// Write a ChangeMessageVisibilityBatchResultEntryList's contents to a SignedRequest
-pub struct ChangeMessageVisibilityBatchResultEntryListWriter;
+/// Write ChangeMessageVisibilityBatchResultEntryList contents to a SignedRequest
+struct ChangeMessageVisibilityBatchResultEntryListWriter;
 impl ChangeMessageVisibilityBatchResultEntryListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchResultEntryList) {
+	fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchResultEntryList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1386,10 +1217,10 @@ pub struct BatchResultErrorEntry {
 	pub id: String,
 }
 
-/// Parse a BatchResultErrorEntry from XML
-pub struct BatchResultErrorEntryParser;
+/// Parse BatchResultErrorEntry from XML
+struct BatchResultErrorEntryParser;
 impl BatchResultErrorEntryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchResultErrorEntry, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchResultErrorEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = BatchResultErrorEntry::default();
 		loop {
@@ -1416,10 +1247,10 @@ impl BatchResultErrorEntryParser {
 		Ok(obj)
 	}
 }
-/// Write a BatchResultErrorEntry's contents to a SignedRequest
-pub struct BatchResultErrorEntryWriter;
+/// Write BatchResultErrorEntry contents to a SignedRequest
+struct BatchResultErrorEntryWriter;
 impl BatchResultErrorEntryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &BatchResultErrorEntry) {
+	fn write_params(params: &mut Params, name: &str, obj: &BatchResultErrorEntry) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.message {
@@ -1450,10 +1281,10 @@ pub struct SendMessageResult {
 	pub message_id: String,
 }
 
-/// Parse a SendMessageResult from XML
-pub struct SendMessageResultParser;
+/// Parse SendMessageResult from XML
+struct SendMessageResultParser;
 impl SendMessageResultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageResult, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageResult::default();
 		loop {
@@ -1476,10 +1307,10 @@ impl SendMessageResultParser {
 		Ok(obj)
 	}
 }
-/// Write a SendMessageResult's contents to a SignedRequest
-pub struct SendMessageResultWriter;
+/// Write SendMessageResult contents to a SignedRequest
+struct SendMessageResultWriter;
 impl SendMessageResultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SendMessageResult) {
+	fn write_params(params: &mut Params, name: &str, obj: &SendMessageResult) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "MD5OfMessageBody"), &obj.md5_of_message_body);
@@ -1487,17 +1318,6 @@ impl SendMessageResultWriter {
 		StringWriter::write_params(params, &(prefix.to_string() + "MessageId"), &obj.message_id);
 	}
 }
-/// Deletes up to ten messages from the specified queue. This is a batch version
-/// of DeleteMessage. The result of the delete action on each message is reported
-/// individually in the response.
-/// Because the batch request can result in a combination of successful and
-/// unsuccessful actions, you should check for batch errors even when the call
-/// returns an HTTP status code of 200.
-/// Some API actions take lists of parameters. These lists are specified using the
-/// `param.n` notation. Values of `n` are integers starting from 1. For example, a
-/// parameter list with two elements looks like this:
-/// `&Attribute.1=this`
-/// `&Attribute.2=that`
 #[derive(Debug, Default)]
 pub struct DeleteMessageBatchRequest {
 	/// The URL of the Amazon SQS queue to take action on.
@@ -1506,10 +1326,10 @@ pub struct DeleteMessageBatchRequest {
 	pub entries: DeleteMessageBatchRequestEntryList,
 }
 
-/// Parse a DeleteMessageBatchRequest from XML
-pub struct DeleteMessageBatchRequestParser;
+/// Parse DeleteMessageBatchRequest from XML
+struct DeleteMessageBatchRequestParser;
 impl DeleteMessageBatchRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteMessageBatchRequest::default();
 		loop {
@@ -1528,10 +1348,10 @@ impl DeleteMessageBatchRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteMessageBatchRequest's contents to a SignedRequest
-pub struct DeleteMessageBatchRequestWriter;
+/// Write DeleteMessageBatchRequest contents to a SignedRequest
+struct DeleteMessageBatchRequestWriter;
 impl DeleteMessageBatchRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
@@ -1539,20 +1359,20 @@ impl DeleteMessageBatchRequestWriter {
 	}
 }
 pub type Integer = i32;
-/// Parse a Integer from XML
-pub struct IntegerParser;
+/// Parse Integer from XML
+struct IntegerParser;
 impl IntegerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Integer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Integer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a Integer's contents to a SignedRequest
-pub struct IntegerWriter;
+/// Write Integer contents to a SignedRequest
+struct IntegerWriter;
 impl IntegerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Integer) {
+	fn write_params(params: &mut Params, name: &str, obj: &Integer) {
 		params.put(name, &obj.to_string());
 	}
 }
@@ -1560,20 +1380,20 @@ impl IntegerWriter {
 #[derive(Debug, Default)]
 pub struct QueueDoesNotExist;
 
-/// Parse a QueueDoesNotExist from XML
-pub struct QueueDoesNotExistParser;
+/// Parse QueueDoesNotExist from XML
+struct QueueDoesNotExistParser;
 impl QueueDoesNotExistParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueDoesNotExist, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueDoesNotExist, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = QueueDoesNotExist::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a QueueDoesNotExist's contents to a SignedRequest
-pub struct QueueDoesNotExistWriter;
+/// Write QueueDoesNotExist contents to a SignedRequest
+struct QueueDoesNotExistWriter;
 impl QueueDoesNotExistWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &QueueDoesNotExist) {
+	fn write_params(params: &mut Params, name: &str, obj: &QueueDoesNotExist) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -1582,20 +1402,20 @@ impl QueueDoesNotExistWriter {
 #[derive(Debug, Default)]
 pub struct InvalidMessageContents;
 
-/// Parse a InvalidMessageContents from XML
-pub struct InvalidMessageContentsParser;
+/// Parse InvalidMessageContents from XML
+struct InvalidMessageContentsParser;
 impl InvalidMessageContentsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidMessageContents, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidMessageContents, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InvalidMessageContents::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a InvalidMessageContents's contents to a SignedRequest
-pub struct InvalidMessageContentsWriter;
+/// Write InvalidMessageContents contents to a SignedRequest
+struct InvalidMessageContentsWriter;
 impl InvalidMessageContentsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &InvalidMessageContents) {
+	fn write_params(params: &mut Params, name: &str, obj: &InvalidMessageContents) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -1604,39 +1424,39 @@ impl InvalidMessageContentsWriter {
 #[derive(Debug, Default)]
 pub struct MessageNotInflight;
 
-/// Parse a MessageNotInflight from XML
-pub struct MessageNotInflightParser;
+/// Parse MessageNotInflight from XML
+struct MessageNotInflightParser;
 impl MessageNotInflightParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageNotInflight, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageNotInflight, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = MessageNotInflight::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a MessageNotInflight's contents to a SignedRequest
-pub struct MessageNotInflightWriter;
+/// Write MessageNotInflight contents to a SignedRequest
+struct MessageNotInflightWriter;
 impl MessageNotInflightWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MessageNotInflight) {
+	fn write_params(params: &mut Params, name: &str, obj: &MessageNotInflight) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
 }
 pub type MessageAttributeName = String;
-/// Parse a MessageAttributeName from XML
-pub struct MessageAttributeNameParser;
+/// Parse MessageAttributeName from XML
+struct MessageAttributeNameParser;
 impl MessageAttributeNameParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeName, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeName, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a MessageAttributeName's contents to a SignedRequest
-pub struct MessageAttributeNameWriter;
+/// Write MessageAttributeName contents to a SignedRequest
+struct MessageAttributeNameWriter;
 impl MessageAttributeNameWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeName) {
+	fn write_params(params: &mut Params, name: &str, obj: &MessageAttributeName) {
 		params.put(name, obj);
 	}
 }
@@ -1647,10 +1467,10 @@ pub struct GetQueueAttributesResult {
 	pub attributes: AttributeMap,
 }
 
-/// Parse a GetQueueAttributesResult from XML
-pub struct GetQueueAttributesResultParser;
+/// Parse GetQueueAttributesResult from XML
+struct GetQueueAttributesResultParser;
 impl GetQueueAttributesResultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueAttributesResult, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueAttributesResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetQueueAttributesResult::default();
 		loop {
@@ -1665,20 +1485,20 @@ impl GetQueueAttributesResultParser {
 		Ok(obj)
 	}
 }
-/// Write a GetQueueAttributesResult's contents to a SignedRequest
-pub struct GetQueueAttributesResultWriter;
+/// Write GetQueueAttributesResult contents to a SignedRequest
+struct GetQueueAttributesResultWriter;
 impl GetQueueAttributesResultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetQueueAttributesResult) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetQueueAttributesResult) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		AttributeMapWriter::write_params(params, &(prefix.to_string() + "Attribute"), &obj.attributes);
 	}
 }
 pub type BinaryList = Vec<Binary>;
-/// Parse a BinaryList from XML
-pub struct BinaryListParser;
+/// Parse BinaryList from XML
+struct BinaryListParser;
 impl BinaryListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BinaryList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BinaryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "BinaryListValue" {
 			obj.push(try!(BinaryParser::parse_xml("BinaryListValue", stack)));
@@ -1686,10 +1506,10 @@ impl BinaryListParser {
 		Ok(obj)
 	}
 }
-/// Write a BinaryList's contents to a SignedRequest
-pub struct BinaryListWriter;
+/// Write BinaryList contents to a SignedRequest
+struct BinaryListWriter;
 impl BinaryListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &BinaryList) {
+	fn write_params(params: &mut Params, name: &str, obj: &BinaryList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1698,21 +1518,16 @@ impl BinaryListWriter {
 		}
 	}
 }
-/// Returns a list of your queues that have the RedrivePolicy queue attribute
-/// configured with a dead letter queue.
-/// For more information about using dead letter queues, see [Using Amazon SQS
-/// Dead Letter Queues](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQ
-/// SDeveloperGuide/SQSDeadLetterQueue.html).
 #[derive(Debug, Default)]
 pub struct ListDeadLetterSourceQueuesRequest {
 	/// The queue URL of a dead letter queue.
 	pub queue_url: String,
 }
 
-/// Parse a ListDeadLetterSourceQueuesRequest from XML
-pub struct ListDeadLetterSourceQueuesRequestParser;
+/// Parse ListDeadLetterSourceQueuesRequest from XML
+struct ListDeadLetterSourceQueuesRequestParser;
 impl ListDeadLetterSourceQueuesRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListDeadLetterSourceQueuesRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListDeadLetterSourceQueuesRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListDeadLetterSourceQueuesRequest::default();
 		loop {
@@ -1727,20 +1542,20 @@ impl ListDeadLetterSourceQueuesRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a ListDeadLetterSourceQueuesRequest's contents to a SignedRequest
-pub struct ListDeadLetterSourceQueuesRequestWriter;
+/// Write ListDeadLetterSourceQueuesRequest contents to a SignedRequest
+struct ListDeadLetterSourceQueuesRequestWriter;
 impl ListDeadLetterSourceQueuesRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListDeadLetterSourceQueuesRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListDeadLetterSourceQueuesRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
 	}
 }
 pub type MessageList = Vec<Message>;
-/// Parse a MessageList from XML
-pub struct MessageListParser;
+/// Parse MessageList from XML
+struct MessageListParser;
 impl MessageListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "Message" {
 			obj.push(try!(MessageParser::parse_xml("Message", stack)));
@@ -1748,10 +1563,10 @@ impl MessageListParser {
 		Ok(obj)
 	}
 }
-/// Write a MessageList's contents to a SignedRequest
-pub struct MessageListWriter;
+/// Write MessageList contents to a SignedRequest
+struct MessageListWriter;
 impl MessageListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MessageList) {
+	fn write_params(params: &mut Params, name: &str, obj: &MessageList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1761,10 +1576,10 @@ impl MessageListWriter {
 	}
 }
 pub type SendMessageBatchRequestEntryList = Vec<SendMessageBatchRequestEntry>;
-/// Parse a SendMessageBatchRequestEntryList from XML
-pub struct SendMessageBatchRequestEntryListParser;
+/// Parse SendMessageBatchRequestEntryList from XML
+struct SendMessageBatchRequestEntryListParser;
 impl SendMessageBatchRequestEntryListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchRequestEntryList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchRequestEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "SendMessageBatchRequestEntry" {
 			obj.push(try!(SendMessageBatchRequestEntryParser::parse_xml("SendMessageBatchRequestEntry", stack)));
@@ -1772,10 +1587,10 @@ impl SendMessageBatchRequestEntryListParser {
 		Ok(obj)
 	}
 }
-/// Write a SendMessageBatchRequestEntryList's contents to a SignedRequest
-pub struct SendMessageBatchRequestEntryListWriter;
+/// Write SendMessageBatchRequestEntryList contents to a SignedRequest
+struct SendMessageBatchRequestEntryListWriter;
 impl SendMessageBatchRequestEntryListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchRequestEntryList) {
+	fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchRequestEntryList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1816,10 +1631,10 @@ pub struct Message {
 	pub message_attributes: MessageAttributeMap,
 }
 
-/// Parse a Message from XML
-pub struct MessageParser;
+/// Parse Message from XML
+struct MessageParser;
 impl MessageParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Message, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Message, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = Message::default();
 		loop {
@@ -1858,10 +1673,10 @@ impl MessageParser {
 		Ok(obj)
 	}
 }
-/// Write a Message's contents to a SignedRequest
-pub struct MessageWriter;
+/// Write Message contents to a SignedRequest
+struct MessageWriter;
 impl MessageWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Message) {
+	fn write_params(params: &mut Params, name: &str, obj: &Message) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "Body"), &obj.body);
@@ -1880,32 +1695,24 @@ impl MessageWriter {
 #[derive(Debug, Default)]
 pub struct OverLimit;
 
-/// Parse a OverLimit from XML
-pub struct OverLimitParser;
+/// Parse OverLimit from XML
+struct OverLimitParser;
 impl OverLimitParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<OverLimit, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<OverLimit, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = OverLimit::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a OverLimit's contents to a SignedRequest
-pub struct OverLimitWriter;
+/// Write OverLimit contents to a SignedRequest
+struct OverLimitWriter;
 impl OverLimitWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &OverLimit) {
+	fn write_params(params: &mut Params, name: &str, obj: &OverLimit) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
 }
-/// Returns the URL of an existing queue. This action provides a simple way to
-/// retrieve the URL of an Amazon SQS queue.
-/// To access a queue that belongs to another AWS account, use the
-/// `QueueOwnerAWSAccountId` parameter to specify the account ID of the queue's
-/// owner. The queue's owner must grant you permission to access the queue. For
-/// more information about shared queue access, see AddPermission or go to [Shared
-/// Queues](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGu
-/// ide/acp-overview.html) in the _Amazon SQS Developer Guide_.
 #[derive(Debug, Default)]
 pub struct GetQueueUrlRequest {
 	/// The name of the queue whose URL must be fetched. Maximum 80 characters;
@@ -1915,10 +1722,10 @@ pub struct GetQueueUrlRequest {
 	pub queue_owner_aws_account_id: Option<String>,
 }
 
-/// Parse a GetQueueUrlRequest from XML
-pub struct GetQueueUrlRequestParser;
+/// Parse GetQueueUrlRequest from XML
+struct GetQueueUrlRequestParser;
 impl GetQueueUrlRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueUrlRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueUrlRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetQueueUrlRequest::default();
 		loop {
@@ -1937,10 +1744,10 @@ impl GetQueueUrlRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a GetQueueUrlRequest's contents to a SignedRequest
-pub struct GetQueueUrlRequestWriter;
+/// Write GetQueueUrlRequest contents to a SignedRequest
+struct GetQueueUrlRequestWriter;
 impl GetQueueUrlRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetQueueUrlRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetQueueUrlRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueName"), &obj.queue_name);
@@ -1950,10 +1757,10 @@ impl GetQueueUrlRequestWriter {
 	}
 }
 pub type AttributeMap = HashMap<QueueAttributeName,String>;
-/// Parse a AttributeMap from XML
-pub struct AttributeMapParser;
+/// Parse AttributeMap from XML
+struct AttributeMapParser;
 impl AttributeMapParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttributeMap, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttributeMap, XmlParseError> {
 		let mut obj = HashMap::new();
 		while try!(peek_at_name(stack)) == tag_name {
 			try!(start_element(tag_name, stack));
@@ -1965,10 +1772,10 @@ impl AttributeMapParser {
 		Ok(obj)
 	}
 }
-/// Write a AttributeMap's contents to a SignedRequest
-pub struct AttributeMapWriter;
+/// Write AttributeMap contents to a SignedRequest
+struct AttributeMapWriter;
 impl AttributeMapWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AttributeMap) {
+	fn write_params(params: &mut Params, name: &str, obj: &AttributeMap) {
 		let mut index = 1;
 		for (key,value) in obj {
 			let prefix = &format!("{}.{}", name, index);
@@ -1978,31 +1785,16 @@ impl AttributeMapWriter {
 		}
 	}
 }
-/// Deletes the queue specified by the **queue URL**, regardless of whether the
-/// queue is empty. If the specified queue does not exist, Amazon SQS returns a
-/// successful response.
-/// Use `DeleteQueue` with care; once you delete your queue, any messages in the
-/// queue are no longer available.
-/// When you delete a queue, the deletion process takes up to 60 seconds. Requests
-/// you send involving that queue during the 60 seconds might succeed. For
-/// example, a SendMessage request might succeed, but after the 60 seconds, the
-/// queue and that message you sent no longer exist. Also, when you delete a
-/// queue, you must wait at least 60 seconds before creating a queue with the same
-/// name.
-/// We reserve the right to delete queues that have had no activity for more than
-/// 30 days. For more information, see [How Amazon SQS Queues Work](http://docs.aw
-/// s.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/SQSConcepts.html)
-/// in the _Amazon SQS Developer Guide_.
 #[derive(Debug, Default)]
 pub struct DeleteQueueRequest {
 	/// The URL of the Amazon SQS queue to take action on.
 	pub queue_url: String,
 }
 
-/// Parse a DeleteQueueRequest from XML
-pub struct DeleteQueueRequestParser;
+/// Parse DeleteQueueRequest from XML
+struct DeleteQueueRequestParser;
 impl DeleteQueueRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteQueueRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteQueueRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteQueueRequest::default();
 		loop {
@@ -2017,20 +1809,20 @@ impl DeleteQueueRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteQueueRequest's contents to a SignedRequest
-pub struct DeleteQueueRequestWriter;
+/// Write DeleteQueueRequest contents to a SignedRequest
+struct DeleteQueueRequestWriter;
 impl DeleteQueueRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteQueueRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteQueueRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
 	}
 }
 pub type ActionNameList = Vec<String>;
-/// Parse a ActionNameList from XML
-pub struct ActionNameListParser;
+/// Parse ActionNameList from XML
+struct ActionNameListParser;
 impl ActionNameListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ActionNameList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ActionNameList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ActionName" {
 			obj.push(try!(StringParser::parse_xml("ActionName", stack)));
@@ -2038,10 +1830,10 @@ impl ActionNameListParser {
 		Ok(obj)
 	}
 }
-/// Write a ActionNameList's contents to a SignedRequest
-pub struct ActionNameListWriter;
+/// Write ActionNameList contents to a SignedRequest
+struct ActionNameListWriter;
 impl ActionNameListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ActionNameList) {
+	fn write_params(params: &mut Params, name: &str, obj: &ActionNameList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -2054,20 +1846,20 @@ impl ActionNameListWriter {
 #[derive(Debug, Default)]
 pub struct BatchRequestTooLong;
 
-/// Parse a BatchRequestTooLong from XML
-pub struct BatchRequestTooLongParser;
+/// Parse BatchRequestTooLong from XML
+struct BatchRequestTooLongParser;
 impl BatchRequestTooLongParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchRequestTooLong, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchRequestTooLong, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = BatchRequestTooLong::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a BatchRequestTooLong's contents to a SignedRequest
-pub struct BatchRequestTooLongWriter;
+/// Write BatchRequestTooLong contents to a SignedRequest
+struct BatchRequestTooLongWriter;
 impl BatchRequestTooLongWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &BatchRequestTooLong) {
+	fn write_params(params: &mut Params, name: &str, obj: &BatchRequestTooLong) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -2081,10 +1873,10 @@ pub struct GetQueueUrlResult {
 	pub queue_url: String,
 }
 
-/// Parse a GetQueueUrlResult from XML
-pub struct GetQueueUrlResultParser;
+/// Parse GetQueueUrlResult from XML
+struct GetQueueUrlResultParser;
 impl GetQueueUrlResultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueUrlResult, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueUrlResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetQueueUrlResult::default();
 		loop {
@@ -2099,19 +1891,15 @@ impl GetQueueUrlResultParser {
 		Ok(obj)
 	}
 }
-/// Write a GetQueueUrlResult's contents to a SignedRequest
-pub struct GetQueueUrlResultWriter;
+/// Write GetQueueUrlResult contents to a SignedRequest
+struct GetQueueUrlResultWriter;
 impl GetQueueUrlResultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GetQueueUrlResult) {
+	fn write_params(params: &mut Params, name: &str, obj: &GetQueueUrlResult) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
 	}
 }
-/// Returns a list of your queues. The maximum number of queues that can be
-/// returned is 1000. If you specify a value for the optional `QueueNamePrefix`
-/// parameter, only queues with a name beginning with the specified value are
-/// returned.
 #[derive(Debug, Default)]
 pub struct ListQueuesRequest {
 	/// A string to use for filtering the list results. Only those queues whose name
@@ -2119,10 +1907,10 @@ pub struct ListQueuesRequest {
 	pub queue_name_prefix: String,
 }
 
-/// Parse a ListQueuesRequest from XML
-pub struct ListQueuesRequestParser;
+/// Parse ListQueuesRequest from XML
+struct ListQueuesRequestParser;
 impl ListQueuesRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListQueuesRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListQueuesRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListQueuesRequest::default();
 		loop {
@@ -2137,20 +1925,20 @@ impl ListQueuesRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a ListQueuesRequest's contents to a SignedRequest
-pub struct ListQueuesRequestWriter;
+/// Write ListQueuesRequest contents to a SignedRequest
+struct ListQueuesRequestWriter;
 impl ListQueuesRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListQueuesRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListQueuesRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueNamePrefix"), &obj.queue_name_prefix);
 	}
 }
 pub type AWSAccountIdList = Vec<String>;
-/// Parse a AWSAccountIdList from XML
-pub struct AWSAccountIdListParser;
+/// Parse AWSAccountIdList from XML
+struct AWSAccountIdListParser;
 impl AWSAccountIdListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AWSAccountIdList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AWSAccountIdList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "AWSAccountId" {
 			obj.push(try!(StringParser::parse_xml("AWSAccountId", stack)));
@@ -2158,10 +1946,10 @@ impl AWSAccountIdListParser {
 		Ok(obj)
 	}
 }
-/// Write a AWSAccountIdList's contents to a SignedRequest
-pub struct AWSAccountIdListWriter;
+/// Write AWSAccountIdList contents to a SignedRequest
+struct AWSAccountIdListWriter;
 impl AWSAccountIdListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AWSAccountIdList) {
+	fn write_params(params: &mut Params, name: &str, obj: &AWSAccountIdList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -2174,42 +1962,24 @@ impl AWSAccountIdListWriter {
 #[derive(Debug, Default)]
 pub struct InvalidIdFormat;
 
-/// Parse a InvalidIdFormat from XML
-pub struct InvalidIdFormatParser;
+/// Parse InvalidIdFormat from XML
+struct InvalidIdFormatParser;
 impl InvalidIdFormatParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidIdFormat, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidIdFormat, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InvalidIdFormat::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a InvalidIdFormat's contents to a SignedRequest
-pub struct InvalidIdFormatWriter;
+/// Write InvalidIdFormat contents to a SignedRequest
+struct InvalidIdFormatWriter;
 impl InvalidIdFormatWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &InvalidIdFormat) {
+	fn write_params(params: &mut Params, name: &str, obj: &InvalidIdFormat) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
 }
-/// Adds a permission to a queue for a specific
-/// [principal](http://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P).
-/// This allows for sharing access to the queue.
-/// When you create a queue, you have full control access rights for the queue.
-/// Only you (as owner of the queue) can grant or deny permissions to the queue.
-/// For more information about these permissions, see [Shared Queues](http://docs.
-/// aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-
-/// overview.html) in the _Amazon SQS Developer Guide_.
-/// `AddPermission` writes an Amazon SQS-generated policy. If you want to write
-/// your own policy, use SetQueueAttributes to upload your policy. For more
-/// information about writing your own policy, see [Using The Access Policy Langua
-/// ge](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/
-/// AccessPolicyLanguage.html) in the _Amazon SQS Developer Guide_.
-/// Some API actions take lists of parameters. These lists are specified using the
-/// `param.n` notation. Values of `n` are integers starting from 1. For example, a
-/// parameter list with two elements looks like this:
-/// `&Attribute.1=this`
-/// `&Attribute.2=that`
 #[derive(Debug, Default)]
 pub struct AddPermissionRequest {
 	/// The URL of the Amazon SQS queue to take action on.
@@ -2239,10 +2009,10 @@ pub struct AddPermissionRequest {
 	pub label: String,
 }
 
-/// Parse a AddPermissionRequest from XML
-pub struct AddPermissionRequestParser;
+/// Parse AddPermissionRequest from XML
+struct AddPermissionRequestParser;
 impl AddPermissionRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AddPermissionRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AddPermissionRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AddPermissionRequest::default();
 		loop {
@@ -2269,10 +2039,10 @@ impl AddPermissionRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a AddPermissionRequest's contents to a SignedRequest
-pub struct AddPermissionRequestWriter;
+/// Write AddPermissionRequest contents to a SignedRequest
+struct AddPermissionRequestWriter;
 impl AddPermissionRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AddPermissionRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &AddPermissionRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
@@ -2282,10 +2052,10 @@ impl AddPermissionRequestWriter {
 	}
 }
 pub type QueueUrlList = Vec<String>;
-/// Parse a QueueUrlList from XML
-pub struct QueueUrlListParser;
+/// Parse QueueUrlList from XML
+struct QueueUrlListParser;
 impl QueueUrlListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueUrlList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueUrlList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "QueueUrl" {
 			obj.push(try!(StringParser::parse_xml("QueueUrl", stack)));
@@ -2293,10 +2063,10 @@ impl QueueUrlListParser {
 		Ok(obj)
 	}
 }
-/// Write a QueueUrlList's contents to a SignedRequest
-pub struct QueueUrlListWriter;
+/// Write QueueUrlList contents to a SignedRequest
+struct QueueUrlListWriter;
 impl QueueUrlListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &QueueUrlList) {
+	fn write_params(params: &mut Params, name: &str, obj: &QueueUrlList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -2313,10 +2083,10 @@ pub struct ListDeadLetterSourceQueuesResult {
 	pub queue_urls: QueueUrlList,
 }
 
-/// Parse a ListDeadLetterSourceQueuesResult from XML
-pub struct ListDeadLetterSourceQueuesResultParser;
+/// Parse ListDeadLetterSourceQueuesResult from XML
+struct ListDeadLetterSourceQueuesResultParser;
 impl ListDeadLetterSourceQueuesResultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListDeadLetterSourceQueuesResult, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListDeadLetterSourceQueuesResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListDeadLetterSourceQueuesResult::default();
 		loop {
@@ -2331,30 +2101,30 @@ impl ListDeadLetterSourceQueuesResultParser {
 		Ok(obj)
 	}
 }
-/// Write a ListDeadLetterSourceQueuesResult's contents to a SignedRequest
-pub struct ListDeadLetterSourceQueuesResultWriter;
+/// Write ListDeadLetterSourceQueuesResult contents to a SignedRequest
+struct ListDeadLetterSourceQueuesResultWriter;
 impl ListDeadLetterSourceQueuesResultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListDeadLetterSourceQueuesResult) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListDeadLetterSourceQueuesResult) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		QueueUrlListWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_urls);
 	}
 }
 pub type QueueAttributeName = String;
-/// Parse a QueueAttributeName from XML
-pub struct QueueAttributeNameParser;
+/// Parse QueueAttributeName from XML
+struct QueueAttributeNameParser;
 impl QueueAttributeNameParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueAttributeName, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueAttributeName, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a QueueAttributeName's contents to a SignedRequest
-pub struct QueueAttributeNameWriter;
+/// Write QueueAttributeName contents to a SignedRequest
+struct QueueAttributeNameWriter;
 impl QueueAttributeNameWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &QueueAttributeName) {
+	fn write_params(params: &mut Params, name: &str, obj: &QueueAttributeName) {
 		params.put(name, obj);
 	}
 }
@@ -2364,20 +2134,20 @@ impl QueueAttributeNameWriter {
 #[derive(Debug, Default)]
 pub struct QueueNameExists;
 
-/// Parse a QueueNameExists from XML
-pub struct QueueNameExistsParser;
+/// Parse QueueNameExists from XML
+struct QueueNameExistsParser;
 impl QueueNameExistsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueNameExists, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueNameExists, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = QueueNameExists::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a QueueNameExists's contents to a SignedRequest
-pub struct QueueNameExistsWriter;
+/// Write QueueNameExists contents to a SignedRequest
+struct QueueNameExistsWriter;
 impl QueueNameExistsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &QueueNameExists) {
+	fn write_params(params: &mut Params, name: &str, obj: &QueueNameExists) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -2386,20 +2156,20 @@ impl QueueNameExistsWriter {
 #[derive(Debug, Default)]
 pub struct BatchEntryIdsNotDistinct;
 
-/// Parse a BatchEntryIdsNotDistinct from XML
-pub struct BatchEntryIdsNotDistinctParser;
+/// Parse BatchEntryIdsNotDistinct from XML
+struct BatchEntryIdsNotDistinctParser;
 impl BatchEntryIdsNotDistinctParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchEntryIdsNotDistinct, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchEntryIdsNotDistinct, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = BatchEntryIdsNotDistinct::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a BatchEntryIdsNotDistinct's contents to a SignedRequest
-pub struct BatchEntryIdsNotDistinctWriter;
+/// Write BatchEntryIdsNotDistinct contents to a SignedRequest
+struct BatchEntryIdsNotDistinctWriter;
 impl BatchEntryIdsNotDistinctWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &BatchEntryIdsNotDistinct) {
+	fn write_params(params: &mut Params, name: &str, obj: &BatchEntryIdsNotDistinct) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -2411,10 +2181,10 @@ pub struct DeleteMessageBatchResultEntry {
 	pub id: String,
 }
 
-/// Parse a DeleteMessageBatchResultEntry from XML
-pub struct DeleteMessageBatchResultEntryParser;
+/// Parse DeleteMessageBatchResultEntry from XML
+struct DeleteMessageBatchResultEntryParser;
 impl DeleteMessageBatchResultEntryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchResultEntry, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchResultEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteMessageBatchResultEntry::default();
 		loop {
@@ -2429,20 +2199,20 @@ impl DeleteMessageBatchResultEntryParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteMessageBatchResultEntry's contents to a SignedRequest
-pub struct DeleteMessageBatchResultEntryWriter;
+/// Write DeleteMessageBatchResultEntry contents to a SignedRequest
+struct DeleteMessageBatchResultEntryWriter;
 impl DeleteMessageBatchResultEntryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchResultEntry) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchResultEntry) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "Id"), &obj.id);
 	}
 }
 pub type DeleteMessageBatchRequestEntryList = Vec<DeleteMessageBatchRequestEntry>;
-/// Parse a DeleteMessageBatchRequestEntryList from XML
-pub struct DeleteMessageBatchRequestEntryListParser;
+/// Parse DeleteMessageBatchRequestEntryList from XML
+struct DeleteMessageBatchRequestEntryListParser;
 impl DeleteMessageBatchRequestEntryListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchRequestEntryList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchRequestEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "DeleteMessageBatchRequestEntry" {
 			obj.push(try!(DeleteMessageBatchRequestEntryParser::parse_xml("DeleteMessageBatchRequestEntry", stack)));
@@ -2450,10 +2220,10 @@ impl DeleteMessageBatchRequestEntryListParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteMessageBatchRequestEntryList's contents to a SignedRequest
-pub struct DeleteMessageBatchRequestEntryListWriter;
+/// Write DeleteMessageBatchRequestEntryList contents to a SignedRequest
+struct DeleteMessageBatchRequestEntryListWriter;
 impl DeleteMessageBatchRequestEntryListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequestEntryList) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequestEntryList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -2466,20 +2236,20 @@ impl DeleteMessageBatchRequestEntryListWriter {
 #[derive(Debug, Default)]
 pub struct EmptyBatchRequest;
 
-/// Parse a EmptyBatchRequest from XML
-pub struct EmptyBatchRequestParser;
+/// Parse EmptyBatchRequest from XML
+struct EmptyBatchRequestParser;
 impl EmptyBatchRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EmptyBatchRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EmptyBatchRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = EmptyBatchRequest::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a EmptyBatchRequest's contents to a SignedRequest
-pub struct EmptyBatchRequestWriter;
+/// Write EmptyBatchRequest contents to a SignedRequest
+struct EmptyBatchRequestWriter;
 impl EmptyBatchRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &EmptyBatchRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &EmptyBatchRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -2491,10 +2261,10 @@ pub struct ListQueuesResult {
 	pub queue_urls: QueueUrlList,
 }
 
-/// Parse a ListQueuesResult from XML
-pub struct ListQueuesResultParser;
+/// Parse ListQueuesResult from XML
+struct ListQueuesResultParser;
 impl ListQueuesResultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListQueuesResult, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListQueuesResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListQueuesResult::default();
 		loop {
@@ -2509,10 +2279,10 @@ impl ListQueuesResultParser {
 		Ok(obj)
 	}
 }
-/// Write a ListQueuesResult's contents to a SignedRequest
-pub struct ListQueuesResultWriter;
+/// Write ListQueuesResult contents to a SignedRequest
+struct ListQueuesResultWriter;
 impl ListQueuesResultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ListQueuesResult) {
+	fn write_params(params: &mut Params, name: &str, obj: &ListQueuesResult) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		QueueUrlListWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_urls);
@@ -2540,10 +2310,10 @@ pub struct ChangeMessageVisibilityBatchRequestEntry {
 	pub id: String,
 }
 
-/// Parse a ChangeMessageVisibilityBatchRequestEntry from XML
-pub struct ChangeMessageVisibilityBatchRequestEntryParser;
+/// Parse ChangeMessageVisibilityBatchRequestEntry from XML
+struct ChangeMessageVisibilityBatchRequestEntryParser;
 impl ChangeMessageVisibilityBatchRequestEntryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchRequestEntry, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchRequestEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ChangeMessageVisibilityBatchRequestEntry::default();
 		loop {
@@ -2566,10 +2336,10 @@ impl ChangeMessageVisibilityBatchRequestEntryParser {
 		Ok(obj)
 	}
 }
-/// Write a ChangeMessageVisibilityBatchRequestEntry's contents to a SignedRequest
-pub struct ChangeMessageVisibilityBatchRequestEntryWriter;
+/// Write ChangeMessageVisibilityBatchRequestEntry contents to a SignedRequest
+struct ChangeMessageVisibilityBatchRequestEntryWriter;
 impl ChangeMessageVisibilityBatchRequestEntryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequestEntry) {
+	fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequestEntry) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "ReceiptHandle"), &obj.receipt_handle);
@@ -2583,20 +2353,20 @@ impl ChangeMessageVisibilityBatchRequestEntryWriter {
 #[derive(Debug, Default)]
 pub struct TooManyEntriesInBatchRequest;
 
-/// Parse a TooManyEntriesInBatchRequest from XML
-pub struct TooManyEntriesInBatchRequestParser;
+/// Parse TooManyEntriesInBatchRequest from XML
+struct TooManyEntriesInBatchRequestParser;
 impl TooManyEntriesInBatchRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TooManyEntriesInBatchRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TooManyEntriesInBatchRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = TooManyEntriesInBatchRequest::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a TooManyEntriesInBatchRequest's contents to a SignedRequest
-pub struct TooManyEntriesInBatchRequestWriter;
+/// Write TooManyEntriesInBatchRequest contents to a SignedRequest
+struct TooManyEntriesInBatchRequestWriter;
 impl TooManyEntriesInBatchRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TooManyEntriesInBatchRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &TooManyEntriesInBatchRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -2606,39 +2376,39 @@ impl TooManyEntriesInBatchRequestWriter {
 #[derive(Debug, Default)]
 pub struct QueueDeletedRecently;
 
-/// Parse a QueueDeletedRecently from XML
-pub struct QueueDeletedRecentlyParser;
+/// Parse QueueDeletedRecently from XML
+struct QueueDeletedRecentlyParser;
 impl QueueDeletedRecentlyParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueDeletedRecently, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueDeletedRecently, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = QueueDeletedRecently::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a QueueDeletedRecently's contents to a SignedRequest
-pub struct QueueDeletedRecentlyWriter;
+/// Write QueueDeletedRecently contents to a SignedRequest
+struct QueueDeletedRecentlyWriter;
 impl QueueDeletedRecentlyWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &QueueDeletedRecently) {
+	fn write_params(params: &mut Params, name: &str, obj: &QueueDeletedRecently) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
 }
 pub type Boolean = bool;
-/// Parse a Boolean from XML
-pub struct BooleanParser;
+/// Parse Boolean from XML
+struct BooleanParser;
 impl BooleanParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Boolean, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Boolean, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a Boolean's contents to a SignedRequest
-pub struct BooleanWriter;
+/// Write Boolean contents to a SignedRequest
+struct BooleanWriter;
 impl BooleanWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Boolean) {
+	fn write_params(params: &mut Params, name: &str, obj: &Boolean) {
 		params.put(name, &obj.to_string());
 	}
 }
@@ -2653,10 +2423,10 @@ pub struct DeleteMessageBatchResult {
 	pub failed: BatchResultErrorEntryList,
 }
 
-/// Parse a DeleteMessageBatchResult from XML
-pub struct DeleteMessageBatchResultParser;
+/// Parse DeleteMessageBatchResult from XML
+struct DeleteMessageBatchResultParser;
 impl DeleteMessageBatchResultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchResult, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteMessageBatchResult::default();
 		loop {
@@ -2675,10 +2445,10 @@ impl DeleteMessageBatchResultParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteMessageBatchResult's contents to a SignedRequest
-pub struct DeleteMessageBatchResultWriter;
+/// Write DeleteMessageBatchResult contents to a SignedRequest
+struct DeleteMessageBatchResultWriter;
 impl DeleteMessageBatchResultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchResult) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageBatchResult) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		DeleteMessageBatchResultEntryListWriter::write_params(params, &(prefix.to_string() + "DeleteMessageBatchResultEntry"), &obj.successful);
@@ -2692,10 +2462,10 @@ pub struct ChangeMessageVisibilityBatchResultEntry {
 	pub id: String,
 }
 
-/// Parse a ChangeMessageVisibilityBatchResultEntry from XML
-pub struct ChangeMessageVisibilityBatchResultEntryParser;
+/// Parse ChangeMessageVisibilityBatchResultEntry from XML
+struct ChangeMessageVisibilityBatchResultEntryParser;
 impl ChangeMessageVisibilityBatchResultEntryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchResultEntry, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchResultEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ChangeMessageVisibilityBatchResultEntry::default();
 		loop {
@@ -2710,20 +2480,20 @@ impl ChangeMessageVisibilityBatchResultEntryParser {
 		Ok(obj)
 	}
 }
-/// Write a ChangeMessageVisibilityBatchResultEntry's contents to a SignedRequest
-pub struct ChangeMessageVisibilityBatchResultEntryWriter;
+/// Write ChangeMessageVisibilityBatchResultEntry contents to a SignedRequest
+struct ChangeMessageVisibilityBatchResultEntryWriter;
 impl ChangeMessageVisibilityBatchResultEntryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchResultEntry) {
+	fn write_params(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchResultEntry) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "Id"), &obj.id);
 	}
 }
 pub type AttributeNameList = Vec<QueueAttributeName>;
-/// Parse a AttributeNameList from XML
-pub struct AttributeNameListParser;
+/// Parse AttributeNameList from XML
+struct AttributeNameListParser;
 impl AttributeNameListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttributeNameList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttributeNameList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "AttributeName" {
 			obj.push(try!(QueueAttributeNameParser::parse_xml("AttributeName", stack)));
@@ -2731,10 +2501,10 @@ impl AttributeNameListParser {
 		Ok(obj)
 	}
 }
-/// Write a AttributeNameList's contents to a SignedRequest
-pub struct AttributeNameListWriter;
+/// Write AttributeNameList contents to a SignedRequest
+struct AttributeNameListWriter;
 impl AttributeNameListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AttributeNameList) {
+	fn write_params(params: &mut Params, name: &str, obj: &AttributeNameList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -2743,24 +2513,6 @@ impl AttributeNameListWriter {
 		}
 	}
 }
-/// Deletes the specified message from the specified queue. You specify the
-/// message by using the message's `receipt handle` and not the `message ID` you
-/// received when you sent the message. Even if the message is locked by another
-/// reader due to the visibility timeout setting, it is still deleted from the
-/// queue. If you leave a message in the queue for longer than the queue's
-/// configured retention period, Amazon SQS automatically deletes it.
-/// The receipt handle is associated with a specific instance of receiving the
-/// message. If you receive a message more than once, the receipt handle you get
-/// each time you receive the message is different. When you request
-/// `DeleteMessage`, if you don't provide the most recently received receipt
-/// handle for the message, the request will still succeed, but the message might
-/// not be deleted.
-/// It is possible you will receive a message even after you have deleted it. This
-/// might happen on rare occasions if one of the servers storing a copy of the
-/// message is unavailable when you request to delete the message. The copy
-/// remains on the server and might be returned to you again on a subsequent
-/// receive request. You should create your system to be idempotent so that
-/// receiving a particular message more than once is not a problem.
 #[derive(Debug, Default)]
 pub struct DeleteMessageRequest {
 	/// The URL of the Amazon SQS queue to take action on.
@@ -2769,10 +2521,10 @@ pub struct DeleteMessageRequest {
 	pub receipt_handle: String,
 }
 
-/// Parse a DeleteMessageRequest from XML
-pub struct DeleteMessageRequestParser;
+/// Parse DeleteMessageRequest from XML
+struct DeleteMessageRequestParser;
 impl DeleteMessageRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteMessageRequest::default();
 		loop {
@@ -2791,10 +2543,10 @@ impl DeleteMessageRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteMessageRequest's contents to a SignedRequest
-pub struct DeleteMessageRequestWriter;
+/// Write DeleteMessageRequest contents to a SignedRequest
+struct DeleteMessageRequestWriter;
 impl DeleteMessageRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteMessageRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		StringWriter::write_params(params, &(prefix.to_string() + "QueueUrl"), &obj.queue_url);
@@ -2819,10 +2571,10 @@ pub struct SendMessageBatchRequestEntry {
 	pub message_attributes: Option<MessageAttributeMap>,
 }
 
-/// Parse a SendMessageBatchRequestEntry from XML
-pub struct SendMessageBatchRequestEntryParser;
+/// Parse SendMessageBatchRequestEntry from XML
+struct SendMessageBatchRequestEntryParser;
 impl SendMessageBatchRequestEntryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchRequestEntry, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchRequestEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageBatchRequestEntry::default();
 		loop {
@@ -2849,10 +2601,10 @@ impl SendMessageBatchRequestEntryParser {
 		Ok(obj)
 	}
 }
-/// Write a SendMessageBatchRequestEntry's contents to a SignedRequest
-pub struct SendMessageBatchRequestEntryWriter;
+/// Write SendMessageBatchRequestEntry contents to a SignedRequest
+struct SendMessageBatchRequestEntryWriter;
 impl SendMessageBatchRequestEntryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchRequestEntry) {
+	fn write_params(params: &mut Params, name: &str, obj: &SendMessageBatchRequestEntry) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.delay_seconds {
@@ -2874,6 +2626,27 @@ impl<'a> SQSClient<'a> {
 	pub fn new(creds: &'a AWSCredentials, region: &'a str) -> SQSClient<'a> {
 		SQSClient { creds: creds, region: region }
 	}
+	/// Creates a new queue, or returns the URL of an existing one. When you request
+	/// `CreateQueue`, you provide a name for the queue. To successfully create a new
+	/// queue, you must provide a name that is unique within the scope of your own
+	/// queues.
+	/// If you delete a queue, you must wait at least 60 seconds before creating a
+	/// queue with the same name.
+	/// You may pass one or more attributes in the request. If you do not provide a
+	/// value for any attribute, the queue will have the default value for that
+	/// attribute. Permitted attributes are the same that can be set using
+	/// SetQueueAttributes.
+	/// Use GetQueueUrl to get a queue's URL. GetQueueUrl requires only the
+	/// `QueueName` parameter.
+	/// If you provide the name of an existing queue, along with the exact names and
+	/// values of all the queue's attributes, `CreateQueue` returns the queue URL for
+	/// the existing queue. If the queue name, attribute names, or attribute values do
+	/// not match an existing queue, `CreateQueue` returns an error.
+	/// Some API actions take lists of parameters. These lists are specified using the
+	/// `param.n` notation. Values of `n` are integers starting from 1. For example, a
+	/// parameter list with two elements looks like this:
+	/// `&Attribute.1=this`
+	/// `&Attribute.2=that`
 	pub fn create_queue(&self, input: &CreateQueueRequest) -> Result<CreateQueueResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -2892,6 +2665,30 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Gets attributes for the specified queue. The following attributes are
+	/// supported:
+	///   * `All` \- returns all values.
+	///   * `ApproximateNumberOfMessages` \- returns the approximate number of visible messages in a queue. For more information, see [Resources Required to Process Messages](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/ApproximateNumber.html) in the _Amazon SQS Developer Guide_.
+	///   * `ApproximateNumberOfMessagesNotVisible` \- returns the approximate number of messages that are not timed-out and not deleted. For more information, see [Resources Required to Process Messages](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/ApproximateNumber.html) in the _Amazon SQS Developer Guide_.
+	///   * `VisibilityTimeout` \- returns the visibility timeout for the queue. For more information about visibility timeout, see [Visibility Timeout](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AboutVT.html) in the _Amazon SQS Developer Guide_.
+	///   * `CreatedTimestamp` \- returns the time when the queue was created (epoch time in seconds).
+	///   * `LastModifiedTimestamp` \- returns the time when the queue was last changed (epoch time in seconds).
+	///   * `Policy` \- returns the queue's policy.
+	///   * `MaximumMessageSize` \- returns the limit of how many bytes a message can contain before Amazon SQS rejects it.
+	///   * `MessageRetentionPeriod` \- returns the number of seconds Amazon SQS retains a message.
+	///   * `QueueArn` \- returns the queue's Amazon resource name (ARN).
+	///   * `ApproximateNumberOfMessagesDelayed` \- returns the approximate number of messages that are pending to be added to the queue.
+	///   * `DelaySeconds` \- returns the default delay on the queue in seconds.
+	///   * `ReceiveMessageWaitTimeSeconds` \- returns the time for which a ReceiveMessage call will wait for a message to arrive.
+	///   * `RedrivePolicy` \- returns the parameters for dead letter queue functionality of the source queue. For more information about RedrivePolicy and dead letter queues, see [Using Amazon SQS Dead Letter Queues](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/SQSDeadLetterQueue.html) in the _Amazon SQS Developer Guide_.
+	/// Going forward, new attributes might be added. If you are writing code that
+	/// calls this action, we recommend that you structure your code so that it can
+	/// handle new attributes gracefully. Some API actions take lists of parameters.
+	/// These lists are specified using the `param.n` notation. Values of `n` are
+	/// integers starting from 1. For example, a parameter list with two elements
+	/// looks like this:
+	/// `&Attribute.1=this`
+	/// `&Attribute.2=that`
 	pub fn get_queue_attributes(&self, input: &GetQueueAttributesRequest) -> Result<GetQueueAttributesResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -2910,6 +2707,13 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Sets the value of one or more queue attributes. When you change a queue's
+	/// attributes, the change can take up to 60 seconds for most of the attributes to
+	/// propagate throughout the SQS system. Changes made to the
+	/// `MessageRetentionPeriod` attribute can take up to 15 minutes.
+	/// Going forward, new attributes might be added. If you are writing code that
+	/// calls this action, we recommend that you structure your code so that it can
+	/// handle new attributes gracefully.
 	pub fn set_queue_attributes(&self, input: &SetQueueAttributesRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -2928,6 +2732,14 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Returns the URL of an existing queue. This action provides a simple way to
+	/// retrieve the URL of an Amazon SQS queue.
+	/// To access a queue that belongs to another AWS account, use the
+	/// `QueueOwnerAWSAccountId` parameter to specify the account ID of the queue's
+	/// owner. The queue's owner must grant you permission to access the queue. For
+	/// more information about shared queue access, see AddPermission or go to [Shared
+	/// Queues](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGu
+	/// ide/acp-overview.html) in the _Amazon SQS Developer Guide_.
 	pub fn get_queue_url(&self, input: &GetQueueUrlRequest) -> Result<GetQueueUrlResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -2946,6 +2758,17 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes up to ten messages from the specified queue. This is a batch version
+	/// of DeleteMessage. The result of the delete action on each message is reported
+	/// individually in the response.
+	/// Because the batch request can result in a combination of successful and
+	/// unsuccessful actions, you should check for batch errors even when the call
+	/// returns an HTTP status code of 200.
+	/// Some API actions take lists of parameters. These lists are specified using the
+	/// `param.n` notation. Values of `n` are integers starting from 1. For example, a
+	/// parameter list with two elements looks like this:
+	/// `&Attribute.1=this`
+	/// `&Attribute.2=that`
 	pub fn delete_message_batch(&self, input: &DeleteMessageBatchRequest) -> Result<DeleteMessageBatchResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -2964,6 +2787,28 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Delivers up to ten messages to the specified queue. This is a batch version of
+	/// SendMessage. The result of the send action on each message is reported
+	/// individually in the response. The maximum allowed individual message size is
+	/// 256 KB (262,144 bytes).
+	/// The maximum total payload size (i.e., the sum of all a batch's individual
+	/// message lengths) is also 256 KB (262,144 bytes).
+	/// If the `DelaySeconds` parameter is not specified for an entry, the default for
+	/// the queue is used.
+	/// The following list shows the characters (in Unicode) that are allowed in your
+	/// message, according to the W3C XML specification. For more information, go to
+	/// <http://www.faqs.org/rfcs/rfc1321.html>. If you send any characters that are
+	/// not included in the list, your request will be rejected.
+	/// #x9 | #xA | #xD | [#x20 to #xD7FF] | [#xE000 to #xFFFD] | [#x10000 to
+	/// #x10FFFF]
+	/// Because the batch request can result in a combination of successful and
+	/// unsuccessful actions, you should check for batch errors even when the call
+	/// returns an HTTP status code of 200.  Some API actions take lists of
+	/// parameters. These lists are specified using the `param.n` notation. Values of
+	/// `n` are integers starting from 1. For example, a parameter list with two
+	/// elements looks like this:
+	/// `&Attribute.1=this`
+	/// `&Attribute.2=that`
 	pub fn send_message_batch(&self, input: &SendMessageBatchRequest) -> Result<SendMessageBatchResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -2982,6 +2827,11 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Returns a list of your queues that have the RedrivePolicy queue attribute
+	/// configured with a dead letter queue.
+	/// For more information about using dead letter queues, see [Using Amazon SQS
+	/// Dead Letter Queues](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQ
+	/// SDeveloperGuide/SQSDeadLetterQueue.html).
 	pub fn list_dead_letter_source_queues(&self, input: &ListDeadLetterSourceQueuesRequest) -> Result<ListDeadLetterSourceQueuesResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -3000,6 +2850,35 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Changes the visibility timeout of a specified message in a queue to a new
+	/// value. The maximum allowed timeout value you can set the value to is 12 hours.
+	/// This means you can't extend the timeout of a message in an existing queue to
+	/// more than a total visibility timeout of 12 hours. (For more information
+	/// visibility timeout, see [Visibility Timeout](http://docs.aws.amazon.com/AWSSim
+	/// pleQueueService/latest/SQSDeveloperGuide/AboutVT.html) in the _Amazon SQS
+	/// Developer Guide_.)
+	/// For example, let's say you have a message and its default message visibility
+	/// timeout is 30 minutes. You could call `ChangeMessageVisiblity` with a value of
+	/// two hours and the effective timeout would be two hours and 30 minutes. When
+	/// that time comes near you could again extend the time out by calling
+	/// ChangeMessageVisiblity, but this time the maximum allowed timeout would be 9
+	/// hours and 30 minutes.
+	/// There is a 120,000 limit for the number of inflight messages per queue.
+	/// Messages are inflight after they have been received from the queue by a
+	/// consuming component, but have not yet been deleted from the queue. If you
+	/// reach the 120,000 limit, you will receive an OverLimit error message from
+	/// Amazon SQS. To help avoid reaching the limit, you should delete the messages
+	/// from the queue after they have been processed. You can also increase the
+	/// number of queues you use to process the messages.
+	/// If you attempt to set the `VisibilityTimeout` to an amount more than the
+	/// maximum time left, Amazon SQS returns an error. It will not automatically
+	/// recalculate and increase the timeout to the maximum time remaining. Unlike
+	/// with a queue, when you change the visibility timeout for a specific message,
+	/// that timeout value is applied immediately but is not saved in memory for that
+	/// message. If you don't delete a message after it is received, the visibility
+	/// timeout for the message the next time it is received reverts to the original
+	/// timeout value, not the value you set with the `ChangeMessageVisibility`
+	/// action.
 	pub fn change_message_visibility(&self, input: &ChangeMessageVisibilityRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -3018,6 +2897,24 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Adds a permission to a queue for a specific
+	/// [principal](http://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P).
+	/// This allows for sharing access to the queue.
+	/// When you create a queue, you have full control access rights for the queue.
+	/// Only you (as owner of the queue) can grant or deny permissions to the queue.
+	/// For more information about these permissions, see [Shared Queues](http://docs.
+	/// aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-
+	/// overview.html) in the _Amazon SQS Developer Guide_.
+	/// `AddPermission` writes an Amazon SQS-generated policy. If you want to write
+	/// your own policy, use SetQueueAttributes to upload your policy. For more
+	/// information about writing your own policy, see [Using The Access Policy Langua
+	/// ge](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/
+	/// AccessPolicyLanguage.html) in the _Amazon SQS Developer Guide_.
+	/// Some API actions take lists of parameters. These lists are specified using the
+	/// `param.n` notation. Values of `n` are integers starting from 1. For example, a
+	/// parameter list with two elements looks like this:
+	/// `&Attribute.1=this`
+	/// `&Attribute.2=that`
 	pub fn add_permission(&self, input: &AddPermissionRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -3036,6 +2933,19 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Changes the visibility timeout of multiple messages. This is a batch version
+	/// of ChangeMessageVisibility. The result of the action on each message is
+	/// reported individually in the response. You can send up to 10
+	/// ChangeMessageVisibility requests with each `ChangeMessageVisibilityBatch`
+	/// action.
+	/// Because the batch request can result in a combination of successful and
+	/// unsuccessful actions, you should check for batch errors even when the call
+	/// returns an HTTP status code of 200. Some API actions take lists of parameters.
+	/// These lists are specified using the `param.n` notation. Values of `n` are
+	/// integers starting from 1. For example, a parameter list with two elements
+	/// looks like this:
+	/// `&Attribute.1=this`
+	/// `&Attribute.2=that`
 	pub fn change_message_visibility_batch(&self, input: &ChangeMessageVisibilityBatchRequest) -> Result<ChangeMessageVisibilityBatchResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -3054,6 +2964,17 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Delivers a message to the specified queue. With Amazon SQS, you now have the
+	/// ability to send large payload messages that are up to 256KB (262,144 bytes) in
+	/// size. To send large payloads, you must use an AWS SDK that supports SigV4
+	/// signing. To verify whether SigV4 is supported for an AWS SDK, check the SDK
+	/// release notes.
+	/// The following list shows the characters (in Unicode) allowed in your message,
+	/// according to the W3C XML specification. For more information, go to
+	/// <http://www.w3.org/TR/REC-xml/#charsets> If you send any characters not
+	/// included in the list, your request will be rejected.
+	/// #x9 | #xA | #xD | [#x20 to #xD7FF] | [#xE000 to #xFFFD] | [#x10000 to
+	/// #x10FFFF]
 	pub fn send_message(&self, input: &SendMessageRequest) -> Result<SendMessageResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -3072,6 +2993,21 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes the queue specified by the **queue URL**, regardless of whether the
+	/// queue is empty. If the specified queue does not exist, Amazon SQS returns a
+	/// successful response.
+	/// Use `DeleteQueue` with care; once you delete your queue, any messages in the
+	/// queue are no longer available.
+	/// When you delete a queue, the deletion process takes up to 60 seconds. Requests
+	/// you send involving that queue during the 60 seconds might succeed. For
+	/// example, a SendMessage request might succeed, but after the 60 seconds, the
+	/// queue and that message you sent no longer exist. Also, when you delete a
+	/// queue, you must wait at least 60 seconds before creating a queue with the same
+	/// name.
+	/// We reserve the right to delete queues that have had no activity for more than
+	/// 30 days. For more information, see [How Amazon SQS Queues Work](http://docs.aw
+	/// s.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/SQSConcepts.html)
+	/// in the _Amazon SQS Developer Guide_.
 	pub fn delete_queue(&self, input: &DeleteQueueRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -3090,6 +3026,14 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes the messages in a queue specified by the **queue URL**.
+	/// When you use the `PurgeQueue` API, the deleted messages in the queue cannot be
+	/// retrieved.
+	/// When you purge a queue, the message deletion process takes up to 60 seconds.
+	/// All messages sent to the queue before calling `PurgeQueue` will be deleted;
+	/// messages sent to the queue while it is being purged may be deleted. While the
+	/// queue is being purged, messages sent to the queue before `PurgeQueue` was
+	/// called may be received, but will be deleted within the next minute.
 	pub fn purge_queue(&self, input: &PurgeQueueRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -3108,6 +3052,38 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Retrieves one or more messages, with a maximum limit of 10 messages, from the
+	/// specified queue. Long poll support is enabled by using the `WaitTimeSeconds`
+	/// parameter. For more information, see [Amazon SQS Long Poll](http://docs.aws.am
+	/// azon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html)
+	/// in the _Amazon SQS Developer Guide_.
+	/// Short poll is the default behavior where a weighted random set of machines is
+	/// sampled on a `ReceiveMessage` call. This means only the messages on the
+	/// sampled machines are returned. If the number of messages in the queue is small
+	/// (less than 1000), it is likely you will get fewer messages than you requested
+	/// per `ReceiveMessage` call. If the number of messages in the queue is extremely
+	/// small, you might not receive any messages in a particular `ReceiveMessage`
+	/// response; in which case you should repeat the request.
+	/// For each message returned, the response includes the following:
+	///   * Message body 
+	///   * MD5 digest of the message body. For information about MD5, go to <http://www.faqs.org/rfcs/rfc1321.html>. 
+	///   * Message ID you received when you sent the message to the queue. 
+	///   * Receipt handle. 
+	///   * Message attributes. 
+	///   * MD5 digest of the message attributes. 
+	/// The receipt handle is the identifier you must provide when deleting the
+	/// message. For more information, see [Queue and Message Identifiers](http://docs
+	/// .aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/ImportantIdenti
+	/// fiers.html) in the _Amazon SQS Developer Guide_.
+	/// You can provide the `VisibilityTimeout` parameter in your request, which will
+	/// be applied to the messages that Amazon SQS returns in the response. If you do
+	/// not include the parameter, the overall visibility timeout for the queue is
+	/// used for the returned messages. For more information, see [Visibility Timeout]
+	/// (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/Abo
+	/// utVT.html) in the _Amazon SQS Developer Guide_.
+	/// Going forward, new attributes might be added. If you are writing code that
+	/// calls this action, we recommend that you structure your code so that it can
+	/// handle new attributes gracefully.
 	pub fn receive_message(&self, input: &ReceiveMessageRequest) -> Result<ReceiveMessageResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -3126,6 +3102,24 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes the specified message from the specified queue. You specify the
+	/// message by using the message's `receipt handle` and not the `message ID` you
+	/// received when you sent the message. Even if the message is locked by another
+	/// reader due to the visibility timeout setting, it is still deleted from the
+	/// queue. If you leave a message in the queue for longer than the queue's
+	/// configured retention period, Amazon SQS automatically deletes it.
+	/// The receipt handle is associated with a specific instance of receiving the
+	/// message. If you receive a message more than once, the receipt handle you get
+	/// each time you receive the message is different. When you request
+	/// `DeleteMessage`, if you don't provide the most recently received receipt
+	/// handle for the message, the request will still succeed, but the message might
+	/// not be deleted.
+	/// It is possible you will receive a message even after you have deleted it. This
+	/// might happen on rare occasions if one of the servers storing a copy of the
+	/// message is unavailable when you request to delete the message. The copy
+	/// remains on the server and might be returned to you again on a subsequent
+	/// receive request. You should create your system to be idempotent so that
+	/// receiving a particular message more than once is not a problem.
 	pub fn delete_message(&self, input: &DeleteMessageRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -3144,6 +3138,10 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Returns a list of your queues. The maximum number of queues that can be
+	/// returned is 1000. If you specify a value for the optional `QueueNamePrefix`
+	/// parameter, only queues with a name beginning with the specified value are
+	/// returned.
 	pub fn list_queues(&self, input: &ListQueuesRequest) -> Result<ListQueuesResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
@@ -3162,6 +3160,8 @@ impl<'a> SQSClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Revokes any permissions in the queue policy that matches the specified `Label`
+	/// parameter. Only the owner of the queue can remove permissions.
 	pub fn remove_permission(&self, input: &RemovePermissionRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();

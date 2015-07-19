@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 use std::str;
-/// Executes the specified policy.
 #[derive(Debug, Default)]
 pub struct ExecutePolicyType {
 	/// The metric value to compare to `BreachThreshold`. This enables you to execute
@@ -31,10 +30,10 @@ pub struct ExecutePolicyType {
 	pub breach_threshold: Option<MetricScale>,
 }
 
-/// Parse a ExecutePolicyType from XML
-pub struct ExecutePolicyTypeParser;
+/// Parse ExecutePolicyType from XML
+struct ExecutePolicyTypeParser;
 impl ExecutePolicyTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ExecutePolicyType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ExecutePolicyType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ExecutePolicyType::default();
 		loop {
@@ -65,10 +64,10 @@ impl ExecutePolicyTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a ExecutePolicyType's contents to a SignedRequest
-pub struct ExecutePolicyTypeWriter;
+/// Write ExecutePolicyType contents to a SignedRequest
+struct ExecutePolicyTypeWriter;
 impl ExecutePolicyTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ExecutePolicyType) {
+	fn write_params(params: &mut Params, name: &str, obj: &ExecutePolicyType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.metric_value {
@@ -86,12 +85,6 @@ impl ExecutePolicyTypeWriter {
 		}
 	}
 }
-/// Removes one or more instances from the specified Auto Scaling group. After the
-/// instances are detached, you can manage them independently from the rest of the
-/// Auto Scaling group.
-/// For more information, see [Detach EC2 Instances from Your Auto Scaling
-/// Group](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/detach-
-/// instance-asg.html) in the _Auto Scaling Developer Guide_.
 #[derive(Debug, Default)]
 pub struct DetachInstancesQuery {
 	/// If `True`, the Auto Scaling group decrements the desired capacity value by the
@@ -103,10 +96,10 @@ pub struct DetachInstancesQuery {
 	pub instance_ids: Option<InstanceIds>,
 }
 
-/// Parse a DetachInstancesQuery from XML
-pub struct DetachInstancesQueryParser;
+/// Parse DetachInstancesQuery from XML
+struct DetachInstancesQueryParser;
 impl DetachInstancesQueryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DetachInstancesQuery, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DetachInstancesQuery, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DetachInstancesQuery::default();
 		loop {
@@ -129,10 +122,10 @@ impl DetachInstancesQueryParser {
 		Ok(obj)
 	}
 }
-/// Write a DetachInstancesQuery's contents to a SignedRequest
-pub struct DetachInstancesQueryWriter;
+/// Write DetachInstancesQuery contents to a SignedRequest
+struct DetachInstancesQueryWriter;
 impl DetachInstancesQueryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DetachInstancesQuery) {
+	fn write_params(params: &mut Params, name: &str, obj: &DetachInstancesQuery) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ShouldDecrementDesiredCapacityWriter::write_params(params, &(prefix.to_string() + "ShouldDecrementDesiredCapacity"), &obj.should_decrement_desired_capacity);
@@ -143,10 +136,10 @@ impl DetachInstancesQueryWriter {
 	}
 }
 pub type NotificationConfigurations = Vec<NotificationConfiguration>;
-/// Parse a NotificationConfigurations from XML
-pub struct NotificationConfigurationsParser;
+/// Parse NotificationConfigurations from XML
+struct NotificationConfigurationsParser;
 impl NotificationConfigurationsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<NotificationConfigurations, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<NotificationConfigurations, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "NotificationConfiguration" {
 			obj.push(try!(NotificationConfigurationParser::parse_xml("NotificationConfiguration", stack)));
@@ -154,10 +147,10 @@ impl NotificationConfigurationsParser {
 		Ok(obj)
 	}
 }
-/// Write a NotificationConfigurations's contents to a SignedRequest
-pub struct NotificationConfigurationsWriter;
+/// Write NotificationConfigurations contents to a SignedRequest
+struct NotificationConfigurationsWriter;
 impl NotificationConfigurationsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &NotificationConfigurations) {
+	fn write_params(params: &mut Params, name: &str, obj: &NotificationConfigurations) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -167,45 +160,41 @@ impl NotificationConfigurationsWriter {
 	}
 }
 pub type MinAdjustmentMagnitude = i32;
-/// Parse a MinAdjustmentMagnitude from XML
-pub struct MinAdjustmentMagnitudeParser;
+/// Parse MinAdjustmentMagnitude from XML
+struct MinAdjustmentMagnitudeParser;
 impl MinAdjustmentMagnitudeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MinAdjustmentMagnitude, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MinAdjustmentMagnitude, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a MinAdjustmentMagnitude's contents to a SignedRequest
-pub struct MinAdjustmentMagnitudeWriter;
+/// Write MinAdjustmentMagnitude contents to a SignedRequest
+struct MinAdjustmentMagnitudeWriter;
 impl MinAdjustmentMagnitudeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MinAdjustmentMagnitude) {
+	fn write_params(params: &mut Params, name: &str, obj: &MinAdjustmentMagnitude) {
 		params.put(name, &obj.to_string());
 	}
 }
 pub type XmlStringMaxLen16 = String;
-/// Parse a XmlStringMaxLen16 from XML
-pub struct XmlStringMaxLen16Parser;
+/// Parse XmlStringMaxLen16 from XML
+struct XmlStringMaxLen16Parser;
 impl XmlStringMaxLen16Parser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen16, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen16, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a XmlStringMaxLen16's contents to a SignedRequest
-pub struct XmlStringMaxLen16Writer;
+/// Write XmlStringMaxLen16 contents to a SignedRequest
+struct XmlStringMaxLen16Writer;
 impl XmlStringMaxLen16Writer {
-	pub fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen16) {
+	fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen16) {
 		params.put(name, obj);
 	}
 }
-/// Terminates the specified instance and optionally adjusts the desired group
-/// size.
-/// This call simply makes a termination request. The instances is not terminated
-/// immediately.
 #[derive(Debug, Default)]
 pub struct TerminateInstanceInAutoScalingGroupType {
 	/// The ID of the EC2 instance.
@@ -215,10 +204,10 @@ pub struct TerminateInstanceInAutoScalingGroupType {
 	pub should_decrement_desired_capacity: ShouldDecrementDesiredCapacity,
 }
 
-/// Parse a TerminateInstanceInAutoScalingGroupType from XML
-pub struct TerminateInstanceInAutoScalingGroupTypeParser;
+/// Parse TerminateInstanceInAutoScalingGroupType from XML
+struct TerminateInstanceInAutoScalingGroupTypeParser;
 impl TerminateInstanceInAutoScalingGroupTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TerminateInstanceInAutoScalingGroupType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TerminateInstanceInAutoScalingGroupType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = TerminateInstanceInAutoScalingGroupType::default();
 		loop {
@@ -237,10 +226,10 @@ impl TerminateInstanceInAutoScalingGroupTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a TerminateInstanceInAutoScalingGroupType's contents to a SignedRequest
-pub struct TerminateInstanceInAutoScalingGroupTypeWriter;
+/// Write TerminateInstanceInAutoScalingGroupType contents to a SignedRequest
+struct TerminateInstanceInAutoScalingGroupTypeWriter;
 impl TerminateInstanceInAutoScalingGroupTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TerminateInstanceInAutoScalingGroupType) {
+	fn write_params(params: &mut Params, name: &str, obj: &TerminateInstanceInAutoScalingGroupType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen16Writer::write_params(params, &(prefix.to_string() + "InstanceId"), &obj.instance_id);
@@ -253,10 +242,10 @@ pub struct ProcessesType {
 	pub processes: Processes,
 }
 
-/// Parse a ProcessesType from XML
-pub struct ProcessesTypeParser;
+/// Parse ProcessesType from XML
+struct ProcessesTypeParser;
 impl ProcessesTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ProcessesType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ProcessesType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ProcessesType::default();
 		loop {
@@ -271,10 +260,10 @@ impl ProcessesTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a ProcessesType's contents to a SignedRequest
-pub struct ProcessesTypeWriter;
+/// Write ProcessesType contents to a SignedRequest
+struct ProcessesTypeWriter;
 impl ProcessesTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ProcessesType) {
+	fn write_params(params: &mut Params, name: &str, obj: &ProcessesType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ProcessesWriter::write_params(params, &(prefix.to_string() + "ProcessType"), &obj.processes);
@@ -287,10 +276,10 @@ pub struct ScalingActivityInProgressFault {
 	pub message: XmlStringMaxLen255,
 }
 
-/// Parse a ScalingActivityInProgressFault from XML
-pub struct ScalingActivityInProgressFaultParser;
+/// Parse ScalingActivityInProgressFault from XML
+struct ScalingActivityInProgressFaultParser;
 impl ScalingActivityInProgressFaultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScalingActivityInProgressFault, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScalingActivityInProgressFault, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ScalingActivityInProgressFault::default();
 		loop {
@@ -305,20 +294,20 @@ impl ScalingActivityInProgressFaultParser {
 		Ok(obj)
 	}
 }
-/// Write a ScalingActivityInProgressFault's contents to a SignedRequest
-pub struct ScalingActivityInProgressFaultWriter;
+/// Write ScalingActivityInProgressFault contents to a SignedRequest
+struct ScalingActivityInProgressFaultWriter;
 impl ScalingActivityInProgressFaultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ScalingActivityInProgressFault) {
+	fn write_params(params: &mut Params, name: &str, obj: &ScalingActivityInProgressFault) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
 pub type AutoScalingNotificationTypes = Vec<XmlStringMaxLen255>;
-/// Parse a AutoScalingNotificationTypes from XML
-pub struct AutoScalingNotificationTypesParser;
+/// Parse AutoScalingNotificationTypes from XML
+struct AutoScalingNotificationTypesParser;
 impl AutoScalingNotificationTypesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingNotificationTypes, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingNotificationTypes, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlStringMaxLen255" {
 			obj.push(try!(XmlStringMaxLen255Parser::parse_xml("XmlStringMaxLen255", stack)));
@@ -326,10 +315,10 @@ impl AutoScalingNotificationTypesParser {
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingNotificationTypes's contents to a SignedRequest
-pub struct AutoScalingNotificationTypesWriter;
+/// Write AutoScalingNotificationTypes contents to a SignedRequest
+struct AutoScalingNotificationTypesWriter;
 impl AutoScalingNotificationTypesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingNotificationTypes) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingNotificationTypes) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -339,45 +328,41 @@ impl AutoScalingNotificationTypesWriter {
 	}
 }
 pub type Progress = i32;
-/// Parse a Progress from XML
-pub struct ProgressParser;
+/// Parse Progress from XML
+struct ProgressParser;
 impl ProgressParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Progress, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Progress, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a Progress's contents to a SignedRequest
-pub struct ProgressWriter;
+/// Write Progress contents to a SignedRequest
+struct ProgressWriter;
 impl ProgressWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Progress) {
+	fn write_params(params: &mut Params, name: &str, obj: &Progress) {
 		params.put(name, &obj.to_string());
 	}
 }
 pub type BlockDeviceEbsVolumeSize = i32;
-/// Parse a BlockDeviceEbsVolumeSize from XML
-pub struct BlockDeviceEbsVolumeSizeParser;
+/// Parse BlockDeviceEbsVolumeSize from XML
+struct BlockDeviceEbsVolumeSizeParser;
 impl BlockDeviceEbsVolumeSizeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceEbsVolumeSize, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceEbsVolumeSize, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a BlockDeviceEbsVolumeSize's contents to a SignedRequest
-pub struct BlockDeviceEbsVolumeSizeWriter;
+/// Write BlockDeviceEbsVolumeSize contents to a SignedRequest
+struct BlockDeviceEbsVolumeSizeWriter;
 impl BlockDeviceEbsVolumeSizeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceEbsVolumeSize) {
+	fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceEbsVolumeSize) {
 		params.put(name, &obj.to_string());
 	}
 }
-/// Attaches one or more EC2 instances to the specified Auto Scaling group.
-/// For more information, see [Attach EC2 Instances to Your Auto Scaling
-/// Group](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/attach-
-/// instance-asg.html) in the _Auto Scaling Developer Guide_.
 #[derive(Debug, Default)]
 pub struct AttachInstancesQuery {
 	/// The name of the group.
@@ -386,10 +371,10 @@ pub struct AttachInstancesQuery {
 	pub instance_ids: Option<InstanceIds>,
 }
 
-/// Parse a AttachInstancesQuery from XML
-pub struct AttachInstancesQueryParser;
+/// Parse AttachInstancesQuery from XML
+struct AttachInstancesQueryParser;
 impl AttachInstancesQueryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttachInstancesQuery, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttachInstancesQuery, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AttachInstancesQuery::default();
 		loop {
@@ -408,10 +393,10 @@ impl AttachInstancesQueryParser {
 		Ok(obj)
 	}
 }
-/// Write a AttachInstancesQuery's contents to a SignedRequest
-pub struct AttachInstancesQueryWriter;
+/// Write AttachInstancesQuery contents to a SignedRequest
+struct AttachInstancesQueryWriter;
 impl AttachInstancesQueryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AttachInstancesQuery) {
+	fn write_params(params: &mut Params, name: &str, obj: &AttachInstancesQuery) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "AutoScalingGroupName"), &obj.auto_scaling_group_name);
@@ -421,56 +406,56 @@ impl AttachInstancesQueryWriter {
 	}
 }
 pub type ShouldRespectGracePeriod = bool;
-/// Parse a ShouldRespectGracePeriod from XML
-pub struct ShouldRespectGracePeriodParser;
+/// Parse ShouldRespectGracePeriod from XML
+struct ShouldRespectGracePeriodParser;
 impl ShouldRespectGracePeriodParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ShouldRespectGracePeriod, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ShouldRespectGracePeriod, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a ShouldRespectGracePeriod's contents to a SignedRequest
-pub struct ShouldRespectGracePeriodWriter;
+/// Write ShouldRespectGracePeriod contents to a SignedRequest
+struct ShouldRespectGracePeriodWriter;
 impl ShouldRespectGracePeriodWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ShouldRespectGracePeriod) {
+	fn write_params(params: &mut Params, name: &str, obj: &ShouldRespectGracePeriod) {
 		params.put(name, &obj.to_string());
 	}
 }
 pub type TagKey = String;
-/// Parse a TagKey from XML
-pub struct TagKeyParser;
+/// Parse TagKey from XML
+struct TagKeyParser;
 impl TagKeyParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TagKey, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TagKey, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a TagKey's contents to a SignedRequest
-pub struct TagKeyWriter;
+/// Write TagKey contents to a SignedRequest
+struct TagKeyWriter;
 impl TagKeyWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TagKey) {
+	fn write_params(params: &mut Params, name: &str, obj: &TagKey) {
 		params.put(name, obj);
 	}
 }
 pub type PropagateAtLaunch = bool;
-/// Parse a PropagateAtLaunch from XML
-pub struct PropagateAtLaunchParser;
+/// Parse PropagateAtLaunch from XML
+struct PropagateAtLaunchParser;
 impl PropagateAtLaunchParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PropagateAtLaunch, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PropagateAtLaunch, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a PropagateAtLaunch's contents to a SignedRequest
-pub struct PropagateAtLaunchWriter;
+/// Write PropagateAtLaunch contents to a SignedRequest
+struct PropagateAtLaunchWriter;
 impl PropagateAtLaunchWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PropagateAtLaunch) {
+	fn write_params(params: &mut Params, name: &str, obj: &PropagateAtLaunch) {
 		params.put(name, &obj.to_string());
 	}
 }
@@ -480,10 +465,10 @@ pub struct ActivityType {
 	pub activity: Activity,
 }
 
-/// Parse a ActivityType from XML
-pub struct ActivityTypeParser;
+/// Parse ActivityType from XML
+struct ActivityTypeParser;
 impl ActivityTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ActivityType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ActivityType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ActivityType::default();
 		loop {
@@ -498,19 +483,15 @@ impl ActivityTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a ActivityType's contents to a SignedRequest
-pub struct ActivityTypeWriter;
+/// Write ActivityType contents to a SignedRequest
+struct ActivityTypeWriter;
 impl ActivityTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ActivityType) {
+	fn write_params(params: &mut Params, name: &str, obj: &ActivityType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ActivityWriter::write_params(params, &(prefix.to_string() + "Activity"), &obj.activity);
 	}
 }
-/// Describes one or more scaling activities for the specified Auto Scaling group.
-/// If you omit the `ActivityIds`, the call returns all activities from the past
-/// six weeks. Activities are sorted by the start time. Activities still in
-/// progress appear first on the list.
 #[derive(Debug, Default)]
 pub struct DescribeScalingActivitiesType {
 	/// The activity IDs of the desired scaling activities. If this list is omitted,
@@ -528,10 +509,10 @@ pub struct DescribeScalingActivitiesType {
 	pub auto_scaling_group_name: ResourceName,
 }
 
-/// Parse a DescribeScalingActivitiesType from XML
-pub struct DescribeScalingActivitiesTypeParser;
+/// Parse DescribeScalingActivitiesType from XML
+struct DescribeScalingActivitiesTypeParser;
 impl DescribeScalingActivitiesTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeScalingActivitiesType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeScalingActivitiesType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeScalingActivitiesType::default();
 		loop {
@@ -558,10 +539,10 @@ impl DescribeScalingActivitiesTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeScalingActivitiesType's contents to a SignedRequest
-pub struct DescribeScalingActivitiesTypeWriter;
+/// Write DescribeScalingActivitiesType contents to a SignedRequest
+struct DescribeScalingActivitiesTypeWriter;
 impl DescribeScalingActivitiesTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeScalingActivitiesType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeScalingActivitiesType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ActivityIdsWriter::write_params(params, &(prefix.to_string() + "XmlString"), &obj.activity_ids);
@@ -579,10 +560,10 @@ pub struct PoliciesType {
 	pub next_token: XmlString,
 }
 
-/// Parse a PoliciesType from XML
-pub struct PoliciesTypeParser;
+/// Parse PoliciesType from XML
+struct PoliciesTypeParser;
 impl PoliciesTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PoliciesType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PoliciesType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PoliciesType::default();
 		loop {
@@ -601,10 +582,10 @@ impl PoliciesTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a PoliciesType's contents to a SignedRequest
-pub struct PoliciesTypeWriter;
+/// Write PoliciesType contents to a SignedRequest
+struct PoliciesTypeWriter;
 impl PoliciesTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PoliciesType) {
+	fn write_params(params: &mut Params, name: &str, obj: &PoliciesType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ScalingPoliciesWriter::write_params(params, &(prefix.to_string() + "ScalingPolicy"), &obj.scaling_policies);
@@ -614,20 +595,20 @@ impl PoliciesTypeWriter {
 #[derive(Debug, Default)]
 pub struct AttachLoadBalancersResultType;
 
-/// Parse a AttachLoadBalancersResultType from XML
-pub struct AttachLoadBalancersResultTypeParser;
+/// Parse AttachLoadBalancersResultType from XML
+struct AttachLoadBalancersResultTypeParser;
 impl AttachLoadBalancersResultTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttachLoadBalancersResultType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttachLoadBalancersResultType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AttachLoadBalancersResultType::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a AttachLoadBalancersResultType's contents to a SignedRequest
-pub struct AttachLoadBalancersResultTypeWriter;
+/// Write AttachLoadBalancersResultType contents to a SignedRequest
+struct AttachLoadBalancersResultTypeWriter;
 impl AttachLoadBalancersResultTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AttachLoadBalancersResultType) {
+	fn write_params(params: &mut Params, name: &str, obj: &AttachLoadBalancersResultType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -641,10 +622,10 @@ pub struct ScheduledActionsType {
 	pub scheduled_update_group_actions: ScheduledUpdateGroupActions,
 }
 
-/// Parse a ScheduledActionsType from XML
-pub struct ScheduledActionsTypeParser;
+/// Parse ScheduledActionsType from XML
+struct ScheduledActionsTypeParser;
 impl ScheduledActionsTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScheduledActionsType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScheduledActionsType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ScheduledActionsType::default();
 		loop {
@@ -663,10 +644,10 @@ impl ScheduledActionsTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a ScheduledActionsType's contents to a SignedRequest
-pub struct ScheduledActionsTypeWriter;
+/// Write ScheduledActionsType contents to a SignedRequest
+struct ScheduledActionsTypeWriter;
 impl ScheduledActionsTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ScheduledActionsType) {
+	fn write_params(params: &mut Params, name: &str, obj: &ScheduledActionsType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringWriter::write_params(params, &(prefix.to_string() + "NextToken"), &obj.next_token);
@@ -674,10 +655,10 @@ impl ScheduledActionsTypeWriter {
 	}
 }
 pub type SecurityGroups = Vec<XmlString>;
-/// Parse a SecurityGroups from XML
-pub struct SecurityGroupsParser;
+/// Parse SecurityGroups from XML
+struct SecurityGroupsParser;
 impl SecurityGroupsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SecurityGroups, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SecurityGroups, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlString" {
 			obj.push(try!(XmlStringParser::parse_xml("XmlString", stack)));
@@ -685,10 +666,10 @@ impl SecurityGroupsParser {
 		Ok(obj)
 	}
 }
-/// Write a SecurityGroups's contents to a SignedRequest
-pub struct SecurityGroupsWriter;
+/// Write SecurityGroups contents to a SignedRequest
+struct SecurityGroupsWriter;
 impl SecurityGroupsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SecurityGroups) {
+	fn write_params(params: &mut Params, name: &str, obj: &SecurityGroups) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -698,38 +679,38 @@ impl SecurityGroupsWriter {
 	}
 }
 pub type HealthCheckGracePeriod = i32;
-/// Parse a HealthCheckGracePeriod from XML
-pub struct HealthCheckGracePeriodParser;
+/// Parse HealthCheckGracePeriod from XML
+struct HealthCheckGracePeriodParser;
 impl HealthCheckGracePeriodParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<HealthCheckGracePeriod, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<HealthCheckGracePeriod, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a HealthCheckGracePeriod's contents to a SignedRequest
-pub struct HealthCheckGracePeriodWriter;
+/// Write HealthCheckGracePeriod contents to a SignedRequest
+struct HealthCheckGracePeriodWriter;
 impl HealthCheckGracePeriodWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &HealthCheckGracePeriod) {
+	fn write_params(params: &mut Params, name: &str, obj: &HealthCheckGracePeriod) {
 		params.put(name, &obj.to_string());
 	}
 }
 pub type AutoScalingGroupDesiredCapacity = i32;
-/// Parse a AutoScalingGroupDesiredCapacity from XML
-pub struct AutoScalingGroupDesiredCapacityParser;
+/// Parse AutoScalingGroupDesiredCapacity from XML
+struct AutoScalingGroupDesiredCapacityParser;
 impl AutoScalingGroupDesiredCapacityParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupDesiredCapacity, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupDesiredCapacity, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingGroupDesiredCapacity's contents to a SignedRequest
-pub struct AutoScalingGroupDesiredCapacityWriter;
+/// Write AutoScalingGroupDesiredCapacity contents to a SignedRequest
+struct AutoScalingGroupDesiredCapacityWriter;
 impl AutoScalingGroupDesiredCapacityWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupDesiredCapacity) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupDesiredCapacity) {
 		params.put(name, &obj.to_string());
 	}
 }
@@ -740,10 +721,10 @@ pub struct ResourceInUseFault {
 	pub message: XmlStringMaxLen255,
 }
 
-/// Parse a ResourceInUseFault from XML
-pub struct ResourceInUseFaultParser;
+/// Parse ResourceInUseFault from XML
+struct ResourceInUseFaultParser;
 impl ResourceInUseFaultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ResourceInUseFault, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ResourceInUseFault, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ResourceInUseFault::default();
 		loop {
@@ -758,20 +739,20 @@ impl ResourceInUseFaultParser {
 		Ok(obj)
 	}
 }
-/// Write a ResourceInUseFault's contents to a SignedRequest
-pub struct ResourceInUseFaultWriter;
+/// Write ResourceInUseFault contents to a SignedRequest
+struct ResourceInUseFaultWriter;
 impl ResourceInUseFaultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ResourceInUseFault) {
+	fn write_params(params: &mut Params, name: &str, obj: &ResourceInUseFault) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
 pub type LifecycleHookNames = Vec<AsciiStringMaxLen255>;
-/// Parse a LifecycleHookNames from XML
-pub struct LifecycleHookNamesParser;
+/// Parse LifecycleHookNames from XML
+struct LifecycleHookNamesParser;
 impl LifecycleHookNamesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleHookNames, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleHookNames, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "AsciiStringMaxLen255" {
 			obj.push(try!(AsciiStringMaxLen255Parser::parse_xml("AsciiStringMaxLen255", stack)));
@@ -779,10 +760,10 @@ impl LifecycleHookNamesParser {
 		Ok(obj)
 	}
 }
-/// Write a LifecycleHookNames's contents to a SignedRequest
-pub struct LifecycleHookNamesWriter;
+/// Write LifecycleHookNames contents to a SignedRequest
+struct LifecycleHookNamesWriter;
 impl LifecycleHookNamesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LifecycleHookNames) {
+	fn write_params(params: &mut Params, name: &str, obj: &LifecycleHookNames) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -791,19 +772,16 @@ impl LifecycleHookNamesWriter {
 		}
 	}
 }
-/// Deletes the specified launch configuration.
-/// The launch configuration must not be attached to an Auto Scaling group. When
-/// this call completes, the launch configuration is no longer available for use.
 #[derive(Debug, Default)]
 pub struct LaunchConfigurationNameType {
 	/// The name of the launch configuration.
 	pub launch_configuration_name: ResourceName,
 }
 
-/// Parse a LaunchConfigurationNameType from XML
-pub struct LaunchConfigurationNameTypeParser;
+/// Parse LaunchConfigurationNameType from XML
+struct LaunchConfigurationNameTypeParser;
 impl LaunchConfigurationNameTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfigurationNameType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfigurationNameType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = LaunchConfigurationNameType::default();
 		loop {
@@ -818,30 +796,30 @@ impl LaunchConfigurationNameTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a LaunchConfigurationNameType's contents to a SignedRequest
-pub struct LaunchConfigurationNameTypeWriter;
+/// Write LaunchConfigurationNameType contents to a SignedRequest
+struct LaunchConfigurationNameTypeWriter;
 impl LaunchConfigurationNameTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LaunchConfigurationNameType) {
+	fn write_params(params: &mut Params, name: &str, obj: &LaunchConfigurationNameType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "LaunchConfigurationName"), &obj.launch_configuration_name);
 	}
 }
 pub type MaxNumberOfLaunchConfigurations = i32;
-/// Parse a MaxNumberOfLaunchConfigurations from XML
-pub struct MaxNumberOfLaunchConfigurationsParser;
+/// Parse MaxNumberOfLaunchConfigurations from XML
+struct MaxNumberOfLaunchConfigurationsParser;
 impl MaxNumberOfLaunchConfigurationsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MaxNumberOfLaunchConfigurations, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MaxNumberOfLaunchConfigurations, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a MaxNumberOfLaunchConfigurations's contents to a SignedRequest
-pub struct MaxNumberOfLaunchConfigurationsWriter;
+/// Write MaxNumberOfLaunchConfigurations contents to a SignedRequest
+struct MaxNumberOfLaunchConfigurationsWriter;
 impl MaxNumberOfLaunchConfigurationsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MaxNumberOfLaunchConfigurations) {
+	fn write_params(params: &mut Params, name: &str, obj: &MaxNumberOfLaunchConfigurations) {
 		params.put(name, &obj.to_string());
 	}
 }
@@ -880,10 +858,10 @@ pub struct StepAdjustment {
 	pub metric_interval_upper_bound: Option<MetricScale>,
 }
 
-/// Parse a StepAdjustment from XML
-pub struct StepAdjustmentParser;
+/// Parse StepAdjustment from XML
+struct StepAdjustmentParser;
 impl StepAdjustmentParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<StepAdjustment, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<StepAdjustment, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = StepAdjustment::default();
 		loop {
@@ -906,10 +884,10 @@ impl StepAdjustmentParser {
 		Ok(obj)
 	}
 }
-/// Write a StepAdjustment's contents to a SignedRequest
-pub struct StepAdjustmentWriter;
+/// Write StepAdjustment contents to a SignedRequest
+struct StepAdjustmentWriter;
 impl StepAdjustmentWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &StepAdjustment) {
+	fn write_params(params: &mut Params, name: &str, obj: &StepAdjustment) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		PolicyIncrementWriter::write_params(params, &(prefix.to_string() + "ScalingAdjustment"), &obj.scaling_adjustment);
@@ -922,10 +900,10 @@ impl StepAdjustmentWriter {
 	}
 }
 pub type ScalingPolicies = Vec<ScalingPolicy>;
-/// Parse a ScalingPolicies from XML
-pub struct ScalingPoliciesParser;
+/// Parse ScalingPolicies from XML
+struct ScalingPoliciesParser;
 impl ScalingPoliciesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScalingPolicies, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScalingPolicies, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ScalingPolicy" {
 			obj.push(try!(ScalingPolicyParser::parse_xml("ScalingPolicy", stack)));
@@ -933,10 +911,10 @@ impl ScalingPoliciesParser {
 		Ok(obj)
 	}
 }
-/// Write a ScalingPolicies's contents to a SignedRequest
-pub struct ScalingPoliciesWriter;
+/// Write ScalingPolicies contents to a SignedRequest
+struct ScalingPoliciesWriter;
 impl ScalingPoliciesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ScalingPolicies) {
+	fn write_params(params: &mut Params, name: &str, obj: &ScalingPolicies) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -946,10 +924,10 @@ impl ScalingPoliciesWriter {
 	}
 }
 pub type BlockDeviceMappings = Vec<BlockDeviceMapping>;
-/// Parse a BlockDeviceMappings from XML
-pub struct BlockDeviceMappingsParser;
+/// Parse BlockDeviceMappings from XML
+struct BlockDeviceMappingsParser;
 impl BlockDeviceMappingsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceMappings, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceMappings, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "BlockDeviceMapping" {
 			obj.push(try!(BlockDeviceMappingParser::parse_xml("BlockDeviceMapping", stack)));
@@ -957,10 +935,10 @@ impl BlockDeviceMappingsParser {
 		Ok(obj)
 	}
 }
-/// Write a BlockDeviceMappings's contents to a SignedRequest
-pub struct BlockDeviceMappingsWriter;
+/// Write BlockDeviceMappings contents to a SignedRequest
+struct BlockDeviceMappingsWriter;
 impl BlockDeviceMappingsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceMappings) {
+	fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceMappings) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -972,39 +950,39 @@ impl BlockDeviceMappingsWriter {
 #[derive(Debug, Default)]
 pub struct DeleteLifecycleHookAnswer;
 
-/// Parse a DeleteLifecycleHookAnswer from XML
-pub struct DeleteLifecycleHookAnswerParser;
+/// Parse DeleteLifecycleHookAnswer from XML
+struct DeleteLifecycleHookAnswerParser;
 impl DeleteLifecycleHookAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteLifecycleHookAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteLifecycleHookAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteLifecycleHookAnswer::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a DeleteLifecycleHookAnswer's contents to a SignedRequest
-pub struct DeleteLifecycleHookAnswerWriter;
+/// Write DeleteLifecycleHookAnswer contents to a SignedRequest
+struct DeleteLifecycleHookAnswerWriter;
 impl DeleteLifecycleHookAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteLifecycleHookAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteLifecycleHookAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
 }
 pub type ForceDelete = bool;
-/// Parse a ForceDelete from XML
-pub struct ForceDeleteParser;
+/// Parse ForceDelete from XML
+struct ForceDeleteParser;
 impl ForceDeleteParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ForceDelete, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ForceDelete, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a ForceDelete's contents to a SignedRequest
-pub struct ForceDeleteWriter;
+/// Write ForceDelete contents to a SignedRequest
+struct ForceDeleteWriter;
 impl ForceDeleteWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ForceDelete) {
+	fn write_params(params: &mut Params, name: &str, obj: &ForceDelete) {
 		params.put(name, &obj.to_string());
 	}
 }
@@ -1065,10 +1043,10 @@ pub struct LaunchConfiguration {
 	pub spot_price: Option<SpotPrice>,
 }
 
-/// Parse a LaunchConfiguration from XML
-pub struct LaunchConfigurationParser;
+/// Parse LaunchConfiguration from XML
+struct LaunchConfigurationParser;
 impl LaunchConfigurationParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfiguration, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfiguration, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = LaunchConfiguration::default();
 		loop {
@@ -1155,10 +1133,10 @@ impl LaunchConfigurationParser {
 		Ok(obj)
 	}
 }
-/// Write a LaunchConfiguration's contents to a SignedRequest
-pub struct LaunchConfigurationWriter;
+/// Write LaunchConfiguration contents to a SignedRequest
+struct LaunchConfigurationWriter;
 impl LaunchConfigurationWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LaunchConfiguration) {
+	fn write_params(params: &mut Params, name: &str, obj: &LaunchConfiguration) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.user_data {
@@ -1213,38 +1191,23 @@ impl LaunchConfigurationWriter {
 	}
 }
 pub type AssociatePublicIpAddress = bool;
-/// Parse a AssociatePublicIpAddress from XML
-pub struct AssociatePublicIpAddressParser;
+/// Parse AssociatePublicIpAddress from XML
+struct AssociatePublicIpAddressParser;
 impl AssociatePublicIpAddressParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AssociatePublicIpAddress, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AssociatePublicIpAddress, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a AssociatePublicIpAddress's contents to a SignedRequest
-pub struct AssociatePublicIpAddressWriter;
+/// Write AssociatePublicIpAddress contents to a SignedRequest
+struct AssociatePublicIpAddressWriter;
 impl AssociatePublicIpAddressWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AssociatePublicIpAddress) {
+	fn write_params(params: &mut Params, name: &str, obj: &AssociatePublicIpAddress) {
 		params.put(name, &obj.to_string());
 	}
 }
-/// Resumes the specified suspended Auto Scaling processes for the specified Auto
-/// Scaling group. To resume specific processes, use the `ScalingProcesses`
-/// parameter. To resume all processes, omit the `ScalingProcesses` parameter. For
-/// more information, see [Suspend and Resume Auto Scaling Processes](http://docs.
-/// aws.amazon.com/AutoScaling/latest/DeveloperGuide/US_SuspendResume.html) in the
-/// _Auto Scaling Developer Guide_.
-/// Suspends the specified Auto Scaling processes for the specified Auto Scaling
-/// group. To suspend specific processes, use the `ScalingProcesses` parameter. To
-/// suspend all processes, omit the `ScalingProcesses` parameter.
-/// Note that if you suspend either the `Launch` or `Terminate` process types, it
-/// can prevent other process types from functioning properly.
-/// To resume processes that have been suspended, use ResumeProcesses.
-/// For more information, see [Suspend and Resume Auto Scaling Processes](http://d
-/// ocs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/US_SuspendResume.html) in
-/// the _Auto Scaling Developer Guide_.
 #[derive(Debug, Default)]
 pub struct ScalingProcessQuery {
 	/// The name or Amazon Resource Name (ARN) of the Auto Scaling group.
@@ -1261,10 +1224,10 @@ pub struct ScalingProcessQuery {
 	pub scaling_processes: Option<ProcessNames>,
 }
 
-/// Parse a ScalingProcessQuery from XML
-pub struct ScalingProcessQueryParser;
+/// Parse ScalingProcessQuery from XML
+struct ScalingProcessQueryParser;
 impl ScalingProcessQueryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScalingProcessQuery, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScalingProcessQuery, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ScalingProcessQuery::default();
 		loop {
@@ -1283,10 +1246,10 @@ impl ScalingProcessQueryParser {
 		Ok(obj)
 	}
 }
-/// Write a ScalingProcessQuery's contents to a SignedRequest
-pub struct ScalingProcessQueryWriter;
+/// Write ScalingProcessQuery contents to a SignedRequest
+struct ScalingProcessQueryWriter;
 impl ScalingProcessQueryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ScalingProcessQuery) {
+	fn write_params(params: &mut Params, name: &str, obj: &ScalingProcessQuery) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "AutoScalingGroupName"), &obj.auto_scaling_group_name);
@@ -1296,10 +1259,10 @@ impl ScalingProcessQueryWriter {
 	}
 }
 pub type EnabledMetrics = Vec<EnabledMetric>;
-/// Parse a EnabledMetrics from XML
-pub struct EnabledMetricsParser;
+/// Parse EnabledMetrics from XML
+struct EnabledMetricsParser;
 impl EnabledMetricsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EnabledMetrics, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EnabledMetrics, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "EnabledMetric" {
 			obj.push(try!(EnabledMetricParser::parse_xml("EnabledMetric", stack)));
@@ -1307,10 +1270,10 @@ impl EnabledMetricsParser {
 		Ok(obj)
 	}
 }
-/// Write a EnabledMetrics's contents to a SignedRequest
-pub struct EnabledMetricsWriter;
+/// Write EnabledMetrics contents to a SignedRequest
+struct EnabledMetricsWriter;
 impl EnabledMetricsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &EnabledMetrics) {
+	fn write_params(params: &mut Params, name: &str, obj: &EnabledMetrics) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1320,10 +1283,10 @@ impl EnabledMetricsWriter {
 	}
 }
 pub type AutoScalingInstances = Vec<AutoScalingInstanceDetails>;
-/// Parse a AutoScalingInstances from XML
-pub struct AutoScalingInstancesParser;
+/// Parse AutoScalingInstances from XML
+struct AutoScalingInstancesParser;
 impl AutoScalingInstancesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingInstances, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingInstances, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "AutoScalingInstanceDetails" {
 			obj.push(try!(AutoScalingInstanceDetailsParser::parse_xml("AutoScalingInstanceDetails", stack)));
@@ -1331,10 +1294,10 @@ impl AutoScalingInstancesParser {
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingInstances's contents to a SignedRequest
-pub struct AutoScalingInstancesWriter;
+/// Write AutoScalingInstances contents to a SignedRequest
+struct AutoScalingInstancesWriter;
 impl AutoScalingInstancesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingInstances) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingInstances) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1353,10 +1316,10 @@ pub struct DescribeAccountLimitsAnswer {
 	pub max_number_of_auto_scaling_groups: MaxNumberOfAutoScalingGroups,
 }
 
-/// Parse a DescribeAccountLimitsAnswer from XML
-pub struct DescribeAccountLimitsAnswerParser;
+/// Parse DescribeAccountLimitsAnswer from XML
+struct DescribeAccountLimitsAnswerParser;
 impl DescribeAccountLimitsAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeAccountLimitsAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeAccountLimitsAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeAccountLimitsAnswer::default();
 		loop {
@@ -1375,10 +1338,10 @@ impl DescribeAccountLimitsAnswerParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeAccountLimitsAnswer's contents to a SignedRequest
-pub struct DescribeAccountLimitsAnswerWriter;
+/// Write DescribeAccountLimitsAnswer contents to a SignedRequest
+struct DescribeAccountLimitsAnswerWriter;
 impl DescribeAccountLimitsAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeAccountLimitsAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeAccountLimitsAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MaxNumberOfLaunchConfigurationsWriter::write_params(params, &(prefix.to_string() + "MaxNumberOfLaunchConfigurations"), &obj.max_number_of_launch_configurations);
@@ -1386,10 +1349,10 @@ impl DescribeAccountLimitsAnswerWriter {
 	}
 }
 pub type AutoScalingGroupNames = Vec<ResourceName>;
-/// Parse a AutoScalingGroupNames from XML
-pub struct AutoScalingGroupNamesParser;
+/// Parse AutoScalingGroupNames from XML
+struct AutoScalingGroupNamesParser;
 impl AutoScalingGroupNamesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupNames, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupNames, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ResourceName" {
 			obj.push(try!(ResourceNameParser::parse_xml("ResourceName", stack)));
@@ -1397,10 +1360,10 @@ impl AutoScalingGroupNamesParser {
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingGroupNames's contents to a SignedRequest
-pub struct AutoScalingGroupNamesWriter;
+/// Write AutoScalingGroupNames contents to a SignedRequest
+struct AutoScalingGroupNamesWriter;
 impl AutoScalingGroupNamesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupNames) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupNames) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -1425,10 +1388,10 @@ pub struct TagDescription {
 	pub key: TagKey,
 }
 
-/// Parse a TagDescription from XML
-pub struct TagDescriptionParser;
+/// Parse TagDescription from XML
+struct TagDescriptionParser;
 impl TagDescriptionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TagDescription, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TagDescription, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = TagDescription::default();
 		loop {
@@ -1459,10 +1422,10 @@ impl TagDescriptionParser {
 		Ok(obj)
 	}
 }
-/// Write a TagDescription's contents to a SignedRequest
-pub struct TagDescriptionWriter;
+/// Write TagDescription contents to a SignedRequest
+struct TagDescriptionWriter;
 impl TagDescriptionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TagDescription) {
+	fn write_params(params: &mut Params, name: &str, obj: &TagDescription) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringWriter::write_params(params, &(prefix.to_string() + "ResourceType"), &obj.resource_type);
@@ -1488,10 +1451,10 @@ pub struct Tag {
 	pub key: TagKey,
 }
 
-/// Parse a Tag from XML
-pub struct TagParser;
+/// Parse Tag from XML
+struct TagParser;
 impl TagParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Tag, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Tag, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = Tag::default();
 		loop {
@@ -1522,10 +1485,10 @@ impl TagParser {
 		Ok(obj)
 	}
 }
-/// Write a Tag's contents to a SignedRequest
-pub struct TagWriter;
+/// Write Tag contents to a SignedRequest
+struct TagWriter;
 impl TagWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Tag) {
+	fn write_params(params: &mut Params, name: &str, obj: &Tag) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.resource_type {
@@ -1543,28 +1506,16 @@ impl TagWriter {
 		TagKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
 	}
 }
-/// Creates or updates tags for the specified Auto Scaling group.
-/// A tag is defined by its resource ID, resource type, key, value, and propagate
-/// flag. The value and the propagate flag are optional parameters. The only
-/// supported resource type is `auto-scaling-group`, and the resource ID must be
-/// the name of the group. The `PropagateAtLaunch` flag determines whether the tag
-/// is added to instances launched in the group. Valid values are `true` or
-/// `false`.
-/// When you specify a tag with a key that already exists, the operation
-/// overwrites the previous tag definition, and you do not get an error message.
-/// For more information, see [Tagging Auto Scaling Groups and Instances](http://d
-/// ocs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/ASTagging.html) in the
-/// _Auto Scaling Developer Guide_.
 #[derive(Debug, Default)]
 pub struct CreateOrUpdateTagsType {
 	/// One or more tags.
 	pub tags: Tags,
 }
 
-/// Parse a CreateOrUpdateTagsType from XML
-pub struct CreateOrUpdateTagsTypeParser;
+/// Parse CreateOrUpdateTagsType from XML
+struct CreateOrUpdateTagsTypeParser;
 impl CreateOrUpdateTagsTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateOrUpdateTagsType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateOrUpdateTagsType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreateOrUpdateTagsType::default();
 		loop {
@@ -1579,10 +1530,10 @@ impl CreateOrUpdateTagsTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a CreateOrUpdateTagsType's contents to a SignedRequest
-pub struct CreateOrUpdateTagsTypeWriter;
+/// Write CreateOrUpdateTagsType contents to a SignedRequest
+struct CreateOrUpdateTagsTypeWriter;
 impl CreateOrUpdateTagsTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CreateOrUpdateTagsType) {
+	fn write_params(params: &mut Params, name: &str, obj: &CreateOrUpdateTagsType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		TagsWriter::write_params(params, &(prefix.to_string() + "Tag"), &obj.tags);
@@ -1615,10 +1566,10 @@ pub struct Ebs {
 	pub iops: BlockDeviceEbsIops,
 }
 
-/// Parse a Ebs from XML
-pub struct EbsParser;
+/// Parse Ebs from XML
+struct EbsParser;
 impl EbsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Ebs, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Ebs, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = Ebs::default();
 		loop {
@@ -1649,10 +1600,10 @@ impl EbsParser {
 		Ok(obj)
 	}
 }
-/// Write a Ebs's contents to a SignedRequest
-pub struct EbsWriter;
+/// Write Ebs contents to a SignedRequest
+struct EbsWriter;
 impl EbsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Ebs) {
+	fn write_params(params: &mut Params, name: &str, obj: &Ebs) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		BlockDeviceEbsDeleteOnTerminationWriter::write_params(params, &(prefix.to_string() + "DeleteOnTermination"), &obj.delete_on_termination);
@@ -1662,10 +1613,6 @@ impl EbsWriter {
 		BlockDeviceEbsIopsWriter::write_params(params, &(prefix.to_string() + "Iops"), &obj.iops);
 	}
 }
-/// Moves the specified instances out of `Standby` mode.
-/// For more information, see [Auto Scaling InService State](http://docs.aws.amazo
-/// n.com/AutoScaling/latest/DeveloperGuide/AutoScalingInServiceState.html) in the
-/// _Auto Scaling Developer Guide_.
 #[derive(Debug, Default)]
 pub struct ExitStandbyQuery {
 	/// The name of the Auto Scaling group.
@@ -1674,10 +1621,10 @@ pub struct ExitStandbyQuery {
 	pub instance_ids: Option<InstanceIds>,
 }
 
-/// Parse a ExitStandbyQuery from XML
-pub struct ExitStandbyQueryParser;
+/// Parse ExitStandbyQuery from XML
+struct ExitStandbyQueryParser;
 impl ExitStandbyQueryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ExitStandbyQuery, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ExitStandbyQuery, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ExitStandbyQuery::default();
 		loop {
@@ -1696,10 +1643,10 @@ impl ExitStandbyQueryParser {
 		Ok(obj)
 	}
 }
-/// Write a ExitStandbyQuery's contents to a SignedRequest
-pub struct ExitStandbyQueryWriter;
+/// Write ExitStandbyQuery contents to a SignedRequest
+struct ExitStandbyQueryWriter;
 impl ExitStandbyQueryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ExitStandbyQuery) {
+	fn write_params(params: &mut Params, name: &str, obj: &ExitStandbyQuery) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "AutoScalingGroupName"), &obj.auto_scaling_group_name);
@@ -1716,10 +1663,10 @@ pub struct DescribeMetricCollectionTypesAnswer {
 	pub granularities: MetricGranularityTypes,
 }
 
-/// Parse a DescribeMetricCollectionTypesAnswer from XML
-pub struct DescribeMetricCollectionTypesAnswerParser;
+/// Parse DescribeMetricCollectionTypesAnswer from XML
+struct DescribeMetricCollectionTypesAnswerParser;
 impl DescribeMetricCollectionTypesAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeMetricCollectionTypesAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeMetricCollectionTypesAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeMetricCollectionTypesAnswer::default();
 		loop {
@@ -1738,17 +1685,16 @@ impl DescribeMetricCollectionTypesAnswerParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeMetricCollectionTypesAnswer's contents to a SignedRequest
-pub struct DescribeMetricCollectionTypesAnswerWriter;
+/// Write DescribeMetricCollectionTypesAnswer contents to a SignedRequest
+struct DescribeMetricCollectionTypesAnswerWriter;
 impl DescribeMetricCollectionTypesAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeMetricCollectionTypesAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeMetricCollectionTypesAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MetricCollectionTypesWriter::write_params(params, &(prefix.to_string() + "MetricCollectionType"), &obj.metrics);
 		MetricGranularityTypesWriter::write_params(params, &(prefix.to_string() + "MetricGranularityType"), &obj.granularities);
 	}
 }
-/// Deletes the specified tags.
 #[derive(Debug, Default)]
 pub struct DeleteTagsType {
 	/// Each tag should be defined by its resource type, resource ID, key, value, and
@@ -1758,10 +1704,10 @@ pub struct DeleteTagsType {
 	pub tags: Tags,
 }
 
-/// Parse a DeleteTagsType from XML
-pub struct DeleteTagsTypeParser;
+/// Parse DeleteTagsType from XML
+struct DeleteTagsTypeParser;
 impl DeleteTagsTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteTagsType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteTagsType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteTagsType::default();
 		loop {
@@ -1776,10 +1722,10 @@ impl DeleteTagsTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteTagsType's contents to a SignedRequest
-pub struct DeleteTagsTypeWriter;
+/// Write DeleteTagsType contents to a SignedRequest
+struct DeleteTagsTypeWriter;
 impl DeleteTagsTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteTagsType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteTagsType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		TagsWriter::write_params(params, &(prefix.to_string() + "Tag"), &obj.tags);
@@ -1791,10 +1737,10 @@ pub struct AlreadyExistsFault {
 	pub message: XmlStringMaxLen255,
 }
 
-/// Parse a AlreadyExistsFault from XML
-pub struct AlreadyExistsFaultParser;
+/// Parse AlreadyExistsFault from XML
+struct AlreadyExistsFaultParser;
 impl AlreadyExistsFaultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AlreadyExistsFault, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AlreadyExistsFault, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AlreadyExistsFault::default();
 		loop {
@@ -1809,66 +1755,66 @@ impl AlreadyExistsFaultParser {
 		Ok(obj)
 	}
 }
-/// Write a AlreadyExistsFault's contents to a SignedRequest
-pub struct AlreadyExistsFaultWriter;
+/// Write AlreadyExistsFault contents to a SignedRequest
+struct AlreadyExistsFaultWriter;
 impl AlreadyExistsFaultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AlreadyExistsFault) {
+	fn write_params(params: &mut Params, name: &str, obj: &AlreadyExistsFault) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
 pub type XmlStringMaxLen1600 = String;
-/// Parse a XmlStringMaxLen1600 from XML
-pub struct XmlStringMaxLen1600Parser;
+/// Parse XmlStringMaxLen1600 from XML
+struct XmlStringMaxLen1600Parser;
 impl XmlStringMaxLen1600Parser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen1600, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen1600, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a XmlStringMaxLen1600's contents to a SignedRequest
-pub struct XmlStringMaxLen1600Writer;
+/// Write XmlStringMaxLen1600 contents to a SignedRequest
+struct XmlStringMaxLen1600Writer;
 impl XmlStringMaxLen1600Writer {
-	pub fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen1600) {
+	fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen1600) {
 		params.put(name, obj);
 	}
 }
 pub type XmlStringMaxLen32 = String;
-/// Parse a XmlStringMaxLen32 from XML
-pub struct XmlStringMaxLen32Parser;
+/// Parse XmlStringMaxLen32 from XML
+struct XmlStringMaxLen32Parser;
 impl XmlStringMaxLen32Parser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen32, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen32, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a XmlStringMaxLen32's contents to a SignedRequest
-pub struct XmlStringMaxLen32Writer;
+/// Write XmlStringMaxLen32 contents to a SignedRequest
+struct XmlStringMaxLen32Writer;
 impl XmlStringMaxLen32Writer {
-	pub fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen32) {
+	fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen32) {
 		params.put(name, obj);
 	}
 }
 pub type ScalingActivityStatusCode = String;
-/// Parse a ScalingActivityStatusCode from XML
-pub struct ScalingActivityStatusCodeParser;
+/// Parse ScalingActivityStatusCode from XML
+struct ScalingActivityStatusCodeParser;
 impl ScalingActivityStatusCodeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScalingActivityStatusCode, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScalingActivityStatusCode, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a ScalingActivityStatusCode's contents to a SignedRequest
-pub struct ScalingActivityStatusCodeWriter;
+/// Write ScalingActivityStatusCode contents to a SignedRequest
+struct ScalingActivityStatusCodeWriter;
 impl ScalingActivityStatusCodeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ScalingActivityStatusCode) {
+	fn write_params(params: &mut Params, name: &str, obj: &ScalingActivityStatusCode) {
 		params.put(name, obj);
 	}
 }
@@ -1925,10 +1871,10 @@ pub struct AutoScalingGroup {
 	pub health_check_type: XmlStringMaxLen32,
 }
 
-/// Parse a AutoScalingGroup from XML
-pub struct AutoScalingGroupParser;
+/// Parse AutoScalingGroup from XML
+struct AutoScalingGroupParser;
 impl AutoScalingGroupParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroup, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroup, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AutoScalingGroup::default();
 		loop {
@@ -2019,10 +1965,10 @@ impl AutoScalingGroupParser {
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingGroup's contents to a SignedRequest
-pub struct AutoScalingGroupWriter;
+/// Write AutoScalingGroup contents to a SignedRequest
+struct AutoScalingGroupWriter;
 impl AutoScalingGroupWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroup) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroup) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.status {
@@ -2070,10 +2016,10 @@ impl AutoScalingGroupWriter {
 	}
 }
 pub type LoadBalancerNames = Vec<XmlStringMaxLen255>;
-/// Parse a LoadBalancerNames from XML
-pub struct LoadBalancerNamesParser;
+/// Parse LoadBalancerNames from XML
+struct LoadBalancerNamesParser;
 impl LoadBalancerNamesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LoadBalancerNames, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LoadBalancerNames, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlStringMaxLen255" {
 			obj.push(try!(XmlStringMaxLen255Parser::parse_xml("XmlStringMaxLen255", stack)));
@@ -2081,10 +2027,10 @@ impl LoadBalancerNamesParser {
 		Ok(obj)
 	}
 }
-/// Write a LoadBalancerNames's contents to a SignedRequest
-pub struct LoadBalancerNamesWriter;
+/// Write LoadBalancerNames contents to a SignedRequest
+struct LoadBalancerNamesWriter;
 impl LoadBalancerNamesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LoadBalancerNames) {
+	fn write_params(params: &mut Params, name: &str, obj: &LoadBalancerNames) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -2099,10 +2045,10 @@ pub struct DetachInstancesAnswer {
 	pub activities: Activities,
 }
 
-/// Parse a DetachInstancesAnswer from XML
-pub struct DetachInstancesAnswerParser;
+/// Parse DetachInstancesAnswer from XML
+struct DetachInstancesAnswerParser;
 impl DetachInstancesAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DetachInstancesAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DetachInstancesAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DetachInstancesAnswer::default();
 		loop {
@@ -2117,56 +2063,56 @@ impl DetachInstancesAnswerParser {
 		Ok(obj)
 	}
 }
-/// Write a DetachInstancesAnswer's contents to a SignedRequest
-pub struct DetachInstancesAnswerWriter;
+/// Write DetachInstancesAnswer contents to a SignedRequest
+struct DetachInstancesAnswerWriter;
 impl DetachInstancesAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DetachInstancesAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &DetachInstancesAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ActivitiesWriter::write_params(params, &(prefix.to_string() + "Activity"), &obj.activities);
 	}
 }
 pub type GlobalTimeout = i32;
-/// Parse a GlobalTimeout from XML
-pub struct GlobalTimeoutParser;
+/// Parse GlobalTimeout from XML
+struct GlobalTimeoutParser;
 impl GlobalTimeoutParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GlobalTimeout, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GlobalTimeout, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a GlobalTimeout's contents to a SignedRequest
-pub struct GlobalTimeoutWriter;
+/// Write GlobalTimeout contents to a SignedRequest
+struct GlobalTimeoutWriter;
 impl GlobalTimeoutWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &GlobalTimeout) {
+	fn write_params(params: &mut Params, name: &str, obj: &GlobalTimeout) {
 		params.put(name, &obj.to_string());
 	}
 }
 pub type XmlString = String;
-/// Parse a XmlString from XML
-pub struct XmlStringParser;
+/// Parse XmlString from XML
+struct XmlStringParser;
 impl XmlStringParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlString, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlString, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a XmlString's contents to a SignedRequest
-pub struct XmlStringWriter;
+/// Write XmlString contents to a SignedRequest
+struct XmlStringWriter;
 impl XmlStringWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &XmlString) {
+	fn write_params(params: &mut Params, name: &str, obj: &XmlString) {
 		params.put(name, obj);
 	}
 }
 pub type ProcessNames = Vec<XmlStringMaxLen255>;
-/// Parse a ProcessNames from XML
-pub struct ProcessNamesParser;
+/// Parse ProcessNames from XML
+struct ProcessNamesParser;
 impl ProcessNamesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ProcessNames, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ProcessNames, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlStringMaxLen255" {
 			obj.push(try!(XmlStringMaxLen255Parser::parse_xml("XmlStringMaxLen255", stack)));
@@ -2174,10 +2120,10 @@ impl ProcessNamesParser {
 		Ok(obj)
 	}
 }
-/// Write a ProcessNames's contents to a SignedRequest
-pub struct ProcessNamesWriter;
+/// Write ProcessNames contents to a SignedRequest
+struct ProcessNamesWriter;
 impl ProcessNamesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ProcessNames) {
+	fn write_params(params: &mut Params, name: &str, obj: &ProcessNames) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -2228,10 +2174,10 @@ pub struct ScalingPolicy {
 	pub scaling_adjustment: PolicyIncrement,
 }
 
-/// Parse a ScalingPolicy from XML
-pub struct ScalingPolicyParser;
+/// Parse ScalingPolicy from XML
+struct ScalingPolicyParser;
 impl ScalingPolicyParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScalingPolicy, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScalingPolicy, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ScalingPolicy::default();
 		loop {
@@ -2294,10 +2240,10 @@ impl ScalingPolicyParser {
 		Ok(obj)
 	}
 }
-/// Write a ScalingPolicy's contents to a SignedRequest
-pub struct ScalingPolicyWriter;
+/// Write ScalingPolicy contents to a SignedRequest
+struct ScalingPolicyWriter;
 impl ScalingPolicyWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ScalingPolicy) {
+	fn write_params(params: &mut Params, name: &str, obj: &ScalingPolicy) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "PolicyName"), &obj.policy_name);
@@ -2316,10 +2262,10 @@ impl ScalingPolicyWriter {
 	}
 }
 pub type SuspendedProcesses = Vec<SuspendedProcess>;
-/// Parse a SuspendedProcesses from XML
-pub struct SuspendedProcessesParser;
+/// Parse SuspendedProcesses from XML
+struct SuspendedProcessesParser;
 impl SuspendedProcessesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SuspendedProcesses, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SuspendedProcesses, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "SuspendedProcess" {
 			obj.push(try!(SuspendedProcessParser::parse_xml("SuspendedProcess", stack)));
@@ -2327,10 +2273,10 @@ impl SuspendedProcessesParser {
 		Ok(obj)
 	}
 }
-/// Write a SuspendedProcesses's contents to a SignedRequest
-pub struct SuspendedProcessesWriter;
+/// Write SuspendedProcesses contents to a SignedRequest
+struct SuspendedProcessesWriter;
 impl SuspendedProcessesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SuspendedProcesses) {
+	fn write_params(params: &mut Params, name: &str, obj: &SuspendedProcesses) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -2340,45 +2286,44 @@ impl SuspendedProcessesWriter {
 	}
 }
 pub type HonorCooldown = bool;
-/// Parse a HonorCooldown from XML
-pub struct HonorCooldownParser;
+/// Parse HonorCooldown from XML
+struct HonorCooldownParser;
 impl HonorCooldownParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<HonorCooldown, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<HonorCooldown, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a HonorCooldown's contents to a SignedRequest
-pub struct HonorCooldownWriter;
+/// Write HonorCooldown contents to a SignedRequest
+struct HonorCooldownWriter;
 impl HonorCooldownWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &HonorCooldown) {
+	fn write_params(params: &mut Params, name: &str, obj: &HonorCooldown) {
 		params.put(name, &obj.to_string());
 	}
 }
 #[derive(Debug, Default)]
 pub struct RecordLifecycleActionHeartbeatAnswer;
 
-/// Parse a RecordLifecycleActionHeartbeatAnswer from XML
-pub struct RecordLifecycleActionHeartbeatAnswerParser;
+/// Parse RecordLifecycleActionHeartbeatAnswer from XML
+struct RecordLifecycleActionHeartbeatAnswerParser;
 impl RecordLifecycleActionHeartbeatAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<RecordLifecycleActionHeartbeatAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<RecordLifecycleActionHeartbeatAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = RecordLifecycleActionHeartbeatAnswer::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a RecordLifecycleActionHeartbeatAnswer's contents to a SignedRequest
-pub struct RecordLifecycleActionHeartbeatAnswerWriter;
+/// Write RecordLifecycleActionHeartbeatAnswer contents to a SignedRequest
+struct RecordLifecycleActionHeartbeatAnswerWriter;
 impl RecordLifecycleActionHeartbeatAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &RecordLifecycleActionHeartbeatAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &RecordLifecycleActionHeartbeatAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
 }
-/// Deletes the specified scheduled action.
 #[derive(Debug, Default)]
 pub struct DeleteScheduledActionType {
 	/// The name of the Auto Scaling group.
@@ -2387,10 +2332,10 @@ pub struct DeleteScheduledActionType {
 	pub scheduled_action_name: ResourceName,
 }
 
-/// Parse a DeleteScheduledActionType from XML
-pub struct DeleteScheduledActionTypeParser;
+/// Parse DeleteScheduledActionType from XML
+struct DeleteScheduledActionTypeParser;
 impl DeleteScheduledActionTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteScheduledActionType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteScheduledActionType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteScheduledActionType::default();
 		loop {
@@ -2409,10 +2354,10 @@ impl DeleteScheduledActionTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteScheduledActionType's contents to a SignedRequest
-pub struct DeleteScheduledActionTypeWriter;
+/// Write DeleteScheduledActionType contents to a SignedRequest
+struct DeleteScheduledActionTypeWriter;
 impl DeleteScheduledActionTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteScheduledActionType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteScheduledActionType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.auto_scaling_group_name {
@@ -2422,43 +2367,41 @@ impl DeleteScheduledActionTypeWriter {
 	}
 }
 pub type LifecycleActionResult = String;
-/// Parse a LifecycleActionResult from XML
-pub struct LifecycleActionResultParser;
+/// Parse LifecycleActionResult from XML
+struct LifecycleActionResultParser;
 impl LifecycleActionResultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleActionResult, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleActionResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a LifecycleActionResult's contents to a SignedRequest
-pub struct LifecycleActionResultWriter;
+/// Write LifecycleActionResult contents to a SignedRequest
+struct LifecycleActionResultWriter;
 impl LifecycleActionResultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LifecycleActionResult) {
+	fn write_params(params: &mut Params, name: &str, obj: &LifecycleActionResult) {
 		params.put(name, obj);
 	}
 }
 pub type AsciiStringMaxLen255 = String;
-/// Parse a AsciiStringMaxLen255 from XML
-pub struct AsciiStringMaxLen255Parser;
+/// Parse AsciiStringMaxLen255 from XML
+struct AsciiStringMaxLen255Parser;
 impl AsciiStringMaxLen255Parser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AsciiStringMaxLen255, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AsciiStringMaxLen255, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a AsciiStringMaxLen255's contents to a SignedRequest
-pub struct AsciiStringMaxLen255Writer;
+/// Write AsciiStringMaxLen255 contents to a SignedRequest
+struct AsciiStringMaxLen255Writer;
 impl AsciiStringMaxLen255Writer {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AsciiStringMaxLen255) {
+	fn write_params(params: &mut Params, name: &str, obj: &AsciiStringMaxLen255) {
 		params.put(name, obj);
 	}
 }
-/// Describes the notification actions associated with the specified Auto Scaling
-/// group.
 #[derive(Debug, Default)]
 pub struct DescribeNotificationConfigurationsType {
 	/// The maximum number of items to return with this call.
@@ -2470,10 +2413,10 @@ pub struct DescribeNotificationConfigurationsType {
 	pub auto_scaling_group_names: AutoScalingGroupNames,
 }
 
-/// Parse a DescribeNotificationConfigurationsType from XML
-pub struct DescribeNotificationConfigurationsTypeParser;
+/// Parse DescribeNotificationConfigurationsType from XML
+struct DescribeNotificationConfigurationsTypeParser;
 impl DescribeNotificationConfigurationsTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeNotificationConfigurationsType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeNotificationConfigurationsType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeNotificationConfigurationsType::default();
 		loop {
@@ -2496,10 +2439,10 @@ impl DescribeNotificationConfigurationsTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeNotificationConfigurationsType's contents to a SignedRequest
-pub struct DescribeNotificationConfigurationsTypeWriter;
+/// Write DescribeNotificationConfigurationsType contents to a SignedRequest
+struct DescribeNotificationConfigurationsTypeWriter;
 impl DescribeNotificationConfigurationsTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeNotificationConfigurationsType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeNotificationConfigurationsType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MaxRecordsWriter::write_params(params, &(prefix.to_string() + "MaxRecords"), &obj.max_records);
@@ -2514,10 +2457,10 @@ pub struct MetricGranularityType {
 	pub granularity: XmlStringMaxLen255,
 }
 
-/// Parse a MetricGranularityType from XML
-pub struct MetricGranularityTypeParser;
+/// Parse MetricGranularityType from XML
+struct MetricGranularityTypeParser;
 impl MetricGranularityTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MetricGranularityType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MetricGranularityType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = MetricGranularityType::default();
 		loop {
@@ -2532,17 +2475,15 @@ impl MetricGranularityTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a MetricGranularityType's contents to a SignedRequest
-pub struct MetricGranularityTypeWriter;
+/// Write MetricGranularityType contents to a SignedRequest
+struct MetricGranularityTypeWriter;
 impl MetricGranularityTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MetricGranularityType) {
+	fn write_params(params: &mut Params, name: &str, obj: &MetricGranularityType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "Granularity"), &obj.granularity);
 	}
 }
-/// Describes the actions scheduled for your Auto Scaling group that haven't run.
-/// To describe the actions that have already run, use DescribeScalingActivities.
 #[derive(Debug, Default)]
 pub struct DescribeScheduledActionsType {
 	/// The latest scheduled start time to return. If scheduled action names are
@@ -2567,10 +2508,10 @@ pub struct DescribeScheduledActionsType {
 	pub next_token: XmlString,
 }
 
-/// Parse a DescribeScheduledActionsType from XML
-pub struct DescribeScheduledActionsTypeParser;
+/// Parse DescribeScheduledActionsType from XML
+struct DescribeScheduledActionsTypeParser;
 impl DescribeScheduledActionsTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeScheduledActionsType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeScheduledActionsType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeScheduledActionsType::default();
 		loop {
@@ -2605,10 +2546,10 @@ impl DescribeScheduledActionsTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeScheduledActionsType's contents to a SignedRequest
-pub struct DescribeScheduledActionsTypeWriter;
+/// Write DescribeScheduledActionsType contents to a SignedRequest
+struct DescribeScheduledActionsTypeWriter;
 impl DescribeScheduledActionsTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeScheduledActionsType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeScheduledActionsType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		TimestampTypeWriter::write_params(params, &(prefix.to_string() + "EndTime"), &obj.end_time);
@@ -2626,10 +2567,10 @@ pub struct ResourceContentionFault {
 	pub message: XmlStringMaxLen255,
 }
 
-/// Parse a ResourceContentionFault from XML
-pub struct ResourceContentionFaultParser;
+/// Parse ResourceContentionFault from XML
+struct ResourceContentionFaultParser;
 impl ResourceContentionFaultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ResourceContentionFault, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ResourceContentionFault, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ResourceContentionFault::default();
 		loop {
@@ -2644,10 +2585,10 @@ impl ResourceContentionFaultParser {
 		Ok(obj)
 	}
 }
-/// Write a ResourceContentionFault's contents to a SignedRequest
-pub struct ResourceContentionFaultWriter;
+/// Write ResourceContentionFault contents to a SignedRequest
+struct ResourceContentionFaultWriter;
 impl ResourceContentionFaultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ResourceContentionFault) {
+	fn write_params(params: &mut Params, name: &str, obj: &ResourceContentionFault) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "message"), &obj.message);
@@ -2682,10 +2623,10 @@ pub struct ScheduledUpdateGroupAction {
 	pub end_time: TimestampType,
 }
 
-/// Parse a ScheduledUpdateGroupAction from XML
-pub struct ScheduledUpdateGroupActionParser;
+/// Parse ScheduledUpdateGroupAction from XML
+struct ScheduledUpdateGroupActionParser;
 impl ScheduledUpdateGroupActionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScheduledUpdateGroupAction, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScheduledUpdateGroupAction, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ScheduledUpdateGroupAction::default();
 		loop {
@@ -2736,10 +2677,10 @@ impl ScheduledUpdateGroupActionParser {
 		Ok(obj)
 	}
 }
-/// Write a ScheduledUpdateGroupAction's contents to a SignedRequest
-pub struct ScheduledUpdateGroupActionWriter;
+/// Write ScheduledUpdateGroupAction contents to a SignedRequest
+struct ScheduledUpdateGroupActionWriter;
 impl ScheduledUpdateGroupActionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ScheduledUpdateGroupAction) {
+	fn write_params(params: &mut Params, name: &str, obj: &ScheduledUpdateGroupAction) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		AutoScalingGroupMinSizeWriter::write_params(params, &(prefix.to_string() + "MinSize"), &obj.min_size);
@@ -2771,10 +2712,10 @@ pub struct EnabledMetric {
 	pub granularity: XmlStringMaxLen255,
 }
 
-/// Parse a EnabledMetric from XML
-pub struct EnabledMetricParser;
+/// Parse EnabledMetric from XML
+struct EnabledMetricParser;
 impl EnabledMetricParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EnabledMetric, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EnabledMetric, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = EnabledMetric::default();
 		loop {
@@ -2793,10 +2734,10 @@ impl EnabledMetricParser {
 		Ok(obj)
 	}
 }
-/// Write a EnabledMetric's contents to a SignedRequest
-pub struct EnabledMetricWriter;
+/// Write EnabledMetric contents to a SignedRequest
+struct EnabledMetricWriter;
 impl EnabledMetricWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &EnabledMetric) {
+	fn write_params(params: &mut Params, name: &str, obj: &EnabledMetric) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "Metric"), &obj.metric);
@@ -2804,7 +2745,6 @@ impl EnabledMetricWriter {
 	}
 }
 /// 
-/// Deletes the specified Auto Scaling policy.
 #[derive(Debug, Default)]
 pub struct DeletePolicyType {
 	/// The name or Amazon Resource Name (ARN) of the policy.
@@ -2813,10 +2753,10 @@ pub struct DeletePolicyType {
 	pub auto_scaling_group_name: Option<ResourceName>,
 }
 
-/// Parse a DeletePolicyType from XML
-pub struct DeletePolicyTypeParser;
+/// Parse DeletePolicyType from XML
+struct DeletePolicyTypeParser;
 impl DeletePolicyTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeletePolicyType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeletePolicyType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeletePolicyType::default();
 		loop {
@@ -2835,10 +2775,10 @@ impl DeletePolicyTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DeletePolicyType's contents to a SignedRequest
-pub struct DeletePolicyTypeWriter;
+/// Write DeletePolicyType contents to a SignedRequest
+struct DeletePolicyTypeWriter;
 impl DeletePolicyTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeletePolicyType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeletePolicyType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "PolicyName"), &obj.policy_name);
@@ -2847,9 +2787,6 @@ impl DeletePolicyTypeWriter {
 		}
 	}
 }
-/// Deletes the specified lifecycle hook.
-/// If there are any outstanding lifecycle actions, they are completed first
-/// (`ABANDON` for launching instances, `CONTINUE` for terminating instances).
 #[derive(Debug, Default)]
 pub struct DeleteLifecycleHookType {
 	/// The name of the lifecycle hook.
@@ -2858,10 +2795,10 @@ pub struct DeleteLifecycleHookType {
 	pub auto_scaling_group_name: ResourceName,
 }
 
-/// Parse a DeleteLifecycleHookType from XML
-pub struct DeleteLifecycleHookTypeParser;
+/// Parse DeleteLifecycleHookType from XML
+struct DeleteLifecycleHookTypeParser;
 impl DeleteLifecycleHookTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteLifecycleHookType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteLifecycleHookType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteLifecycleHookType::default();
 		loop {
@@ -2880,10 +2817,10 @@ impl DeleteLifecycleHookTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteLifecycleHookType's contents to a SignedRequest
-pub struct DeleteLifecycleHookTypeWriter;
+/// Write DeleteLifecycleHookType contents to a SignedRequest
+struct DeleteLifecycleHookTypeWriter;
 impl DeleteLifecycleHookTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteLifecycleHookType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteLifecycleHookType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		AsciiStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "LifecycleHookName"), &obj.lifecycle_hook_name);
@@ -2891,20 +2828,20 @@ impl DeleteLifecycleHookTypeWriter {
 	}
 }
 pub type TagValue = String;
-/// Parse a TagValue from XML
-pub struct TagValueParser;
+/// Parse TagValue from XML
+struct TagValueParser;
 impl TagValueParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TagValue, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TagValue, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a TagValue's contents to a SignedRequest
-pub struct TagValueWriter;
+/// Write TagValue contents to a SignedRequest
+struct TagValueWriter;
 impl TagValueWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TagValue) {
+	fn write_params(params: &mut Params, name: &str, obj: &TagValue) {
 		params.put(name, obj);
 	}
 }
@@ -2926,10 +2863,10 @@ pub struct ProcessType {
 	pub process_name: XmlStringMaxLen255,
 }
 
-/// Parse a ProcessType from XML
-pub struct ProcessTypeParser;
+/// Parse ProcessType from XML
+struct ProcessTypeParser;
 impl ProcessTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ProcessType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ProcessType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ProcessType::default();
 		loop {
@@ -2944,22 +2881,15 @@ impl ProcessTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a ProcessType's contents to a SignedRequest
-pub struct ProcessTypeWriter;
+/// Write ProcessType contents to a SignedRequest
+struct ProcessTypeWriter;
 impl ProcessTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ProcessType) {
+	fn write_params(params: &mut Params, name: &str, obj: &ProcessType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "ProcessName"), &obj.process_name);
 	}
 }
-/// Configures an Auto Scaling group to send notifications when specified events
-/// take place. Subscribers to this topic can have messages for events delivered
-/// to an endpoint such as a web server or email address.
-/// For more information see [Getting Notifications When Your Auto Scaling Group C
-/// hanges](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/ASGetting
-/// Notifications.html) in the _Auto Scaling Developer Guide_.
-/// This configuration overwrites an existing configuration.
 #[derive(Debug, Default)]
 pub struct PutNotificationConfigurationType {
 	/// The name of the Auto Scaling group.
@@ -2973,10 +2903,10 @@ pub struct PutNotificationConfigurationType {
 	pub topic_arn: ResourceName,
 }
 
-/// Parse a PutNotificationConfigurationType from XML
-pub struct PutNotificationConfigurationTypeParser;
+/// Parse PutNotificationConfigurationType from XML
+struct PutNotificationConfigurationTypeParser;
 impl PutNotificationConfigurationTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PutNotificationConfigurationType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PutNotificationConfigurationType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PutNotificationConfigurationType::default();
 		loop {
@@ -2999,10 +2929,10 @@ impl PutNotificationConfigurationTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a PutNotificationConfigurationType's contents to a SignedRequest
-pub struct PutNotificationConfigurationTypeWriter;
+/// Write PutNotificationConfigurationType contents to a SignedRequest
+struct PutNotificationConfigurationTypeWriter;
 impl PutNotificationConfigurationTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PutNotificationConfigurationType) {
+	fn write_params(params: &mut Params, name: &str, obj: &PutNotificationConfigurationType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "AutoScalingGroupName"), &obj.auto_scaling_group_name);
@@ -3011,10 +2941,10 @@ impl PutNotificationConfigurationTypeWriter {
 	}
 }
 pub type StepAdjustments = Vec<StepAdjustment>;
-/// Parse a StepAdjustments from XML
-pub struct StepAdjustmentsParser;
+/// Parse StepAdjustments from XML
+struct StepAdjustmentsParser;
 impl StepAdjustmentsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<StepAdjustments, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<StepAdjustments, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "StepAdjustment" {
 			obj.push(try!(StepAdjustmentParser::parse_xml("StepAdjustment", stack)));
@@ -3022,10 +2952,10 @@ impl StepAdjustmentsParser {
 		Ok(obj)
 	}
 }
-/// Write a StepAdjustments's contents to a SignedRequest
-pub struct StepAdjustmentsWriter;
+/// Write StepAdjustments contents to a SignedRequest
+struct StepAdjustmentsWriter;
 impl StepAdjustmentsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &StepAdjustments) {
+	fn write_params(params: &mut Params, name: &str, obj: &StepAdjustments) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -3035,20 +2965,20 @@ impl StepAdjustmentsWriter {
 	}
 }
 pub type EstimatedInstanceWarmup = i32;
-/// Parse a EstimatedInstanceWarmup from XML
-pub struct EstimatedInstanceWarmupParser;
+/// Parse EstimatedInstanceWarmup from XML
+struct EstimatedInstanceWarmupParser;
 impl EstimatedInstanceWarmupParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EstimatedInstanceWarmup, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EstimatedInstanceWarmup, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a EstimatedInstanceWarmup's contents to a SignedRequest
-pub struct EstimatedInstanceWarmupWriter;
+/// Write EstimatedInstanceWarmup contents to a SignedRequest
+struct EstimatedInstanceWarmupWriter;
 impl EstimatedInstanceWarmupWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &EstimatedInstanceWarmup) {
+	fn write_params(params: &mut Params, name: &str, obj: &EstimatedInstanceWarmup) {
 		params.put(name, &obj.to_string());
 	}
 }
@@ -3058,10 +2988,10 @@ pub struct EnterStandbyAnswer {
 	pub activities: Activities,
 }
 
-/// Parse a EnterStandbyAnswer from XML
-pub struct EnterStandbyAnswerParser;
+/// Parse EnterStandbyAnswer from XML
+struct EnterStandbyAnswerParser;
 impl EnterStandbyAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EnterStandbyAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EnterStandbyAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = EnterStandbyAnswer::default();
 		loop {
@@ -3076,38 +3006,38 @@ impl EnterStandbyAnswerParser {
 		Ok(obj)
 	}
 }
-/// Write a EnterStandbyAnswer's contents to a SignedRequest
-pub struct EnterStandbyAnswerWriter;
+/// Write EnterStandbyAnswer contents to a SignedRequest
+struct EnterStandbyAnswerWriter;
 impl EnterStandbyAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &EnterStandbyAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &EnterStandbyAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ActivitiesWriter::write_params(params, &(prefix.to_string() + "Activity"), &obj.activities);
 	}
 }
 pub type MetricScale = f32;
-/// Parse a MetricScale from XML
-pub struct MetricScaleParser;
+/// Parse MetricScale from XML
+struct MetricScaleParser;
 impl MetricScaleParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MetricScale, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MetricScale, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = f32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a MetricScale's contents to a SignedRequest
-pub struct MetricScaleWriter;
+/// Write MetricScale contents to a SignedRequest
+struct MetricScaleWriter;
 impl MetricScaleWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MetricScale) {
+	fn write_params(params: &mut Params, name: &str, obj: &MetricScale) {
 		params.put(name, &obj.to_string());
 	}
 }
 pub type LaunchConfigurations = Vec<LaunchConfiguration>;
-/// Parse a LaunchConfigurations from XML
-pub struct LaunchConfigurationsParser;
+/// Parse LaunchConfigurations from XML
+struct LaunchConfigurationsParser;
 impl LaunchConfigurationsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfigurations, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfigurations, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "LaunchConfiguration" {
 			obj.push(try!(LaunchConfigurationParser::parse_xml("LaunchConfiguration", stack)));
@@ -3115,10 +3045,10 @@ impl LaunchConfigurationsParser {
 		Ok(obj)
 	}
 }
-/// Write a LaunchConfigurations's contents to a SignedRequest
-pub struct LaunchConfigurationsWriter;
+/// Write LaunchConfigurations contents to a SignedRequest
+struct LaunchConfigurationsWriter;
 impl LaunchConfigurationsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LaunchConfigurations) {
+	fn write_params(params: &mut Params, name: &str, obj: &LaunchConfigurations) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -3133,10 +3063,10 @@ pub struct ExitStandbyAnswer {
 	pub activities: Activities,
 }
 
-/// Parse a ExitStandbyAnswer from XML
-pub struct ExitStandbyAnswerParser;
+/// Parse ExitStandbyAnswer from XML
+struct ExitStandbyAnswerParser;
 impl ExitStandbyAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ExitStandbyAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ExitStandbyAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ExitStandbyAnswer::default();
 		loop {
@@ -3151,30 +3081,30 @@ impl ExitStandbyAnswerParser {
 		Ok(obj)
 	}
 }
-/// Write a ExitStandbyAnswer's contents to a SignedRequest
-pub struct ExitStandbyAnswerWriter;
+/// Write ExitStandbyAnswer contents to a SignedRequest
+struct ExitStandbyAnswerWriter;
 impl ExitStandbyAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ExitStandbyAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &ExitStandbyAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ActivitiesWriter::write_params(params, &(prefix.to_string() + "Activity"), &obj.activities);
 	}
 }
 pub type MaxNumberOfAutoScalingGroups = i32;
-/// Parse a MaxNumberOfAutoScalingGroups from XML
-pub struct MaxNumberOfAutoScalingGroupsParser;
+/// Parse MaxNumberOfAutoScalingGroups from XML
+struct MaxNumberOfAutoScalingGroupsParser;
 impl MaxNumberOfAutoScalingGroupsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MaxNumberOfAutoScalingGroups, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MaxNumberOfAutoScalingGroups, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a MaxNumberOfAutoScalingGroups's contents to a SignedRequest
-pub struct MaxNumberOfAutoScalingGroupsWriter;
+/// Write MaxNumberOfAutoScalingGroups contents to a SignedRequest
+struct MaxNumberOfAutoScalingGroupsWriter;
 impl MaxNumberOfAutoScalingGroupsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MaxNumberOfAutoScalingGroups) {
+	fn write_params(params: &mut Params, name: &str, obj: &MaxNumberOfAutoScalingGroups) {
 		params.put(name, &obj.to_string());
 	}
 }
@@ -3184,10 +3114,10 @@ pub struct DescribeAdjustmentTypesAnswer {
 	pub adjustment_types: AdjustmentTypes,
 }
 
-/// Parse a DescribeAdjustmentTypesAnswer from XML
-pub struct DescribeAdjustmentTypesAnswerParser;
+/// Parse DescribeAdjustmentTypesAnswer from XML
+struct DescribeAdjustmentTypesAnswerParser;
 impl DescribeAdjustmentTypesAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeAdjustmentTypesAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeAdjustmentTypesAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeAdjustmentTypesAnswer::default();
 		loop {
@@ -3202,30 +3132,30 @@ impl DescribeAdjustmentTypesAnswerParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeAdjustmentTypesAnswer's contents to a SignedRequest
-pub struct DescribeAdjustmentTypesAnswerWriter;
+/// Write DescribeAdjustmentTypesAnswer contents to a SignedRequest
+struct DescribeAdjustmentTypesAnswerWriter;
 impl DescribeAdjustmentTypesAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeAdjustmentTypesAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeAdjustmentTypesAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		AdjustmentTypesWriter::write_params(params, &(prefix.to_string() + "AdjustmentType"), &obj.adjustment_types);
 	}
 }
 pub type TimestampType = String;
-/// Parse a TimestampType from XML
-pub struct TimestampTypeParser;
+/// Parse TimestampType from XML
+struct TimestampTypeParser;
 impl TimestampTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TimestampType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TimestampType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a TimestampType's contents to a SignedRequest
-pub struct TimestampTypeWriter;
+/// Write TimestampType contents to a SignedRequest
+struct TimestampTypeWriter;
 impl TimestampTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TimestampType) {
+	fn write_params(params: &mut Params, name: &str, obj: &TimestampType) {
 		params.put(name, obj);
 	}
 }
@@ -3240,10 +3170,10 @@ pub struct AdjustmentType {
 	pub adjustment_type: XmlStringMaxLen255,
 }
 
-/// Parse a AdjustmentType from XML
-pub struct AdjustmentTypeParser;
+/// Parse AdjustmentType from XML
+struct AdjustmentTypeParser;
 impl AdjustmentTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AdjustmentType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AdjustmentType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AdjustmentType::default();
 		loop {
@@ -3258,20 +3188,20 @@ impl AdjustmentTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a AdjustmentType's contents to a SignedRequest
-pub struct AdjustmentTypeWriter;
+/// Write AdjustmentType contents to a SignedRequest
+struct AdjustmentTypeWriter;
 impl AdjustmentTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AdjustmentType) {
+	fn write_params(params: &mut Params, name: &str, obj: &AdjustmentType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "AdjustmentType"), &obj.adjustment_type);
 	}
 }
 pub type Values = Vec<XmlString>;
-/// Parse a Values from XML
-pub struct ValuesParser;
+/// Parse Values from XML
+struct ValuesParser;
 impl ValuesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Values, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Values, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlString" {
 			obj.push(try!(XmlStringParser::parse_xml("XmlString", stack)));
@@ -3279,10 +3209,10 @@ impl ValuesParser {
 		Ok(obj)
 	}
 }
-/// Write a Values's contents to a SignedRequest
-pub struct ValuesWriter;
+/// Write Values contents to a SignedRequest
+struct ValuesWriter;
 impl ValuesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Values) {
+	fn write_params(params: &mut Params, name: &str, obj: &Values) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -3291,8 +3221,6 @@ impl ValuesWriter {
 		}
 	}
 }
-/// Disables monitoring of the specified metrics for the specified Auto Scaling
-/// group.
 #[derive(Debug, Default)]
 pub struct DisableMetricsCollectionQuery {
 	/// One or more metrics. If you omit this parameter, all metrics are disabled.
@@ -3309,10 +3237,10 @@ pub struct DisableMetricsCollectionQuery {
 	pub auto_scaling_group_name: ResourceName,
 }
 
-/// Parse a DisableMetricsCollectionQuery from XML
-pub struct DisableMetricsCollectionQueryParser;
+/// Parse DisableMetricsCollectionQuery from XML
+struct DisableMetricsCollectionQueryParser;
 impl DisableMetricsCollectionQueryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DisableMetricsCollectionQuery, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DisableMetricsCollectionQuery, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DisableMetricsCollectionQuery::default();
 		loop {
@@ -3331,10 +3259,10 @@ impl DisableMetricsCollectionQueryParser {
 		Ok(obj)
 	}
 }
-/// Write a DisableMetricsCollectionQuery's contents to a SignedRequest
-pub struct DisableMetricsCollectionQueryWriter;
+/// Write DisableMetricsCollectionQuery contents to a SignedRequest
+struct DisableMetricsCollectionQueryWriter;
 impl DisableMetricsCollectionQueryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DisableMetricsCollectionQuery) {
+	fn write_params(params: &mut Params, name: &str, obj: &DisableMetricsCollectionQuery) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.metrics {
@@ -3344,20 +3272,20 @@ impl DisableMetricsCollectionQueryWriter {
 	}
 }
 pub type LifecycleTransition = String;
-/// Parse a LifecycleTransition from XML
-pub struct LifecycleTransitionParser;
+/// Parse LifecycleTransition from XML
+struct LifecycleTransitionParser;
 impl LifecycleTransitionParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleTransition, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleTransition, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a LifecycleTransition's contents to a SignedRequest
-pub struct LifecycleTransitionWriter;
+/// Write LifecycleTransition contents to a SignedRequest
+struct LifecycleTransitionWriter;
 impl LifecycleTransitionWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LifecycleTransition) {
+	fn write_params(params: &mut Params, name: &str, obj: &LifecycleTransition) {
 		params.put(name, obj);
 	}
 }
@@ -3378,10 +3306,10 @@ pub struct NotificationConfiguration {
 	pub topic_arn: ResourceName,
 }
 
-/// Parse a NotificationConfiguration from XML
-pub struct NotificationConfigurationParser;
+/// Parse NotificationConfiguration from XML
+struct NotificationConfigurationParser;
 impl NotificationConfigurationParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<NotificationConfiguration, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<NotificationConfiguration, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = NotificationConfiguration::default();
 		loop {
@@ -3404,10 +3332,10 @@ impl NotificationConfigurationParser {
 		Ok(obj)
 	}
 }
-/// Write a NotificationConfiguration's contents to a SignedRequest
-pub struct NotificationConfigurationWriter;
+/// Write NotificationConfiguration contents to a SignedRequest
+struct NotificationConfigurationWriter;
 impl NotificationConfigurationWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &NotificationConfiguration) {
+	fn write_params(params: &mut Params, name: &str, obj: &NotificationConfiguration) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "AutoScalingGroupName"), &obj.auto_scaling_group_name);
@@ -3416,10 +3344,10 @@ impl NotificationConfigurationWriter {
 	}
 }
 pub type LaunchConfigurationNames = Vec<ResourceName>;
-/// Parse a LaunchConfigurationNames from XML
-pub struct LaunchConfigurationNamesParser;
+/// Parse LaunchConfigurationNames from XML
+struct LaunchConfigurationNamesParser;
 impl LaunchConfigurationNamesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfigurationNames, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfigurationNames, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ResourceName" {
 			obj.push(try!(ResourceNameParser::parse_xml("ResourceName", stack)));
@@ -3427,10 +3355,10 @@ impl LaunchConfigurationNamesParser {
 		Ok(obj)
 	}
 }
-/// Write a LaunchConfigurationNames's contents to a SignedRequest
-pub struct LaunchConfigurationNamesWriter;
+/// Write LaunchConfigurationNames contents to a SignedRequest
+struct LaunchConfigurationNamesWriter;
 impl LaunchConfigurationNamesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LaunchConfigurationNames) {
+	fn write_params(params: &mut Params, name: &str, obj: &LaunchConfigurationNames) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -3440,25 +3368,23 @@ impl LaunchConfigurationNamesWriter {
 	}
 }
 pub type MinAdjustmentStep = i32;
-/// Parse a MinAdjustmentStep from XML
-pub struct MinAdjustmentStepParser;
+/// Parse MinAdjustmentStep from XML
+struct MinAdjustmentStepParser;
 impl MinAdjustmentStepParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MinAdjustmentStep, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MinAdjustmentStep, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a MinAdjustmentStep's contents to a SignedRequest
-pub struct MinAdjustmentStepWriter;
+/// Write MinAdjustmentStep contents to a SignedRequest
+struct MinAdjustmentStepWriter;
 impl MinAdjustmentStepWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MinAdjustmentStep) {
+	fn write_params(params: &mut Params, name: &str, obj: &MinAdjustmentStep) {
 		params.put(name, &obj.to_string());
 	}
 }
-/// Describes one or more launch configurations. If you omit the list of names,
-/// then the call describes all launch configurations.
 #[derive(Debug, Default)]
 pub struct LaunchConfigurationNamesType {
 	/// The maximum number of items to return with this call. The default is 100.
@@ -3470,10 +3396,10 @@ pub struct LaunchConfigurationNamesType {
 	pub next_token: XmlString,
 }
 
-/// Parse a LaunchConfigurationNamesType from XML
-pub struct LaunchConfigurationNamesTypeParser;
+/// Parse LaunchConfigurationNamesType from XML
+struct LaunchConfigurationNamesTypeParser;
 impl LaunchConfigurationNamesTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfigurationNamesType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfigurationNamesType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = LaunchConfigurationNamesType::default();
 		loop {
@@ -3496,10 +3422,10 @@ impl LaunchConfigurationNamesTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a LaunchConfigurationNamesType's contents to a SignedRequest
-pub struct LaunchConfigurationNamesTypeWriter;
+/// Write LaunchConfigurationNamesType contents to a SignedRequest
+struct LaunchConfigurationNamesTypeWriter;
 impl LaunchConfigurationNamesTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LaunchConfigurationNamesType) {
+	fn write_params(params: &mut Params, name: &str, obj: &LaunchConfigurationNamesType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MaxRecordsWriter::write_params(params, &(prefix.to_string() + "MaxRecords"), &obj.max_records);
@@ -3507,15 +3433,6 @@ impl LaunchConfigurationNamesTypeWriter {
 		XmlStringWriter::write_params(params, &(prefix.to_string() + "NextToken"), &obj.next_token);
 	}
 }
-/// Creates or updates a policy for an Auto Scaling group. To update an existing
-/// policy, use the existing policy name and set the parameters you want to
-/// change. Any existing parameter not changed in an update to an existing policy
-/// is not changed in this update request.
-/// If you exceed your maximum limit of step adjustments, which by default is 20
-/// per region, the call fails. For information about updating this limit, see
-/// [AWS Service
-/// Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)
-/// in the _Amazon Web Services General Reference_.
 #[derive(Debug, Default)]
 pub struct PutScalingPolicyType {
 	/// The name of the policy.
@@ -3569,10 +3486,10 @@ pub struct PutScalingPolicyType {
 	pub scaling_adjustment: Option<PolicyIncrement>,
 }
 
-/// Parse a PutScalingPolicyType from XML
-pub struct PutScalingPolicyTypeParser;
+/// Parse PutScalingPolicyType from XML
+struct PutScalingPolicyTypeParser;
 impl PutScalingPolicyTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PutScalingPolicyType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PutScalingPolicyType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PutScalingPolicyType::default();
 		loop {
@@ -3627,10 +3544,10 @@ impl PutScalingPolicyTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a PutScalingPolicyType's contents to a SignedRequest
-pub struct PutScalingPolicyTypeWriter;
+/// Write PutScalingPolicyType contents to a SignedRequest
+struct PutScalingPolicyTypeWriter;
 impl PutScalingPolicyTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PutScalingPolicyType) {
+	fn write_params(params: &mut Params, name: &str, obj: &PutScalingPolicyType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "PolicyName"), &obj.policy_name);
@@ -3669,10 +3586,10 @@ pub struct InstanceMonitoring {
 	pub enabled: MonitoringEnabled,
 }
 
-/// Parse a InstanceMonitoring from XML
-pub struct InstanceMonitoringParser;
+/// Parse InstanceMonitoring from XML
+struct InstanceMonitoringParser;
 impl InstanceMonitoringParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InstanceMonitoring, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InstanceMonitoring, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InstanceMonitoring::default();
 		loop {
@@ -3687,20 +3604,20 @@ impl InstanceMonitoringParser {
 		Ok(obj)
 	}
 }
-/// Write a InstanceMonitoring's contents to a SignedRequest
-pub struct InstanceMonitoringWriter;
+/// Write InstanceMonitoring contents to a SignedRequest
+struct InstanceMonitoringWriter;
 impl InstanceMonitoringWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &InstanceMonitoring) {
+	fn write_params(params: &mut Params, name: &str, obj: &InstanceMonitoring) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MonitoringEnabledWriter::write_params(params, &(prefix.to_string() + "Enabled"), &obj.enabled);
 	}
 }
 pub type ClassicLinkVPCSecurityGroups = Vec<XmlStringMaxLen255>;
-/// Parse a ClassicLinkVPCSecurityGroups from XML
-pub struct ClassicLinkVPCSecurityGroupsParser;
+/// Parse ClassicLinkVPCSecurityGroups from XML
+struct ClassicLinkVPCSecurityGroupsParser;
 impl ClassicLinkVPCSecurityGroupsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ClassicLinkVPCSecurityGroups, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ClassicLinkVPCSecurityGroups, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlStringMaxLen255" {
 			obj.push(try!(XmlStringMaxLen255Parser::parse_xml("XmlStringMaxLen255", stack)));
@@ -3708,10 +3625,10 @@ impl ClassicLinkVPCSecurityGroupsParser {
 		Ok(obj)
 	}
 }
-/// Write a ClassicLinkVPCSecurityGroups's contents to a SignedRequest
-pub struct ClassicLinkVPCSecurityGroupsWriter;
+/// Write ClassicLinkVPCSecurityGroups contents to a SignedRequest
+struct ClassicLinkVPCSecurityGroupsWriter;
 impl ClassicLinkVPCSecurityGroupsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ClassicLinkVPCSecurityGroups) {
+	fn write_params(params: &mut Params, name: &str, obj: &ClassicLinkVPCSecurityGroups) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -3721,10 +3638,10 @@ impl ClassicLinkVPCSecurityGroupsWriter {
 	}
 }
 pub type TagDescriptionList = Vec<TagDescription>;
-/// Parse a TagDescriptionList from XML
-pub struct TagDescriptionListParser;
+/// Parse TagDescriptionList from XML
+struct TagDescriptionListParser;
 impl TagDescriptionListParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TagDescriptionList, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TagDescriptionList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "TagDescription" {
 			obj.push(try!(TagDescriptionParser::parse_xml("TagDescription", stack)));
@@ -3732,10 +3649,10 @@ impl TagDescriptionListParser {
 		Ok(obj)
 	}
 }
-/// Write a TagDescriptionList's contents to a SignedRequest
-pub struct TagDescriptionListWriter;
+/// Write TagDescriptionList contents to a SignedRequest
+struct TagDescriptionListWriter;
 impl TagDescriptionListWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TagDescriptionList) {
+	fn write_params(params: &mut Params, name: &str, obj: &TagDescriptionList) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -3760,10 +3677,10 @@ pub struct Instance {
 	pub launch_configuration_name: XmlStringMaxLen255,
 }
 
-/// Parse a Instance from XML
-pub struct InstanceParser;
+/// Parse Instance from XML
+struct InstanceParser;
 impl InstanceParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Instance, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Instance, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = Instance::default();
 		loop {
@@ -3794,10 +3711,10 @@ impl InstanceParser {
 		Ok(obj)
 	}
 }
-/// Write a Instance's contents to a SignedRequest
-pub struct InstanceWriter;
+/// Write Instance contents to a SignedRequest
+struct InstanceWriter;
 impl InstanceWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Instance) {
+	fn write_params(params: &mut Params, name: &str, obj: &Instance) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen16Writer::write_params(params, &(prefix.to_string() + "InstanceId"), &obj.instance_id);
@@ -3808,28 +3725,28 @@ impl InstanceWriter {
 	}
 }
 pub type EbsOptimized = bool;
-/// Parse a EbsOptimized from XML
-pub struct EbsOptimizedParser;
+/// Parse EbsOptimized from XML
+struct EbsOptimizedParser;
 impl EbsOptimizedParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EbsOptimized, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EbsOptimized, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a EbsOptimized's contents to a SignedRequest
-pub struct EbsOptimizedWriter;
+/// Write EbsOptimized contents to a SignedRequest
+struct EbsOptimizedWriter;
 impl EbsOptimizedWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &EbsOptimized) {
+	fn write_params(params: &mut Params, name: &str, obj: &EbsOptimized) {
 		params.put(name, &obj.to_string());
 	}
 }
 pub type PolicyNames = Vec<ResourceName>;
-/// Parse a PolicyNames from XML
-pub struct PolicyNamesParser;
+/// Parse PolicyNames from XML
+struct PolicyNamesParser;
 impl PolicyNamesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PolicyNames, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PolicyNames, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ResourceName" {
 			obj.push(try!(ResourceNameParser::parse_xml("ResourceName", stack)));
@@ -3837,10 +3754,10 @@ impl PolicyNamesParser {
 		Ok(obj)
 	}
 }
-/// Write a PolicyNames's contents to a SignedRequest
-pub struct PolicyNamesWriter;
+/// Write PolicyNames contents to a SignedRequest
+struct PolicyNamesWriter;
 impl PolicyNamesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PolicyNames) {
+	fn write_params(params: &mut Params, name: &str, obj: &PolicyNames) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -3849,11 +3766,6 @@ impl PolicyNamesWriter {
 		}
 	}
 }
-/// Removes one or more load balancers from the specified Auto Scaling group.
-/// When you detach a load balancer, it enters the `Removing` state while
-/// deregistering the instances in the group. When all instances are deregistered,
-/// then you can no longer describe the load balancer using DescribeLoadBalancers.
-/// Note that the instances remain running.
 #[derive(Debug, Default)]
 pub struct DetachLoadBalancersType {
 	/// The name of the group.
@@ -3862,10 +3774,10 @@ pub struct DetachLoadBalancersType {
 	pub load_balancer_names: LoadBalancerNames,
 }
 
-/// Parse a DetachLoadBalancersType from XML
-pub struct DetachLoadBalancersTypeParser;
+/// Parse DetachLoadBalancersType from XML
+struct DetachLoadBalancersTypeParser;
 impl DetachLoadBalancersTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DetachLoadBalancersType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DetachLoadBalancersType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DetachLoadBalancersType::default();
 		loop {
@@ -3884,10 +3796,10 @@ impl DetachLoadBalancersTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DetachLoadBalancersType's contents to a SignedRequest
-pub struct DetachLoadBalancersTypeWriter;
+/// Write DetachLoadBalancersType contents to a SignedRequest
+struct DetachLoadBalancersTypeWriter;
 impl DetachLoadBalancersTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DetachLoadBalancersType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DetachLoadBalancersType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "AutoScalingGroupName"), &obj.auto_scaling_group_name);
@@ -3895,10 +3807,10 @@ impl DetachLoadBalancersTypeWriter {
 	}
 }
 pub type LoadBalancerStates = Vec<LoadBalancerState>;
-/// Parse a LoadBalancerStates from XML
-pub struct LoadBalancerStatesParser;
+/// Parse LoadBalancerStates from XML
+struct LoadBalancerStatesParser;
 impl LoadBalancerStatesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LoadBalancerStates, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LoadBalancerStates, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "LoadBalancerState" {
 			obj.push(try!(LoadBalancerStateParser::parse_xml("LoadBalancerState", stack)));
@@ -3906,10 +3818,10 @@ impl LoadBalancerStatesParser {
 		Ok(obj)
 	}
 }
-/// Write a LoadBalancerStates's contents to a SignedRequest
-pub struct LoadBalancerStatesWriter;
+/// Write LoadBalancerStates contents to a SignedRequest
+struct LoadBalancerStatesWriter;
 impl LoadBalancerStatesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LoadBalancerStates) {
+	fn write_params(params: &mut Params, name: &str, obj: &LoadBalancerStates) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -3919,10 +3831,10 @@ impl LoadBalancerStatesWriter {
 	}
 }
 pub type InstanceIds = Vec<XmlStringMaxLen16>;
-/// Parse a InstanceIds from XML
-pub struct InstanceIdsParser;
+/// Parse InstanceIds from XML
+struct InstanceIdsParser;
 impl InstanceIdsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InstanceIds, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InstanceIds, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlStringMaxLen16" {
 			obj.push(try!(XmlStringMaxLen16Parser::parse_xml("XmlStringMaxLen16", stack)));
@@ -3930,10 +3842,10 @@ impl InstanceIdsParser {
 		Ok(obj)
 	}
 }
-/// Write a InstanceIds's contents to a SignedRequest
-pub struct InstanceIdsWriter;
+/// Write InstanceIds contents to a SignedRequest
+struct InstanceIdsWriter;
 impl InstanceIdsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &InstanceIds) {
+	fn write_params(params: &mut Params, name: &str, obj: &InstanceIds) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -3951,10 +3863,10 @@ pub struct TagsType {
 	pub tags: TagDescriptionList,
 }
 
-/// Parse a TagsType from XML
-pub struct TagsTypeParser;
+/// Parse TagsType from XML
+struct TagsTypeParser;
 impl TagsTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TagsType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TagsType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = TagsType::default();
 		loop {
@@ -3973,10 +3885,10 @@ impl TagsTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a TagsType's contents to a SignedRequest
-pub struct TagsTypeWriter;
+/// Write TagsType contents to a SignedRequest
+struct TagsTypeWriter;
 impl TagsTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TagsType) {
+	fn write_params(params: &mut Params, name: &str, obj: &TagsType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringWriter::write_params(params, &(prefix.to_string() + "NextToken"), &obj.next_token);
@@ -3984,10 +3896,10 @@ impl TagsTypeWriter {
 	}
 }
 pub type Tags = Vec<Tag>;
-/// Parse a Tags from XML
-pub struct TagsParser;
+/// Parse Tags from XML
+struct TagsParser;
 impl TagsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Tags, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Tags, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "Tag" {
 			obj.push(try!(TagParser::parse_xml("Tag", stack)));
@@ -3995,10 +3907,10 @@ impl TagsParser {
 		Ok(obj)
 	}
 }
-/// Write a Tags's contents to a SignedRequest
-pub struct TagsWriter;
+/// Write Tags contents to a SignedRequest
+struct TagsWriter;
 impl TagsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Tags) {
+	fn write_params(params: &mut Params, name: &str, obj: &Tags) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -4016,10 +3928,10 @@ pub struct LaunchConfigurationsType {
 	pub launch_configurations: LaunchConfigurations,
 }
 
-/// Parse a LaunchConfigurationsType from XML
-pub struct LaunchConfigurationsTypeParser;
+/// Parse LaunchConfigurationsType from XML
+struct LaunchConfigurationsTypeParser;
 impl LaunchConfigurationsTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfigurationsType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LaunchConfigurationsType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = LaunchConfigurationsType::default();
 		loop {
@@ -4038,10 +3950,10 @@ impl LaunchConfigurationsTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a LaunchConfigurationsType's contents to a SignedRequest
-pub struct LaunchConfigurationsTypeWriter;
+/// Write LaunchConfigurationsType contents to a SignedRequest
+struct LaunchConfigurationsTypeWriter;
 impl LaunchConfigurationsTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LaunchConfigurationsType) {
+	fn write_params(params: &mut Params, name: &str, obj: &LaunchConfigurationsType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.next_token {
@@ -4058,10 +3970,10 @@ pub struct LimitExceededFault {
 	pub message: XmlStringMaxLen255,
 }
 
-/// Parse a LimitExceededFault from XML
-pub struct LimitExceededFaultParser;
+/// Parse LimitExceededFault from XML
+struct LimitExceededFaultParser;
 impl LimitExceededFaultParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LimitExceededFault, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LimitExceededFault, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = LimitExceededFault::default();
 		loop {
@@ -4076,40 +3988,33 @@ impl LimitExceededFaultParser {
 		Ok(obj)
 	}
 }
-/// Write a LimitExceededFault's contents to a SignedRequest
-pub struct LimitExceededFaultWriter;
+/// Write LimitExceededFault contents to a SignedRequest
+struct LimitExceededFaultWriter;
 impl LimitExceededFaultWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LimitExceededFault) {
+	fn write_params(params: &mut Params, name: &str, obj: &LimitExceededFault) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
 pub type LifecycleActionToken = String;
-/// Parse a LifecycleActionToken from XML
-pub struct LifecycleActionTokenParser;
+/// Parse LifecycleActionToken from XML
+struct LifecycleActionTokenParser;
 impl LifecycleActionTokenParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleActionToken, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleActionToken, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a LifecycleActionToken's contents to a SignedRequest
-pub struct LifecycleActionTokenWriter;
+/// Write LifecycleActionToken contents to a SignedRequest
+struct LifecycleActionTokenWriter;
 impl LifecycleActionTokenWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LifecycleActionToken) {
+	fn write_params(params: &mut Params, name: &str, obj: &LifecycleActionToken) {
 		params.put(name, obj);
 	}
 }
-/// Creates a launch configuration.
-/// If you exceed your maximum limit of launch configurations, which by default is
-/// 100 per region, the call fails. For information about viewing and updating
-/// this limit, see DescribeAccountLimits.
-/// For more information, see [Launch Configurations](http://docs.aws.amazon.com/A
-/// utoScaling/latest/DeveloperGuide/LaunchConfiguration.html) in the _Auto
-/// Scaling Developer Guide_.
 #[derive(Debug, Default)]
 pub struct CreateLaunchConfigurationType {
 	/// The user data to make available to the launched EC2 instances. For more
@@ -4239,10 +4144,10 @@ pub struct CreateLaunchConfigurationType {
 	pub spot_price: Option<SpotPrice>,
 }
 
-/// Parse a CreateLaunchConfigurationType from XML
-pub struct CreateLaunchConfigurationTypeParser;
+/// Parse CreateLaunchConfigurationType from XML
+struct CreateLaunchConfigurationTypeParser;
 impl CreateLaunchConfigurationTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateLaunchConfigurationType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateLaunchConfigurationType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreateLaunchConfigurationType::default();
 		loop {
@@ -4325,10 +4230,10 @@ impl CreateLaunchConfigurationTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a CreateLaunchConfigurationType's contents to a SignedRequest
-pub struct CreateLaunchConfigurationTypeWriter;
+/// Write CreateLaunchConfigurationType contents to a SignedRequest
+struct CreateLaunchConfigurationTypeWriter;
 impl CreateLaunchConfigurationTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CreateLaunchConfigurationType) {
+	fn write_params(params: &mut Params, name: &str, obj: &CreateLaunchConfigurationType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.user_data {
@@ -4386,20 +4291,20 @@ impl CreateLaunchConfigurationTypeWriter {
 	}
 }
 pub type HeartbeatTimeout = i32;
-/// Parse a HeartbeatTimeout from XML
-pub struct HeartbeatTimeoutParser;
+/// Parse HeartbeatTimeout from XML
+struct HeartbeatTimeoutParser;
 impl HeartbeatTimeoutParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<HeartbeatTimeout, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<HeartbeatTimeout, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a HeartbeatTimeout's contents to a SignedRequest
-pub struct HeartbeatTimeoutWriter;
+/// Write HeartbeatTimeout contents to a SignedRequest
+struct HeartbeatTimeoutWriter;
 impl HeartbeatTimeoutWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &HeartbeatTimeout) {
+	fn write_params(params: &mut Params, name: &str, obj: &HeartbeatTimeout) {
 		params.put(name, &obj.to_string());
 	}
 }
@@ -4409,10 +4314,10 @@ pub struct PolicyARNType {
 	pub policy_arn: ResourceName,
 }
 
-/// Parse a PolicyARNType from XML
-pub struct PolicyARNTypeParser;
+/// Parse PolicyARNType from XML
+struct PolicyARNTypeParser;
 impl PolicyARNTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PolicyARNType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PolicyARNType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PolicyARNType::default();
 		loop {
@@ -4427,10 +4332,10 @@ impl PolicyARNTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a PolicyARNType's contents to a SignedRequest
-pub struct PolicyARNTypeWriter;
+/// Write PolicyARNType contents to a SignedRequest
+struct PolicyARNTypeWriter;
 impl PolicyARNTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PolicyARNType) {
+	fn write_params(params: &mut Params, name: &str, obj: &PolicyARNType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "PolicyARN"), &obj.policy_arn);
@@ -4445,10 +4350,10 @@ pub struct AutoScalingInstancesType {
 	pub auto_scaling_instances: AutoScalingInstances,
 }
 
-/// Parse a AutoScalingInstancesType from XML
-pub struct AutoScalingInstancesTypeParser;
+/// Parse AutoScalingInstancesType from XML
+struct AutoScalingInstancesTypeParser;
 impl AutoScalingInstancesTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingInstancesType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingInstancesType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AutoScalingInstancesType::default();
 		loop {
@@ -4467,10 +4372,10 @@ impl AutoScalingInstancesTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingInstancesType's contents to a SignedRequest
-pub struct AutoScalingInstancesTypeWriter;
+/// Write AutoScalingInstancesType contents to a SignedRequest
+struct AutoScalingInstancesTypeWriter;
 impl AutoScalingInstancesTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingInstancesType) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingInstancesType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringWriter::write_params(params, &(prefix.to_string() + "NextToken"), &obj.next_token);
@@ -4478,27 +4383,23 @@ impl AutoScalingInstancesTypeWriter {
 	}
 }
 pub type AutoScalingGroupMaxSize = i32;
-/// Parse a AutoScalingGroupMaxSize from XML
-pub struct AutoScalingGroupMaxSizeParser;
+/// Parse AutoScalingGroupMaxSize from XML
+struct AutoScalingGroupMaxSizeParser;
 impl AutoScalingGroupMaxSizeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupMaxSize, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupMaxSize, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingGroupMaxSize's contents to a SignedRequest
-pub struct AutoScalingGroupMaxSizeWriter;
+/// Write AutoScalingGroupMaxSize contents to a SignedRequest
+struct AutoScalingGroupMaxSizeWriter;
 impl AutoScalingGroupMaxSizeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupMaxSize) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupMaxSize) {
 		params.put(name, &obj.to_string());
 	}
 }
-/// Sets the size of the specified Auto Scaling group.
-/// For more information about desired capacity, see [What Is Auto Scaling?](http:
-/// //docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/WhatIsAutoScaling.html
-/// ) in the _Auto Scaling Developer Guide_.
 #[derive(Debug, Default)]
 pub struct SetDesiredCapacityType {
 	/// The name of the Auto Scaling group.
@@ -4513,10 +4414,10 @@ pub struct SetDesiredCapacityType {
 	pub honor_cooldown: Option<HonorCooldown>,
 }
 
-/// Parse a SetDesiredCapacityType from XML
-pub struct SetDesiredCapacityTypeParser;
+/// Parse SetDesiredCapacityType from XML
+struct SetDesiredCapacityTypeParser;
 impl SetDesiredCapacityTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetDesiredCapacityType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetDesiredCapacityType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SetDesiredCapacityType::default();
 		loop {
@@ -4539,10 +4440,10 @@ impl SetDesiredCapacityTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a SetDesiredCapacityType's contents to a SignedRequest
-pub struct SetDesiredCapacityTypeWriter;
+/// Write SetDesiredCapacityType contents to a SignedRequest
+struct SetDesiredCapacityTypeWriter;
 impl SetDesiredCapacityTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SetDesiredCapacityType) {
+	fn write_params(params: &mut Params, name: &str, obj: &SetDesiredCapacityType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "AutoScalingGroupName"), &obj.auto_scaling_group_name);
@@ -4561,10 +4462,10 @@ pub struct AutoScalingGroupsType {
 	pub next_token: Option<XmlString>,
 }
 
-/// Parse a AutoScalingGroupsType from XML
-pub struct AutoScalingGroupsTypeParser;
+/// Parse AutoScalingGroupsType from XML
+struct AutoScalingGroupsTypeParser;
 impl AutoScalingGroupsTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupsType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupsType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AutoScalingGroupsType::default();
 		loop {
@@ -4583,10 +4484,10 @@ impl AutoScalingGroupsTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingGroupsType's contents to a SignedRequest
-pub struct AutoScalingGroupsTypeWriter;
+/// Write AutoScalingGroupsType contents to a SignedRequest
+struct AutoScalingGroupsTypeWriter;
 impl AutoScalingGroupsTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupsType) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupsType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		AutoScalingGroupsWriter::write_params(params, &(prefix.to_string() + "AutoScalingGroup"), &obj.auto_scaling_groups);
@@ -4596,10 +4497,10 @@ impl AutoScalingGroupsTypeWriter {
 	}
 }
 pub type Processes = Vec<ProcessType>;
-/// Parse a Processes from XML
-pub struct ProcessesParser;
+/// Parse Processes from XML
+struct ProcessesParser;
 impl ProcessesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Processes, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Processes, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ProcessType" {
 			obj.push(try!(ProcessTypeParser::parse_xml("ProcessType", stack)));
@@ -4607,10 +4508,10 @@ impl ProcessesParser {
 		Ok(obj)
 	}
 }
-/// Write a Processes's contents to a SignedRequest
-pub struct ProcessesWriter;
+/// Write Processes contents to a SignedRequest
+struct ProcessesWriter;
 impl ProcessesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Processes) {
+	fn write_params(params: &mut Params, name: &str, obj: &Processes) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -4636,10 +4537,10 @@ pub struct BlockDeviceMapping {
 	pub ebs: Option<Ebs>,
 }
 
-/// Parse a BlockDeviceMapping from XML
-pub struct BlockDeviceMappingParser;
+/// Parse BlockDeviceMapping from XML
+struct BlockDeviceMappingParser;
 impl BlockDeviceMappingParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceMapping, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceMapping, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = BlockDeviceMapping::default();
 		loop {
@@ -4666,10 +4567,10 @@ impl BlockDeviceMappingParser {
 		Ok(obj)
 	}
 }
-/// Write a BlockDeviceMapping's contents to a SignedRequest
-pub struct BlockDeviceMappingWriter;
+/// Write BlockDeviceMapping contents to a SignedRequest
+struct BlockDeviceMappingWriter;
 impl BlockDeviceMappingWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceMapping) {
+	fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceMapping) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "DeviceName"), &obj.device_name);
@@ -4685,28 +4586,28 @@ impl BlockDeviceMappingWriter {
 	}
 }
 pub type XmlStringUserData = String;
-/// Parse a XmlStringUserData from XML
-pub struct XmlStringUserDataParser;
+/// Parse XmlStringUserData from XML
+struct XmlStringUserDataParser;
 impl XmlStringUserDataParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringUserData, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringUserData, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a XmlStringUserData's contents to a SignedRequest
-pub struct XmlStringUserDataWriter;
+/// Write XmlStringUserData contents to a SignedRequest
+struct XmlStringUserDataWriter;
 impl XmlStringUserDataWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &XmlStringUserData) {
+	fn write_params(params: &mut Params, name: &str, obj: &XmlStringUserData) {
 		params.put(name, obj);
 	}
 }
 pub type MetricGranularityTypes = Vec<MetricGranularityType>;
-/// Parse a MetricGranularityTypes from XML
-pub struct MetricGranularityTypesParser;
+/// Parse MetricGranularityTypes from XML
+struct MetricGranularityTypesParser;
 impl MetricGranularityTypesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MetricGranularityTypes, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MetricGranularityTypes, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "MetricGranularityType" {
 			obj.push(try!(MetricGranularityTypeParser::parse_xml("MetricGranularityType", stack)));
@@ -4714,10 +4615,10 @@ impl MetricGranularityTypesParser {
 		Ok(obj)
 	}
 }
-/// Write a MetricGranularityTypes's contents to a SignedRequest
-pub struct MetricGranularityTypesWriter;
+/// Write MetricGranularityTypes contents to a SignedRequest
+struct MetricGranularityTypesWriter;
 impl MetricGranularityTypesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MetricGranularityTypes) {
+	fn write_params(params: &mut Params, name: &str, obj: &MetricGranularityTypes) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -4727,10 +4628,10 @@ impl MetricGranularityTypesWriter {
 	}
 }
 pub type LifecycleHooks = Vec<LifecycleHook>;
-/// Parse a LifecycleHooks from XML
-pub struct LifecycleHooksParser;
+/// Parse LifecycleHooks from XML
+struct LifecycleHooksParser;
 impl LifecycleHooksParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleHooks, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleHooks, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "LifecycleHook" {
 			obj.push(try!(LifecycleHookParser::parse_xml("LifecycleHook", stack)));
@@ -4738,10 +4639,10 @@ impl LifecycleHooksParser {
 		Ok(obj)
 	}
 }
-/// Write a LifecycleHooks's contents to a SignedRequest
-pub struct LifecycleHooksWriter;
+/// Write LifecycleHooks contents to a SignedRequest
+struct LifecycleHooksWriter;
 impl LifecycleHooksWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LifecycleHooks) {
+	fn write_params(params: &mut Params, name: &str, obj: &LifecycleHooks) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -4760,10 +4661,10 @@ pub struct Filter {
 	pub name: XmlString,
 }
 
-/// Parse a Filter from XML
-pub struct FilterParser;
+/// Parse Filter from XML
+struct FilterParser;
 impl FilterParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Filter, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Filter, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = Filter::default();
 		loop {
@@ -4782,22 +4683,16 @@ impl FilterParser {
 		Ok(obj)
 	}
 }
-/// Write a Filter's contents to a SignedRequest
-pub struct FilterWriter;
+/// Write Filter contents to a SignedRequest
+struct FilterWriter;
 impl FilterWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Filter) {
+	fn write_params(params: &mut Params, name: &str, obj: &Filter) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ValuesWriter::write_params(params, &(prefix.to_string() + "XmlString"), &obj.values);
 		XmlStringWriter::write_params(params, &(prefix.to_string() + "Name"), &obj.name);
 	}
 }
-/// Creates or updates a scheduled scaling action for an Auto Scaling group. When
-/// updating a scheduled scaling action, if you leave a parameter unspecified, the
-/// corresponding value remains unchanged in the affected Auto Scaling group.
-/// For more information, see [Scheduled Scaling](http://docs.aws.amazon.com/AutoS
-/// caling/latest/DeveloperGuide/schedule_time.html) in the _Auto Scaling
-/// Developer Guide_.
 #[derive(Debug, Default)]
 pub struct PutScheduledUpdateGroupActionType {
 	/// The minimum size for the Auto Scaling group.
@@ -4831,10 +4726,10 @@ pub struct PutScheduledUpdateGroupActionType {
 	pub end_time: Option<TimestampType>,
 }
 
-/// Parse a PutScheduledUpdateGroupActionType from XML
-pub struct PutScheduledUpdateGroupActionTypeParser;
+/// Parse PutScheduledUpdateGroupActionType from XML
+struct PutScheduledUpdateGroupActionTypeParser;
 impl PutScheduledUpdateGroupActionTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PutScheduledUpdateGroupActionType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PutScheduledUpdateGroupActionType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PutScheduledUpdateGroupActionType::default();
 		loop {
@@ -4881,10 +4776,10 @@ impl PutScheduledUpdateGroupActionTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a PutScheduledUpdateGroupActionType's contents to a SignedRequest
-pub struct PutScheduledUpdateGroupActionTypeWriter;
+/// Write PutScheduledUpdateGroupActionType contents to a SignedRequest
+struct PutScheduledUpdateGroupActionTypeWriter;
 impl PutScheduledUpdateGroupActionTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PutScheduledUpdateGroupActionType) {
+	fn write_params(params: &mut Params, name: &str, obj: &PutScheduledUpdateGroupActionType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.min_size {
@@ -4913,10 +4808,10 @@ impl PutScheduledUpdateGroupActionTypeWriter {
 	}
 }
 pub type AdjustmentTypes = Vec<AdjustmentType>;
-/// Parse a AdjustmentTypes from XML
-pub struct AdjustmentTypesParser;
+/// Parse AdjustmentTypes from XML
+struct AdjustmentTypesParser;
 impl AdjustmentTypesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AdjustmentTypes, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AdjustmentTypes, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "AdjustmentType" {
 			obj.push(try!(AdjustmentTypeParser::parse_xml("AdjustmentType", stack)));
@@ -4924,10 +4819,10 @@ impl AdjustmentTypesParser {
 		Ok(obj)
 	}
 }
-/// Write a AdjustmentTypes's contents to a SignedRequest
-pub struct AdjustmentTypesWriter;
+/// Write AdjustmentTypes contents to a SignedRequest
+struct AdjustmentTypesWriter;
 impl AdjustmentTypesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AdjustmentTypes) {
+	fn write_params(params: &mut Params, name: &str, obj: &AdjustmentTypes) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -4937,10 +4832,10 @@ impl AdjustmentTypesWriter {
 	}
 }
 pub type Alarms = Vec<Alarm>;
-/// Parse a Alarms from XML
-pub struct AlarmsParser;
+/// Parse Alarms from XML
+struct AlarmsParser;
 impl AlarmsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Alarms, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Alarms, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "Alarm" {
 			obj.push(try!(AlarmParser::parse_xml("Alarm", stack)));
@@ -4948,10 +4843,10 @@ impl AlarmsParser {
 		Ok(obj)
 	}
 }
-/// Write a Alarms's contents to a SignedRequest
-pub struct AlarmsWriter;
+/// Write Alarms contents to a SignedRequest
+struct AlarmsWriter;
 impl AlarmsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Alarms) {
+	fn write_params(params: &mut Params, name: &str, obj: &Alarms) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -4960,14 +4855,6 @@ impl AlarmsWriter {
 		}
 	}
 }
-/// Describes the specified tags.
-/// You can use filters to limit the results. For example, you can query for the
-/// tags for a specific Auto Scaling group. You can specify multiple values for a
-/// filter. A tag must match at least one of the specified values for it to be
-/// included in the results.
-/// You can also specify multiple filters. The result includes information for a
-/// particular tag only if it matches all the filters. If there's no match, no
-/// special message is returned.
 #[derive(Debug, Default)]
 pub struct DescribeTagsType {
 	/// The maximum number of items to return with this call.
@@ -4979,10 +4866,10 @@ pub struct DescribeTagsType {
 	pub filters: Filters,
 }
 
-/// Parse a DescribeTagsType from XML
-pub struct DescribeTagsTypeParser;
+/// Parse DescribeTagsType from XML
+struct DescribeTagsTypeParser;
 impl DescribeTagsTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeTagsType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeTagsType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeTagsType::default();
 		loop {
@@ -5005,10 +4892,10 @@ impl DescribeTagsTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeTagsType's contents to a SignedRequest
-pub struct DescribeTagsTypeWriter;
+/// Write DescribeTagsType contents to a SignedRequest
+struct DescribeTagsTypeWriter;
 impl DescribeTagsTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeTagsType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeTagsType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MaxRecordsWriter::write_params(params, &(prefix.to_string() + "MaxRecords"), &obj.max_records);
@@ -5016,10 +4903,6 @@ impl DescribeTagsTypeWriter {
 		FiltersWriter::write_params(params, &(prefix.to_string() + "Filter"), &obj.filters);
 	}
 }
-/// Moves the specified instances into `Standby` mode.
-/// For more information, see [Auto Scaling InService State](http://docs.aws.amazo
-/// n.com/AutoScaling/latest/DeveloperGuide/AutoScalingInServiceState.html) in the
-/// _Auto Scaling Developer Guide_.
 #[derive(Debug, Default)]
 pub struct EnterStandbyQuery {
 	/// Specifies whether the instances moved to `Standby` mode count as part of the
@@ -5034,10 +4917,10 @@ pub struct EnterStandbyQuery {
 	pub instance_ids: Option<InstanceIds>,
 }
 
-/// Parse a EnterStandbyQuery from XML
-pub struct EnterStandbyQueryParser;
+/// Parse EnterStandbyQuery from XML
+struct EnterStandbyQueryParser;
 impl EnterStandbyQueryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EnterStandbyQuery, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EnterStandbyQuery, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = EnterStandbyQuery::default();
 		loop {
@@ -5060,10 +4943,10 @@ impl EnterStandbyQueryParser {
 		Ok(obj)
 	}
 }
-/// Write a EnterStandbyQuery's contents to a SignedRequest
-pub struct EnterStandbyQueryWriter;
+/// Write EnterStandbyQuery contents to a SignedRequest
+struct EnterStandbyQueryWriter;
 impl EnterStandbyQueryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &EnterStandbyQuery) {
+	fn write_params(params: &mut Params, name: &str, obj: &EnterStandbyQuery) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ShouldDecrementDesiredCapacityWriter::write_params(params, &(prefix.to_string() + "ShouldDecrementDesiredCapacity"), &obj.should_decrement_desired_capacity);
@@ -5079,10 +4962,10 @@ pub struct InvalidNextToken {
 	pub message: XmlStringMaxLen255,
 }
 
-/// Parse a InvalidNextToken from XML
-pub struct InvalidNextTokenParser;
+/// Parse InvalidNextToken from XML
+struct InvalidNextTokenParser;
 impl InvalidNextTokenParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidNextToken, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidNextToken, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InvalidNextToken::default();
 		loop {
@@ -5097,16 +4980,15 @@ impl InvalidNextTokenParser {
 		Ok(obj)
 	}
 }
-/// Write a InvalidNextToken's contents to a SignedRequest
-pub struct InvalidNextTokenWriter;
+/// Write InvalidNextToken contents to a SignedRequest
+struct InvalidNextTokenWriter;
 impl InvalidNextTokenWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &InvalidNextToken) {
+	fn write_params(params: &mut Params, name: &str, obj: &InvalidNextToken) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "message"), &obj.message);
 	}
 }
-/// Describes the load balancers for the specified Auto Scaling group.
 #[derive(Debug, Default)]
 pub struct DescribeLoadBalancersRequest {
 	/// The maximum number of items to return with this call.
@@ -5118,10 +5000,10 @@ pub struct DescribeLoadBalancersRequest {
 	pub auto_scaling_group_name: ResourceName,
 }
 
-/// Parse a DescribeLoadBalancersRequest from XML
-pub struct DescribeLoadBalancersRequestParser;
+/// Parse DescribeLoadBalancersRequest from XML
+struct DescribeLoadBalancersRequestParser;
 impl DescribeLoadBalancersRequestParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeLoadBalancersRequest, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeLoadBalancersRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeLoadBalancersRequest::default();
 		loop {
@@ -5144,10 +5026,10 @@ impl DescribeLoadBalancersRequestParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeLoadBalancersRequest's contents to a SignedRequest
-pub struct DescribeLoadBalancersRequestWriter;
+/// Write DescribeLoadBalancersRequest contents to a SignedRequest
+struct DescribeLoadBalancersRequestWriter;
 impl DescribeLoadBalancersRequestWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeLoadBalancersRequest) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeLoadBalancersRequest) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.max_records {
@@ -5160,74 +5042,59 @@ impl DescribeLoadBalancersRequestWriter {
 	}
 }
 pub type BlockDeviceEbsDeleteOnTermination = bool;
-/// Parse a BlockDeviceEbsDeleteOnTermination from XML
-pub struct BlockDeviceEbsDeleteOnTerminationParser;
+/// Parse BlockDeviceEbsDeleteOnTermination from XML
+struct BlockDeviceEbsDeleteOnTerminationParser;
 impl BlockDeviceEbsDeleteOnTerminationParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceEbsDeleteOnTermination, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceEbsDeleteOnTermination, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a BlockDeviceEbsDeleteOnTermination's contents to a SignedRequest
-pub struct BlockDeviceEbsDeleteOnTerminationWriter;
+/// Write BlockDeviceEbsDeleteOnTermination contents to a SignedRequest
+struct BlockDeviceEbsDeleteOnTerminationWriter;
 impl BlockDeviceEbsDeleteOnTerminationWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceEbsDeleteOnTermination) {
+	fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceEbsDeleteOnTermination) {
 		params.put(name, &obj.to_string());
 	}
 }
 pub type BlockDeviceEbsIops = i32;
-/// Parse a BlockDeviceEbsIops from XML
-pub struct BlockDeviceEbsIopsParser;
+/// Parse BlockDeviceEbsIops from XML
+struct BlockDeviceEbsIopsParser;
 impl BlockDeviceEbsIopsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceEbsIops, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceEbsIops, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a BlockDeviceEbsIops's contents to a SignedRequest
-pub struct BlockDeviceEbsIopsWriter;
+/// Write BlockDeviceEbsIops contents to a SignedRequest
+struct BlockDeviceEbsIopsWriter;
 impl BlockDeviceEbsIopsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceEbsIops) {
+	fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceEbsIops) {
 		params.put(name, &obj.to_string());
 	}
 }
 pub type BlockDeviceEbsVolumeType = String;
-/// Parse a BlockDeviceEbsVolumeType from XML
-pub struct BlockDeviceEbsVolumeTypeParser;
+/// Parse BlockDeviceEbsVolumeType from XML
+struct BlockDeviceEbsVolumeTypeParser;
 impl BlockDeviceEbsVolumeTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceEbsVolumeType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BlockDeviceEbsVolumeType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a BlockDeviceEbsVolumeType's contents to a SignedRequest
-pub struct BlockDeviceEbsVolumeTypeWriter;
+/// Write BlockDeviceEbsVolumeType contents to a SignedRequest
+struct BlockDeviceEbsVolumeTypeWriter;
 impl BlockDeviceEbsVolumeTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceEbsVolumeType) {
+	fn write_params(params: &mut Params, name: &str, obj: &BlockDeviceEbsVolumeType) {
 		params.put(name, obj);
 	}
 }
-/// Records a heartbeat for the lifecycle action associated with a specific token.
-/// This extends the timeout by the length of time defined by the
-/// `HeartbeatTimeout` parameter of PutLifecycleHook.
-/// This operation is a part of the basic sequence for adding a lifecycle hook to
-/// an Auto Scaling group:
-///   1. Create a notification target. A target can be either an Amazon SQS queue or an Amazon SNS topic.
-///   2. Create an IAM role. This role allows Auto Scaling to publish lifecycle notifications to the designated SQS queue or SNS topic.
-///   3. Create the lifecycle hook. You can create a hook that acts when instances launch or when instances terminate.
-///   4. **If necessary, record the lifecycle action heartbeat to keep the instance in a pending state.**
-///   5. Complete the lifecycle action.
-/// For more information, see [Auto Scaling Pending State](http://docs.aws.amazon.
-/// com/AutoScaling/latest/DeveloperGuide/AutoScalingPendingState.html) and [Auto
-/// Scaling Terminating State](http://docs.aws.amazon.com/AutoScaling/latest/Devel
-/// operGuide/AutoScalingTerminatingState.html) in the _Auto Scaling Developer
-/// Guide_.
 #[derive(Debug, Default)]
 pub struct RecordLifecycleActionHeartbeatType {
 	/// The name of the lifecycle hook.
@@ -5240,10 +5107,10 @@ pub struct RecordLifecycleActionHeartbeatType {
 	pub lifecycle_action_token: LifecycleActionToken,
 }
 
-/// Parse a RecordLifecycleActionHeartbeatType from XML
-pub struct RecordLifecycleActionHeartbeatTypeParser;
+/// Parse RecordLifecycleActionHeartbeatType from XML
+struct RecordLifecycleActionHeartbeatTypeParser;
 impl RecordLifecycleActionHeartbeatTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<RecordLifecycleActionHeartbeatType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<RecordLifecycleActionHeartbeatType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = RecordLifecycleActionHeartbeatType::default();
 		loop {
@@ -5266,10 +5133,10 @@ impl RecordLifecycleActionHeartbeatTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a RecordLifecycleActionHeartbeatType's contents to a SignedRequest
-pub struct RecordLifecycleActionHeartbeatTypeWriter;
+/// Write RecordLifecycleActionHeartbeatType contents to a SignedRequest
+struct RecordLifecycleActionHeartbeatTypeWriter;
 impl RecordLifecycleActionHeartbeatTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &RecordLifecycleActionHeartbeatType) {
+	fn write_params(params: &mut Params, name: &str, obj: &RecordLifecycleActionHeartbeatType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		AsciiStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "LifecycleHookName"), &obj.lifecycle_hook_name);
@@ -5278,28 +5145,28 @@ impl RecordLifecycleActionHeartbeatTypeWriter {
 	}
 }
 pub type XmlStringMaxLen255 = String;
-/// Parse a XmlStringMaxLen255 from XML
-pub struct XmlStringMaxLen255Parser;
+/// Parse XmlStringMaxLen255 from XML
+struct XmlStringMaxLen255Parser;
 impl XmlStringMaxLen255Parser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen255, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen255, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a XmlStringMaxLen255's contents to a SignedRequest
-pub struct XmlStringMaxLen255Writer;
+/// Write XmlStringMaxLen255 contents to a SignedRequest
+struct XmlStringMaxLen255Writer;
 impl XmlStringMaxLen255Writer {
-	pub fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen255) {
+	fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen255) {
 		params.put(name, obj);
 	}
 }
 pub type ActivityIds = Vec<XmlString>;
-/// Parse a ActivityIds from XML
-pub struct ActivityIdsParser;
+/// Parse ActivityIds from XML
+struct ActivityIdsParser;
 impl ActivityIdsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ActivityIds, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ActivityIds, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlString" {
 			obj.push(try!(XmlStringParser::parse_xml("XmlString", stack)));
@@ -5307,10 +5174,10 @@ impl ActivityIdsParser {
 		Ok(obj)
 	}
 }
-/// Write a ActivityIds's contents to a SignedRequest
-pub struct ActivityIdsWriter;
+/// Write ActivityIds contents to a SignedRequest
+struct ActivityIdsWriter;
 impl ActivityIdsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ActivityIds) {
+	fn write_params(params: &mut Params, name: &str, obj: &ActivityIds) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -5328,10 +5195,10 @@ pub struct DescribeNotificationConfigurationsAnswer {
 	pub notification_configurations: NotificationConfigurations,
 }
 
-/// Parse a DescribeNotificationConfigurationsAnswer from XML
-pub struct DescribeNotificationConfigurationsAnswerParser;
+/// Parse DescribeNotificationConfigurationsAnswer from XML
+struct DescribeNotificationConfigurationsAnswerParser;
 impl DescribeNotificationConfigurationsAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeNotificationConfigurationsAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeNotificationConfigurationsAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeNotificationConfigurationsAnswer::default();
 		loop {
@@ -5350,10 +5217,10 @@ impl DescribeNotificationConfigurationsAnswerParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeNotificationConfigurationsAnswer's contents to a SignedRequest
-pub struct DescribeNotificationConfigurationsAnswerWriter;
+/// Write DescribeNotificationConfigurationsAnswer contents to a SignedRequest
+struct DescribeNotificationConfigurationsAnswerWriter;
 impl DescribeNotificationConfigurationsAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeNotificationConfigurationsAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeNotificationConfigurationsAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.next_token {
@@ -5363,28 +5230,28 @@ impl DescribeNotificationConfigurationsAnswerWriter {
 	}
 }
 pub type Cooldown = i32;
-/// Parse a Cooldown from XML
-pub struct CooldownParser;
+/// Parse Cooldown from XML
+struct CooldownParser;
 impl CooldownParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Cooldown, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Cooldown, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a Cooldown's contents to a SignedRequest
-pub struct CooldownWriter;
+/// Write Cooldown contents to a SignedRequest
+struct CooldownWriter;
 impl CooldownWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Cooldown) {
+	fn write_params(params: &mut Params, name: &str, obj: &Cooldown) {
 		params.put(name, &obj.to_string());
 	}
 }
 pub type MetricCollectionTypes = Vec<MetricCollectionType>;
-/// Parse a MetricCollectionTypes from XML
-pub struct MetricCollectionTypesParser;
+/// Parse MetricCollectionTypes from XML
+struct MetricCollectionTypesParser;
 impl MetricCollectionTypesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MetricCollectionTypes, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MetricCollectionTypes, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "MetricCollectionType" {
 			obj.push(try!(MetricCollectionTypeParser::parse_xml("MetricCollectionType", stack)));
@@ -5392,10 +5259,10 @@ impl MetricCollectionTypesParser {
 		Ok(obj)
 	}
 }
-/// Write a MetricCollectionTypes's contents to a SignedRequest
-pub struct MetricCollectionTypesWriter;
+/// Write MetricCollectionTypes contents to a SignedRequest
+struct MetricCollectionTypesWriter;
 impl MetricCollectionTypesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MetricCollectionTypes) {
+	fn write_params(params: &mut Params, name: &str, obj: &MetricCollectionTypes) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -5404,13 +5271,6 @@ impl MetricCollectionTypesWriter {
 		}
 	}
 }
-/// Creates an Auto Scaling group with the specified name and attributes.
-/// If you exceed your maximum limit of Auto Scaling groups, which by default is
-/// 20 per region, the call fails. For information about viewing and updating this
-/// limit, see DescribeAccountLimits.
-/// For more information, see [Auto Scaling Groups](http://docs.aws.amazon.com/Aut
-/// oScaling/latest/DeveloperGuide/AutoScalingGroup.html) in the _Auto Scaling
-/// Developer Guide_.
 #[derive(Debug, Default)]
 pub struct CreateAutoScalingGroupType {
 	/// The amount of time, in seconds, after an EC2 instance comes into service that
@@ -5500,10 +5360,10 @@ pub struct CreateAutoScalingGroupType {
 	pub health_check_type: Option<XmlStringMaxLen32>,
 }
 
-/// Parse a CreateAutoScalingGroupType from XML
-pub struct CreateAutoScalingGroupTypeParser;
+/// Parse CreateAutoScalingGroupType from XML
+struct CreateAutoScalingGroupTypeParser;
 impl CreateAutoScalingGroupTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateAutoScalingGroupType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateAutoScalingGroupType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreateAutoScalingGroupType::default();
 		loop {
@@ -5574,10 +5434,10 @@ impl CreateAutoScalingGroupTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a CreateAutoScalingGroupType's contents to a SignedRequest
-pub struct CreateAutoScalingGroupTypeWriter;
+/// Write CreateAutoScalingGroupType contents to a SignedRequest
+struct CreateAutoScalingGroupTypeWriter;
 impl CreateAutoScalingGroupTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CreateAutoScalingGroupType) {
+	fn write_params(params: &mut Params, name: &str, obj: &CreateAutoScalingGroupType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.health_check_grace_period {
@@ -5621,20 +5481,6 @@ impl CreateAutoScalingGroupTypeWriter {
 		}
 	}
 }
-/// Completes the lifecycle action for the associated token initiated under the
-/// given lifecycle hook with the specified result.
-/// This operation is a part of the basic sequence for adding a lifecycle hook to
-/// an Auto Scaling group:
-///   1. Create a notification target. A target can be either an Amazon SQS queue or an Amazon SNS topic.
-///   2. Create an IAM role. This role allows Auto Scaling to publish lifecycle notifications to the designated SQS queue or SNS topic.
-///   3. Create the lifecycle hook. You can create a hook that acts when instances launch or when instances terminate.
-///   4. If necessary, record the lifecycle action heartbeat to keep the instance in a pending state.
-///   5. **Complete the lifecycle action**.
-/// For more information, see [Auto Scaling Pending State](http://docs.aws.amazon.
-/// com/AutoScaling/latest/DeveloperGuide/AutoScalingPendingState.html) and [Auto
-/// Scaling Terminating State](http://docs.aws.amazon.com/AutoScaling/latest/Devel
-/// operGuide/AutoScalingTerminatingState.html) in the _Auto Scaling Developer
-/// Guide_.
 #[derive(Debug, Default)]
 pub struct CompleteLifecycleActionType {
 	/// The action for the group to take. This parameter can be either `CONTINUE` or
@@ -5650,10 +5496,10 @@ pub struct CompleteLifecycleActionType {
 	pub lifecycle_action_token: LifecycleActionToken,
 }
 
-/// Parse a CompleteLifecycleActionType from XML
-pub struct CompleteLifecycleActionTypeParser;
+/// Parse CompleteLifecycleActionType from XML
+struct CompleteLifecycleActionTypeParser;
 impl CompleteLifecycleActionTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CompleteLifecycleActionType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CompleteLifecycleActionType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CompleteLifecycleActionType::default();
 		loop {
@@ -5680,10 +5526,10 @@ impl CompleteLifecycleActionTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a CompleteLifecycleActionType's contents to a SignedRequest
-pub struct CompleteLifecycleActionTypeWriter;
+/// Write CompleteLifecycleActionType contents to a SignedRequest
+struct CompleteLifecycleActionTypeWriter;
 impl CompleteLifecycleActionTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CompleteLifecycleActionType) {
+	fn write_params(params: &mut Params, name: &str, obj: &CompleteLifecycleActionType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		LifecycleActionResultWriter::write_params(params, &(prefix.to_string() + "LifecycleActionResult"), &obj.lifecycle_action_result);
@@ -5692,7 +5538,6 @@ impl CompleteLifecycleActionTypeWriter {
 		LifecycleActionTokenWriter::write_params(params, &(prefix.to_string() + "LifecycleActionToken"), &obj.lifecycle_action_token);
 	}
 }
-/// Describes the policies for the specified Auto Scaling group.
 #[derive(Debug, Default)]
 pub struct DescribePoliciesType {
 	/// One or more policy names or policy ARNs to be described. If you omit this
@@ -5711,10 +5556,10 @@ pub struct DescribePoliciesType {
 	pub max_records: MaxRecords,
 }
 
-/// Parse a DescribePoliciesType from XML
-pub struct DescribePoliciesTypeParser;
+/// Parse DescribePoliciesType from XML
+struct DescribePoliciesTypeParser;
 impl DescribePoliciesTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribePoliciesType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribePoliciesType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribePoliciesType::default();
 		loop {
@@ -5745,10 +5590,10 @@ impl DescribePoliciesTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribePoliciesType's contents to a SignedRequest
-pub struct DescribePoliciesTypeWriter;
+/// Write DescribePoliciesType contents to a SignedRequest
+struct DescribePoliciesTypeWriter;
 impl DescribePoliciesTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribePoliciesType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribePoliciesType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		PolicyNamesWriter::write_params(params, &(prefix.to_string() + "ResourceName"), &obj.policy_names);
@@ -5764,10 +5609,10 @@ pub struct DescribeLifecycleHooksAnswer {
 	pub lifecycle_hooks: LifecycleHooks,
 }
 
-/// Parse a DescribeLifecycleHooksAnswer from XML
-pub struct DescribeLifecycleHooksAnswerParser;
+/// Parse DescribeLifecycleHooksAnswer from XML
+struct DescribeLifecycleHooksAnswerParser;
 impl DescribeLifecycleHooksAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeLifecycleHooksAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeLifecycleHooksAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeLifecycleHooksAnswer::default();
 		loop {
@@ -5782,20 +5627,20 @@ impl DescribeLifecycleHooksAnswerParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeLifecycleHooksAnswer's contents to a SignedRequest
-pub struct DescribeLifecycleHooksAnswerWriter;
+/// Write DescribeLifecycleHooksAnswer contents to a SignedRequest
+struct DescribeLifecycleHooksAnswerWriter;
 impl DescribeLifecycleHooksAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeLifecycleHooksAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeLifecycleHooksAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		LifecycleHooksWriter::write_params(params, &(prefix.to_string() + "LifecycleHook"), &obj.lifecycle_hooks);
 	}
 }
 pub type PolicyTypes = Vec<XmlStringMaxLen64>;
-/// Parse a PolicyTypes from XML
-pub struct PolicyTypesParser;
+/// Parse PolicyTypes from XML
+struct PolicyTypesParser;
 impl PolicyTypesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PolicyTypes, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PolicyTypes, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlStringMaxLen64" {
 			obj.push(try!(XmlStringMaxLen64Parser::parse_xml("XmlStringMaxLen64", stack)));
@@ -5803,10 +5648,10 @@ impl PolicyTypesParser {
 		Ok(obj)
 	}
 }
-/// Write a PolicyTypes's contents to a SignedRequest
-pub struct PolicyTypesWriter;
+/// Write PolicyTypes contents to a SignedRequest
+struct PolicyTypesWriter;
 impl PolicyTypesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PolicyTypes) {
+	fn write_params(params: &mut Params, name: &str, obj: &PolicyTypes) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -5818,20 +5663,20 @@ impl PolicyTypesWriter {
 #[derive(Debug, Default)]
 pub struct DetachLoadBalancersResultType;
 
-/// Parse a DetachLoadBalancersResultType from XML
-pub struct DetachLoadBalancersResultTypeParser;
+/// Parse DetachLoadBalancersResultType from XML
+struct DetachLoadBalancersResultTypeParser;
 impl DetachLoadBalancersResultTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DetachLoadBalancersResultType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DetachLoadBalancersResultType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DetachLoadBalancersResultType::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a DetachLoadBalancersResultType's contents to a SignedRequest
-pub struct DetachLoadBalancersResultTypeWriter;
+/// Write DetachLoadBalancersResultType contents to a SignedRequest
+struct DetachLoadBalancersResultTypeWriter;
 impl DetachLoadBalancersResultTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DetachLoadBalancersResultType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DetachLoadBalancersResultType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -5858,10 +5703,10 @@ pub struct AutoScalingInstanceDetails {
 	pub launch_configuration_name: XmlStringMaxLen255,
 }
 
-/// Parse a AutoScalingInstanceDetails from XML
-pub struct AutoScalingInstanceDetailsParser;
+/// Parse AutoScalingInstanceDetails from XML
+struct AutoScalingInstanceDetailsParser;
 impl AutoScalingInstanceDetailsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingInstanceDetails, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingInstanceDetails, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AutoScalingInstanceDetails::default();
 		loop {
@@ -5896,10 +5741,10 @@ impl AutoScalingInstanceDetailsParser {
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingInstanceDetails's contents to a SignedRequest
-pub struct AutoScalingInstanceDetailsWriter;
+/// Write AutoScalingInstanceDetails contents to a SignedRequest
+struct AutoScalingInstanceDetailsWriter;
 impl AutoScalingInstanceDetailsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingInstanceDetails) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingInstanceDetails) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "AvailabilityZone"), &obj.availability_zone);
@@ -5911,28 +5756,23 @@ impl AutoScalingInstanceDetailsWriter {
 	}
 }
 pub type PolicyIncrement = i32;
-/// Parse a PolicyIncrement from XML
-pub struct PolicyIncrementParser;
+/// Parse PolicyIncrement from XML
+struct PolicyIncrementParser;
 impl PolicyIncrementParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PolicyIncrement, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PolicyIncrement, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a PolicyIncrement's contents to a SignedRequest
-pub struct PolicyIncrementWriter;
+/// Write PolicyIncrement contents to a SignedRequest
+struct PolicyIncrementWriter;
 impl PolicyIncrementWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PolicyIncrement) {
+	fn write_params(params: &mut Params, name: &str, obj: &PolicyIncrement) {
 		params.put(name, &obj.to_string());
 	}
 }
-/// Deletes the specified Auto Scaling group.
-/// The group must have no instances and no scaling activities in progress.
-/// To remove all instances before calling `DeleteAutoScalingGroup`, call
-/// UpdateAutoScalingGroup to set the minimum and maximum size of the Auto Scaling
-/// group to zero.
 #[derive(Debug, Default)]
 pub struct DeleteAutoScalingGroupType {
 	/// Specifies that the group will be deleted along with all instances associated
@@ -5943,10 +5783,10 @@ pub struct DeleteAutoScalingGroupType {
 	pub auto_scaling_group_name: ResourceName,
 }
 
-/// Parse a DeleteAutoScalingGroupType from XML
-pub struct DeleteAutoScalingGroupTypeParser;
+/// Parse DeleteAutoScalingGroupType from XML
+struct DeleteAutoScalingGroupTypeParser;
 impl DeleteAutoScalingGroupTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteAutoScalingGroupType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteAutoScalingGroupType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteAutoScalingGroupType::default();
 		loop {
@@ -5965,10 +5805,10 @@ impl DeleteAutoScalingGroupTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteAutoScalingGroupType's contents to a SignedRequest
-pub struct DeleteAutoScalingGroupTypeWriter;
+/// Write DeleteAutoScalingGroupType contents to a SignedRequest
+struct DeleteAutoScalingGroupTypeWriter;
 impl DeleteAutoScalingGroupTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteAutoScalingGroupType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteAutoScalingGroupType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.force_delete {
@@ -5978,24 +5818,23 @@ impl DeleteAutoScalingGroupTypeWriter {
 	}
 }
 pub type MonitoringEnabled = bool;
-/// Parse a MonitoringEnabled from XML
-pub struct MonitoringEnabledParser;
+/// Parse MonitoringEnabled from XML
+struct MonitoringEnabledParser;
 impl MonitoringEnabledParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MonitoringEnabled, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MonitoringEnabled, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a MonitoringEnabled's contents to a SignedRequest
-pub struct MonitoringEnabledWriter;
+/// Write MonitoringEnabled contents to a SignedRequest
+struct MonitoringEnabledWriter;
 impl MonitoringEnabledWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MonitoringEnabled) {
+	fn write_params(params: &mut Params, name: &str, obj: &MonitoringEnabled) {
 		params.put(name, &obj.to_string());
 	}
 }
-/// Describes the lifecycle hooks for the specified Auto Scaling group.
 #[derive(Debug, Default)]
 pub struct DescribeLifecycleHooksType {
 	/// The names of one or more lifecycle hooks.
@@ -6004,10 +5843,10 @@ pub struct DescribeLifecycleHooksType {
 	pub auto_scaling_group_name: ResourceName,
 }
 
-/// Parse a DescribeLifecycleHooksType from XML
-pub struct DescribeLifecycleHooksTypeParser;
+/// Parse DescribeLifecycleHooksType from XML
+struct DescribeLifecycleHooksTypeParser;
 impl DescribeLifecycleHooksTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeLifecycleHooksType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeLifecycleHooksType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeLifecycleHooksType::default();
 		loop {
@@ -6026,10 +5865,10 @@ impl DescribeLifecycleHooksTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeLifecycleHooksType's contents to a SignedRequest
-pub struct DescribeLifecycleHooksTypeWriter;
+/// Write DescribeLifecycleHooksType contents to a SignedRequest
+struct DescribeLifecycleHooksTypeWriter;
 impl DescribeLifecycleHooksTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeLifecycleHooksType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeLifecycleHooksType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.lifecycle_hook_names {
@@ -6049,10 +5888,10 @@ pub struct DescribeAutoScalingNotificationTypesAnswer {
 	pub auto_scaling_notification_types: AutoScalingNotificationTypes,
 }
 
-/// Parse a DescribeAutoScalingNotificationTypesAnswer from XML
-pub struct DescribeAutoScalingNotificationTypesAnswerParser;
+/// Parse DescribeAutoScalingNotificationTypesAnswer from XML
+struct DescribeAutoScalingNotificationTypesAnswerParser;
 impl DescribeAutoScalingNotificationTypesAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeAutoScalingNotificationTypesAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeAutoScalingNotificationTypesAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeAutoScalingNotificationTypesAnswer::default();
 		loop {
@@ -6067,20 +5906,20 @@ impl DescribeAutoScalingNotificationTypesAnswerParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeAutoScalingNotificationTypesAnswer's contents to a SignedRequest
-pub struct DescribeAutoScalingNotificationTypesAnswerWriter;
+/// Write DescribeAutoScalingNotificationTypesAnswer contents to a SignedRequest
+struct DescribeAutoScalingNotificationTypesAnswerWriter;
 impl DescribeAutoScalingNotificationTypesAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeAutoScalingNotificationTypesAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeAutoScalingNotificationTypesAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		AutoScalingNotificationTypesWriter::write_params(params, &(prefix.to_string() + "XmlStringMaxLen255"), &obj.auto_scaling_notification_types);
 	}
 }
 pub type Activities = Vec<Activity>;
-/// Parse a Activities from XML
-pub struct ActivitiesParser;
+/// Parse Activities from XML
+struct ActivitiesParser;
 impl ActivitiesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Activities, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Activities, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "Activity" {
 			obj.push(try!(ActivityParser::parse_xml("Activity", stack)));
@@ -6088,10 +5927,10 @@ impl ActivitiesParser {
 		Ok(obj)
 	}
 }
-/// Write a Activities's contents to a SignedRequest
-pub struct ActivitiesWriter;
+/// Write Activities contents to a SignedRequest
+struct ActivitiesWriter;
 impl ActivitiesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Activities) {
+	fn write_params(params: &mut Params, name: &str, obj: &Activities) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -6103,20 +5942,20 @@ impl ActivitiesWriter {
 #[derive(Debug, Default)]
 pub struct CompleteLifecycleActionAnswer;
 
-/// Parse a CompleteLifecycleActionAnswer from XML
-pub struct CompleteLifecycleActionAnswerParser;
+/// Parse CompleteLifecycleActionAnswer from XML
+struct CompleteLifecycleActionAnswerParser;
 impl CompleteLifecycleActionAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CompleteLifecycleActionAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CompleteLifecycleActionAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CompleteLifecycleActionAnswer::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a CompleteLifecycleActionAnswer's contents to a SignedRequest
-pub struct CompleteLifecycleActionAnswerWriter;
+/// Write CompleteLifecycleActionAnswer contents to a SignedRequest
+struct CompleteLifecycleActionAnswerWriter;
 impl CompleteLifecycleActionAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &CompleteLifecycleActionAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &CompleteLifecycleActionAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
@@ -6172,10 +6011,10 @@ pub struct LifecycleHook {
 	pub lifecycle_transition: LifecycleTransition,
 }
 
-/// Parse a LifecycleHook from XML
-pub struct LifecycleHookParser;
+/// Parse LifecycleHook from XML
+struct LifecycleHookParser;
 impl LifecycleHookParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleHook, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleHook, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = LifecycleHook::default();
 		loop {
@@ -6222,10 +6061,10 @@ impl LifecycleHookParser {
 		Ok(obj)
 	}
 }
-/// Write a LifecycleHook's contents to a SignedRequest
-pub struct LifecycleHookWriter;
+/// Write LifecycleHook contents to a SignedRequest
+struct LifecycleHookWriter;
 impl LifecycleHookWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LifecycleHook) {
+	fn write_params(params: &mut Params, name: &str, obj: &LifecycleHook) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		GlobalTimeoutWriter::write_params(params, &(prefix.to_string() + "GlobalTimeout"), &obj.global_timeout);
@@ -6247,10 +6086,10 @@ pub struct DescribeLifecycleHookTypesAnswer {
 	pub lifecycle_hook_types: AutoScalingNotificationTypes,
 }
 
-/// Parse a DescribeLifecycleHookTypesAnswer from XML
-pub struct DescribeLifecycleHookTypesAnswerParser;
+/// Parse DescribeLifecycleHookTypesAnswer from XML
+struct DescribeLifecycleHookTypesAnswerParser;
 impl DescribeLifecycleHookTypesAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeLifecycleHookTypesAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeLifecycleHookTypesAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeLifecycleHookTypesAnswer::default();
 		loop {
@@ -6265,10 +6104,10 @@ impl DescribeLifecycleHookTypesAnswerParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeLifecycleHookTypesAnswer's contents to a SignedRequest
-pub struct DescribeLifecycleHookTypesAnswerWriter;
+/// Write DescribeLifecycleHookTypesAnswer contents to a SignedRequest
+struct DescribeLifecycleHookTypesAnswerWriter;
 impl DescribeLifecycleHookTypesAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeLifecycleHookTypesAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeLifecycleHookTypesAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		AutoScalingNotificationTypesWriter::write_params(params, &(prefix.to_string() + "XmlStringMaxLen255"), &obj.lifecycle_hook_types);
@@ -6282,10 +6121,10 @@ pub struct DescribeTerminationPolicyTypesAnswer {
 	pub termination_policy_types: TerminationPolicies,
 }
 
-/// Parse a DescribeTerminationPolicyTypesAnswer from XML
-pub struct DescribeTerminationPolicyTypesAnswerParser;
+/// Parse DescribeTerminationPolicyTypesAnswer from XML
+struct DescribeTerminationPolicyTypesAnswerParser;
 impl DescribeTerminationPolicyTypesAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeTerminationPolicyTypesAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeTerminationPolicyTypesAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeTerminationPolicyTypesAnswer::default();
 		loop {
@@ -6300,16 +6139,15 @@ impl DescribeTerminationPolicyTypesAnswerParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeTerminationPolicyTypesAnswer's contents to a SignedRequest
-pub struct DescribeTerminationPolicyTypesAnswerWriter;
+/// Write DescribeTerminationPolicyTypesAnswer contents to a SignedRequest
+struct DescribeTerminationPolicyTypesAnswerWriter;
 impl DescribeTerminationPolicyTypesAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeTerminationPolicyTypesAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeTerminationPolicyTypesAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		TerminationPoliciesWriter::write_params(params, &(prefix.to_string() + "XmlStringMaxLen1600"), &obj.termination_policy_types);
 	}
 }
-/// Deletes the specified notification.
 #[derive(Debug, Default)]
 pub struct DeleteNotificationConfigurationType {
 	/// The name of the Auto Scaling group.
@@ -6319,10 +6157,10 @@ pub struct DeleteNotificationConfigurationType {
 	pub topic_arn: ResourceName,
 }
 
-/// Parse a DeleteNotificationConfigurationType from XML
-pub struct DeleteNotificationConfigurationTypeParser;
+/// Parse DeleteNotificationConfigurationType from XML
+struct DeleteNotificationConfigurationTypeParser;
 impl DeleteNotificationConfigurationTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteNotificationConfigurationType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteNotificationConfigurationType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteNotificationConfigurationType::default();
 		loop {
@@ -6341,10 +6179,10 @@ impl DeleteNotificationConfigurationTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DeleteNotificationConfigurationType's contents to a SignedRequest
-pub struct DeleteNotificationConfigurationTypeWriter;
+/// Write DeleteNotificationConfigurationType contents to a SignedRequest
+struct DeleteNotificationConfigurationTypeWriter;
 impl DeleteNotificationConfigurationTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DeleteNotificationConfigurationType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DeleteNotificationConfigurationType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "AutoScalingGroupName"), &obj.auto_scaling_group_name);
@@ -6352,10 +6190,10 @@ impl DeleteNotificationConfigurationTypeWriter {
 	}
 }
 pub type Metrics = Vec<XmlStringMaxLen255>;
-/// Parse a Metrics from XML
-pub struct MetricsParser;
+/// Parse Metrics from XML
+struct MetricsParser;
 impl MetricsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Metrics, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Metrics, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlStringMaxLen255" {
 			obj.push(try!(XmlStringMaxLen255Parser::parse_xml("XmlStringMaxLen255", stack)));
@@ -6363,10 +6201,10 @@ impl MetricsParser {
 		Ok(obj)
 	}
 }
-/// Write a Metrics's contents to a SignedRequest
-pub struct MetricsWriter;
+/// Write Metrics contents to a SignedRequest
+struct MetricsWriter;
 impl MetricsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Metrics) {
+	fn write_params(params: &mut Params, name: &str, obj: &Metrics) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -6376,27 +6214,23 @@ impl MetricsWriter {
 	}
 }
 pub type MaxRecords = i32;
-/// Parse a MaxRecords from XML
-pub struct MaxRecordsParser;
+/// Parse MaxRecords from XML
+struct MaxRecordsParser;
 impl MaxRecordsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MaxRecords, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MaxRecords, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a MaxRecords's contents to a SignedRequest
-pub struct MaxRecordsWriter;
+/// Write MaxRecords contents to a SignedRequest
+struct MaxRecordsWriter;
 impl MaxRecordsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MaxRecords) {
+	fn write_params(params: &mut Params, name: &str, obj: &MaxRecords) {
 		params.put(name, &obj.to_string());
 	}
 }
-/// Enables monitoring of the specified metrics for the specified Auto Scaling
-/// group.
-/// You can only enable metrics collection if `InstanceMonitoring` in the launch
-/// configuration for the group is set to `True`.
 #[derive(Debug, Default)]
 pub struct EnableMetricsCollectionQuery {
 	/// One or more metrics. If you omit this parameter, all metrics are enabled.
@@ -6418,10 +6252,10 @@ pub struct EnableMetricsCollectionQuery {
 	pub granularity: XmlStringMaxLen255,
 }
 
-/// Parse a EnableMetricsCollectionQuery from XML
-pub struct EnableMetricsCollectionQueryParser;
+/// Parse EnableMetricsCollectionQuery from XML
+struct EnableMetricsCollectionQueryParser;
 impl EnableMetricsCollectionQueryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EnableMetricsCollectionQuery, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EnableMetricsCollectionQuery, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = EnableMetricsCollectionQuery::default();
 		loop {
@@ -6444,10 +6278,10 @@ impl EnableMetricsCollectionQueryParser {
 		Ok(obj)
 	}
 }
-/// Write a EnableMetricsCollectionQuery's contents to a SignedRequest
-pub struct EnableMetricsCollectionQueryWriter;
+/// Write EnableMetricsCollectionQuery contents to a SignedRequest
+struct EnableMetricsCollectionQueryWriter;
 impl EnableMetricsCollectionQueryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &EnableMetricsCollectionQuery) {
+	fn write_params(params: &mut Params, name: &str, obj: &EnableMetricsCollectionQuery) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.metrics {
@@ -6458,10 +6292,10 @@ impl EnableMetricsCollectionQueryWriter {
 	}
 }
 pub type TerminationPolicies = Vec<XmlStringMaxLen1600>;
-/// Parse a TerminationPolicies from XML
-pub struct TerminationPoliciesParser;
+/// Parse TerminationPolicies from XML
+struct TerminationPoliciesParser;
 impl TerminationPoliciesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TerminationPolicies, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TerminationPolicies, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlStringMaxLen1600" {
 			obj.push(try!(XmlStringMaxLen1600Parser::parse_xml("XmlStringMaxLen1600", stack)));
@@ -6469,10 +6303,10 @@ impl TerminationPoliciesParser {
 		Ok(obj)
 	}
 }
-/// Write a TerminationPolicies's contents to a SignedRequest
-pub struct TerminationPoliciesWriter;
+/// Write TerminationPolicies contents to a SignedRequest
+struct TerminationPoliciesWriter;
 impl TerminationPoliciesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &TerminationPolicies) {
+	fn write_params(params: &mut Params, name: &str, obj: &TerminationPolicies) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -6494,10 +6328,10 @@ pub struct LoadBalancerState {
 	pub load_balancer_name: XmlStringMaxLen255,
 }
 
-/// Parse a LoadBalancerState from XML
-pub struct LoadBalancerStateParser;
+/// Parse LoadBalancerState from XML
+struct LoadBalancerStateParser;
 impl LoadBalancerStateParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LoadBalancerState, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LoadBalancerState, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = LoadBalancerState::default();
 		loop {
@@ -6516,10 +6350,10 @@ impl LoadBalancerStateParser {
 		Ok(obj)
 	}
 }
-/// Write a LoadBalancerState's contents to a SignedRequest
-pub struct LoadBalancerStateWriter;
+/// Write LoadBalancerState contents to a SignedRequest
+struct LoadBalancerStateWriter;
 impl LoadBalancerStateWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LoadBalancerState) {
+	fn write_params(params: &mut Params, name: &str, obj: &LoadBalancerState) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "State"), &obj.state);
@@ -6527,46 +6361,46 @@ impl LoadBalancerStateWriter {
 	}
 }
 pub type ResourceName = String;
-/// Parse a ResourceName from XML
-pub struct ResourceNameParser;
+/// Parse ResourceName from XML
+struct ResourceNameParser;
 impl ResourceNameParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ResourceName, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ResourceName, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a ResourceName's contents to a SignedRequest
-pub struct ResourceNameWriter;
+/// Write ResourceName contents to a SignedRequest
+struct ResourceNameWriter;
 impl ResourceNameWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ResourceName) {
+	fn write_params(params: &mut Params, name: &str, obj: &ResourceName) {
 		params.put(name, obj);
 	}
 }
 pub type SpotPrice = String;
-/// Parse a SpotPrice from XML
-pub struct SpotPriceParser;
+/// Parse SpotPrice from XML
+struct SpotPriceParser;
 impl SpotPriceParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SpotPrice, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SpotPrice, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a SpotPrice's contents to a SignedRequest
-pub struct SpotPriceWriter;
+/// Write SpotPrice contents to a SignedRequest
+struct SpotPriceWriter;
 impl SpotPriceWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SpotPrice) {
+	fn write_params(params: &mut Params, name: &str, obj: &SpotPrice) {
 		params.put(name, obj);
 	}
 }
 pub type ScheduledUpdateGroupActions = Vec<ScheduledUpdateGroupAction>;
-/// Parse a ScheduledUpdateGroupActions from XML
-pub struct ScheduledUpdateGroupActionsParser;
+/// Parse ScheduledUpdateGroupActions from XML
+struct ScheduledUpdateGroupActionsParser;
 impl ScheduledUpdateGroupActionsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScheduledUpdateGroupActions, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScheduledUpdateGroupActions, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ScheduledUpdateGroupAction" {
 			obj.push(try!(ScheduledUpdateGroupActionParser::parse_xml("ScheduledUpdateGroupAction", stack)));
@@ -6574,10 +6408,10 @@ impl ScheduledUpdateGroupActionsParser {
 		Ok(obj)
 	}
 }
-/// Write a ScheduledUpdateGroupActions's contents to a SignedRequest
-pub struct ScheduledUpdateGroupActionsWriter;
+/// Write ScheduledUpdateGroupActions contents to a SignedRequest
+struct ScheduledUpdateGroupActionsWriter;
 impl ScheduledUpdateGroupActionsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ScheduledUpdateGroupActions) {
+	fn write_params(params: &mut Params, name: &str, obj: &ScheduledUpdateGroupActions) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -6596,10 +6430,10 @@ pub struct SuspendedProcess {
 	pub suspension_reason: XmlStringMaxLen255,
 }
 
-/// Parse a SuspendedProcess from XML
-pub struct SuspendedProcessParser;
+/// Parse SuspendedProcess from XML
+struct SuspendedProcessParser;
 impl SuspendedProcessParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SuspendedProcess, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SuspendedProcess, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SuspendedProcess::default();
 		loop {
@@ -6618,10 +6452,10 @@ impl SuspendedProcessParser {
 		Ok(obj)
 	}
 }
-/// Write a SuspendedProcess's contents to a SignedRequest
-pub struct SuspendedProcessWriter;
+/// Write SuspendedProcess contents to a SignedRequest
+struct SuspendedProcessWriter;
 impl SuspendedProcessWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SuspendedProcess) {
+	fn write_params(params: &mut Params, name: &str, obj: &SuspendedProcess) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "ProcessName"), &obj.process_name);
@@ -6629,10 +6463,10 @@ impl SuspendedProcessWriter {
 	}
 }
 pub type AutoScalingGroups = Vec<AutoScalingGroup>;
-/// Parse a AutoScalingGroups from XML
-pub struct AutoScalingGroupsParser;
+/// Parse AutoScalingGroups from XML
+struct AutoScalingGroupsParser;
 impl AutoScalingGroupsParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroups, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroups, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "AutoScalingGroup" {
 			obj.push(try!(AutoScalingGroupParser::parse_xml("AutoScalingGroup", stack)));
@@ -6640,10 +6474,10 @@ impl AutoScalingGroupsParser {
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingGroups's contents to a SignedRequest
-pub struct AutoScalingGroupsWriter;
+/// Write AutoScalingGroups contents to a SignedRequest
+struct AutoScalingGroupsWriter;
 impl AutoScalingGroupsWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroups) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroups) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -6661,10 +6495,10 @@ pub struct Alarm {
 	pub alarm_arn: ResourceName,
 }
 
-/// Parse a Alarm from XML
-pub struct AlarmParser;
+/// Parse Alarm from XML
+struct AlarmParser;
 impl AlarmParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Alarm, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Alarm, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = Alarm::default();
 		loop {
@@ -6683,23 +6517,16 @@ impl AlarmParser {
 		Ok(obj)
 	}
 }
-/// Write a Alarm's contents to a SignedRequest
-pub struct AlarmWriter;
+/// Write Alarm contents to a SignedRequest
+struct AlarmWriter;
 impl AlarmWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Alarm) {
+	fn write_params(params: &mut Params, name: &str, obj: &Alarm) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "AlarmName"), &obj.alarm_name);
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "AlarmARN"), &obj.alarm_arn);
 	}
 }
-/// Attaches one or more load balancers to the specified Auto Scaling group.
-/// To describe the load balancers for an Auto Scaling group, use
-/// DescribeLoadBalancers. To detach the load balancer from the Auto Scaling
-/// group, use DetachLoadBalancers.
-/// For more information, see [Attach a Load Balancer to Your Auto Scaling
-/// Group](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/attach-
-/// load-balancer-asg.html) in the _Auto Scaling Developer Guide_.
 #[derive(Debug, Default)]
 pub struct AttachLoadBalancersType {
 	/// The name of the group.
@@ -6708,10 +6535,10 @@ pub struct AttachLoadBalancersType {
 	pub load_balancer_names: LoadBalancerNames,
 }
 
-/// Parse a AttachLoadBalancersType from XML
-pub struct AttachLoadBalancersTypeParser;
+/// Parse AttachLoadBalancersType from XML
+struct AttachLoadBalancersTypeParser;
 impl AttachLoadBalancersTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttachLoadBalancersType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttachLoadBalancersType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AttachLoadBalancersType::default();
 		loop {
@@ -6730,10 +6557,10 @@ impl AttachLoadBalancersTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a AttachLoadBalancersType's contents to a SignedRequest
-pub struct AttachLoadBalancersTypeWriter;
+/// Write AttachLoadBalancersType contents to a SignedRequest
+struct AttachLoadBalancersTypeWriter;
 impl AttachLoadBalancersTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AttachLoadBalancersType) {
+	fn write_params(params: &mut Params, name: &str, obj: &AttachLoadBalancersType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ResourceNameWriter::write_params(params, &(prefix.to_string() + "AutoScalingGroupName"), &obj.auto_scaling_group_name);
@@ -6749,10 +6576,10 @@ pub struct ActivitiesType {
 	pub next_token: Option<XmlString>,
 }
 
-/// Parse a ActivitiesType from XML
-pub struct ActivitiesTypeParser;
+/// Parse ActivitiesType from XML
+struct ActivitiesTypeParser;
 impl ActivitiesTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ActivitiesType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ActivitiesType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ActivitiesType::default();
 		loop {
@@ -6771,10 +6598,10 @@ impl ActivitiesTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a ActivitiesType's contents to a SignedRequest
-pub struct ActivitiesTypeWriter;
+/// Write ActivitiesType contents to a SignedRequest
+struct ActivitiesTypeWriter;
 impl ActivitiesTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ActivitiesType) {
+	fn write_params(params: &mut Params, name: &str, obj: &ActivitiesType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		ActivitiesWriter::write_params(params, &(prefix.to_string() + "Activity"), &obj.activities);
@@ -6784,62 +6611,41 @@ impl ActivitiesTypeWriter {
 	}
 }
 pub type XmlStringMaxLen1023 = String;
-/// Parse a XmlStringMaxLen1023 from XML
-pub struct XmlStringMaxLen1023Parser;
+/// Parse XmlStringMaxLen1023 from XML
+struct XmlStringMaxLen1023Parser;
 impl XmlStringMaxLen1023Parser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen1023, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen1023, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a XmlStringMaxLen1023's contents to a SignedRequest
-pub struct XmlStringMaxLen1023Writer;
+/// Write XmlStringMaxLen1023 contents to a SignedRequest
+struct XmlStringMaxLen1023Writer;
 impl XmlStringMaxLen1023Writer {
-	pub fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen1023) {
+	fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen1023) {
 		params.put(name, obj);
 	}
 }
 pub type NoDevice = bool;
-/// Parse a NoDevice from XML
-pub struct NoDeviceParser;
+/// Parse NoDevice from XML
+struct NoDeviceParser;
 impl NoDeviceParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<NoDevice, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<NoDevice, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a NoDevice's contents to a SignedRequest
-pub struct NoDeviceWriter;
+/// Write NoDevice contents to a SignedRequest
+struct NoDeviceWriter;
 impl NoDeviceWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &NoDevice) {
+	fn write_params(params: &mut Params, name: &str, obj: &NoDevice) {
 		params.put(name, &obj.to_string());
 	}
 }
-/// Creates or updates a lifecycle hook for the specified Auto Scaling Group.
-/// A lifecycle hook tells Auto Scaling that you want to perform an action on an
-/// instance that is not actively in service; for example, either when the
-/// instance launches or before the instance terminates.
-/// This operation is a part of the basic sequence for adding a lifecycle hook to
-/// an Auto Scaling group:
-///   1. Create a notification target. A target can be either an Amazon SQS queue or an Amazon SNS topic.
-///   2. Create an IAM role. This role allows Auto Scaling to publish lifecycle notifications to the designated SQS queue or SNS topic.
-///   3. **Create the lifecycle hook. You can create a hook that acts when instances launch or when instances terminate.**
-///   4. If necessary, record the lifecycle action heartbeat to keep the instance in a pending state.
-///   5. Complete the lifecycle action.
-/// For more information, see [Auto Scaling Pending State](http://docs.aws.amazon.
-/// com/AutoScaling/latest/DeveloperGuide/AutoScalingPendingState.html) and [Auto
-/// Scaling Terminating State](http://docs.aws.amazon.com/AutoScaling/latest/Devel
-/// operGuide/AutoScalingTerminatingState.html) in the _Auto Scaling Developer
-/// Guide_.
-/// If you exceed your maximum limit of lifecycle hooks, which by default is 50
-/// per region, the call fails. For information about updating this limit, see
-/// [AWS Service
-/// Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)
-/// in the _Amazon Web Services General Reference_.
 #[derive(Debug, Default)]
 pub struct PutLifecycleHookType {
 	/// Defines the amount of time, in seconds, that can elapse before the lifecycle
@@ -6893,10 +6699,10 @@ pub struct PutLifecycleHookType {
 	pub lifecycle_transition: Option<LifecycleTransition>,
 }
 
-/// Parse a PutLifecycleHookType from XML
-pub struct PutLifecycleHookTypeParser;
+/// Parse PutLifecycleHookType from XML
+struct PutLifecycleHookTypeParser;
 impl PutLifecycleHookTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PutLifecycleHookType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PutLifecycleHookType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PutLifecycleHookType::default();
 		loop {
@@ -6939,10 +6745,10 @@ impl PutLifecycleHookTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a PutLifecycleHookType's contents to a SignedRequest
-pub struct PutLifecycleHookTypeWriter;
+/// Write PutLifecycleHookType contents to a SignedRequest
+struct PutLifecycleHookTypeWriter;
 impl PutLifecycleHookTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PutLifecycleHookType) {
+	fn write_params(params: &mut Params, name: &str, obj: &PutLifecycleHookType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.heartbeat_timeout {
@@ -6970,29 +6776,29 @@ impl PutLifecycleHookTypeWriter {
 #[derive(Debug, Default)]
 pub struct PutLifecycleHookAnswer;
 
-/// Parse a PutLifecycleHookAnswer from XML
-pub struct PutLifecycleHookAnswerParser;
+/// Parse PutLifecycleHookAnswer from XML
+struct PutLifecycleHookAnswerParser;
 impl PutLifecycleHookAnswerParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PutLifecycleHookAnswer, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PutLifecycleHookAnswer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PutLifecycleHookAnswer::default();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a PutLifecycleHookAnswer's contents to a SignedRequest
-pub struct PutLifecycleHookAnswerWriter;
+/// Write PutLifecycleHookAnswer contents to a SignedRequest
+struct PutLifecycleHookAnswerWriter;
 impl PutLifecycleHookAnswerWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &PutLifecycleHookAnswer) {
+	fn write_params(params: &mut Params, name: &str, obj: &PutLifecycleHookAnswer) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 	}
 }
 pub type ScheduledActionNames = Vec<ResourceName>;
-/// Parse a ScheduledActionNames from XML
-pub struct ScheduledActionNamesParser;
+/// Parse ScheduledActionNames from XML
+struct ScheduledActionNamesParser;
 impl ScheduledActionNamesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScheduledActionNames, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ScheduledActionNames, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ResourceName" {
 			obj.push(try!(ResourceNameParser::parse_xml("ResourceName", stack)));
@@ -7000,10 +6806,10 @@ impl ScheduledActionNamesParser {
 		Ok(obj)
 	}
 }
-/// Write a ScheduledActionNames's contents to a SignedRequest
-pub struct ScheduledActionNamesWriter;
+/// Write ScheduledActionNames contents to a SignedRequest
+struct ScheduledActionNamesWriter;
 impl ScheduledActionNamesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ScheduledActionNames) {
+	fn write_params(params: &mut Params, name: &str, obj: &ScheduledActionNames) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -7039,10 +6845,10 @@ pub struct Activity {
 	pub status_code: ScalingActivityStatusCode,
 }
 
-/// Parse a Activity from XML
-pub struct ActivityParser;
+/// Parse Activity from XML
+struct ActivityParser;
 impl ActivityParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Activity, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Activity, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = Activity::default();
 		loop {
@@ -7093,10 +6899,10 @@ impl ActivityParser {
 		Ok(obj)
 	}
 }
-/// Write a Activity's contents to a SignedRequest
-pub struct ActivityWriter;
+/// Write Activity contents to a SignedRequest
+struct ActivityWriter;
 impl ActivityWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Activity) {
+	fn write_params(params: &mut Params, name: &str, obj: &Activity) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.description {
@@ -7122,20 +6928,20 @@ impl ActivityWriter {
 	}
 }
 pub type XmlStringMaxLen64 = String;
-/// Parse a XmlStringMaxLen64 from XML
-pub struct XmlStringMaxLen64Parser;
+/// Parse XmlStringMaxLen64 from XML
+struct XmlStringMaxLen64Parser;
 impl XmlStringMaxLen64Parser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen64, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<XmlStringMaxLen64, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a XmlStringMaxLen64's contents to a SignedRequest
-pub struct XmlStringMaxLen64Writer;
+/// Write XmlStringMaxLen64 contents to a SignedRequest
+struct XmlStringMaxLen64Writer;
 impl XmlStringMaxLen64Writer {
-	pub fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen64) {
+	fn write_params(params: &mut Params, name: &str, obj: &XmlStringMaxLen64) {
 		params.put(name, obj);
 	}
 }
@@ -7154,10 +6960,10 @@ pub struct MetricCollectionType {
 	pub metric: XmlStringMaxLen255,
 }
 
-/// Parse a MetricCollectionType from XML
-pub struct MetricCollectionTypeParser;
+/// Parse MetricCollectionType from XML
+struct MetricCollectionTypeParser;
 impl MetricCollectionTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MetricCollectionType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MetricCollectionType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = MetricCollectionType::default();
 		loop {
@@ -7172,17 +6978,15 @@ impl MetricCollectionTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a MetricCollectionType's contents to a SignedRequest
-pub struct MetricCollectionTypeWriter;
+/// Write MetricCollectionType contents to a SignedRequest
+struct MetricCollectionTypeWriter;
 impl MetricCollectionTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &MetricCollectionType) {
+	fn write_params(params: &mut Params, name: &str, obj: &MetricCollectionType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen255Writer::write_params(params, &(prefix.to_string() + "Metric"), &obj.metric);
 	}
 }
-/// Describes one or more Auto Scaling instances. If a list is not provided, the
-/// call describes all instances.
 #[derive(Debug, Default)]
 pub struct DescribeAutoScalingInstancesType {
 	/// The maximum number of items to return with this call.
@@ -7196,10 +7000,10 @@ pub struct DescribeAutoScalingInstancesType {
 	pub instance_ids: InstanceIds,
 }
 
-/// Parse a DescribeAutoScalingInstancesType from XML
-pub struct DescribeAutoScalingInstancesTypeParser;
+/// Parse DescribeAutoScalingInstancesType from XML
+struct DescribeAutoScalingInstancesTypeParser;
 impl DescribeAutoScalingInstancesTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeAutoScalingInstancesType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeAutoScalingInstancesType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeAutoScalingInstancesType::default();
 		loop {
@@ -7222,10 +7026,10 @@ impl DescribeAutoScalingInstancesTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeAutoScalingInstancesType's contents to a SignedRequest
-pub struct DescribeAutoScalingInstancesTypeWriter;
+/// Write DescribeAutoScalingInstancesType contents to a SignedRequest
+struct DescribeAutoScalingInstancesTypeWriter;
 impl DescribeAutoScalingInstancesTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeAutoScalingInstancesType) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeAutoScalingInstancesType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MaxRecordsWriter::write_params(params, &(prefix.to_string() + "MaxRecords"), &obj.max_records);
@@ -7233,10 +7037,6 @@ impl DescribeAutoScalingInstancesTypeWriter {
 		InstanceIdsWriter::write_params(params, &(prefix.to_string() + "XmlStringMaxLen16"), &obj.instance_ids);
 	}
 }
-/// Sets the health status of the specified instance.
-/// For more information, see [Health Checks](http://docs.aws.amazon.com/AutoScali
-/// ng/latest/DeveloperGuide/healthcheck.html) in the _Auto Scaling Developer
-/// Guide_.
 #[derive(Debug, Default)]
 pub struct SetInstanceHealthQuery {
 	/// The ID of the EC2 instance.
@@ -7254,10 +7054,10 @@ pub struct SetInstanceHealthQuery {
 	pub health_status: XmlStringMaxLen32,
 }
 
-/// Parse a SetInstanceHealthQuery from XML
-pub struct SetInstanceHealthQueryParser;
+/// Parse SetInstanceHealthQuery from XML
+struct SetInstanceHealthQueryParser;
 impl SetInstanceHealthQueryParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetInstanceHealthQuery, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetInstanceHealthQuery, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SetInstanceHealthQuery::default();
 		loop {
@@ -7280,10 +7080,10 @@ impl SetInstanceHealthQueryParser {
 		Ok(obj)
 	}
 }
-/// Write a SetInstanceHealthQuery's contents to a SignedRequest
-pub struct SetInstanceHealthQueryWriter;
+/// Write SetInstanceHealthQuery contents to a SignedRequest
+struct SetInstanceHealthQueryWriter;
 impl SetInstanceHealthQueryWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &SetInstanceHealthQuery) {
+	fn write_params(params: &mut Params, name: &str, obj: &SetInstanceHealthQuery) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		XmlStringMaxLen16Writer::write_params(params, &(prefix.to_string() + "InstanceId"), &obj.instance_id);
@@ -7302,10 +7102,10 @@ pub struct DescribeLoadBalancersResponse {
 	pub next_token: XmlString,
 }
 
-/// Parse a DescribeLoadBalancersResponse from XML
-pub struct DescribeLoadBalancersResponseParser;
+/// Parse DescribeLoadBalancersResponse from XML
+struct DescribeLoadBalancersResponseParser;
 impl DescribeLoadBalancersResponseParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeLoadBalancersResponse, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DescribeLoadBalancersResponse, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DescribeLoadBalancersResponse::default();
 		loop {
@@ -7324,10 +7124,10 @@ impl DescribeLoadBalancersResponseParser {
 		Ok(obj)
 	}
 }
-/// Write a DescribeLoadBalancersResponse's contents to a SignedRequest
-pub struct DescribeLoadBalancersResponseWriter;
+/// Write DescribeLoadBalancersResponse contents to a SignedRequest
+struct DescribeLoadBalancersResponseWriter;
 impl DescribeLoadBalancersResponseWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &DescribeLoadBalancersResponse) {
+	fn write_params(params: &mut Params, name: &str, obj: &DescribeLoadBalancersResponse) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		LoadBalancerStatesWriter::write_params(params, &(prefix.to_string() + "LoadBalancerState"), &obj.load_balancers);
@@ -7335,36 +7135,23 @@ impl DescribeLoadBalancersResponseWriter {
 	}
 }
 pub type ShouldDecrementDesiredCapacity = bool;
-/// Parse a ShouldDecrementDesiredCapacity from XML
-pub struct ShouldDecrementDesiredCapacityParser;
+/// Parse ShouldDecrementDesiredCapacity from XML
+struct ShouldDecrementDesiredCapacityParser;
 impl ShouldDecrementDesiredCapacityParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ShouldDecrementDesiredCapacity, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ShouldDecrementDesiredCapacity, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a ShouldDecrementDesiredCapacity's contents to a SignedRequest
-pub struct ShouldDecrementDesiredCapacityWriter;
+/// Write ShouldDecrementDesiredCapacity contents to a SignedRequest
+struct ShouldDecrementDesiredCapacityWriter;
 impl ShouldDecrementDesiredCapacityWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &ShouldDecrementDesiredCapacity) {
+	fn write_params(params: &mut Params, name: &str, obj: &ShouldDecrementDesiredCapacity) {
 		params.put(name, &obj.to_string());
 	}
 }
-/// Updates the configuration for the specified Auto Scaling group.
-/// To update an Auto Scaling group with a launch configuration with
-/// `InstanceMonitoring` set to `False`, you must first disable the collection of
-/// group metrics. Otherwise, you will get an error. If you have previously
-/// enabled the collection of group metrics, you can disable it using
-/// DisableMetricsCollection.
-/// The new settings are registered upon the completion of this call. Any launch
-/// configuration settings take effect on any triggers after this call returns.
-/// Scaling activities that are currently in progress aren't affected.
-/// Note the following:
-///   * If you specify a new value for `MinSize` without specifying a value for `DesiredCapacity`, and the new `MinSize` is larger than the current size of the group, we implicitly call SetDesiredCapacity to set the size of the group to the new value of `MinSize`.
-///   * If you specify a new value for `MaxSize` without specifying a value for `DesiredCapacity`, and the new `MaxSize` is smaller than the current size of the group, we implicitly call SetDesiredCapacity to set the size of the group to the new value of `MaxSize`.
-///   * All other optional parameters are left unchanged if not specified.
 #[derive(Debug, Default)]
 pub struct UpdateAutoScalingGroupType {
 	/// The amount of time, in seconds, that Auto Scaling waits before checking the
@@ -7418,10 +7205,10 @@ pub struct UpdateAutoScalingGroupType {
 	pub health_check_type: Option<XmlStringMaxLen32>,
 }
 
-/// Parse a UpdateAutoScalingGroupType from XML
-pub struct UpdateAutoScalingGroupTypeParser;
+/// Parse UpdateAutoScalingGroupType from XML
+struct UpdateAutoScalingGroupTypeParser;
 impl UpdateAutoScalingGroupTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<UpdateAutoScalingGroupType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<UpdateAutoScalingGroupType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = UpdateAutoScalingGroupType::default();
 		loop {
@@ -7480,10 +7267,10 @@ impl UpdateAutoScalingGroupTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a UpdateAutoScalingGroupType's contents to a SignedRequest
-pub struct UpdateAutoScalingGroupTypeWriter;
+/// Write UpdateAutoScalingGroupType contents to a SignedRequest
+struct UpdateAutoScalingGroupTypeWriter;
 impl UpdateAutoScalingGroupTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &UpdateAutoScalingGroupType) {
+	fn write_params(params: &mut Params, name: &str, obj: &UpdateAutoScalingGroupType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		if let Some(ref obj) = obj.health_check_grace_period {
@@ -7522,8 +7309,6 @@ impl UpdateAutoScalingGroupTypeWriter {
 		}
 	}
 }
-/// Describes one or more Auto Scaling groups. If a list of names is not provided,
-/// the call describes all Auto Scaling groups.
 #[derive(Debug, Default)]
 pub struct AutoScalingGroupNamesType {
 	/// The maximum number of items to return with this call.
@@ -7535,10 +7320,10 @@ pub struct AutoScalingGroupNamesType {
 	pub auto_scaling_group_names: AutoScalingGroupNames,
 }
 
-/// Parse a AutoScalingGroupNamesType from XML
-pub struct AutoScalingGroupNamesTypeParser;
+/// Parse AutoScalingGroupNamesType from XML
+struct AutoScalingGroupNamesTypeParser;
 impl AutoScalingGroupNamesTypeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupNamesType, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupNamesType, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AutoScalingGroupNamesType::default();
 		loop {
@@ -7561,10 +7346,10 @@ impl AutoScalingGroupNamesTypeParser {
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingGroupNamesType's contents to a SignedRequest
-pub struct AutoScalingGroupNamesTypeWriter;
+/// Write AutoScalingGroupNamesType contents to a SignedRequest
+struct AutoScalingGroupNamesTypeWriter;
 impl AutoScalingGroupNamesTypeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupNamesType) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupNamesType) {
 		let mut prefix = name.to_string();
 		if prefix != "" { prefix.push_str("."); }
 		MaxRecordsWriter::write_params(params, &(prefix.to_string() + "MaxRecords"), &obj.max_records);
@@ -7573,10 +7358,10 @@ impl AutoScalingGroupNamesTypeWriter {
 	}
 }
 pub type Instances = Vec<Instance>;
-/// Parse a Instances from XML
-pub struct InstancesParser;
+/// Parse Instances from XML
+struct InstancesParser;
 impl InstancesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Instances, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Instances, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "Instance" {
 			obj.push(try!(InstanceParser::parse_xml("Instance", stack)));
@@ -7584,10 +7369,10 @@ impl InstancesParser {
 		Ok(obj)
 	}
 }
-/// Write a Instances's contents to a SignedRequest
-pub struct InstancesWriter;
+/// Write Instances contents to a SignedRequest
+struct InstancesWriter;
 impl InstancesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Instances) {
+	fn write_params(params: &mut Params, name: &str, obj: &Instances) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -7597,46 +7382,46 @@ impl InstancesWriter {
 	}
 }
 pub type AutoScalingGroupMinSize = i32;
-/// Parse a AutoScalingGroupMinSize from XML
-pub struct AutoScalingGroupMinSizeParser;
+/// Parse AutoScalingGroupMinSize from XML
+struct AutoScalingGroupMinSizeParser;
 impl AutoScalingGroupMinSizeParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupMinSize, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AutoScalingGroupMinSize, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a AutoScalingGroupMinSize's contents to a SignedRequest
-pub struct AutoScalingGroupMinSizeWriter;
+/// Write AutoScalingGroupMinSize contents to a SignedRequest
+struct AutoScalingGroupMinSizeWriter;
 impl AutoScalingGroupMinSizeWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupMinSize) {
+	fn write_params(params: &mut Params, name: &str, obj: &AutoScalingGroupMinSize) {
 		params.put(name, &obj.to_string());
 	}
 }
 pub type LifecycleState = String;
-/// Parse a LifecycleState from XML
-pub struct LifecycleStateParser;
+/// Parse LifecycleState from XML
+struct LifecycleStateParser;
 impl LifecycleStateParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleState, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<LifecycleState, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
 }
-/// Write a LifecycleState's contents to a SignedRequest
-pub struct LifecycleStateWriter;
+/// Write LifecycleState contents to a SignedRequest
+struct LifecycleStateWriter;
 impl LifecycleStateWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &LifecycleState) {
+	fn write_params(params: &mut Params, name: &str, obj: &LifecycleState) {
 		params.put(name, obj);
 	}
 }
 pub type Filters = Vec<Filter>;
-/// Parse a Filters from XML
-pub struct FiltersParser;
+/// Parse Filters from XML
+struct FiltersParser;
 impl FiltersParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Filters, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Filters, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "Filter" {
 			obj.push(try!(FilterParser::parse_xml("Filter", stack)));
@@ -7644,10 +7429,10 @@ impl FiltersParser {
 		Ok(obj)
 	}
 }
-/// Write a Filters's contents to a SignedRequest
-pub struct FiltersWriter;
+/// Write Filters contents to a SignedRequest
+struct FiltersWriter;
 impl FiltersWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &Filters) {
+	fn write_params(params: &mut Params, name: &str, obj: &Filters) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -7657,10 +7442,10 @@ impl FiltersWriter {
 	}
 }
 pub type AvailabilityZones = Vec<XmlStringMaxLen255>;
-/// Parse a AvailabilityZones from XML
-pub struct AvailabilityZonesParser;
+/// Parse AvailabilityZones from XML
+struct AvailabilityZonesParser;
 impl AvailabilityZonesParser {
-	pub fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AvailabilityZones, XmlParseError> {
+	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AvailabilityZones, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "XmlStringMaxLen255" {
 			obj.push(try!(XmlStringMaxLen255Parser::parse_xml("XmlStringMaxLen255", stack)));
@@ -7668,10 +7453,10 @@ impl AvailabilityZonesParser {
 		Ok(obj)
 	}
 }
-/// Write a AvailabilityZones's contents to a SignedRequest
-pub struct AvailabilityZonesWriter;
+/// Write AvailabilityZones contents to a SignedRequest
+struct AvailabilityZonesWriter;
 impl AvailabilityZonesWriter {
-	pub fn write_params(params: &mut Params, name: &str, obj: &AvailabilityZones) {
+	fn write_params(params: &mut Params, name: &str, obj: &AvailabilityZones) {
 		let mut index = 1;
 		for element in obj.iter() {
 			let key = &format!("{}.{}", name, index);
@@ -7689,6 +7474,7 @@ impl<'a> AutoscalingClient<'a> {
 	pub fn new(creds: &'a AWSCredentials, region: &'a str) -> AutoscalingClient<'a> {
 		AutoscalingClient { creds: creds, region: region }
 	}
+	/// Deletes the specified tags.
 	pub fn delete_tags(&self, input: &DeleteTagsType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7707,6 +7493,10 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Describes one or more scaling activities for the specified Auto Scaling group.
+	/// If you omit the `ActivityIds`, the call returns all activities from the past
+	/// six weeks. Activities are sorted by the start time. Activities still in
+	/// progress appear first on the list.
 	pub fn describe_scaling_activities(&self, input: &DescribeScalingActivitiesType) -> Result<ActivitiesType, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7725,6 +7515,13 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Creates an Auto Scaling group with the specified name and attributes.
+	/// If you exceed your maximum limit of Auto Scaling groups, which by default is
+	/// 20 per region, the call fails. For information about viewing and updating this
+	/// limit, see DescribeAccountLimits.
+	/// For more information, see [Auto Scaling Groups](http://docs.aws.amazon.com/Aut
+	/// oScaling/latest/DeveloperGuide/AutoScalingGroup.html) in the _Auto Scaling
+	/// Developer Guide_.
 	pub fn create_auto_scaling_group(&self, input: &CreateAutoScalingGroupType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7743,6 +7540,7 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Executes the specified policy.
 	pub fn execute_policy(&self, input: &ExecutePolicyType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7761,6 +7559,8 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Describes the notification actions associated with the specified Auto Scaling
+	/// group.
 	pub fn describe_notification_configurations(&self, input: &DescribeNotificationConfigurationsType) -> Result<DescribeNotificationConfigurationsAnswer, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7779,6 +7579,11 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes the specified Auto Scaling group.
+	/// The group must have no instances and no scaling activities in progress.
+	/// To remove all instances before calling `DeleteAutoScalingGroup`, call
+	/// UpdateAutoScalingGroup to set the minimum and maximum size of the Auto Scaling
+	/// group to zero.
 	pub fn delete_auto_scaling_group(&self, input: &DeleteAutoScalingGroupType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7797,6 +7602,7 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes the specified Auto Scaling policy.
 	pub fn delete_policy(&self, input: &DeletePolicyType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7815,6 +7621,10 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Moves the specified instances out of `Standby` mode.
+	/// For more information, see [Auto Scaling InService State](http://docs.aws.amazo
+	/// n.com/AutoScaling/latest/DeveloperGuide/AutoScalingInServiceState.html) in the
+	/// _Auto Scaling Developer Guide_.
 	pub fn exit_standby(&self, input: &ExitStandbyQuery) -> Result<ExitStandbyAnswer, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7833,6 +7643,10 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Sets the health status of the specified instance.
+	/// For more information, see [Health Checks](http://docs.aws.amazon.com/AutoScali
+	/// ng/latest/DeveloperGuide/healthcheck.html) in the _Auto Scaling Developer
+	/// Guide_.
 	pub fn set_instance_health(&self, input: &SetInstanceHealthQuery) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7851,6 +7665,18 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Creates or updates tags for the specified Auto Scaling group.
+	/// A tag is defined by its resource ID, resource type, key, value, and propagate
+	/// flag. The value and the propagate flag are optional parameters. The only
+	/// supported resource type is `auto-scaling-group`, and the resource ID must be
+	/// the name of the group. The `PropagateAtLaunch` flag determines whether the tag
+	/// is added to instances launched in the group. Valid values are `true` or
+	/// `false`.
+	/// When you specify a tag with a key that already exists, the operation
+	/// overwrites the previous tag definition, and you do not get an error message.
+	/// For more information, see [Tagging Auto Scaling Groups and Instances](http://d
+	/// ocs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/ASTagging.html) in the
+	/// _Auto Scaling Developer Guide_.
 	pub fn create_or_update_tags(&self, input: &CreateOrUpdateTagsType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7869,6 +7695,27 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Creates or updates a lifecycle hook for the specified Auto Scaling Group.
+	/// A lifecycle hook tells Auto Scaling that you want to perform an action on an
+	/// instance that is not actively in service; for example, either when the
+	/// instance launches or before the instance terminates.
+	/// This operation is a part of the basic sequence for adding a lifecycle hook to
+	/// an Auto Scaling group:
+	///   1. Create a notification target. A target can be either an Amazon SQS queue or an Amazon SNS topic.
+	///   2. Create an IAM role. This role allows Auto Scaling to publish lifecycle notifications to the designated SQS queue or SNS topic.
+	///   3. **Create the lifecycle hook. You can create a hook that acts when instances launch or when instances terminate.**
+	///   4. If necessary, record the lifecycle action heartbeat to keep the instance in a pending state.
+	///   5. Complete the lifecycle action.
+	/// For more information, see [Auto Scaling Pending State](http://docs.aws.amazon.
+	/// com/AutoScaling/latest/DeveloperGuide/AutoScalingPendingState.html) and [Auto
+	/// Scaling Terminating State](http://docs.aws.amazon.com/AutoScaling/latest/Devel
+	/// operGuide/AutoScalingTerminatingState.html) in the _Auto Scaling Developer
+	/// Guide_.
+	/// If you exceed your maximum limit of lifecycle hooks, which by default is 50
+	/// per region, the call fails. For information about updating this limit, see
+	/// [AWS Service
+	/// Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)
+	/// in the _Amazon Web Services General Reference_.
 	pub fn put_lifecycle_hook(&self, input: &PutLifecycleHookType) -> Result<PutLifecycleHookAnswer, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7887,6 +7734,11 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Removes one or more load balancers from the specified Auto Scaling group.
+	/// When you detach a load balancer, it enters the `Removing` state while
+	/// deregistering the instances in the group. When all instances are deregistered,
+	/// then you can no longer describe the load balancer using DescribeLoadBalancers.
+	/// Note that the instances remain running.
 	pub fn detach_load_balancers(&self, input: &DetachLoadBalancersType) -> Result<DetachLoadBalancersResultType, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7905,6 +7757,10 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Attaches one or more EC2 instances to the specified Auto Scaling group.
+	/// For more information, see [Attach EC2 Instances to Your Auto Scaling
+	/// Group](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/attach-
+	/// instance-asg.html) in the _Auto Scaling Developer Guide_.
 	pub fn attach_instances(&self, input: &AttachInstancesQuery) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7923,6 +7779,12 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Creates or updates a scheduled scaling action for an Auto Scaling group. When
+	/// updating a scheduled scaling action, if you leave a parameter unspecified, the
+	/// corresponding value remains unchanged in the affected Auto Scaling group.
+	/// For more information, see [Scheduled Scaling](http://docs.aws.amazon.com/AutoS
+	/// caling/latest/DeveloperGuide/schedule_time.html) in the _Auto Scaling
+	/// Developer Guide_.
 	pub fn put_scheduled_update_group_action(&self, input: &PutScheduledUpdateGroupActionType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7941,6 +7803,15 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Creates or updates a policy for an Auto Scaling group. To update an existing
+	/// policy, use the existing policy name and set the parameters you want to
+	/// change. Any existing parameter not changed in an update to an existing policy
+	/// is not changed in this update request.
+	/// If you exceed your maximum limit of step adjustments, which by default is 20
+	/// per region, the call fails. For information about updating this limit, see
+	/// [AWS Service
+	/// Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)
+	/// in the _Amazon Web Services General Reference_.
 	pub fn put_scaling_policy(&self, input: &PutScalingPolicyType) -> Result<PolicyARNType, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7959,6 +7830,7 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes the specified scheduled action.
 	pub fn delete_scheduled_action(&self, input: &DeleteScheduledActionType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7977,6 +7849,13 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Attaches one or more load balancers to the specified Auto Scaling group.
+	/// To describe the load balancers for an Auto Scaling group, use
+	/// DescribeLoadBalancers. To detach the load balancer from the Auto Scaling
+	/// group, use DetachLoadBalancers.
+	/// For more information, see [Attach a Load Balancer to Your Auto Scaling
+	/// Group](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/attach-
+	/// load-balancer-asg.html) in the _Auto Scaling Developer Guide_.
 	pub fn attach_load_balancers(&self, input: &AttachLoadBalancersType) -> Result<AttachLoadBalancersResultType, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -7995,6 +7874,12 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Removes one or more instances from the specified Auto Scaling group. After the
+	/// instances are detached, you can manage them independently from the rest of the
+	/// Auto Scaling group.
+	/// For more information, see [Detach EC2 Instances from Your Auto Scaling
+	/// Group](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/detach-
+	/// instance-asg.html) in the _Auto Scaling Developer Guide_.
 	pub fn detach_instances(&self, input: &DetachInstancesQuery) -> Result<DetachInstancesAnswer, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8013,6 +7898,10 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Terminates the specified instance and optionally adjusts the desired group
+	/// size.
+	/// This call simply makes a termination request. The instances is not terminated
+	/// immediately.
 	pub fn terminate_instance_in_auto_scaling_group(&self, input: &TerminateInstanceInAutoScalingGroupType) -> Result<ActivityType, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8031,6 +7920,7 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Describes the load balancers for the specified Auto Scaling group.
 	pub fn describe_load_balancers(&self, input: &DescribeLoadBalancersRequest) -> Result<DescribeLoadBalancersResponse, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8049,6 +7939,20 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Completes the lifecycle action for the associated token initiated under the
+	/// given lifecycle hook with the specified result.
+	/// This operation is a part of the basic sequence for adding a lifecycle hook to
+	/// an Auto Scaling group:
+	///   1. Create a notification target. A target can be either an Amazon SQS queue or an Amazon SNS topic.
+	///   2. Create an IAM role. This role allows Auto Scaling to publish lifecycle notifications to the designated SQS queue or SNS topic.
+	///   3. Create the lifecycle hook. You can create a hook that acts when instances launch or when instances terminate.
+	///   4. If necessary, record the lifecycle action heartbeat to keep the instance in a pending state.
+	///   5. **Complete the lifecycle action**.
+	/// For more information, see [Auto Scaling Pending State](http://docs.aws.amazon.
+	/// com/AutoScaling/latest/DeveloperGuide/AutoScalingPendingState.html) and [Auto
+	/// Scaling Terminating State](http://docs.aws.amazon.com/AutoScaling/latest/Devel
+	/// operGuide/AutoScalingTerminatingState.html) in the _Auto Scaling Developer
+	/// Guide_.
 	pub fn complete_lifecycle_action(&self, input: &CompleteLifecycleActionType) -> Result<CompleteLifecycleActionAnswer, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8067,6 +7971,19 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Updates the configuration for the specified Auto Scaling group.
+	/// To update an Auto Scaling group with a launch configuration with
+	/// `InstanceMonitoring` set to `False`, you must first disable the collection of
+	/// group metrics. Otherwise, you will get an error. If you have previously
+	/// enabled the collection of group metrics, you can disable it using
+	/// DisableMetricsCollection.
+	/// The new settings are registered upon the completion of this call. Any launch
+	/// configuration settings take effect on any triggers after this call returns.
+	/// Scaling activities that are currently in progress aren't affected.
+	/// Note the following:
+	///   * If you specify a new value for `MinSize` without specifying a value for `DesiredCapacity`, and the new `MinSize` is larger than the current size of the group, we implicitly call SetDesiredCapacity to set the size of the group to the new value of `MinSize`.
+	///   * If you specify a new value for `MaxSize` without specifying a value for `DesiredCapacity`, and the new `MaxSize` is smaller than the current size of the group, we implicitly call SetDesiredCapacity to set the size of the group to the new value of `MaxSize`.
+	///   * All other optional parameters are left unchanged if not specified.
 	pub fn update_auto_scaling_group(&self, input: &UpdateAutoScalingGroupType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8085,6 +8002,21 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Records a heartbeat for the lifecycle action associated with a specific token.
+	/// This extends the timeout by the length of time defined by the
+	/// `HeartbeatTimeout` parameter of PutLifecycleHook.
+	/// This operation is a part of the basic sequence for adding a lifecycle hook to
+	/// an Auto Scaling group:
+	///   1. Create a notification target. A target can be either an Amazon SQS queue or an Amazon SNS topic.
+	///   2. Create an IAM role. This role allows Auto Scaling to publish lifecycle notifications to the designated SQS queue or SNS topic.
+	///   3. Create the lifecycle hook. You can create a hook that acts when instances launch or when instances terminate.
+	///   4. **If necessary, record the lifecycle action heartbeat to keep the instance in a pending state.**
+	///   5. Complete the lifecycle action.
+	/// For more information, see [Auto Scaling Pending State](http://docs.aws.amazon.
+	/// com/AutoScaling/latest/DeveloperGuide/AutoScalingPendingState.html) and [Auto
+	/// Scaling Terminating State](http://docs.aws.amazon.com/AutoScaling/latest/Devel
+	/// operGuide/AutoScalingTerminatingState.html) in the _Auto Scaling Developer
+	/// Guide_.
 	pub fn record_lifecycle_action_heartbeat(&self, input: &RecordLifecycleActionHeartbeatType) -> Result<RecordLifecycleActionHeartbeatAnswer, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8103,6 +8035,13 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Configures an Auto Scaling group to send notifications when specified events
+	/// take place. Subscribers to this topic can have messages for events delivered
+	/// to an endpoint such as a web server or email address.
+	/// For more information see [Getting Notifications When Your Auto Scaling Group C
+	/// hanges](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/ASGetting
+	/// Notifications.html) in the _Auto Scaling Developer Guide_.
+	/// This configuration overwrites an existing configuration.
 	pub fn put_notification_configuration(&self, input: &PutNotificationConfigurationType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8121,6 +8060,12 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Resumes the specified suspended Auto Scaling processes for the specified Auto
+	/// Scaling group. To resume specific processes, use the `ScalingProcesses`
+	/// parameter. To resume all processes, omit the `ScalingProcesses` parameter. For
+	/// more information, see [Suspend and Resume Auto Scaling Processes](http://docs.
+	/// aws.amazon.com/AutoScaling/latest/DeveloperGuide/US_SuspendResume.html) in the
+	/// _Auto Scaling Developer Guide_.
 	pub fn resume_processes(&self, input: &ScalingProcessQuery) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8139,6 +8084,13 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Creates a launch configuration.
+	/// If you exceed your maximum limit of launch configurations, which by default is
+	/// 100 per region, the call fails. For information about viewing and updating
+	/// this limit, see DescribeAccountLimits.
+	/// For more information, see [Launch Configurations](http://docs.aws.amazon.com/A
+	/// utoScaling/latest/DeveloperGuide/LaunchConfiguration.html) in the _Auto
+	/// Scaling Developer Guide_.
 	pub fn create_launch_configuration(&self, input: &CreateLaunchConfigurationType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8157,6 +8109,8 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Describes one or more Auto Scaling instances. If a list is not provided, the
+	/// call describes all instances.
 	pub fn describe_auto_scaling_instances(&self, input: &DescribeAutoScalingInstancesType) -> Result<AutoScalingInstancesType, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8175,6 +8129,14 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Describes the specified tags.
+	/// You can use filters to limit the results. For example, you can query for the
+	/// tags for a specific Auto Scaling group. You can specify multiple values for a
+	/// filter. A tag must match at least one of the specified values for it to be
+	/// included in the results.
+	/// You can also specify multiple filters. The result includes information for a
+	/// particular tag only if it matches all the filters. If there's no match, no
+	/// special message is returned.
 	pub fn describe_tags(&self, input: &DescribeTagsType) -> Result<TagsType, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8193,6 +8155,8 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Disables monitoring of the specified metrics for the specified Auto Scaling
+	/// group.
 	pub fn disable_metrics_collection(&self, input: &DisableMetricsCollectionQuery) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8211,6 +8175,10 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Sets the size of the specified Auto Scaling group.
+	/// For more information about desired capacity, see [What Is Auto Scaling?](http:
+	/// //docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/WhatIsAutoScaling.html
+	/// ) in the _Auto Scaling Developer Guide_.
 	pub fn set_desired_capacity(&self, input: &SetDesiredCapacityType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8229,6 +8197,8 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Describes one or more launch configurations. If you omit the list of names,
+	/// then the call describes all launch configurations.
 	pub fn describe_launch_configurations(&self, input: &LaunchConfigurationNamesType) -> Result<LaunchConfigurationsType, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8247,6 +8217,10 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Moves the specified instances into `Standby` mode.
+	/// For more information, see [Auto Scaling InService State](http://docs.aws.amazo
+	/// n.com/AutoScaling/latest/DeveloperGuide/AutoScalingInServiceState.html) in the
+	/// _Auto Scaling Developer Guide_.
 	pub fn enter_standby(&self, input: &EnterStandbyQuery) -> Result<EnterStandbyAnswer, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8265,6 +8239,9 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes the specified launch configuration.
+	/// The launch configuration must not be attached to an Auto Scaling group. When
+	/// this call completes, the launch configuration is no longer available for use.
 	pub fn delete_launch_configuration(&self, input: &LaunchConfigurationNameType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8283,6 +8260,9 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes the specified lifecycle hook.
+	/// If there are any outstanding lifecycle actions, they are completed first
+	/// (`ABANDON` for launching instances, `CONTINUE` for terminating instances).
 	pub fn delete_lifecycle_hook(&self, input: &DeleteLifecycleHookType) -> Result<DeleteLifecycleHookAnswer, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8301,6 +8281,7 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Describes the policies for the specified Auto Scaling group.
 	pub fn describe_policies(&self, input: &DescribePoliciesType) -> Result<PoliciesType, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8319,6 +8300,7 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Describes the lifecycle hooks for the specified Auto Scaling group.
 	pub fn describe_lifecycle_hooks(&self, input: &DescribeLifecycleHooksType) -> Result<DescribeLifecycleHooksAnswer, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8337,6 +8319,8 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Describes the actions scheduled for your Auto Scaling group that haven't run.
+	/// To describe the actions that have already run, use DescribeScalingActivities.
 	pub fn describe_scheduled_actions(&self, input: &DescribeScheduledActionsType) -> Result<ScheduledActionsType, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8355,6 +8339,8 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Describes one or more Auto Scaling groups. If a list of names is not provided,
+	/// the call describes all Auto Scaling groups.
 	pub fn describe_auto_scaling_groups(&self, input: &AutoScalingGroupNamesType) -> Result<AutoScalingGroupsType, AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8373,6 +8359,10 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Enables monitoring of the specified metrics for the specified Auto Scaling
+	/// group.
+	/// You can only enable metrics collection if `InstanceMonitoring` in the launch
+	/// configuration for the group is set to `True`.
 	pub fn enable_metrics_collection(&self, input: &EnableMetricsCollectionQuery) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8391,6 +8381,7 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Deletes the specified notification.
 	pub fn delete_notification_configuration(&self, input: &DeleteNotificationConfigurationType) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
@@ -8409,6 +8400,15 @@ impl<'a> AutoscalingClient<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
+	/// Suspends the specified Auto Scaling processes for the specified Auto Scaling
+	/// group. To suspend specific processes, use the `ScalingProcesses` parameter. To
+	/// suspend all processes, omit the `ScalingProcesses` parameter.
+	/// Note that if you suspend either the `Launch` or `Terminate` process types, it
+	/// can prevent other process types from functioning properly.
+	/// To resume processes that have been suspended, use ResumeProcesses.
+	/// For more information, see [Suspend and Resume Auto Scaling Processes](http://d
+	/// ocs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/US_SuspendResume.html) in
+	/// the _Auto Scaling Developer Guide_.
 	pub fn suspend_processes(&self, input: &ScalingProcessQuery) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
 		let mut params = Params::new();
