@@ -6,24 +6,24 @@ use std::env::*;
 use rusoto::credentials::*;
 use rusoto::error::*;
 use rusoto::sqs::*;
-use rusoto::sns::SNSClient;
+
 use time::*;
 
 fn main() {
 	if let Ok(creds) = creds_from_env() {
-		/*match sqs_roundtrip_tests(creds) {
+		match sqs_roundtrip_tests(creds) {
 			Ok(_) => { println!("Everything worked."); },
 			Err(err) => { println!("Got error: {:#?}", err); }
-		}*/
-		match sns_roundtrip_tests(creds) {
+		}
+		/*match sns_roundtrip_tests(creds) {
 			Ok(_) => { println!("Everything worked."); },
 			Err(err) => { println!("Got error: {:#?}", err); }
-		}			
+		}*/			
 	} else {
 		println!("Set AWS credentials with environment variables AWS_ACCESS_KEY_ID and AWS_SECRET_KEY");
 	}	
 }
-
+/*
 fn sns_roundtrip_tests(creds: AWSCredentials) -> Result<(), AWSError> {
 	let sns = SNSClient::new(creds, "us-east-1");
 	
@@ -31,10 +31,10 @@ fn sns_roundtrip_tests(creds: AWSCredentials) -> Result<(), AWSError> {
 	println!("{:#?}", response);
 	Ok(())
 }
-
+*/
 fn sqs_roundtrip_tests(creds: AWSCredentials) -> Result<(), AWSError> {
 	
-	let sqs = SQSClient::new(creds, "us-east-1");
+	let sqs = SQSHelper::new(&creds, "us-east-1");
 	
 	// list existing queues
 	let response = try!(sqs.list_queues());	

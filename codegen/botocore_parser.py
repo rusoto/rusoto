@@ -12,7 +12,9 @@ metadata = {}
 # map botocore primitives to rust primitives
 primitive_types = {
 	'string': 'String',
+	'timestamp': 'String',
 	'integer': 'i32',
+	'double': 'f32',
 	'blob': 'Vec<u8>',
 	'boolean': 'bool'
 }
@@ -20,15 +22,19 @@ primitive_types = {
 # rust code to pull primitive types from XML
 primitive_parsers = {
 	'string': 'try!(characters(stack))',
+	'timestamp': 'try!(characters(stack))',
 	'integer': 'i32::from_str(try!(characters(stack)).as_ref()).unwrap()',
+	'double': 'f32::from_str(try!(characters(stack)).as_ref()).unwrap()',	
 	'blob': 'try!(characters(stack)).into_bytes()',
 	'boolean': 'bool::from_str(try!(characters(stack)).as_ref()).unwrap()'
 }
 
 # rust code to write primitive types to a string
-primitive_writers = {
+primitive_writers = {	
 	'string': 'obj',
+	'timestamp': 'obj',
 	'integer': '&obj.to_string()',
+	'double': '&obj.to_string()',
 	'blob': 'str::from_utf8(&obj).unwrap()',
 	'boolean': '&obj.to_string()',
 }
@@ -60,9 +66,8 @@ def rust_type(name, shape):
 			rust_type = "HashMap<" + shape['key']['shape'] + "," + shape['value']['shape'] + ">"
 		elif shape_type == 'list':
 			rust_type = "Vec<" + shape['member']['shape'] + ">"
-		elif shape_type == 'structure':		
-			rust_struct(name, shape)
-
+#		else:
+#			rust_type = "SHIT-" + name
 		# a String is already a String in rust
 		if name != 'String':
 			print "pub type " + name + " = " + rust_type + ";"
@@ -71,7 +76,7 @@ def rust_type(name, shape):
 def rust_struct(name, shape):
 
 	for (opname, op) in operations.iteritems():
-		if op['input']['shape'] == name:
+		if 'input' in op and op['input']['shape'] == name:
 			documentation(op)
 
 	print "#[derive(Debug, Default)]";
@@ -198,7 +203,7 @@ def is_required(shape, field_name):
 	if not 'required' in shape:
 		return True;
 	else:
-		return field_name in shape['required']
+		return 'required' in shape and field_name in shape['required']
 
 # guts of the XML parser for struct shapes
 def struct_parser(name, shape):
@@ -251,20 +256,22 @@ def get_output_type(operation):
 # generate rust code to sign and execute an HTTP request for a botocore operation
 def request_method(operation):
 	http = operation['http']
+	if not ('input' in operation):
+		return
+
 	input_name = operation['input']['shape']
 	input_type = shapes[input_name]
 	output_type = get_output_type(operation)
 
-	print "impl AWSRequest<" + output_type+ "> for " + input_name + " {"
-	print "\tfn execute(&self, creds: &AWSCredentials, region: &str) -> Result<" + output_type + ", AWSError> {"
-	print '\t\tlet mut request = SignedRequest::new("' + http['method'] + '", "' + metadata['endpointPrefix'] + '", region, "' + http['requestUri'] + '");'
+	print "\tpub fn " + c_to_s(operation['name']) + "(&self, input: &" + input_name + ") -> Result<" + output_type + ", AWSError> {"
+	print '\t\tlet mut request = SignedRequest::new("' + http['method'] + '", "' + metadata['endpointPrefix'] + '", &self.region, "' + http['requestUri'] + '");'
 	print "\t\tlet mut params = Params::new();"
 	print '\t\tparams.put("Action", "' + operation['name'] + '");'
 
-	print '\t\t' + input_name + 'Writer::write_params(&mut params, \"\", self);'
+	print '\t\t' + input_name + 'Writer::write_params(&mut params, \"\", &input);'
 
 	print '\t\trequest.set_params(params);'
-	print '\t\tlet (status, output) = try!(request.sign_and_execute(creds));'
+	print '\t\tlet (status, output) = try!(request.sign_and_execute(&self.creds));'
 #	print '\t\tprintln!("{}", output);'
 	print '\t\tlet mut reader = EventReader::new(output.as_bytes());'
 	print '\t\tlet mut stack = reader.events().peekable();'
@@ -283,7 +290,25 @@ def request_method(operation):
 
 	print '\t\t}'
 	print "\t}"
-	print "}"
+
+def generate_client():
+		client_name = sys.argv[2]
+
+		print "pub struct " + client_name  + "<'a> {"
+		print "\tcreds: &'a AWSCredentials,"
+		print "\tregion: &'a str"
+		print "}\n"
+
+		print "impl<'a> " + client_name + "<'a> { "
+		print "\tpub fn new(creds: &'a AWSCredentials, region: &'a str) -> " + client_name + "<'a> {"
+		print "\t\t" + client_name + " { creds: creds, region: region }"
+		print "\t}"
+
+		for (name, operation) in operations.iteritems():
+			request_method(operation)
+
+		print "}"
+
 
 def main():	
 	with open(sys.argv[1]) as data_file:
@@ -303,8 +328,7 @@ def main():
 			type_parser(name, shape)
 			param_writer(name, shape)
 
-		for (name, operation) in service['operations'].iteritems():
-			request_method(operation)
+		generate_client()
 
 if __name__ == "__main__": main()
 

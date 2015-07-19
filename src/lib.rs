@@ -14,6 +14,7 @@ extern crate xmlutil;
 #[macro_use] pub mod signature;
 pub mod credentials;
 pub mod error;
+pub mod autoscaling;
 pub mod sqs;
 pub mod sns;
 pub mod request;

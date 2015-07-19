@@ -2865,14 +2865,22 @@ impl SendMessageBatchRequestEntryWriter {
 		}
 	}
 }
-impl AWSRequest<CreateQueueResult> for CreateQueueRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<CreateQueueResult, AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+pub struct SQSClient<'a> {
+	creds: &'a AWSCredentials,
+	region: &'a str
+}
+
+impl<'a> SQSClient<'a> { 
+	pub fn new(creds: &'a AWSCredentials, region: &'a str) -> SQSClient<'a> {
+		SQSClient { creds: creds, region: region }
+	}
+	pub fn create_queue(&self, input: &CreateQueueRequest) -> Result<CreateQueueResult, AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "CreateQueue");
-		CreateQueueRequestWriter::write_params(&mut params, "", self);
+		CreateQueueRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -2884,15 +2892,13 @@ impl AWSRequest<CreateQueueResult> for CreateQueueRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<GetQueueAttributesResult> for GetQueueAttributesRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<GetQueueAttributesResult, AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn get_queue_attributes(&self, input: &GetQueueAttributesRequest) -> Result<GetQueueAttributesResult, AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "GetQueueAttributes");
-		GetQueueAttributesRequestWriter::write_params(&mut params, "", self);
+		GetQueueAttributesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -2904,15 +2910,13 @@ impl AWSRequest<GetQueueAttributesResult> for GetQueueAttributesRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for SetQueueAttributesRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn set_queue_attributes(&self, input: &SetQueueAttributesRequest) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "SetQueueAttributes");
-		SetQueueAttributesRequestWriter::write_params(&mut params, "", self);
+		SetQueueAttributesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -2924,15 +2928,13 @@ impl AWSRequest<()> for SetQueueAttributesRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<GetQueueUrlResult> for GetQueueUrlRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<GetQueueUrlResult, AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn get_queue_url(&self, input: &GetQueueUrlRequest) -> Result<GetQueueUrlResult, AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "GetQueueUrl");
-		GetQueueUrlRequestWriter::write_params(&mut params, "", self);
+		GetQueueUrlRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -2944,15 +2946,13 @@ impl AWSRequest<GetQueueUrlResult> for GetQueueUrlRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<DeleteMessageBatchResult> for DeleteMessageBatchRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<DeleteMessageBatchResult, AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn delete_message_batch(&self, input: &DeleteMessageBatchRequest) -> Result<DeleteMessageBatchResult, AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "DeleteMessageBatch");
-		DeleteMessageBatchRequestWriter::write_params(&mut params, "", self);
+		DeleteMessageBatchRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -2964,15 +2964,13 @@ impl AWSRequest<DeleteMessageBatchResult> for DeleteMessageBatchRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<SendMessageBatchResult> for SendMessageBatchRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<SendMessageBatchResult, AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn send_message_batch(&self, input: &SendMessageBatchRequest) -> Result<SendMessageBatchResult, AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "SendMessageBatch");
-		SendMessageBatchRequestWriter::write_params(&mut params, "", self);
+		SendMessageBatchRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -2984,15 +2982,13 @@ impl AWSRequest<SendMessageBatchResult> for SendMessageBatchRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<ListDeadLetterSourceQueuesResult> for ListDeadLetterSourceQueuesRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<ListDeadLetterSourceQueuesResult, AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn list_dead_letter_source_queues(&self, input: &ListDeadLetterSourceQueuesRequest) -> Result<ListDeadLetterSourceQueuesResult, AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ListDeadLetterSourceQueues");
-		ListDeadLetterSourceQueuesRequestWriter::write_params(&mut params, "", self);
+		ListDeadLetterSourceQueuesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3004,15 +3000,13 @@ impl AWSRequest<ListDeadLetterSourceQueuesResult> for ListDeadLetterSourceQueues
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for ChangeMessageVisibilityRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn change_message_visibility(&self, input: &ChangeMessageVisibilityRequest) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ChangeMessageVisibility");
-		ChangeMessageVisibilityRequestWriter::write_params(&mut params, "", self);
+		ChangeMessageVisibilityRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3024,15 +3018,13 @@ impl AWSRequest<()> for ChangeMessageVisibilityRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for AddPermissionRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn add_permission(&self, input: &AddPermissionRequest) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "AddPermission");
-		AddPermissionRequestWriter::write_params(&mut params, "", self);
+		AddPermissionRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3044,15 +3036,13 @@ impl AWSRequest<()> for AddPermissionRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<ChangeMessageVisibilityBatchResult> for ChangeMessageVisibilityBatchRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<ChangeMessageVisibilityBatchResult, AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn change_message_visibility_batch(&self, input: &ChangeMessageVisibilityBatchRequest) -> Result<ChangeMessageVisibilityBatchResult, AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ChangeMessageVisibilityBatch");
-		ChangeMessageVisibilityBatchRequestWriter::write_params(&mut params, "", self);
+		ChangeMessageVisibilityBatchRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3064,15 +3054,13 @@ impl AWSRequest<ChangeMessageVisibilityBatchResult> for ChangeMessageVisibilityB
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<SendMessageResult> for SendMessageRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<SendMessageResult, AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn send_message(&self, input: &SendMessageRequest) -> Result<SendMessageResult, AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "SendMessage");
-		SendMessageRequestWriter::write_params(&mut params, "", self);
+		SendMessageRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3084,15 +3072,13 @@ impl AWSRequest<SendMessageResult> for SendMessageRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for DeleteQueueRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn delete_queue(&self, input: &DeleteQueueRequest) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "DeleteQueue");
-		DeleteQueueRequestWriter::write_params(&mut params, "", self);
+		DeleteQueueRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3104,15 +3090,13 @@ impl AWSRequest<()> for DeleteQueueRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for PurgeQueueRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn purge_queue(&self, input: &PurgeQueueRequest) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "PurgeQueue");
-		PurgeQueueRequestWriter::write_params(&mut params, "", self);
+		PurgeQueueRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3124,15 +3108,13 @@ impl AWSRequest<()> for PurgeQueueRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<ReceiveMessageResult> for ReceiveMessageRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<ReceiveMessageResult, AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn receive_message(&self, input: &ReceiveMessageRequest) -> Result<ReceiveMessageResult, AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ReceiveMessage");
-		ReceiveMessageRequestWriter::write_params(&mut params, "", self);
+		ReceiveMessageRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3144,15 +3126,13 @@ impl AWSRequest<ReceiveMessageResult> for ReceiveMessageRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for DeleteMessageRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn delete_message(&self, input: &DeleteMessageRequest) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "DeleteMessage");
-		DeleteMessageRequestWriter::write_params(&mut params, "", self);
+		DeleteMessageRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3164,15 +3144,13 @@ impl AWSRequest<()> for DeleteMessageRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<ListQueuesResult> for ListQueuesRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<ListQueuesResult, AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn list_queues(&self, input: &ListQueuesRequest) -> Result<ListQueuesResult, AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ListQueues");
-		ListQueuesRequestWriter::write_params(&mut params, "", self);
+		ListQueuesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3184,15 +3162,13 @@ impl AWSRequest<ListQueuesResult> for ListQueuesRequest {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for RemovePermissionRequest {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sqs", region, "/");
+	pub fn remove_permission(&self, input: &RemovePermissionRequest) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "RemovePermission");
-		RemovePermissionRequestWriter::write_params(&mut params, "", self);
+		RemovePermissionRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();

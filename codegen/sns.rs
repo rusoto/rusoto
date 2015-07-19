@@ -3031,14 +3031,22 @@ impl SubscribeInputWriter {
 		topicARNWriter::write_params(params, &(prefix.to_string() + "TopicArn"), &obj.topic_arn);
 	}
 }
-impl AWSRequest<ListPlatformApplicationsResponse> for ListPlatformApplicationsInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<ListPlatformApplicationsResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+pub struct SNSClient<'a> {
+	creds: &'a AWSCredentials,
+	region: &'a str
+}
+
+impl<'a> SNSClient<'a> { 
+	pub fn new(creds: &'a AWSCredentials, region: &'a str) -> SNSClient<'a> {
+		SNSClient { creds: creds, region: region }
+	}
+	pub fn list_platform_applications(&self, input: &ListPlatformApplicationsInput) -> Result<ListPlatformApplicationsResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ListPlatformApplications");
-		ListPlatformApplicationsInputWriter::write_params(&mut params, "", self);
+		ListPlatformApplicationsInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3050,15 +3058,13 @@ impl AWSRequest<ListPlatformApplicationsResponse> for ListPlatformApplicationsIn
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for SetPlatformApplicationAttributesInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn set_platform_application_attributes(&self, input: &SetPlatformApplicationAttributesInput) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "SetPlatformApplicationAttributes");
-		SetPlatformApplicationAttributesInputWriter::write_params(&mut params, "", self);
+		SetPlatformApplicationAttributesInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3070,15 +3076,13 @@ impl AWSRequest<()> for SetPlatformApplicationAttributesInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<ListSubscriptionsByTopicResponse> for ListSubscriptionsByTopicInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<ListSubscriptionsByTopicResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn list_subscriptions_by_topic(&self, input: &ListSubscriptionsByTopicInput) -> Result<ListSubscriptionsByTopicResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ListSubscriptionsByTopic");
-		ListSubscriptionsByTopicInputWriter::write_params(&mut params, "", self);
+		ListSubscriptionsByTopicInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3090,15 +3094,13 @@ impl AWSRequest<ListSubscriptionsByTopicResponse> for ListSubscriptionsByTopicIn
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<ListSubscriptionsResponse> for ListSubscriptionsInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<ListSubscriptionsResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn list_subscriptions(&self, input: &ListSubscriptionsInput) -> Result<ListSubscriptionsResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ListSubscriptions");
-		ListSubscriptionsInputWriter::write_params(&mut params, "", self);
+		ListSubscriptionsInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3110,15 +3112,13 @@ impl AWSRequest<ListSubscriptionsResponse> for ListSubscriptionsInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<ConfirmSubscriptionResponse> for ConfirmSubscriptionInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<ConfirmSubscriptionResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn confirm_subscription(&self, input: &ConfirmSubscriptionInput) -> Result<ConfirmSubscriptionResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ConfirmSubscription");
-		ConfirmSubscriptionInputWriter::write_params(&mut params, "", self);
+		ConfirmSubscriptionInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3130,15 +3130,13 @@ impl AWSRequest<ConfirmSubscriptionResponse> for ConfirmSubscriptionInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for SetTopicAttributesInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn set_topic_attributes(&self, input: &SetTopicAttributesInput) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "SetTopicAttributes");
-		SetTopicAttributesInputWriter::write_params(&mut params, "", self);
+		SetTopicAttributesInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3150,15 +3148,13 @@ impl AWSRequest<()> for SetTopicAttributesInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for SetEndpointAttributesInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn set_endpoint_attributes(&self, input: &SetEndpointAttributesInput) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "SetEndpointAttributes");
-		SetEndpointAttributesInputWriter::write_params(&mut params, "", self);
+		SetEndpointAttributesInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3170,15 +3166,13 @@ impl AWSRequest<()> for SetEndpointAttributesInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for AddPermissionInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "AddPermission");
-		AddPermissionInputWriter::write_params(&mut params, "", self);
+		AddPermissionInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3190,15 +3184,13 @@ impl AWSRequest<()> for AddPermissionInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for UnsubscribeInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "Unsubscribe");
-		UnsubscribeInputWriter::write_params(&mut params, "", self);
+		UnsubscribeInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3210,15 +3202,13 @@ impl AWSRequest<()> for UnsubscribeInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<GetSubscriptionAttributesResponse> for GetSubscriptionAttributesInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<GetSubscriptionAttributesResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn get_subscription_attributes(&self, input: &GetSubscriptionAttributesInput) -> Result<GetSubscriptionAttributesResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "GetSubscriptionAttributes");
-		GetSubscriptionAttributesInputWriter::write_params(&mut params, "", self);
+		GetSubscriptionAttributesInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3230,15 +3220,13 @@ impl AWSRequest<GetSubscriptionAttributesResponse> for GetSubscriptionAttributes
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<CreateEndpointResponse> for CreatePlatformEndpointInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<CreateEndpointResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn create_platform_endpoint(&self, input: &CreatePlatformEndpointInput) -> Result<CreateEndpointResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "CreatePlatformEndpoint");
-		CreatePlatformEndpointInputWriter::write_params(&mut params, "", self);
+		CreatePlatformEndpointInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3250,15 +3238,13 @@ impl AWSRequest<CreateEndpointResponse> for CreatePlatformEndpointInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for RemovePermissionInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn remove_permission(&self, input: &RemovePermissionInput) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "RemovePermission");
-		RemovePermissionInputWriter::write_params(&mut params, "", self);
+		RemovePermissionInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3270,15 +3256,13 @@ impl AWSRequest<()> for RemovePermissionInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<CreateTopicResponse> for CreateTopicInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<CreateTopicResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn create_topic(&self, input: &CreateTopicInput) -> Result<CreateTopicResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "CreateTopic");
-		CreateTopicInputWriter::write_params(&mut params, "", self);
+		CreateTopicInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3290,15 +3274,13 @@ impl AWSRequest<CreateTopicResponse> for CreateTopicInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for SetSubscriptionAttributesInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn set_subscription_attributes(&self, input: &SetSubscriptionAttributesInput) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "SetSubscriptionAttributes");
-		SetSubscriptionAttributesInputWriter::write_params(&mut params, "", self);
+		SetSubscriptionAttributesInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3310,15 +3292,13 @@ impl AWSRequest<()> for SetSubscriptionAttributesInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<CreatePlatformApplicationResponse> for CreatePlatformApplicationInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<CreatePlatformApplicationResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn create_platform_application(&self, input: &CreatePlatformApplicationInput) -> Result<CreatePlatformApplicationResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "CreatePlatformApplication");
-		CreatePlatformApplicationInputWriter::write_params(&mut params, "", self);
+		CreatePlatformApplicationInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3330,15 +3310,13 @@ impl AWSRequest<CreatePlatformApplicationResponse> for CreatePlatformApplication
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<GetPlatformApplicationAttributesResponse> for GetPlatformApplicationAttributesInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<GetPlatformApplicationAttributesResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn get_platform_application_attributes(&self, input: &GetPlatformApplicationAttributesInput) -> Result<GetPlatformApplicationAttributesResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "GetPlatformApplicationAttributes");
-		GetPlatformApplicationAttributesInputWriter::write_params(&mut params, "", self);
+		GetPlatformApplicationAttributesInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3350,15 +3328,13 @@ impl AWSRequest<GetPlatformApplicationAttributesResponse> for GetPlatformApplica
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<PublishResponse> for PublishInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<PublishResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn publish(&self, input: &PublishInput) -> Result<PublishResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "Publish");
-		PublishInputWriter::write_params(&mut params, "", self);
+		PublishInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3370,15 +3346,13 @@ impl AWSRequest<PublishResponse> for PublishInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<ListEndpointsByPlatformApplicationResponse> for ListEndpointsByPlatformApplicationInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<ListEndpointsByPlatformApplicationResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn list_endpoints_by_platform_application(&self, input: &ListEndpointsByPlatformApplicationInput) -> Result<ListEndpointsByPlatformApplicationResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ListEndpointsByPlatformApplication");
-		ListEndpointsByPlatformApplicationInputWriter::write_params(&mut params, "", self);
+		ListEndpointsByPlatformApplicationInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3390,15 +3364,13 @@ impl AWSRequest<ListEndpointsByPlatformApplicationResponse> for ListEndpointsByP
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<GetEndpointAttributesResponse> for GetEndpointAttributesInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<GetEndpointAttributesResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn get_endpoint_attributes(&self, input: &GetEndpointAttributesInput) -> Result<GetEndpointAttributesResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "GetEndpointAttributes");
-		GetEndpointAttributesInputWriter::write_params(&mut params, "", self);
+		GetEndpointAttributesInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3410,15 +3382,13 @@ impl AWSRequest<GetEndpointAttributesResponse> for GetEndpointAttributesInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for DeleteEndpointInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "DeleteEndpoint");
-		DeleteEndpointInputWriter::write_params(&mut params, "", self);
+		DeleteEndpointInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3430,15 +3400,13 @@ impl AWSRequest<()> for DeleteEndpointInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for DeletePlatformApplicationInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn delete_platform_application(&self, input: &DeletePlatformApplicationInput) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "DeletePlatformApplication");
-		DeletePlatformApplicationInputWriter::write_params(&mut params, "", self);
+		DeletePlatformApplicationInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3450,15 +3418,13 @@ impl AWSRequest<()> for DeletePlatformApplicationInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<GetTopicAttributesResponse> for GetTopicAttributesInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<GetTopicAttributesResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn get_topic_attributes(&self, input: &GetTopicAttributesInput) -> Result<GetTopicAttributesResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "GetTopicAttributes");
-		GetTopicAttributesInputWriter::write_params(&mut params, "", self);
+		GetTopicAttributesInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3470,15 +3436,13 @@ impl AWSRequest<GetTopicAttributesResponse> for GetTopicAttributesInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<SubscribeResponse> for SubscribeInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<SubscribeResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "Subscribe");
-		SubscribeInputWriter::write_params(&mut params, "", self);
+		SubscribeInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3490,15 +3454,13 @@ impl AWSRequest<SubscribeResponse> for SubscribeInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<()> for DeleteTopicInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "DeleteTopic");
-		DeleteTopicInputWriter::write_params(&mut params, "", self);
+		DeleteTopicInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();
@@ -3510,15 +3472,13 @@ impl AWSRequest<()> for DeleteTopicInput {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-}
-impl AWSRequest<ListTopicsResponse> for ListTopicsInput {
-	fn execute(&self, creds: &AWSCredentials, region: &str) -> Result<ListTopicsResponse, AWSError> {
-		let mut request = SignedRequest::new("POST", "sns", region, "/");
+	pub fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, AWSError> {
+		let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ListTopics");
-		ListTopicsInputWriter::write_params(&mut params, "", self);
+		ListTopicsInputWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let (status, output) = try!(request.sign_and_execute(creds));
+		let (status, output) = try!(request.sign_and_execute(&self.creds));
 		let mut reader = EventReader::new(output.as_bytes());
 		let mut stack = reader.events().peekable();
 		stack.next();

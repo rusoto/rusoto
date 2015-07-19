@@ -1,4 +1,4 @@
-//! SNS bindings for Rust
+//! Autoscaling bindings for Rust
 #![allow(unused_variables, unused_mut, non_camel_case_types, unused_imports)]
 use credentials::*;
 use xml::*;
@@ -9,6 +9,5 @@ use request::*;
 use xmlutil::*;
 use std::str::FromStr;
 
-// include the code generated from the SNS botocore templates
-include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/sns.rs"));
-
+// include the code generated from the autoscaling botocore templates
+include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/autoscaling.rs"));
