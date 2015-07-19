@@ -8,17 +8,17 @@ extern crate hyper;
 extern crate openssl;
 extern crate url;
 extern crate rustc_serialize as serialize;
-extern crate xmlutil;
 
 #[macro_use] pub mod params;
 #[macro_use] pub mod signature;
 pub mod credentials;
 pub mod error;
-pub mod autoscaling;
+//pub mod autoscaling;
+//pub mod cloudformation;
+//pub mod iam;
 pub mod sqs;
-pub mod sns;
-pub mod request;
-
+//pub mod sns;
+pub mod xmlutil;
 
 
 

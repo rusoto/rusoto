@@ -1,4 +1,4 @@
-//! Autoscaling bindings for Rust
+//! Cloudformation bindings for Rust
 #![allow(unused_variables, unused_mut, non_camel_case_types, unused_imports)]
 use credentials::*;
 use xml::*;
@@ -8,5 +8,5 @@ use error::*;
 use xmlutil::*;
 use std::str::FromStr;
 
-// include the code generated from the autoscaling botocore templates
-include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/autoscaling.rs"));
+// include the code generated from the cloudformation botocore templates
+include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/cloudformation.rs"));

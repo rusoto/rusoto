@@ -1,8 +1,5 @@
 extern crate regex;
 use std::env::*;
-//use std::fs::File;
-//use std::io::BufReader;
-//use std::io::BufRead;
 
 #[derive(Clone, Debug)]
 pub struct AWSCredentials {

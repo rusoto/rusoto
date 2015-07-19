@@ -269,9 +269,10 @@ def request_method(operation):
 	print '\t\t' + input_name + 'Writer::write_params(&mut params, \"\", &input);'
 
 	print '\t\trequest.set_params(params);'
-	print '\t\tlet (status, output) = try!(request.sign_and_execute(&self.creds));'
+	print '\t\tlet result = try!(request.sign_and_execute(&self.creds));'
+	print '\t\tlet status = result.status.to_u16();'
 #	print '\t\tprintln!("{}", output);'
-	print '\t\tlet mut reader = EventReader::new(output.as_bytes());'
+	print '\t\tlet mut reader = EventReader::new(result);'
 	print '\t\tlet mut stack = reader.events().peekable();'
 	print '\t\tstack.next();'
 	print '\t\tstack.next();'

@@ -11,6 +11,7 @@ use std::ascii::AsciiExt;
 use time::now_utc;
 use time::Tm;
 use hyper::header::Headers;
+use hyper::client::Response;
 use hyper::Client;
 use std::io::Read;
 use std::collections::btree_map::Entry;
@@ -78,7 +79,7 @@ impl SignedRequest {
 	}
 		
 
-	pub fn sign_and_execute(&mut self, creds: &AWSCredentials) -> Result<(u16, Box<String>), URIParseError> {	
+	pub fn sign_and_execute(&mut self, creds: &AWSCredentials) -> Result<Response, URIParseError> {	
 		
 		let date = now_utc();
 
@@ -154,12 +155,8 @@ impl SignedRequest {
 
 	    // send the damn request already
 	    let client = Client::new();	    
-	    let mut res = client.request(hyper_method, &final_uri).headers(hyper_headers).body(&payload).send().unwrap();
-	    let status:u16 = res.status.to_u16(); 
-	    let mut output = Box::new(String::new());                                                                                                                                                                 
-	    try!(res.read_to_string(&mut output));
-
-		return Ok((status, output));
+	    let result = client.request(hyper_method, &final_uri).headers(hyper_headers).body(&payload).send().unwrap();
+	    Ok(result)
 	}
 }
 

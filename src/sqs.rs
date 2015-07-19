@@ -5,7 +5,6 @@ use xml::*;
 use signature::*;
 use params::*;
 use error::*;
-use request::*;
 use xmlutil::*;
 use std::str::FromStr;
 
