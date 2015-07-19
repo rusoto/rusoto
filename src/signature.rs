@@ -1,29 +1,24 @@
 extern crate regex;
 use credentials::AWSCredentials;
-use params::Params;
-use std::collections::BTreeMap;
+use hyper::Client;
+use hyper::client::Response;
+use hyper::header::Headers;
+use hyper::method::Method;
+use openssl::crypto::hash::Type::SHA256;
 use openssl::crypto::hash::hash;
 use openssl::crypto::hmac::hmac;
-use openssl::crypto::hash::Type::SHA256;
-use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
+use params::Params;
 use serialize::hex::ToHex;
 use std::ascii::AsciiExt;
-use time::now_utc;
-use time::Tm;
-use hyper::header::Headers;
-use hyper::client::Response;
-use hyper::Client;
-use std::io::Read;
+use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
-use std::io::{self};
-use hyper::method::Method;
+use time::Tm;
+use time::now_utc;
+use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
 
-
-
-#[derive(Debug)]
-pub struct URIParseError;
-
+/// A data structure for all the elements of an HTTP request that are involved in
+/// the Amazon Signature Version 4 signing process
 #[derive(Debug)]
 pub struct SignedRequest {
 	method: String,
@@ -37,7 +32,8 @@ pub struct SignedRequest {
 
 impl SignedRequest {
 	
-	pub fn new(method: &str, service: &str, region: &str, path:&str) -> SignedRequest {
+	/// Default constructor
+	pub fn new(method: &str, service: &str, region: &str, path: &str) -> SignedRequest {
 		SignedRequest {
 			method: method.to_string(), 
 			service: service.to_string(), 
@@ -53,8 +49,9 @@ impl SignedRequest {
 		self.hostname = hostname;
 	}
 
-
-	pub fn add_header(&mut self, key:&str, value:&str) {
+	/// Add a value to the array of headers for the specified key.
+	/// Headers are kept sorted by key name for use at signing (BTreeMap)
+	pub fn add_header(&mut self, key: &str, value: &str) {
 		let key_lower = key.to_ascii_lowercase().to_string();
 		let value_vec = value.as_bytes().to_vec();
 		
@@ -70,34 +67,36 @@ impl SignedRequest {
 		}
 	}
 	
-	pub fn add_param<S>(&mut self, key:S, value:S)  where S: Into<String> {
+	pub fn add_param<S>(&mut self, key: S, value: S)  where S: Into<String> {
 		self.params.insert(key.into(), value.into());
 	}
 
-	pub fn set_params(&mut self, params:Params){
+	pub fn set_params(&mut self, params: Params){
 		self.params = params;
 	}
-		
 
-	pub fn sign_and_execute(&mut self, creds: &AWSCredentials) -> Result<Response, URIParseError> {	
+	/// Calculate the signature from the credentials provided and the request data
+	/// Add the calculated signature to the request headers and execute it
+	/// Return the hyper HTTP response
+	pub fn sign_and_execute(&mut self, creds: &AWSCredentials) -> Response {	
 		
 		let date = now_utc();
 
 		// set the required host/date headers
-		let hostname;
-		if self.hostname.is_some() {
-			hostname = self.hostname.take().unwrap();
-		} else {
-			hostname = build_hostname(&self.service, &self.region);
-		}
+		let hostname = match self.hostname {
+			Some(ref h) => h.to_string(),
+			None => build_hostname(&self.service, &self.region)
+		};
+
 		self.add_header("host", &hostname);
 		self.add_header("x-amz-date", &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
 		
-		let payload:String;
-		let canonical_query_string:String;
+		let payload: String;
+		let canonical_query_string: String;
 		let hyper_method;
 		
 		// get the parameters in the right place for the http method being used
+		// TODO: handle PUT/DELTE/HEAD methods
 		if self.method == "POST" {
 			payload = build_canonical_query_string(&self.params);
 			canonical_query_string = "".to_string();
@@ -153,16 +152,10 @@ impl SignedRequest {
 
 		//println!("{}\n{}\n{}", self.method, final_uri, payload);
 
-	    // send the damn request already
+	    // execute the damn request already
 	    let client = Client::new();	    
 	    let result = client.request(hyper_method, &final_uri).headers(hyper_headers).body(&payload).send().unwrap();
-	    Ok(result)
-	}
-}
-
-impl From<io::Error> for URIParseError {
-	fn from(_err: io::Error) -> URIParseError {
-		URIParseError
+	    result
 	}
 }
 
@@ -184,7 +177,7 @@ pub fn string_to_sign(date: Tm, hashed_canonical_request: &str, scope: &str) -> 
 		hashed_canonical_request)
 }
 
-fn signed_headers(headers:&BTreeMap<String, Vec<Vec<u8>>>) -> String {
+fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
 	let mut signed = String::new();
 
 	for (key,_) in headers.iter() {
@@ -200,7 +193,7 @@ fn signed_headers(headers:&BTreeMap<String, Vec<Vec<u8>>>) -> String {
     signed
 }
 
-fn canonical_headers(headers:&BTreeMap<String, Vec<Vec<u8>>>) -> String {
+fn canonical_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
 	let mut canonical = String::new();
 
 	for item in headers.iter() {
@@ -213,7 +206,7 @@ fn canonical_headers(headers:&BTreeMap<String, Vec<Vec<u8>>>) -> String {
 }
 
 fn canonical_values(values: &Vec<Vec<u8>>) -> String {
-	 let mut st = String::new();
+	let mut st = String::new();
     for v in values {
         let s = str::from_utf8(v).unwrap();
         if st.len() > 0 {
@@ -226,8 +219,6 @@ fn canonical_values(values: &Vec<Vec<u8>>) -> String {
         }
     }
     st
-
-
 }
 
 fn skipped_headers(header: &str) -> bool {
