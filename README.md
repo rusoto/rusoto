@@ -1,12 +1,16 @@
 # rust-aws
 AWS client libraries for Rust
 
+## Current state
+
+**Alpha**.  Rust code has been generated from JSON documentation of services from [botocore](https://github.com/boto/botocore).
+
 ## Installation / Setup
 1. Install Rust 1.1.0 - http://www.rust-lang.org/
 2. Check out code from github
 3. Set up environment variables for AWS credentials (export AWS_ACCESS_KEY_ID and AWS_SECRET_KEY)
 4. `cargo build`
-5. `cargo run`
+5. `cargo run` - This will create real AWS resources and you may be charged.
 
 #### Output from `cargo run` should resemble:
 
@@ -22,4 +26,20 @@ Queue https://sqs.us-east-1.amazonaws.com/428250473290/test_q_1436921723 deleted
 Everything worked.
 ```
 
-#### Example code in src/bin/main.rs
+#### Example code in [src/bin/main.rs](src/bin/main.rs)
+
+```rust
+let sqs = SQSHelper::new(&creds, "us-east-1");
+
+// list existing queues
+let response = try!(sqs.list_queues());
+for q in response.queue_urls {
+  println!("Existing queue: {}", q);
+}
+```
+
+#### Code generation
+
+```bash
+./botocore_parser path/to/some.json ClientClassName > some_module.rs
+```
