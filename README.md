@@ -3,7 +3,7 @@ AWS client libraries for Rust
 
 ## Current state
 
-*Alpha*.  Rust code has been generated from JSON documentation of services from [botocore](https://github.com/boto/botocore).
+**Alpha**.  Rust code has been generated from JSON documentation of services from [botocore](https://github.com/boto/botocore).
 
 ## Installation / Setup
 1. Install Rust 1.1.0 - http://www.rust-lang.org/
@@ -41,5 +41,5 @@ for q in response.queue_urls {
 #### Code generation
 
 ```bash
-./botocore_parser path/to/some.json ClientClassName > some_module.rs`
+./botocore_parser path/to/some.json ClientClassName > some_module.rs
 ```
