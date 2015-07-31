@@ -65,38 +65,47 @@ struct ProfileCredentialsError;
 // 3. IAM role (if running on an EC2 instance)
 impl DefaultAWSCredentialsProviderChain {
 
+    // fn get_credentials() -> Result<AWSCredentials, VarError> {
+    //     let usable_creds : AWSCredentials;
+    //     match DefaultAWSCredentialsProviderChain::creds_from_env() {
+    //         Ok(creds) => usable_creds = creds,
+    //         Err(why) => println!("Couldn't get environment credentials."),
+    //     }
+    //
+    //     return Ok(usable_creds);
+    // }
+
 	fn creds_from_env() -> Result<AWSCredentials, VarError> {
 		let env_key = try!(var("AWS_ACCESS_KEY_ID"));
 		let env_secret = try!(var("AWS_SECRET_KEY"));
 
-		Ok(AWSCredentials { key: env_key, secret: env_secret })
+		Ok(AWSCredentials { key: env_key, secret: env_secret });
 	}
 
-	fn creds_from_profile() -> Result<AWSCredentials, ProfileCredentialsError> {
-        let path = Path::new("sample-credentials");
-        let display = path.display();
-
-        let mut file = match File::open(&path) {
-            Err(why) => panic!("couldn't open {}: {}", display,
-                                                       Error::description(&why)),
-            Ok(file) => file,
-        };
-
-        let mut contents = String::new();
-        match file.read_to_string(&mut contents) {
-            Err(why) => panic!("couldn't read {}: {}", display,
-                                                       Error::description(&why)),
-            Ok(_) => {},
-        }
-
-        let profile_key = String::from("foo");
-        let secret_key = String::from("bar");
-
-        return  Ok(AWSCredentials{ key: profile_key, secret: secret_key });
-
-		// Err(ProfileCredentialsError)
-
-	}
+	// fn creds_from_profile() -> Result<AWSCredentials, ProfileCredentialsError> {
+    //     let path = Path::new("sample-credentials");
+    //     let display = path.display();
+    //
+    //     let mut file = match File::open(&path) {
+    //         Err(why) => panic!("couldn't open {}: {}", display,
+    //                                                    Error::description(&why)),
+    //         Ok(file) => file,
+    //     };
+    //
+    //     let mut contents = String::new();
+    //     match file.read_to_string(&mut contents) {
+    //         Err(why) => panic!("couldn't read {}: {}", display,
+    //                                                    Error::description(&why)),
+    //         Ok(_) => {},
+    //     }
+    //
+    //     let profile_key = String::from("foo");
+    //     let secret_key = String::from("bar");
+    //
+    //     return Ok(AWSCredentials{ key: profile_key, secret: secret_key });
+    //
+	// 	// Err(ProfileCredentialsError)
+	// }
 
     // IAM role
 }
