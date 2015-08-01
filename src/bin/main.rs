@@ -11,31 +11,27 @@ use time::*;
 
 fn main() {
 	if let Ok(creds) = creds_from_env() {
-		// match sqs_roundtrip_tests(creds) {
-		// 	Ok(_) => { println!("Everything worked."); },
-		// 	Err(err) => { println!("Got error: {:#?}", err); }
-		// }
 		let mah_key = creds.get_aws_access_key_id();
 		println!("creds: {}, {}", mah_key, mah_key);
+		match sqs_roundtrip_tests(&creds) {
+			Ok(_) => { println!("Everything worked."); },
+			Err(err) => { println!("Got error: {:#?}", err); }
+		}
 
 	} else {
 		println!("Couldn't find AWS environment vars: Set AWS credentials with environment variables AWS_ACCESS_KEY_ID and AWS_SECRET_KEY");
 	}
 }
-/*
-fn sns_roundtrip_tests(creds: AWSCredentials) -> Result<(), AWSError> {
-	let sns = SNSClient::new(creds, "us-east-1");
 
-	let response = try!(sns.list_topics());
-	println!("{:#?}", response);
-	Ok(())
-}
-*/
-fn sqs_roundtrip_tests(creds: AWSCredentials) -> Result<(), AWSError> {
+// fn sns_roundtrip_tests(creds: AWSCredentials) -> Result<(), AWSError> {
+// 	let sns = SQSClient::new(creds, "us-east-1");
+//
+// 	let response = try!(sns.list_topics());
+// 	println!("{:#?}", response);
+// 	Ok(())
+// }
 
-	// Matthew's debugging fun
-	return Ok(());
-
+fn sqs_roundtrip_tests(creds: &AWSCredentials) -> Result<(), AWSError> {
 	let sqs = SQSHelper::new(&creds, "us-east-1");
 
 	// list existing queues

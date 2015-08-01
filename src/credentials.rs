@@ -89,8 +89,7 @@ impl DefaultAWSCredentialsProviderChain {
         if file_return.get_aws_secret_key().len() > 0 && file_return.get_aws_access_key_id().len() > 0 {
             return Ok(file_return)
         }
-        panic!("ftp");
-        // Ok(usable_creds)
+        panic!("Couldn't find any credentials to use.");
     }
 
 	fn creds_from_env() -> Result<AWSCredentials, CredentialErr> {
