@@ -37,6 +37,7 @@ impl AWSCredentials {
 }
 
 pub trait AWSCredentialsProvider {
+    fn new() -> Self;
 	fn get_credentials(&self) -> &AWSCredentials;
 	fn refresh(&mut self);
 }
@@ -47,6 +48,10 @@ pub struct EnvironmentCredentialsProvider {
 }
 
 impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
+    fn new() -> EnvironmentCredentialsProvider {
+        return EnvironmentCredentialsProvider {credentials: AWSCredentials{ key: "a".to_string(), secret: "b".to_string() } };
+    }
+
 	fn refresh(&mut self) {
         let env_key = match var("AWS_ACCESS_KEY_ID") {
             Ok(val) => val,
@@ -78,6 +83,10 @@ pub struct FileCredentialsProvider {
 }
 
 impl AWSCredentialsProvider for FileCredentialsProvider {
+    fn new() -> FileCredentialsProvider {
+        return FileCredentialsProvider {credentials: AWSCredentials{ key: "a".to_string(), secret: "b".to_string() } };
+    }
+
 	fn refresh(&mut self) {
         let path = Path::new("sample-credentials");
         let display = path.display();
@@ -128,6 +137,18 @@ impl DefaultAWSCredentialsProviderChain {
         // fetch creds in order: env, file, IAM
         // pretend we got credentials here
         self.credentials = AWSCredentials{ key: "a2".to_string(), secret: "b2".to_string() };
+
+        let mut env_provider = EnvironmentCredentialsProvider::new();
+        env_provider.refresh();
+        let credentials = env_provider.get_credentials();
+        println!("creds from env: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
+        // if not blank, use it to populate self.credentials
+
+        if credentials.get_aws_access_key_id().len() <= 0 || credentials.get_aws_secret_key().len() <= 0 {
+            panic!("Couldn't find credentials in environment.");
+            // return Err(CredentialErr::NoEnvironmentVariables);
+        };
+        self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() }; //credentials.clone();
     }
 }
 
