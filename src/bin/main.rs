@@ -2,10 +2,10 @@
 extern crate rusoto;
 extern crate xml;
 extern crate time;
+extern crate regex;
 use rusoto::credentials::*;
 use rusoto::error::*;
 use rusoto::sqs::*;
-
 use time::*;
 
 fn main() {

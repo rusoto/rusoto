@@ -1,9 +1,10 @@
-extern crate regex;
 use std::env::*;
 use std::fs::File;
 use std::path::Path;
 use std::error::Error;
 use std::io::prelude::*;
+use std::io::BufReader;
+use std::ascii::AsciiExt;
 
 #[derive(Clone, Debug)]
 pub struct AWSCredentials {
@@ -64,11 +65,6 @@ impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
                 "".to_string() }
         };
 
-        // if env_key.len() <= 0 || env_secret.len() <= 0 {
-        //     panic!("Couldn't find credentials in environment.");
-        //     // return Err(CredentialErr::NoEnvironmentVariables);
-        // };
-
         self.credentials = AWSCredentials{key: env_key, secret: env_secret};
 	}
 
@@ -88,31 +84,57 @@ impl AWSCredentialsProvider for FileCredentialsProvider {
     }
 
 	fn refresh(&mut self) {
-        let path = Path::new("./src/sample-credentials");
-        let display = path.display();
+        let credentials = get_credentials_from_file("./src/sample-credentials".to_string());
 
-        let mut file = match File::open(&path) {
-            Err(why) => panic!("couldn't open {}: {}", display,
-                                                       Error::description(&why)),
-            Ok(file) => file,
-        };
-
-        let mut contents = String::new();
-        match file.read_to_string(&mut contents) {
-            Err(why) => panic!("couldn't read {}: {}", display,
-                                                       Error::description(&why)),
-            Ok(_) => {},
-        }
-
-        let profile_key = String::from("ACCESS_KEY");
-        let secret_key = String::from("SECRET_KEY");
-
-        self.credentials = AWSCredentials{ key: profile_key, secret: secret_key };
+        self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
     }
 
     fn get_credentials(&self) -> &AWSCredentials {
 		return &self.credentials;
 	}
+
+
+}
+
+// Finds and uses the first "aws_access_key_id" and "aws_secret_access_key" in the file.
+fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
+    let path = Path::new(&file_with_path);
+    let display = path.display();
+
+    let file = match File::open(&path) {
+        Err(why) => panic!("couldn't open {}: {}", display,
+                                                   Error::description(&why)),
+        Ok(file) => file,
+    };
+
+    let mut access_key = String::new();
+    let mut secret_key = String::new();
+    let file_lines = BufReader::new(&file);
+    for line in file_lines.lines() {
+        let unwrapped_line : String = line.unwrap();
+        let lower_case_line = unwrapped_line.to_ascii_lowercase().to_string();
+
+        if lower_case_line.contains("aws_access_key_id") {
+            if access_key.is_empty() {
+                let v: Vec<&str> = unwrapped_line.split("=").collect();
+                // TODO: check there's actually two items in the array
+                access_key = v[1].trim_matches(' ').to_string();
+                println!("access_key is {}", access_key);
+
+            }
+        } else if lower_case_line.contains("aws_secret_access_key") {
+            if secret_key.is_empty() {
+                let v: Vec<&str> = unwrapped_line.split("=").collect();
+                // TODO: check there's actually two items in the array
+                secret_key = v[1].trim_matches(' ').to_string();
+                println!("access_key is {}", secret_key);
+            }
+        }
+    }
+
+    println!("Found these entries: \n{}\n{}", access_key, secret_key);
+
+    return AWSCredentials{ key: access_key.to_string(), secret: secret_key.to_string() };
 }
 
 // class for IAM role
