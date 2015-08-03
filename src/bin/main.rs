@@ -10,17 +10,16 @@ use rusoto::sqs::*;
 use time::*;
 
 fn main() {
-	if let Ok(creds) = creds_from_env() {
-		let mah_key = creds.get_aws_access_key_id();
-		println!("creds: {}, {}", mah_key, mah_key);
-		match sqs_roundtrip_tests(&creds) {
-			Ok(_) => { println!("Everything worked."); },
-			Err(err) => { println!("Got error: {:#?}", err); }
-		}
+	let mut provider = DefaultAWSCredentialsProviderChain::new();
+	provider.refresh();
+	let creds =  provider.get_credentials();
+	println!("creds: {}, {}", creds.get_aws_access_key_id(), creds.get_aws_secret_key());
 
-	} else {
-		println!("Couldn't find AWS environment vars: Set AWS credentials with environment variables AWS_ACCESS_KEY_ID and AWS_SECRET_KEY");
+	match sqs_roundtrip_tests(&creds) {
+		Ok(_) => { println!("Everything worked."); },
+		Err(err) => { println!("Got error: {:#?}", err); }
 	}
+
 }
 
 // fn sns_roundtrip_tests(creds: AWSCredentials) -> Result<(), AWSError> {
@@ -32,6 +31,8 @@ fn main() {
 // }
 
 fn sqs_roundtrip_tests(creds: &AWSCredentials) -> Result<(), AWSError> {
+	// Matthew's debugging:
+	return Ok(());
 	let sqs = SQSHelper::new(&creds, "us-east-1");
 
 	// list existing queues
@@ -67,11 +68,4 @@ fn sqs_roundtrip_tests(creds: &AWSCredentials) -> Result<(), AWSError> {
 	println!("Queue {} deleted", queue_url);
 
 	Ok(())
-}
-
-fn creds_from_env() -> Result<AWSCredentials, VarError> {
-	let env_key = try!(var("AWS_ACCESS_KEY_ID"));
-	let env_secret = try!(var("AWS_SECRET_KEY"));
-
-	Ok(AWSCredentials::new(&env_key, &env_secret))
 }
