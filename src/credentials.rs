@@ -64,10 +64,10 @@ impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
                 "".to_string() }
         };
 
-        if env_key.len() <= 0 || env_secret.len() <= 0 {
-            panic!("Couldn't find credentials in environment.");
-            // return Err(CredentialErr::NoEnvironmentVariables);
-        };
+        // if env_key.len() <= 0 || env_secret.len() <= 0 {
+        //     panic!("Couldn't find credentials in environment.");
+        //     // return Err(CredentialErr::NoEnvironmentVariables);
+        // };
 
         self.credentials = AWSCredentials{key: env_key, secret: env_secret};
 	}
@@ -144,11 +144,24 @@ impl DefaultAWSCredentialsProviderChain {
         println!("creds from env: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
         // if not blank, use it to populate self.credentials
 
-        if credentials.get_aws_access_key_id().len() <= 0 || credentials.get_aws_secret_key().len() <= 0 {
-            panic!("Couldn't find credentials in environment.");
-            // return Err(CredentialErr::NoEnvironmentVariables);
-        };
-        self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() }; //credentials.clone();
+        // success first: key length > 0 for key and secret key
+        if credentials.get_aws_access_key_id().len() > 0 && credentials.get_aws_secret_key().len() > 0 {
+            self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
+            return;
+        } else {
+            // try the file provider
+            let mut file_provider = FileCredentialsProvider::new();
+            file_provider.refresh();
+            let credentials = file_provider.get_credentials();
+            println!("creds from file: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
+
+            if credentials.get_aws_access_key_id().len() > 0 && credentials.get_aws_secret_key().len() > 0 {
+                self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
+            } else {
+                // or try IAM role
+                panic!("Couldn't find credentials in file.");
+            }
+        }
     }
 }
 
