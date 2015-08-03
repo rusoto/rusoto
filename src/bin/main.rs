@@ -2,7 +2,6 @@
 extern crate rusoto;
 extern crate xml;
 extern crate time;
-use std::env::*;
 use rusoto::credentials::*;
 use rusoto::error::*;
 use rusoto::sqs::*;

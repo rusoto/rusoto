@@ -88,7 +88,7 @@ impl AWSCredentialsProvider for FileCredentialsProvider {
     }
 
 	fn refresh(&mut self) {
-        let path = Path::new("sample-credentials");
+        let path = Path::new("./src/sample-credentials");
         let display = path.display();
 
         let mut file = match File::open(&path) {
@@ -124,9 +124,10 @@ pub struct DefaultAWSCredentialsProviderChain {
     credentials: AWSCredentials
 }
 
+// Chain the providers:
 impl DefaultAWSCredentialsProviderChain {
     pub fn new() -> DefaultAWSCredentialsProviderChain {
-        return DefaultAWSCredentialsProviderChain {credentials: AWSCredentials{ key: "a".to_string(), secret: "b".to_string() } };
+        return DefaultAWSCredentialsProviderChain {credentials: AWSCredentials{ key: "".to_string(), secret: "".to_string() } };
     }
 
     pub fn get_credentials(&self) -> &AWSCredentials {
@@ -135,16 +136,14 @@ impl DefaultAWSCredentialsProviderChain {
 
     pub fn refresh(&mut self) {
         // fetch creds in order: env, file, IAM
-        // pretend we got credentials here
-        self.credentials = AWSCredentials{ key: "a2".to_string(), secret: "b2".to_string() };
+        self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string() };
 
         let mut env_provider = EnvironmentCredentialsProvider::new();
         env_provider.refresh();
         let credentials = env_provider.get_credentials();
         println!("creds from env: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
-        // if not blank, use it to populate self.credentials
 
-        // success first: key length > 0 for key and secret key
+        // success first: return if we found something
         if credentials.get_aws_access_key_id().len() > 0 && credentials.get_aws_secret_key().len() > 0 {
             self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
             return;
@@ -159,18 +158,8 @@ impl DefaultAWSCredentialsProviderChain {
                 self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
             } else {
                 // or try IAM role
-                panic!("Couldn't find credentials in file.");
+                panic!("Couldn't find credentials in env or file.  IAM roles not yet supported.");
             }
         }
     }
 }
-
-
-
-// From http://blogs.aws.amazon.com/security/post/Tx3D6U6WSFGOK2H/A-New-and-Standardized-Way-to-Manage-Credentials-in-the-AWS-SDKs
-// 1. environment variables
-// 2. central credentials file (named profile is supplied, otherwise default)
-// 3. IAM role (if running on an EC2 instance)
-// impl DefaultAWSCredentialsProviderChain {
-//
-// }
