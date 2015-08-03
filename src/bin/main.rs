@@ -12,7 +12,7 @@ fn main() {
 	let mut provider = DefaultAWSCredentialsProviderChain::new();
 	provider.refresh();
 	let creds = provider.get_credentials();
-	println!("creds: {}, {}", creds.get_aws_access_key_id(), creds.get_aws_secret_key());
+	println!("creds in main.rs: {}, {}", creds.get_aws_access_key_id(), creds.get_aws_secret_key());
 
 	match sqs_roundtrip_tests(&creds) {
 		Ok(_) => { println!("Everything worked."); },

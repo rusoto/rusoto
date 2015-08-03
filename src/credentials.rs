@@ -1,4 +1,5 @@
 use std::env::*;
+use std::env;
 use std::fs::File;
 use std::path::Path;
 use std::error::Error;
@@ -84,20 +85,30 @@ impl AWSCredentialsProvider for FileCredentialsProvider {
     }
 
 	fn refresh(&mut self) {
-        let credentials = get_credentials_from_file("./src/sample-credentials".to_string());
-
+        // Default credentials file location:
+        // ~/.aws/credentials (Linux/Mac)
+        // %USERPROFILE%\.aws\credentials  (Windows)
+        let mut profile_location = String::new();
+        match env::home_dir() {
+            Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
+            None => {
+                println!("Couldn't get your home dir.");
+                self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string() };
+                return;
+            }
+        }
+        let credentials = get_credentials_from_file(profile_location);
         self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
     }
 
     fn get_credentials(&self) -> &AWSCredentials {
 		return &self.credentials;
 	}
-
-
 }
 
 // Finds and uses the first "aws_access_key_id" and "aws_secret_access_key" in the file.
 fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
+    println!("Looking for credentials file at {}", file_with_path);
     let path = Path::new(&file_with_path);
     let display = path.display();
 
@@ -169,7 +180,7 @@ impl DefaultAWSCredentialsProviderChain {
         let mut env_provider = EnvironmentCredentialsProvider::new();
         env_provider.refresh();
         let credentials = env_provider.get_credentials();
-        println!("creds from env: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
+        println!("using creds from env: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
 
         if creds_have_values(credentials) {
             self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
@@ -179,7 +190,7 @@ impl DefaultAWSCredentialsProviderChain {
             let mut file_provider = FileCredentialsProvider::new();
             file_provider.refresh();
             let credentials = file_provider.get_credentials();
-            println!("creds from file: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
+            println!("using creds from file: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
 
             if creds_have_values(credentials) {
                 self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
