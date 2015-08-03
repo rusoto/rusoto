@@ -38,6 +38,7 @@ impl AWSCredentials {
     }
 }
 
+// TODO: refactor get_credentials to return std::result
 pub trait AWSCredentialsProvider {
     fn new() -> Self;
 	fn get_credentials(&self) -> &AWSCredentials;
@@ -57,13 +58,11 @@ impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
 	fn refresh(&mut self) {
         let env_key = match var("AWS_ACCESS_KEY_ID") {
             Ok(val) => val,
-            Err(_) => {println!("couldn't find access key");
-                "".to_string() }
+            Err(_) => "".to_string()
         };
-        let env_secret = match var("AWS_SECRET_KEY") {
+        let env_secret = match var("AWS_SECRET_ACCESS_KEY") {
             Ok(val) => val,
-            Err(_) => {println!("couldn't find secret key");
-                "".to_string() }
+            Err(_) => "".to_string()
         };
 
         self.credentials = AWSCredentials{key: env_key, secret: env_secret};
@@ -155,6 +154,7 @@ fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
 }
 
 // class for IAM role
+// TODO: implement
 pub struct IAMRoleCredentialsProvider {
     credentials: AWSCredentials
 }
@@ -180,9 +180,9 @@ impl DefaultAWSCredentialsProviderChain {
         let mut env_provider = EnvironmentCredentialsProvider::new();
         env_provider.refresh();
         let credentials = env_provider.get_credentials();
-        println!("using creds from env: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
 
         if creds_have_values(credentials) {
+            println!("using creds from env: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
             self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
             return;
         } else {
