@@ -11,14 +11,13 @@ use time::*;
 fn main() {
 	let mut provider = DefaultAWSCredentialsProviderChain::new();
 	provider.refresh();
-	let creds =  provider.get_credentials();
+	let creds = provider.get_credentials();
 	println!("creds: {}, {}", creds.get_aws_access_key_id(), creds.get_aws_secret_key());
 
 	match sqs_roundtrip_tests(&creds) {
 		Ok(_) => { println!("Everything worked."); },
 		Err(err) => { println!("Got error: {:#?}", err); }
 	}
-
 }
 
 // fn sns_roundtrip_tests(creds: AWSCredentials) -> Result<(), AWSError> {

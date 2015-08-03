@@ -50,7 +50,7 @@ pub struct EnvironmentCredentialsProvider {
 
 impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
     fn new() -> EnvironmentCredentialsProvider {
-        return EnvironmentCredentialsProvider {credentials: AWSCredentials{ key: "a".to_string(), secret: "b".to_string() } };
+        return EnvironmentCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(), secret: "".to_string() } };
     }
 
 	fn refresh(&mut self) {
@@ -80,7 +80,7 @@ pub struct FileCredentialsProvider {
 
 impl AWSCredentialsProvider for FileCredentialsProvider {
     fn new() -> FileCredentialsProvider {
-        return FileCredentialsProvider {credentials: AWSCredentials{ key: "a".to_string(), secret: "b".to_string() } };
+        return FileCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(), secret: "".to_string() } };
     }
 
 	fn refresh(&mut self) {
@@ -112,27 +112,33 @@ fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
     let file_lines = BufReader::new(&file);
     for line in file_lines.lines() {
         let unwrapped_line : String = line.unwrap();
+        // Skip line if it starts with a comment ('#')
+        if unwrapped_line.starts_with('#') {
+            continue;
+        }
+
         let lower_case_line = unwrapped_line.to_ascii_lowercase().to_string();
 
         if lower_case_line.contains("aws_access_key_id") {
             if access_key.is_empty() {
                 let v: Vec<&str> = unwrapped_line.split("=").collect();
-                // TODO: check there's actually two items in the array
-                access_key = v[1].trim_matches(' ').to_string();
-                println!("access_key is {}", access_key);
-
+                if v.len() == 0 {
+                    access_key = "".to_string();
+                } else {
+                    access_key = v[1].trim_matches(' ').to_string();
+                }
             }
         } else if lower_case_line.contains("aws_secret_access_key") {
             if secret_key.is_empty() {
                 let v: Vec<&str> = unwrapped_line.split("=").collect();
-                // TODO: check there's actually two items in the array
-                secret_key = v[1].trim_matches(' ').to_string();
-                println!("access_key is {}", secret_key);
+                if v.len() == 0 {
+                    secret_key = "".to_string();
+                } else {
+                    secret_key = v[1].trim_matches(' ').to_string();
+                }
             }
         }
     }
-
-    println!("Found these entries: \n{}\n{}", access_key, secret_key);
 
     return AWSCredentials{ key: access_key.to_string(), secret: secret_key.to_string() };
 }
@@ -165,8 +171,7 @@ impl DefaultAWSCredentialsProviderChain {
         let credentials = env_provider.get_credentials();
         println!("creds from env: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
 
-        // success first: return if we found something
-        if credentials.get_aws_access_key_id().len() > 0 && credentials.get_aws_secret_key().len() > 0 {
+        if creds_have_values(credentials) {
             self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
             return;
         } else {
@@ -176,7 +181,7 @@ impl DefaultAWSCredentialsProviderChain {
             let credentials = file_provider.get_credentials();
             println!("creds from file: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
 
-            if credentials.get_aws_access_key_id().len() > 0 && credentials.get_aws_secret_key().len() > 0 {
+            if creds_have_values(credentials) {
                 self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
             } else {
                 // or try IAM role
@@ -184,4 +189,11 @@ impl DefaultAWSCredentialsProviderChain {
             }
         }
     }
+}
+
+fn creds_have_values(creds: &AWSCredentials) -> bool {
+    if creds.get_aws_access_key_id().len() > 0 && creds.get_aws_secret_key().len() > 0 {
+        return true;
+    }
+    return false;
 }
