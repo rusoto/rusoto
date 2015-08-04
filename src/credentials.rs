@@ -228,10 +228,30 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 
         println!("Response for iam role request: {}", body);
 
-        let json_object = Json::from_str(&body);
+        let json_object : Json;
+        match Json::from_str(&body) {
+            Err(why) => {
+                println!("Error: {}", why);
+                return;
+            }
+            Ok(val) => json_object = val
+        };
 
-        let decoded = decode(&body).unwrap();
-        println!("decoded.code = {}", decoded.code);
+        match json_object.find("AccessKeyId") {
+            None => {
+                println!("Error finding AccessKeyId");
+                return;
+            }
+            Some(val) => println!("json is {}", val)
+        };
+
+        match json_object.find("SecretAccessKey") {
+            None => {
+                println!("Error finding AccessKeyId");
+                return;
+            }
+            Some(val) => println!("json is {}", val)
+        };
 
 
         // use results to make another call:
