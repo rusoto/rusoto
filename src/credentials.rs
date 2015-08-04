@@ -11,6 +11,8 @@ use hyper::Client;
 use hyper::header::Connection;
 use hyper::client::response::Response;
 
+use rustc_serialize::json::*;
+
 #[derive(Clone, Debug)]
 pub struct AWSCredentials {
     key: String,
@@ -184,18 +186,51 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
         // sample result:
         // fooprofile
 
+        // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
+        let address = "http://localhost:8080/latest/meta-data/iam/security-credentials";
+        println!("Checking {} for credentials.", address);
         let client = Client::new();
         let mut response;
-        match client.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/")
+        match client.get(address)
+            .header(Connection::close()).send() {
+                Err(why) => {
+                    println!("boo, request failed: {}", why);
+                    return;
+                }
+                Ok(received_response) => response = received_response
+            };
+        println!("request made");
+
+        let mut body = String::new();
+        match response.read_to_string(&mut body) {
+            Err(why) => println!("Had issues with reading response: {}", why),
+            Ok(_) => (),
+        };
+
+        println!("Response: {}", body);
+
+        // add body to location:
+        let iam_location = "http://localhost:8080/latest/meta-data/iam/security-credentials/testrole";
+
+        body = String::new();
+        match client.get(iam_location)
             .header(Connection::close()).send() {
                 Err(_) => return,
                 Ok(received_response) => response = received_response
             };
 
-        let mut body = String::new();
-        response.read_to_string(&mut body).unwrap();
+        match response.read_to_string(&mut body) {
+            Err(why) => println!("Had issues with reading iam role response: {}", why),
+            Ok(_) => (),
+        };
 
-        println!("Response: {}", body);
+        println!("Response for iam role request: {}", body);
+
+        let json_object = json::from_str(body);
+
+        let decoded = json::decode(body).unwrap();
+        println!("decoded.code = {}", decoded.code);
+
 
         // use results to make another call:
         // curl http://169.254.169.254/latest/meta-data/iam/security-credentials/fooprofile
@@ -210,17 +245,8 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
         //   "Token" : "AAAAA",
         //   "Expiration" : "2015-08-04T06:32:37Z"
         // }
-        let mut profile_location = String::new();
-        match env::home_dir() {
-            Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
-            None => {
-                println!("Couldn't get your home dir.");
-                self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string() };
-                return;
-            }
-        }
-        let credentials = get_credentials_from_file(profile_location);
-        self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
+
+        self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string() };
     }
 
     fn get_credentials(&self) -> &AWSCredentials {

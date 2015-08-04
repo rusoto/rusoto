@@ -3,6 +3,7 @@ extern crate rusoto;
 extern crate xml;
 extern crate time;
 extern crate regex;
+extern crate rustc_serialize;
 use rusoto::credentials::*;
 use rusoto::error::*;
 use rusoto::sqs::*;
