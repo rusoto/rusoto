@@ -8,7 +8,7 @@ AWS client libraries for Rust
 ## Installation / Setup
 1. Install Rust 1.1.0 - http://www.rust-lang.org/
 2. Check out code from github
-3. Set up environment variables for AWS credentials (export AWS_ACCESS_KEY_ID and AWS_SECRET_KEY)
+3. Set up AWS credentials: environment variables (export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY) or ~/.aws/credentials.
 4. `cargo build`
 5. `cargo run` - This will create real AWS resources and you may be charged.
 
