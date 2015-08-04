@@ -189,11 +189,11 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
         // fooprofile
 
         // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
-        let address = "http://localhost:8080/latest/meta-data/iam/security-credentials";
+        let mut address : String = "http://localhost:8080/latest/meta-data/iam/security-credentials".to_string();
         println!("Checking {} for credentials.", address);
         let client = Client::new();
         let mut response;
-        match client.get(address)
+        match client.get(&address)
             .header(Connection::close()).send() {
                 Err(why) => {
                     println!("boo, request failed: {}", why);
@@ -209,51 +209,6 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             Ok(_) => (),
         };
 
-        println!("Response: {}", body);
-
-        // add body to location:
-        let iam_location = "http://localhost:8080/latest/meta-data/iam/security-credentials/testrole";
-
-        body = String::new();
-        match client.get(iam_location)
-            .header(Connection::close()).send() {
-                Err(_) => return,
-                Ok(received_response) => response = received_response
-            };
-
-        match response.read_to_string(&mut body) {
-            Err(why) => println!("Had issues with reading iam role response: {}", why),
-            Ok(_) => (),
-        };
-
-        println!("Response for iam role request: {}", body);
-
-        let json_object : Json;
-        match Json::from_str(&body) {
-            Err(why) => {
-                println!("Error: {}", why);
-                return;
-            }
-            Ok(val) => json_object = val
-        };
-
-        match json_object.find("AccessKeyId") {
-            None => {
-                println!("Error finding AccessKeyId");
-                return;
-            }
-            Some(val) => println!("json is {}", val)
-        };
-
-        match json_object.find("SecretAccessKey") {
-            None => {
-                println!("Error finding AccessKeyId");
-                return;
-            }
-            Some(val) => println!("json is {}", val)
-        };
-
-
         // use results to make another call:
         // curl http://169.254.169.254/latest/meta-data/iam/security-credentials/fooprofile
 
@@ -268,7 +223,55 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
         //   "Expiration" : "2015-08-04T06:32:37Z"
         // }
 
-        self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string() };
+        // add body to location:
+        address.push_str("/");
+        address.push_str(&body);
+        println!("Making request to {}", address);
+        body = String::new();
+        match client.get(&address)
+            .header(Connection::close()).send() {
+                Err(_) => return,
+                Ok(received_response) => response = received_response
+            };
+
+        match response.read_to_string(&mut body) {
+            Err(why) => println!("Had issues with reading iam role response: {}", why),
+            Ok(_) => (),
+        };
+
+        // println!("Response for iam role request: {}", body);
+
+        let json_object : Json;
+        match Json::from_str(&body) {
+            Err(why) => {
+                println!("Error: {}", why);
+                return;
+            }
+            Ok(val) => json_object = val
+        };
+
+        let mut access_key = String::new();
+        match json_object.find("AccessKeyId") {
+            None => {
+                println!("Error finding AccessKeyId");
+                return;
+            }
+            Some(val) => access_key = val.to_string()
+        };
+
+        let mut secret_key = String::new();
+        match json_object.find("SecretAccessKey") {
+            None => {
+                println!("Error finding AccessKeyId");
+                return;
+            }
+            Some(val) => secret_key = val.to_string()
+        };
+
+
+
+
+        self.credentials = AWSCredentials{ key: access_key.to_string(), secret: secret_key.to_string() };
     }
 
     fn get_credentials(&self) -> &AWSCredentials {
