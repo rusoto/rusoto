@@ -1,11 +1,15 @@
 use std::env::*;
 use std::env;
+use std::fs;
 use std::fs::File;
 use std::path::Path;
 use std::error::Error;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::ascii::AsciiExt;
+use hyper::Client;
+use hyper::header::Connection;
+use hyper::client::response::Response;
 
 #[derive(Clone, Debug)]
 pub struct AWSCredentials {
@@ -111,10 +115,21 @@ fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
     let path = Path::new(&file_with_path);
     let display = path.display();
 
+    let mut found_file = false;
+
+    match fs::metadata(&path) {
+        Err(why) => println!("Couldn't get metadata for file: {}", why),
+        Ok(metadata) => found_file = metadata.is_file()
+    };
+
+    // bail early.  Should be converted to a return type.
+    if !found_file {
+        return AWSCredentials{ key: "".to_string(), secret: "".to_string() };
+    }
+
     let file = match File::open(&path) {
-        Err(why) => panic!("couldn't open {}: {}", display,
-                                                   Error::description(&why)),
-        Ok(file) => file,
+        Err(why) => panic!("couldn't open {}: {}", display, Error::description(&why)),
+        Ok(opened_file) => opened_file,
     };
 
     let mut access_key = String::new();
@@ -154,9 +169,63 @@ fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
 }
 
 // class for IAM role
-// TODO: implement
 pub struct IAMRoleCredentialsProvider {
     credentials: AWSCredentials
+}
+
+impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
+    fn new() -> IAMRoleCredentialsProvider {
+        return IAMRoleCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(), secret: "".to_string() } };
+    }
+
+	fn refresh(&mut self) {
+        // call instance metadata to get iam role
+        // curl http://169.254.169.254/latest/meta-data/iam/security-credentials/
+        // sample result:
+        // fooprofile
+
+        let client = Client::new();
+        let mut response;
+        match client.get("http://169.254.169.254/latest/meta-data/iam/security-credentials/")
+            .header(Connection::close()).send() {
+                Err(_) => return,
+                Ok(received_response) => response = received_response
+            };
+
+        let mut body = String::new();
+        response.read_to_string(&mut body).unwrap();
+
+        println!("Response: {}", body);
+
+        // use results to make another call:
+        // curl http://169.254.169.254/latest/meta-data/iam/security-credentials/fooprofile
+
+        // sample results:
+        // {
+        //   "Code" : "Success",
+        //   "LastUpdated" : "2015-08-04T00:09:23Z",
+        //   "Type" : "AWS-HMAC",
+        //   "AccessKeyId" : "AAAAAA",
+        //   "SecretAccessKey" : "AAAAA",
+        //   "Token" : "AAAAA",
+        //   "Expiration" : "2015-08-04T06:32:37Z"
+        // }
+        let mut profile_location = String::new();
+        match env::home_dir() {
+            Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
+            None => {
+                println!("Couldn't get your home dir.");
+                self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string() };
+                return;
+            }
+        }
+        let credentials = get_credentials_from_file(profile_location);
+        self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
+    }
+
+    fn get_credentials(&self) -> &AWSCredentials {
+		return &self.credentials;
+	}
 }
 
 pub struct DefaultAWSCredentialsProviderChain {
@@ -173,6 +242,7 @@ impl DefaultAWSCredentialsProviderChain {
         return &self.credentials;
     }
 
+    // This is getting a bit out of control with nested if/else: should try doing something else for flow control.
     pub fn refresh(&mut self) {
         // fetch creds in order: env, file, IAM
         self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string() };
@@ -195,8 +265,17 @@ impl DefaultAWSCredentialsProviderChain {
             if creds_have_values(credentials) {
                 self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
             } else {
-                // or try IAM role
-                panic!("Couldn't find credentials in env or file.  IAM roles not yet supported.");
+                let mut iam_provider = IAMRoleCredentialsProvider::new();
+                iam_provider.refresh();
+                let credentials = iam_provider.get_credentials();
+                if creds_have_values(credentials) {
+                    println!("using creds from IAM: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
+                    self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(), secret: credentials.get_aws_secret_key().to_string() };
+                    return;
+                } else {
+                    // We're out of options
+                    panic!("Couldn't find AWS credentials in environment, default credential file location or IAM role.");
+                }
             }
         }
     }
