@@ -53,7 +53,6 @@ pub trait AWSCredentialsProvider {
 	fn refresh(&mut self);
 }
 
-// class for environment
 pub struct EnvironmentCredentialsProvider {
     credentials: AWSCredentials
 }
@@ -81,7 +80,6 @@ impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
 	}
 }
 
-// class for file based
 pub struct FileCredentialsProvider {
     credentials: AWSCredentials
 }
@@ -267,9 +265,6 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             }
             Some(val) => secret_key = val.to_string()
         };
-
-
-
 
         self.credentials = AWSCredentials{ key: access_key.to_string(), secret: secret_key.to_string() };
     }
