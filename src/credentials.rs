@@ -11,7 +11,9 @@ use hyper::Client;
 use hyper::header::Connection;
 use hyper::client::response::Response;
 
-use rustc_serialize::json::*;
+extern crate rustc_serialize;
+use self::rustc_serialize::json::*;
+
 
 #[derive(Clone, Debug)]
 pub struct AWSCredentials {
@@ -226,9 +228,9 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 
         println!("Response for iam role request: {}", body);
 
-        let json_object = json::from_str(body);
+        let json_object = Json::from_str(&body);
 
-        let decoded = json::decode(body).unwrap();
+        let decoded = decode(&body).unwrap();
         println!("decoded.code = {}", decoded.code);
 
 
