@@ -45,12 +45,22 @@ impl AWSCredentials {
     pub fn get_expires_at(&self) -> &DateTime<UTC> {
         &self.expires_at
     }
+
+    fn credentials_are_expired(&self) -> bool {
+        println!("Seeing if creds of {:?} are expired compared to {:?}", self.expires_at, UTC::now() + Duration::seconds(20));
+        // This is a rough hack to hopefully avoid someone requesting creds then sitting on them
+        // before issuing the request:
+        if self.expires_at < UTC::now() + Duration::seconds(20) {
+            return true;
+        }
+        return false;
+    }
 }
 
 // TODO: refactor get_credentials to return std::result
 pub trait AWSCredentialsProvider {
     fn new() -> Self;
-	fn get_credentials(&self) -> &AWSCredentials;
+	fn get_credentials(&mut self) -> &AWSCredentials;
 	fn refresh(&mut self);
 }
 
@@ -77,7 +87,7 @@ impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
         self.credentials = AWSCredentials{key: env_key, secret: env_secret, expires_at: UTC::now() + Duration::seconds(600)};
 	}
 
-	fn get_credentials(&self) -> &AWSCredentials {
+	fn get_credentials(&mut self) -> &AWSCredentials {
 		return &self.credentials;
 	}
 }
@@ -111,7 +121,7 @@ impl AWSCredentialsProvider for FileCredentialsProvider {
             secret: credentials.get_aws_secret_key().to_string(), expires_at: UTC::now() + Duration::seconds(600) };
     }
 
-    fn get_credentials(&self) -> &AWSCredentials {
+    fn get_credentials(&mut self) -> &AWSCredentials {
 		return &self.credentials;
 	}
 }
@@ -253,7 +263,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
                 println!("Error finding AccessKeyId");
                 return;
             }
-            Some(val) => access_key = val.to_string()
+            Some(val) => access_key = val.to_string().replace("\"", "")
         };
 
         let mut secret_key = String::new();
@@ -262,7 +272,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
                 println!("Error finding SecretAccessKey");
                 return;
             }
-            Some(val) => secret_key = val.to_string()
+            Some(val) => secret_key = val.to_string().replace("\"", "")
         };
 
         let mut expiration = String::new();
@@ -271,16 +281,25 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
                 println!("Error finding Expiration");
                 return;
             }
-            Some(val) => expiration = val.to_string()
+            Some(val) => expiration = val.to_string().replace("\"", "")
         };
-        // strptime!  From "Expiration"
-        // let mut expiration_time = strptime(&expiration, )
+
+        let mut expiration_time;
+        match expiration.parse::<DateTime<UTC>>() {
+            Err(why) => panic!("Kabloey on parse: {}", why),
+            Ok(val) => expiration_time = val
+        };
 
         self.credentials = AWSCredentials{ key: access_key.to_string(),
-            secret: secret_key.to_string(), expires_at: UTC::now() + Duration::seconds(600) };
+            secret: secret_key.to_string(), expires_at: expiration_time };
     }
 
-    fn get_credentials(&self) -> &AWSCredentials {
+    fn get_credentials(&mut self) -> &AWSCredentials {
+        let expired = &self.credentials.credentials_are_expired();
+        if *expired {
+            println!("Creds are expired, refreshing.");
+            &self.refresh();
+        }
 		return &self.credentials;
 	}
 }
@@ -296,7 +315,7 @@ impl DefaultAWSCredentialsProviderChain {
             secret: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
     }
 
-    pub fn get_credentials(&self) -> &AWSCredentials {
+    pub fn get_credentials(&mut self) -> &AWSCredentials {
         return &self.credentials;
     }
 
