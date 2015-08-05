@@ -294,11 +294,16 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             secret: secret_key.to_string(), expires_at: expiration_time };
     }
 
+    // This seems a bit convoluted: try to reused expired instead of making a new var.
     fn get_credentials(&mut self) -> &AWSCredentials {
         let expired = &self.credentials.credentials_are_expired();
         if *expired {
             println!("Creds are expired, refreshing.");
             &self.refresh();
+            let new_expired = &self.credentials.credentials_are_expired();
+            if *new_expired {
+                panic!("Credentials were expired and couldn't fetch fresh ones.");
+            }
         }
 		return &self.credentials;
 	}
