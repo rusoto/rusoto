@@ -1,7 +1,8 @@
 [package]
 name = "rusoto"
 version = "0.1.0"
-authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>"]
+authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>",
+"Matthew Mayer <matthew@dualspark.com>"]
 
 [dependencies]
 xml-rs = "*"
