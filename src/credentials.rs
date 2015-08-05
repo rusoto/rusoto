@@ -9,7 +9,6 @@ use std::io::BufReader;
 use std::ascii::AsciiExt;
 use hyper::Client;
 use hyper::header::Connection;
-// use hyper::client::response::Response;
 
 extern crate rustc_serialize;
 use self::rustc_serialize::json::*;
@@ -163,7 +162,6 @@ fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
     let file_lines = BufReader::new(&file);
     for line in file_lines.lines() {
         let unwrapped_line : String = line.unwrap();
-        // Skip line if it starts with a comment ('#')
         if unwrapped_line.starts_with('#') {
             continue;
         }
@@ -195,7 +193,6 @@ fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
          token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) };
 }
 
-// class for IAM role
 pub struct IAMRoleCredentialsProvider {
     credentials: AWSCredentials
 }
