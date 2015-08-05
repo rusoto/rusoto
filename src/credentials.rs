@@ -9,7 +9,7 @@ use std::io::BufReader;
 use std::ascii::AsciiExt;
 use hyper::Client;
 use hyper::header::Connection;
-use hyper::client::response::Response;
+// use hyper::client::response::Response;
 
 extern crate rustc_serialize;
 use self::rustc_serialize::json::*;
@@ -22,14 +22,16 @@ use self::chrono::*;
 pub struct AWSCredentials {
     key: String,
     secret: String,
+    token: String,
     expires_at: DateTime<UTC>
 }
 
 impl AWSCredentials {
-    pub fn new(key:&str, secret:&str, expires_at:DateTime<UTC>) -> AWSCredentials {
+    pub fn new(key:&str, secret:&str, token:&str, expires_at:DateTime<UTC>) -> AWSCredentials {
         AWSCredentials {
             key: key.to_string(),
             secret: secret.to_string(),
+            token: token.to_string(),
             expires_at: expires_at,
         }
     }
@@ -44,6 +46,10 @@ impl AWSCredentials {
 
     pub fn get_expires_at(&self) -> &DateTime<UTC> {
         &self.expires_at
+    }
+
+    pub fn get_token(&self) -> &str {
+        &self.token
     }
 
     fn credentials_are_expired(&self) -> bool {
@@ -71,7 +77,7 @@ pub struct EnvironmentCredentialsProvider {
 impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
     fn new() -> EnvironmentCredentialsProvider {
         return EnvironmentCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
+            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
     }
 
 	fn refresh(&mut self) {
@@ -84,7 +90,8 @@ impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
             Err(_) => "".to_string()
         };
 
-        self.credentials = AWSCredentials{key: env_key, secret: env_secret, expires_at: UTC::now() + Duration::seconds(600)};
+        self.credentials = AWSCredentials{key: env_key, secret: env_secret,
+             token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600)};
 	}
 
 	fn get_credentials(&mut self) -> &AWSCredentials {
@@ -99,7 +106,7 @@ pub struct FileCredentialsProvider {
 impl AWSCredentialsProvider for FileCredentialsProvider {
     fn new() -> FileCredentialsProvider {
         return FileCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
+            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
     }
 
 	fn refresh(&mut self) {
@@ -112,13 +119,14 @@ impl AWSCredentialsProvider for FileCredentialsProvider {
             None => {
                 println!("Couldn't get your home dir.");
                 self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string(),
-                    expires_at: UTC::now() + Duration::seconds(600) };
+                     token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) };
                 return;
             }
         }
         let credentials = get_credentials_from_file(profile_location);
         self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(),
-            secret: credentials.get_aws_secret_key().to_string(), expires_at: UTC::now() + Duration::seconds(600) };
+            secret: credentials.get_aws_secret_key().to_string(), token: "".to_string(),
+            expires_at: UTC::now() + Duration::seconds(600) };
     }
 
     fn get_credentials(&mut self) -> &AWSCredentials {
@@ -142,7 +150,7 @@ fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
     // bail early.  Should be converted to a return type.
     if !found_file {
         return AWSCredentials{ key: "".to_string(), secret: "".to_string(),
-            expires_at: UTC::now() + Duration::seconds(600) };
+             token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) };
     }
 
     let file = match File::open(&path) {
@@ -184,7 +192,7 @@ fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
     }
 
     return AWSCredentials{ key: access_key.to_string(), secret: secret_key.to_string(),
-        expires_at: UTC::now() + Duration::seconds(600) };
+         token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) };
 }
 
 // class for IAM role
@@ -195,13 +203,13 @@ pub struct IAMRoleCredentialsProvider {
 impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
     fn new() -> IAMRoleCredentialsProvider {
         return IAMRoleCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-        secret: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
+        secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
     }
 
 	fn refresh(&mut self) {
         // call instance metadata to get iam role
         // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
-        let mut address : String = "http://localhost:8080/latest/meta-data/iam/security-credentials".to_string();
+        let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
         let client = Client::new();
         let mut response;
         match client.get(&address)
@@ -290,8 +298,17 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             Ok(val) => expiration_time = val
         };
 
+        let mut token_from_response = String::new();
+        match json_object.find("Token") {
+            None => {
+                println!("Error finding Token");
+                return;
+            }
+            Some(val) => token_from_response = val.to_string().replace("\"", "")
+        };
+
         self.credentials = AWSCredentials{ key: access_key.to_string(),
-            secret: secret_key.to_string(), expires_at: expiration_time };
+            secret: secret_key.to_string(),  token: token_from_response.to_string(), expires_at: expiration_time };
     }
 
     // This seems a bit convoluted: try to reused expired instead of making a new var.
@@ -317,7 +334,7 @@ pub struct DefaultAWSCredentialsProviderChain {
 impl DefaultAWSCredentialsProviderChain {
     pub fn new() -> DefaultAWSCredentialsProviderChain {
         return DefaultAWSCredentialsProviderChain {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
+            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
     }
 
     pub fn get_credentials(&mut self) -> &AWSCredentials {
@@ -327,7 +344,8 @@ impl DefaultAWSCredentialsProviderChain {
     // This is getting a bit out of control with nested if/else: should try doing something else for flow control.
     pub fn refresh(&mut self) {
         // fetch creds in order: env, file, IAM
-        self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) };
+        self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string(),
+            token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) };
 
         let mut env_provider = EnvironmentCredentialsProvider::new();
         env_provider.refresh();
@@ -336,7 +354,8 @@ impl DefaultAWSCredentialsProviderChain {
         if creds_have_values(credentials) {
             println!("using creds from env: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
             self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(),
-                secret: credentials.get_aws_secret_key().to_string(), expires_at: UTC::now() + Duration::seconds(600) };
+                secret: credentials.get_aws_secret_key().to_string(), token: "".to_string(),
+                expires_at: UTC::now() + Duration::seconds(600) };
             return;
         } else {
             // try the file provider
@@ -347,15 +366,18 @@ impl DefaultAWSCredentialsProviderChain {
 
             if creds_have_values(credentials) {
                 self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(),
-                    secret: credentials.get_aws_secret_key().to_string(), expires_at: UTC::now() + Duration::seconds(600) };
+                    secret: credentials.get_aws_secret_key().to_string(), token: "".to_string(),
+                    expires_at: UTC::now() + Duration::seconds(600) };
             } else {
                 let mut iam_provider = IAMRoleCredentialsProvider::new();
                 iam_provider.refresh();
                 let credentials = iam_provider.get_credentials();
                 if creds_have_values(credentials) {
-                    println!("using creds from IAM: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
+                    println!("using creds from IAM: {}, {}, {}", credentials.get_aws_access_key_id(),
+                        credentials.get_aws_secret_key(), credentials.get_token());
                     self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(),
-                        secret: credentials.get_aws_secret_key().to_string(), expires_at: UTC::now() + Duration::seconds(600) };
+                        secret: credentials.get_aws_secret_key().to_string(), token: credentials.get_token().to_string(),
+                        expires_at: UTC::now() + Duration::seconds(600) };
                     return;
                 } else {
                     // We're out of options
