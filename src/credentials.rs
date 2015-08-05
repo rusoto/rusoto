@@ -112,7 +112,7 @@ impl AWSCredentialsProvider for FileCredentialsProvider {
         // Default credentials file location:
         // ~/.aws/credentials (Linux/Mac)
         // %USERPROFILE%\.aws\credentials  (Windows)
-        let mut profile_location = String::new();
+        let mut profile_location;
         match env::home_dir() {
             Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
             None => {
@@ -246,7 +246,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             Ok(val) => json_object = val
         };
 
-        let mut access_key = String::new();
+        let mut access_key;
         match json_object.find("AccessKeyId") {
             None => {
                 println!("Error finding AccessKeyId");
@@ -255,7 +255,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             Some(val) => access_key = val.to_string().replace("\"", "")
         };
 
-        let mut secret_key = String::new();
+        let mut secret_key;
         match json_object.find("SecretAccessKey") {
             None => {
                 println!("Error finding SecretAccessKey");
@@ -264,7 +264,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             Some(val) => secret_key = val.to_string().replace("\"", "")
         };
 
-        let mut expiration = String::new();
+        let mut expiration;
         match json_object.find("Expiration") {
             None => {
                 println!("Error finding Expiration");
@@ -279,7 +279,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             Ok(val) => expiration_time = val
         };
 
-        let mut token_from_response = String::new();
+        let mut token_from_response;
         match json_object.find("Token") {
             None => {
                 println!("Error finding Token");
