@@ -207,7 +207,6 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
     }
 
 	fn refresh(&mut self) {
-        // call instance metadata to get iam role
         // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
         let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
         let client = Client::new();
@@ -226,21 +225,6 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             Err(why) => println!("Had issues with reading response: {}", why),
             Ok(_) => (),
         };
-
-        // use results to make another call:
-        // curl http://169.254.169.254/latest/meta-data/iam/security-credentials/fooprofile
-
-        // sample results:
-        // {
-        //   "Code" : "Success",
-        //   "LastUpdated" : "2015-08-04T00:09:23Z",
-        //   "Type" : "AWS-HMAC",
-        //   "AccessKeyId" : "AAAAAA",
-        //   "SecretAccessKey" : "AAAAA",
-        //   "Token" : "AAAAA",
-        //   "Expiration" : "2015-08-04T06:32:37Z"
-        // }
-        //  let format = "%Y-%m-%d %T.%f";
 
         address.push_str("/");
         address.push_str(&body);
