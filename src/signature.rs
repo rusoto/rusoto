@@ -31,15 +31,15 @@ pub struct SignedRequest {
 }
 
 impl SignedRequest {
-	
+
 	/// Default constructor
 	pub fn new(method: &str, service: &str, region: &str, path: &str) -> SignedRequest {
 		SignedRequest {
-			method: method.to_string(), 
-			service: service.to_string(), 
-			region: region.to_string(), 
-			path: path.to_string(), 
-			headers: BTreeMap::new(), 
+			method: method.to_string(),
+			service: service.to_string(),
+			region: region.to_string(),
+			path: path.to_string(),
+			headers: BTreeMap::new(),
 			params: Params::new(),
 			hostname: None
 		 }
@@ -54,7 +54,7 @@ impl SignedRequest {
 	pub fn add_header(&mut self, key: &str, value: &str) {
 		let key_lower = key.to_ascii_lowercase().to_string();
 		let value_vec = value.as_bytes().to_vec();
-		
+
 		match self.headers.entry(key_lower) {
 			Entry::Vacant(entry) => {
 				let mut values = Vec::new();
@@ -66,7 +66,7 @@ impl SignedRequest {
 			}
 		}
 	}
-	
+
 	pub fn add_param<S>(&mut self, key: S, value: S)  where S: Into<String> {
 		self.params.insert(key.into(), value.into());
 	}
@@ -78,8 +78,8 @@ impl SignedRequest {
 	/// Calculate the signature from the credentials provided and the request data
 	/// Add the calculated signature to the request headers and execute it
 	/// Return the hyper HTTP response
-	pub fn sign_and_execute(&mut self, creds: &AWSCredentials) -> Response {	
-		
+	pub fn sign_and_execute(&mut self, creds: &AWSCredentials) -> Response {
+
 		let date = now_utc();
 
 		// set the required host/date headers
@@ -90,18 +90,21 @@ impl SignedRequest {
 
 		self.add_header("host", &hostname);
 		self.add_header("x-amz-date", &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
-		
+		if !creds.get_token().to_string().is_empty() {
+			self.add_header("X-Amz-Security-Token", creds.get_token());
+		}
+
 		let payload: String;
 		let canonical_query_string: String;
 		let hyper_method;
-		
+
 		// get the parameters in the right place for the http method being used
 		// TODO: handle PUT/DELTE/HEAD methods
 		if self.method == "POST" {
 			payload = build_canonical_query_string(&self.params);
 			canonical_query_string = "".to_string();
 			hyper_method = Method::Post;
-			
+
 			self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
 			self.add_header("content-length", &format!("{}", payload.len()));
 		} else {
@@ -109,20 +112,20 @@ impl SignedRequest {
 			canonical_query_string =  build_canonical_query_string(&self.params);
 			hyper_method = Method::Get;
 		}
-	
+
 		self.add_header("x-amz-content-sha256", &to_hexdigest(&payload));
-	
+
 		// build the canonical request
 		let signed_headers = signed_headers(&self.headers);
 		let canonical_uri = canonical_uri(&self.path);
 		let canonical_headers = canonical_headers(&self.headers);
-		let canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}", 
-				&self.method, 
+		let canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+				&self.method,
 				canonical_uri,
 				canonical_query_string,
 				canonical_headers,
 				signed_headers,
-				to_hexdigest(&payload));	
+				to_hexdigest(&payload));
 
 		// use the hashed canonical request to build the string to sign
 		let hashed_canonical_request = to_hexdigest(&canonical_request);
@@ -132,18 +135,18 @@ impl SignedRequest {
 		// construct the signing key and sign the string with it
 		let signing_key = signing_key(&creds.get_aws_secret_key(), date, &self.region, &self.service);
 		let signature = signature(&string_to_sign, signing_key);
-		
-		// build the actual auth header 
+
+		// build the actual auth header
 		let auth_header = format!("AWS4-HMAC-SHA256 Credential={}/{}, SignedHeaders={}, Signature={}",
-	               &creds.get_aws_access_key_id(), scope, signed_headers, signature);		
+	               &creds.get_aws_access_key_id(), scope, signed_headers, signature);
 		self.add_header("authorization", &auth_header);
-		
+
 		// translate the headers map to a format Hyper likes
 		let mut hyper_headers = Headers::new();
 		for h in self.headers.iter() {
 			hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
 		}
-		
+
 		// determine the final URI to use based on http method
 		let mut final_uri = format!("https://{}{}", hostname, canonical_uri);
 		if self.method == "GET" {
@@ -153,7 +156,7 @@ impl SignedRequest {
 		//println!("{}\n{}\n{}", self.method, final_uri, payload);
 
 	    // execute the damn request already
-	    let client = Client::new();	    
+	    let client = Client::new();
 	    let result = client.request(hyper_method, &final_uri).headers(hyper_headers).body(&payload).send().unwrap();
 	    result
 	}
@@ -246,7 +249,7 @@ fn build_canonical_query_string(params: &Params) -> String {
 		output.push_str("=");
 		byte_serialize(item.1, &mut output);
 	}
-	
+
 	output
 }
 
@@ -267,7 +270,5 @@ fn build_hostname(service: &str, region: &str) -> String {
 	match service {
 		"iam" => format!("{}.amazonaws.com", service),
 		_ => format!("{}.{}.amazonaws.com", service, region)
-	}	
+	}
 }
-
-    

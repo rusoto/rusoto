@@ -1,16 +1,31 @@
 # rust-aws
 AWS client libraries for Rust
 
-## Current state
+### Current state
 
 **Alpha**.  Rust code has been generated from JSON documentation of services from [botocore](https://github.com/boto/botocore).
 
-## Installation / Setup
+### Installation / Setup
 1. Install Rust 1.1.0 - http://www.rust-lang.org/
 2. Check out code from github
-3. Set up AWS credentials: environment variables (export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY) or ~/.aws/credentials.
+3. Set up AWS credentials: environment variables (export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY), ~/.aws/credentials, or use an IAM instance profile.
 4. `cargo build`
 5. `cargo run` - This will create real AWS resources and you may be charged.
+
+### Credentials
+
+Rusoto will search for credentials in this order:
+
+1. Environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
+2. AWS Credentials file: `~/.aws/credentials`.  It will use the first `aws_access_key_id` and `aws_secret_access_key` it finds.  Profiles are not yet supported.
+3. IAM instance profile.  Rusoto will query the metadata service for an instance profile/role and fetch the access key, secret access key and token to supply those for requests.
+
+If Rusoto exhausts all three options it will panic.
+
+#### Credential refreshing
+
+Only IAM instance profile credentials are refreshed.  Upon calling `get_credentials()` it will see if they are expired or not.  If expired, it attempts to get new credentials from the metadata service.  If that fails it will panic.
+
 
 #### Output from `cargo run` should resemble:
 
@@ -42,4 +57,12 @@ for q in response.queue_urls {
 
 ```bash
 ./botocore_parser path/to/some.json ClientClassName > some_module.rs
+```
+
+#### Local testing of IAM credentials
+
+Edit the `address` location in [src/credentials.rs](src/credentials.rs).  For local testing, I use [moe](https://github.com/matthewkmayer/moe) and set the string to this:
+
+```rust
+let mut address : String = "http://localhost:8080/latest/meta-data/iam/security-credentials".to_string();
 ```

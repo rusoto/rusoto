@@ -3,6 +3,7 @@ extern crate rusoto;
 extern crate xml;
 extern crate time;
 extern crate regex;
+extern crate rustc_serialize;
 use rusoto::credentials::*;
 use rusoto::error::*;
 use rusoto::sqs::*;
@@ -10,9 +11,10 @@ use time::*;
 
 fn main() {
 	let mut provider = DefaultAWSCredentialsProviderChain::new();
-	provider.refresh();
 	let creds = provider.get_credentials();
-	println!("creds in main.rs: {}, {}", creds.get_aws_access_key_id(), creds.get_aws_secret_key());
+
+	println!("Creds in main: {}, {}, {}.", creds.get_aws_secret_key(), creds.get_aws_secret_key(),
+		creds.get_token());
 
 	match sqs_roundtrip_tests(&creds) {
 		Ok(_) => { println!("Everything worked."); },
@@ -29,6 +31,7 @@ fn main() {
 // }
 
 fn sqs_roundtrip_tests(creds: &AWSCredentials) -> Result<(), AWSError> {
+	return Ok(());
 	let sqs = SQSHelper::new(&creds, "us-east-1");
 
 	// list existing queues
