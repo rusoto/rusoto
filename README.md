@@ -24,7 +24,9 @@ If Rusoto exhausts all three options it will panic.
 
 #### Credential refreshing
 
-Only IAM instance profile credentials are refreshed.  Upon calling `get_credentials()` it will see if they are expired or not.  If expired, it attempts to get new credentials from the metadata service.  If that fails it will panic.
+Environment variable and credential file credentials are refreshed on calling `get_credentials()` and it's been five minutes since acquiring credentials.
+
+IAM instance profile credentials are refreshed as needed.  Upon calling `get_credentials()` it will see if they are expired or not.  If expired, it attempts to get new credentials from the metadata service.  If that fails it will panic.  IAM credentials expiration time comes from the IAM metadata response.
 
 
 #### Output from `cargo run` should resemble:
@@ -59,7 +61,7 @@ for q in response.queue_urls {
 ./botocore_parser path/to/some.json ClientClassName > some_module.rs
 ```
 
-#### Local testing of IAM credentials
+#### Local integration testing of IAM credentials
 
 Edit the `address` location in [src/credentials.rs](src/credentials.rs).  For local testing, I use [moe](https://github.com/matthewkmayer/moe) and set the string to this:
 
