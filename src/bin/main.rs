@@ -31,7 +31,6 @@ fn main() {
 // }
 
 fn sqs_roundtrip_tests(creds: &AWSCredentials) -> Result<(), AWSError> {
-	return Ok(());
 	let sqs = SQSHelper::new(&creds, "us-east-1");
 
 	// list existing queues
