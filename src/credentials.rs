@@ -62,11 +62,9 @@ impl AWSCredentials {
     }
 }
 
-// TODO: refactor get_credentials to return std::result
 pub trait AWSCredentialsProvider {
     fn new() -> Self;
-	fn get_credentials(&mut self) -> &AWSCredentials;
-	fn refresh(&mut self);
+	fn get_credentials(&mut self) -> Result<&AWSCredentials, &str>;
 }
 
 pub struct EnvironmentCredentialsProvider {
@@ -75,26 +73,26 @@ pub struct EnvironmentCredentialsProvider {
 
 impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
     fn new() -> EnvironmentCredentialsProvider {
+        // expired by default
         return EnvironmentCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
+            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
     }
 
-	fn refresh(&mut self) {
-        let env_key = match var("AWS_ACCESS_KEY_ID") {
-            Ok(val) => val,
-            Err(_) => "".to_string()
-        };
-        let env_secret = match var("AWS_SECRET_ACCESS_KEY") {
-            Ok(val) => val,
-            Err(_) => "".to_string()
-        };
+	fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
+        if self.credentials.credentials_are_expired() {
+            let env_key = match var("AWS_ACCESS_KEY_ID") {
+                Ok(val) => val,
+                Err(_) => return Err("No AWS_ACCESS_KEY_ID in environment")
+            };
+            let env_secret = match var("AWS_SECRET_ACCESS_KEY") {
+                Ok(val) => val,
+                Err(_) => return Err("No AWS_SECRET_ACCESS_KEY in environment")
+            };
+            self.credentials = AWSCredentials{key: env_key, secret: env_secret,
+                 token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600)};
+        }
 
-        self.credentials = AWSCredentials{key: env_key, secret: env_secret,
-             token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600)};
-	}
-
-	fn get_credentials(&mut self) -> &AWSCredentials {
-		return &self.credentials;
+		Ok(&self.credentials)
 	}
 }
 
@@ -105,35 +103,31 @@ pub struct FileCredentialsProvider {
 impl AWSCredentialsProvider for FileCredentialsProvider {
     fn new() -> FileCredentialsProvider {
         return FileCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
+            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
     }
 
-	fn refresh(&mut self) {
-        // Default credentials file location:
-        // ~/.aws/credentials (Linux/Mac)
-        // %USERPROFILE%\.aws\credentials  (Windows)
-        let mut profile_location;
-        match env::home_dir() {
-            Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
-            None => {
-                println!("Couldn't get your home dir.");
-                self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string(),
-                     token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) };
-                return;
+    fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
+        if self.credentials.credentials_are_expired() {
+            // Default credentials file location:
+            // ~/.aws/credentials (Linux/Mac)
+            // %USERPROFILE%\.aws\credentials  (Windows)
+            let mut profile_location;
+            match env::home_dir() {
+                Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
+                None => return Err("Couldn't get your home dir.")
             }
+            // this needs to be converted to Result:
+            let credentials = get_credentials_from_file(profile_location);
+            self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(),
+                secret: credentials.get_aws_secret_key().to_string(), token: "".to_string(),
+                expires_at: UTC::now() + Duration::seconds(600) };
         }
-        let credentials = get_credentials_from_file(profile_location);
-        self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(),
-            secret: credentials.get_aws_secret_key().to_string(), token: "".to_string(),
-            expires_at: UTC::now() + Duration::seconds(600) };
-    }
-
-    fn get_credentials(&mut self) -> &AWSCredentials {
-		return &self.credentials;
+		Ok(&self.credentials)
 	}
 }
 
 // Finds and uses the first "aws_access_key_id" and "aws_secret_access_key" in the file.
+// TODO: refactor to use Result
 fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
     println!("Looking for credentials file at {}", file_with_path);
     let path = Path::new(&file_with_path);
@@ -200,110 +194,82 @@ pub struct IAMRoleCredentialsProvider {
 impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
     fn new() -> IAMRoleCredentialsProvider {
         return IAMRoleCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-        secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
+        secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
     }
 
-	fn refresh(&mut self) {
-        // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
-        let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
-        let client = Client::new();
-        let mut response;
-        match client.get(&address)
-            .header(Connection::close()).send() {
-                Err(why) => {
-                    println!("boo, request failed: {}", why);
-                    return;
-                }
-                Ok(received_response) => response = received_response
+    fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
+        if self.credentials.credentials_are_expired() {
+            // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
+            let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
+            let client = Client::new();
+            let mut response;
+            match client.get(&address)
+                .header(Connection::close()).send() {
+                    Err(_) => return Err("Couldn't connect to metadata service"), // add Why?
+                    Ok(received_response) => response = received_response
+                };
+
+            let mut body = String::new();
+            match response.read_to_string(&mut body) {
+                Err(why) => return Err("Didn't get a parsable response body from metadata service"),
+                Ok(_) => (),
             };
 
-        let mut body = String::new();
-        match response.read_to_string(&mut body) {
-            Err(why) => println!("Had issues with reading response: {}", why),
-            Ok(_) => (),
-        };
+            address.push_str("/");
+            address.push_str(&body);
+            body = String::new();
+            match client.get(&address)
+                .header(Connection::close()).send() {
+                    Err(_) => return Err("Didn't get a parseable response body from instance role details"),
+                    Ok(received_response) => response = received_response
+                };
 
-        address.push_str("/");
-        address.push_str(&body);
-        body = String::new();
-        match client.get(&address)
-            .header(Connection::close()).send() {
-                Err(_) => return,
-                Ok(received_response) => response = received_response
+            match response.read_to_string(&mut body) {
+                Err(_) => return Err("Had issues with reading iam role response: {}"),
+                Ok(_) => (),
             };
 
-        match response.read_to_string(&mut body) {
-            Err(why) => println!("Had issues with reading iam role response: {}", why),
-            Ok(_) => (),
-        };
+            let json_object : Json;
+            match Json::from_str(&body) {
+                Err(why) => return Err("Couldn't parse metadata response body."),
+                Ok(val) => json_object = val
+            };
 
-        let json_object : Json;
-        match Json::from_str(&body) {
-            Err(why) => {
-                println!("Error: {}", why);
-                return;
-            }
-            Ok(val) => json_object = val
-        };
+            let mut access_key;
+            match json_object.find("AccessKeyId") {
+                None => return Err("Couldn't find AccessKeyId in response."),
+                Some(val) => access_key = val.to_string().replace("\"", "")
+            };
 
-        let mut access_key;
-        match json_object.find("AccessKeyId") {
-            None => {
-                println!("Error finding AccessKeyId");
-                return;
-            }
-            Some(val) => access_key = val.to_string().replace("\"", "")
-        };
+            let mut secret_key;
+            match json_object.find("SecretAccessKey") {
+                None => return Err("Couldn't find SecretAccessKey in response."),
+                Some(val) => secret_key = val.to_string().replace("\"", "")
+            };
 
-        let mut secret_key;
-        match json_object.find("SecretAccessKey") {
-            None => {
-                println!("Error finding SecretAccessKey");
-                return;
-            }
-            Some(val) => secret_key = val.to_string().replace("\"", "")
-        };
+            let mut expiration;
+            match json_object.find("Expiration") {
+                None => return Err("Couldn't find Expiration in response."),
+                Some(val) => expiration = val.to_string().replace("\"", "")
+            };
 
-        let mut expiration;
-        match json_object.find("Expiration") {
-            None => {
-                println!("Error finding Expiration");
-                return;
-            }
-            Some(val) => expiration = val.to_string().replace("\"", "")
-        };
+            let mut expiration_time;
+            match expiration.parse::<DateTime<UTC>>() {
+                Err(why) => panic!("Kabloey on parse: {}", why),
+                Ok(val) => expiration_time = val
+            };
 
-        let mut expiration_time;
-        match expiration.parse::<DateTime<UTC>>() {
-            Err(why) => panic!("Kabloey on parse: {}", why),
-            Ok(val) => expiration_time = val
-        };
+            let mut token_from_response;
+            match json_object.find("Token") {
+                None => return Err("Couldn't find Token in response."),
+                Some(val) => token_from_response = val.to_string().replace("\"", "")
+            };
 
-        let mut token_from_response;
-        match json_object.find("Token") {
-            None => {
-                println!("Error finding Token");
-                return;
-            }
-            Some(val) => token_from_response = val.to_string().replace("\"", "")
-        };
-
-        self.credentials = AWSCredentials{ key: access_key.to_string(),
-            secret: secret_key.to_string(),  token: token_from_response.to_string(), expires_at: expiration_time };
-    }
-
-    // This seems a bit convoluted: try to reused expired instead of making a new var.
-    fn get_credentials(&mut self) -> &AWSCredentials {
-        let expired = &self.credentials.credentials_are_expired();
-        if *expired {
-            println!("Creds are expired, refreshing.");
-            &self.refresh();
-            let new_expired = &self.credentials.credentials_are_expired();
-            if *new_expired {
-                panic!("Credentials were expired and couldn't fetch fresh ones.");
-            }
+            self.credentials = AWSCredentials{ key: access_key.to_string(),
+                secret: secret_key.to_string(),  token: token_from_response.to_string(), expires_at: expiration_time };
         }
-		return &self.credentials;
+
+		Ok(&self.credentials)
 	}
 }
 
@@ -315,57 +281,49 @@ pub struct DefaultAWSCredentialsProviderChain {
 impl DefaultAWSCredentialsProviderChain {
     pub fn new() -> DefaultAWSCredentialsProviderChain {
         return DefaultAWSCredentialsProviderChain {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) } };
+            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
     }
 
     pub fn get_credentials(&mut self) -> &AWSCredentials {
-        return &self.credentials;
-    }
-
-    // This is getting a bit out of control with nested if/else: should try doing something else for flow control.
-    pub fn refresh(&mut self) {
-        // fetch creds in order: env, file, IAM
-        self.credentials = AWSCredentials{ key: "".to_string(), secret: "".to_string(),
-            token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) };
-
-        let mut env_provider = EnvironmentCredentialsProvider::new();
-        env_provider.refresh();
-        let credentials = env_provider.get_credentials();
-
-        if creds_have_values(credentials) {
-            println!("using creds from env: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
-            self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(),
-                secret: credentials.get_aws_secret_key().to_string(), token: "".to_string(),
-                expires_at: UTC::now() + Duration::seconds(600) };
-            return;
-        } else {
-            // try the file provider
-            let mut file_provider = FileCredentialsProvider::new();
-            file_provider.refresh();
-            let credentials = file_provider.get_credentials();
-            println!("using creds from file: {}, {}", credentials.get_aws_access_key_id(), credentials.get_aws_secret_key());
-
-            if creds_have_values(credentials) {
-                self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(),
-                    secret: credentials.get_aws_secret_key().to_string(), token: "".to_string(),
-                    expires_at: UTC::now() + Duration::seconds(600) };
-            } else {
-                let mut iam_provider = IAMRoleCredentialsProvider::new();
-                iam_provider.refresh();
-                let credentials = iam_provider.get_credentials();
-                if creds_have_values(credentials) {
-                    println!("using creds from IAM: {}, {}, {}", credentials.get_aws_access_key_id(),
-                        credentials.get_aws_secret_key(), credentials.get_token());
-                    self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(),
-                        secret: credentials.get_aws_secret_key().to_string(), token: credentials.get_token().to_string(),
+        if self.credentials.credentials_are_expired() {
+            // fetch creds in order: env, file, IAM
+            let mut env_provider = EnvironmentCredentialsProvider::new();
+            match env_provider.get_credentials() {
+                Ok(creds) => {
+                    println!("Found creds in env");
+                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
+                        secret: creds.get_aws_secret_key().to_string(), token: "".to_string(),
                         expires_at: UTC::now() + Duration::seconds(600) };
-                    return;
-                } else {
-                    // We're out of options
-                    panic!("Couldn't find AWS credentials in environment, default credential file location or IAM role.");
+                    return &self.credentials;
                 }
+                Err(_) => ()
+            }
+
+            let mut file_provider = FileCredentialsProvider::new();
+            match file_provider.get_credentials() {
+                Ok(creds) => {
+                    println!("Found creds in file");
+                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
+                        secret: creds.get_aws_secret_key().to_string(), token: "".to_string(),
+                        expires_at: UTC::now() + Duration::seconds(600) };
+                    return &self.credentials;
+                }
+                Err(_) => ()
+            }
+
+            let mut iam_provider = IAMRoleCredentialsProvider::new();
+            match iam_provider.get_credentials() {
+                Ok(creds) => {
+                    println!("Found creds via iam");
+                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
+                        secret: creds.get_aws_secret_key().to_string(), token: creds.get_token().to_string(),
+                        expires_at: UTC::now() + Duration::seconds(600) };
+                    return &self.credentials;
+                }
+                Err(_) => panic!("Couldn't find AWS credentials in environment, default credential file location or IAM role.")
             }
         }
+        return &self.credentials;
     }
 }
 
