@@ -2,7 +2,7 @@
 name = "rusoto"
 version = "0.1.0"
 authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>", "Matthew Mayer <matthew@dualspark.com>"]
-
+license = "MIT"
 readme = "README.md"
 keywords = [ "AWS", "SQS", "Amazon" ]
 description = "AWS client libraries for Rust"
