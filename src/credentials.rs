@@ -88,6 +88,11 @@ impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
                 Ok(val) => val,
                 Err(_) => return Err("No AWS_SECRET_ACCESS_KEY in environment")
             };
+
+            if env_key.is_empty() || env_secret.is_empty() {
+                return Err("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment.");
+            }
+
             self.credentials = AWSCredentials{key: env_key, secret: env_secret,
                  token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600)};
         }
@@ -116,35 +121,33 @@ impl AWSCredentialsProvider for FileCredentialsProvider {
                 Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
                 None => return Err("Couldn't get your home dir.")
             }
-            // this needs to be converted to Result:
-            let credentials = get_credentials_from_file(profile_location);
-            self.credentials = AWSCredentials{ key: credentials.get_aws_access_key_id().to_string(),
-                secret: credentials.get_aws_secret_key().to_string(), token: "".to_string(),
-                expires_at: UTC::now() + Duration::seconds(600) };
-        }
-		Ok(&self.credentials)
-	}
+            match get_credentials_from_file(profile_location) {
+                Ok(creds) => {
+                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
+                        secret: creds.get_aws_secret_key().to_string(), token: "".to_string(),
+                        expires_at: UTC::now() + Duration::seconds(600) };
+                }
+                Err(_) => return Err("Couldn't get creds from file.")
+            }
+       }
+       Ok(&self.credentials)
+   }
 }
 
 // Finds and uses the first "aws_access_key_id" and "aws_secret_access_key" in the file.
-// TODO: refactor to use Result
-fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
+fn get_credentials_from_file<'a>(file_with_path: String) -> Result<AWSCredentials, &'a str> {
     println!("Looking for credentials file at {}", file_with_path);
     let path = Path::new(&file_with_path);
     let display = path.display();
 
-    let mut found_file = false;
-
     match fs::metadata(&path) {
-        Err(why) => println!("Couldn't get metadata for file: {}", why),
-        Ok(metadata) => found_file = metadata.is_file()
+        Err(_) => return Err("Couldn't stat credentials file."),
+        Ok(metadata) => {
+            if !metadata.is_file() {
+                return Err("Couldn't open file.")
+            }
+        }
     };
-
-    // bail early.  Should be converted to a return type.
-    if !found_file {
-        return AWSCredentials{ key: "".to_string(), secret: "".to_string(),
-             token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) };
-    }
 
     let file = match File::open(&path) {
         Err(why) => panic!("couldn't open {}: {}", display, Error::description(&why)),
@@ -183,8 +186,12 @@ fn get_credentials_from_file(file_with_path: String) -> AWSCredentials {
         }
     }
 
-    return AWSCredentials{ key: access_key.to_string(), secret: secret_key.to_string(),
-         token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) };
+    if access_key.is_empty() || secret_key.is_empty() {
+        return Err("Couldn't find either aws_access_key_id, aws_secret_access_key or both in profile file.");
+    }
+
+    return Ok(AWSCredentials{ key: access_key.to_string(), secret: secret_key.to_string(),
+         token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) });
 }
 
 pub struct IAMRoleCredentialsProvider {
@@ -199,6 +206,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 
     fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
         if self.credentials.credentials_are_expired() {
+            println!("Calling IAM metadata");
             // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
             let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
             let client = Client::new();
@@ -211,7 +219,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 
             let mut body = String::new();
             match response.read_to_string(&mut body) {
-                Err(why) => return Err("Didn't get a parsable response body from metadata service"),
+                Err(_) => return Err("Didn't get a parsable response body from metadata service"),
                 Ok(_) => (),
             };
 
@@ -231,7 +239,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 
             let json_object : Json;
             match Json::from_str(&body) {
-                Err(why) => return Err("Couldn't parse metadata response body."),
+                Err(_) => return Err("Couldn't parse metadata response body."),
                 Ok(val) => json_object = val
             };
 
@@ -296,7 +304,7 @@ impl DefaultAWSCredentialsProviderChain {
                         expires_at: UTC::now() + Duration::seconds(600) };
                     return &self.credentials;
                 }
-                Err(_) => ()
+                Err(_) => println!("Whiffed on env") //()
             }
 
             let mut file_provider = FileCredentialsProvider::new();
@@ -308,7 +316,7 @@ impl DefaultAWSCredentialsProviderChain {
                         expires_at: UTC::now() + Duration::seconds(600) };
                     return &self.credentials;
                 }
-                Err(_) => ()
+                Err(_) => println!("Whiffed on file") //()
             }
 
             let mut iam_provider = IAMRoleCredentialsProvider::new();
@@ -325,11 +333,4 @@ impl DefaultAWSCredentialsProviderChain {
         }
         return &self.credentials;
     }
-}
-
-fn creds_have_values(creds: &AWSCredentials) -> bool {
-    if creds.get_aws_access_key_id().len() > 0 && creds.get_aws_secret_key().len() > 0 {
-        return true;
-    }
-    return false;
 }
