@@ -22,16 +22,7 @@ fn main() {
 	}
 }
 
-// fn sns_roundtrip_tests(creds: AWSCredentials) -> Result<(), AWSError> {
-// 	let sns = SQSClient::new(creds, "us-east-1");
-//
-// 	let response = try!(sns.list_topics());
-// 	println!("{:#?}", response);
-// 	Ok(())
-// }
-
 fn sqs_roundtrip_tests(creds: &AWSCredentials) -> Result<(), AWSError> {
-	return Ok(());
 	let sqs = SQSHelper::new(&creds, "us-east-1");
 
 	// list existing queues

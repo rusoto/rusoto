@@ -13,11 +13,7 @@ extern crate rustc_serialize as serialize;
 #[macro_use] pub mod signature;
 pub mod credentials;
 pub mod error;
-//pub mod autoscaling;
-//pub mod cloudformation;
-//pub mod iam;
 pub mod sqs;
-//pub mod sns;
 pub mod xmlutil;
 
 

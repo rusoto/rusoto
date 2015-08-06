@@ -52,7 +52,7 @@ impl AWSCredentials {
     }
 
     fn credentials_are_expired(&self) -> bool {
-        println!("Seeing if creds of {:?} are expired compared to {:?}", self.expires_at, UTC::now() + Duration::seconds(20));
+        //println!("Seeing if creds of {:?} are expired compared to {:?}", self.expires_at, UTC::now() + Duration::seconds(20));
         // This is a rough hack to hopefully avoid someone requesting creds then sitting on them
         // before issuing the request:
         if self.expires_at < UTC::now() + Duration::seconds(20) {
@@ -136,7 +136,7 @@ impl AWSCredentialsProvider for FileCredentialsProvider {
 
 // Finds and uses the first "aws_access_key_id" and "aws_secret_access_key" in the file.
 fn get_credentials_from_file<'a>(file_with_path: String) -> Result<AWSCredentials, &'a str> {
-    println!("Looking for credentials file at {}", file_with_path);
+    //println!("Looking for credentials file at {}", file_with_path);
     let path = Path::new(&file_with_path);
     let display = path.display();
 
@@ -206,7 +206,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 
     fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
         if self.credentials.credentials_are_expired() {
-            println!("Calling IAM metadata");
+            //println!("Calling IAM metadata");
             // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
             let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
             let client = Client::new();
@@ -298,31 +298,31 @@ impl DefaultAWSCredentialsProviderChain {
             let mut env_provider = EnvironmentCredentialsProvider::new();
             match env_provider.get_credentials() {
                 Ok(creds) => {
-                    println!("Found creds in env");
+                    //println!("Found creds in env");
                     self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
                         secret: creds.get_aws_secret_key().to_string(), token: "".to_string(),
                         expires_at: UTC::now() + Duration::seconds(600) };
                     return &self.credentials;
                 }
-                Err(_) => println!("Whiffed on env") //()
+                Err(_) => () //println!("Whiffed on env")
             }
 
             let mut file_provider = FileCredentialsProvider::new();
             match file_provider.get_credentials() {
                 Ok(creds) => {
-                    println!("Found creds in file");
+                    //println!("Found creds in file");
                     self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
                         secret: creds.get_aws_secret_key().to_string(), token: "".to_string(),
                         expires_at: UTC::now() + Duration::seconds(600) };
                     return &self.credentials;
                 }
-                Err(_) => println!("Whiffed on file") //()
+                Err(_) => () //println!("Whiffed on file")
             }
 
             let mut iam_provider = IAMRoleCredentialsProvider::new();
             match iam_provider.get_credentials() {
                 Ok(creds) => {
-                    println!("Found creds via iam");
+                    //println!("Found creds via iam");
                     self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
                         secret: creds.get_aws_secret_key().to_string(), token: creds.get_token().to_string(),
                         expires_at: UTC::now() + Duration::seconds(600) };

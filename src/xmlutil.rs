@@ -76,7 +76,7 @@ pub fn start_element(element_name: &str, stack: &mut XmlStack)  -> Result<HashMa
 		}
 	}else {
     
-    	println!("{:#?}", next);		
+    //  	println!("{:#?}", next);		
 		Err(XmlParseError::new(&format!("Expected StartElement {}", element_name)))
 	}
 }	
