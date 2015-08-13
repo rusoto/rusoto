@@ -4,5 +4,7 @@ git:
     path: github.com/DualSpark/rust-aws
 
 script:
+    - uname -a
+    - sudo apt-get install libssl-dev
     - cargo build
     - cargo test
