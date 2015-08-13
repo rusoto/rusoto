@@ -8,7 +8,7 @@ AWS client libraries for Rust
 **Alpha**.  Rust code has been generated from JSON documentation of services from [botocore](https://github.com/boto/botocore).
 
 ### Installation / Setup
-1. Install Rust 1.1.0 - http://www.rust-lang.org/
+1. Install Rust 1.1.0 or later - http://www.rust-lang.org/
 2. Check out code from github
 3. Set up AWS credentials: environment variables (export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY), ~/.aws/credentials, or use an IAM instance profile.
 4. `cargo build`
