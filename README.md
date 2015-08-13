@@ -1,4 +1,6 @@
 # rust-aws
+[![Build Status](https://ci.dualspark.com/api/badge/github.com/DualSpark/rust-aws/status.svg?branch=master)](https://ci.dualspark.com/github.com/DualSpark/rust-aws)
+
 AWS client libraries for Rust
 
 ### Current state
