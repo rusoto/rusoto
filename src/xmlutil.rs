@@ -1,7 +1,7 @@
 use std::iter::Peekable;
 use std::num::ParseIntError;
 use std::collections::HashMap;
-
+use std::io::{self, Read};
 use xml::reader::events::*;
 use xml::reader::Events;
 use hyper::client::response::*;
@@ -18,6 +18,34 @@ impl XmlParseError {
 
 /// syntactic sugar for the XML event stack we pass around
 pub type XmlStack<'a> = Peekable<Events<'a, Response>>;
+
+// Wraps the Hyper Response type
+pub struct XmlResponseFromAws<'b> {
+	response: Response, // Hyper response type
+	xml_stack: Peekable<Events<'b, Response>> // refactor to use XmlStack type?
+}
+
+impl <'b> Read for XmlResponseFromAws<'b> {
+	// implement read.  See https://github.com/hyperium/hyper/blob/master/src/client/response.rs
+	fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+		return self.response.read(buf);
+	}
+}
+
+// TODO: move to tests/xmlutils.rs
+pub struct XmlResponseFromFile {
+	file_location: String
+}
+
+impl Read for XmlResponseFromFile {
+	#[inline]
+    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+		// Get a Result reader from our specified file
+        panic!("Not implemented.");
+    }
+}
+// /move to tests/xmlutils.rs
+
 
 impl From<ParseIntError> for XmlParseError{
         fn from(_e:ParseIntError) -> XmlParseError { XmlParseError::new("ParseIntError") }
@@ -48,17 +76,17 @@ pub fn characters(stack: &mut XmlStack ) -> Result<String, XmlParseError> {
 	} else {
 		Err(XmlParseError::new("Expected characters"))
 	}
-	
+
 }
 
 /// get the name of the current element in the stack.  throw a parse error if it's not a StartElement
 pub fn peek_at_name(stack: &mut XmlStack) -> Result<String, XmlParseError> {
 	let current = stack.peek();
 	if let Some(&XmlEvent::StartElement{ref name, ..}) = current {
-		Ok(name.local_name.to_string())	
-	} else {		    
+		Ok(name.local_name.to_string())
+	} else {
 		Ok("".to_string())
-	}	
+	}
 }
 
 /// consume a StartElement with a specific name or throw an XmlParseError
@@ -75,13 +103,13 @@ pub fn start_element(element_name: &str, stack: &mut XmlStack)  -> Result<HashMa
 			Ok(attr_map)
 		}
 	}else {
-    
-    //  	println!("{:#?}", next);		
+
+    //  	println!("{:#?}", next);
 		Err(XmlParseError::new(&format!("Expected StartElement {}", element_name)))
 	}
-}	
-		
-/// consume an EndElement with a specific name or throw an XmlParseError		
+}
+
+/// consume an EndElement with a specific name or throw an XmlParseError
 pub fn end_element(element_name: &str, stack: &mut XmlStack)  -> Result<(), XmlParseError> {
 	let next = stack.next();
 	if let Some(XmlEvent::EndElement { name, .. }) = next {
@@ -93,5 +121,4 @@ pub fn end_element(element_name: &str, stack: &mut XmlStack)  -> Result<(), XmlP
 	}else {
 		Err(XmlParseError::new(&format!("Expected EndElement {} got {:?}", element_name, next)))
 	}
-}	
-			
+}
