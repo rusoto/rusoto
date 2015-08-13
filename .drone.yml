@@ -1,0 +1,8 @@
+image: bantl23/rust
+
+git:
+    path: github.com/DualSpark/rust-aws
+
+script:
+    - cargo build
+    - cargo test
