@@ -15,7 +15,7 @@ use xml::reader::events::*;
 #[test]
 fn peek_at_name_happy_path() {
     // open file
-    let file = File::open("tests/blah.xml").unwrap();
+    let file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
     let file = BufReader::new(file);
 
     let mut my_parser  = EventReader::new(file);
@@ -26,7 +26,7 @@ fn peek_at_name_happy_path() {
     // try peek_at_name
     match peek_at_name(&mut reader) {
         Ok(data) => println!("Got {}", data),
-        Err(why) => panic!("Couldn't peek at name")
+        Err(_) => panic!("Couldn't peek at name")
     }
 }
 
