@@ -4,13 +4,7 @@ use xml::reader::events::*;
 use xml::reader::Events;
 use hyper::client::response::*;
 use std::collections::HashMap;
-use std::io::prelude::*;
-use std::io::BufReader;
-use std::fs::File;
-use std::path::Path;
-use std::fs;
-use std::error::Error;
-use xml::reader::EventReader;
+
 
 /// generic Error for XML parsing
 #[derive(Debug)]
@@ -60,42 +54,8 @@ impl <'b> Next for XmlResponseFromAws<'b> {
 	}
 }
 
-// TODO: move to tests/xmlutils.rs
-pub struct XmlResponseFromFile<'a> {
-	xml_stack: Peekable<Events<'a, BufReader<File>>>,
-}
-
-
-// I cannot explain how these lifetimes work to a child, therefore I need to understand them better:
-impl <'a>XmlResponseFromFile<'a> {
-	// TODO: refactor to have caller supply the xml_stack not just location.
-	pub fn new<'c>(stack: Peekable<Events<'a, BufReader<File>>>) -> XmlResponseFromFile {
-
-		XmlResponseFromFile {
-			xml_stack: stack,
-		}
-
-	}
-}
-
-// Need peek and next implemented.
-impl <'b> Peek for XmlResponseFromFile <'b> {
-	fn peek(&mut self) -> Option<&XmlEvent> {
-		return self.xml_stack.peek();
-	}
-}
-
-impl <'b> Next for XmlResponseFromFile <'b> {
-	fn next(&mut self) -> Option<XmlEvent> {
-		return self.xml_stack.next();
-	}
-}
-
-// /move to tests/xmlutils.rs
-
-
 impl From<ParseIntError> for XmlParseError{
-        fn from(_e:ParseIntError) -> XmlParseError { XmlParseError::new("ParseIntError") }
+    fn from(_e:ParseIntError) -> XmlParseError { XmlParseError::new("ParseIntError") }
 }
 
 /// parse Some(String) if the next tag has the right name, otherwise None
