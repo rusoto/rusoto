@@ -1,0 +1,1 @@
+<?xml version="1.0"?><ListQueuesResponse xmlns="http://queue.amazonaws.com/doc/2012-11-05/"><ListQueuesResult><QueueUrl>https://sqs.us-east-1.amazonaws.com/347452556413/testqueue</QueueUrl></ListQueuesResult><ResponseMetadata><RequestId>75299359-456a-5980-a013-dd11713706fa</RequestId></ResponseMetadata></ListQueuesResponse>

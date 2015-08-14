@@ -7,7 +7,7 @@ pub struct UnsupportedOperation;
 /// Parse UnsupportedOperation from XML
 struct UnsupportedOperationParser;
 impl UnsupportedOperationParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<UnsupportedOperation, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UnsupportedOperation, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = UnsupportedOperation::default();
 		try!(end_element(tag_name, stack));
@@ -26,7 +26,7 @@ pub type Binary = Vec<u8>;
 /// Parse Binary from XML
 struct BinaryParser;
 impl BinaryParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Binary, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Binary, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack)).into_bytes();
 		try!(end_element(tag_name, stack));
@@ -49,7 +49,7 @@ pub struct PurgeQueueInProgress;
 /// Parse PurgeQueueInProgress from XML
 struct PurgeQueueInProgressParser;
 impl PurgeQueueInProgressParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PurgeQueueInProgress, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PurgeQueueInProgress, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PurgeQueueInProgress::default();
 		try!(end_element(tag_name, stack));
@@ -95,7 +95,7 @@ pub struct MessageAttributeValue {
 /// Parse MessageAttributeValue from XML
 struct MessageAttributeValueParser;
 impl MessageAttributeValueParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeValue, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MessageAttributeValue, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = MessageAttributeValue::default();
 		loop {
@@ -151,7 +151,7 @@ pub type MessageAttributeNameList = Vec<MessageAttributeName>;
 /// Parse MessageAttributeNameList from XML
 struct MessageAttributeNameListParser;
 impl MessageAttributeNameListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeNameList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MessageAttributeNameList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "MessageAttributeName" {
 			obj.push(try!(MessageAttributeNameParser::parse_xml("MessageAttributeName", stack)));
@@ -191,7 +191,7 @@ pub struct SetQueueAttributesRequest {
 /// Parse SetQueueAttributesRequest from XML
 struct SetQueueAttributesRequestParser;
 impl SetQueueAttributesRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SetQueueAttributesRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SetQueueAttributesRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SetQueueAttributesRequest::default();
 		loop {
@@ -231,7 +231,7 @@ pub struct GetQueueAttributesRequest {
 /// Parse GetQueueAttributesRequest from XML
 struct GetQueueAttributesRequestParser;
 impl GetQueueAttributesRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueAttributesRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetQueueAttributesRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetQueueAttributesRequest::default();
 		loop {
@@ -277,7 +277,7 @@ pub struct SendMessageBatchResult {
 /// Parse SendMessageBatchResult from XML
 struct SendMessageBatchResultParser;
 impl SendMessageBatchResultParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchResult, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SendMessageBatchResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageBatchResult::default();
 		loop {
@@ -325,7 +325,7 @@ pub struct CreateQueueRequest {
 /// Parse CreateQueueRequest from XML
 struct CreateQueueRequestParser;
 impl CreateQueueRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateQueueRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateQueueRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreateQueueRequest::default();
 		loop {
@@ -368,7 +368,7 @@ pub struct RemovePermissionRequest {
 /// Parse RemovePermissionRequest from XML
 struct RemovePermissionRequestParser;
 impl RemovePermissionRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<RemovePermissionRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RemovePermissionRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = RemovePermissionRequest::default();
 		loop {
@@ -411,7 +411,7 @@ pub struct DeleteMessageBatchRequestEntry {
 /// Parse DeleteMessageBatchRequestEntry from XML
 struct DeleteMessageBatchRequestEntryParser;
 impl DeleteMessageBatchRequestEntryParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchRequestEntry, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMessageBatchRequestEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteMessageBatchRequestEntry::default();
 		loop {
@@ -451,7 +451,7 @@ pub struct SendMessageBatchRequest {
 /// Parse SendMessageBatchRequest from XML
 struct SendMessageBatchRequestParser;
 impl SendMessageBatchRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SendMessageBatchRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageBatchRequest::default();
 		loop {
@@ -494,7 +494,7 @@ pub struct ChangeMessageVisibilityBatchResult {
 /// Parse ChangeMessageVisibilityBatchResult from XML
 struct ChangeMessageVisibilityBatchResultParser;
 impl ChangeMessageVisibilityBatchResultParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchResult, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ChangeMessageVisibilityBatchResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ChangeMessageVisibilityBatchResult::default();
 		loop {
@@ -533,7 +533,7 @@ pub struct CreateQueueResult {
 /// Parse CreateQueueResult from XML
 struct CreateQueueResultParser;
 impl CreateQueueResultParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<CreateQueueResult, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateQueueResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = CreateQueueResult::default();
 		loop {
@@ -567,7 +567,7 @@ pub struct PurgeQueueRequest {
 /// Parse PurgeQueueRequest from XML
 struct PurgeQueueRequestParser;
 impl PurgeQueueRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<PurgeQueueRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PurgeQueueRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = PurgeQueueRequest::default();
 		loop {
@@ -598,7 +598,7 @@ pub struct ReceiptHandleIsInvalid;
 /// Parse ReceiptHandleIsInvalid from XML
 struct ReceiptHandleIsInvalidParser;
 impl ReceiptHandleIsInvalidParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ReceiptHandleIsInvalid, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReceiptHandleIsInvalid, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ReceiptHandleIsInvalid::default();
 		try!(end_element(tag_name, stack));
@@ -620,7 +620,7 @@ pub struct InvalidAttributeName;
 /// Parse InvalidAttributeName from XML
 struct InvalidAttributeNameParser;
 impl InvalidAttributeNameParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidAttributeName, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<InvalidAttributeName, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InvalidAttributeName::default();
 		try!(end_element(tag_name, stack));
@@ -647,7 +647,7 @@ pub struct ChangeMessageVisibilityBatchRequest {
 /// Parse ChangeMessageVisibilityBatchRequest from XML
 struct ChangeMessageVisibilityBatchRequestParser;
 impl ChangeMessageVisibilityBatchRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ChangeMessageVisibilityBatchRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ChangeMessageVisibilityBatchRequest::default();
 		loop {
@@ -680,7 +680,7 @@ pub type MessageAttributeMap = HashMap<String,MessageAttributeValue>;
 /// Parse MessageAttributeMap from XML
 struct MessageAttributeMapParser;
 impl MessageAttributeMapParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeMap, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MessageAttributeMap, XmlParseError> {
 		let mut obj = HashMap::new();
 		while try!(peek_at_name(stack)) == tag_name {
 			try!(start_element(tag_name, stack));
@@ -749,7 +749,7 @@ pub struct ReceiveMessageRequest {
 /// Parse ReceiveMessageRequest from XML
 struct ReceiveMessageRequestParser;
 impl ReceiveMessageRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ReceiveMessageRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReceiveMessageRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ReceiveMessageRequest::default();
 		loop {
@@ -818,7 +818,7 @@ pub struct ReceiveMessageResult {
 /// Parse ReceiveMessageResult from XML
 struct ReceiveMessageResultParser;
 impl ReceiveMessageResultParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ReceiveMessageResult, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReceiveMessageResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ReceiveMessageResult::default();
 		loop {
@@ -845,7 +845,7 @@ impl ReceiveMessageResultWriter {
 /// Parse String from XML
 struct StringParser;
 impl StringParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<String, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
@@ -863,7 +863,7 @@ pub type ChangeMessageVisibilityBatchRequestEntryList = Vec<ChangeMessageVisibil
 /// Parse ChangeMessageVisibilityBatchRequestEntryList from XML
 struct ChangeMessageVisibilityBatchRequestEntryListParser;
 impl ChangeMessageVisibilityBatchRequestEntryListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchRequestEntryList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ChangeMessageVisibilityBatchRequestEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ChangeMessageVisibilityBatchRequestEntry" {
 			obj.push(try!(ChangeMessageVisibilityBatchRequestEntryParser::parse_xml("ChangeMessageVisibilityBatchRequestEntry", stack)));
@@ -887,7 +887,7 @@ pub type SendMessageBatchResultEntryList = Vec<SendMessageBatchResultEntry>;
 /// Parse SendMessageBatchResultEntryList from XML
 struct SendMessageBatchResultEntryListParser;
 impl SendMessageBatchResultEntryListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchResultEntryList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SendMessageBatchResultEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "SendMessageBatchResultEntry" {
 			obj.push(try!(SendMessageBatchResultEntryParser::parse_xml("SendMessageBatchResultEntry", stack)));
@@ -929,7 +929,7 @@ pub struct SendMessageRequest {
 /// Parse SendMessageRequest from XML
 struct SendMessageRequestParser;
 impl SendMessageRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SendMessageRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageRequest::default();
 		loop {
@@ -994,7 +994,7 @@ pub struct SendMessageBatchResultEntry {
 /// Parse SendMessageBatchResultEntry from XML
 struct SendMessageBatchResultEntryParser;
 impl SendMessageBatchResultEntryParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchResultEntry, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SendMessageBatchResultEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageBatchResultEntry::default();
 		loop {
@@ -1039,7 +1039,7 @@ pub type DeleteMessageBatchResultEntryList = Vec<DeleteMessageBatchResultEntry>;
 /// Parse DeleteMessageBatchResultEntryList from XML
 struct DeleteMessageBatchResultEntryListParser;
 impl DeleteMessageBatchResultEntryListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchResultEntryList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMessageBatchResultEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "DeleteMessageBatchResultEntry" {
 			obj.push(try!(DeleteMessageBatchResultEntryParser::parse_xml("DeleteMessageBatchResultEntry", stack)));
@@ -1063,7 +1063,7 @@ pub type StringList = Vec<String>;
 /// Parse StringList from XML
 struct StringListParser;
 impl StringListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<StringList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<StringList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "StringListValue" {
 			obj.push(try!(StringParser::parse_xml("StringListValue", stack)));
@@ -1087,7 +1087,7 @@ pub type BatchResultErrorEntryList = Vec<BatchResultErrorEntry>;
 /// Parse BatchResultErrorEntryList from XML
 struct BatchResultErrorEntryListParser;
 impl BatchResultErrorEntryListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchResultErrorEntryList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BatchResultErrorEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "BatchResultErrorEntry" {
 			obj.push(try!(BatchResultErrorEntryParser::parse_xml("BatchResultErrorEntry", stack)));
@@ -1115,7 +1115,7 @@ pub struct InvalidBatchEntryId;
 /// Parse InvalidBatchEntryId from XML
 struct InvalidBatchEntryIdParser;
 impl InvalidBatchEntryIdParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidBatchEntryId, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<InvalidBatchEntryId, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InvalidBatchEntryId::default();
 		try!(end_element(tag_name, stack));
@@ -1145,7 +1145,7 @@ pub struct ChangeMessageVisibilityRequest {
 /// Parse ChangeMessageVisibilityRequest from XML
 struct ChangeMessageVisibilityRequestParser;
 impl ChangeMessageVisibilityRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ChangeMessageVisibilityRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ChangeMessageVisibilityRequest::default();
 		loop {
@@ -1183,7 +1183,7 @@ pub type ChangeMessageVisibilityBatchResultEntryList = Vec<ChangeMessageVisibili
 /// Parse ChangeMessageVisibilityBatchResultEntryList from XML
 struct ChangeMessageVisibilityBatchResultEntryListParser;
 impl ChangeMessageVisibilityBatchResultEntryListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchResultEntryList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ChangeMessageVisibilityBatchResultEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ChangeMessageVisibilityBatchResultEntry" {
 			obj.push(try!(ChangeMessageVisibilityBatchResultEntryParser::parse_xml("ChangeMessageVisibilityBatchResultEntry", stack)));
@@ -1220,7 +1220,7 @@ pub struct BatchResultErrorEntry {
 /// Parse BatchResultErrorEntry from XML
 struct BatchResultErrorEntryParser;
 impl BatchResultErrorEntryParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchResultErrorEntry, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BatchResultErrorEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = BatchResultErrorEntry::default();
 		loop {
@@ -1284,7 +1284,7 @@ pub struct SendMessageResult {
 /// Parse SendMessageResult from XML
 struct SendMessageResultParser;
 impl SendMessageResultParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageResult, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SendMessageResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageResult::default();
 		loop {
@@ -1329,7 +1329,7 @@ pub struct DeleteMessageBatchRequest {
 /// Parse DeleteMessageBatchRequest from XML
 struct DeleteMessageBatchRequestParser;
 impl DeleteMessageBatchRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMessageBatchRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteMessageBatchRequest::default();
 		loop {
@@ -1362,7 +1362,7 @@ pub type Integer = i32;
 /// Parse Integer from XML
 struct IntegerParser;
 impl IntegerParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Integer, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Integer, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
@@ -1383,7 +1383,7 @@ pub struct QueueDoesNotExist;
 /// Parse QueueDoesNotExist from XML
 struct QueueDoesNotExistParser;
 impl QueueDoesNotExistParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueDoesNotExist, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueDoesNotExist, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = QueueDoesNotExist::default();
 		try!(end_element(tag_name, stack));
@@ -1405,7 +1405,7 @@ pub struct InvalidMessageContents;
 /// Parse InvalidMessageContents from XML
 struct InvalidMessageContentsParser;
 impl InvalidMessageContentsParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidMessageContents, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<InvalidMessageContents, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InvalidMessageContents::default();
 		try!(end_element(tag_name, stack));
@@ -1427,7 +1427,7 @@ pub struct MessageNotInflight;
 /// Parse MessageNotInflight from XML
 struct MessageNotInflightParser;
 impl MessageNotInflightParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageNotInflight, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MessageNotInflight, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = MessageNotInflight::default();
 		try!(end_element(tag_name, stack));
@@ -1446,7 +1446,7 @@ pub type MessageAttributeName = String;
 /// Parse MessageAttributeName from XML
 struct MessageAttributeNameParser;
 impl MessageAttributeNameParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageAttributeName, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MessageAttributeName, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
@@ -1470,7 +1470,7 @@ pub struct GetQueueAttributesResult {
 /// Parse GetQueueAttributesResult from XML
 struct GetQueueAttributesResultParser;
 impl GetQueueAttributesResultParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueAttributesResult, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetQueueAttributesResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetQueueAttributesResult::default();
 		loop {
@@ -1498,7 +1498,7 @@ pub type BinaryList = Vec<Binary>;
 /// Parse BinaryList from XML
 struct BinaryListParser;
 impl BinaryListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BinaryList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BinaryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "BinaryListValue" {
 			obj.push(try!(BinaryParser::parse_xml("BinaryListValue", stack)));
@@ -1527,7 +1527,7 @@ pub struct ListDeadLetterSourceQueuesRequest {
 /// Parse ListDeadLetterSourceQueuesRequest from XML
 struct ListDeadLetterSourceQueuesRequestParser;
 impl ListDeadLetterSourceQueuesRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListDeadLetterSourceQueuesRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListDeadLetterSourceQueuesRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListDeadLetterSourceQueuesRequest::default();
 		loop {
@@ -1555,7 +1555,7 @@ pub type MessageList = Vec<Message>;
 /// Parse MessageList from XML
 struct MessageListParser;
 impl MessageListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<MessageList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MessageList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "Message" {
 			obj.push(try!(MessageParser::parse_xml("Message", stack)));
@@ -1579,7 +1579,7 @@ pub type SendMessageBatchRequestEntryList = Vec<SendMessageBatchRequestEntry>;
 /// Parse SendMessageBatchRequestEntryList from XML
 struct SendMessageBatchRequestEntryListParser;
 impl SendMessageBatchRequestEntryListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchRequestEntryList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SendMessageBatchRequestEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "SendMessageBatchRequestEntry" {
 			obj.push(try!(SendMessageBatchRequestEntryParser::parse_xml("SendMessageBatchRequestEntry", stack)));
@@ -1634,7 +1634,7 @@ pub struct Message {
 /// Parse Message from XML
 struct MessageParser;
 impl MessageParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Message, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Message, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = Message::default();
 		loop {
@@ -1698,7 +1698,7 @@ pub struct OverLimit;
 /// Parse OverLimit from XML
 struct OverLimitParser;
 impl OverLimitParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<OverLimit, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<OverLimit, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = OverLimit::default();
 		try!(end_element(tag_name, stack));
@@ -1725,7 +1725,7 @@ pub struct GetQueueUrlRequest {
 /// Parse GetQueueUrlRequest from XML
 struct GetQueueUrlRequestParser;
 impl GetQueueUrlRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueUrlRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetQueueUrlRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetQueueUrlRequest::default();
 		loop {
@@ -1760,7 +1760,7 @@ pub type AttributeMap = HashMap<QueueAttributeName,String>;
 /// Parse AttributeMap from XML
 struct AttributeMapParser;
 impl AttributeMapParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttributeMap, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AttributeMap, XmlParseError> {
 		let mut obj = HashMap::new();
 		while try!(peek_at_name(stack)) == tag_name {
 			try!(start_element(tag_name, stack));
@@ -1794,7 +1794,7 @@ pub struct DeleteQueueRequest {
 /// Parse DeleteQueueRequest from XML
 struct DeleteQueueRequestParser;
 impl DeleteQueueRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteQueueRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteQueueRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteQueueRequest::default();
 		loop {
@@ -1822,7 +1822,7 @@ pub type ActionNameList = Vec<String>;
 /// Parse ActionNameList from XML
 struct ActionNameListParser;
 impl ActionNameListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ActionNameList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ActionNameList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "ActionName" {
 			obj.push(try!(StringParser::parse_xml("ActionName", stack)));
@@ -1849,7 +1849,7 @@ pub struct BatchRequestTooLong;
 /// Parse BatchRequestTooLong from XML
 struct BatchRequestTooLongParser;
 impl BatchRequestTooLongParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchRequestTooLong, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BatchRequestTooLong, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = BatchRequestTooLong::default();
 		try!(end_element(tag_name, stack));
@@ -1876,7 +1876,7 @@ pub struct GetQueueUrlResult {
 /// Parse GetQueueUrlResult from XML
 struct GetQueueUrlResultParser;
 impl GetQueueUrlResultParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<GetQueueUrlResult, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetQueueUrlResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = GetQueueUrlResult::default();
 		loop {
@@ -1910,7 +1910,7 @@ pub struct ListQueuesRequest {
 /// Parse ListQueuesRequest from XML
 struct ListQueuesRequestParser;
 impl ListQueuesRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListQueuesRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListQueuesRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListQueuesRequest::default();
 		loop {
@@ -1938,7 +1938,7 @@ pub type AWSAccountIdList = Vec<String>;
 /// Parse AWSAccountIdList from XML
 struct AWSAccountIdListParser;
 impl AWSAccountIdListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AWSAccountIdList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AWSAccountIdList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "AWSAccountId" {
 			obj.push(try!(StringParser::parse_xml("AWSAccountId", stack)));
@@ -1965,7 +1965,7 @@ pub struct InvalidIdFormat;
 /// Parse InvalidIdFormat from XML
 struct InvalidIdFormatParser;
 impl InvalidIdFormatParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<InvalidIdFormat, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<InvalidIdFormat, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = InvalidIdFormat::default();
 		try!(end_element(tag_name, stack));
@@ -2012,7 +2012,7 @@ pub struct AddPermissionRequest {
 /// Parse AddPermissionRequest from XML
 struct AddPermissionRequestParser;
 impl AddPermissionRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AddPermissionRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AddPermissionRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = AddPermissionRequest::default();
 		loop {
@@ -2055,7 +2055,7 @@ pub type QueueUrlList = Vec<String>;
 /// Parse QueueUrlList from XML
 struct QueueUrlListParser;
 impl QueueUrlListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueUrlList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueUrlList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "QueueUrl" {
 			obj.push(try!(StringParser::parse_xml("QueueUrl", stack)));
@@ -2086,7 +2086,7 @@ pub struct ListDeadLetterSourceQueuesResult {
 /// Parse ListDeadLetterSourceQueuesResult from XML
 struct ListDeadLetterSourceQueuesResultParser;
 impl ListDeadLetterSourceQueuesResultParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListDeadLetterSourceQueuesResult, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListDeadLetterSourceQueuesResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListDeadLetterSourceQueuesResult::default();
 		loop {
@@ -2114,7 +2114,7 @@ pub type QueueAttributeName = String;
 /// Parse QueueAttributeName from XML
 struct QueueAttributeNameParser;
 impl QueueAttributeNameParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueAttributeName, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueAttributeName, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
@@ -2137,7 +2137,7 @@ pub struct QueueNameExists;
 /// Parse QueueNameExists from XML
 struct QueueNameExistsParser;
 impl QueueNameExistsParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueNameExists, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueNameExists, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = QueueNameExists::default();
 		try!(end_element(tag_name, stack));
@@ -2159,7 +2159,7 @@ pub struct BatchEntryIdsNotDistinct;
 /// Parse BatchEntryIdsNotDistinct from XML
 struct BatchEntryIdsNotDistinctParser;
 impl BatchEntryIdsNotDistinctParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<BatchEntryIdsNotDistinct, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BatchEntryIdsNotDistinct, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = BatchEntryIdsNotDistinct::default();
 		try!(end_element(tag_name, stack));
@@ -2184,7 +2184,7 @@ pub struct DeleteMessageBatchResultEntry {
 /// Parse DeleteMessageBatchResultEntry from XML
 struct DeleteMessageBatchResultEntryParser;
 impl DeleteMessageBatchResultEntryParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchResultEntry, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMessageBatchResultEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteMessageBatchResultEntry::default();
 		loop {
@@ -2212,7 +2212,7 @@ pub type DeleteMessageBatchRequestEntryList = Vec<DeleteMessageBatchRequestEntry
 /// Parse DeleteMessageBatchRequestEntryList from XML
 struct DeleteMessageBatchRequestEntryListParser;
 impl DeleteMessageBatchRequestEntryListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchRequestEntryList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMessageBatchRequestEntryList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "DeleteMessageBatchRequestEntry" {
 			obj.push(try!(DeleteMessageBatchRequestEntryParser::parse_xml("DeleteMessageBatchRequestEntry", stack)));
@@ -2239,7 +2239,7 @@ pub struct EmptyBatchRequest;
 /// Parse EmptyBatchRequest from XML
 struct EmptyBatchRequestParser;
 impl EmptyBatchRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<EmptyBatchRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<EmptyBatchRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = EmptyBatchRequest::default();
 		try!(end_element(tag_name, stack));
@@ -2264,7 +2264,7 @@ pub struct ListQueuesResult {
 /// Parse ListQueuesResult from XML
 struct ListQueuesResultParser;
 impl ListQueuesResultParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListQueuesResult, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListQueuesResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListQueuesResult::default();
 		loop {
@@ -2313,7 +2313,7 @@ pub struct ChangeMessageVisibilityBatchRequestEntry {
 /// Parse ChangeMessageVisibilityBatchRequestEntry from XML
 struct ChangeMessageVisibilityBatchRequestEntryParser;
 impl ChangeMessageVisibilityBatchRequestEntryParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchRequestEntry, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ChangeMessageVisibilityBatchRequestEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ChangeMessageVisibilityBatchRequestEntry::default();
 		loop {
@@ -2356,7 +2356,7 @@ pub struct TooManyEntriesInBatchRequest;
 /// Parse TooManyEntriesInBatchRequest from XML
 struct TooManyEntriesInBatchRequestParser;
 impl TooManyEntriesInBatchRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<TooManyEntriesInBatchRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TooManyEntriesInBatchRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = TooManyEntriesInBatchRequest::default();
 		try!(end_element(tag_name, stack));
@@ -2379,7 +2379,7 @@ pub struct QueueDeletedRecently;
 /// Parse QueueDeletedRecently from XML
 struct QueueDeletedRecentlyParser;
 impl QueueDeletedRecentlyParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueDeletedRecently, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueDeletedRecently, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = QueueDeletedRecently::default();
 		try!(end_element(tag_name, stack));
@@ -2398,7 +2398,7 @@ pub type Boolean = bool;
 /// Parse Boolean from XML
 struct BooleanParser;
 impl BooleanParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Boolean, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Boolean, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
@@ -2426,7 +2426,7 @@ pub struct DeleteMessageBatchResult {
 /// Parse DeleteMessageBatchResult from XML
 struct DeleteMessageBatchResultParser;
 impl DeleteMessageBatchResultParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageBatchResult, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMessageBatchResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteMessageBatchResult::default();
 		loop {
@@ -2465,7 +2465,7 @@ pub struct ChangeMessageVisibilityBatchResultEntry {
 /// Parse ChangeMessageVisibilityBatchResultEntry from XML
 struct ChangeMessageVisibilityBatchResultEntryParser;
 impl ChangeMessageVisibilityBatchResultEntryParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ChangeMessageVisibilityBatchResultEntry, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ChangeMessageVisibilityBatchResultEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ChangeMessageVisibilityBatchResultEntry::default();
 		loop {
@@ -2493,7 +2493,7 @@ pub type AttributeNameList = Vec<QueueAttributeName>;
 /// Parse AttributeNameList from XML
 struct AttributeNameListParser;
 impl AttributeNameListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<AttributeNameList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AttributeNameList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "AttributeName" {
 			obj.push(try!(QueueAttributeNameParser::parse_xml("AttributeName", stack)));
@@ -2524,7 +2524,7 @@ pub struct DeleteMessageRequest {
 /// Parse DeleteMessageRequest from XML
 struct DeleteMessageRequestParser;
 impl DeleteMessageRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<DeleteMessageRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMessageRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = DeleteMessageRequest::default();
 		loop {
@@ -2574,7 +2574,7 @@ pub struct SendMessageBatchRequestEntry {
 /// Parse SendMessageBatchRequestEntry from XML
 struct SendMessageBatchRequestEntryParser;
 impl SendMessageBatchRequestEntryParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<SendMessageBatchRequestEntry, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SendMessageBatchRequestEntry, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = SendMessageBatchRequestEntry::default();
 		loop {
@@ -2656,8 +2656,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -2699,8 +2699,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -2725,8 +2725,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -2752,8 +2752,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -2782,8 +2782,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -2823,8 +2823,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -2847,8 +2847,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -2895,8 +2895,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -2932,8 +2932,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -2964,8 +2964,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -2994,8 +2994,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -3028,8 +3028,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -3055,8 +3055,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -3106,8 +3106,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -3143,8 +3143,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -3166,8 +3166,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 
@@ -3187,8 +3187,8 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
+		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+		stack.next(); // xml start tag
 		stack.next();
 		match status {
 			200 => { 

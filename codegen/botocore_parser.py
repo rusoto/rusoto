@@ -24,13 +24,13 @@ primitive_parsers = {
 	'string': 'try!(characters(stack))',
 	'timestamp': 'try!(characters(stack))',
 	'integer': 'i32::from_str(try!(characters(stack)).as_ref()).unwrap()',
-	'double': 'f32::from_str(try!(characters(stack)).as_ref()).unwrap()',	
+	'double': 'f32::from_str(try!(characters(stack)).as_ref()).unwrap()',
 	'blob': 'try!(characters(stack)).into_bytes()',
 	'boolean': 'bool::from_str(try!(characters(stack)).as_ref()).unwrap()'
 }
 
 # rust code to write primitive types to a string
-primitive_writers = {	
+primitive_writers = {
 	'string': 'obj',
 	'timestamp': 'obj',
 	'integer': '&obj.to_string()',
@@ -66,8 +66,6 @@ def rust_type(name, shape):
 			rust_type = "HashMap<" + shape['key']['shape'] + "," + shape['value']['shape'] + ">"
 		elif shape_type == 'list':
 			rust_type = "Vec<" + shape['member']['shape'] + ">"
-#		else:
-#			rust_type = "SHIT-" + name
 		# a String is already a String in rust
 		if name != 'String':
 			print "pub type " + name + " = " + rust_type + ";"
@@ -107,14 +105,14 @@ def param_writer(name, shape):
 		map_writer(shape)
 	elif shape_type == 'structure':
 		struct_writer(shape)
-		
+
 	print '\t}'
 	print '}'
 
 # guts of the param_writer for struct shapes
 def struct_writer(shape):
 	print '\t\tlet mut prefix = name.to_string();'
-	print '\t\tif prefix != "" { prefix.push_str("."); }'	
+	print '\t\tif prefix != "" { prefix.push_str("."); }'
 
 	for (name, member) in shape['members'].iteritems():
 		location_name = get_location_name(name, member)
@@ -140,20 +138,21 @@ def list_writer(shape):
 def map_writer(shape):
 	print "\t\tlet mut index = 1;"
 	print "\t\tfor (key,value) in obj {"
-	print "\t\t\tlet prefix = &format!(\"{}.{}\", name, index);"			
+	print "\t\t\tlet prefix = &format!(\"{}.{}\", name, index);"
 	print "\t\t\t" + shape['key']['shape'] + "Writer::write_params(params, &format!(\"{}.{}\", prefix, \"" + shape_name(shape['key']) + "\"), &key);"
-	print "\t\t\t" + shape['value']['shape'] + "Writer::write_params(params, &format!(\"{}.{}\", prefix, \"" + shape_name(shape['value'])	 + "\"), &value);"				
+	print "\t\t\t" + shape['value']['shape'] + "Writer::write_params(params, &format!(\"{}.{}\", prefix, \"" + shape_name(shape['value'])	 + "\"), &value);"
 	print "\t\t\tindex += 1;"
 	print "\t\t}"
 
 # generate rust code to parse a botocore shape from XML
 def type_parser(name, shape):
 	shape_type = shape['type']
-	
+
 	print "/// Parse " + name + " from XML"
 	print 'struct ' + name + 'Parser;'
 	print 'impl ' + name + 'Parser {'
-	print '\tfn parse_xml<\'a>(tag_name: &str, stack: &mut XmlStack) -> Result<' + name + ', XmlParseError> {'
+	# I think this is where the Trait refactor comes in:
+	print '\tfn parse_xml<\'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<' + name + ', XmlParseError> {'
 
 	if shape_type == 'map':
 		map_parser(shape)
@@ -163,9 +162,9 @@ def type_parser(name, shape):
 		print '\t\ttry!(start_element(tag_name, stack));'
 		if shape_type in primitive_parsers:
 			print "\t\tlet obj = " + primitive_parsers[shape_type] + ";"
-		elif shape_type == 'structure':		
+		elif shape_type == 'structure':
 			struct_parser(name, shape)
-		print '\t\ttry!(end_element(tag_name, stack));'		
+		print '\t\ttry!(end_element(tag_name, stack));'
 
 	print '\t\tOk(obj)'
 	print '\t}'
@@ -192,7 +191,7 @@ def map_parser(shape):
 def list_parser(shape):
 	print "\t\tlet mut obj = Vec::new();";
 	print "\t\twhile try!(peek_at_name(stack)) == \"" + shape_name(shape['member']) + "\" {"
-	print "\t\t\tobj.push(try!(" + shape['member']['shape'] + "Parser::parse_xml(\"" + shape_name(shape['member']) + "\", stack)));"	
+	print "\t\t\tobj.push(try!(" + shape['member']['shape'] + "Parser::parse_xml(\"" + shape_name(shape['member']) + "\", stack)));"
 	print "\t\t}"
 
 def is_required(shape, field_name):
@@ -203,15 +202,15 @@ def is_required(shape, field_name):
 
 # guts of the XML parser for struct shapes
 def struct_parser(name, shape):
-	children = shape['members']	
+	children = shape['members']
 	print '\t\tlet mut obj = ' + name + '::default();'
-	if children: 
+	if children:
 		print '\t\tloop {'
 		print '\t\t\tlet current_name = try!(peek_at_name(stack));'
 		for (cname, child) in children.iteritems():
 			parse_struct_child(cname, child, is_required(shape, cname))
 		print '\t\t\tbreak;\n\t\t}'
-	
+
 # get the name that should be used for a child element when encoding/decoding
 def get_location_name(name, child):
 	child_shape = shapes[child['shape']]
@@ -222,8 +221,8 @@ def get_location_name(name, child):
 	else:
 		if 'locationName' in child:
 			tag_name = child['locationName']
-		else:			
-			tag_name = name	
+		else:
+			tag_name = name
 
 	return tag_name
 
@@ -238,7 +237,7 @@ def parse_struct_child(name, child, required):
 		parse_stmt = "Some(" + parse_stmt + ")"
 
 	print '\t\t\tif current_name == "' + tag_name + '" {'
-	print '\t\t\t\tobj.' + c_to_s(name) + ' = ' + parse_stmt + ';'		
+	print '\t\t\t\tobj.' + c_to_s(name) + ' = ' + parse_stmt + ';'
 	print '\t\t\t\tcontinue;'
 	print '\t\t\t}'
 
@@ -273,8 +272,8 @@ def request_method(operation):
 	print '\t\tlet status = result.status.to_u16();'
 #	print '\t\tprintln!("{}", output);'
 	print '\t\tlet mut reader = EventReader::new(result);'
-	print '\t\tlet mut stack = reader.events().peekable();'
-	print '\t\tstack.next();'
+	print '\t\tlet mut stack = XmlResponseFromAws::new(reader.events().peekable());'
+	print '\t\tstack.next(); // xml start tag'
 	print '\t\tstack.next();'
 	print '\t\tmatch status {'
 
@@ -309,13 +308,13 @@ def generate_client():
 		print "}"
 
 
-def main():	
+def main():
 	with open(sys.argv[1]) as data_file:
 		service = json.load(data_file)
 
 		print "use std::collections::HashMap;"
 		print "use std::str;"
-		global shapes	
+		global shapes
 		global metadata
 		global operations
 		shapes = service['shapes']
@@ -323,11 +322,10 @@ def main():
 		operations = service['operations']
 
 		for (name, shape) in shapes.iteritems():
-			rust_type(name, shape)			
+			rust_type(name, shape)
 			type_parser(name, shape)
 			param_writer(name, shape)
 
 		generate_client()
 
 if __name__ == "__main__": main()
-

@@ -158,6 +158,13 @@ impl SignedRequest {
 	    // execute the damn request already
 	    let client = Client::new();
 	    let result = client.request(hyper_method, &final_uri).headers(hyper_headers).body(&payload).send().unwrap();
+
+		// Debug:
+		// let mut body = String::new();
+	    // result.read_to_string(&mut body).unwrap();
+	    // println!("Response: {}", body);
+		// /Debug
+
 	    result
 	}
 }
