@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-use std::str;
 /// Error code 400. Unsupported operation.
 #[derive(Debug, Default)]
 pub struct UnsupportedOperation;
@@ -11,7 +9,6 @@ pub struct ListQueuesRequest {
 	/// begins with the specified string are returned.
 	pub queue_name_prefix: String,
 }
-
 
 /// Parse String from XML
 struct StringParser;

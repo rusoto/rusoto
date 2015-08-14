@@ -7,7 +7,7 @@ extern crate rustc_serialize;
 use rusoto::credentials::*;
 use rusoto::error::*;
 use rusoto::sqs::*;
-use time::*;
+// use time::*;
 
 fn main() {
 	let mut provider = DefaultAWSCredentialsProviderChain::new();

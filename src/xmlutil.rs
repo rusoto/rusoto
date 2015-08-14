@@ -1,10 +1,9 @@
 use std::iter::Peekable;
 use std::num::ParseIntError;
-use std::collections::HashMap;
-use std::io::{self, Read};
 use xml::reader::events::*;
 use xml::reader::Events;
 use hyper::client::response::*;
+use std::collections::HashMap;
 
 /// generic Error for XML parsing
 #[derive(Debug)]
@@ -18,21 +17,36 @@ impl XmlParseError {
 
 /// syntactic sugar for the XML event stack we pass around
 pub type XmlStack<'a> = Peekable<Events<'a, Response>>;
-//
-// // Wraps the Hyper Response type
-// pub struct XmlResponseFromAws<'b> {
-// 	response: Response, // Hyper response type
-// 	xml_stack: Peekable<Events<'b, Response>> // refactor to use XmlStack type?
-// }
-//
-// // Need peek and next implemented.
-// impl <'b> Peek, Next for XmlResponseFromAws<'b> {
-// 	// implement Peek.  See https://github.com/hyperium/hyper/blob/master/src/client/response.rs
-// 	fn peek(&mut self) ->  {
-// 		return self.response.
-// 	}
-// }
-//
+
+
+
+pub trait Peek {
+    fn peek(&mut self) -> Option<&XmlEvent>;
+}
+
+pub trait Next {
+	fn next(&mut self) -> Option<XmlEvent>;
+}
+
+// Wraps the Hyper Response type
+pub struct XmlResponseFromAws<'b> {
+	xml_stack: Peekable<Events<'b, Response>> // refactor to use XmlStack type?
+}
+
+// Need peek and next implemented.
+impl <'b>Peek for XmlResponseFromAws<'b> {
+	fn peek(&mut self) -> Option<&XmlEvent> {
+		return self.xml_stack.peek();
+	}
+}
+
+impl <'b> Next for XmlResponseFromAws<'b> {
+	fn next(&mut self) -> Option<XmlEvent> {
+		return self.xml_stack.next();
+	}
+}
+
+
 // // TODO: move to tests/xmlutils.rs
 // pub struct XmlResponseFromFile {
 // 	file_location: String
