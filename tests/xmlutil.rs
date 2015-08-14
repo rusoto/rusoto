@@ -10,21 +10,65 @@ use xml::reader::events::*;
 
 #[test]
 fn peek_at_name_happy_path() {
+    let file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
+    let file = BufReader::new(file);
+    let mut my_parser  = EventReader::new(file);
+    let my_stack = my_parser.events().peekable();
+    let mut reader = XmlResponseFromFile::new(my_stack);
+
+    loop {
+        reader.next();
+        match peek_at_name(&mut reader) {
+            Ok(data) => {
+                // println!("Got {}", data);
+                if data == "QueueUrl" {
+                    return;
+                }
+            }
+            Err(_) => panic!("Couldn't peek at name")
+        }
+    }
+}
+
+// #[test]
+// fn optional_string_field_happy_path() {
+//     panic!("Not implemented");
+// }
+//
+// #[test]
+// fn string_field_happy_path() {
+//     panic!("Not implemented");
+// }
+//
+// #[test]
+// fn characters_happy_path() {
+//     panic!("Not implemented");
+// }
+
+#[test]
+fn start_element_happy_path() {
     // open file
     let file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
     let file = BufReader::new(file);
-
     let mut my_parser  = EventReader::new(file);
     let my_stack = my_parser.events().peekable();
-
     let mut reader = XmlResponseFromFile::new(my_stack);
 
+    // skip two leading fields since we ignore them (xml declaration, return type declaration)
+    reader.next();
+    reader.next();
+
     // try peek_at_name
-    match peek_at_name(&mut reader) {
-        Ok(data) => println!("Got {}", data),
-        Err(_) => panic!("Couldn't peek at name")
+    match start_element("ListQueuesResult", &mut reader) {
+        Ok(_) => println!("Got start"),
+        Err(_) => panic!("Couldn't find start element")
     }
 }
+//
+// #[test]
+// fn end_element_happy_path() {
+//     panic!("Not implemented");
+// }
 
 pub struct XmlResponseFromFile<'a> {
 	xml_stack: Peekable<Events<'a, BufReader<File>>>,

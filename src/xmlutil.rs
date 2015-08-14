@@ -108,9 +108,8 @@ pub fn start_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Resu
 			}
 			Ok(attr_map)
 		}
-	}else {
-
-    //  	println!("{:#?}", next);
+	} else {
+     // 	println!("start_element got: {:#?}", next);
 		Err(XmlParseError::new(&format!("Expected StartElement {}", element_name)))
 	}
 }

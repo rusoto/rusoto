@@ -177,12 +177,26 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		// NOTE: the next four lines are important and will probably need to be changed in the code gen:
-		// let mut stack = reader.events().peekable();
+		// NOTE: the next four lines are important and will probably need to be changed in the code gen.
+		// Also the match 200 arm.
+		// Next line was: let mut stack = reader.events().peekable();
 		let mut stack_wrapped = XmlResponseFromAws::new(reader.events().peekable());
-		stack_wrapped.next();
-		stack_wrapped.next();
-		
+		stack_wrapped.next(); // xml start tag
+		stack_wrapped.next(); // ListQueuesResponse
+
+		// Matt's debug:
+		// loop {
+		//     match stack_wrapped.next() {
+		//         Some(x) => {
+		//             println!("found {:?}", x);
+		//         },
+		//         None => { println!("none");
+		// 		 break }
+		//     }
+		// }
+		// /Matt's debug
+
+
 		match status {
 			200 => {
 				Ok(try!(ListQueuesResultParser::parse_xml("ListQueuesResult", &mut stack_wrapped)))
