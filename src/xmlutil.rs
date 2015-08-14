@@ -67,15 +67,12 @@ pub struct XmlResponseFromFile<'a> {
 
 
 // I cannot explain how these lifetimes work to a child, therefore I need to understand them better:
-impl <'b>XmlResponseFromFile<'b> {
+impl <'a>XmlResponseFromFile<'a> {
 	// TODO: refactor to have caller supply the xml_stack not just location.
-	pub fn new<'c>(file_location: &str) -> XmlResponseFromFile {
-		let file = File::open("file.xml").unwrap();
-	    let file = BufReader::new(file);
+	pub fn new<'c>(stack: Peekable<Events<'a, BufReader<File>>>) -> XmlResponseFromFile {
 
-	    let mut parser = EventReader::new(file);
 		XmlResponseFromFile {
-			xml_stack: parser.events().peekable(),
+			xml_stack: stack,
 		}
 
 	}
