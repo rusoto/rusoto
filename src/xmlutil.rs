@@ -124,6 +124,7 @@ pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result
 			Ok(())
 		}
 	}else {
+		println!("end_element got: {:#?}", next);
 		Err(XmlParseError::new(&format!("Expected EndElement {} got {:?}", element_name, next)))
 	}
 }

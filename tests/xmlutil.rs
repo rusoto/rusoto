@@ -47,7 +47,6 @@ fn peek_at_name_happy_path() {
 
 #[test]
 fn start_element_happy_path() {
-    // open file
     let file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
     let file = BufReader::new(file);
     let mut my_parser  = EventReader::new(file);
@@ -58,17 +57,37 @@ fn start_element_happy_path() {
     reader.next();
     reader.next();
 
-    // try peek_at_name
     match start_element("ListQueuesResult", &mut reader) {
         Ok(_) => println!("Got start"),
         Err(_) => panic!("Couldn't find start element")
     }
 }
-//
-// #[test]
-// fn end_element_happy_path() {
-//     panic!("Not implemented");
-// }
+
+#[test]
+fn end_element_happy_path() {
+    let file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
+    let file = BufReader::new(file);
+    let mut my_parser  = EventReader::new(file);
+    let my_stack = my_parser.events().peekable();
+    let mut reader = XmlResponseFromFile::new(my_stack);
+
+    // skip two leading fields since we ignore them (xml declaration, return type declaration)
+    reader.next();
+    reader.next();
+
+
+    // TODO: this is fragile and not good: do some looping to find end element?
+    // But need to do it without being dependent on peek_at_name.
+    reader.next();
+    reader.next();
+    reader.next();
+    reader.next();
+
+    match end_element("ListQueuesResult", &mut reader) {
+        Ok(_) => println!("Got end"),
+        Err(_) => panic!("Couldn't find end element")
+    }
+}
 
 pub struct XmlResponseFromFile<'a> {
 	xml_stack: Peekable<Events<'a, BufReader<File>>>,
