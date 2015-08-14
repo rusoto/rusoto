@@ -4,6 +4,13 @@ use xml::reader::events::*;
 use xml::reader::Events;
 use hyper::client::response::*;
 use std::collections::HashMap;
+use std::io::prelude::*;
+use std::io::BufReader;
+use std::fs::File;
+use std::path::Path;
+use std::fs;
+use std::error::Error;
+use xml::reader::EventReader;
 
 /// generic Error for XML parsing
 #[derive(Debug)]
@@ -53,19 +60,40 @@ impl <'b> Next for XmlResponseFromAws<'b> {
 	}
 }
 
+// TODO: move to tests/xmlutils.rs
+pub struct XmlResponseFromFile<'a> {
+	xml_stack: Peekable<Events<'a, BufReader<File>>>,
+}
 
-// // TODO: move to tests/xmlutils.rs
-// pub struct XmlResponseFromFile {
-// 	file_location: String
-// }
-//
-// impl Read for XmlResponseFromFile {
-// 	#[inline]
-//     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-// 		// Get a Result reader from our specified file
-//         panic!("Not implemented.");
-//     }
-// }
+
+// I cannot explain how these lifetimes work to a child, therefore I need to understand them better:
+impl <'b>XmlResponseFromFile<'b> {
+	// TODO: refactor to have caller supply the xml_stack not just location.
+	pub fn new<'c>(file_location: &str) -> XmlResponseFromFile {
+		let file = File::open("file.xml").unwrap();
+	    let file = BufReader::new(file);
+
+	    let mut parser = EventReader::new(file);
+		XmlResponseFromFile {
+			xml_stack: parser.events().peekable(),
+		}
+
+	}
+}
+
+// Need peek and next implemented.
+impl <'b> Peek for XmlResponseFromFile <'b> {
+	fn peek(&mut self) -> Option<&XmlEvent> {
+		return self.xml_stack.peek();
+	}
+}
+
+impl <'b> Next for XmlResponseFromFile <'b> {
+	fn next(&mut self) -> Option<XmlEvent> {
+		return self.xml_stack.next();
+	}
+}
+
 // /move to tests/xmlutils.rs
 
 
