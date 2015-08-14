@@ -15,22 +15,19 @@ use xml::reader::events::*;
 #[test]
 fn peek_at_name_happy_path() {
     // open file
-    let mut good_xml = open_xmlfile_for_test("tests/sampledata/sqs-happy.xml");
-    // try peek_at_name
+    let file = File::open("tests/blah.xml").unwrap();
+    let file = BufReader::new(file);
 
-    match peek_at_name(&mut good_xml) {
+    let mut my_parser  = EventReader::new(file);
+    let mut my_stack = my_parser.events().peekable();
+
+    let mut reader = XmlResponseFromFile::new(my_stack);
+
+    // try peek_at_name
+    match peek_at_name(&mut reader) {
         Ok(data) => println!("Got {}", data),
         Err(why) => panic!("Couldn't peek at name")
     }
-}
-
-fn open_xmlfile_for_test<'a>(file_location: &str) -> XmlResponseFromFile {
-    let file = File::open(file_location).unwrap();
-    let file = BufReader::new(file);
-
-    let mut parser = EventReader::new(file);
-    let mut XmlResponse = XmlResponseFromFile::new(parser.events().peekable());
-    return XmlResponse;
 }
 
 pub struct XmlResponseFromFile<'a> {
@@ -39,10 +36,8 @@ pub struct XmlResponseFromFile<'a> {
 
 // I cannot explain how these lifetimes work to a child, therefore I need to understand them better:
 impl <'a>XmlResponseFromFile<'a> {
-	pub fn new<'c>(stack: Peekable<Events<'a, BufReader<File>>>) -> XmlResponseFromFile {
-		XmlResponseFromFile {
-			xml_stack: stack,
-		}
+	pub fn new<'c>(my_stack: Peekable<Events<'a, BufReader<File>>>) -> XmlResponseFromFile {
+		return XmlResponseFromFile { xml_stack: my_stack };
 	}
 }
 
