@@ -152,7 +152,7 @@ def type_parser(name, shape):
 	print 'struct ' + name + 'Parser;'
 	print 'impl ' + name + 'Parser {'
 	# I think this is where the Trait refactor comes in:
-	print '\tfn parse_xml<\'a>(tag_name: &str, stack: &mut XmlStack) -> Result<' + name + ', XmlParseError> {'
+	print '\tfn parse_xml<\'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<' + name + ', XmlParseError> {'
 
 	if shape_type == 'map':
 		map_parser(shape)
@@ -272,8 +272,8 @@ def request_method(operation):
 	print '\t\tlet status = result.status.to_u16();'
 #	print '\t\tprintln!("{}", output);'
 	print '\t\tlet mut reader = EventReader::new(result);'
-	print '\t\tlet mut stack = reader.events().peekable();'
-	print '\t\tstack.next();'
+	print '\t\tlet mut stack = XmlResponseFromAws::new(reader.events().peekable());'
+	print '\t\tstack.next(); // xml start tag'
 	print '\t\tstack.next();'
 	print '\t\tmatch status {'
 
