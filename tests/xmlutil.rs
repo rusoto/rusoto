@@ -30,21 +30,6 @@ fn peek_at_name_happy_path() {
     }
 }
 
-// #[test]
-// fn optional_string_field_happy_path() {
-//     panic!("Not implemented");
-// }
-//
-// #[test]
-// fn string_field_happy_path() {
-//     panic!("Not implemented");
-// }
-//
-// #[test]
-// fn characters_happy_path() {
-//     panic!("Not implemented");
-// }
-
 #[test]
 fn start_element_happy_path() {
     let file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
@@ -61,6 +46,25 @@ fn start_element_happy_path() {
         Ok(_) => println!("Got start"),
         Err(_) => panic!("Couldn't find start element")
     }
+}
+
+#[test]
+fn string_field_happy_path() {
+    let file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
+    let file = BufReader::new(file);
+    let mut my_parser  = EventReader::new(file);
+    let my_stack = my_parser.events().peekable();
+    let mut reader = XmlResponseFromFile::new(my_stack);
+
+    // skip two leading fields since we ignore them (xml declaration, return type declaration)
+    reader.next();
+    reader.next();
+
+    reader.next(); // reader now at ListQueuesResult
+
+    // now we're set up to use string:
+    let my_chars = string_field("QueueUrl", &mut reader);
+    println!("Got {} for string", my_chars.unwrap());
 }
 
 #[test]
