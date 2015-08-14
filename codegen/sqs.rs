@@ -13,7 +13,7 @@ pub struct ListQueuesRequest {
 /// Parse String from XML
 struct StringParser;
 impl StringParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<String, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
@@ -32,7 +32,7 @@ impl StringWriter {
 /// Parse ListQueuesRequest from XML
 struct ListQueuesRequestParser;
 impl ListQueuesRequestParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListQueuesRequest, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListQueuesRequest, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListQueuesRequest::default();
 		loop {
@@ -61,7 +61,7 @@ pub type QueueUrlList = Vec<String>;
 /// Parse QueueUrlList from XML
 struct QueueUrlListParser;
 impl QueueUrlListParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueUrlList, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueUrlList, XmlParseError> {
 		let mut obj = Vec::new();
 		while try!(peek_at_name(stack)) == "QueueUrl" {
 			obj.push(try!(StringParser::parse_xml("QueueUrl", stack)));
@@ -86,7 +86,7 @@ pub type QueueAttributeName = String;
 /// Parse QueueAttributeName from XML
 struct QueueAttributeNameParser;
 impl QueueAttributeNameParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<QueueAttributeName, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueAttributeName, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
@@ -111,7 +111,7 @@ pub struct ListQueuesResult {
 /// Parse ListQueuesResult from XML
 struct ListQueuesResultParser;
 impl ListQueuesResultParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<ListQueuesResult, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListQueuesResult, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let mut obj = ListQueuesResult::default();
 		loop {
@@ -140,7 +140,7 @@ pub type Boolean = bool;
 /// Parse Boolean from XML
 struct BooleanParser;
 impl BooleanParser {
-	fn parse_xml<'a>(tag_name: &str, stack: &mut XmlStack) -> Result<Boolean, XmlParseError> {
+	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Boolean, XmlParseError> {
 		try!(start_element(tag_name, stack));
 		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
 		try!(end_element(tag_name, stack));
@@ -177,12 +177,15 @@ impl<'a> SQSClient<'a> {
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
-		let mut stack = reader.events().peekable();
-		stack.next();
-		stack.next();
+		// NOTE: the next four lines are important and will probably need to be changed in the code gen:
+		// let mut stack = reader.events().peekable();
+		let mut stack_wrapped = XmlResponseFromAws::new(reader.events().peekable());
+		stack_wrapped.next();
+		stack_wrapped.next();
+		
 		match status {
 			200 => {
-				Ok(try!(ListQueuesResultParser::parse_xml("ListQueuesResult", &mut stack)))
+				Ok(try!(ListQueuesResultParser::parse_xml("ListQueuesResult", &mut stack_wrapped)))
 			}
 			_ => { Err(AWSError::new("error")) }
 		}
