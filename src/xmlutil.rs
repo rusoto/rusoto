@@ -18,32 +18,33 @@ impl XmlParseError {
 
 /// syntactic sugar for the XML event stack we pass around
 pub type XmlStack<'a> = Peekable<Events<'a, Response>>;
-
-// Wraps the Hyper Response type
-pub struct XmlResponseFromAws<'b> {
-	response: Response, // Hyper response type
-	xml_stack: Peekable<Events<'b, Response>> // refactor to use XmlStack type?
-}
-
-impl <'b> Read for XmlResponseFromAws<'b> {
-	// implement read.  See https://github.com/hyperium/hyper/blob/master/src/client/response.rs
-	fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-		return self.response.read(buf);
-	}
-}
-
-// TODO: move to tests/xmlutils.rs
-pub struct XmlResponseFromFile {
-	file_location: String
-}
-
-impl Read for XmlResponseFromFile {
-	#[inline]
-    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-		// Get a Result reader from our specified file
-        panic!("Not implemented.");
-    }
-}
+//
+// // Wraps the Hyper Response type
+// pub struct XmlResponseFromAws<'b> {
+// 	response: Response, // Hyper response type
+// 	xml_stack: Peekable<Events<'b, Response>> // refactor to use XmlStack type?
+// }
+//
+// // Need peek and next implemented.
+// impl <'b> Peek, Next for XmlResponseFromAws<'b> {
+// 	// implement Peek.  See https://github.com/hyperium/hyper/blob/master/src/client/response.rs
+// 	fn peek(&mut self) ->  {
+// 		return self.response.
+// 	}
+// }
+//
+// // TODO: move to tests/xmlutils.rs
+// pub struct XmlResponseFromFile {
+// 	file_location: String
+// }
+//
+// impl Read for XmlResponseFromFile {
+// 	#[inline]
+//     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+// 		// Get a Result reader from our specified file
+//         panic!("Not implemented.");
+//     }
+// }
 // /move to tests/xmlutils.rs
 
 
@@ -76,7 +77,6 @@ pub fn characters(stack: &mut XmlStack ) -> Result<String, XmlParseError> {
 	} else {
 		Err(XmlParseError::new("Expected characters"))
 	}
-
 }
 
 /// get the name of the current element in the stack.  throw a parse error if it's not a StartElement
