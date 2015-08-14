@@ -3,12 +3,8 @@ extern crate xml;
 
 use xml::reader::*;
 use rusoto::xmlutil::*;
-use std::io::prelude::*;
-use std::path::Path;
 use std::io::BufReader;
 use std::fs::File;
-use std::fs;
-use std::error::Error;
 use std::iter::Peekable;
 use xml::reader::events::*;
 
@@ -19,7 +15,7 @@ fn peek_at_name_happy_path() {
     let file = BufReader::new(file);
 
     let mut my_parser  = EventReader::new(file);
-    let mut my_stack = my_parser.events().peekable();
+    let my_stack = my_parser.events().peekable();
 
     let mut reader = XmlResponseFromFile::new(my_stack);
 
