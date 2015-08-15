@@ -16,6 +16,9 @@ use std::str;
 use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
+// Debug:
+// use std::io::Read;
+
 
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process
@@ -27,7 +30,8 @@ pub struct SignedRequest {
 	path: String,
 	headers: BTreeMap<String, Vec<Vec<u8>>>,
 	params: Params,
-	hostname: Option<String>
+	hostname: Option<String>,
+	payload: Option<Vec<u8>>,
 }
 
 impl SignedRequest {
@@ -41,12 +45,17 @@ impl SignedRequest {
 			path: path.to_string(),
 			headers: BTreeMap::new(),
 			params: Params::new(),
-			hostname: None
+			hostname: None,
+			payload: None,
 		 }
 	}
 
 	pub fn set_hostname(&mut self, hostname: Option<String>) {
 		self.hostname = hostname;
+	}
+
+	pub fn set_payload(&mut self, payload: Option<Vec<u8>>) {
+		self.payload = payload;
 	}
 
 	/// Add a value to the array of headers for the specified key.
@@ -79,7 +88,6 @@ impl SignedRequest {
 	/// Add the calculated signature to the request headers and execute it
 	/// Return the hyper HTTP response
 	pub fn sign_and_execute(&mut self, creds: &AWSCredentials) -> Response {
-
 		let date = now_utc();
 
 		// set the required host/date headers
@@ -94,16 +102,33 @@ impl SignedRequest {
 			self.add_header("X-Amz-Security-Token", creds.get_token());
 		}
 
-		let payload: String;
+		let mut payload: String;
+		match self.payload {
+			None => payload = String::new(),
+			Some(ref payload_data) => payload = str::from_utf8(&payload_data).unwrap().to_string(),
+		}
+
 		let canonical_query_string: String;
 		let hyper_method;
 
 		// get the parameters in the right place for the http method being used
-		// TODO: handle PUT/DELTE/HEAD methods
+		// TODO: handle PUT/DELTE/HEAD methods (with a matcher, not if/else if)
 		if self.method == "POST" {
-			payload = build_canonical_query_string(&self.params);
+			payload = build_canonical_query_string(&self.params); // can we move this up to the matcher above?
 			canonical_query_string = "".to_string();
 			hyper_method = Method::Post;
+
+			self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
+			self.add_header("content-length", &format!("{}", payload.len()));
+		} else if self.method == "PUT" {
+			canonical_query_string = "".to_string();
+			hyper_method = Method::Put;
+
+			self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
+			self.add_header("content-length", &format!("{}", payload.len()));
+		} else if self.method == "DELETE" {
+			canonical_query_string = "".to_string();
+			hyper_method = Method::Delete;
 
 			self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
 			self.add_header("content-length", &format!("{}", payload.len()));
@@ -148,21 +173,27 @@ impl SignedRequest {
 		}
 
 		// determine the final URI to use based on http method
+		// println!("Canonical url is {}", canonical_uri);
 		let mut final_uri = format!("https://{}{}", hostname, canonical_uri);
 		if self.method == "GET" {
 			final_uri = final_uri + &format!("?{}", canonical_query_string);
 		}
 
-		//println!("{}\n{}\n{}", self.method, final_uri, payload);
+		// S3 can be tricky, signature is against us-east-1 for now.  To verify:
+		// println!("Region is {}", &self.region);
+		//
+		// println!("Full request: {}\n{}\n{}", self.method, final_uri, payload);
 
 	    // execute the damn request already
 	    let client = Client::new();
+		// Set to mut for debug:
 	    let result = client.request(hyper_method, &final_uri).headers(hyper_headers).body(&payload).send().unwrap();
 
 		// Debug:
 		// let mut body = String::new();
 	    // result.read_to_string(&mut body).unwrap();
 	    // println!("Response: {}", body);
+		// result is now consumed, would have to reset it to original.  Perhaps make a copy to consume with read_to_string.
 		// /Debug
 
 	    result
@@ -276,6 +307,13 @@ fn build_hostname(service: &str, region: &str) -> String {
 	//iam has only 1 endpoint, other services have region-based endpoints
 	match service {
 		"iam" => format!("{}.amazonaws.com", service),
+		"s3" => {   // TODO: unmagick string this:
+					if region == "us-east-1" {
+						format!("{}.amazonaws.com", service)
+					} else {
+						format!("s3-{}.amazonaws.com", service)
+					}
+				},
 		_ => format!("{}.{}.amazonaws.com", service, region)
 	}
 }
