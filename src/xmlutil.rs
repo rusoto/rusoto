@@ -1,9 +1,12 @@
 use std::iter::Peekable;
 use std::num::ParseIntError;
-use xml::reader::events::*;
-use xml::reader::Events;
 use hyper::client::response::*;
 use std::collections::HashMap;
+
+use xml::reader::*;
+use std::io::BufReader;
+use std::fs::File;
+use xml::reader::events::*;
 
 
 /// generic Error for XML parsing
@@ -58,6 +61,32 @@ impl From<ParseIntError> for XmlParseError{
     fn from(_e:ParseIntError) -> XmlParseError { XmlParseError::new("ParseIntError") }
 }
 
+// Testing helper:
+pub struct XmlResponseFromFile<'a> {
+	xml_stack: Peekable<Events<'a, BufReader<File>>>,
+}
+
+// I cannot explain how these lifetimes work to a child, therefore I need to understand them better:
+impl <'a>XmlResponseFromFile<'a> {
+	pub fn new<'c>(my_stack: Peekable<Events<'a, BufReader<File>>>) -> XmlResponseFromFile {
+		return XmlResponseFromFile { xml_stack: my_stack };
+	}
+}
+
+// Need peek and next implemented.
+impl <'b> Peek for XmlResponseFromFile <'b> {
+	fn peek(&mut self) -> Option<&XmlEvent> {
+		return self.xml_stack.peek();
+	}
+}
+
+impl <'b> Next for XmlResponseFromFile <'b> {
+	fn next(&mut self) -> Option<XmlEvent> {
+		return self.xml_stack.next();
+	}
+}
+// /testing helper
+
 /// parse Some(String) if the next tag has the right name, otherwise None
 pub fn optional_string_field<T: Peek + Next>(field_name: &str, stack: &mut T) -> Result<Option<String>, XmlParseError> {
 	if try!(peek_at_name(stack)) == field_name {
@@ -109,7 +138,6 @@ pub fn start_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Resu
 			Ok(attr_map)
 		}
 	} else {
-     // 	println!("start_element got: {:#?}", next);
 		Err(XmlParseError::new(&format!("Expected StartElement {}", element_name)))
 	}
 }
@@ -124,7 +152,6 @@ pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result
 			Ok(())
 		}
 	}else {
-		println!("end_element got: {:#?}", next);
 		Err(XmlParseError::new(&format!("Expected EndElement {} got {:?}", element_name, next)))
 	}
 }
@@ -135,8 +162,6 @@ mod tests {
 	use xml::reader::*;
 	use std::io::BufReader;
 	use std::fs::File;
-	use std::iter::Peekable;
-	use xml::reader::events::*;
 
 	#[test]
 	fn peek_at_name_happy_path() {
@@ -221,30 +246,6 @@ mod tests {
 	        Ok(_) => println!("Got end"),
 	        Err(_) => panic!("Couldn't find end element")
 	    }
-	}
-
-	pub struct XmlResponseFromFile<'a> {
-		xml_stack: Peekable<Events<'a, BufReader<File>>>,
-	}
-
-	// I cannot explain how these lifetimes work to a child, therefore I need to understand them better:
-	impl <'a>XmlResponseFromFile<'a> {
-		pub fn new<'c>(my_stack: Peekable<Events<'a, BufReader<File>>>) -> XmlResponseFromFile {
-			return XmlResponseFromFile { xml_stack: my_stack };
-		}
-	}
-
-	// Need peek and next implemented.
-	impl <'b> Peek for XmlResponseFromFile <'b> {
-		fn peek(&mut self) -> Option<&XmlEvent> {
-			return self.xml_stack.peek();
-		}
-	}
-
-	impl <'b> Next for XmlResponseFromFile <'b> {
-		fn next(&mut self) -> Option<XmlEvent> {
-			return self.xml_stack.next();
-		}
 	}
 
 }

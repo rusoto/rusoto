@@ -14,7 +14,5 @@ extern crate rustc_serialize as serialize;
 pub mod credentials;
 pub mod error;
 pub mod sqs;
+pub mod s3;
 pub mod xmlutil;
-
-
-

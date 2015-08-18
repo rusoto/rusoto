@@ -40,9 +40,15 @@ primitive_writers = {
 }
 
 # convert CamelCase to snake_case
+# Also unapolagetically overloaded to prevent collisions with Rust keywords like "type".
+# TODO: stop that, use function specifically for that.
 def c_to_s(name):
 	s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-	return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+	s2 = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+	if s2 == 'type':
+		# prepend something informative
+		s2 = 'foo_' + s2
+	return s2
 
 def documentation(shape, indent=""):
 	if 'documentation' in shape:
@@ -72,14 +78,19 @@ def rust_type(name, shape):
 
 # generate a rust declaration for a botocore structure shape
 def rust_struct(name, shape):
-
 	print "#[derive(Debug, Default)]";
 	if shape['members']:
+		# print "MEMBERS:" + name
 		print "pub struct " + name + " {"
 		for (mname, member) in shape['members'].iteritems():
 			if 'documentation' in member:
 				documentation(member,"\t")
 			rust_type =  member['shape']
+
+			if rust_type == 'Message':
+				# print "foooo shape"
+				rust_type = sys.argv[2] + rust_type
+
 			if not is_required(shape, mname):
 				rust_type = "Option<" + rust_type + ">"
 			print "\tpub " + c_to_s(mname) + ": " + rust_type + ","
@@ -89,7 +100,6 @@ def rust_struct(name, shape):
 
 # generate rust code to encode a botocore shape into a map of query parameters
 def param_writer(name, shape):
-
 	print "/// Write " + name + " contents to a SignedRequest"
 	print 'struct ' + name + 'Writer;'
 	print 'impl ' + name + 'Writer {'
@@ -229,7 +239,6 @@ def get_location_name(name, child):
 
 # XML parser code to pull a single struct element from XML
 def parse_struct_child(name, child, required):
-
 	tag_name = get_location_name(name, child)
 	parse_stmt = 'try!(' + child['shape'] + 'Parser::parse_xml("' + tag_name + '", stack))'
 
@@ -251,21 +260,27 @@ def get_output_type(operation):
 # generate rust code to sign and execute an HTTP request for a botocore operation
 def request_method(operation):
 	http = operation['http']
-	if not ('input' in operation):
-		return
 
-	input_name = operation['input']['shape']
-	input_type = shapes[input_name]
 	output_type = get_output_type(operation)
-
 	documentation(operation,"\t")
 
-	print "\tpub fn " + c_to_s(operation['name']) + "(&self, input: &" + input_name + ") -> Result<" + output_type + ", AWSError> {"
+	# This feels so hacky to get around scoping of these in the else block:
+	input_name = ''
+	input_type = ''
+
+	if not ('input' in operation):
+		print "\tpub fn " + c_to_s(operation['name']) + "(&self"") -> Result<" + output_type + ", AWSError> {"
+	else:
+		input_name = operation['input']['shape']
+		input_type = shapes[input_name]
+		print "\tpub fn " + c_to_s(operation['name']) + "(&self, input: &" + input_name + ") -> Result<" + output_type + ", AWSError> {"
+
 	print '\t\tlet mut request = SignedRequest::new("' + http['method'] + '", "' + metadata['endpointPrefix'] + '", &self.region, "' + http['requestUri'] + '");'
 	print "\t\tlet mut params = Params::new();"
 	print '\t\tparams.put("Action", "' + operation['name'] + '");'
 
-	print '\t\t' + input_name + 'Writer::write_params(&mut params, \"\", &input);'
+	if ('input' in operation):
+		print '\t\t' + input_name + 'Writer::write_params(&mut params, \"\", &input);'
 
 	print '\t\trequest.set_params(params);'
 	print '\t\tlet result = request.sign_and_execute(&self.creds);'
@@ -290,22 +305,22 @@ def request_method(operation):
 	print "\t}"
 
 def generate_client():
-		client_name = sys.argv[2]
+	client_name = sys.argv[2]
 
-		print "pub struct " + client_name  + "<'a> {"
-		print "\tcreds: &'a AWSCredentials,"
-		print "\tregion: &'a str"
-		print "}\n"
+	print "pub struct " + client_name  + "<'a> {"
+	print "\tcreds: &'a AWSCredentials,"
+	print "\tregion: &'a str"
+	print "}\n"
 
-		print "impl<'a> " + client_name + "<'a> { "
-		print "\tpub fn new(creds: &'a AWSCredentials, region: &'a str) -> " + client_name + "<'a> {"
-		print "\t\t" + client_name + " { creds: creds, region: region }"
-		print "\t}"
+	print "impl<'a> " + client_name + "<'a> { "
+	print "\tpub fn new(creds: &'a AWSCredentials, region: &'a str) -> " + client_name + "<'a> {"
+	print "\t\t" + client_name + " { creds: creds, region: region }"
+	print "\t}"
 
-		for (name, operation) in operations.iteritems():
-			request_method(operation)
+	for (name, operation) in operations.iteritems():
+		request_method(operation)
 
-		print "}"
+	print "}"
 
 
 def main():
@@ -314,6 +329,7 @@ def main():
 
 		print "use std::collections::HashMap;"
 		print "use std::str;"
+		print "use std::error::Error;"
 		global shapes
 		global metadata
 		global operations
@@ -322,6 +338,10 @@ def main():
 		operations = service['operations']
 
 		for (name, shape) in shapes.iteritems():
+			# don't pass in reserved Rust keywords.
+			if name == 'Message' or name == 'Error':
+				# print "REASSIGNING"
+				name = sys.argv[2] + name
 			rust_type(name, shape)
 			type_parser(name, shape)
 			param_writer(name, shape)
