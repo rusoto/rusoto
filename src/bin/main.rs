@@ -19,35 +19,20 @@ fn main() {
 	// println!("Creds in main: {}, {}, {}.", creds.get_aws_secret_key(), creds.get_aws_secret_key(),
 	// 	creds.get_token());
 
-	// match sqs_roundtrip_tests(&provider.get_credentials()) {
-	// 	Ok(_) => { println!("Everything worked."); },
-	// 	Err(err) => { println!("Got error: {:#?}", err); }
-	// }
+	match sqs_roundtrip_tests(&provider.get_credentials()) {
+		Ok(_) => { println!("Everything worked."); },
+		Err(err) => { println!("Got error: {:#?}", err); }
+	}
 
-	// match s3_list_buckets_tests(&provider.get_credentials()) {
-	// 	Ok(_) => { println!("Everything worked for S3 list buckets."); },
-	// 	Err(err) => { println!("Got error in s3 list buckets: {:#?}", err); }
-	// }
+	match s3_list_buckets_tests(&provider.get_credentials()) {
+		Ok(_) => { println!("Everything worked for S3 list buckets."); },
+		Err(err) => { println!("Got error in s3 list buckets: {:#?}", err); }
+	}
 
-	// match s3_create_bucket_test(&provider.get_credentials()) {
-	// 	Ok(_) => { println!("Everything worked for S3 create bucket."); },
-	// 	Err(err) => { println!("Got error in s3 create bucket: {:#?}", err); }
-	// }
-
-	// match s3_delete_bucket_test(&provider.get_credentials()) {
-	// 	Ok(_) => { println!("Everything worked for S3 delete bucket."); },
-	// 	Err(err) => { println!("Got error in s3 delete bucket: {:#?}", err); }
-	// }
-	//
-	// match s3_get_object_test(&provider.get_credentials()) {
-	// 	Ok(result) => {
-	// 		println!("Everything worked for S3 get object.");
-	// 		println!("saving file to object.png");
-	// 		let mut f = File::create("object.png").unwrap();
-	// 		f.write(&(result.body));
-	// 	}
-	// 	Err(err) => { println!("Got error in s3 get object: {:#?}", err); }
-	// }
+	match s3_create_bucket_test(&provider.get_credentials()) {
+		Ok(_) => { println!("Everything worked for S3 create bucket."); },
+		Err(err) => { println!("Got error in s3 create bucket: {:#?}", err); }
+	}
 
 	match s3_put_object_test(&provider.get_credentials()) {
 		Ok(result) => {
@@ -56,11 +41,25 @@ fn main() {
 		Err(err) => { println!("Got error in s3 put object: {:#?}", err); }
 	}
 
+	match s3_get_object_test(&provider.get_credentials()) {
+		Ok(result) => {
+			println!("Everything worked for S3 get object.");
+			let mut f = File::create("s3-sample-creds").unwrap();
+			f.write(&(result.body));
+		}
+		Err(err) => { println!("Got error in s3 get object: {:#?}", err); }
+	}
+
 	match s3_delete_object_test(&provider.get_credentials()) {
 		Ok(result) => {
 			println!("Everything worked for S3 delete object.");
 		}
 		Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
+	}
+
+	match s3_delete_bucket_test(&provider.get_credentials()) {
+		Ok(_) => { println!("Everything worked for S3 delete bucket."); },
+		Err(err) => { println!("Got error in s3 delete bucket: {:#?}", err); }
 	}
 }
 
@@ -79,7 +78,7 @@ fn s3_list_buckets_tests(creds: &AWSCredentials) -> Result<(), AWSError> {
 fn s3_get_object_test(creds: &AWSCredentials) -> Result<GetObjectOutput, AWSError> {
 	let s3 = S3Helper::new(&creds, "us-east-1");
 
-	let response = try!(s3.get_object("rusotobucket2", "rusotoobject"));
+	let response = try!(s3.get_object("rusotobucket2", "sample-credentials"));
 	// println!("get object response is {:?}", response);
 	Ok(response)
 }
@@ -87,7 +86,7 @@ fn s3_get_object_test(creds: &AWSCredentials) -> Result<GetObjectOutput, AWSErro
 fn s3_delete_object_test(creds: &AWSCredentials) -> Result<DeleteObjectOutput, AWSError> {
 	let s3 = S3Helper::new(&creds, "us-east-1");
 
-	let response = try!(s3.delete_object("rusotobucket2", "rusotoobject"));
+	let response = try!(s3.delete_object("rusotobucket2", "sample-credentials"));
 	// println!("delete object response is {:?}", response);
 	Ok(response)
 }
