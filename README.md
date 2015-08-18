@@ -1,4 +1,4 @@
-# rust-aws
+# Rusoto
 [![Build Status](https://ci.dualspark.com/api/badge/github.com/DualSpark/rust-aws/status.svg?branch=master)](https://ci.dualspark.com/github.com/DualSpark/rust-aws)
 
 AWS client libraries for Rust
@@ -7,7 +7,17 @@ AWS client libraries for Rust
 
 **Alpha**.  Rust code has been generated from JSON documentation of services from [botocore](https://github.com/boto/botocore).
 
-### Installation / Setup
+#### Currently implemented
+
+1. **SQS**: list queues, create queue, get queue url, send message, receive message, delete message, delete queue.
+2. **S3**: list buckets, create bucket, delete bucket, upload object, download object, delete object.
+
+### Installation
+
+Rusoto is available on [crates.io](https://crates.io/crates/rusoto).
+
+### Contributing
+
 1. Install Rust 1.1.0 or later - http://www.rust-lang.org/
 2. Check out code from github
 3. Set up AWS credentials: environment variables (export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY), ~/.aws/credentials, or use an IAM instance profile.
