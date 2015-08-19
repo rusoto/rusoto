@@ -16,6 +16,10 @@ AWS client libraries for Rust
 
 Rusoto is available on [crates.io](https://crates.io/crates/rusoto).
 
+### Semantic versioning
+
+Rusoto complies with [semantic versioning 2.0](http://semver.org/).  Until reaching 1.0.0 the API is to be considered unstable.  See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/rusoto) for current version.
+
 ### Contributing
 
 1. Install Rust 1.1.0 or later - http://www.rust-lang.org/
