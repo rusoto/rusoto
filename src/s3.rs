@@ -27,8 +27,26 @@ impl<'a> S3Helper<'a> {
 		self.client.list_buckets()
 	}
 
+	/// Creates bucket in default us-east-1/us-standard region.
 	pub fn create_bucket(&self, bucket_name: &str) -> Result<CreateBucketOutput, AWSError> {
+		// TODO: refactor to call create_bucket_in_region
 		let mut request = CreateBucketRequest::default();
+		request.bucket = bucket_name.to_string();
+		// println!("Creating bucket");
+		let result = self.client.create_bucket(&request);
+		// println!("Result is {:?}", result);
+		result
+	}
+
+	/// Creates bucket in specified region.
+	// TODO: enum for region?
+	pub fn create_bucket_in_region(&self, bucket_name: &str, region: &str) -> Result<CreateBucketOutput, AWSError> {
+		// TODO: refactor to call create_bucket with location specified
+		let mut request = CreateBucketRequest::default();
+		// create_bucket_configuration needs to be specified.  It's of type Option<CreateBucketConfiguration>.
+		let create_config = CreateBucketConfiguration {location_constraint: region.to_string()};
+		request.create_bucket_configuration = Some(create_config);
+
 		request.bucket = bucket_name.to_string();
 		// println!("Creating bucket");
 		let result = self.client.create_bucket(&request);
