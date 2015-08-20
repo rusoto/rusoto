@@ -40,7 +40,6 @@ impl<'a> S3Helper<'a> {
 		// not specified means us-standard, no need to specify anything for calling AWS:
 		// also handle us-east-1 being specified: ignore it!
 		if region.len() > 0 && region_is_valid(region) && region != "us-east-1" {
-			println!("Locking down to {}", region);
 			let create_config = CreateBucketConfiguration {location_constraint: region.to_string()};
 			request.create_bucket_configuration = Some(create_config);
 		}
@@ -51,11 +50,11 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
-	pub fn delete_bucket(&self, bucket_name: &str) -> Result<(), AWSError> {
+	pub fn delete_bucket(&self, bucket_name: &str, region: &str) -> Result<(), AWSError> {
 		let mut request = DeleteBucketRequest::default();
 		request.bucket = bucket_name.to_string();
 		// println!("Deleting bucket");
-		let result = self.client.delete_bucket(&request);
+		let result = self.client.delete_bucket(&request, region);
 		// println!("Result is {:?}", result);
 		result
 	}
