@@ -123,6 +123,7 @@ mod tests {
 	use super::ListBucketsOutputParser;
 	use super::*;
 	use xmlutil::*;
+	use regions::*;
 
 	#[test]
 	fn list_buckets_happy_path() {
@@ -142,7 +143,8 @@ mod tests {
 
 	#[test]
 	fn create_bucket_constrained_to_region() {
-		match create_bucket_config_xml("us-west-2").len() {
+		let region = Region::UsWest2;
+		match create_bucket_config_xml(&region).len() {
 			0 => panic!("us-west-2 should have bucket constraint."),
 			_ => return,
 		}
@@ -150,7 +152,8 @@ mod tests {
 
 	#[test]
 	fn create_bucket_us_east_1_no_constraints() {
-		match create_bucket_config_xml("us-east-1").len() {
+		let region = Region::UsEast1;
+		match create_bucket_config_xml(&region).len() {
 			0 => return,
 			_ => panic!("us-east-1 should not have bucket constraint."),
 		}
