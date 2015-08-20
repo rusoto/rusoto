@@ -90,7 +90,7 @@ impl<'a> S3Helper<'a> {
 }
 
 // This is a bit hacky to get functionality until we figure out an XML writing util.
-fn create_bucket_config_xml(region: &str) -> Vec<u8> {
+pub fn create_bucket_config_xml(region: &str) -> Vec<u8> {
 	if region == "us-east-1" {
 		return Vec::new();
 	} else {
@@ -107,6 +107,7 @@ mod tests {
 	use std::io::BufReader;
 	use std::fs::File;
 	use super::ListBucketsOutputParser;
+	use super::*;
 	use xmlutil::*;
 
 	#[test]
@@ -122,6 +123,22 @@ mod tests {
 		match result {
 			Err(_) => panic!("Couldn't parse list_buckets"),
 			Ok(_) => return,
+		}
+	}
+
+	#[test]
+	fn create_bucket_constrained_to_region() {
+		match create_bucket_config_xml("us-west-2").len() {
+			0 => panic!("us-west-2 should have bucket constraint."),
+			_ => return,
+		}
+	}
+
+	#[test]
+	fn create_bucket_us_east_1_no_constraints() {
+		match create_bucket_config_xml("us-east-1").len() {
+			0 => return,
+			_ => panic!("us-east-1 should not have bucket constraint."),
 		}
 	}
 }
