@@ -7,6 +7,7 @@ use params::*;
 use error::*;
 use xmlutil::*;
 use std::str::FromStr;
+use regions::*;
 
 // include the code generated from the SQS botocore templates
 include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/sqs.rs"));
@@ -16,7 +17,7 @@ pub struct SQSHelper<'a> {
 }
 
 impl<'a> SQSHelper<'a> {
-	pub fn new(credentials:&'a AWSCredentials, region:&'a str) -> SQSHelper<'a> {
+	pub fn new(credentials:&'a AWSCredentials, region:&'a Region) -> SQSHelper<'a> {
 		SQSHelper { client: SQSClient::new(credentials, region) }
 	}
 

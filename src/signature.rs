@@ -16,6 +16,7 @@ use std::str;
 use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
+use regions::*;
 // Debug:
 // use std::io::Read;
 
@@ -23,10 +24,10 @@ use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process
 #[derive(Debug)]
-pub struct SignedRequest {
+pub struct SignedRequest<'a> {
 	method: String,
 	service: String,
-	region: String,
+	region: &'a Region,
 	path: String,
 	headers: BTreeMap<String, Vec<Vec<u8>>>,
 	params: Params,
@@ -34,14 +35,13 @@ pub struct SignedRequest {
 	payload: Option<Vec<u8>>,
 }
 
-impl SignedRequest {
-
+impl <'a> SignedRequest <'a> {
 	/// Default constructor
-	pub fn new(method: &str, service: &str, region: &str, path: &str) -> SignedRequest {
+	pub fn new<'b>(method: &str, service: &str, region: &'a Region, path: &str) -> SignedRequest<'a> {
 		SignedRequest {
 			method: method.to_string(),
 			service: service.to_string(),
-			region: region.to_string(),
+			region: region,
 			path: path.to_string(),
 			headers: BTreeMap::new(),
 			params: Params::new(),
@@ -154,11 +154,11 @@ impl SignedRequest {
 
 		// use the hashed canonical request to build the string to sign
 		let hashed_canonical_request = to_hexdigest(&canonical_request);
-		let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), &self.region, &self.service);
+		let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), region_in_aws_format(&self.region), &self.service);
 		let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
 
 		// construct the signing key and sign the string with it
-		let signing_key = signing_key(&creds.get_aws_secret_key(), date, &self.region, &self.service);
+		let signing_key = signing_key(&creds.get_aws_secret_key(), date, &region_in_aws_format(&self.region), &self.service);
 		let signature = signature(&string_to_sign, signing_key);
 
 		// build the actual auth header
@@ -180,7 +180,7 @@ impl SignedRequest {
 		}
 
 		// S3 can be tricky, signature is against us-east-1 for now.  To verify:
-		// println!("Region is {}", &self.region);
+		// println!("Region is {}", region_in_aws_format(&self.region));
 		// println!("Full request: {}\n{}\n{}\n", self.method, final_uri, payload);
 
 	    // execute the request already
@@ -302,18 +302,16 @@ fn to_hexdigest(val: &str) -> String {
     h.to_hex().to_string()
 }
 
-fn build_hostname(service: &str, region: &str) -> String {
+fn build_hostname(service: &str, region: &Region) -> String {
 	//iam has only 1 endpoint, other services have region-based endpoints
 	match service {
 		"iam" => format!("{}.amazonaws.com", service),
-		"s3" => {   // TODO: unmagick string this:
-					// TODO: do we even need this?  S3 is special, let that class determine what the hostname is.
-					if region == "us-east-1" {
-						"s3.amazonaws.com".to_string()
-					} else {
-						format!("s3-{}.amazonaws.com", region)
-					}
-				},
-		_ => format!("{}.{}.amazonaws.com", service, region)
+		"s3" => {
+				match *region {
+					Region::UsEast1 => return "s3.amazonaws.com".to_string(),
+					_ => return format!("s3-{}.amazonaws.com", region_in_aws_format(region)),
+				}
+			}
+		_ => format!("{}.{}.amazonaws.com", service, region_in_aws_format(region))
 	}
 }

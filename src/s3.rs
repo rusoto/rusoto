@@ -6,7 +6,7 @@ use signature::*;
 use params::*;
 use error::*;
 use xmlutil::*;
-use regionchecker::*;
+use regions::*;
 use std::str::FromStr;
 use hyper::client::Response;
 use std::io::Read;
@@ -19,7 +19,7 @@ pub struct S3Helper<'a> {
 }
 
 impl<'a> S3Helper<'a> {
-	pub fn new(credentials:&'a AWSCredentials, region:&'a str) -> S3Helper<'a> {
+	pub fn new(credentials:&'a AWSCredentials, region:&'a Region) -> S3Helper<'a> {
 		S3Helper { client: S3Client::new(credentials, region) }
 	}
 
@@ -29,19 +29,22 @@ impl<'a> S3Helper<'a> {
 
 	/// Creates bucket in default us-east-1/us-standard region.
 	pub fn create_bucket(&self, bucket_name: &str) -> Result<CreateBucketOutput, AWSError> {
-		self.create_bucket_in_region(bucket_name, "us-east-1")
+		self.create_bucket_in_region(bucket_name, &Region::UsEast1)
 	}
 
 	/// Creates bucket in specified region.
-	// TODO: enum for region?
-	pub fn create_bucket_in_region(&self, bucket_name: &str, region: &str) -> Result<CreateBucketOutput, AWSError> {
+	pub fn create_bucket_in_region(&self, bucket_name: &str, region: &Region) -> Result<CreateBucketOutput, AWSError> {
 		let mut request = CreateBucketRequest::default();
 
-		// not specified means us-standard, no need to specify anything for calling AWS:
-		// also handle us-east-1 being specified: ignore it!
-		if region.len() > 0 && region_is_valid(region) && region != "us-east-1" {
-			let create_config = CreateBucketConfiguration {location_constraint: region.to_string()};
-			request.create_bucket_configuration = Some(create_config);
+		match *region {
+			Region::UsEast1 => {
+				// us-east-1 is us-standard, don't send a location constraint:
+				request.create_bucket_configuration = None;
+			}
+			_ => {
+				let create_config = CreateBucketConfiguration {location_constraint: region_in_aws_format(region)};
+				request.create_bucket_configuration = Some(create_config);
+			}
 		}
 		request.bucket = bucket_name.to_string();
 		// println!("Creating bucket");
@@ -50,7 +53,7 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
-	pub fn delete_bucket(&self, bucket_name: &str, region: &str) -> Result<(), AWSError> {
+	pub fn delete_bucket(&self, bucket_name: &str, region: &Region) -> Result<(), AWSError> {
 		let mut request = DeleteBucketRequest::default();
 		request.bucket = bucket_name.to_string();
 		// println!("Deleting bucket");
@@ -98,14 +101,17 @@ impl<'a> S3Helper<'a> {
 }
 
 // This is a bit hacky to get functionality until we figure out an XML writing util.
-pub fn create_bucket_config_xml(region: &str) -> Vec<u8> {
-	if region == "us-east-1" {
-		return Vec::new();
-	} else {
-		let xml = format!("<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">
-	<LocationConstraint>{}</LocationConstraint>
-	</CreateBucketConfiguration >", region);
-		return xml.into_bytes();
+pub fn create_bucket_config_xml(region: &Region) -> Vec<u8> {
+	match *region {
+		Region::UsEast1 => {
+			return Vec::new();
+		}
+		_ => {
+			let xml = format!("<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">
+		<LocationConstraint>{}</LocationConstraint>
+		</CreateBucketConfiguration >", region_in_aws_format(region));
+			return xml.into_bytes();
+		}
 	}
 }
 
@@ -117,6 +123,7 @@ mod tests {
 	use super::ListBucketsOutputParser;
 	use super::*;
 	use xmlutil::*;
+	use regions::*;
 
 	#[test]
 	fn list_buckets_happy_path() {
@@ -136,7 +143,8 @@ mod tests {
 
 	#[test]
 	fn create_bucket_constrained_to_region() {
-		match create_bucket_config_xml("us-west-2").len() {
+		let region = Region::UsWest2;
+		match create_bucket_config_xml(&region).len() {
 			0 => panic!("us-west-2 should have bucket constraint."),
 			_ => return,
 		}
@@ -144,7 +152,8 @@ mod tests {
 
 	#[test]
 	fn create_bucket_us_east_1_no_constraints() {
-		match create_bucket_config_xml("us-east-1").len() {
+		let region = Region::UsEast1;
+		match create_bucket_config_xml(&region).len() {
 			0 => return,
 			_ => panic!("us-east-1 should not have bucket constraint."),
 		}
