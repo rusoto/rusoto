@@ -4424,7 +4424,6 @@ impl CreateBucketRequestWriter {
 			GrantFullControlWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-full-control"), obj);
 		}
 		if let Some(ref obj) = obj.create_bucket_configuration {
-			// println!("Creating CreateBucketConfiguration");
 			CreateBucketConfigurationWriter::write_params(params, &(prefix.to_string() + "CreateBucketConfiguration"), obj);
 		}
 		if let Some(ref obj) = obj.grant_write_acp {
@@ -12181,15 +12180,17 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Creates a new bucket.
+	/// All requests go to the us-east-1/us-standard endpoint, but can create buckets anywhere.
 	pub fn create_bucket(&self, input: &CreateBucketRequest) -> Result<CreateBucketOutput, AWSError> {
-		let mut request = SignedRequest::new("PUT", "s3", &self.region, ""); // was "/{Bucket}"
-		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+		let mut request = SignedRequest::new("PUT", "s3", "us-east-1", "");
+		let hostname = format!("{}.s3.amazonaws.com", input.bucket);
 		request.set_hostname(Some(hostname));
-		let mut params = Params::new();
-		params.put("Action", "CreateBucket");
-		CreateBucketRequestWriter::write_params(&mut params, "", &input);
-		// println!("Request parameters in s3 codegen: {:?}", params);
-		request.set_params(params);
+
+		let create_config = create_bucket_config_xml(&self.region);
+		if create_config.len() > 0 {
+			request.set_payload(Some(create_config));
+		}
+
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 
@@ -12397,7 +12398,6 @@ impl<'a> S3Client<'a> {
 		request.set_params(params);
 		let mut result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
-		println!("Status was {}", status);
 		match status {
 			200 => {
 				let s3_object = try!(S3Client::get_object_from_response(&mut result));

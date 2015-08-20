@@ -181,10 +181,9 @@ impl SignedRequest {
 
 		// S3 can be tricky, signature is against us-east-1 for now.  To verify:
 		// println!("Region is {}", &self.region);
-		//
-		// println!("Full request: {}\n{}\n{}", self.method, final_uri, payload);
+		// println!("Full request: {}\n{}\n{}\n", self.method, final_uri, payload);
 
-	    // execute the damn request already
+	    // execute the request already
 	    let client = Client::new();
 		// Set to mut for debug:
 	    let result = client.request(hyper_method, &final_uri).headers(hyper_headers).body(&payload).send().unwrap();
@@ -308,10 +307,11 @@ fn build_hostname(service: &str, region: &str) -> String {
 	match service {
 		"iam" => format!("{}.amazonaws.com", service),
 		"s3" => {   // TODO: unmagick string this:
+					// TODO: do we even need this?  S3 is special, let that class determine what the hostname is.
 					if region == "us-east-1" {
-						format!("{}.amazonaws.com", service)
+						"s3.amazonaws.com".to_string()
 					} else {
-						format!("s3-{}.amazonaws.com", service)
+						format!("s3-{}.amazonaws.com", region)
 					}
 				},
 		_ => format!("{}.{}.amazonaws.com", service, region)

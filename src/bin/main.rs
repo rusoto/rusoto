@@ -12,6 +12,7 @@ use time::*;
 use std::fs::File;
 use std::io::Write;
 use std::io::Read;
+// use std::thread;
 
 fn main() {
 	let mut provider = DefaultAWSCredentialsProviderChain::new();
@@ -104,9 +105,10 @@ fn s3_put_object_test(creds: &AWSCredentials) -> Result<PutObjectOutput, AWSErro
 }
 
 fn s3_create_bucket_test(creds: &AWSCredentials) -> Result<(), AWSError> {
-	let s3 = S3Helper::new(&creds, "us-east-1");
+	// let s3 = S3Helper::new(&creds, "us-east-1");
+	let s3 = S3Helper::new(&creds, "eu-west-1"); // do we need to specify the region?
 
-	let response = try!(s3.create_bucket("rusotobucket2"));
+	let response = try!(s3.create_bucket_in_region(&format!("rusotobucket2{}", get_time().sec), "eu-west-1"));
 	// println!("Create bucket response is {:?}", response);
 	Ok(())
 }
