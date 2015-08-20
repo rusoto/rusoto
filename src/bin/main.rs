@@ -39,7 +39,7 @@ fn main() {
 	}
 
 	match s3_put_object_test(&provider.get_credentials(), &bucket_name) {
-		Ok(result) => {
+		Ok(_) => {
 			println!("Everything worked for S3 put object.");
 		}
 		Err(err) => { println!("Got error in s3 put object: {:#?}", err); }
@@ -49,13 +49,16 @@ fn main() {
 		Ok(result) => {
 			println!("Everything worked for S3 get object.");
 			let mut f = File::create("s3-sample-creds").unwrap();
-			f.write(&(result.body));
+			match f.write(&(result.body)) {
+				Err(why) => println!("Couldn't create file to save object from S3: {}", why),
+				Ok(_) => return,
+			}
 		}
 		Err(err) => { println!("Got error in s3 get object: {:#?}", err); }
 	}
 
 	match s3_delete_object_test(&provider.get_credentials(), &bucket_name) {
-		Ok(result) => {
+		Ok(_) => {
 			println!("Everything worked for S3 delete object.");
 		}
 		Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
@@ -100,27 +103,27 @@ fn s3_put_object_test(creds: &AWSCredentials, bucket: &str) -> Result<PutObjectO
 
 	let mut f = File::open("src/sample-credentials").unwrap();
 	let mut contents = Vec::new();
-	f.read_to_end(&mut contents);
-
-	let response = try!(s3.put_object(bucket, "sample-credentials", &contents));
-	// println!("put object response is {:?}", response);
-	Ok(response)
+	match f.read_to_end(&mut contents) {
+		Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
+		Ok(_) => {
+			let response = try!(s3.put_object(bucket, "sample-credentials", &contents));
+			Ok(response)
+		}
+	}
 }
 
 fn s3_create_bucket_test(creds: &AWSCredentials, bucket: &str) -> Result<(), AWSError> {
 	let s3 = S3Helper::new(&creds, "us-east-1");
 
-	let response = try!(s3.create_bucket_in_region(bucket, "us-east-1"));
+	try!(s3.create_bucket_in_region(bucket, "us-east-1"));
 
-	// println!("Create bucket response is {:?}", response);
 	Ok(())
 }
 
 fn s3_delete_bucket_test(creds: &AWSCredentials, bucket: &str) -> Result<(), AWSError> {
 	let s3 = S3Helper::new(&creds, "us-east-1");
 
-	let response = try!(s3.delete_bucket(bucket));
-	// println!("Delete bucket response is {:?}", response);
+	try!(s3.delete_bucket(bucket));
 	Ok(())
 }
 
