@@ -25,24 +25,27 @@ fn main() {
 		Err(err) => { println!("Got error: {:#?}", err); }
 	}
 
+
+	let bucket_name = format!("rusoto{}", get_time().sec);
+
 	match s3_list_buckets_tests(&provider.get_credentials()) {
 		Ok(_) => { println!("Everything worked for S3 list buckets."); },
 		Err(err) => { println!("Got error in s3 list buckets: {:#?}", err); }
 	}
 
-	match s3_create_bucket_test(&provider.get_credentials()) {
+	match s3_create_bucket_test(&provider.get_credentials(), &bucket_name) {
 		Ok(_) => { println!("Everything worked for S3 create bucket."); },
 		Err(err) => { println!("Got error in s3 create bucket: {:#?}", err); }
 	}
 
-	match s3_put_object_test(&provider.get_credentials()) {
+	match s3_put_object_test(&provider.get_credentials(), &bucket_name) {
 		Ok(result) => {
 			println!("Everything worked for S3 put object.");
 		}
 		Err(err) => { println!("Got error in s3 put object: {:#?}", err); }
 	}
 
-	match s3_get_object_test(&provider.get_credentials()) {
+	match s3_get_object_test(&provider.get_credentials(), &bucket_name) {
 		Ok(result) => {
 			println!("Everything worked for S3 get object.");
 			let mut f = File::create("s3-sample-creds").unwrap();
@@ -51,14 +54,14 @@ fn main() {
 		Err(err) => { println!("Got error in s3 get object: {:#?}", err); }
 	}
 
-	match s3_delete_object_test(&provider.get_credentials()) {
+	match s3_delete_object_test(&provider.get_credentials(), &bucket_name) {
 		Ok(result) => {
 			println!("Everything worked for S3 delete object.");
 		}
 		Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
 	}
 
-	match s3_delete_bucket_test(&provider.get_credentials()) {
+	match s3_delete_bucket_test(&provider.get_credentials(), &bucket_name) {
 		Ok(_) => { println!("Everything worked for S3 delete bucket."); },
 		Err(err) => { println!("Got error in s3 delete bucket: {:#?}", err); }
 	}
@@ -76,47 +79,47 @@ fn s3_list_buckets_tests(creds: &AWSCredentials) -> Result<(), AWSError> {
 	Ok(())
 }
 
-fn s3_get_object_test(creds: &AWSCredentials) -> Result<GetObjectOutput, AWSError> {
+fn s3_get_object_test(creds: &AWSCredentials, bucket: &str) -> Result<GetObjectOutput, AWSError> {
 	let s3 = S3Helper::new(&creds, "us-east-1");
 
-	let response = try!(s3.get_object("rusotobucket2", "sample-credentials"));
+	let response = try!(s3.get_object(bucket, "sample-credentials"));
 	// println!("get object response is {:?}", response);
 	Ok(response)
 }
 
-fn s3_delete_object_test(creds: &AWSCredentials) -> Result<DeleteObjectOutput, AWSError> {
+fn s3_delete_object_test(creds: &AWSCredentials, bucket: &str) -> Result<DeleteObjectOutput, AWSError> {
 	let s3 = S3Helper::new(&creds, "us-east-1");
 
-	let response = try!(s3.delete_object("rusotobucket2", "sample-credentials"));
+	let response = try!(s3.delete_object(bucket, "sample-credentials"));
 	// println!("delete object response is {:?}", response);
 	Ok(response)
 }
 
-fn s3_put_object_test(creds: &AWSCredentials) -> Result<PutObjectOutput, AWSError> {
+fn s3_put_object_test(creds: &AWSCredentials, bucket: &str) -> Result<PutObjectOutput, AWSError> {
 	let s3 = S3Helper::new(&creds, "us-east-1");
 
 	let mut f = File::open("src/sample-credentials").unwrap();
 	let mut contents = Vec::new();
 	f.read_to_end(&mut contents);
 
-	let response = try!(s3.put_object("rusotobucket2", "sample-credentials", &contents));
+	let response = try!(s3.put_object(bucket, "sample-credentials", &contents));
 	// println!("put object response is {:?}", response);
 	Ok(response)
 }
 
-fn s3_create_bucket_test(creds: &AWSCredentials) -> Result<(), AWSError> {
-	// let s3 = S3Helper::new(&creds, "us-east-1");
-	let s3 = S3Helper::new(&creds, "eu-west-1"); // do we need to specify the region?
+fn s3_create_bucket_test(creds: &AWSCredentials, bucket: &str) -> Result<(), AWSError> {
+	let s3 = S3Helper::new(&creds, "us-east-1");
 
-	let response = try!(s3.create_bucket_in_region(&format!("rusotobucket2{}", get_time().sec), "eu-west-1"));
+	let response = try!(s3.create_bucket_in_region(bucket, "us-east-1"));
+
 	// println!("Create bucket response is {:?}", response);
 	Ok(())
 }
 
-fn s3_delete_bucket_test(creds: &AWSCredentials) -> Result<(), AWSError> {
+fn s3_delete_bucket_test(creds: &AWSCredentials, bucket: &str) -> Result<(), AWSError> {
 	let s3 = S3Helper::new(&creds, "us-east-1");
 
-	let response = try!(s3.delete_bucket("rusotobucket2"));
+	let response = try!(s3.delete_bucket(bucket));
 	// println!("Delete bucket response is {:?}", response);
 	Ok(())
 }

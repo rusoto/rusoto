@@ -2914,33 +2914,6 @@ pub struct CreateBucketConfiguration {
 	pub location_constraint: BucketLocationConstraint,
 }
 
-/// Parse CreateBucketConfiguration from XML
-struct CreateBucketConfigurationParser;
-impl CreateBucketConfigurationParser {
-	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateBucketConfiguration, XmlParseError> {
-		try!(start_element(tag_name, stack));
-		let mut obj = CreateBucketConfiguration::default();
-		loop {
-			let current_name = try!(peek_at_name(stack));
-			if current_name == "LocationConstraint" {
-				obj.location_constraint = try!(BucketLocationConstraintParser::parse_xml("LocationConstraint", stack));
-				continue;
-			}
-			break;
-		}
-		try!(end_element(tag_name, stack));
-		Ok(obj)
-	}
-}
-/// Write CreateBucketConfiguration contents to a SignedRequest
-struct CreateBucketConfigurationWriter;
-impl CreateBucketConfigurationWriter {
-	fn write_params(params: &mut Params, name: &str, obj: &CreateBucketConfiguration) {
-		let mut prefix = name.to_string();
-		if prefix != "" { prefix.push_str("."); }
-		BucketLocationConstraintWriter::write_params(params, &(prefix.to_string() + "LocationConstraint"), &obj.location_constraint);
-	}
-}
 pub type BucketLogsPermission = String;
 /// Parse BucketLogsPermission from XML
 struct BucketLogsPermissionParser;
@@ -4368,82 +4341,6 @@ pub struct CreateBucketRequest {
 	pub grant_read_acp: Option<GrantReadACP>,
 }
 
-/// Parse CreateBucketRequest from XML
-struct CreateBucketRequestParser;
-impl CreateBucketRequestParser {
-	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateBucketRequest, XmlParseError> {
-		try!(start_element(tag_name, stack));
-		let mut obj = CreateBucketRequest::default();
-		loop {
-			let current_name = try!(peek_at_name(stack));
-			if current_name == "x-amz-grant-full-control" {
-				obj.grant_full_control = Some(try!(GrantFullControlParser::parse_xml("x-amz-grant-full-control", stack)));
-				continue;
-			}
-			if current_name == "CreateBucketConfiguration" {
-				obj.create_bucket_configuration = Some(try!(CreateBucketConfigurationParser::parse_xml("CreateBucketConfiguration", stack)));
-				continue;
-			}
-			if current_name == "x-amz-grant-write-acp" {
-				obj.grant_write_acp = Some(try!(GrantWriteACPParser::parse_xml("x-amz-grant-write-acp", stack)));
-				continue;
-			}
-			if current_name == "Bucket" {
-				obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-				continue;
-			}
-			if current_name == "x-amz-acl" {
-				obj.acl = Some(try!(BucketCannedACLParser::parse_xml("x-amz-acl", stack)));
-				continue;
-			}
-			if current_name == "x-amz-grant-write" {
-				obj.grant_write = Some(try!(GrantWriteParser::parse_xml("x-amz-grant-write", stack)));
-				continue;
-			}
-			if current_name == "x-amz-grant-read" {
-				obj.grant_read = Some(try!(GrantReadParser::parse_xml("x-amz-grant-read", stack)));
-				continue;
-			}
-			if current_name == "x-amz-grant-read-acp" {
-				obj.grant_read_acp = Some(try!(GrantReadACPParser::parse_xml("x-amz-grant-read-acp", stack)));
-				continue;
-			}
-			break;
-		}
-		try!(end_element(tag_name, stack));
-		Ok(obj)
-	}
-}
-/// Write CreateBucketRequest contents to a SignedRequest
-struct CreateBucketRequestWriter;
-impl CreateBucketRequestWriter {
-	fn write_params(params: &mut Params, name: &str, obj: &CreateBucketRequest) {
-		let mut prefix = name.to_string();
-		if prefix != "" { prefix.push_str("."); }
-		if let Some(ref obj) = obj.grant_full_control {
-			GrantFullControlWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-full-control"), obj);
-		}
-		if let Some(ref obj) = obj.create_bucket_configuration {
-			CreateBucketConfigurationWriter::write_params(params, &(prefix.to_string() + "CreateBucketConfiguration"), obj);
-		}
-		if let Some(ref obj) = obj.grant_write_acp {
-			GrantWriteACPWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-write-acp"), obj);
-		}
-		BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-		if let Some(ref obj) = obj.acl {
-			BucketCannedACLWriter::write_params(params, &(prefix.to_string() + "x-amz-acl"), obj);
-		}
-		if let Some(ref obj) = obj.grant_write {
-			GrantWriteWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-write"), obj);
-		}
-		if let Some(ref obj) = obj.grant_read {
-			GrantReadWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-read"), obj);
-		}
-		if let Some(ref obj) = obj.grant_read_acp {
-			GrantReadACPWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-read-acp"), obj);
-		}
-	}
-}
 pub type BucketName = String;
 /// Parse BucketName from XML
 struct BucketNameParser;
@@ -5153,22 +5050,15 @@ pub struct ListBucketsOutput {
 struct ListBucketsOutputParser;
 impl ListBucketsOutputParser {
 	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListBucketsOutput, XmlParseError> {
-		// println!("Looking for start element {}", tag_name);
-		// println!("Peek is {}", peek_at_name(stack).unwrap());
 		try!(start_element(tag_name, stack));
-		// println!("Found start element {}", tag_name);
 		let mut obj = ListBucketsOutput::default();
 		loop {
-			// println!("Looking for owner or bucket.");
 			let current_name = try!(peek_at_name(stack));
-			// println!("current_name is {}", current_name);
 			if current_name == "Owner" {
-				// println!("parsing owner");
 				obj.owner = try!(OwnerParser::parse_xml("Owner", stack));
 				continue;
 			}
 			if current_name == "Buckets" {
-				// println!("parsing bucket");
 				stack.next(); // skip Buckets start and go to contents
 				// this will parse all buckets:
 				obj.buckets = try!(BucketsParser::parse_xml("Bucket", stack));
@@ -12037,13 +11927,8 @@ impl<'a> S3Client<'a> {
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
 
-		// println!("listbuckets Peek is {}", peek_at_name(&mut stack).unwrap());
 		stack.next(); // xml start tag
-		// println!("lb Peek is now {}", peek_at_name(&mut stack).unwrap());
-		// stack.next();
-		// println!("lb Peek2 is now {}", peek_at_name(&mut stack).unwrap());
 
-		// println!("Status is {}", status);
 		match status {
 			200 => {
 				// was "ListBucketsOutput"
