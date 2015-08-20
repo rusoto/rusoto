@@ -7783,85 +7783,7 @@ impl PutObjectRequestParser {
 		Ok(obj)
 	}
 }
-/// Write PutObjectRequest contents to a SignedRequest
-struct PutObjectRequestWriter;
-impl PutObjectRequestWriter {
-	fn write_params(params: &mut Params, name: &str, obj: &PutObjectRequest) {
-		let mut prefix = name.to_string();
-		if prefix != "" { prefix.push_str("."); }
-		if let Some(ref obj) = obj.request_payer {
-			RequestPayerWriter::write_params(params, &(prefix.to_string() + "x-amz-request-payer"), obj);
-		}
-		if let Some(ref obj) = obj.content_encoding {
-			ContentEncodingWriter::write_params(params, &(prefix.to_string() + "Content-Encoding"), obj);
-		}
-		if let Some(ref obj) = obj.storage_class {
-			StorageClassWriter::write_params(params, &(prefix.to_string() + "x-amz-storage-class"), obj);
-		}
-		if let Some(ref obj) = obj.grant_read_acp {
-			GrantReadACPWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-read-acp"), obj);
-		}
-		if let Some(ref obj) = obj.server_side_encryption {
-			ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), obj);
-		}
-		if let Some(ref obj) = obj.ssekms_key_id {
-			SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), obj);
-		}
-		if let Some(ref obj) = obj.content_disposition {
-			ContentDispositionWriter::write_params(params, &(prefix.to_string() + "Content-Disposition"), obj);
-		}
-		if let Some(ref obj) = obj.metadata {
-			MetadataWriter::write_params(params, &(prefix.to_string() + "x-amz-meta-"), obj);
-		}
-		if let Some(ref obj) = obj.body {
-			BodyWriter::write_params(params, &(prefix.to_string() + "Body"), obj);
-		}
-		if let Some(ref obj) = obj.sse_customer_key {
-			SSECustomerKeyWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key"), obj);
-		}
-		if let Some(ref obj) = obj.website_redirect_location {
-			WebsiteRedirectLocationWriter::write_params(params, &(prefix.to_string() + "x-amz-website-redirect-location"), obj);
-		}
-		if let Some(ref obj) = obj.expires {
-			ExpiresWriter::write_params(params, &(prefix.to_string() + "Expires"), obj);
-		}
-		ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
-		if let Some(ref obj) = obj.cache_control {
-			CacheControlWriter::write_params(params, &(prefix.to_string() + "Cache-Control"), obj);
-		}
-		if let Some(ref obj) = obj.content_length {
-			ContentLengthWriter::write_params(params, &(prefix.to_string() + "Content-Length"), obj);
-		}
-		BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-		if let Some(ref obj) = obj.grant_read {
-			GrantReadWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-read"), obj);
-		}
-		if let Some(ref obj) = obj.grant_write_acp {
-			GrantWriteACPWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-write-acp"), obj);
-		}
-		if let Some(ref obj) = obj.acl {
-			ObjectCannedACLWriter::write_params(params, &(prefix.to_string() + "x-amz-acl"), obj);
-		}
-		if let Some(ref obj) = obj.grant_full_control {
-			GrantFullControlWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-full-control"), obj);
-		}
-		if let Some(ref obj) = obj.sse_customer_algorithm {
-			SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), obj);
-		}
-		if let Some(ref obj) = obj.content_type {
-			ContentTypeWriter::write_params(params, &(prefix.to_string() + "Content-Type"), obj);
-		}
-		if let Some(ref obj) = obj.content_language {
-			ContentLanguageWriter::write_params(params, &(prefix.to_string() + "Content-Language"), obj);
-		}
-		if let Some(ref obj) = obj.content_md5 {
-			ContentMD5Writer::write_params(params, &(prefix.to_string() + "Content-MD5"), obj);
-		}
-		if let Some(ref obj) = obj.sse_customer_key_md5 {
-			SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), obj);
-		}
-	}
-}
+
 pub type Code = String;
 /// Parse Code from XML
 struct CodeParser;
@@ -11593,20 +11515,19 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Adds an object to a bucket.
-	pub fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, AWSError> {
+	pub fn put_object(&self, input: &PutObjectRequest, use_reduced_redundency: bool) -> Result<PutObjectOutput, AWSError> {
 		let mut uri = String::from("/");
 		uri = uri +  &input.key.to_string();
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, &uri);
-		let mut params = Params::new();
+
+		if use_reduced_redundency {
+			request.add_header("x-amz-storage-class", "REDUCED_REDUNDANCY");
+		}
 
 		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
 		request.set_hostname(Some(hostname));
-
 		request.set_payload(input.body.clone());
 
-		params.put("Action", "PutObject");
-		PutObjectRequestWriter::write_params(&mut params, "", &input);
-		request.set_params(params);
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 

@@ -48,10 +48,24 @@ fn main() {
 			let mut f = File::create("s3-sample-creds").unwrap();
 			match f.write(&(result.body)) {
 				Err(why) => println!("Couldn't create file to save object from S3: {}", why),
-				Ok(_) => return,
+				Ok(_) => println!("Pretend this is a noop"),
 			}
 		}
 		Err(err) => { println!("Got error in s3 get object: {:#?}", err); }
+	}
+
+	match s3_delete_object_test(&provider.get_credentials(), &bucket_name) {
+		Ok(_) => {
+			println!("Everything worked for S3 delete object.");
+		}
+		Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
+	}
+
+	match s3_put_object_with_reduced_redundancy_test(&provider.get_credentials(), &bucket_name) {
+		Ok(_) => {
+			println!("Everything worked for S3 put object with reduced redundancy.");
+		}
+		Err(err) => { println!("Got error in s3 put object with reduced redundancy: {:#?}", err); }
 	}
 
 	match s3_delete_object_test(&provider.get_credentials(), &bucket_name) {
@@ -104,6 +118,20 @@ fn s3_put_object_test(creds: &AWSCredentials, bucket: &str) -> Result<PutObjectO
 		Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
 		Ok(_) => {
 			let response = try!(s3.put_object(bucket, "sample-credentials", &contents));
+			Ok(response)
+		}
+	}
+}
+
+fn s3_put_object_with_reduced_redundancy_test(creds: &AWSCredentials, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+	let s3 = S3Helper::new(&creds, "us-east-1");
+
+	let mut f = File::open("src/sample-credentials").unwrap();
+	let mut contents = Vec::new();
+	match f.read_to_end(&mut contents) {
+		Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
+		Ok(_) => {
+			let response = try!(s3.put_object_with_reduced_redundancy(bucket, "sample-credentials", &contents));
 			Ok(response)
 		}
 	}
