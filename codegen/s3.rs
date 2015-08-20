@@ -3385,15 +3385,7 @@ impl DeleteBucketRequestParser {
 		Ok(obj)
 	}
 }
-/// Write DeleteBucketRequest contents to a SignedRequest
-struct DeleteBucketRequestWriter;
-impl DeleteBucketRequestWriter {
-	fn write_params(params: &mut Params, name: &str, obj: &DeleteBucketRequest) {
-		let mut prefix = name.to_string();
-		if prefix != "" { prefix.push_str("."); }
-		BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-	}
-}
+
 pub type TargetPrefix = String;
 /// Parse TargetPrefix from XML
 struct TargetPrefixParser;
@@ -12158,17 +12150,12 @@ impl<'a> S3Client<'a> {
 	/// Deletes the bucket. All objects (including all object versions and Delete
 	/// Markers) in the bucket must be deleted before the bucket itself can be
 	/// deleted.
-	pub fn delete_bucket(&self, input: &DeleteBucketRequest) -> Result<(), AWSError> {
-		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "");
-		let mut params = Params::new();
-		params.put("Action", "DeleteBucket");
+	pub fn delete_bucket(&self, input: &DeleteBucketRequest, region: &str) -> Result<(), AWSError> {
+		let mut request = SignedRequest::new("DELETE", "s3", region, "");
 
 		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
 		request.set_hostname(Some(hostname));
 
-		DeleteBucketRequestWriter::write_params(&mut params, "", &input); // needed?
-
-		request.set_params(params);
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
 		match status {

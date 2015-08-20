@@ -17,9 +17,6 @@ use std::io::Read;
 fn main() {
 	let mut provider = DefaultAWSCredentialsProviderChain::new();
 
-	// println!("Creds in main: {}, {}, {}.", creds.get_aws_secret_key(), creds.get_aws_secret_key(),
-	// 	creds.get_token());
-
 	match sqs_roundtrip_tests(&provider.get_credentials()) {
 		Ok(_) => { println!("Everything worked."); },
 		Err(err) => { println!("Got error: {:#?}", err); }
@@ -123,7 +120,7 @@ fn s3_create_bucket_test(creds: &AWSCredentials, bucket: &str) -> Result<(), AWS
 fn s3_delete_bucket_test(creds: &AWSCredentials, bucket: &str) -> Result<(), AWSError> {
 	let s3 = S3Helper::new(&creds, "us-east-1");
 
-	try!(s3.delete_bucket(bucket));
+	try!(s3.delete_bucket(bucket, "us-east-1"));
 	Ok(())
 }
 
