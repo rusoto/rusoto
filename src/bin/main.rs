@@ -65,7 +65,7 @@ fn main() {
 		Ok(_) => {
 			println!("Everything worked for S3 put object with reduced redundancy.");
 		}
-		Err(err) => { println!("Got error in s3 put object: {:#?}", err); }
+		Err(err) => { println!("Got error in s3 put object with reduced redundancy: {:#?}", err); }
 	}
 
 	match s3_delete_object_test(&provider.get_credentials(), &bucket_name) {
