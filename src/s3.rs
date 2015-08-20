@@ -6,8 +6,8 @@ use signature::*;
 use params::*;
 use error::*;
 use xmlutil::*;
+use regionchecker::*;
 use std::str::FromStr;
-// use hyper::header::Headers;
 use hyper::client::Response;
 use std::io::Read;
 
@@ -27,8 +27,23 @@ impl<'a> S3Helper<'a> {
 		self.client.list_buckets()
 	}
 
+	/// Creates bucket in default us-east-1/us-standard region.
 	pub fn create_bucket(&self, bucket_name: &str) -> Result<CreateBucketOutput, AWSError> {
+		self.create_bucket_in_region(bucket_name, "us-east-1")
+	}
+
+	/// Creates bucket in specified region.
+	// TODO: enum for region?
+	pub fn create_bucket_in_region(&self, bucket_name: &str, region: &str) -> Result<CreateBucketOutput, AWSError> {
 		let mut request = CreateBucketRequest::default();
+
+		// not specified means us-standard, no need to specify anything for calling AWS:
+		// also handle us-east-1 being specified: ignore it!
+		if region.len() > 0 && region_is_valid(region) && region != "us-east-1" {
+			println!("Locking down to {}", region);
+			let create_config = CreateBucketConfiguration {location_constraint: region.to_string()};
+			request.create_bucket_configuration = Some(create_config);
+		}
 		request.bucket = bucket_name.to_string();
 		// println!("Creating bucket");
 		let result = self.client.create_bucket(&request);
@@ -39,9 +54,9 @@ impl<'a> S3Helper<'a> {
 	pub fn delete_bucket(&self, bucket_name: &str) -> Result<(), AWSError> {
 		let mut request = DeleteBucketRequest::default();
 		request.bucket = bucket_name.to_string();
-		println!("Deleting bucket");
+		// println!("Deleting bucket");
 		let result = self.client.delete_bucket(&request);
-		println!("Result is {:?}", result);
+		// println!("Result is {:?}", result);
 		result
 	}
 
@@ -69,8 +84,20 @@ impl<'a> S3Helper<'a> {
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
 		let result = self.client.delete_object(&request);
-		println!("Result is {:?}", result);
+		// println!("Result is {:?}", result);
 		result
+	}
+}
+
+// This is a bit hacky to get functionality until we figure out an XML writing util.
+pub fn create_bucket_config_xml(region: &str) -> Vec<u8> {
+	if region == "us-east-1" {
+		return Vec::new();
+	} else {
+		let xml = format!("<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">
+	<LocationConstraint>{}</LocationConstraint>
+	</CreateBucketConfiguration >", region);
+		return xml.into_bytes();
 	}
 }
 
@@ -80,6 +107,7 @@ mod tests {
 	use std::io::BufReader;
 	use std::fs::File;
 	use super::ListBucketsOutputParser;
+	use super::*;
 	use xmlutil::*;
 
 	#[test]
@@ -95,6 +123,22 @@ mod tests {
 		match result {
 			Err(_) => panic!("Couldn't parse list_buckets"),
 			Ok(_) => return,
+		}
+	}
+
+	#[test]
+	fn create_bucket_constrained_to_region() {
+		match create_bucket_config_xml("us-west-2").len() {
+			0 => panic!("us-west-2 should have bucket constraint."),
+			_ => return,
+		}
+	}
+
+	#[test]
+	fn create_bucket_us_east_1_no_constraints() {
+		match create_bucket_config_xml("us-east-1").len() {
+			0 => return,
+			_ => panic!("us-east-1 should not have bucket constraint."),
 		}
 	}
 }
