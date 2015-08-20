@@ -73,8 +73,18 @@ impl<'a> S3Helper<'a> {
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
 		request.body = Some(object_as_bytes.clone()); // this needs to be refactored to pass a reference
-		let result = self.client.put_object(&request);
+		let result = self.client.put_object(&request, false);
 		// println!("Result is {:?}", result);
+		result
+	}
+
+	// Code smell: duplicate code.  See above.
+	pub fn put_object_with_reduced_redundancy(&self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
+		let mut request = PutObjectRequest::default();
+		request.key = object_name.to_string();
+		request.bucket = bucket_name.to_string();
+		request.body = Some(object_as_bytes.clone()); // this needs to be refactored to pass a reference
+		let result = self.client.put_object(&request, true);
 		result
 	}
 
@@ -83,7 +93,6 @@ impl<'a> S3Helper<'a> {
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
 		let result = self.client.delete_object(&request);
-		// println!("Result is {:?}", result);
 		result
 	}
 }
