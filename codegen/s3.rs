@@ -11340,11 +11340,11 @@ impl MaxPartsWriter {
 }
 pub struct S3Client<'a> {
 	creds: &'a AWSCredentials,
-	region: &'a str
+	region: &'a Region
 }
 
 impl<'a> S3Client<'a> {
-	pub fn new(creds: &'a AWSCredentials, region: &'a str) -> S3Client<'a> {
+	pub fn new(creds: &'a AWSCredentials, region: &'a Region) -> S3Client<'a> {
 		S3Client { creds: creds, region: region }
 	}
 	/// Returns metadata about all of the versions of objects in a bucket.
@@ -11980,7 +11980,8 @@ impl<'a> S3Client<'a> {
 	/// Creates a new bucket.
 	/// All requests go to the us-east-1/us-standard endpoint, but can create buckets anywhere.
 	pub fn create_bucket(&self, input: &CreateBucketRequest) -> Result<CreateBucketOutput, AWSError> {
-		let mut request = SignedRequest::new("PUT", "s3", "us-east-1", "");
+		let region = Region::UsEast1;
+		let mut request = SignedRequest::new("PUT", "s3", &region, "");
 		let hostname = format!("{}.s3.amazonaws.com", input.bucket);
 		request.set_hostname(Some(hostname));
 
@@ -12071,7 +12072,7 @@ impl<'a> S3Client<'a> {
 	/// Deletes the bucket. All objects (including all object versions and Delete
 	/// Markers) in the bucket must be deleted before the bucket itself can be
 	/// deleted.
-	pub fn delete_bucket(&self, input: &DeleteBucketRequest, region: &str) -> Result<(), AWSError> {
+	pub fn delete_bucket(&self, input: &DeleteBucketRequest, region: &Region) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("DELETE", "s3", region, "");
 
 		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";

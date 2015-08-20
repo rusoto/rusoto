@@ -8,6 +8,7 @@ use rusoto::credentials::*;
 use rusoto::error::*;
 use rusoto::sqs::*;
 use rusoto::s3::*;
+use rusoto::regions::*;
 use time::*;
 use std::fs::File;
 use std::io::Write;
@@ -21,7 +22,6 @@ fn main() {
 		Ok(_) => { println!("Everything worked."); },
 		Err(err) => { println!("Got error: {:#?}", err); }
 	}
-
 
 	let bucket_name = format!("rusoto{}", get_time().sec);
 
@@ -82,7 +82,8 @@ fn main() {
 }
 
 fn s3_list_buckets_tests(creds: &AWSCredentials) -> Result<(), AWSError> {
-	let s3 = S3Helper::new(&creds, "us-east-1");
+	let region = Region::UsEast1;
+	let s3 = S3Helper::new(&creds, &region);
 
 	let response = try!(s3.list_buckets());
 	// println!("response is {:?}", response);
@@ -94,7 +95,8 @@ fn s3_list_buckets_tests(creds: &AWSCredentials) -> Result<(), AWSError> {
 }
 
 fn s3_get_object_test(creds: &AWSCredentials, bucket: &str) -> Result<GetObjectOutput, AWSError> {
-	let s3 = S3Helper::new(&creds, "us-east-1");
+	let region = Region::UsEast1;
+	let s3 = S3Helper::new(&creds, &region);
 
 	let response = try!(s3.get_object(bucket, "sample-credentials"));
 	// println!("get object response is {:?}", response);
@@ -102,7 +104,8 @@ fn s3_get_object_test(creds: &AWSCredentials, bucket: &str) -> Result<GetObjectO
 }
 
 fn s3_delete_object_test(creds: &AWSCredentials, bucket: &str) -> Result<DeleteObjectOutput, AWSError> {
-	let s3 = S3Helper::new(&creds, "us-east-1");
+	let region = Region::UsEast1;
+	let s3 = S3Helper::new(&creds, &region);
 
 	let response = try!(s3.delete_object(bucket, "sample-credentials"));
 	// println!("delete object response is {:?}", response);
@@ -110,7 +113,8 @@ fn s3_delete_object_test(creds: &AWSCredentials, bucket: &str) -> Result<DeleteO
 }
 
 fn s3_put_object_test(creds: &AWSCredentials, bucket: &str) -> Result<PutObjectOutput, AWSError> {
-	let s3 = S3Helper::new(&creds, "us-east-1");
+	let region = Region::UsEast1;
+	let s3 = S3Helper::new(&creds, &region);
 
 	let mut f = File::open("src/sample-credentials").unwrap();
 	let mut contents = Vec::new();
@@ -124,7 +128,8 @@ fn s3_put_object_test(creds: &AWSCredentials, bucket: &str) -> Result<PutObjectO
 }
 
 fn s3_put_object_with_reduced_redundancy_test(creds: &AWSCredentials, bucket: &str) -> Result<PutObjectOutput, AWSError> {
-	let s3 = S3Helper::new(&creds, "us-east-1");
+	let region = Region::UsEast1;
+	let s3 = S3Helper::new(&creds, &region);
 
 	let mut f = File::open("src/sample-credentials").unwrap();
 	let mut contents = Vec::new();
@@ -138,22 +143,25 @@ fn s3_put_object_with_reduced_redundancy_test(creds: &AWSCredentials, bucket: &s
 }
 
 fn s3_create_bucket_test(creds: &AWSCredentials, bucket: &str) -> Result<(), AWSError> {
-	let s3 = S3Helper::new(&creds, "us-east-1");
+	let region = Region::UsEast1;
+	let s3 = S3Helper::new(&creds, &region);
 
-	try!(s3.create_bucket_in_region(bucket, "us-east-1"));
+	try!(s3.create_bucket_in_region(bucket, &region));
 
 	Ok(())
 }
 
 fn s3_delete_bucket_test(creds: &AWSCredentials, bucket: &str) -> Result<(), AWSError> {
-	let s3 = S3Helper::new(&creds, "us-east-1");
+	let region = Region::UsEast1;
+	let s3 = S3Helper::new(&creds, &region);
 
-	try!(s3.delete_bucket(bucket, "us-east-1"));
+	try!(s3.delete_bucket(bucket, &region));
 	Ok(())
 }
 
 fn sqs_roundtrip_tests(creds: &AWSCredentials) -> Result<(), AWSError> {
-	let sqs = SQSHelper::new(&creds, "us-east-1");
+	let region = Region::UsEast1;
+	let sqs = SQSHelper::new(&creds, &region);
 
 	// list existing queues
 	let response = try!(sqs.list_queues());
