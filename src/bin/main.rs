@@ -48,7 +48,7 @@ fn main() {
 			let mut f = File::create("s3-sample-creds").unwrap();
 			match f.write(&(result.body)) {
 				Err(why) => println!("Couldn't create file to save object from S3: {}", why),
-				Ok(_) => println!("Pretend this is a noop"),
+				Ok(_) => (),
 			}
 		}
 		Err(err) => { println!("Got error in s3 get object: {:#?}", err); }

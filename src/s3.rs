@@ -75,7 +75,7 @@ impl<'a> S3Helper<'a> {
 		let mut request = PutObjectRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
-		request.body = Some(object_as_bytes.clone()); // this needs to be refactored to pass a reference
+		request.body = Some(object_as_bytes);
 		let result = self.client.put_object(&request, false);
 		// println!("Result is {:?}", result);
 		result
@@ -86,7 +86,7 @@ impl<'a> S3Helper<'a> {
 		let mut request = PutObjectRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
-		request.body = Some(object_as_bytes.clone()); // this needs to be refactored to pass a reference
+		request.body = Some(object_as_bytes);
 		let result = self.client.put_object(&request, true);
 		result
 	}
@@ -100,17 +100,24 @@ impl<'a> S3Helper<'a> {
 	}
 }
 
+pub fn needs_create_bucket_config(region: &Region) -> bool {
+	match *region {
+		Region::UsEast1 => false,
+		_ => true,
+	}
+}
+
 // This is a bit hacky to get functionality until we figure out an XML writing util.
 pub fn create_bucket_config_xml(region: &Region) -> Vec<u8> {
 	match *region {
 		Region::UsEast1 => {
-			return Vec::new();
+			Vec::new() // shouldn't actually execute this: panic! or unreachable! this?
 		}
 		_ => {
 			let xml = format!("<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">
 		<LocationConstraint>{}</LocationConstraint>
 		</CreateBucketConfiguration >", region_in_aws_format(region));
-			return xml.into_bytes();
+			xml.into_bytes()
 		}
 	}
 }
@@ -156,6 +163,24 @@ mod tests {
 		match create_bucket_config_xml(&region).len() {
 			0 => return,
 			_ => panic!("us-east-1 should not have bucket constraint."),
+		}
+	}
+
+	#[test]
+	fn create_bucket_constraint_needed() {
+		let region = Region::UsWest2;
+		match needs_create_bucket_config(&region) {
+			false => panic!("us-west-2 should have bucket constraint."),
+			true => return,
+		}
+	}
+
+	#[test]
+	fn create_bucket_no_constraint_needed() {
+		let region = Region::UsEast1;
+		match needs_create_bucket_config(&region) {
+			true => panic!("us-east-1 should not have bucket constraint."),
+			false => return,
 		}
 	}
 }

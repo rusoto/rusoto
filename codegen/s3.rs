@@ -7603,7 +7603,7 @@ impl NoSuchUploadWriter {
 	}
 }
 #[derive(Debug, Default)]
-pub struct PutObjectRequest {
+pub struct PutObjectRequest<'a> {
 	pub request_payer: Option<RequestPayer>,
 	/// Specifies what content encodings have been applied to the object and thus what
 	/// decoding mechanisms must be applied to obtain the media-type referenced by the
@@ -7628,7 +7628,7 @@ pub struct PutObjectRequest {
 	/// A map of metadata to store with the object in S3.
 	pub metadata: Option<Metadata>,
 	/// Object data.
-	pub body: Option<Body>,
+	pub body: Option<&'a Body>,
 	/// Specifies the customer-provided encryption key for Amazon S3 to use in
 	/// encrypting data. This value is used to store the object and then it is
 	/// discarded; Amazon does not store the encryption key. The key must be
@@ -7667,121 +7667,6 @@ pub struct PutObjectRequest {
 	/// Amazon S3 uses this header for a message integrity check to ensure the
 	/// encryption key was transmitted without error.
 	pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-}
-
-/// Parse PutObjectRequest from XML
-struct PutObjectRequestParser;
-impl PutObjectRequestParser {
-	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutObjectRequest, XmlParseError> {
-		try!(start_element(tag_name, stack));
-		let mut obj = PutObjectRequest::default();
-		loop {
-			let current_name = try!(peek_at_name(stack));
-			if current_name == "x-amz-request-payer" {
-				obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-				continue;
-			}
-			if current_name == "Content-Encoding" {
-				obj.content_encoding = Some(try!(ContentEncodingParser::parse_xml("Content-Encoding", stack)));
-				continue;
-			}
-			if current_name == "x-amz-storage-class" {
-				obj.storage_class = Some(try!(StorageClassParser::parse_xml("x-amz-storage-class", stack)));
-				continue;
-			}
-			if current_name == "x-amz-grant-read-acp" {
-				obj.grant_read_acp = Some(try!(GrantReadACPParser::parse_xml("x-amz-grant-read-acp", stack)));
-				continue;
-			}
-			if current_name == "x-amz-server-side-encryption" {
-				obj.server_side_encryption = Some(try!(ServerSideEncryptionParser::parse_xml("x-amz-server-side-encryption", stack)));
-				continue;
-			}
-			if current_name == "x-amz-server-side-encryption-aws-kms-key-id" {
-				obj.ssekms_key_id = Some(try!(SSEKMSKeyIdParser::parse_xml("x-amz-server-side-encryption-aws-kms-key-id", stack)));
-				continue;
-			}
-			if current_name == "Content-Disposition" {
-				obj.content_disposition = Some(try!(ContentDispositionParser::parse_xml("Content-Disposition", stack)));
-				continue;
-			}
-			if current_name == "x-amz-meta-" {
-				obj.metadata = Some(try!(MetadataParser::parse_xml("x-amz-meta-", stack)));
-				continue;
-			}
-			if current_name == "Body" {
-				obj.body = Some(try!(BodyParser::parse_xml("Body", stack)));
-				continue;
-			}
-			if current_name == "x-amz-server-side-encryption-customer-key" {
-				obj.sse_customer_key = Some(try!(SSECustomerKeyParser::parse_xml("x-amz-server-side-encryption-customer-key", stack)));
-				continue;
-			}
-			if current_name == "x-amz-website-redirect-location" {
-				obj.website_redirect_location = Some(try!(WebsiteRedirectLocationParser::parse_xml("x-amz-website-redirect-location", stack)));
-				continue;
-			}
-			if current_name == "Expires" {
-				obj.expires = Some(try!(ExpiresParser::parse_xml("Expires", stack)));
-				continue;
-			}
-			if current_name == "Key" {
-				obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-				continue;
-			}
-			if current_name == "Cache-Control" {
-				obj.cache_control = Some(try!(CacheControlParser::parse_xml("Cache-Control", stack)));
-				continue;
-			}
-			if current_name == "Content-Length" {
-				obj.content_length = Some(try!(ContentLengthParser::parse_xml("Content-Length", stack)));
-				continue;
-			}
-			if current_name == "Bucket" {
-				obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-				continue;
-			}
-			if current_name == "x-amz-grant-read" {
-				obj.grant_read = Some(try!(GrantReadParser::parse_xml("x-amz-grant-read", stack)));
-				continue;
-			}
-			if current_name == "x-amz-grant-write-acp" {
-				obj.grant_write_acp = Some(try!(GrantWriteACPParser::parse_xml("x-amz-grant-write-acp", stack)));
-				continue;
-			}
-			if current_name == "x-amz-acl" {
-				obj.acl = Some(try!(ObjectCannedACLParser::parse_xml("x-amz-acl", stack)));
-				continue;
-			}
-			if current_name == "x-amz-grant-full-control" {
-				obj.grant_full_control = Some(try!(GrantFullControlParser::parse_xml("x-amz-grant-full-control", stack)));
-				continue;
-			}
-			if current_name == "x-amz-server-side-encryption-customer-algorithm" {
-				obj.sse_customer_algorithm = Some(try!(SSECustomerAlgorithmParser::parse_xml("x-amz-server-side-encryption-customer-algorithm", stack)));
-				continue;
-			}
-			if current_name == "Content-Type" {
-				obj.content_type = Some(try!(ContentTypeParser::parse_xml("Content-Type", stack)));
-				continue;
-			}
-			if current_name == "Content-Language" {
-				obj.content_language = Some(try!(ContentLanguageParser::parse_xml("Content-Language", stack)));
-				continue;
-			}
-			if current_name == "Content-MD5" {
-				obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-				continue;
-			}
-			if current_name == "x-amz-server-side-encryption-customer-key-MD5" {
-				obj.sse_customer_key_md5 = Some(try!(SSECustomerKeyMD5Parser::parse_xml("x-amz-server-side-encryption-customer-key-MD5", stack)));
-				continue;
-			}
-			break;
-		}
-		try!(end_element(tag_name, stack));
-		Ok(obj)
-	}
 }
 
 pub type Code = String;
@@ -11526,7 +11411,7 @@ impl<'a> S3Client<'a> {
 
 		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
 		request.set_hostname(Some(hostname));
-		request.set_payload(input.body.clone());
+		request.set_payload(input.body);
 
 		let result = request.sign_and_execute(&self.creds);
 		let status = result.status.to_u16();
@@ -11981,13 +11866,14 @@ impl<'a> S3Client<'a> {
 	/// All requests go to the us-east-1/us-standard endpoint, but can create buckets anywhere.
 	pub fn create_bucket(&self, input: &CreateBucketRequest) -> Result<CreateBucketOutput, AWSError> {
 		let region = Region::UsEast1;
+		let mut create_config : Vec<u8>;
 		let mut request = SignedRequest::new("PUT", "s3", &region, "");
 		let hostname = format!("{}.s3.amazonaws.com", input.bucket);
 		request.set_hostname(Some(hostname));
 
-		let create_config = create_bucket_config_xml(&self.region);
-		if create_config.len() > 0 {
-			request.set_payload(Some(create_config));
+		if needs_create_bucket_config(&self.region) {
+			create_config = create_bucket_config_xml(&self.region);
+			request.set_payload(Some(&create_config));
 		}
 
 		let result = request.sign_and_execute(&self.creds);
