@@ -32,7 +32,7 @@ pub struct SignedRequest<'a> {
 	headers: BTreeMap<String, Vec<Vec<u8>>>,
 	params: Params,
 	hostname: Option<String>,
-	payload: Option<Vec<u8>>,
+	payload: Option<&'a Vec<u8>>,
 }
 
 impl <'a> SignedRequest <'a> {
@@ -54,7 +54,7 @@ impl <'a> SignedRequest <'a> {
 		self.hostname = hostname;
 	}
 
-	pub fn set_payload(&mut self, payload: Option<Vec<u8>>) {
+	pub fn set_payload(&mut self, payload: Option<&'a Vec<u8>>) {
 		self.payload = payload;
 	}
 
