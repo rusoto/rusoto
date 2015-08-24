@@ -17,47 +17,47 @@ pub struct SQSHelper<'a> {
 }
 
 impl<'a> SQSHelper<'a> {
-	pub fn new(credentials:&'a AWSCredentials, region:&'a Region) -> SQSHelper<'a> {
+	pub fn new(credentials: DefaultAWSCredentialsProviderChain, region:&'a Region) -> SQSHelper<'a> {
 		SQSHelper { client: SQSClient::new(credentials, region) }
 	}
 
-	pub fn list_queues(&self) -> Result<ListQueuesResult, AWSError> {
+	pub fn list_queues(&mut self) -> Result<ListQueuesResult, AWSError> {
 		self.client.list_queues(&ListQueuesRequest::default())
 	}
 
-	pub fn create_queue(&self, queue_name: &str) -> Result<CreateQueueResult, AWSError> {
+	pub fn create_queue(&mut self, queue_name: &str) -> Result<CreateQueueResult, AWSError> {
 		let mut req = CreateQueueRequest::default();
 		req.queue_name = queue_name.to_string();
 		self.client.create_queue(&req)
 	}
 
-	pub fn get_queue_url(&self, queue_name: &str) -> Result<GetQueueUrlResult, AWSError> {
+	pub fn get_queue_url(&mut self, queue_name: &str) -> Result<GetQueueUrlResult, AWSError> {
 		let mut req = GetQueueUrlRequest::default();
 		req.queue_name = queue_name.to_string();
 		self.client.get_queue_url(&req)
 	}
 
-	pub fn send_message(&self, queue_url: &str, message_body: &str) -> Result<SendMessageResult, AWSError> {
+	pub fn send_message(&mut self, queue_url: &str, message_body: &str) -> Result<SendMessageResult, AWSError> {
 		let mut req = SendMessageRequest::default();
 		req.queue_url = queue_url.to_string();
 		req.message_body = message_body.to_string();
 		self.client.send_message(&req)
 	}
 
-	pub fn receive_message(&self, queue_url: &str) -> Result<ReceiveMessageResult, AWSError> {
+	pub fn receive_message(&mut self, queue_url: &str) -> Result<ReceiveMessageResult, AWSError> {
 		let mut req = ReceiveMessageRequest::default();
 		req.queue_url = queue_url.to_string();
 		self.client.receive_message(&req)
 	}
 
-	pub fn delete_message(&self, queue_url: &str, receipt_handle: &str) -> Result<(), AWSError> {
+	pub fn delete_message(&mut self, queue_url: &str, receipt_handle: &str) -> Result<(), AWSError> {
 		let mut req = DeleteMessageRequest::default();
 		req.queue_url = queue_url.to_string();
 		req.receipt_handle = receipt_handle.to_string();
 		self.client.delete_message(&req)
 	}
 
-	pub fn delete_queue(&self, queue_url: &str) -> Result<(), AWSError> {
+	pub fn delete_queue(&mut self, queue_url: &str) -> Result<(), AWSError> {
 		let mut req = DeleteQueueRequest::default();
 		req.queue_url = queue_url.to_string();
 		self.client.delete_queue(&req)
