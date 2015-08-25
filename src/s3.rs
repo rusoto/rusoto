@@ -72,22 +72,21 @@ impl<'a> S3Helper<'a> {
 	}
 
 	pub fn put_object(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
-		let mut request = PutObjectRequest::default();
-		request.key = object_name.to_string();
-		request.bucket = bucket_name.to_string();
-		request.body = Some(object_as_bytes);
-		let result = self.client.put_object(&request, false);
-		// println!("Result is {:?}", result);
-		result
+		self.put_object_with_optional_reduced_redundancy(bucket_name, object_name, object_as_bytes, false)
 	}
 
-	// Code smell: duplicate code.  See above.
 	pub fn put_object_with_reduced_redundancy(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
+		self.put_object_with_optional_reduced_redundancy(bucket_name, object_name, object_as_bytes, true)
+	}
+
+	fn put_object_with_optional_reduced_redundancy(&mut self, bucket_name: &str, object_name: &str,
+		object_as_bytes: &Vec<u8>, reduced_redundancy: bool) ->  Result<PutObjectOutput, AWSError> {
+
 		let mut request = PutObjectRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
 		request.body = Some(object_as_bytes);
-		let result = self.client.put_object(&request, true);
+		let result = self.client.put_object(&request, reduced_redundancy);
 		result
 	}
 
