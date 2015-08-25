@@ -206,6 +206,8 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 
     fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
         if self.credentials.credentials_are_expired() {
+            // TODO: backoff and retry on failure.
+
             //println!("Calling IAM metadata");
             // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
             let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
@@ -281,6 +283,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 	}
 }
 
+#[derive(Debug, Clone)]
 pub struct DefaultAWSCredentialsProviderChain {
     credentials: AWSCredentials
 }

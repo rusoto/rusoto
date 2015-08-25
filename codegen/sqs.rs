@@ -2618,12 +2618,12 @@ impl SendMessageBatchRequestEntryWriter {
 	}
 }
 pub struct SQSClient<'a> {
-	creds: &'a AWSCredentials,
+	creds: DefaultAWSCredentialsProviderChain,
 	region: &'a Region
 }
 
 impl<'a> SQSClient<'a> {
-	pub fn new(creds: &'a AWSCredentials, region: &'a Region) -> SQSClient<'a> {
+	pub fn new(creds: DefaultAWSCredentialsProviderChain, region: &'a Region) -> SQSClient<'a> {
 		SQSClient { creds: creds, region: region }
 	}
 	/// Creates a new queue, or returns the URL of an existing one. When you request
@@ -2647,13 +2647,13 @@ impl<'a> SQSClient<'a> {
 	/// parameter list with two elements looks like this:
 	/// `&Attribute.1=this`
 	/// `&Attribute.2=that`
-	pub fn create_queue(&self, input: &CreateQueueRequest) -> Result<CreateQueueResult, AWSError> {
+	pub fn create_queue(&mut self, input: &CreateQueueRequest) -> Result<CreateQueueResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "CreateQueue");
 		CreateQueueRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2690,13 +2690,13 @@ impl<'a> SQSClient<'a> {
 	/// looks like this:
 	/// `&Attribute.1=this`
 	/// `&Attribute.2=that`
-	pub fn get_queue_attributes(&self, input: &GetQueueAttributesRequest) -> Result<GetQueueAttributesResult, AWSError> {
+	pub fn get_queue_attributes(&mut self, input: &GetQueueAttributesRequest) -> Result<GetQueueAttributesResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "GetQueueAttributes");
 		GetQueueAttributesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2716,13 +2716,13 @@ impl<'a> SQSClient<'a> {
 	/// Going forward, new attributes might be added. If you are writing code that
 	/// calls this action, we recommend that you structure your code so that it can
 	/// handle new attributes gracefully.
-	pub fn set_queue_attributes(&self, input: &SetQueueAttributesRequest) -> Result<(), AWSError> {
+	pub fn set_queue_attributes(&mut self, input: &SetQueueAttributesRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "SetQueueAttributes");
 		SetQueueAttributesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2743,13 +2743,13 @@ impl<'a> SQSClient<'a> {
 	/// more information about shared queue access, see AddPermission or go to [Shared
 	/// Queues](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGu
 	/// ide/acp-overview.html) in the _Amazon SQS Developer Guide_.
-	pub fn get_queue_url(&self, input: &GetQueueUrlRequest) -> Result<GetQueueUrlResult, AWSError> {
+	pub fn get_queue_url(&mut self, input: &GetQueueUrlRequest) -> Result<GetQueueUrlResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "GetQueueUrl");
 		GetQueueUrlRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2773,13 +2773,13 @@ impl<'a> SQSClient<'a> {
 	/// parameter list with two elements looks like this:
 	/// `&Attribute.1=this`
 	/// `&Attribute.2=that`
-	pub fn delete_message_batch(&self, input: &DeleteMessageBatchRequest) -> Result<DeleteMessageBatchResult, AWSError> {
+	pub fn delete_message_batch(&mut self, input: &DeleteMessageBatchRequest) -> Result<DeleteMessageBatchResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "DeleteMessageBatch");
 		DeleteMessageBatchRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2814,13 +2814,13 @@ impl<'a> SQSClient<'a> {
 	/// elements looks like this:
 	/// `&Attribute.1=this`
 	/// `&Attribute.2=that`
-	pub fn send_message_batch(&self, input: &SendMessageBatchRequest) -> Result<SendMessageBatchResult, AWSError> {
+	pub fn send_message_batch(&mut self, input: &SendMessageBatchRequest) -> Result<SendMessageBatchResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "SendMessageBatch");
 		SendMessageBatchRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2838,13 +2838,13 @@ impl<'a> SQSClient<'a> {
 	/// For more information about using dead letter queues, see [Using Amazon SQS
 	/// Dead Letter Queues](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQ
 	/// SDeveloperGuide/SQSDeadLetterQueue.html).
-	pub fn list_dead_letter_source_queues(&self, input: &ListDeadLetterSourceQueuesRequest) -> Result<ListDeadLetterSourceQueuesResult, AWSError> {
+	pub fn list_dead_letter_source_queues(&mut self, input: &ListDeadLetterSourceQueuesRequest) -> Result<ListDeadLetterSourceQueuesResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ListDeadLetterSourceQueues");
 		ListDeadLetterSourceQueuesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2886,13 +2886,13 @@ impl<'a> SQSClient<'a> {
 	/// timeout for the message the next time it is received reverts to the original
 	/// timeout value, not the value you set with the `ChangeMessageVisibility`
 	/// action.
-	pub fn change_message_visibility(&self, input: &ChangeMessageVisibilityRequest) -> Result<(), AWSError> {
+	pub fn change_message_visibility(&mut self, input: &ChangeMessageVisibilityRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ChangeMessageVisibility");
 		ChangeMessageVisibilityRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2923,13 +2923,13 @@ impl<'a> SQSClient<'a> {
 	/// parameter list with two elements looks like this:
 	/// `&Attribute.1=this`
 	/// `&Attribute.2=that`
-	pub fn add_permission(&self, input: &AddPermissionRequest) -> Result<(), AWSError> {
+	pub fn add_permission(&mut self, input: &AddPermissionRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "AddPermission");
 		AddPermissionRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2955,13 +2955,13 @@ impl<'a> SQSClient<'a> {
 	/// looks like this:
 	/// `&Attribute.1=this`
 	/// `&Attribute.2=that`
-	pub fn change_message_visibility_batch(&self, input: &ChangeMessageVisibilityBatchRequest) -> Result<ChangeMessageVisibilityBatchResult, AWSError> {
+	pub fn change_message_visibility_batch(&mut self, input: &ChangeMessageVisibilityBatchRequest) -> Result<ChangeMessageVisibilityBatchResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ChangeMessageVisibilityBatch");
 		ChangeMessageVisibilityBatchRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2985,13 +2985,13 @@ impl<'a> SQSClient<'a> {
 	/// included in the list, your request will be rejected.
 	/// #x9 | #xA | #xD | [#x20 to #xD7FF] | [#xE000 to #xFFFD] | [#x10000 to
 	/// #x10FFFF]
-	pub fn send_message(&self, input: &SendMessageRequest) -> Result<SendMessageResult, AWSError> {
+	pub fn send_message(&mut self, input: &SendMessageRequest) -> Result<SendMessageResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "SendMessage");
 		SendMessageRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3019,13 +3019,13 @@ impl<'a> SQSClient<'a> {
 	/// 30 days. For more information, see [How Amazon SQS Queues Work](http://docs.aw
 	/// s.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/SQSConcepts.html)
 	/// in the _Amazon SQS Developer Guide_.
-	pub fn delete_queue(&self, input: &DeleteQueueRequest) -> Result<(), AWSError> {
+	pub fn delete_queue(&mut self, input: &DeleteQueueRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "DeleteQueue");
 		DeleteQueueRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3046,13 +3046,13 @@ impl<'a> SQSClient<'a> {
 	/// messages sent to the queue while it is being purged may be deleted. While the
 	/// queue is being purged, messages sent to the queue before `PurgeQueue` was
 	/// called may be received, but will be deleted within the next minute.
-	pub fn purge_queue(&self, input: &PurgeQueueRequest) -> Result<(), AWSError> {
+	pub fn purge_queue(&mut self, input: &PurgeQueueRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "PurgeQueue");
 		PurgeQueueRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3097,13 +3097,13 @@ impl<'a> SQSClient<'a> {
 	/// Going forward, new attributes might be added. If you are writing code that
 	/// calls this action, we recommend that you structure your code so that it can
 	/// handle new attributes gracefully.
-	pub fn receive_message(&self, input: &ReceiveMessageRequest) -> Result<ReceiveMessageResult, AWSError> {
+	pub fn receive_message(&mut self, input: &ReceiveMessageRequest) -> Result<ReceiveMessageResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ReceiveMessage");
 		ReceiveMessageRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3134,13 +3134,13 @@ impl<'a> SQSClient<'a> {
 	/// remains on the server and might be returned to you again on a subsequent
 	/// receive request. You should create your system to be idempotent so that
 	/// receiving a particular message more than once is not a problem.
-	pub fn delete_message(&self, input: &DeleteMessageRequest) -> Result<(), AWSError> {
+	pub fn delete_message(&mut self, input: &DeleteMessageRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "DeleteMessage");
 		DeleteMessageRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3157,13 +3157,13 @@ impl<'a> SQSClient<'a> {
 	/// returned is 1000. If you specify a value for the optional `QueueNamePrefix`
 	/// parameter, only queues with a name beginning with the specified value are
 	/// returned.
-	pub fn list_queues(&self, input: &ListQueuesRequest) -> Result<ListQueuesResult, AWSError> {
+	pub fn list_queues(&mut self, input: &ListQueuesRequest) -> Result<ListQueuesResult, AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ListQueues");
 		ListQueuesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3178,13 +3178,13 @@ impl<'a> SQSClient<'a> {
 	}
 	/// Revokes any permissions in the queue policy that matches the specified `Label`
 	/// parameter. Only the owner of the queue can remove permissions.
-	pub fn remove_permission(&self, input: &RemovePermissionRequest) -> Result<(), AWSError> {
+	pub fn remove_permission(&mut self, input: &RemovePermissionRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "RemovePermission");
 		RemovePermissionRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());

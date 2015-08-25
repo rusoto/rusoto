@@ -19,21 +19,21 @@ pub struct S3Helper<'a> {
 }
 
 impl<'a> S3Helper<'a> {
-	pub fn new(credentials:&'a AWSCredentials, region:&'a Region) -> S3Helper<'a> {
+	pub fn new(credentials: DefaultAWSCredentialsProviderChain, region:&'a Region) -> S3Helper<'a> {
 		S3Helper { client: S3Client::new(credentials, region) }
 	}
 
-	pub fn list_buckets(&self) -> Result<ListBucketsOutput, AWSError> {
+	pub fn list_buckets(&mut self) -> Result<ListBucketsOutput, AWSError> {
 		self.client.list_buckets()
 	}
 
 	/// Creates bucket in default us-east-1/us-standard region.
-	pub fn create_bucket(&self, bucket_name: &str) -> Result<CreateBucketOutput, AWSError> {
+	pub fn create_bucket(&mut self, bucket_name: &str) -> Result<CreateBucketOutput, AWSError> {
 		self.create_bucket_in_region(bucket_name, &Region::UsEast1)
 	}
 
 	/// Creates bucket in specified region.
-	pub fn create_bucket_in_region(&self, bucket_name: &str, region: &Region) -> Result<CreateBucketOutput, AWSError> {
+	pub fn create_bucket_in_region(&mut self, bucket_name: &str, region: &Region) -> Result<CreateBucketOutput, AWSError> {
 		let mut request = CreateBucketRequest::default();
 
 		match *region {
@@ -53,7 +53,7 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
-	pub fn delete_bucket(&self, bucket_name: &str, region: &Region) -> Result<(), AWSError> {
+	pub fn delete_bucket(&mut self, bucket_name: &str, region: &Region) -> Result<(), AWSError> {
 		let mut request = DeleteBucketRequest::default();
 		request.bucket = bucket_name.to_string();
 		// println!("Deleting bucket");
@@ -62,7 +62,7 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
-	pub fn get_object(&self, bucket_name: &str, object_name: &str) ->  Result<GetObjectOutput, AWSError> {
+	pub fn get_object(&mut self, bucket_name: &str, object_name: &str) ->  Result<GetObjectOutput, AWSError> {
 		let mut request = GetObjectRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
@@ -71,7 +71,7 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
-	pub fn put_object(&self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
+	pub fn put_object(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
 		let mut request = PutObjectRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
@@ -82,7 +82,7 @@ impl<'a> S3Helper<'a> {
 	}
 
 	// Code smell: duplicate code.  See above.
-	pub fn put_object_with_reduced_redundancy(&self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
+	pub fn put_object_with_reduced_redundancy(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
 		let mut request = PutObjectRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
@@ -91,7 +91,7 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
-	pub fn delete_object(&self, bucket_name: &str, object_name: &str) ->  Result<DeleteObjectOutput, AWSError> {
+	pub fn delete_object(&mut self, bucket_name: &str, object_name: &str) ->  Result<DeleteObjectOutput, AWSError> {
 		let mut request = DeleteObjectRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();

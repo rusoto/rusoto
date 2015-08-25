@@ -11224,22 +11224,22 @@ impl MaxPartsWriter {
 	}
 }
 pub struct S3Client<'a> {
-	creds: &'a AWSCredentials,
+	creds: DefaultAWSCredentialsProviderChain,
 	region: &'a Region
 }
 
 impl<'a> S3Client<'a> {
-	pub fn new(creds: &'a AWSCredentials, region: &'a Region) -> S3Client<'a> {
+	pub fn new(creds: DefaultAWSCredentialsProviderChain, region: &'a Region) -> S3Client<'a> {
 		S3Client { creds: creds, region: region }
 	}
 	/// Returns metadata about all of the versions of objects in a bucket.
-	pub fn list_object_versions(&self, input: &ListObjectVersionsRequest) -> Result<ListObjectVersionsOutput, AWSError> {
+	pub fn list_object_versions(&mut self, input: &ListObjectVersionsRequest) -> Result<ListObjectVersionsOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?versions");
 		let mut params = Params::new();
 		params.put("Action", "ListObjectVersions");
 		ListObjectVersionsRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11254,13 +11254,13 @@ impl<'a> S3Client<'a> {
 	}
 	/// Replaces a policy on a bucket. If the bucket already has a policy, the one in
 	/// this request completely replaces it.
-	pub fn put_bucket_policy(&self, input: &PutBucketPolicyRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_policy(&mut self, input: &PutBucketPolicyRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?policy");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketPolicy");
 		PutBucketPolicyRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11276,13 +11276,13 @@ impl<'a> S3Client<'a> {
 	/// Returns some or all (up to 1000) of the objects in a bucket. You can use the
 	/// request parameters as selection criteria to return a subset of the objects in
 	/// a bucket.
-	pub fn list_objects(&self, input: &ListObjectsRequest) -> Result<ListObjectsOutput, AWSError> {
+	pub fn list_objects(&mut self, input: &ListObjectsRequest) -> Result<ListObjectsOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}");
 		let mut params = Params::new();
 		params.put("Action", "ListObjects");
 		ListObjectsRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11296,13 +11296,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Set the website configuration for a bucket.
-	pub fn put_bucket_website(&self, input: &PutBucketWebsiteRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_website(&mut self, input: &PutBucketWebsiteRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?website");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketWebsite");
 		PutBucketWebsiteRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11316,13 +11316,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Deprecated, see the PutBucketNotificationConfiguraiton operation.
-	pub fn put_bucket_notification(&self, input: &PutBucketNotificationRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_notification(&mut self, input: &PutBucketNotificationRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?notification");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketNotification");
 		PutBucketNotificationRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11338,13 +11338,13 @@ impl<'a> S3Client<'a> {
 	/// Set the logging parameters for a bucket and to specify permissions for who can
 	/// view and modify the logging parameters. To set the logging status of a bucket,
 	/// you must be the bucket owner.
-	pub fn put_bucket_logging(&self, input: &PutBucketLoggingRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_logging(&mut self, input: &PutBucketLoggingRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?logging");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketLogging");
 		PutBucketLoggingRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11359,13 +11359,13 @@ impl<'a> S3Client<'a> {
 	}
 	/// Creates a new replication configuration (or replaces an existing one, if
 	/// present).
-	pub fn put_bucket_replication(&self, input: &PutBucketReplicationRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_replication(&mut self, input: &PutBucketReplicationRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?replication");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketReplication");
 		PutBucketReplicationRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11380,13 +11380,13 @@ impl<'a> S3Client<'a> {
 	}
 	/// Uploads a part in a multipart upload.
 	/// **Note:** After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.
-	pub fn upload_part(&self, input: &UploadPartRequest) -> Result<UploadPartOutput, AWSError> {
+	pub fn upload_part(&mut self, input: &UploadPartRequest) -> Result<UploadPartOutput, AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}/{Key+}");
 		let mut params = Params::new();
 		params.put("Action", "UploadPart");
 		UploadPartRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11400,7 +11400,7 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Adds an object to a bucket.
-	pub fn put_object(&self, input: &PutObjectRequest, use_reduced_redundency: bool) -> Result<PutObjectOutput, AWSError> {
+	pub fn put_object(&mut self, input: &PutObjectRequest, use_reduced_redundency: bool) -> Result<PutObjectOutput, AWSError> {
 		let mut uri = String::from("/");
 		uri = uri +  &input.key.to_string();
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, &uri);
@@ -11413,7 +11413,7 @@ impl<'a> S3Client<'a> {
 		request.set_hostname(Some(hostname));
 		request.set_payload(input.body);
 
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 
 		match status {
@@ -11427,13 +11427,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Deletes the cors configuration information set for the bucket.
-	pub fn delete_bucket_cors(&self, input: &DeleteBucketCorsRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_cors(&mut self, input: &DeleteBucketCorsRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?cors");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketCors");
 		DeleteBucketCorsRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11448,13 +11448,13 @@ impl<'a> S3Client<'a> {
 	}
 	/// Sets the versioning state of an existing bucket. To set the versioning state,
 	/// you must be the bucket owner.
-	pub fn put_bucket_versioning(&self, input: &PutBucketVersioningRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_versioning(&mut self, input: &PutBucketVersioningRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?versioning");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketVersioning");
 		PutBucketVersioningRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11468,13 +11468,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Returns the cors configuration for the bucket.
-	pub fn get_bucket_cors(&self, input: &GetBucketCorsRequest) -> Result<GetBucketCorsOutput, AWSError> {
+	pub fn get_bucket_cors(&mut self, input: &GetBucketCorsRequest) -> Result<GetBucketCorsOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?cors");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketCors");
 		GetBucketCorsRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11489,13 +11489,13 @@ impl<'a> S3Client<'a> {
 	}
 	/// Sets lifecycle configuration for your bucket. If a lifecycle configuration
 	/// exists, it replaces it.
-	pub fn put_bucket_lifecycle(&self, input: &PutBucketLifecycleRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_lifecycle(&mut self, input: &PutBucketLifecycleRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?lifecycle");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketLifecycle");
 		PutBucketLifecycleRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11509,13 +11509,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Gets the access control policy for the bucket.
-	pub fn get_bucket_acl(&self, input: &GetBucketAclRequest) -> Result<GetBucketAclOutput, AWSError> {
+	pub fn get_bucket_acl(&mut self, input: &GetBucketAclRequest) -> Result<GetBucketAclOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?acl");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketAcl");
 		GetBucketAclRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11530,13 +11530,13 @@ impl<'a> S3Client<'a> {
 	}
 	/// Returns the logging status of a bucket and the permissions users have to view
 	/// and modify that status. To use GET, you must be the bucket owner.
-	pub fn get_bucket_logging(&self, input: &GetBucketLoggingRequest) -> Result<GetBucketLoggingOutput, AWSError> {
+	pub fn get_bucket_logging(&mut self, input: &GetBucketLoggingRequest) -> Result<GetBucketLoggingOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?logging");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketLogging");
 		GetBucketLoggingRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11551,13 +11551,13 @@ impl<'a> S3Client<'a> {
 	}
 	/// This operation is useful to determine if a bucket exists and you have
 	/// permission to access it.
-	pub fn head_bucket(&self, input: &HeadBucketRequest) -> Result<(), AWSError> {
+	pub fn head_bucket(&mut self, input: &HeadBucketRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("HEAD", "s3", &self.region, "/{Bucket}");
 		let mut params = Params::new();
 		params.put("Action", "HeadBucket");
 		HeadBucketRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11571,13 +11571,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Sets the permissions on a bucket using access control lists (ACL).
-	pub fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_acl(&mut self, input: &PutBucketAclRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?acl");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketAcl");
 		PutBucketAclRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11591,13 +11591,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// This operation removes the website configuration from the bucket.
-	pub fn delete_bucket_website(&self, input: &DeleteBucketWebsiteRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_website(&mut self, input: &DeleteBucketWebsiteRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?website");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketWebsite");
 		DeleteBucketWebsiteRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11611,13 +11611,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Deletes the policy from the bucket.
-	pub fn delete_bucket_policy(&self, input: &DeleteBucketPolicyRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_policy(&mut self, input: &DeleteBucketPolicyRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?policy");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketPolicy");
 		DeleteBucketPolicyRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11631,13 +11631,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Returns the notification configuration of a bucket.
-	pub fn get_bucket_notification_configuration(&self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfiguration, AWSError> {
+	pub fn get_bucket_notification_configuration(&mut self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfiguration, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?notification");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketNotificationConfiguration");
 		GetBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11652,7 +11652,7 @@ impl<'a> S3Client<'a> {
 	}
 	/// This operation enables you to delete multiple objects from a bucket using a
 	/// single HTTP request. You may specify up to 1000 keys.
-	pub fn delete_objects(&self, input: &DeleteObjectsRequest) -> Result<DeleteObjectsOutput, AWSError> {
+	pub fn delete_objects(&mut self, input: &DeleteObjectsRequest) -> Result<DeleteObjectsOutput, AWSError> {
 		// let mut uri = String::from("/");
 		// uri = uri +  &input.key.to_string();
 		// let mut request = SignedRequest::new("DELETE", "s3", &self.region, &uri);
@@ -11664,7 +11664,7 @@ impl<'a> S3Client<'a> {
 		// params.put("Action", "DeleteObjects");
 		// DeleteObjectsRequestWriter::write_params(&mut params, "", &input);
 		// request.set_params(params);
-		// let result = request.sign_and_execute(&self.creds);
+		// let result = request.sign_and_execute(&self.creds.get_credentials());
 		// let status = result.status.to_u16();
 		// match status {
 		// 	200 => {
@@ -11674,13 +11674,13 @@ impl<'a> S3Client<'a> {
 		// }
 		Err(AWSError::new("not implemented"))
 	}
-	pub fn delete_bucket_replication(&self, input: &DeleteBucketReplicationRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_replication(&mut self, input: &DeleteBucketReplicationRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?replication");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketReplication");
 		DeleteBucketReplicationRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11694,13 +11694,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Creates a copy of an object that is already stored in Amazon S3.
-	pub fn copy_object(&self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, AWSError> {
+	pub fn copy_object(&mut self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}/{Key+}");
 		let mut params = Params::new();
 		params.put("Action", "CopyObject");
 		CopyObjectRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11715,12 +11715,12 @@ impl<'a> S3Client<'a> {
 	}
 	/// Returns a list of all buckets owned by the authenticated sender of the
 	/// request.
-	pub fn list_buckets(&self) -> Result<ListBucketsOutput, AWSError> {
+	pub fn list_buckets(&mut self) -> Result<ListBucketsOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ListBuckets");
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11741,13 +11741,13 @@ impl<'a> S3Client<'a> {
 	/// will be charged for the download. Documentation on requester pays buckets can
 	/// be found at
 	/// http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html
-	pub fn put_bucket_request_payment(&self, input: &PutBucketRequestPaymentRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_request_payment(&mut self, input: &PutBucketRequestPaymentRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?requestPayment");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketRequestPayment");
 		PutBucketRequestPaymentRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11761,13 +11761,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Enables notifications of specified events for a bucket.
-	pub fn put_bucket_notification_configuration(&self, input: &PutBucketNotificationConfigurationRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_notification_configuration(&mut self, input: &PutBucketNotificationConfigurationRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?notification");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketNotificationConfiguration");
 		PutBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11783,13 +11783,13 @@ impl<'a> S3Client<'a> {
 	/// The HEAD operation retrieves metadata from an object without returning the
 	/// object itself. This operation is useful if you're only interested in an
 	/// object's metadata. To use HEAD, you must have READ access to the object.
-	pub fn head_object(&self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, AWSError> {
+	pub fn head_object(&mut self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, AWSError> {
 		let mut request = SignedRequest::new("HEAD", "s3", &self.region, "/{Bucket}/{Key+}");
 		let mut params = Params::new();
 		params.put("Action", "HeadObject");
 		HeadObjectRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11803,13 +11803,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Deletes the tags from the bucket.
-	pub fn delete_bucket_tagging(&self, input: &DeleteBucketTaggingRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_tagging(&mut self, input: &DeleteBucketTaggingRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?tagging");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketTagging");
 		DeleteBucketTaggingRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11823,13 +11823,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Return torrent files from a bucket.
-	pub fn get_object_torrent(&self, input: &GetObjectTorrentRequest) -> Result<GetObjectTorrentOutput, AWSError> {
+	pub fn get_object_torrent(&mut self, input: &GetObjectTorrentRequest) -> Result<GetObjectTorrentOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}/{Key+}?torrent");
 		let mut params = Params::new();
 		params.put("Action", "GetObjectTorrent");
 		GetObjectTorrentRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11843,13 +11843,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Returns the lifecycle configuration information set on the bucket.
-	pub fn get_bucket_lifecycle(&self, input: &GetBucketLifecycleRequest) -> Result<GetBucketLifecycleOutput, AWSError> {
+	pub fn get_bucket_lifecycle(&mut self, input: &GetBucketLifecycleRequest) -> Result<GetBucketLifecycleOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?lifecycle");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketLifecycle");
 		GetBucketLifecycleRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11864,7 +11864,7 @@ impl<'a> S3Client<'a> {
 	}
 	/// Creates a new bucket.
 	/// All requests go to the us-east-1/us-standard endpoint, but can create buckets anywhere.
-	pub fn create_bucket(&self, input: &CreateBucketRequest) -> Result<CreateBucketOutput, AWSError> {
+	pub fn create_bucket(&mut self, input: &CreateBucketRequest) -> Result<CreateBucketOutput, AWSError> {
 		let region = Region::UsEast1;
 		let mut create_config : Vec<u8>;
 		let mut request = SignedRequest::new("PUT", "s3", &region, "");
@@ -11876,7 +11876,7 @@ impl<'a> S3Client<'a> {
 			request.set_payload(Some(&create_config));
 		}
 
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 
 		match status {
@@ -11895,13 +11895,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Completes a multipart upload by assembling previously uploaded parts.
-	pub fn complete_multipart_upload(&self, input: &CompleteMultipartUploadRequest) -> Result<CompleteMultipartUploadOutput, AWSError> {
+	pub fn complete_multipart_upload(&mut self, input: &CompleteMultipartUploadRequest) -> Result<CompleteMultipartUploadOutput, AWSError> {
 		let mut request = SignedRequest::new("POST", "s3", &self.region, "/{Bucket}/{Key+}");
 		let mut params = Params::new();
 		params.put("Action", "CompleteMultipartUpload");
 		CompleteMultipartUploadRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11915,13 +11915,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Returns the website configuration for a bucket.
-	pub fn get_bucket_website(&self, input: &GetBucketWebsiteRequest) -> Result<GetBucketWebsiteOutput, AWSError> {
+	pub fn get_bucket_website(&mut self, input: &GetBucketWebsiteRequest) -> Result<GetBucketWebsiteOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?website");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketWebsite");
 		GetBucketWebsiteRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11936,13 +11936,13 @@ impl<'a> S3Client<'a> {
 	}
 	/// Initiates a multipart upload and returns an upload ID.
 	/// **Note:** After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.
-	pub fn create_multipart_upload(&self, input: &CreateMultipartUploadRequest) -> Result<CreateMultipartUploadOutput, AWSError> {
+	pub fn create_multipart_upload(&mut self, input: &CreateMultipartUploadRequest) -> Result<CreateMultipartUploadOutput, AWSError> {
 		let mut request = SignedRequest::new("POST", "s3", &self.region, "/{Bucket}/{Key+}?uploads");
 		let mut params = Params::new();
 		params.put("Action", "CreateMultipartUpload");
 		CreateMultipartUploadRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11958,13 +11958,13 @@ impl<'a> S3Client<'a> {
 	/// Deletes the bucket. All objects (including all object versions and Delete
 	/// Markers) in the bucket must be deleted before the bucket itself can be
 	/// deleted.
-	pub fn delete_bucket(&self, input: &DeleteBucketRequest, region: &Region) -> Result<(), AWSError> {
+	pub fn delete_bucket(&mut self, input: &DeleteBucketRequest, region: &Region) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("DELETE", "s3", region, "");
 
 		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
 		request.set_hostname(Some(hostname));
 
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		match status {
 			204 => {
@@ -12063,7 +12063,7 @@ impl<'a> S3Client<'a> {
 	}
 
 	/// Retrieves objects from Amazon S3.
-	pub fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, AWSError> {
+	pub fn get_object(&mut self, input: &GetObjectRequest) -> Result<GetObjectOutput, AWSError> {
 		let mut uri = String::from("/");
 		uri = uri +  &input.key.to_string();
 		let mut request = SignedRequest::new("GET", "s3", &self.region, &uri);
@@ -12076,7 +12076,7 @@ impl<'a> S3Client<'a> {
 		GetObjectRequestWriter::write_params(&mut params, "", &input);
 
 		request.set_params(params);
-		let mut result = request.sign_and_execute(&self.creds);
+		let mut result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		match status {
 			200 => {
@@ -12089,13 +12089,13 @@ impl<'a> S3Client<'a> {
 	}
 
 	/// Returns the policy of a specified bucket.
-	pub fn get_bucket_policy(&self, input: &GetBucketPolicyRequest) -> Result<GetBucketPolicyOutput, AWSError> {
+	pub fn get_bucket_policy(&mut self, input: &GetBucketPolicyRequest) -> Result<GetBucketPolicyOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?policy");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketPolicy");
 		GetBucketPolicyRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12109,13 +12109,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Returns the versioning state of a bucket.
-	pub fn get_bucket_versioning(&self, input: &GetBucketVersioningRequest) -> Result<GetBucketVersioningOutput, AWSError> {
+	pub fn get_bucket_versioning(&mut self, input: &GetBucketVersioningRequest) -> Result<GetBucketVersioningOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?versioning");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketVersioning");
 		GetBucketVersioningRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12129,13 +12129,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// This operation lists in-progress multipart uploads.
-	pub fn list_multipart_uploads(&self, input: &ListMultipartUploadsRequest) -> Result<ListMultipartUploadsOutput, AWSError> {
+	pub fn list_multipart_uploads(&mut self, input: &ListMultipartUploadsRequest) -> Result<ListMultipartUploadsOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?uploads");
 		let mut params = Params::new();
 		params.put("Action", "ListMultipartUploads");
 		ListMultipartUploadsRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12149,13 +12149,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Returns the request payment configuration of a bucket.
-	pub fn get_bucket_request_payment(&self, input: &GetBucketRequestPaymentRequest) -> Result<GetBucketRequestPaymentOutput, AWSError> {
+	pub fn get_bucket_request_payment(&mut self, input: &GetBucketRequestPaymentRequest) -> Result<GetBucketRequestPaymentOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?requestPayment");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketRequestPayment");
 		GetBucketRequestPaymentRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12169,13 +12169,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Sets the tags for a bucket.
-	pub fn put_bucket_tagging(&self, input: &PutBucketTaggingRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_tagging(&mut self, input: &PutBucketTaggingRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?tagging");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketTagging");
 		PutBucketTaggingRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12189,13 +12189,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Returns the tag set associated with the bucket.
-	pub fn get_bucket_tagging(&self, input: &GetBucketTaggingRequest) -> Result<GetBucketTaggingOutput, AWSError> {
+	pub fn get_bucket_tagging(&mut self, input: &GetBucketTaggingRequest) -> Result<GetBucketTaggingOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?tagging");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketTagging");
 		GetBucketTaggingRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12212,13 +12212,13 @@ impl<'a> S3Client<'a> {
 	/// To verify that all parts have been removed, so you don't get charged for the
 	/// part storage, you should call the List Parts operation and ensure the parts
 	/// list is empty.
-	pub fn abort_multipart_upload(&self, input: &AbortMultipartUploadRequest) -> Result<AbortMultipartUploadOutput, AWSError> {
+	pub fn abort_multipart_upload(&mut self, input: &AbortMultipartUploadRequest) -> Result<AbortMultipartUploadOutput, AWSError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}/{Key+}");
 		let mut params = Params::new();
 		params.put("Action", "AbortMultipartUpload");
 		AbortMultipartUploadRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12233,13 +12233,13 @@ impl<'a> S3Client<'a> {
 	}
 	/// uses the acl subresource to set the access control list (ACL) permissions for
 	/// an object that already exists in a bucket
-	pub fn put_object_acl(&self, input: &PutObjectAclRequest) -> Result<PutObjectAclOutput, AWSError> {
+	pub fn put_object_acl(&mut self, input: &PutObjectAclRequest) -> Result<PutObjectAclOutput, AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}/{Key+}?acl");
 		let mut params = Params::new();
 		params.put("Action", "PutObjectAcl");
 		PutObjectAclRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12253,13 +12253,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Returns the region the bucket resides in.
-	pub fn get_bucket_location(&self, input: &GetBucketLocationRequest) -> Result<GetBucketLocationOutput, AWSError> {
+	pub fn get_bucket_location(&mut self, input: &GetBucketLocationRequest) -> Result<GetBucketLocationOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?location");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketLocation");
 		GetBucketLocationRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12273,13 +12273,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Sets the cors configuration for a bucket.
-	pub fn put_bucket_cors(&self, input: &PutBucketCorsRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_cors(&mut self, input: &PutBucketCorsRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?cors");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketCors");
 		PutBucketCorsRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12293,13 +12293,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Deletes the lifecycle configuration from the bucket.
-	pub fn delete_bucket_lifecycle(&self, input: &DeleteBucketLifecycleRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_lifecycle(&mut self, input: &DeleteBucketLifecycleRequest) -> Result<(), AWSError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?lifecycle");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketLifecycle");
 		DeleteBucketLifecycleRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12313,13 +12313,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Deprecated, see the GetBucketNotificationConfiguration operation.
-	pub fn get_bucket_notification(&self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfigurationDeprecated, AWSError> {
+	pub fn get_bucket_notification(&mut self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfigurationDeprecated, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?notification");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketNotification");
 		GetBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12333,13 +12333,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Lists the parts that have been uploaded for a specific multipart upload.
-	pub fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, AWSError> {
+	pub fn list_parts(&mut self, input: &ListPartsRequest) -> Result<ListPartsOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}/{Key+}");
 		let mut params = Params::new();
 		params.put("Action", "ListParts");
 		ListPartsRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12353,13 +12353,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Returns the access control list (ACL) of an object.
-	pub fn get_object_acl(&self, input: &GetObjectAclRequest) -> Result<GetObjectAclOutput, AWSError> {
+	pub fn get_object_acl(&mut self, input: &GetObjectAclRequest) -> Result<GetObjectAclOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}/{Key+}?acl");
 		let mut params = Params::new();
 		params.put("Action", "GetObjectAcl");
 		GetObjectAclRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12373,13 +12373,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Uploads a part by copying data from an existing object as data source.
-	pub fn upload_part_copy(&self, input: &UploadPartCopyRequest) -> Result<UploadPartCopyOutput, AWSError> {
+	pub fn upload_part_copy(&mut self, input: &UploadPartCopyRequest) -> Result<UploadPartCopyOutput, AWSError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}/{Key+}");
 		let mut params = Params::new();
 		params.put("Action", "UploadPartCopy");
 		UploadPartCopyRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12395,7 +12395,7 @@ impl<'a> S3Client<'a> {
 	/// Removes the null version (if there is one) of an object and inserts a delete
 	/// marker, which becomes the latest version of the object. If there isn't a null
 	/// version, Amazon S3 does not remove any objects.
-	pub fn delete_object(&self, input: &DeleteObjectRequest) -> Result<DeleteObjectOutput, AWSError> {
+	pub fn delete_object(&mut self, input: &DeleteObjectRequest) -> Result<DeleteObjectOutput, AWSError> {
 		let mut uri = String::from("/");
 		uri = uri +  &input.key.to_string();
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, &uri);
@@ -12407,7 +12407,7 @@ impl<'a> S3Client<'a> {
 		params.put("Action", "DeleteObject");
 		DeleteObjectRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 
 		match status {
@@ -12419,13 +12419,13 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Restores an archived copy of an object back into Amazon S3
-	pub fn restore_object(&self, input: &RestoreObjectRequest) -> Result<RestoreObjectOutput, AWSError> {
+	pub fn restore_object(&mut self, input: &RestoreObjectRequest) -> Result<RestoreObjectOutput, AWSError> {
 		let mut request = SignedRequest::new("POST", "s3", &self.region, "/{Bucket}/{Key+}?restore");
 		let mut params = Params::new();
 		params.put("Action", "RestoreObject");
 		RestoreObjectRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -12438,13 +12438,13 @@ impl<'a> S3Client<'a> {
 			_ => { Err(AWSError::new("error")) }
 		}
 	}
-	pub fn get_bucket_replication(&self, input: &GetBucketReplicationRequest) -> Result<GetBucketReplicationOutput, AWSError> {
+	pub fn get_bucket_replication(&mut self, input: &GetBucketReplicationRequest) -> Result<GetBucketReplicationOutput, AWSError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?replication");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketReplication");
 		GetBucketReplicationRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds);
+		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
