@@ -2351,24 +2351,7 @@ impl QueueConfigurationWriter {
 		EventListWriter::write_params(params, &(prefix.to_string() + "Event"), &obj.events);
 	}
 }
-pub type BucketCannedACL = String;
-/// Parse BucketCannedACL from XML
-struct BucketCannedACLParser;
-impl BucketCannedACLParser {
-	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketCannedACL, XmlParseError> {
-		try!(start_element(tag_name, stack));
-		let obj = try!(characters(stack));
-		try!(end_element(tag_name, stack));
-		Ok(obj)
-	}
-}
-/// Write BucketCannedACL contents to a SignedRequest
-struct BucketCannedACLWriter;
-impl BucketCannedACLWriter {
-	fn write_params(params: &mut Params, name: &str, obj: &BucketCannedACL) {
-		params.put(name, obj);
-	}
-}
+
 pub type SSECustomerKey = String;
 /// Parse SSECustomerKey from XML
 struct SSECustomerKeyParser;
@@ -4324,7 +4307,7 @@ pub struct CreateBucketRequest {
 	pub grant_write_acp: Option<GrantWriteACP>,
 	pub bucket: BucketName,
 	/// The canned ACL to apply to the bucket.
-	pub acl: Option<BucketCannedACL>,
+	pub acl: Option<CannedAcl>,
 	/// Allows grantee to create, overwrite, and delete any object in the bucket.
 	pub grant_write: Option<GrantWrite>,
 	/// Allows grantee to list the objects in the bucket.
@@ -4466,7 +4449,7 @@ pub struct PutObjectAclRequest {
 	pub content_md5: Option<ContentMD5>,
 	pub bucket: BucketName,
 	/// The canned ACL to apply to the object.
-	pub acl: Option<ObjectCannedACL>,
+	pub acl: Option<CannedAcl>,
 	pub access_control_policy: Option<AccessControlPolicy>,
 	/// Allows grantee to create, overwrite, and delete any object in the bucket.
 	pub grant_write: Option<GrantWrite>,
@@ -4506,10 +4489,6 @@ impl PutObjectAclRequestParser {
 			}
 			if current_name == "Bucket" {
 				obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-				continue;
-			}
-			if current_name == "x-amz-acl" {
-				obj.acl = Some(try!(ObjectCannedACLParser::parse_xml("x-amz-acl", stack)));
 				continue;
 			}
 			if current_name == "AccessControlPolicy" {
@@ -4554,9 +4533,6 @@ impl PutObjectAclRequestWriter {
 			ContentMD5Writer::write_params(params, &(prefix.to_string() + "Content-MD5"), obj);
 		}
 		BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-		if let Some(ref obj) = obj.acl {
-			ObjectCannedACLWriter::write_params(params, &(prefix.to_string() + "x-amz-acl"), obj);
-		}
 		if let Some(ref obj) = obj.access_control_policy {
 			AccessControlPolicyWriter::write_params(params, &(prefix.to_string() + "AccessControlPolicy"), obj);
 		}
@@ -6230,7 +6206,7 @@ pub struct PutBucketAclRequest {
 	pub content_md5: Option<ContentMD5>,
 	pub bucket: BucketName,
 	/// The canned ACL to apply to the bucket.
-	pub acl: Option<BucketCannedACL>,
+	pub acl: Option<CannedAcl>,
 	pub access_control_policy: Option<AccessControlPolicy>,
 	/// Allows grantee to create, overwrite, and delete any object in the bucket.
 	pub grant_write: Option<GrantWrite>,
@@ -6240,89 +6216,6 @@ pub struct PutBucketAclRequest {
 	pub grant_read_acp: Option<GrantReadACP>,
 }
 
-/// Parse PutBucketAclRequest from XML
-struct PutBucketAclRequestParser;
-impl PutBucketAclRequestParser {
-	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketAclRequest, XmlParseError> {
-		try!(start_element(tag_name, stack));
-		let mut obj = PutBucketAclRequest::default();
-		loop {
-			let current_name = try!(peek_at_name(stack));
-			if current_name == "x-amz-grant-full-control" {
-				obj.grant_full_control = Some(try!(GrantFullControlParser::parse_xml("x-amz-grant-full-control", stack)));
-				continue;
-			}
-			if current_name == "x-amz-grant-write-acp" {
-				obj.grant_write_acp = Some(try!(GrantWriteACPParser::parse_xml("x-amz-grant-write-acp", stack)));
-				continue;
-			}
-			if current_name == "Content-MD5" {
-				obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-				continue;
-			}
-			if current_name == "Bucket" {
-				obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-				continue;
-			}
-			if current_name == "x-amz-acl" {
-				obj.acl = Some(try!(BucketCannedACLParser::parse_xml("x-amz-acl", stack)));
-				continue;
-			}
-			if current_name == "AccessControlPolicy" {
-				obj.access_control_policy = Some(try!(AccessControlPolicyParser::parse_xml("AccessControlPolicy", stack)));
-				continue;
-			}
-			if current_name == "x-amz-grant-write" {
-				obj.grant_write = Some(try!(GrantWriteParser::parse_xml("x-amz-grant-write", stack)));
-				continue;
-			}
-			if current_name == "x-amz-grant-read" {
-				obj.grant_read = Some(try!(GrantReadParser::parse_xml("x-amz-grant-read", stack)));
-				continue;
-			}
-			if current_name == "x-amz-grant-read-acp" {
-				obj.grant_read_acp = Some(try!(GrantReadACPParser::parse_xml("x-amz-grant-read-acp", stack)));
-				continue;
-			}
-			break;
-		}
-		try!(end_element(tag_name, stack));
-		Ok(obj)
-	}
-}
-/// Write PutBucketAclRequest contents to a SignedRequest
-struct PutBucketAclRequestWriter;
-impl PutBucketAclRequestWriter {
-	fn write_params(params: &mut Params, name: &str, obj: &PutBucketAclRequest) {
-		let mut prefix = name.to_string();
-		if prefix != "" { prefix.push_str("."); }
-		if let Some(ref obj) = obj.grant_full_control {
-			GrantFullControlWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-full-control"), obj);
-		}
-		if let Some(ref obj) = obj.grant_write_acp {
-			GrantWriteACPWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-write-acp"), obj);
-		}
-		if let Some(ref obj) = obj.content_md5 {
-			ContentMD5Writer::write_params(params, &(prefix.to_string() + "Content-MD5"), obj);
-		}
-		BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-		if let Some(ref obj) = obj.acl {
-			BucketCannedACLWriter::write_params(params, &(prefix.to_string() + "x-amz-acl"), obj);
-		}
-		if let Some(ref obj) = obj.access_control_policy {
-			AccessControlPolicyWriter::write_params(params, &(prefix.to_string() + "AccessControlPolicy"), obj);
-		}
-		if let Some(ref obj) = obj.grant_write {
-			GrantWriteWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-write"), obj);
-		}
-		if let Some(ref obj) = obj.grant_read {
-			GrantReadWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-read"), obj);
-		}
-		if let Some(ref obj) = obj.grant_read_acp {
-			GrantReadACPWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-read-acp"), obj);
-		}
-	}
-}
 #[derive(Debug, Default)]
 pub struct UploadPartOutput {
 	/// If server-side encryption with a customer-provided encryption key was
@@ -7653,7 +7546,7 @@ pub struct PutObjectRequest<'a> {
 	/// Allows grantee to write the ACL for the applicable object.
 	pub grant_write_acp: Option<GrantWriteACP>,
 	/// The canned ACL to apply to the object.
-	pub acl: Option<ObjectCannedACL>,
+	pub acl: Option<CannedAcl>,
 	/// Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object.
 	pub grant_full_control: Option<GrantFullControl>,
 	/// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
@@ -8118,7 +8011,7 @@ pub struct CopyObjectRequest {
 	/// encryption key was transmitted without error.
 	pub copy_source_sse_customer_key_md5: Option<CopySourceSSECustomerKeyMD5>,
 	/// The canned ACL to apply to the object.
-	pub acl: Option<ObjectCannedACL>,
+	pub acl: Option<CannedAcl>,
 	/// Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object.
 	pub grant_full_control: Option<GrantFullControl>,
 	/// Copies the object if its entity tag (ETag) matches the specified tag.
@@ -8237,10 +8130,6 @@ impl CopyObjectRequestParser {
 				obj.copy_source_sse_customer_key_md5 = Some(try!(CopySourceSSECustomerKeyMD5Parser::parse_xml("x-amz-copy-source-server-side-encryption-customer-key-MD5", stack)));
 				continue;
 			}
-			if current_name == "x-amz-acl" {
-				obj.acl = Some(try!(ObjectCannedACLParser::parse_xml("x-amz-acl", stack)));
-				continue;
-			}
 			if current_name == "x-amz-grant-full-control" {
 				obj.grant_full_control = Some(try!(GrantFullControlParser::parse_xml("x-amz-grant-full-control", stack)));
 				continue;
@@ -8344,9 +8233,6 @@ impl CopyObjectRequestWriter {
 		}
 		if let Some(ref obj) = obj.copy_source_sse_customer_key_md5 {
 			CopySourceSSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-copy-source-server-side-encryption-customer-key-MD5"), obj);
-		}
-		if let Some(ref obj) = obj.acl {
-			ObjectCannedACLWriter::write_params(params, &(prefix.to_string() + "x-amz-acl"), obj);
 		}
 		if let Some(ref obj) = obj.grant_full_control {
 			GrantFullControlWriter::write_params(params, &(prefix.to_string() + "x-amz-grant-full-control"), obj);
@@ -11575,7 +11461,6 @@ impl<'a> S3Client<'a> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?acl");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketAcl");
-		PutBucketAclRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
 		let result = request.sign_and_execute(&self.creds.get_credentials());
 		let status = result.status.to_u16();
@@ -11874,6 +11759,11 @@ impl<'a> S3Client<'a> {
 		if needs_create_bucket_config(&self.region) {
 			create_config = create_bucket_config_xml(&self.region);
 			request.set_payload(Some(&create_config));
+		}
+
+		match input.acl {
+			None => (),
+			Some(ref canned_acl) => request.add_header("x-amz-acl", &canned_acl_in_aws_format(&canned_acl)),
 		}
 
 		let result = request.sign_and_execute(&self.creds.get_credentials());

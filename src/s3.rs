@@ -18,6 +18,16 @@ pub struct S3Helper<'a> {
 	client: S3Client<'a>
 }
 
+#[derive(Debug)]
+pub enum CannedAcl {
+    Private,
+    PublicRead,
+	PublicReadWrite,
+	AuthenticatedRead,
+	BucketOwnerRead,
+	BucketOwnerFullControl,
+}
+
 impl<'a> S3Helper<'a> {
 	pub fn new(credentials: DefaultAWSCredentialsProviderChain, region:&'a Region) -> S3Helper<'a> {
 		S3Helper { client: S3Client::new(credentials, region) }
@@ -28,12 +38,12 @@ impl<'a> S3Helper<'a> {
 	}
 
 	/// Creates bucket in default us-east-1/us-standard region.
-	pub fn create_bucket(&mut self, bucket_name: &str) -> Result<CreateBucketOutput, AWSError> {
-		self.create_bucket_in_region(bucket_name, &Region::UsEast1)
+	pub fn create_bucket(&mut self, bucket_name: &str, canned_acl: Option<CannedAcl>) -> Result<CreateBucketOutput, AWSError> {
+		self.create_bucket_in_region(bucket_name, &Region::UsEast1, canned_acl)
 	}
 
 	/// Creates bucket in specified region.
-	pub fn create_bucket_in_region(&mut self, bucket_name: &str, region: &Region) -> Result<CreateBucketOutput, AWSError> {
+	pub fn create_bucket_in_region(&mut self, bucket_name: &str, region: &Region, canned_acl: Option<CannedAcl>) -> Result<CreateBucketOutput, AWSError> {
 		let mut request = CreateBucketRequest::default();
 
 		match *region {
@@ -47,6 +57,9 @@ impl<'a> S3Helper<'a> {
 			}
 		}
 		request.bucket = bucket_name.to_string();
+
+		request.acl = canned_acl;
+
 		// println!("Creating bucket");
 		let result = self.client.create_bucket(&request);
 		// println!("Result is {:?}", result);
@@ -118,6 +131,17 @@ pub fn create_bucket_config_xml(region: &Region) -> Vec<u8> {
 		</CreateBucketConfiguration >", region_in_aws_format(region));
 			xml.into_bytes()
 		}
+	}
+}
+
+pub fn canned_acl_in_aws_format(canned_acl: &CannedAcl) -> String {
+	match *canned_acl {
+		CannedAcl::Private => "private".to_string(),
+	    CannedAcl::PublicRead => "public-read".to_string(),
+		CannedAcl::PublicReadWrite => "public-read-write".to_string(),
+		CannedAcl::AuthenticatedRead => "authenticated-read".to_string(),
+		CannedAcl::BucketOwnerRead => "bucket-owner-read".to_string(),
+		CannedAcl::BucketOwnerFullControl => "bucket-owner-full-control".to_string(),
 	}
 }
 

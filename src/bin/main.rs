@@ -27,7 +27,7 @@ fn main() {
 		Err(err) => { println!("Got error: {:#?}", err); }
 	}
 
-	let bucket_name = format!("rusoto{}", get_time().sec);
+	let mut bucket_name = format!("rusoto{}", get_time().sec);
 	// S3 client gets its own provider chain:
 	let mut s3 = S3Helper::new(provider.clone(), &region);
 
@@ -36,7 +36,7 @@ fn main() {
 		Err(err) => { println!("Got error in s3 list buckets: {:#?}", err); }
 	}
 
-	match s3_create_bucket_test(&mut s3, &bucket_name, &region) {
+	match s3_create_bucket_test(&mut s3, &bucket_name, &region, None) {
 		Ok(_) => { println!("Everything worked for S3 create bucket."); },
 		Err(err) => { println!("Got error in s3 create bucket: {:#?}", err); }
 	}
@@ -79,6 +79,19 @@ fn main() {
 			println!("Everything worked for S3 delete object.");
 		}
 		Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
+	}
+
+	match s3_delete_bucket_test(&mut s3, &bucket_name, &region) {
+		Ok(_) => { println!("Everything worked for S3 delete bucket."); },
+		Err(err) => { println!("Got error in s3 delete bucket: {:#?}", err); }
+	}
+
+	// new bucket for canned acl testing!
+	bucket_name = format!("rusoto{}", get_time().sec);
+
+	match s3_create_bucket_test(&mut s3, &bucket_name, &region, Some(CannedAcl::AuthenticatedRead)) {
+		Ok(_) => { println!("Everything worked for S3 create bucket with ACL."); },
+		Err(err) => { println!("Got error in s3 create bucket: {:#?}", err); }
 	}
 
 	match s3_delete_bucket_test(&mut s3, &bucket_name, &region) {
@@ -133,8 +146,8 @@ fn s3_put_object_with_reduced_redundancy_test(s3: &mut S3Helper, bucket: &str) -
 	}
 }
 
-fn s3_create_bucket_test(s3: &mut S3Helper, bucket: &str, region: &Region) -> Result<(), AWSError> {
-	try!(s3.create_bucket_in_region(bucket, &region));
+fn s3_create_bucket_test(s3: &mut S3Helper, bucket: &str, region: &Region, canned_acl: Option<CannedAcl>) -> Result<(), AWSError> {
+	try!(s3.create_bucket_in_region(bucket, &region, canned_acl));
 
 	Ok(())
 }
