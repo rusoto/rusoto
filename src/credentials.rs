@@ -21,16 +21,16 @@ use self::chrono::*;
 pub struct AWSCredentials {
     key: String,
     secret: String,
-    token: String,
+    token: Option<String>,
     expires_at: DateTime<UTC>
 }
 
 impl AWSCredentials {
-    pub fn new(key:&str, secret:&str, token:&str, expires_at:DateTime<UTC>) -> AWSCredentials {
+    pub fn new(key:&str, secret:&str, token:Option<String>, expires_at:DateTime<UTC>) -> AWSCredentials {
         AWSCredentials {
             key: key.to_string(),
             secret: secret.to_string(),
-            token: token.to_string(),
+            token: token,
             expires_at: expires_at,
         }
     }
@@ -47,7 +47,7 @@ impl AWSCredentials {
         &self.expires_at
     }
 
-    pub fn get_token(&self) -> &str {
+    pub fn get_token(&self) -> &Option<String> {
         &self.token
     }
 
@@ -75,7 +75,7 @@ impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
     fn new() -> EnvironmentCredentialsProvider {
         // expired by default
         return EnvironmentCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
+            secret: "".to_string(), token: None, expires_at: UTC::now() - Duration::seconds(600) } };
     }
 
 	fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
@@ -94,7 +94,7 @@ impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
             }
 
             self.credentials = AWSCredentials{key: env_key, secret: env_secret,
-                 token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600)};
+                 token: None, expires_at: UTC::now() + Duration::seconds(600)};
         }
 
 		Ok(&self.credentials)
@@ -108,7 +108,7 @@ pub struct FileCredentialsProvider {
 impl AWSCredentialsProvider for FileCredentialsProvider {
     fn new() -> FileCredentialsProvider {
         return FileCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
+            secret: "".to_string(), token: None, expires_at: UTC::now() - Duration::seconds(600) } };
     }
 
     fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
@@ -124,7 +124,7 @@ impl AWSCredentialsProvider for FileCredentialsProvider {
             match get_credentials_from_file(profile_location) {
                 Ok(creds) => {
                     self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: "".to_string(),
+                        secret: creds.get_aws_secret_key().to_string(), token: None,
                         expires_at: UTC::now() + Duration::seconds(600) };
                 }
                 Err(_) => return Err("Couldn't get creds from file.")
@@ -191,7 +191,7 @@ fn get_credentials_from_file<'a>(file_with_path: String) -> Result<AWSCredential
     }
 
     return Ok(AWSCredentials{ key: access_key.to_string(), secret: secret_key.to_string(),
-         token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) });
+         token:None, expires_at: UTC::now() + Duration::seconds(600) });
 }
 
 pub struct IAMRoleCredentialsProvider {
@@ -201,7 +201,7 @@ pub struct IAMRoleCredentialsProvider {
 impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
     fn new() -> IAMRoleCredentialsProvider {
         return IAMRoleCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-        secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
+        secret: "".to_string(), token: None, expires_at: UTC::now() - Duration::seconds(600) } };
     }
 
     fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
@@ -276,7 +276,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             };
 
             self.credentials = AWSCredentials{ key: access_key.to_string(),
-                secret: secret_key.to_string(),  token: token_from_response.to_string(), expires_at: expiration_time };
+                secret: secret_key.to_string(),  token: Some(token_from_response.to_string()), expires_at: expiration_time };
         }
 
 		Ok(&self.credentials)
@@ -292,7 +292,7 @@ pub struct DefaultAWSCredentialsProviderChain {
 impl DefaultAWSCredentialsProviderChain {
     pub fn new() -> DefaultAWSCredentialsProviderChain {
         return DefaultAWSCredentialsProviderChain {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
+            secret: "".to_string(), token: None, expires_at: UTC::now() - Duration::seconds(600) } };
     }
 
     pub fn get_credentials(&mut self) -> &AWSCredentials {
@@ -303,7 +303,7 @@ impl DefaultAWSCredentialsProviderChain {
                 Ok(creds) => {
                     //println!("Found creds in env");
                     self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: "".to_string(),
+                        secret: creds.get_aws_secret_key().to_string(), token: None,
                         expires_at: UTC::now() + Duration::seconds(600) };
                     return &self.credentials;
                 }
@@ -315,7 +315,7 @@ impl DefaultAWSCredentialsProviderChain {
                 Ok(creds) => {
                     //println!("Found creds in file");
                     self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: "".to_string(),
+                        secret: creds.get_aws_secret_key().to_string(), token: None,
                         expires_at: UTC::now() + Duration::seconds(600) };
                     return &self.credentials;
                 }
@@ -327,7 +327,7 @@ impl DefaultAWSCredentialsProviderChain {
                 Ok(creds) => {
                     //println!("Found creds via iam");
                     self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: creds.get_token().to_string(),
+                        secret: creds.get_aws_secret_key().to_string(), token: creds.get_token().clone(),
                         expires_at: UTC::now() + Duration::seconds(600) };
                     return &self.credentials;
                 }
