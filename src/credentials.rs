@@ -9,6 +9,7 @@ use std::io::BufReader;
 use std::ascii::AsciiExt;
 use hyper::Client;
 use hyper::header::Connection;
+use error::*;
 
 extern crate rustc_serialize;
 use self::rustc_serialize::json::*;
@@ -26,10 +27,10 @@ pub struct AWSCredentials {
 }
 
 impl AWSCredentials {
-    pub fn new(key:&str, secret:&str, token:Option<String>, expires_at:DateTime<UTC>) -> AWSCredentials {
+    pub fn new<K, S>(key:K, secret:S, token:Option<String>, expires_at:DateTime<UTC>) -> AWSCredentials where K:Into<String>, S:Into<String> {
         AWSCredentials {
-            key: key.to_string(),
-            secret: secret.to_string(),
+            key: key.into(),
+            secret: secret.into(),
             token: token,
             expires_at: expires_at,
         }
@@ -73,8 +74,7 @@ pub struct EnvironmentCredentialsProvider {
 
 impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
     fn new() -> EnvironmentCredentialsProvider {
-        // expired by default
-        return EnvironmentCredentialsProvider { credentials: None }
+        EnvironmentCredentialsProvider { credentials: None }
     }
 
 	fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
@@ -99,22 +99,20 @@ fn get_credentials_from_environment<'a>() -> Result<AWSCredentials, &'a str> {
         return Err("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment.");
     }
 
-    Ok(AWSCredentials{key: env_key, secret: env_secret,
-       token: None, expires_at: UTC::now() + Duration::seconds(600)})
+    Ok(AWSCredentials::new(env_key, env_secret, None, in_ten_minutes()))
 }
 
 pub struct FileCredentialsProvider {
-    credentials: AWSCredentials
+    credentials: Option<AWSCredentials>
 }
 
 impl AWSCredentialsProvider for FileCredentialsProvider {
     fn new() -> FileCredentialsProvider {
-        return FileCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: None, expires_at: UTC::now() - Duration::seconds(600) } };
+        FileCredentialsProvider { credentials: None }
     }
 
     fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
-        if self.credentials.credentials_are_expired() {
+        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
             // Default credentials file location:
             // ~/.aws/credentials (Linux/Mac)
             // %USERPROFILE%\.aws\credentials  (Windows)
@@ -123,16 +121,9 @@ impl AWSCredentialsProvider for FileCredentialsProvider {
                 Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
                 None => return Err("Couldn't get your home dir.")
             }
-            match get_credentials_from_file(profile_location) {
-                Ok(creds) => {
-                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: None,
-                        expires_at: UTC::now() + Duration::seconds(600) };
-                }
-                Err(_) => return Err("Couldn't get creds from file.")
-            }
+            self.credentials = Some(try!(get_credentials_from_file(profile_location)));
        }
-       Ok(&self.credentials)
+       Ok(self.credentials.as_ref().unwrap())
    }
 }
 
@@ -192,22 +183,20 @@ fn get_credentials_from_file<'a>(file_with_path: String) -> Result<AWSCredential
         return Err("Couldn't find either aws_access_key_id, aws_secret_access_key or both in profile file.");
     }
 
-    return Ok(AWSCredentials{ key: access_key.to_string(), secret: secret_key.to_string(),
-         token:None, expires_at: UTC::now() + Duration::seconds(600) });
+    return Ok(AWSCredentials::new(access_key, secret_key, None, in_ten_minutes()));
 }
 
 pub struct IAMRoleCredentialsProvider {
-    credentials: AWSCredentials
+    credentials: Option<AWSCredentials>
 }
 
 impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
     fn new() -> IAMRoleCredentialsProvider {
-        return IAMRoleCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-        secret: "".to_string(), token: None, expires_at: UTC::now() - Duration::seconds(600) } };
+        IAMRoleCredentialsProvider { credentials: None }
     }
 
     fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
-        if self.credentials.credentials_are_expired() {
+        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
             // TODO: backoff and retry on failure.
 
             //println!("Calling IAM metadata");
@@ -277,66 +266,46 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
                 Some(val) => token_from_response = val.to_string().replace("\"", "")
             };
 
-            self.credentials = AWSCredentials{ key: access_key.to_string(),
-                secret: secret_key.to_string(),  token: Some(token_from_response.to_string()), expires_at: expiration_time };
+            self.credentials = Some(AWSCredentials::new(access_key, secret_key, Some(token_from_response.to_string()), expiration_time));
         }
 
-		Ok(&self.credentials)
+		Ok(&self.credentials.as_ref().unwrap())
 	}
 }
 
 #[derive(Debug, Clone)]
 pub struct DefaultAWSCredentialsProviderChain {
-    credentials: AWSCredentials
+    credentials: Option<AWSCredentials>
 }
 
 // Chain the providers:
 impl DefaultAWSCredentialsProviderChain {
     pub fn new() -> DefaultAWSCredentialsProviderChain {
-        return DefaultAWSCredentialsProviderChain {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: None, expires_at: UTC::now() - Duration::seconds(600) } };
+        DefaultAWSCredentialsProviderChain { credentials: None }
     }
 
-    pub fn get_credentials(&mut self) -> &AWSCredentials {
-        if self.credentials.credentials_are_expired() {
+    pub fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
+        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
             // fetch creds in order: env, file, IAM
-            let mut env_provider = EnvironmentCredentialsProvider::new();
-            match env_provider.get_credentials() {
-                Ok(creds) => {
-                    //println!("Found creds in env");
-                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: None,
-                        expires_at: UTC::now() + Duration::seconds(600) };
-                    return &self.credentials;
-                }
-                Err(_) => () //println!("Whiffed on env")
-            }
 
-            let mut file_provider = FileCredentialsProvider::new();
-            match file_provider.get_credentials() {
-                Ok(creds) => {
-                    //println!("Found creds in file");
-                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: None,
-                        expires_at: UTC::now() + Duration::seconds(600) };
-                    return &self.credentials;
-                }
-                Err(_) => () //println!("Whiffed on file")
-            }
-
-            let mut iam_provider = IAMRoleCredentialsProvider::new();
-            match iam_provider.get_credentials() {
-                Ok(creds) => {
-                    //println!("Found creds via iam");
-                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: creds.get_token().clone(),
-                        expires_at: UTC::now() + Duration::seconds(600) };
-                    return &self.credentials;
-                }
-                Err(_) => panic!("Couldn't find AWS credentials in environment, default credential file location or IAM role.")
+            if let Ok(creds) = EnvironmentCredentialsProvider::new().get_credentials() {
+                //println!("Found creds in env");
+                self.credentials = Some(creds.clone());
+            } else if let Ok(creds) = FileCredentialsProvider::new().get_credentials() {             
+                //println!("Found creds in file");
+                self.credentials = Some(creds.clone());             
+            } else if let Ok(creds) = IAMRoleCredentialsProvider::new().get_credentials() {
+                //println!("Found creds via iam");
+                self.credentials = Some(creds.clone());
+            } else {
+               panic!("Couldn't find AWS credentials in environment, default credential file location or IAM role.")
             }
         }
-        return &self.credentials;
+        Ok(self.credentials.as_ref().unwrap())
     }
+}
+
+fn in_ten_minutes() -> DateTime<UTC> {
+    UTC::now() + Duration::seconds(600)
 }
 

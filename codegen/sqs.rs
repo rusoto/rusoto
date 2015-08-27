@@ -2653,7 +2653,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "CreateQueue");
 		CreateQueueRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2696,7 +2696,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "GetQueueAttributes");
 		GetQueueAttributesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2722,7 +2722,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "SetQueueAttributes");
 		SetQueueAttributesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2749,7 +2749,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "GetQueueUrl");
 		GetQueueUrlRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2779,7 +2779,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "DeleteMessageBatch");
 		DeleteMessageBatchRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2820,7 +2820,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "SendMessageBatch");
 		SendMessageBatchRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2844,7 +2844,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "ListDeadLetterSourceQueues");
 		ListDeadLetterSourceQueuesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2892,7 +2892,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "ChangeMessageVisibility");
 		ChangeMessageVisibilityRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2929,7 +2929,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "AddPermission");
 		AddPermissionRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2961,7 +2961,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "ChangeMessageVisibilityBatch");
 		ChangeMessageVisibilityBatchRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -2991,7 +2991,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "SendMessage");
 		SendMessageRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3025,7 +3025,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "DeleteQueue");
 		DeleteQueueRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3052,7 +3052,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "PurgeQueue");
 		PurgeQueueRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3103,7 +3103,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "ReceiveMessage");
 		ReceiveMessageRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3140,7 +3140,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "DeleteMessage");
 		DeleteMessageRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3163,7 +3163,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "ListQueues");
 		ListQueuesRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -3184,7 +3184,7 @@ impl<'a> SQSClient<'a> {
 		params.put("Action", "RemovePermission");
 		RemovePermissionRequestWriter::write_params(&mut params, "", &input);
 		request.set_params(params);
-		let result = request.sign_and_execute(&self.creds.get_credentials());
+		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
