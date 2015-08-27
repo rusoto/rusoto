@@ -68,37 +68,39 @@ pub trait AWSCredentialsProvider {
 }
 
 pub struct EnvironmentCredentialsProvider {
-    credentials: AWSCredentials
+    credentials: Option<AWSCredentials>
 }
 
 impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
     fn new() -> EnvironmentCredentialsProvider {
         // expired by default
-        return EnvironmentCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: None, expires_at: UTC::now() - Duration::seconds(600) } };
+        return EnvironmentCredentialsProvider { credentials: None }
     }
 
 	fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
-        if self.credentials.credentials_are_expired() {
-            let env_key = match var("AWS_ACCESS_KEY_ID") {
-                Ok(val) => val,
-                Err(_) => return Err("No AWS_ACCESS_KEY_ID in environment")
-            };
-            let env_secret = match var("AWS_SECRET_ACCESS_KEY") {
-                Ok(val) => val,
-                Err(_) => return Err("No AWS_SECRET_ACCESS_KEY in environment")
-            };
-
-            if env_key.is_empty() || env_secret.is_empty() {
-                return Err("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment.");
-            }
-
-            self.credentials = AWSCredentials{key: env_key, secret: env_secret,
-                 token: None, expires_at: UTC::now() + Duration::seconds(600)};
-        }
-
-		Ok(&self.credentials)
+        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
+           self.credentials = Some(try!(get_credentials_from_environment()));
+        } 
+        Ok(self.credentials.as_ref().unwrap())
 	}
+}
+
+fn get_credentials_from_environment<'a>() -> Result<AWSCredentials, &'a str> {
+    let env_key = match var("AWS_ACCESS_KEY_ID") {
+        Ok(val) => val,
+        Err(_) => return Err("No AWS_ACCESS_KEY_ID in environment")
+    };
+    let env_secret = match var("AWS_SECRET_ACCESS_KEY") {
+        Ok(val) => val,
+        Err(_) => return Err("No AWS_SECRET_ACCESS_KEY in environment")
+    };
+
+    if env_key.is_empty() || env_secret.is_empty() {
+        return Err("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment.");
+    }
+
+    Ok(AWSCredentials{key: env_key, secret: env_secret,
+       token: None, expires_at: UTC::now() + Duration::seconds(600)})
 }
 
 pub struct FileCredentialsProvider {
@@ -337,3 +339,4 @@ impl DefaultAWSCredentialsProviderChain {
         return &self.credentials;
     }
 }
+
