@@ -115,6 +115,15 @@ impl ProfileCredentialsProvider {
     pub fn with_configuration(profile: &str, file_name: &str) -> ProfileCredentialsProvider {
         ProfileCredentialsProvider { credentials: None, profile: profile.to_string(), file_name: file_name.to_string() }
     }
+
+    pub fn with_profile(&mut self, profile: &str) -> &mut ProfileCredentialsProvider {
+        self.profile = profile.to_string();
+        self
+    }
+
+    pub fn get_profile(&self) -> &str {
+        &self.profile
+    }
 }
 
 impl AWSCredentialsProvider for ProfileCredentialsProvider {
@@ -322,13 +331,14 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 
 #[derive(Debug, Clone)]
 pub struct DefaultAWSCredentialsProviderChain {
-    credentials: Option<AWSCredentials>
+    credentials: Option<AWSCredentials>,
+    profile: String
 }
 
 // Chain the providers:
 impl DefaultAWSCredentialsProviderChain {
     pub fn new() -> DefaultAWSCredentialsProviderChain {
-        DefaultAWSCredentialsProviderChain { credentials: None }
+        DefaultAWSCredentialsProviderChain { credentials: None, profile: "default".to_string() }
     }
 
     pub fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
@@ -338,7 +348,7 @@ impl DefaultAWSCredentialsProviderChain {
             if let Ok(creds) = EnvironmentCredentialsProvider::new().get_credentials() {
                 //println!("Found creds in env");
                 self.credentials = Some(creds.clone());
-            } else if let Ok(creds) = ProfileCredentialsProvider::new().get_credentials() {             
+            } else if let Ok(creds) = ProfileCredentialsProvider::new().with_profile(&self.profile).get_credentials() {             
                 //println!("Found creds in file");
                 self.credentials = Some(creds.clone());             
             } else if let Ok(creds) = IAMRoleCredentialsProvider::new().get_credentials() {
@@ -349,6 +359,14 @@ impl DefaultAWSCredentialsProviderChain {
             }
         }
         Ok(self.credentials.as_ref().unwrap())
+    }
+
+    pub fn set_profile<S>(&mut self, profile: S) where S: Into<String> {
+        self.profile = profile.into();
+    }
+
+    pub fn get_profile(&self) -> &str {
+        &self.profile
     }
 }
 
@@ -414,6 +432,21 @@ mod tests {
 
         assert!(result.is_err());
         assert_eq!(result.err(), Some("profile not found"));
+     }
+
+     #[test]
+     fn profile_credentials_provider_profile_name() {
+        let mut provider = ProfileCredentialsProvider::new();
+        assert_eq!("default", provider.get_profile());
+        assert_eq!("foo", provider.with_profile("foo").get_profile());
+     }
+
+     #[test]
+     fn credential_chain_profile_name() {
+        let mut chain = DefaultAWSCredentialsProviderChain::new();
+        assert_eq!("default", chain.get_profile());
+        chain.set_profile("foo");
+        assert_eq!("foo", chain.get_profile());
      }
 
     #[test]
