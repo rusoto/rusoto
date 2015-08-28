@@ -8,6 +8,7 @@ extern crate hyper;
 extern crate openssl;
 extern crate url;
 extern crate rustc_serialize as serialize;
+extern crate regex;
 
 #[macro_use] pub mod params;
 #[macro_use] pub mod signature;

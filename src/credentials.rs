@@ -7,9 +7,12 @@ use std::error::Error;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::ascii::AsciiExt;
+use std::collections::HashMap;
 use hyper::Client;
 use hyper::header::Connection;
 use error::*;
+use regex::Regex;
+
 
 extern crate rustc_serialize;
 use self::rustc_serialize::json::*;
@@ -121,23 +124,31 @@ impl AWSCredentialsProvider for FileCredentialsProvider {
                 Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
                 None => return Err("Couldn't get your home dir.")
             }
-            self.credentials = Some(try!(get_credentials_from_file(profile_location)));
+
+            match parse_credentials_file(&profile_location) {
+                Ok(mut profiles) => { 
+                    let default_profile = profiles.remove("default");
+                    if default_profile.is_none() {
+                        return Err("default profile not found");
+                    }
+                    self.credentials = default_profile;
+                },
+                Err(_) => { return Err("Parse error"); }
+            };
        }
        Ok(self.credentials.as_ref().unwrap())
    }
 }
 
-// Finds and uses the first "aws_access_key_id" and "aws_secret_access_key" in the file.
-fn get_credentials_from_file<'a>(file_with_path: String) -> Result<AWSCredentials, &'a str> {
-    //println!("Looking for credentials file at {}", file_with_path);
+fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCredentials>, AWSError> {
     let path = Path::new(&file_with_path);
     let display = path.display();
 
     match fs::metadata(&path) {
-        Err(_) => return Err("Couldn't stat credentials file."),
+        Err(_) => return Err(AWSError::new("Couldn't stat credentials file.")),
         Ok(metadata) => {
             if !metadata.is_file() {
-                return Err("Couldn't open file.")
+                return Err(AWSError::new("Couldn't open file."));
             }
         }
     };
@@ -147,43 +158,71 @@ fn get_credentials_from_file<'a>(file_with_path: String) -> Result<AWSCredential
         Ok(opened_file) => opened_file,
     };
 
-    let mut access_key = String::new();
-    let mut secret_key = String::new();
+    let profile_regex = Regex::new(r"^\[([^\]]+)\]$").unwrap();
+    let mut profiles: HashMap<String, AWSCredentials> = HashMap::new();
+    let mut access_key: Option<String> = None;
+    let mut secret_key: Option<String> = None;    
+    let mut profile_name: Option<String> = None;
+
     let file_lines = BufReader::new(&file);
     for line in file_lines.lines() {
+
         let unwrapped_line : String = line.unwrap();
+
+        // skip comments
         if unwrapped_line.starts_with('#') {
             continue;
         }
 
+        // handle the opening of named profile blocks
+        if profile_regex.is_match(&unwrapped_line) {
+
+            if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
+                let creds = AWSCredentials::new(access_key.unwrap(), secret_key.unwrap(), None, in_ten_minutes());
+                profiles.insert(profile_name.unwrap(), creds);
+            }
+
+            access_key = None;
+            secret_key = None;
+
+            let caps = profile_regex.captures(&unwrapped_line).unwrap();            
+            profile_name = Some(caps.at(1).unwrap().to_string());
+            continue;
+        }
+
+        // otherwise look for key=value pairs we care about
         let lower_case_line = unwrapped_line.to_ascii_lowercase().to_string();
 
         if lower_case_line.contains("aws_access_key_id") {
-            if access_key.is_empty() {
+            if access_key.is_none() {
                 let v: Vec<&str> = unwrapped_line.split("=").collect();
-                if v.len() == 0 {
-                    access_key = "".to_string();
-                } else {
-                    access_key = v[1].trim_matches(' ').to_string();
+                if v.len() > 0 {                  
+                    access_key = Some(v[1].trim_matches(' ').to_string());
                 }
             }
         } else if lower_case_line.contains("aws_secret_access_key") {
-            if secret_key.is_empty() {
+            if secret_key.is_none() {
                 let v: Vec<&str> = unwrapped_line.split("=").collect();
-                if v.len() == 0 {
-                    secret_key = "".to_string();
-                } else {
-                    secret_key = v[1].trim_matches(' ').to_string();
+                if v.len() > 0 {                  
+                    secret_key = Some(v[1].trim_matches(' ').to_string());
                 }
             }
         }
+
+        // we could potentially explode here to indicate that the file is invalid
+
     }
 
-    if access_key.is_empty() || secret_key.is_empty() {
-        return Err("Couldn't find either aws_access_key_id, aws_secret_access_key or both in profile file.");
+    if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
+        let creds = AWSCredentials::new(access_key.unwrap(), secret_key.unwrap(), None, in_ten_minutes());
+        profiles.insert(profile_name.unwrap(), creds);
     }
 
-    return Ok(AWSCredentials::new(access_key, secret_key, None, in_ten_minutes()));
+    if profiles.is_empty() {
+        return Err(AWSError::new("No credentials found."));
+    } 
+
+    Ok(profiles)
 }
 
 pub struct IAMRoleCredentialsProvider {
@@ -307,5 +346,64 @@ impl DefaultAWSCredentialsProviderChain {
 
 fn in_ten_minutes() -> DateTime<UTC> {
     UTC::now() + Duration::seconds(600)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::io::BufReader;
+    use std::fs::File;
+    use error::*;
+    use regex::*;
+
+    #[test]
+    fn parse_credentials_file_default_profile() {
+        let result = super::parse_credentials_file("tests/sample-data/default_profile_credentials");
+        assert!(result.is_ok());
+
+        let profiles = result.ok().unwrap();
+        assert_eq!(profiles.len(), 1);
+
+        let default_profile = profiles.get("default").unwrap();
+        assert_eq!(default_profile.get_aws_access_key_id(), "foo");
+        assert_eq!(default_profile.get_aws_secret_key(), "bar");        
+    }
+
+    #[test]
+    fn parse_credentials_file_multiple_profiles() {
+        let result = super::parse_credentials_file("tests/sample-data/multiple_profile_credentials");
+        assert!(result.is_ok());
+
+        let profiles = result.ok().unwrap();
+        assert_eq!(profiles.len(), 2);
+
+        let foo_profile = profiles.get("foo").unwrap();
+        assert_eq!(foo_profile.get_aws_access_key_id(), "foo_access_key");
+        assert_eq!(foo_profile.get_aws_secret_key(), "foo_secret_key");   
+
+        let bar_profile = profiles.get("bar").unwrap();
+        assert_eq!(bar_profile.get_aws_access_key_id(), "bar_access_key");
+        assert_eq!(bar_profile.get_aws_secret_key(), "bar_secret_key");   
+
+    }
+
+    #[test]
+    fn existing_file_no_credentials() {
+        let result = super::parse_credentials_file("tests/sample-data/no_credentials");
+        assert_eq!(result.err(), Some(AWSError::new("No credentials found.")))
+    }
+
+    #[test]
+    fn parse_credentials_bad_path() {
+        let result = super::parse_credentials_file("/bad/file/path");
+        assert_eq!(result.err(), Some(AWSError::new("Couldn't stat credentials file.")));
+    }
+
+    #[test]
+    fn parse_credentials_directory_path() {
+        let result = super::parse_credentials_file("tests/");
+        assert_eq!(result.err(), Some(AWSError::new("Couldn't open file.")));
+    }
+
 }
 
