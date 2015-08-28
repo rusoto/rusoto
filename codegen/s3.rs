@@ -11170,7 +11170,7 @@ impl<'a> S3Client<'a> {
 		request.set_hostname(Some(hostname));
 		request.set_payload(input.body);
 
-		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
+		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 
 		match status {
@@ -11180,7 +11180,14 @@ impl<'a> S3Client<'a> {
 
 				Ok(put_result)
 			}
-			_ => { Err(AWSError::new("error uploading object to S3")) }
+			_ => {
+				println!("Error: Status code was {}", status);
+				let mut body = String::new();
+			    result.read_to_string(&mut body).unwrap();
+			    println!("Error response body: {}", body);
+
+				Err(AWSError::new("error uploading object to S3"))
+			}
 		}
 	}
 	/// Deletes the cors configuration information set for the bucket.
@@ -11650,8 +11657,7 @@ impl<'a> S3Client<'a> {
 				panic!("Something went wrong when creating a bucket.");
 			}
 			_ => {
-				println!("Got a non-200 from AWS.");
-				Err(AWSError::new("error"))
+				Err(AWSError::new("error in create_bucket"))
 			}
 		}
 	}
@@ -11672,8 +11678,6 @@ impl<'a> S3Client<'a> {
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 
-		println!("status is {}", status);
-
 		match status {
 			200 => {
 				let mut reader = EventReader::new(result);
@@ -11685,8 +11689,7 @@ impl<'a> S3Client<'a> {
 			_ => {
 				let mut body = String::new();
 			    result.read_to_string(&mut body).unwrap();
-			    println!("Error response body: {}", body);
-				Err(AWSError::new("error"))
+				Err(AWSError::new("error in complete_multipart_upload"))
 			}
 		}
 	}
@@ -11713,8 +11716,6 @@ impl<'a> S3Client<'a> {
 	/// Initiates a multipart upload and returns an upload ID.
 	/// **Note:** After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.
 	pub fn create_multipart_upload(&mut self, input: &CreateMultipartUploadRequest) -> Result<CreateMultipartUploadOutput, AWSError> {
-		println!("Creating multipart upload.  Region is {:?}, input.key is {}, bucket is {}",
-			&self.region, input.key, input.bucket);
 
 		let ref object_name = input.key;
 		let mut request = SignedRequest::new("POST", "s3", &self.region, &format!("/{}", object_name));
@@ -11862,13 +11863,20 @@ impl<'a> S3Client<'a> {
 		request.set_params(params);
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
+
 		match status {
 			200 => {
 				let s3_object = try!(S3Client::get_object_from_response(&mut result));
 
 				return Ok(s3_object);
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => {
+				println!("Error: Status code was {}", status);
+				let mut body = String::new();
+			    result.read_to_string(&mut body).unwrap();
+			    println!("Error response body: {}", body);
+				Err(AWSError::new("error in get_object"))
+			}
 		}
 	}
 
@@ -11914,7 +11922,6 @@ impl<'a> S3Client<'a> {
 	}
 	/// This operation lists in-progress multipart uploads.
 	pub fn list_multipart_uploads(&mut self, input: &ListMultipartUploadsRequest) -> Result<ListMultipartUploadsOutput, AWSError> {
-		println!("in list multipart uploads");
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/");
 
 		let mut params = Params::new();
@@ -11924,9 +11931,7 @@ impl<'a> S3Client<'a> {
 		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
 		request.set_hostname(Some(hostname));
 
-		println!("about to sign and execute");
 		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
-		println!("executed request");
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
@@ -11934,11 +11939,9 @@ impl<'a> S3Client<'a> {
 
 		match status {
 			200 => {
-				println!("Got a 200.");
 				Ok(try!(ListMultipartUploadsOutputParser::parse_xml("ListMultipartUploadsResult", &mut stack)))
 			}
 			_ => {
-				println!("Got error");
 				Err(AWSError::new("error"))
 			}
 		}

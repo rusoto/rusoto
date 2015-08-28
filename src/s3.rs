@@ -111,8 +111,6 @@ impl<'a> S3Helper<'a> {
 	pub fn put_multipart_object<T: Read>(&mut self, bucket_name: &str, object_name: &str,
 		object_as_reader: &mut T) -> Result<PutObjectOutput, AWSError> { // TODO: return type correct?
 
-		println!("Starting multipart upload");
-
 		// TODO: make helper function for object PUT requests that handles encryption, reduced redudancy, etc...
 
 		let mut multipart_upload_request = CreateMultipartUploadRequest::default();
@@ -120,7 +118,7 @@ impl<'a> S3Helper<'a> {
 		multipart_upload_request.bucket = bucket_name.to_string();
 
 		// compiler warns about this line, it's not seeing its use later in this function:
-		let mut upload_id : String = String::new();
+		let mut upload_id : String;
 
 		match self.client.create_multipart_upload(&multipart_upload_request) {
 			Err(why) => {
@@ -130,10 +128,8 @@ impl<'a> S3Helper<'a> {
 			Ok(response) => upload_id = response.upload_id.to_string(),
 		}
 
-		println!("Started multipart upload");
-
 		let mut buffered_reader = BufReader::new(object_as_reader);
-		let mut parts_list = Vec::new();
+		let mut parts_list : Vec<String>;
 
 		match self.upload_chunks(&mut buffered_reader, &bucket_name, &upload_id, &object_name) {
 			Err(why) => return Err(AWSError::new("oops in upload_chunks")),
@@ -141,14 +137,16 @@ impl<'a> S3Helper<'a> {
 		}
 
 		// call complete multipart upload with the list of etags
-		let item_list = multipart_upload_finish_xml(&parts_list);
+		let item_list : Vec<u8>;
+		match multipart_upload_finish_xml(&parts_list) {
+			Err(why) => return Err(AWSError::new("oops in multipart_upload_finish_xml")),
+			Ok(parts_in_xml) => item_list = parts_in_xml,
+		}
 		let mut complete_upload = CompleteMultipartUploadRequest::default();
 
 		complete_upload.key = object_name.to_string();
 		complete_upload.bucket = bucket_name.to_string();
 		complete_upload.upload_id = upload_id.to_string();
-
-		println!("upload id is {}", upload_id.to_string());
 
 		complete_upload.multipart_upload = Some(&item_list);
 
@@ -157,7 +155,7 @@ impl<'a> S3Helper<'a> {
 				println!("Couldn't mark multipart upload as complete: {:?}", why);
 				return Err(AWSError::new("oops in complete multipart upload"));
 			},
-			Ok(response) => println!("Multipart upload complete: {:?}", response),
+			Ok(_) => (), // TODO: return object output
 		}
 
 		Ok(PutObjectOutput::default())
@@ -180,7 +178,6 @@ impl<'a> S3Helper<'a> {
 				Ok(bytes_read) => {
 					total_bytes_for_debug += bytes_read;
 					if bytes_read == 0 {
-						println!("Read 0 bytes.");
 						more_chunks_to_go = false;
 					}
 					let mut bytes_copied = 0;
@@ -194,7 +191,6 @@ impl<'a> S3Helper<'a> {
 					}
 
 					if s3_chunk.len() >= S3_MINIMUM_PART_SIZE || !more_chunks_to_go {
-						println!("uploading s3_chunk of length {}", s3_chunk.len());
 						match self.upload_a_part(&s3_chunk, &part_number, &bucket_name, &upload_id, &object_name) {
 							Err(why) => {
 								println!("Got error uploading a part: {:?}", why);
@@ -210,18 +206,14 @@ impl<'a> S3Helper<'a> {
 				}
 			}
 		}
-		println!("Saw a total of {} bytes.", total_bytes_for_debug);
 		Ok(parts)
 	}
 
 	fn upload_a_part(&mut self, buffer: &Vec<u8>, part_number: &i32,
 			bucket_name: &str, upload_id: &str, object_name: &str) -> Result<String, AWSError> {
 
-		println!("Upload part {} with length {}", part_number, buffer.len());
 		let mut upload_part_request = UploadPartRequest::default();
 		upload_part_request.body = Some(&buffer);
-		// Don't think we need this, the signature class will take care of it:
-		// upload_part_request.content_length = Some(buffer.len());
 
 		// TODO: implement md5 hash:
 		upload_part_request.content_md5 = None; // string
@@ -237,7 +229,6 @@ impl<'a> S3Helper<'a> {
 				return Err(AWSError::new("oops in upload_a_part"));
 			},
 			Ok(response) => {
-				println!("yay got a part uploaded: {:?}", response);
 				return Ok(response.to_string());
 			}
 		}
@@ -285,25 +276,21 @@ pub fn create_bucket_config_xml(region: &Region) -> Vec<u8> {
 	}
 }
 
-pub fn multipart_upload_finish_xml(parts: &Vec<String>) -> Vec<u8> {
-	// println!("parts length: {}", parts.len());
+pub fn multipart_upload_finish_xml(parts: &Vec<String>) -> Result<Vec<u8>, AWSError> {
 	if parts.len() < 1 {
-		panic!("Can't finish upload on 0 parts.");
+		return Err(AWSError::new("Can't finish upload on 0 parts."));
 	}
 	let mut response = String::from("<CompleteMultipartUpload>");
 
 	let mut part_number = 1;
 	for etag in parts {
-	    println!("key: {} val: {}", part_number, etag);
 		response = response + &format!("<Part><PartNumber>{}</PartNumber><ETag>{}</ETag></Part>", part_number, etag);
 		part_number += 1;
 	}
 
 	response = response + "</CompleteMultipartUpload>";
 
-	println!("Wrote body of:\n{}", response);
-
-	response.into_bytes()
+	Ok(response.into_bytes())
 }
 
 pub fn canned_acl_in_aws_format(canned_acl: &CannedAcl) -> String {
@@ -322,6 +309,7 @@ mod tests {
 	use xml::reader::*;
 	use std::io::BufReader;
 	use std::fs::File;
+	use std::str;
 	use super::ListBucketsOutputParser;
 	use super::CreateMultipartUploadOutputParser;
 	use super::CompleteMultipartUploadOutputParser;
@@ -389,6 +377,18 @@ mod tests {
 				assert_eq!(result.e_tag, "\"525a81fcbc4181997bd96e4096fa7304-1\"");
 			}
 		}
+	}
+
+	#[test]
+	fn multipart_upload_xml_looks_right() {
+		let mut parts : Vec<String> = Vec::new();
+		parts.push("etag1".to_string());
+		parts.push("etag2".to_string());
+		let response = multipart_upload_finish_xml(&parts).unwrap();
+
+		let expected_string = "<CompleteMultipartUpload><Part><PartNumber>1</PartNumber><ETag>etag1</ETag></Part><Part><PartNumber>2</PartNumber><ETag>etag2</ETag></Part></CompleteMultipartUpload>";
+
+		assert_eq!(expected_string,  str::from_utf8(&response).unwrap());
 	}
 
 	#[test]

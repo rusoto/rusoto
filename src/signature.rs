@@ -18,7 +18,7 @@ use time::now_utc;
 use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
 use regions::*;
 // Debug:
-use std::io::Read;
+// use std::io::Read;
 
 
 /// A data structure for all the elements of an HTTP request that are involved in
@@ -114,8 +114,9 @@ impl <'a> SignedRequest <'a> {
 				payload_hexdigest = to_hexdigest_from_string("");
 			}
 			Some(payload) => {
-				// println!("payload present, it's {} bytes.", payload.len());
+				println!("payload present, it's {} bytes.", payload.len());
 				payload_hexdigest = to_hexdigest_from_bytes(payload);
+				println!("hex digest is {}", payload_hexdigest);
 				self.add_header("content-length", &format!("{}", payload.len()));
 			}
 		}
@@ -133,7 +134,7 @@ impl <'a> SignedRequest <'a> {
 			canonical_query_string = build_canonical_query_string(&self.params);
 			hyper_method = Method::Put;
 
-			self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
+			// self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
 		} else if self.method == "DELETE" {
 			canonical_query_string = "".to_string();
 			hyper_method = Method::Delete;
@@ -165,8 +166,6 @@ impl <'a> SignedRequest <'a> {
 		let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), region_in_aws_format(&self.region), &self.service);
 		let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
 
-		// println!("string_to_sign is {}", string_to_sign);
-
 		// construct the signing key and sign the string with it
 		let signing_key = signing_key(&creds.get_aws_secret_key(), date, &region_in_aws_format(&self.region), &self.service);
 		let signature = signature(&string_to_sign, signing_key);
@@ -180,6 +179,11 @@ impl <'a> SignedRequest <'a> {
 		let mut hyper_headers = Headers::new();
 		for h in self.headers.iter() {
 			hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
+		}
+
+		// debug:
+		for h in hyper_headers.iter() {
+			println!("header key:val: {:?}:{:?}", h.name(), h.value_string());
 		}
 
 		// println!("Canonical url is {}", canonical_uri);
@@ -321,6 +325,7 @@ fn to_hexdigest_from_string(val: &str) -> String {
 
 fn to_hexdigest_from_bytes(val: &[u8]) -> String {
 	let h = hash(SHA256, val);
+	println!("Hex encoded: {}", h.to_hex().to_string());
     h.to_hex().to_string()
 }
 
