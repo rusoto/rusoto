@@ -105,31 +105,39 @@ fn get_credentials_from_environment<'a>() -> Result<AWSCredentials, &'a str> {
     Ok(AWSCredentials::new(env_key, env_secret, None, in_ten_minutes()))
 }
 
-pub struct FileCredentialsProvider {
+pub struct ProfileCredentialsProvider {
+    profile: String,
+    file_name: String,
     credentials: Option<AWSCredentials>
 }
 
-impl AWSCredentialsProvider for FileCredentialsProvider {
-    fn new() -> FileCredentialsProvider {
-        FileCredentialsProvider { credentials: None }
+impl ProfileCredentialsProvider {
+    pub fn with_configuration(profile: &str, file_name: &str) -> ProfileCredentialsProvider {
+        ProfileCredentialsProvider { credentials: None, profile: profile.to_string(), file_name: file_name.to_string() }
+    }
+}
+
+impl AWSCredentialsProvider for ProfileCredentialsProvider {
+    fn new() -> ProfileCredentialsProvider {
+        // Default credentials file location:
+        // ~/.aws/credentials (Linux/Mac)
+        // %USERPROFILE%\.aws\credentials  (Windows)
+        let mut profile_location;
+        match env::home_dir() {
+            Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
+            None => panic!("Couldn't get your home dir.")
+        }
+
+        ProfileCredentialsProvider { credentials: None, profile: "default".to_string(), file_name: profile_location }
     }
 
     fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
-        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
-            // Default credentials file location:
-            // ~/.aws/credentials (Linux/Mac)
-            // %USERPROFILE%\.aws\credentials  (Windows)
-            let mut profile_location;
-            match env::home_dir() {
-                Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
-                None => return Err("Couldn't get your home dir.")
-            }
-
-            match parse_credentials_file(&profile_location) {
+        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {           
+            match parse_credentials_file(&self.file_name) {
                 Ok(mut profiles) => { 
-                    let default_profile = profiles.remove("default");
+                    let default_profile = profiles.remove(&self.profile);
                     if default_profile.is_none() {
-                        return Err("default profile not found");
+                        return Err("profile not found");
                     }
                     self.credentials = default_profile;
                 },
@@ -330,7 +338,7 @@ impl DefaultAWSCredentialsProviderChain {
             if let Ok(creds) = EnvironmentCredentialsProvider::new().get_credentials() {
                 //println!("Found creds in env");
                 self.credentials = Some(creds.clone());
-            } else if let Ok(creds) = FileCredentialsProvider::new().get_credentials() {             
+            } else if let Ok(creds) = ProfileCredentialsProvider::new().get_credentials() {             
                 //println!("Found creds in file");
                 self.credentials = Some(creds.clone());             
             } else if let Ok(creds) = IAMRoleCredentialsProvider::new().get_credentials() {
@@ -386,6 +394,27 @@ mod tests {
         assert_eq!(bar_profile.get_aws_secret_key(), "bar_secret_key");   
 
     }
+
+    #[test]
+    fn profile_credentials_provider_happy_path() {
+        let mut provider = ProfileCredentialsProvider::with_configuration("foo","tests/sample-data/multiple_profile_credentials");
+        let result = provider.get_credentials();
+
+        assert!(result.is_ok());
+
+        let creds = result.ok().unwrap();
+        assert_eq!(creds.get_aws_access_key_id(), "foo_access_key");
+        assert_eq!(creds.get_aws_secret_key(), "foo_secret_key");
+     }
+
+    #[test]
+    fn profile_credentials_provider_bad_profile() {
+        let mut provider = ProfileCredentialsProvider::with_configuration("not_a_profile","tests/sample-data/multiple_profile_credentials");
+        let result = provider.get_credentials();
+
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some("profile not found"));
+     }
 
     #[test]
     fn existing_file_no_credentials() {
