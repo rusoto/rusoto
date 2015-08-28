@@ -40,7 +40,7 @@ If Rusoto exhausts all three options it will panic.
 
 #### Credential refreshing
 
-Environment variable and credential file credentials are refreshed on calling `get_credentials()` and it's been five minutes since acquiring credentials.
+Credentials obtained from environment variables and credential files expire ten minutes after being acquired, and are refreshed on subsequent calls to `get_credentials()`.
 
 IAM instance profile credentials are refreshed as needed.  Upon calling `get_credentials()` it will see if they are expired or not.  If expired, it attempts to get new credentials from the metadata service.  If that fails it will panic.  IAM credentials expiration time comes from the IAM metadata response.
 
