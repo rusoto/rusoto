@@ -98,8 +98,9 @@ impl <'a> SignedRequest <'a> {
 
 		self.add_header("host", &hostname);
 		self.add_header("x-amz-date", &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
-		if !creds.get_token().to_string().is_empty() {
-			self.add_header("X-Amz-Security-Token", creds.get_token());
+
+		if let Some(ref token) = *creds.get_token() {
+			self.add_header("X-Amz-Security-Token", token);
 		}
 
 		let mut payload: String;

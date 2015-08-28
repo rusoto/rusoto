@@ -7,8 +7,12 @@ use std::error::Error;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::ascii::AsciiExt;
+use std::collections::HashMap;
 use hyper::Client;
 use hyper::header::Connection;
+use error::*;
+use regex::Regex;
+
 
 extern crate rustc_serialize;
 use self::rustc_serialize::json::*;
@@ -21,16 +25,16 @@ use self::chrono::*;
 pub struct AWSCredentials {
     key: String,
     secret: String,
-    token: String,
+    token: Option<String>,
     expires_at: DateTime<UTC>
 }
 
 impl AWSCredentials {
-    pub fn new(key:&str, secret:&str, token:&str, expires_at:DateTime<UTC>) -> AWSCredentials {
+    pub fn new<K, S>(key:K, secret:S, token:Option<String>, expires_at:DateTime<UTC>) -> AWSCredentials where K:Into<String>, S:Into<String> {
         AWSCredentials {
-            key: key.to_string(),
-            secret: secret.to_string(),
-            token: token.to_string(),
+            key: key.into(),
+            secret: secret.into(),
+            token: token,
             expires_at: expires_at,
         }
     }
@@ -47,7 +51,7 @@ impl AWSCredentials {
         &self.expires_at
     }
 
-    pub fn get_token(&self) -> &str {
+    pub fn get_token(&self) -> &Option<String> {
         &self.token
     }
 
@@ -68,83 +72,100 @@ pub trait AWSCredentialsProvider {
 }
 
 pub struct EnvironmentCredentialsProvider {
-    credentials: AWSCredentials
+    credentials: Option<AWSCredentials>
 }
 
 impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
     fn new() -> EnvironmentCredentialsProvider {
-        // expired by default
-        return EnvironmentCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
+        EnvironmentCredentialsProvider { credentials: None }
     }
 
 	fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
-        if self.credentials.credentials_are_expired() {
-            let env_key = match var("AWS_ACCESS_KEY_ID") {
-                Ok(val) => val,
-                Err(_) => return Err("No AWS_ACCESS_KEY_ID in environment")
-            };
-            let env_secret = match var("AWS_SECRET_ACCESS_KEY") {
-                Ok(val) => val,
-                Err(_) => return Err("No AWS_SECRET_ACCESS_KEY in environment")
-            };
-
-            if env_key.is_empty() || env_secret.is_empty() {
-                return Err("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment.");
-            }
-
-            self.credentials = AWSCredentials{key: env_key, secret: env_secret,
-                 token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600)};
-        }
-
-		Ok(&self.credentials)
+        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
+           self.credentials = Some(try!(get_credentials_from_environment()));
+        } 
+        Ok(self.credentials.as_ref().unwrap())
 	}
 }
 
-pub struct FileCredentialsProvider {
-    credentials: AWSCredentials
+fn get_credentials_from_environment<'a>() -> Result<AWSCredentials, &'a str> {
+    let env_key = match var("AWS_ACCESS_KEY_ID") {
+        Ok(val) => val,
+        Err(_) => return Err("No AWS_ACCESS_KEY_ID in environment")
+    };
+    let env_secret = match var("AWS_SECRET_ACCESS_KEY") {
+        Ok(val) => val,
+        Err(_) => return Err("No AWS_SECRET_ACCESS_KEY in environment")
+    };
+
+    if env_key.is_empty() || env_secret.is_empty() {
+        return Err("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment.");
+    }
+
+    Ok(AWSCredentials::new(env_key, env_secret, None, in_ten_minutes()))
 }
 
-impl AWSCredentialsProvider for FileCredentialsProvider {
-    fn new() -> FileCredentialsProvider {
-        return FileCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
+pub struct ProfileCredentialsProvider {
+    profile: String,
+    file_name: String,
+    credentials: Option<AWSCredentials>
+}
+
+impl ProfileCredentialsProvider {
+    pub fn with_configuration(profile: &str, file_name: &str) -> ProfileCredentialsProvider {
+        ProfileCredentialsProvider { credentials: None, profile: profile.to_string(), file_name: file_name.to_string() }
+    }
+
+    pub fn with_profile(&mut self, profile: &str) -> &mut ProfileCredentialsProvider {
+        self.profile = profile.to_string();
+        self
+    }
+
+    pub fn get_profile(&self) -> &str {
+        &self.profile
+    }
+}
+
+impl AWSCredentialsProvider for ProfileCredentialsProvider {
+    fn new() -> ProfileCredentialsProvider {
+        // Default credentials file location:
+        // ~/.aws/credentials (Linux/Mac)
+        // %USERPROFILE%\.aws\credentials  (Windows)
+        let mut profile_location;
+        match env::home_dir() {
+            Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
+            None => panic!("Couldn't get your home dir.")
+        }
+
+        ProfileCredentialsProvider { credentials: None, profile: "default".to_string(), file_name: profile_location }
     }
 
     fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
-        if self.credentials.credentials_are_expired() {
-            // Default credentials file location:
-            // ~/.aws/credentials (Linux/Mac)
-            // %USERPROFILE%\.aws\credentials  (Windows)
-            let mut profile_location;
-            match env::home_dir() {
-                Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
-                None => return Err("Couldn't get your home dir.")
-            }
-            match get_credentials_from_file(profile_location) {
-                Ok(creds) => {
-                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: "".to_string(),
-                        expires_at: UTC::now() + Duration::seconds(600) };
-                }
-                Err(_) => return Err("Couldn't get creds from file.")
-            }
+        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {           
+            match parse_credentials_file(&self.file_name) {
+                Ok(mut profiles) => { 
+                    let default_profile = profiles.remove(&self.profile);
+                    if default_profile.is_none() {
+                        return Err("profile not found");
+                    }
+                    self.credentials = default_profile;
+                },
+                Err(_) => { return Err("Parse error"); }
+            };
        }
-       Ok(&self.credentials)
+       Ok(self.credentials.as_ref().unwrap())
    }
 }
 
-// Finds and uses the first "aws_access_key_id" and "aws_secret_access_key" in the file.
-fn get_credentials_from_file<'a>(file_with_path: String) -> Result<AWSCredentials, &'a str> {
-    //println!("Looking for credentials file at {}", file_with_path);
+fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCredentials>, AWSError> {
     let path = Path::new(&file_with_path);
     let display = path.display();
 
     match fs::metadata(&path) {
-        Err(_) => return Err("Couldn't stat credentials file."),
+        Err(_) => return Err(AWSError::new("Couldn't stat credentials file.")),
         Ok(metadata) => {
             if !metadata.is_file() {
-                return Err("Couldn't open file.")
+                return Err(AWSError::new("Couldn't open file."));
             }
         }
     };
@@ -154,58 +175,84 @@ fn get_credentials_from_file<'a>(file_with_path: String) -> Result<AWSCredential
         Ok(opened_file) => opened_file,
     };
 
-    let mut access_key = String::new();
-    let mut secret_key = String::new();
+    let profile_regex = Regex::new(r"^\[([^\]]+)\]$").unwrap();
+    let mut profiles: HashMap<String, AWSCredentials> = HashMap::new();
+    let mut access_key: Option<String> = None;
+    let mut secret_key: Option<String> = None;    
+    let mut profile_name: Option<String> = None;
+
     let file_lines = BufReader::new(&file);
     for line in file_lines.lines() {
+
         let unwrapped_line : String = line.unwrap();
+
+        // skip comments
         if unwrapped_line.starts_with('#') {
             continue;
         }
 
+        // handle the opening of named profile blocks
+        if profile_regex.is_match(&unwrapped_line) {
+
+            if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
+                let creds = AWSCredentials::new(access_key.unwrap(), secret_key.unwrap(), None, in_ten_minutes());
+                profiles.insert(profile_name.unwrap(), creds);
+            }
+
+            access_key = None;
+            secret_key = None;
+
+            let caps = profile_regex.captures(&unwrapped_line).unwrap();            
+            profile_name = Some(caps.at(1).unwrap().to_string());
+            continue;
+        }
+
+        // otherwise look for key=value pairs we care about
         let lower_case_line = unwrapped_line.to_ascii_lowercase().to_string();
 
         if lower_case_line.contains("aws_access_key_id") {
-            if access_key.is_empty() {
+            if access_key.is_none() {
                 let v: Vec<&str> = unwrapped_line.split("=").collect();
-                if v.len() == 0 {
-                    access_key = "".to_string();
-                } else {
-                    access_key = v[1].trim_matches(' ').to_string();
+                if v.len() > 0 {                  
+                    access_key = Some(v[1].trim_matches(' ').to_string());
                 }
             }
         } else if lower_case_line.contains("aws_secret_access_key") {
-            if secret_key.is_empty() {
+            if secret_key.is_none() {
                 let v: Vec<&str> = unwrapped_line.split("=").collect();
-                if v.len() == 0 {
-                    secret_key = "".to_string();
-                } else {
-                    secret_key = v[1].trim_matches(' ').to_string();
+                if v.len() > 0 {                  
+                    secret_key = Some(v[1].trim_matches(' ').to_string());
                 }
             }
         }
+
+        // we could potentially explode here to indicate that the file is invalid
+
     }
 
-    if access_key.is_empty() || secret_key.is_empty() {
-        return Err("Couldn't find either aws_access_key_id, aws_secret_access_key or both in profile file.");
+    if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
+        let creds = AWSCredentials::new(access_key.unwrap(), secret_key.unwrap(), None, in_ten_minutes());
+        profiles.insert(profile_name.unwrap(), creds);
     }
 
-    return Ok(AWSCredentials{ key: access_key.to_string(), secret: secret_key.to_string(),
-         token: "".to_string(), expires_at: UTC::now() + Duration::seconds(600) });
+    if profiles.is_empty() {
+        return Err(AWSError::new("No credentials found."));
+    } 
+
+    Ok(profiles)
 }
 
 pub struct IAMRoleCredentialsProvider {
-    credentials: AWSCredentials
+    credentials: Option<AWSCredentials>
 }
 
 impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
     fn new() -> IAMRoleCredentialsProvider {
-        return IAMRoleCredentialsProvider {credentials: AWSCredentials{ key: "".to_string(),
-        secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
+        IAMRoleCredentialsProvider { credentials: None }
     }
 
     fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
-        if self.credentials.credentials_are_expired() {
+        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
             // TODO: backoff and retry on failure.
 
             //println!("Calling IAM metadata");
@@ -275,65 +322,150 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
                 Some(val) => token_from_response = val.to_string().replace("\"", "")
             };
 
-            self.credentials = AWSCredentials{ key: access_key.to_string(),
-                secret: secret_key.to_string(),  token: token_from_response.to_string(), expires_at: expiration_time };
+            self.credentials = Some(AWSCredentials::new(access_key, secret_key, Some(token_from_response.to_string()), expiration_time));
         }
 
-		Ok(&self.credentials)
+		Ok(&self.credentials.as_ref().unwrap())
 	}
 }
 
 #[derive(Debug, Clone)]
 pub struct DefaultAWSCredentialsProviderChain {
-    credentials: AWSCredentials
+    credentials: Option<AWSCredentials>,
+    profile: String
 }
 
 // Chain the providers:
 impl DefaultAWSCredentialsProviderChain {
     pub fn new() -> DefaultAWSCredentialsProviderChain {
-        return DefaultAWSCredentialsProviderChain {credentials: AWSCredentials{ key: "".to_string(),
-            secret: "".to_string(), token: "".to_string(), expires_at: UTC::now() - Duration::seconds(600) } };
+        DefaultAWSCredentialsProviderChain { credentials: None, profile: "default".to_string() }
     }
 
-    pub fn get_credentials(&mut self) -> &AWSCredentials {
-        if self.credentials.credentials_are_expired() {
+    pub fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
+        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
             // fetch creds in order: env, file, IAM
-            let mut env_provider = EnvironmentCredentialsProvider::new();
-            match env_provider.get_credentials() {
-                Ok(creds) => {
-                    //println!("Found creds in env");
-                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: "".to_string(),
-                        expires_at: UTC::now() + Duration::seconds(600) };
-                    return &self.credentials;
-                }
-                Err(_) => () //println!("Whiffed on env")
-            }
 
-            let mut file_provider = FileCredentialsProvider::new();
-            match file_provider.get_credentials() {
-                Ok(creds) => {
-                    //println!("Found creds in file");
-                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: "".to_string(),
-                        expires_at: UTC::now() + Duration::seconds(600) };
-                    return &self.credentials;
-                }
-                Err(_) => () //println!("Whiffed on file")
-            }
-
-            let mut iam_provider = IAMRoleCredentialsProvider::new();
-            match iam_provider.get_credentials() {
-                Ok(creds) => {
-                    //println!("Found creds via iam");
-                    self.credentials = AWSCredentials{ key: creds.get_aws_access_key_id().to_string(),
-                        secret: creds.get_aws_secret_key().to_string(), token: creds.get_token().to_string(),
-                        expires_at: UTC::now() + Duration::seconds(600) };
-                    return &self.credentials;
-                }
-                Err(_) => panic!("Couldn't find AWS credentials in environment, default credential file location or IAM role.")
+            if let Ok(creds) = EnvironmentCredentialsProvider::new().get_credentials() {
+                //println!("Found creds in env");
+                self.credentials = Some(creds.clone());
+            } else if let Ok(creds) = ProfileCredentialsProvider::new().with_profile(&self.profile).get_credentials() {             
+                //println!("Found creds in file");
+                self.credentials = Some(creds.clone());             
+            } else if let Ok(creds) = IAMRoleCredentialsProvider::new().get_credentials() {
+                //println!("Found creds via iam");
+                self.credentials = Some(creds.clone());
+            } else {
+               return Err(AWSError::new("Couldn't find AWS credentials in environment, default credential file location or IAM role."))
             }
         }
-        return &self.credentials;
+        Ok(self.credentials.as_ref().unwrap())
+    }
+
+    pub fn set_profile<S>(&mut self, profile: S) where S: Into<String> {
+        self.profile = profile.into();
+    }
+
+    pub fn get_profile(&self) -> &str {
+        &self.profile
     }
 }
+
+fn in_ten_minutes() -> DateTime<UTC> {
+    UTC::now() + Duration::seconds(600)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::io::BufReader;
+    use std::fs::File;
+    use error::*;
+    use regex::*;
+
+    #[test]
+    fn parse_credentials_file_default_profile() {
+        let result = super::parse_credentials_file("tests/sample-data/default_profile_credentials");
+        assert!(result.is_ok());
+
+        let profiles = result.ok().unwrap();
+        assert_eq!(profiles.len(), 1);
+
+        let default_profile = profiles.get("default").unwrap();
+        assert_eq!(default_profile.get_aws_access_key_id(), "foo");
+        assert_eq!(default_profile.get_aws_secret_key(), "bar");        
+    }
+
+    #[test]
+    fn parse_credentials_file_multiple_profiles() {
+        let result = super::parse_credentials_file("tests/sample-data/multiple_profile_credentials");
+        assert!(result.is_ok());
+
+        let profiles = result.ok().unwrap();
+        assert_eq!(profiles.len(), 2);
+
+        let foo_profile = profiles.get("foo").unwrap();
+        assert_eq!(foo_profile.get_aws_access_key_id(), "foo_access_key");
+        assert_eq!(foo_profile.get_aws_secret_key(), "foo_secret_key");   
+
+        let bar_profile = profiles.get("bar").unwrap();
+        assert_eq!(bar_profile.get_aws_access_key_id(), "bar_access_key");
+        assert_eq!(bar_profile.get_aws_secret_key(), "bar_secret_key");   
+
+    }
+
+    #[test]
+    fn profile_credentials_provider_happy_path() {
+        let mut provider = ProfileCredentialsProvider::with_configuration("foo","tests/sample-data/multiple_profile_credentials");
+        let result = provider.get_credentials();
+
+        assert!(result.is_ok());
+
+        let creds = result.ok().unwrap();
+        assert_eq!(creds.get_aws_access_key_id(), "foo_access_key");
+        assert_eq!(creds.get_aws_secret_key(), "foo_secret_key");
+     }
+
+    #[test]
+    fn profile_credentials_provider_bad_profile() {
+        let mut provider = ProfileCredentialsProvider::with_configuration("not_a_profile","tests/sample-data/multiple_profile_credentials");
+        let result = provider.get_credentials();
+
+        assert!(result.is_err());
+        assert_eq!(result.err(), Some("profile not found"));
+     }
+
+     #[test]
+     fn profile_credentials_provider_profile_name() {
+        let mut provider = ProfileCredentialsProvider::new();
+        assert_eq!("default", provider.get_profile());
+        assert_eq!("foo", provider.with_profile("foo").get_profile());
+     }
+
+     #[test]
+     fn credential_chain_profile_name() {
+        let mut chain = DefaultAWSCredentialsProviderChain::new();
+        assert_eq!("default", chain.get_profile());
+        chain.set_profile("foo");
+        assert_eq!("foo", chain.get_profile());
+     }
+
+    #[test]
+    fn existing_file_no_credentials() {
+        let result = super::parse_credentials_file("tests/sample-data/no_credentials");
+        assert_eq!(result.err(), Some(AWSError::new("No credentials found.")))
+    }
+
+    #[test]
+    fn parse_credentials_bad_path() {
+        let result = super::parse_credentials_file("/bad/file/path");
+        assert_eq!(result.err(), Some(AWSError::new("Couldn't stat credentials file.")));
+    }
+
+    #[test]
+    fn parse_credentials_directory_path() {
+        let result = super::parse_credentials_file("tests/");
+        assert_eq!(result.err(), Some(AWSError::new("Couldn't open file.")));
+    }
+
+}
+

@@ -1,7 +1,7 @@
 use xmlutil::XmlParseError;
 
-#[derive(Debug)]
-pub struct AWSError(String);
+#[derive(Debug, PartialEq)]
+pub struct AWSError(pub String);
 
 impl AWSError {
 	pub fn new<S>(msg:S) -> AWSError where S:Into<String>{
