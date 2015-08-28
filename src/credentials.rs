@@ -345,7 +345,7 @@ impl DefaultAWSCredentialsProviderChain {
                 //println!("Found creds via iam");
                 self.credentials = Some(creds.clone());
             } else {
-               panic!("Couldn't find AWS credentials in environment, default credential file location or IAM role.")
+               return Err(AWSError::new("Couldn't find AWS credentials in environment, default credential file location or IAM role."))
             }
         }
         Ok(self.credentials.as_ref().unwrap())
