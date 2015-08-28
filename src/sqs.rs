@@ -17,7 +17,7 @@ pub struct SQSHelper<'a> {
 }
 
 impl<'a> SQSHelper<'a> {
-	pub fn new(credentials: DefaultAWSCredentialsProviderChain, region:&'a Region) -> SQSHelper<'a> {
+	pub fn new<P: AWSCredentialsProvider + 'a>(credentials: P, region:&'a Region) -> SQSHelper<'a> {
 		SQSHelper { client: SQSClient::new(credentials, region) }
 	}
 
