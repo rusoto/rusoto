@@ -106,22 +106,6 @@ impl <'a> SignedRequest <'a> {
 
 		let canonical_query_string : String;
 		let hyper_method;
-		let payload_hexdigest : String;
-
-		match self.payload {
-			None => {
-				// println!("no payload, setting to empty string");
-				payload_hexdigest = to_hexdigest_from_string("");
-			}
-			Some(payload) => {
-				println!("payload present, it's {} bytes.", payload.len());
-				payload_hexdigest = to_hexdigest_from_bytes(payload);
-				println!("hex digest is {}", payload_hexdigest);
-				self.add_header("content-length", &format!("{}", payload.len()));
-			}
-		}
-		self.add_header("x-amz-content-sha256", &payload_hexdigest);
-
 
 		// get the parameters in the right place for the http method being used
 		// TODO: handle PUT/DELTE/HEAD methods (with a matcher, not if/else if)
@@ -152,13 +136,33 @@ impl <'a> SignedRequest <'a> {
 		let canonical_uri = canonical_uri(&self.path);
 		let canonical_headers = canonical_headers(&self.headers);
 
-		let canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-				&self.method,
-				canonical_uri,
-				canonical_query_string,
-				canonical_headers,
-				signed_headers,
-				payload_hexdigest);
+		let mut canonical_request : String;
+
+		match self.payload {
+			None => {
+				canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+					&self.method,
+					canonical_uri,
+					canonical_query_string,
+					canonical_headers,
+					signed_headers,
+					&to_hexdigest_from_string(""));
+				self.add_header("x-amz-content-sha256", &to_hexdigest_from_string(""));
+			}
+			Some(payload) => {
+				canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+					&self.method,
+					canonical_uri,
+					canonical_query_string,
+					canonical_headers,
+					signed_headers,
+					&to_hexdigest_from_bytes(payload));
+				self.add_header("x-amz-content-sha256", &to_hexdigest_from_bytes(payload));
+				self.add_header("content-length", &format!("{}", payload.len()));
+				self.add_header("content-type", "application/octet-stream");
+				// println!("payload is {:?}", payload);
+			}
+		}
 
 		// use the hashed canonical request to build the string to sign
 		let hashed_canonical_request = to_hexdigest_from_string(&canonical_request);
@@ -182,9 +186,9 @@ impl <'a> SignedRequest <'a> {
 		}
 
 		// debug:
-		for h in hyper_headers.iter() {
-			println!("header key:val: {:?}:{:?}", h.name(), h.value_string());
-		}
+		// for h in hyper_headers.iter() {
+		// 	println!("header key:val: {:?}:{:?}", h.name(), h.value_string());
+		// }
 
 		// println!("Canonical url is {}", canonical_uri);
 		let mut final_uri = format!("https://{}{}", hostname, canonical_uri);
@@ -201,9 +205,12 @@ impl <'a> SignedRequest <'a> {
 	    let client = Client::new();
 		// Set to mut for debug:
 		let mut result : Response;
+
 	    match self.payload {
 			None => result = client.request(hyper_method, &final_uri).headers(hyper_headers).body("").send().unwrap(),
-			Some(payload_contents) => result = client.request(hyper_method, &final_uri).headers(hyper_headers).body(payload_contents).send().unwrap(),
+			Some(payload_contents) => {
+				result = client.request(hyper_method, &final_uri).headers(hyper_headers).body(payload_contents).send().unwrap()
+			}
 		}
 
 		// Debug:
