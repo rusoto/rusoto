@@ -911,65 +911,14 @@ impl RulesWriter {
 	}
 }
 #[derive(Debug, Default)]
-pub struct CompleteMultipartUploadRequest {
-	pub multipart_upload: Option<CompletedMultipartUpload>,
+pub struct CompleteMultipartUploadRequest <'a> {
+	pub multipart_upload: Option<&'a [u8]>,
 	pub upload_id: MultipartUploadId,
 	pub bucket: BucketName,
 	pub request_payer: Option<RequestPayer>,
 	pub key: ObjectKey,
 }
 
-/// Parse CompleteMultipartUploadRequest from XML
-struct CompleteMultipartUploadRequestParser;
-impl CompleteMultipartUploadRequestParser {
-	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CompleteMultipartUploadRequest, XmlParseError> {
-		try!(start_element(tag_name, stack));
-		let mut obj = CompleteMultipartUploadRequest::default();
-		loop {
-			let current_name = try!(peek_at_name(stack));
-			if current_name == "CompleteMultipartUpload" {
-				obj.multipart_upload = Some(try!(CompletedMultipartUploadParser::parse_xml("CompleteMultipartUpload", stack)));
-				continue;
-			}
-			if current_name == "uploadId" {
-				obj.upload_id = try!(MultipartUploadIdParser::parse_xml("uploadId", stack));
-				continue;
-			}
-			if current_name == "Bucket" {
-				obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-				continue;
-			}
-			if current_name == "x-amz-request-payer" {
-				obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-				continue;
-			}
-			if current_name == "Key" {
-				obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-				continue;
-			}
-			break;
-		}
-		try!(end_element(tag_name, stack));
-		Ok(obj)
-	}
-}
-/// Write CompleteMultipartUploadRequest contents to a SignedRequest
-struct CompleteMultipartUploadRequestWriter;
-impl CompleteMultipartUploadRequestWriter {
-	fn write_params(params: &mut Params, name: &str, obj: &CompleteMultipartUploadRequest) {
-		let mut prefix = name.to_string();
-		if prefix != "" { prefix.push_str("."); }
-		if let Some(ref obj) = obj.multipart_upload {
-			CompletedMultipartUploadWriter::write_params(params, &(prefix.to_string() + "CompleteMultipartUpload"), obj);
-		}
-		MultipartUploadIdWriter::write_params(params, &(prefix.to_string() + "uploadId"), &obj.upload_id);
-		BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-		if let Some(ref obj) = obj.request_payer {
-			RequestPayerWriter::write_params(params, &(prefix.to_string() + "x-amz-request-payer"), obj);
-		}
-		ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
-	}
-}
 #[derive(Debug, Default)]
 pub struct CreateBucketOutput {
 	pub location: Location,
@@ -7521,7 +7470,7 @@ pub struct PutObjectRequest<'a> {
 	/// A map of metadata to store with the object in S3.
 	pub metadata: Option<Metadata>,
 	/// Object data.
-	pub body: Option<&'a Body>,
+	pub body: Option<&'a [u8]>,
 	/// Specifies the customer-provided encryption key for Amazon S3 to use in
 	/// encrypting data. This value is used to store the object and then it is
 	/// discarded; Amazon does not store the encryption key. The key must be
@@ -10108,8 +10057,8 @@ impl NoSuchKeyWriter {
 	}
 }
 #[derive(Debug, Default)]
-pub struct UploadPartRequest {
-	pub body: Option<Body>,
+pub struct UploadPartRequest <'a> {
+	pub body: Option<&'a [u8]>,
 	/// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
 	pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
 	pub request_payer: Option<RequestPayer>,
@@ -10137,97 +10086,7 @@ pub struct UploadPartRequest {
 	pub part_number: PartNumber,
 }
 
-/// Parse UploadPartRequest from XML
-struct UploadPartRequestParser;
-impl UploadPartRequestParser {
-	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadPartRequest, XmlParseError> {
-		try!(start_element(tag_name, stack));
-		let mut obj = UploadPartRequest::default();
-		loop {
-			let current_name = try!(peek_at_name(stack));
-			if current_name == "Body" {
-				obj.body = Some(try!(BodyParser::parse_xml("Body", stack)));
-				continue;
-			}
-			if current_name == "x-amz-server-side-encryption-customer-algorithm" {
-				obj.sse_customer_algorithm = Some(try!(SSECustomerAlgorithmParser::parse_xml("x-amz-server-side-encryption-customer-algorithm", stack)));
-				continue;
-			}
-			if current_name == "x-amz-request-payer" {
-				obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-				continue;
-			}
-			if current_name == "Content-Length" {
-				obj.content_length = Some(try!(ContentLengthParser::parse_xml("Content-Length", stack)));
-				continue;
-			}
-			if current_name == "Content-MD5" {
-				obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-				continue;
-			}
-			if current_name == "Bucket" {
-				obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-				continue;
-			}
-			if current_name == "x-amz-server-side-encryption-customer-key" {
-				obj.sse_customer_key = Some(try!(SSECustomerKeyParser::parse_xml("x-amz-server-side-encryption-customer-key", stack)));
-				continue;
-			}
-			if current_name == "uploadId" {
-				obj.upload_id = try!(MultipartUploadIdParser::parse_xml("uploadId", stack));
-				continue;
-			}
-			if current_name == "Key" {
-				obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-				continue;
-			}
-			if current_name == "x-amz-server-side-encryption-customer-key-MD5" {
-				obj.sse_customer_key_md5 = Some(try!(SSECustomerKeyMD5Parser::parse_xml("x-amz-server-side-encryption-customer-key-MD5", stack)));
-				continue;
-			}
-			if current_name == "partNumber" {
-				obj.part_number = try!(PartNumberParser::parse_xml("partNumber", stack));
-				continue;
-			}
-			break;
-		}
-		try!(end_element(tag_name, stack));
-		Ok(obj)
-	}
-}
-/// Write UploadPartRequest contents to a SignedRequest
-struct UploadPartRequestWriter;
-impl UploadPartRequestWriter {
-	fn write_params(params: &mut Params, name: &str, obj: &UploadPartRequest) {
-		let mut prefix = name.to_string();
-		if prefix != "" { prefix.push_str("."); }
-		if let Some(ref obj) = obj.body {
-			BodyWriter::write_params(params, &(prefix.to_string() + "Body"), obj);
-		}
-		if let Some(ref obj) = obj.sse_customer_algorithm {
-			SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), obj);
-		}
-		if let Some(ref obj) = obj.request_payer {
-			RequestPayerWriter::write_params(params, &(prefix.to_string() + "x-amz-request-payer"), obj);
-		}
-		if let Some(ref obj) = obj.content_length {
-			ContentLengthWriter::write_params(params, &(prefix.to_string() + "Content-Length"), obj);
-		}
-		if let Some(ref obj) = obj.content_md5 {
-			ContentMD5Writer::write_params(params, &(prefix.to_string() + "Content-MD5"), obj);
-		}
-		BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-		if let Some(ref obj) = obj.sse_customer_key {
-			SSECustomerKeyWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key"), obj);
-		}
-		MultipartUploadIdWriter::write_params(params, &(prefix.to_string() + "uploadId"), &obj.upload_id);
-		ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
-		if let Some(ref obj) = obj.sse_customer_key_md5 {
-			SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), obj);
-		}
-		PartNumberWriter::write_params(params, &(prefix.to_string() + "partNumber"), &obj.part_number);
-	}
-}
+
 pub type ObjectVersionList = Vec<ObjectVersion>;
 /// Parse ObjectVersionList from XML
 struct ObjectVersionListParser;
@@ -11266,23 +11125,35 @@ impl<'a> S3Client<'a> {
 	}
 	/// Uploads a part in a multipart upload.
 	/// **Note:** After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.
-	pub fn upload_part(&mut self, input: &UploadPartRequest) -> Result<UploadPartOutput, AWSError> {
-		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}/{Key+}");
+	pub fn upload_part(&mut self, input: &UploadPartRequest) -> Result<String, AWSError> {
+		let ref object_id = input.key;
+		let mut request = SignedRequest::new("PUT", "s3", &self.region, &format!("/{}", object_id));
+
+		request.set_payload(input.body);
+
+		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+		request.set_hostname(Some(hostname));
+
 		let mut params = Params::new();
-		params.put("Action", "UploadPart");
-		UploadPartRequestWriter::write_params(&mut params, "", &input);
+		let ref upload_id = input.upload_id;
+		let ref part_number = input.part_number;
+		params.put("partNumber", &format!("{}", part_number));
+		params.put("uploadId", &format!("{}", upload_id));
 		request.set_params(params);
+
 		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
-		let mut reader = EventReader::new(result);
-		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
-		stack.next(); // xml start tag
-		stack.next();
+
 		match status {
 			200 => {
-				Ok(try!(UploadPartOutputParser::parse_xml("UploadPartOutput", &mut stack)))
+				for header in result.headers.iter() {
+					if header.name() == "ETag" {
+						return Ok(header.value_string());
+					}
+				}
+				return Err(AWSError::new("Couldn't find etag in response headers."));
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => Err(AWSError::new("error: didn't get a 200.")),
 		}
 	}
 	/// Adds an object to a bucket.
@@ -11299,7 +11170,7 @@ impl<'a> S3Client<'a> {
 		request.set_hostname(Some(hostname));
 		request.set_payload(input.body);
 
-		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
+		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 
 		match status {
@@ -11309,7 +11180,14 @@ impl<'a> S3Client<'a> {
 
 				Ok(put_result)
 			}
-			_ => { Err(AWSError::new("error uploading object to S3")) }
+			_ => {
+				println!("Error: Status code was {}", status);
+				let mut body = String::new();
+			    result.read_to_string(&mut body).unwrap();
+			    println!("Error response body: {}", body);
+
+				Err(AWSError::new("error uploading object to S3"))
+			}
 		}
 	}
 	/// Deletes the cors configuration information set for the bucket.
@@ -11779,29 +11657,40 @@ impl<'a> S3Client<'a> {
 				panic!("Something went wrong when creating a bucket.");
 			}
 			_ => {
-				println!("Got a non-200 from AWS.");
-				Err(AWSError::new("error"))
+				Err(AWSError::new("error in create_bucket"))
 			}
 		}
 	}
 	/// Completes a multipart upload by assembling previously uploaded parts.
 	pub fn complete_multipart_upload(&mut self, input: &CompleteMultipartUploadRequest) -> Result<CompleteMultipartUploadOutput, AWSError> {
-		let mut request = SignedRequest::new("POST", "s3", &self.region, "/{Bucket}/{Key+}");
+		let mut request = SignedRequest::new("POST", "s3", &self.region,
+			&format!("/{}", input.key));
+
 		let mut params = Params::new();
-		params.put("Action", "CompleteMultipartUpload");
-		CompleteMultipartUploadRequestWriter::write_params(&mut params, "", &input);
+		params.put("uploadId", &input.upload_id.to_string());
 		request.set_params(params);
-		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
+
+		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+		request.set_hostname(Some(hostname));
+
+		request.set_payload(input.multipart_upload);
+
+		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
-		let mut reader = EventReader::new(result);
-		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
-		stack.next(); // xml start tag
-		stack.next();
+
 		match status {
 			200 => {
-				Ok(try!(CompleteMultipartUploadOutputParser::parse_xml("CompleteMultipartUploadOutput", &mut stack)))
+				let mut reader = EventReader::new(result);
+				let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+				stack.next(); // xml start tag
+
+				Ok(try!(CompleteMultipartUploadOutputParser::parse_xml("CompleteMultipartUploadResult", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => {
+				let mut body = String::new();
+			    result.read_to_string(&mut body).unwrap();
+				Err(AWSError::new("error in complete_multipart_upload"))
+			}
 		}
 	}
 	/// Returns the website configuration for a bucket.
@@ -11827,20 +11716,26 @@ impl<'a> S3Client<'a> {
 	/// Initiates a multipart upload and returns an upload ID.
 	/// **Note:** After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.
 	pub fn create_multipart_upload(&mut self, input: &CreateMultipartUploadRequest) -> Result<CreateMultipartUploadOutput, AWSError> {
-		let mut request = SignedRequest::new("POST", "s3", &self.region, "/{Bucket}/{Key+}?uploads");
+
+		let ref object_name = input.key;
+		let mut request = SignedRequest::new("POST", "s3", &self.region, &format!("/{}", object_name));
+
 		let mut params = Params::new();
-		params.put("Action", "CreateMultipartUpload");
-		CreateMultipartUploadRequestWriter::write_params(&mut params, "", &input);
+		params.put("uploads", "");
 		request.set_params(params);
+
+		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+		request.set_hostname(Some(hostname));
+
 		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
+
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
 		stack.next(); // xml start tag
-		stack.next();
 		match status {
 			200 => {
-				Ok(try!(CreateMultipartUploadOutputParser::parse_xml("CreateMultipartUploadOutput", &mut stack)))
+				Ok(try!(CreateMultipartUploadOutputParser::parse_xml("InitiateMultipartUploadResult", &mut stack)))
 			}
 			_ => { Err(AWSError::new("error")) }
 		}
@@ -11968,13 +11863,20 @@ impl<'a> S3Client<'a> {
 		request.set_params(params);
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
+
 		match status {
 			200 => {
 				let s3_object = try!(S3Client::get_object_from_response(&mut result));
 
 				return Ok(s3_object);
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => {
+				println!("Error: Status code was {}", status);
+				let mut body = String::new();
+			    result.read_to_string(&mut body).unwrap();
+			    println!("Error response body: {}", body);
+				Err(AWSError::new("error in get_object"))
+			}
 		}
 	}
 
@@ -12020,22 +11922,28 @@ impl<'a> S3Client<'a> {
 	}
 	/// This operation lists in-progress multipart uploads.
 	pub fn list_multipart_uploads(&mut self, input: &ListMultipartUploadsRequest) -> Result<ListMultipartUploadsOutput, AWSError> {
-		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?uploads");
+		let mut request = SignedRequest::new("GET", "s3", &self.region, "/");
+
 		let mut params = Params::new();
-		params.put("Action", "ListMultipartUploads");
-		ListMultipartUploadsRequestWriter::write_params(&mut params, "", &input);
+		params.put("Uploads", "");
 		request.set_params(params);
+
+		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+		request.set_hostname(Some(hostname));
+
 		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
 		stack.next(); // xml start tag
-		stack.next();
+
 		match status {
 			200 => {
-				Ok(try!(ListMultipartUploadsOutputParser::parse_xml("ListMultipartUploadsOutput", &mut stack)))
+				Ok(try!(ListMultipartUploadsOutputParser::parse_xml("ListMultipartUploadsResult", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => {
+				Err(AWSError::new("error"))
+			}
 		}
 	}
 	/// Returns the request payment configuration of a bucket.
@@ -12263,25 +12171,23 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Uploads a part by copying data from an existing object as data source.
-	pub fn upload_part_copy(&mut self, input: &UploadPartCopyRequest) -> Result<UploadPartCopyOutput, AWSError> {
-		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}/{Key+}");
-		let mut params = Params::new();
-		params.put("Action", "UploadPartCopy");
-		UploadPartCopyRequestWriter::write_params(&mut params, "", &input);
-		request.set_params(params);
-		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
-		let status = result.status.to_u16();
-		let mut reader = EventReader::new(result);
-		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
-		stack.next(); // xml start tag
-		stack.next();
-		match status {
-			200 => {
-				Ok(try!(UploadPartCopyOutputParser::parse_xml("UploadPartCopyOutput", &mut stack)))
-			}
-			_ => { Err(AWSError::new("error")) }
-		}
-	}
+	// pub fn upload_part_copy(&mut self, input: &UploadPartCopyRequest) -> Result<bool, AWSError> {
+	// 	let ref part_number = input.part_number;
+	// 	let ref upload_id = input.upload_id;
+	// 	let ref object_id = input.key;
+	// 	let mut request = SignedRequest::new("PUT", "s3", &self.region, &format!("/{}?partNumber={}&uploadId={}",
+	// 		object_id, part_number, upload_id));
+	//
+	// 	let result = request.sign_and_execute(&self.creds.get_credentials());
+	// 	let status = result.status.to_u16();
+	//
+	// 	match status {
+	// 		200 => {
+	// 			Ok(true)
+	// 		}
+	// 		_ => { Err(AWSError::new("error")) }
+	// 	}
+	// }
 	/// Removes the null version (if there is one) of an object and inserts a delete
 	/// marker, which becomes the latest version of the object. If there isn't a null
 	/// version, Amazon S3 does not remove any objects.

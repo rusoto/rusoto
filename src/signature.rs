@@ -32,7 +32,7 @@ pub struct SignedRequest<'a> {
 	headers: BTreeMap<String, Vec<Vec<u8>>>,
 	params: Params,
 	hostname: Option<String>,
-	payload: Option<&'a Vec<u8>>,
+	payload: Option<&'a [u8]>,
 }
 
 impl <'a> SignedRequest <'a> {
@@ -54,7 +54,7 @@ impl <'a> SignedRequest <'a> {
 		self.hostname = hostname;
 	}
 
-	pub fn set_payload(&mut self, payload: Option<&'a Vec<u8>>) {
+	pub fn set_payload(&mut self, payload: Option<&'a [u8]>) {
 		self.payload = payload;
 	}
 
@@ -103,58 +103,65 @@ impl <'a> SignedRequest <'a> {
 			self.add_header("X-Amz-Security-Token", token);
 		}
 
-		let mut payload: String;
-		match self.payload {
-			None => payload = String::new(),
-			Some(ref payload_data) => payload = str::from_utf8(&payload_data).unwrap().to_string(),
-		}
-
-		let canonical_query_string: String;
+		let canonical_query_string : String;
 		let hyper_method;
 
 		// get the parameters in the right place for the http method being used
 		// TODO: handle PUT/DELTE/HEAD methods (with a matcher, not if/else if)
 		if self.method == "POST" {
-			payload = build_canonical_query_string(&self.params); // can we move this up to the matcher above?
-			canonical_query_string = "".to_string();
+			canonical_query_string = build_canonical_query_string(&self.params);
 			hyper_method = Method::Post;
 
-			self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
-			self.add_header("content-length", &format!("{}", payload.len()));
+			// self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
 		} else if self.method == "PUT" {
-			canonical_query_string = "".to_string();
+			canonical_query_string = build_canonical_query_string(&self.params);
 			hyper_method = Method::Put;
 
-			self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
-			self.add_header("content-length", &format!("{}", payload.len()));
+			// self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
 		} else if self.method == "DELETE" {
 			canonical_query_string = "".to_string();
 			hyper_method = Method::Delete;
 
 			self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
-			self.add_header("content-length", &format!("{}", payload.len()));
 		} else {
-			payload = "".to_string();
 			canonical_query_string =  build_canonical_query_string(&self.params);
 			hyper_method = Method::Get;
 		}
-
-		self.add_header("x-amz-content-sha256", &to_hexdigest(&payload));
 
 		// build the canonical request
 		let signed_headers = signed_headers(&self.headers);
 		let canonical_uri = canonical_uri(&self.path);
 		let canonical_headers = canonical_headers(&self.headers);
-		let canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-				&self.method,
-				canonical_uri,
-				canonical_query_string,
-				canonical_headers,
-				signed_headers,
-				to_hexdigest(&payload));
+
+		let mut canonical_request : String;
+
+		match self.payload {
+			None => {
+				canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+					&self.method,
+					canonical_uri,
+					canonical_query_string,
+					canonical_headers,
+					signed_headers,
+					&to_hexdigest_from_string(""));
+				self.add_header("x-amz-content-sha256", &to_hexdigest_from_string(""));
+			}
+			Some(payload) => {
+				canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+					&self.method,
+					canonical_uri,
+					canonical_query_string,
+					canonical_headers,
+					signed_headers,
+					&to_hexdigest_from_bytes(payload));
+				self.add_header("x-amz-content-sha256", &to_hexdigest_from_bytes(payload));
+				self.add_header("content-length", &format!("{}", payload.len()));
+				self.add_header("content-type", "application/octet-stream");
+			}
+		}
 
 		// use the hashed canonical request to build the string to sign
-		let hashed_canonical_request = to_hexdigest(&canonical_request);
+		let hashed_canonical_request = to_hexdigest_from_string(&canonical_request);
 		let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), region_in_aws_format(&self.region), &self.service);
 		let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
 
@@ -173,27 +180,32 @@ impl <'a> SignedRequest <'a> {
 			hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
 		}
 
-		// determine the final URI to use based on http method
-		// println!("Canonical url is {}", canonical_uri);
 		let mut final_uri = format!("https://{}{}", hostname, canonical_uri);
-		if self.method == "GET" {
+		if canonical_query_string.len() > 0 {
 			final_uri = final_uri + &format!("?{}", canonical_query_string);
 		}
 
 		// S3 can be tricky, signature is against us-east-1 for now.  To verify:
 		// println!("Region is {}", region_in_aws_format(&self.region));
-		// println!("Full request: {}\n{}\n{}\n", self.method, final_uri, payload);
+		// println!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\n canon headers: {:?}\n",
+		// 	self.method, final_uri, self.payload, canonical_headers);
 
 	    // execute the request already
 	    let client = Client::new();
 		// Set to mut for debug:
-	    let result = client.request(hyper_method, &final_uri).headers(hyper_headers).body(&payload).send().unwrap();
+		let mut result : Response;
+
+	    match self.payload {
+			None => result = client.request(hyper_method, &final_uri).headers(hyper_headers).body("").send().unwrap(),
+			Some(payload_contents) => {
+				result = client.request(hyper_method, &final_uri).headers(hyper_headers).body(payload_contents).send().unwrap()
+			}
+		}
 
 		// Debug:
 		// let mut body = String::new();
 	    // result.read_to_string(&mut body).unwrap();
 	    // println!("Response: {}", body);
-		// result is now consumed, would have to reset it to original.  Perhaps make a copy to consume with read_to_string.
 		// /Debug
 
 	    result
@@ -298,8 +310,14 @@ fn byte_serialize(input: &str, output: &mut String) {
 	}
 }
 
-fn to_hexdigest(val: &str) -> String {
+// TODO: consolidate these functions
+fn to_hexdigest_from_string(val: &str) -> String {
     let h = hash(SHA256, val.as_bytes());
+    h.to_hex().to_string()
+}
+
+fn to_hexdigest_from_bytes(val: &[u8]) -> String {
+	let h = hash(SHA256, val);
     h.to_hex().to_string()
 }
 

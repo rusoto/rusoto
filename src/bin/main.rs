@@ -13,7 +13,6 @@ use time::*;
 use std::fs::File;
 use std::io::Write;
 use std::io::Read;
-// use std::thread;
 
 fn main() {
 	let provider = DefaultAWSCredentialsProviderChain::new();
@@ -29,7 +28,6 @@ fn main() {
 		Err(err) => { println!("Got error: {:#?}", err); }
 	}
 
-	let mut bucket_name = format!("rusoto{}", get_time().sec);
 	// S3 client gets its own provider chain:
 	let mut s3 = S3Helper::new(provider.clone(), &region);
 
@@ -37,6 +35,8 @@ fn main() {
 		Ok(_) => { println!("Everything worked for S3 list buckets."); },
 		Err(err) => { println!("Got error in s3 list buckets: {:#?}", err); }
 	}
+
+	let mut bucket_name = format!("rusoto{}", get_time().sec);
 
 	match s3_create_bucket_test(&mut s3, &bucket_name, &region, None) {
 		Ok(_) => { println!("Everything worked for S3 create bucket."); },
@@ -62,7 +62,7 @@ fn main() {
 		Err(err) => { println!("Got error in s3 get object: {:#?}", err); }
 	}
 
-	match s3_delete_object_test(&mut s3, &bucket_name) {
+	match s3_delete_object_test(&mut s3, &bucket_name, "sample-credentials") {
 		Ok(_) => {
 			println!("Everything worked for S3 delete object.");
 		}
@@ -76,12 +76,31 @@ fn main() {
 		Err(err) => { println!("Got error in s3 put object with reduced redundancy: {:#?}", err); }
 	}
 
-	match s3_delete_object_test(&mut s3, &bucket_name) {
+	match s3_delete_object_test(&mut s3, &bucket_name, "sample-credentials") {
 		Ok(_) => {
 			println!("Everything worked for S3 delete object.");
 		}
 		Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
 	}
+
+	println!("Making a large upload...");
+	match s3_multipart_upload_test(&mut s3, &bucket_name) {
+		Ok(_) => { println!("Everything worked for S3 multipart upload."); }
+		Err(err) => { println!("Got error in s3 multipart upload: {:#?}", err); }
+	}
+
+	match s3_delete_object_test(&mut s3, &bucket_name, "join.me.zip") {
+		Ok(_) => {
+			println!("Everything worked for S3 delete object.");
+		}
+		Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
+	}
+
+	// Not yet implemented.
+	// match s3_list_multipart_uploads(&mut s3, &bucket_name) {
+	// 	Err(why) => println!("Erro listing multipart uploads: {:?}", why),
+	// 	Ok(_) => println!("yay listed."),
+	// }
 
 	match s3_delete_bucket_test(&mut s3, &bucket_name, &region) {
 		Ok(_) => { println!("Everything worked for S3 delete bucket."); },
@@ -102,6 +121,14 @@ fn main() {
 	}
 }
 
+fn s3_list_multipart_uploads(s3: &mut S3Helper, bucket: &str) -> Result<(), AWSError> {
+	match s3.list_multipart_uploads_for_bucket(bucket) {
+		Err(why) => println!("Error: {:?}", why),
+		Ok(_) => println!("made it"),
+	}
+	Ok(())
+}
+
 fn s3_list_buckets_tests(s3: &mut S3Helper) -> Result<(), AWSError> {
 	let response = try!(s3.list_buckets());
 	// println!("response is {:?}", response);
@@ -118,15 +145,15 @@ fn s3_get_object_test(s3: &mut S3Helper, bucket: &str) -> Result<GetObjectOutput
 	Ok(response)
 }
 
-fn s3_delete_object_test(s3: &mut S3Helper, bucket: &str) -> Result<DeleteObjectOutput, AWSError> {
-	let response = try!(s3.delete_object(bucket, "sample-credentials"));
+fn s3_delete_object_test(s3: &mut S3Helper, bucket: &str, object_name: &str) -> Result<DeleteObjectOutput, AWSError> {
+	let response = try!(s3.delete_object(bucket, object_name));
 	// println!("delete object response is {:?}", response);
 	Ok(response)
 }
 
 fn s3_put_object_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
 	let mut f = File::open("src/sample-credentials").unwrap();
-	let mut contents = Vec::new();
+	let mut contents : Vec<u8> = Vec::new();
 	match f.read_to_end(&mut contents) {
 		Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
 		Ok(_) => {
@@ -134,6 +161,13 @@ fn s3_put_object_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput
 			Ok(response)
 		}
 	}
+}
+
+fn s3_multipart_upload_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+	let mut f = File::open("/Users/matthewmayer/Downloads/join.me.zip").unwrap();
+
+	let response = try!(s3.put_multipart_object(bucket, "join.me.zip", &mut f));
+	Ok(response)
 }
 
 fn s3_put_object_with_reduced_redundancy_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
