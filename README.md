@@ -20,7 +20,7 @@ Rusoto is available on [crates.io](https://crates.io/crates/rusoto).
 
 Rusoto complies with [semantic versioning 2.0.0](http://semver.org/).  Until reaching 1.0.0 the API is to be considered unstable.  See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/rusoto) for current version.  
 
-Information about how releases are made are in [RELEASING](RELEASING.md).
+Information about how releases are made is in [RELEASING](RELEASING.md).
 
 ### Contributing
 
