@@ -19,8 +19,10 @@ fn main() {
 	let provider = DefaultAWSCredentialsProviderChain::new();
 	let region = Region::UsWest1; //Region::UsEast1;
 
+	let provider2 = ProfileCredentialsProvider::new();
+
 	// Creates an SQS client with its own copy of the credential provider chain:
-	// let mut sqs = SQSHelper::new(provider.clone(), &region);
+	let mut sqs = SQSHelper::new(provider2, &region);
 
 	// match sqs_roundtrip_tests(&mut sqs) {
 	// 	Ok(_) => { println!("Everything worked."); },

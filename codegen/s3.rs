@@ -10969,13 +10969,13 @@ impl MaxPartsWriter {
 	}
 }
 pub struct S3Client<'a> {
-	creds: DefaultAWSCredentialsProviderChain,
+	creds: Box<AWSCredentialsProvider + 'a>,
 	region: &'a Region
 }
 
 impl<'a> S3Client<'a> {
-	pub fn new(creds: DefaultAWSCredentialsProviderChain, region: &'a Region) -> S3Client<'a> {
-		S3Client { creds: creds, region: region }
+	pub fn new<P: AWSCredentialsProvider + 'a>(creds: P, region: &'a Region) -> S3Client<'a> {
+		S3Client { creds: Box::new(creds), region: region }
 	}
 	/// Returns metadata about all of the versions of objects in a bucket.
 	pub fn list_object_versions(&mut self, input: &ListObjectVersionsRequest) -> Result<ListObjectVersionsOutput, AWSError> {
