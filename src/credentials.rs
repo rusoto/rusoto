@@ -67,8 +67,11 @@ impl AWSCredentials {
 }
 
 pub trait AWSCredentialsProvider {
-    fn new() -> Self;
-	fn get_credentials(&mut self) -> Result<&AWSCredentials, &str>;
+	fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError>;
+}
+
+fn err(message: &str) -> Result<&AWSCredentials, AWSError> {
+    Err(AWSError::new(message))
 }
 
 pub struct EnvironmentCredentialsProvider {
@@ -76,11 +79,8 @@ pub struct EnvironmentCredentialsProvider {
 }
 
 impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
-    fn new() -> EnvironmentCredentialsProvider {
-        EnvironmentCredentialsProvider { credentials: None }
-    }
 
-	fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
+	fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
         if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
            self.credentials = Some(try!(get_credentials_from_environment()));
         } 
@@ -88,18 +88,25 @@ impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
 	}
 }
 
-fn get_credentials_from_environment<'a>() -> Result<AWSCredentials, &'a str> {
+impl EnvironmentCredentialsProvider {
+    fn new() -> EnvironmentCredentialsProvider {
+        EnvironmentCredentialsProvider { credentials: None }
+    }
+
+}
+
+fn get_credentials_from_environment<'a>() -> Result<AWSCredentials, AWSError> {
     let env_key = match var("AWS_ACCESS_KEY_ID") {
         Ok(val) => val,
-        Err(_) => return Err("No AWS_ACCESS_KEY_ID in environment")
+        Err(_) => return Err(AWSError::new("No AWS_ACCESS_KEY_ID in environment"))
     };
     let env_secret = match var("AWS_SECRET_ACCESS_KEY") {
         Ok(val) => val,
-        Err(_) => return Err("No AWS_SECRET_ACCESS_KEY in environment")
+        Err(_) => return Err(AWSError::new("No AWS_SECRET_ACCESS_KEY in environment"))
     };
 
     if env_key.is_empty() || env_secret.is_empty() {
-        return Err("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment.");
+        return Err(AWSError::new("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment."));
     }
 
     Ok(AWSCredentials::new(env_key, env_secret, None, in_ten_minutes()))
@@ -127,7 +134,25 @@ impl ProfileCredentialsProvider {
 }
 
 impl AWSCredentialsProvider for ProfileCredentialsProvider {
-    fn new() -> ProfileCredentialsProvider {
+    fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
+        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {           
+            match parse_credentials_file(&self.file_name) {
+                Ok(mut profiles) => { 
+                    let default_profile = profiles.remove(&self.profile);
+                    if default_profile.is_none() {
+                        return err("profile not found");
+                    }
+                    self.credentials = default_profile;
+                },
+                Err(_) => { return err("Parse error"); }
+            };
+       }
+       Ok(self.credentials.as_ref().unwrap())
+   }
+}
+
+impl ProfileCredentialsProvider {
+   pub fn new() -> ProfileCredentialsProvider {
         // Default credentials file location:
         // ~/.aws/credentials (Linux/Mac)
         // %USERPROFILE%\.aws\credentials  (Windows)
@@ -139,22 +164,6 @@ impl AWSCredentialsProvider for ProfileCredentialsProvider {
 
         ProfileCredentialsProvider { credentials: None, profile: "default".to_string(), file_name: profile_location }
     }
-
-    fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
-        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {           
-            match parse_credentials_file(&self.file_name) {
-                Ok(mut profiles) => { 
-                    let default_profile = profiles.remove(&self.profile);
-                    if default_profile.is_none() {
-                        return Err("profile not found");
-                    }
-                    self.credentials = default_profile;
-                },
-                Err(_) => { return Err("Parse error"); }
-            };
-       }
-       Ok(self.credentials.as_ref().unwrap())
-   }
 }
 
 fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCredentials>, AWSError> {
@@ -246,12 +255,15 @@ pub struct IAMRoleCredentialsProvider {
     credentials: Option<AWSCredentials>
 }
 
-impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
+impl IAMRoleCredentialsProvider {
     fn new() -> IAMRoleCredentialsProvider {
         IAMRoleCredentialsProvider { credentials: None }
     }
+}
 
-    fn get_credentials(&mut self) -> Result<&AWSCredentials, &str> {
+impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
+
+    fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
         if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
             // TODO: backoff and retry on failure.
 
@@ -262,13 +274,13 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             let mut response;
             match client.get(&address)
                 .header(Connection::close()).send() {
-                    Err(_) => return Err("Couldn't connect to metadata service"), // add Why?
+                    Err(_) => return err("Couldn't connect to metadata service"), // add Why?
                     Ok(received_response) => response = received_response
                 };
 
             let mut body = String::new();
             match response.read_to_string(&mut body) {
-                Err(_) => return Err("Didn't get a parsable response body from metadata service"),
+                Err(_) => return err("Didn't get a parsable response body from metadata service"),
                 Ok(_) => (),
             };
 
@@ -277,36 +289,36 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             body = String::new();
             match client.get(&address)
                 .header(Connection::close()).send() {
-                    Err(_) => return Err("Didn't get a parseable response body from instance role details"),
+                    Err(_) => return err("Didn't get a parseable response body from instance role details"),
                     Ok(received_response) => response = received_response
                 };
 
             match response.read_to_string(&mut body) {
-                Err(_) => return Err("Had issues with reading iam role response: {}"),
+                Err(_) => return err("Had issues with reading iam role response: {}"),
                 Ok(_) => (),
             };
 
             let json_object : Json;
             match Json::from_str(&body) {
-                Err(_) => return Err("Couldn't parse metadata response body."),
+                Err(_) => return err("Couldn't parse metadata response body."),
                 Ok(val) => json_object = val
             };
 
             let mut access_key;
             match json_object.find("AccessKeyId") {
-                None => return Err("Couldn't find AccessKeyId in response."),
+                None => return err("Couldn't find AccessKeyId in response."),
                 Some(val) => access_key = val.to_string().replace("\"", "")
             };
 
             let mut secret_key;
             match json_object.find("SecretAccessKey") {
-                None => return Err("Couldn't find SecretAccessKey in response."),
+                None => return err("Couldn't find SecretAccessKey in response."),
                 Some(val) => secret_key = val.to_string().replace("\"", "")
             };
 
             let mut expiration;
             match json_object.find("Expiration") {
-                None => return Err("Couldn't find Expiration in response."),
+                None => return err("Couldn't find Expiration in response."),
                 Some(val) => expiration = val.to_string().replace("\"", "")
             };
 
@@ -318,7 +330,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 
             let mut token_from_response;
             match json_object.find("Token") {
-                None => return Err("Couldn't find Token in response."),
+                None => return err("Couldn't find Token in response."),
                 Some(val) => token_from_response = val.to_string().replace("\"", "")
             };
 
@@ -336,12 +348,9 @@ pub struct DefaultAWSCredentialsProviderChain {
 }
 
 // Chain the providers:
-impl DefaultAWSCredentialsProviderChain {
-    pub fn new() -> DefaultAWSCredentialsProviderChain {
-        DefaultAWSCredentialsProviderChain { credentials: None, profile: "default".to_string() }
-    }
+impl AWSCredentialsProvider for DefaultAWSCredentialsProviderChain {
 
-    pub fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
+    fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
         if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
             // fetch creds in order: env, file, IAM
 
@@ -360,6 +369,12 @@ impl DefaultAWSCredentialsProviderChain {
         }
         Ok(self.credentials.as_ref().unwrap())
     }
+}
+
+impl DefaultAWSCredentialsProviderChain {
+    pub fn new() -> DefaultAWSCredentialsProviderChain {
+        DefaultAWSCredentialsProviderChain { credentials: None, profile: "default".to_string() }
+    }
 
     pub fn set_profile<S>(&mut self, profile: S) where S: Into<String> {
         self.profile = profile.into();
@@ -377,10 +392,7 @@ fn in_ten_minutes() -> DateTime<UTC> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::io::BufReader;
-    use std::fs::File;
     use error::*;
-    use regex::*;
 
     #[test]
     fn parse_credentials_file_default_profile() {
@@ -431,7 +443,7 @@ mod tests {
         let result = provider.get_credentials();
 
         assert!(result.is_err());
-        assert_eq!(result.err(), Some("profile not found"));
+        assert_eq!(result.err(), Some(AWSError("profile not found".to_string())));
      }
 
      #[test]

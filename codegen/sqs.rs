@@ -2618,13 +2618,13 @@ impl SendMessageBatchRequestEntryWriter {
 	}
 }
 pub struct SQSClient<'a> {
-	creds: DefaultAWSCredentialsProviderChain,
+	creds: Box<AWSCredentialsProvider + 'a>,
 	region: &'a Region
 }
 
 impl<'a> SQSClient<'a> {
-	pub fn new(creds: DefaultAWSCredentialsProviderChain, region: &'a Region) -> SQSClient<'a> {
-		SQSClient { creds: creds, region: region }
+	pub fn new<P: AWSCredentialsProvider + 'a>(creds: P, region: &'a Region) -> SQSClient<'a> {
+		SQSClient { creds: Box::new(creds), region: region }
 	}
 	/// Creates a new queue, or returns the URL of an existing one. When you request
 	/// `CreateQueue`, you provide a name for the queue. To successfully create a new
