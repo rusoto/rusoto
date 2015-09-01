@@ -1950,13 +1950,8 @@ impl KeyMarkerParser {
 		try!(start_element(tag_name, stack));
 		let mut obj = KeyMarker::default();
 
-		// if the contents are blank, we're done.
-		if peek_at_name(stack).unwrap() == "" {
-			stack.next();
-			return Ok(obj);
-		}
 		match characters(stack) {
-			Err(why) => (), // swallow exception, it's okay to be blank
+			Err(why) => return Ok(obj),
 			Ok(chars) => obj = chars,
 		}
 
@@ -9563,13 +9558,8 @@ impl UploadIdMarkerParser {
 		try!(start_element(tag_name, stack));
 		let mut obj = UploadIdMarker::default();
 
-		// if the contents are blank, we're done.
-		if peek_at_name(stack).unwrap() == "" {
-			stack.next();
-			return Ok(obj);
-		}
 		match characters(stack) {
-			Err(why) => (), // swallow error, it's okay to be blank
+			Err(why) => return Ok(obj),
 			Ok(chars) => obj = chars,
 		}
 
