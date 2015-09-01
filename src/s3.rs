@@ -394,7 +394,7 @@ mod tests {
 
 	#[test]
 	fn list_multipart_upload_happy_path() {
-		let file = File::open("tests/sample-data/s3-list-multipart-uploads.xml").unwrap();
+		let file = File::open("tests/sample-data/s3_list_multipart_uploads.xml").unwrap();
 	    let file = BufReader::new(file);
 	    let mut my_parser  = EventReader::new(file);
 	    let my_stack = my_parser.events().peekable();
@@ -403,7 +403,7 @@ mod tests {
 		let result = ListMultipartUploadsOutputParser::parse_xml("ListMultipartUploadsResult", &mut reader);
 
 		match result {
-			Err(_) => panic!("Couldn't parse s3-list-multipart-uploads.xml"),
+			Err(_) => panic!("Couldn't parse s3_list_multipart_uploads.xml"),
 			Ok(result) => {
 				assert_eq!(result.bucket, "rusoto1440826511");
 				let ref an_upload = result.uploads[0];
@@ -425,6 +425,25 @@ mod tests {
 				assert_eq!(an_upload.owner.display_name, test_owner.display_name);
 
 				assert_eq!(an_upload.storage_class, "STANDARD");
+			}
+		}
+	}
+
+	#[test]
+	fn list_multipart_upload_no_uploads() {
+		let file = File::open("tests/sample-data/s3_list_multipart_uploads_no_multipart_uploads.xml").unwrap();
+	    let file = BufReader::new(file);
+	    let mut my_parser  = EventReader::new(file);
+	    let my_stack = my_parser.events().peekable();
+	    let mut reader = XmlResponseFromFile::new(my_stack);
+		reader.next(); // xml start node
+		let result = ListMultipartUploadsOutputParser::parse_xml("ListMultipartUploadsResult", &mut reader);
+
+		match result {
+			Err(_) => panic!("Couldn't parse s3_list_multipart_uploads_no_multipart_uploads.xml"),
+			Ok(result) => {
+				assert_eq!(result.bucket, "rusoto1440826568");
+				assert_eq!(result.uploads.len(), 0);
 			}
 		}
 	}

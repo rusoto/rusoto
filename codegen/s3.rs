@@ -2730,7 +2730,13 @@ struct NextKeyMarkerParser;
 impl NextKeyMarkerParser {
 	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextKeyMarker, XmlParseError> {
 		try!(start_element(tag_name, stack));
-		let obj = try!(characters(stack));
+		let mut obj = NextKeyMarker::default();
+
+		match characters(stack) {
+			Err(why) => return Ok(obj), // swallow error, it's okay to be blank
+			Ok(chars) => println!("got {} for chars", chars),
+		}
+
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
@@ -4249,7 +4255,14 @@ struct IsTruncatedParser;
 impl IsTruncatedParser {
 	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IsTruncated, XmlParseError> {
 		try!(start_element(tag_name, stack));
-		let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+
+		let mut obj = IsTruncated::default();
+
+		match characters(stack) {
+			Err(why) => return Ok(obj),
+			Ok(ref chars) => obj = bool::from_str(chars).unwrap(),
+		}
+
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
@@ -5974,7 +5987,13 @@ impl NextUploadIdMarkerParser {
 	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextUploadIdMarker, XmlParseError> {
 		try!(start_element(tag_name, stack));
 
-		let obj = try!(characters(stack));
+		let mut obj = NextUploadIdMarker::default();
+
+		match characters(stack) {
+			Err(why) => return Ok(obj),
+			Ok(chars) => obj = chars,
+		}
+
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
