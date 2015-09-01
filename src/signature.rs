@@ -18,7 +18,7 @@ use time::now_utc;
 use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
 use regions::*;
 // Debug:
-use std::io::Read;
+// use std::io::Read;
 
 
 /// A data structure for all the elements of an HTTP request that are involved in
