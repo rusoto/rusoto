@@ -1,9 +1,6 @@
 extern crate regex;
 use credentials::AWSCredentials;
-use hyper::Client;
 use hyper::client::Response;
-use hyper::header::Headers;
-use hyper::method::Method;
 use openssl::crypto::hash::Type::SHA256;
 use openssl::crypto::hash::hash;
 use openssl::crypto::hmac::hmac;
@@ -17,9 +14,9 @@ use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
 use regions::*;
+use request::send_request;
 // Debug:
 // use std::io::Read;
-
 
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process
@@ -33,6 +30,8 @@ pub struct SignedRequest<'a> {
 	params: Params,
 	hostname: Option<String>,
 	payload: Option<&'a [u8]>,
+	canonical_query_string: String,
+	canonical_uri: String,
 }
 
 impl <'a> SignedRequest <'a> {
@@ -47,6 +46,8 @@ impl <'a> SignedRequest <'a> {
 			params: Params::new(),
 			hostname: None,
 			payload: None,
+			canonical_query_string: String::new(),
+			canonical_uri: String::new(),
 		 }
 	}
 
@@ -56,6 +57,33 @@ impl <'a> SignedRequest <'a> {
 
 	pub fn set_payload(&mut self, payload: Option<&'a [u8]>) {
 		self.payload = payload;
+	}
+
+	pub fn get_method(&self) -> &str {
+		&self.method
+	}
+
+	pub fn get_canonical_uri(&self) -> &str {
+		&self.canonical_uri
+	}
+
+	pub fn get_canonical_query_string(&self) -> &str {
+		&self.canonical_query_string
+	}
+
+	pub fn get_payload(&self) -> Option<&'a [u8]> {
+		self.payload
+	}
+
+	pub fn get_headers(&'a self) -> &'a BTreeMap<String, Vec<Vec<u8>>> {
+		&self.headers
+	}
+
+	pub fn get_hostname(&self) -> String {
+		match self.hostname {
+			Some(ref h) => h.to_string(),
+			None => build_hostname(&self.service, &self.region)
+		}
 	}
 
 	/// Add a value to the array of headers for the specified key.
@@ -88,49 +116,28 @@ impl <'a> SignedRequest <'a> {
 	/// Add the calculated signature to the request headers and execute it
 	/// Return the hyper HTTP response
 	pub fn sign_and_execute(&mut self, creds: &AWSCredentials) -> Response {
-		let date = now_utc();
-
-		// set the required host/date headers
 		let hostname = match self.hostname {
 			Some(ref h) => h.to_string(),
 			None => build_hostname(&self.service, &self.region)
 		};
-
 		self.add_header("host", &hostname);
-		self.add_header("x-amz-date", &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
 
 		if let Some(ref token) = *creds.get_token() {
 			self.add_header("X-Amz-Security-Token", token);
 		}
 
-		let canonical_query_string : String;
-		let hyper_method;
-
-		// get the parameters in the right place for the http method being used
-		// TODO: handle PUT/DELTE/HEAD methods (with a matcher, not if/else if)
-		if self.method == "POST" {
-			canonical_query_string = build_canonical_query_string(&self.params);
-			hyper_method = Method::Post;
-
-			// self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
-		} else if self.method == "PUT" {
-			canonical_query_string = build_canonical_query_string(&self.params);
-			hyper_method = Method::Put;
-
-			// self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
-		} else if self.method == "DELETE" {
-			canonical_query_string = "".to_string();
-			hyper_method = Method::Delete;
-
-			self.add_header("content-type", "application/x-www-form-urlencoded; charset=utf-8");
-		} else {
-			canonical_query_string =  build_canonical_query_string(&self.params);
-			hyper_method = Method::Get;
+		// Only delete needs to set the query string as empty string.
+		match self.method.as_ref() {
+			"DELETE" => self.canonical_query_string = "".to_string(),
+			_ => self.canonical_query_string = build_canonical_query_string(&self.params),
 		}
+
+		let date = now_utc();
+		self.add_header("x-amz-date", &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
 
 		// build the canonical request
 		let signed_headers = signed_headers(&self.headers);
-		let canonical_uri = canonical_uri(&self.path);
+		self.canonical_uri = canonical_uri(&self.path);
 		let canonical_headers = canonical_headers(&self.headers);
 
 		let mut canonical_request : String;
@@ -139,26 +146,28 @@ impl <'a> SignedRequest <'a> {
 			None => {
 				canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
 					&self.method,
-					canonical_uri,
-					canonical_query_string,
+					self.canonical_uri,
+					self.canonical_query_string,
 					canonical_headers,
 					signed_headers,
 					&to_hexdigest_from_string(""));
 				self.add_header("x-amz-content-sha256", &to_hexdigest_from_string(""));
 			}
 			Some(payload) => {
+				// This is hashing the payload twice, booo:
 				canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
 					&self.method,
-					canonical_uri,
-					canonical_query_string,
+					self.canonical_uri,
+					self.canonical_query_string,
 					canonical_headers,
 					signed_headers,
 					&to_hexdigest_from_bytes(payload));
 				self.add_header("x-amz-content-sha256", &to_hexdigest_from_bytes(payload));
 				self.add_header("content-length", &format!("{}", payload.len()));
-				self.add_header("content-type", "application/octet-stream");
 			}
 		}
+		self.add_header("content-type", "application/octet-stream");
+
 
 		// use the hashed canonical request to build the string to sign
 		let hashed_canonical_request = to_hexdigest_from_string(&canonical_request);
@@ -174,41 +183,8 @@ impl <'a> SignedRequest <'a> {
 	               &creds.get_aws_access_key_id(), scope, signed_headers, signature);
 		self.add_header("authorization", &auth_header);
 
-		// translate the headers map to a format Hyper likes
-		let mut hyper_headers = Headers::new();
-		for h in self.headers.iter() {
-			hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
-		}
-
-		let mut final_uri = format!("https://{}{}", hostname, canonical_uri);
-		if canonical_query_string.len() > 0 {
-			final_uri = final_uri + &format!("?{}", canonical_query_string);
-		}
-
-		// S3 can be tricky, signature is against us-east-1 for now.  To verify:
-		// println!("Region is {}", region_in_aws_format(&self.region));
-		// println!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\n canon headers: {:?}\n",
-		// 	self.method, final_uri, self.payload, canonical_headers);
-
-	    // execute the request already
-	    let client = Client::new();
-		// Set to mut for debug:
-		let mut result : Response;
-
-	    match self.payload {
-			None => result = client.request(hyper_method, &final_uri).headers(hyper_headers).body("").send().unwrap(),
-			Some(payload_contents) => {
-				result = client.request(hyper_method, &final_uri).headers(hyper_headers).body(payload_contents).send().unwrap()
-			}
-		}
-
-		// Debug:
-		// let mut body = String::new();
-	    // result.read_to_string(&mut body).unwrap();
-	    // println!("Response: {}", body);
-		// /Debug
-
-	    result
+		// TODO: if Response is a redirect, re-issue request to that location
+		send_request(&self)
 	}
 }
 
@@ -333,4 +309,27 @@ fn build_hostname(service: &str, region: &Region) -> String {
 			}
 		_ => format!("{}.{}.amazonaws.com", service, region_in_aws_format(region))
 	}
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+	use regions::*;
+
+	#[test]
+	fn get_hostname_none_present() {
+		let region = Region::UsEast1;
+		let request = SignedRequest::new("POST", "sqs", &region, "/");
+		assert_eq!("sqs.us-east-1.amazonaws.com", request.get_hostname());
+	}
+
+	#[test]
+	fn get_hostname_happy_path() {
+		let region = Region::UsEast1;
+		let mut request = SignedRequest::new("POST", "sqs", &region, "/");
+		request.set_hostname(Some("test-hostname".to_string()));
+		assert_eq!("test-hostname", request.get_hostname());
+	}
+
 }

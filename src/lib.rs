@@ -19,3 +19,4 @@ pub mod sqs;
 pub mod s3;
 pub mod xmlutil;
 pub mod regions;
+pub mod request;
