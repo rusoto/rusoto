@@ -1947,26 +1947,20 @@ pub type KeyMarker = String;
 struct KeyMarkerParser;
 impl KeyMarkerParser {
 	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<KeyMarker, XmlParseError> {
-		// println!("peek is {}", peek_at_name(stack).unwrap());
 		try!(start_element(tag_name, stack));
 		let mut obj = KeyMarker::default();
 
-		// println!("peek is {}", peek_at_name(stack).unwrap());
-
 		// if the contents are blank, we're done.
 		if peek_at_name(stack).unwrap() == "" {
-			println!("bailing early");
 			stack.next();
 			return Ok(obj);
 		}
 		match characters(stack) {
-			Err(why) => println!("got error in KeyMarkerParser"), // swallow exception, it's okay to be blank
+			Err(why) => (), // swallow exception, it's okay to be blank
 			Ok(chars) => obj = chars,
 		}
 
-		println!("looking for end");
 		try!(end_element(tag_name, stack));
-		println!("exiting KeyMarkerParser");
 		Ok(obj)
 	}
 }
@@ -3881,13 +3875,10 @@ pub struct ListMultipartUploadsOutput {
 struct ListMultipartUploadsOutputParser;
 impl ListMultipartUploadsOutputParser {
 	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListMultipartUploadsOutput, XmlParseError> {
-		println!("looking for {}", tag_name);
 		try!(start_element(tag_name, stack));
-		println!("found start.");
 		let mut obj = ListMultipartUploadsOutput::default();
 		loop {
 			let current_name = try!(peek_at_name(stack));
-			println!("current_name is {}", current_name);
 			if current_name == "UploadIdMarker" {
 				obj.upload_id_marker = try!(UploadIdMarkerParser::parse_xml("UploadIdMarker", stack));
 				continue;
@@ -3942,8 +3933,6 @@ impl ListMultipartUploadsOutputParser {
 			}
 			break;
 		}
-		println!("Looking for end elemen {}", tag_name);
-		println!("peeking shows {}", peek_at_name(stack).unwrap());
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
@@ -9557,12 +9546,11 @@ impl UploadIdMarkerParser {
 
 		// if the contents are blank, we're done.
 		if peek_at_name(stack).unwrap() == "" {
-			println!("bailing early");
 			stack.next();
 			return Ok(obj);
 		}
 		match characters(stack) {
-			Err(why) => println!("got error in UploadIdMarkerParser"), // swallow error, it's okay to be blank
+			Err(why) => (), // swallow error, it's okay to be blank
 			Ok(chars) => obj = chars,
 		}
 

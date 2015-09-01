@@ -406,6 +406,25 @@ mod tests {
 			Err(_) => panic!("Couldn't parse s3-list-multipart-uploads.xml"),
 			Ok(result) => {
 				assert_eq!(result.bucket, "rusoto1440826511");
+				let ref an_upload = result.uploads[0];
+				assert_eq!(an_upload.upload_id, "eUeGzA6xR2jAH7KUhTSwrrNVfu8XPIYdoWpa7meOiceoGQLQhtKfPg_APCnuVRsyWd7bx8SS5jNssgdtTU5tTziGOz.j1URgseoqpdHqnyZRikJHTLd6iXF.GjKBEhky");
+				assert_eq!(an_upload.key, "join.me.zip");
+
+				let test_initiator = Initiator {id: "arn:aws:iam::347452556412:user/matthew".to_string(),
+					display_name: "matthew".to_string() };
+
+				assert_eq!(an_upload.initiator.id, test_initiator.id);
+				assert_eq!(an_upload.initiator.display_name, test_initiator.display_name);
+
+				assert_eq!(an_upload.initiated, "2015-09-01T19:22:56.000Z");
+
+				let test_owner = Owner { id: "b84c6b0c308085829b6562b586f6664fc00faab6cfd441e90ad418ea916eed83".to_string(),
+					display_name: "matthew".to_string() };
+
+				assert_eq!(an_upload.owner.id, test_owner.id);
+				assert_eq!(an_upload.owner.display_name, test_owner.display_name);
+
+				assert_eq!(an_upload.storage_class, "STANDARD");
 			}
 		}
 	}
