@@ -313,6 +313,7 @@ mod tests {
 	use super::ListBucketsOutputParser;
 	use super::CreateMultipartUploadOutputParser;
 	use super::CompleteMultipartUploadOutputParser;
+	use super::ListMultipartUploadsOutputParser;
 	use super::*;
 	use xmlutil::*;
 	use regions::*;
@@ -389,6 +390,24 @@ mod tests {
 		let expected_string = "<CompleteMultipartUpload><Part><PartNumber>1</PartNumber><ETag>etag1</ETag></Part><Part><PartNumber>2</PartNumber><ETag>etag2</ETag></Part></CompleteMultipartUpload>";
 
 		assert_eq!(expected_string,  str::from_utf8(&response).unwrap());
+	}
+
+	#[test]
+	fn list_multipart_upload_happy_path() {
+		let file = File::open("tests/sample-data/s3-list-multipart-uploads.xml").unwrap();
+	    let file = BufReader::new(file);
+	    let mut my_parser  = EventReader::new(file);
+	    let my_stack = my_parser.events().peekable();
+	    let mut reader = XmlResponseFromFile::new(my_stack);
+		reader.next(); // xml start node
+		let result = ListMultipartUploadsOutputParser::parse_xml("ListMultipartUploadsResult", &mut reader);
+
+		match result {
+			Err(_) => panic!("Couldn't parse s3-list-multipart-uploads.xml"),
+			Ok(result) => {
+				assert_eq!(result.bucket, "rusoto1440826511");
+			}
+		}
 	}
 
 	#[test]

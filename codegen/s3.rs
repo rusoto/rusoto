@@ -1947,9 +1947,26 @@ pub type KeyMarker = String;
 struct KeyMarkerParser;
 impl KeyMarkerParser {
 	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<KeyMarker, XmlParseError> {
+		// println!("peek is {}", peek_at_name(stack).unwrap());
 		try!(start_element(tag_name, stack));
-		let obj = try!(characters(stack));
+		let mut obj = KeyMarker::default();
+
+		// println!("peek is {}", peek_at_name(stack).unwrap());
+
+		// if the contents are blank, we're done.
+		if peek_at_name(stack).unwrap() == "" {
+			println!("bailing early");
+			stack.next();
+			return Ok(obj);
+		}
+		match characters(stack) {
+			Err(why) => println!("got error in KeyMarkerParser"), // swallow exception, it's okay to be blank
+			Ok(chars) => obj = chars,
+		}
+
+		println!("looking for end");
 		try!(end_element(tag_name, stack));
+		println!("exiting KeyMarkerParser");
 		Ok(obj)
 	}
 }
@@ -3864,10 +3881,13 @@ pub struct ListMultipartUploadsOutput {
 struct ListMultipartUploadsOutputParser;
 impl ListMultipartUploadsOutputParser {
 	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListMultipartUploadsOutput, XmlParseError> {
+		println!("looking for {}", tag_name);
 		try!(start_element(tag_name, stack));
+		println!("found start.");
 		let mut obj = ListMultipartUploadsOutput::default();
 		loop {
 			let current_name = try!(peek_at_name(stack));
+			println!("current_name is {}", current_name);
 			if current_name == "UploadIdMarker" {
 				obj.upload_id_marker = try!(UploadIdMarkerParser::parse_xml("UploadIdMarker", stack));
 				continue;
@@ -3916,8 +3936,14 @@ impl ListMultipartUploadsOutputParser {
 				obj.is_truncated = try!(IsTruncatedParser::parse_xml("IsTruncated", stack));
 				continue;
 			}
+			if current_name == "Upload" {
+				obj.uploads.push(try!(MultipartUploadParser::parse_xml("Upload", stack)));
+				continue;
+			}
 			break;
 		}
+		println!("Looking for end elemen {}", tag_name);
+		println!("peeking shows {}", peek_at_name(stack).unwrap());
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
@@ -5958,6 +5984,7 @@ struct NextUploadIdMarkerParser;
 impl NextUploadIdMarkerParser {
 	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextUploadIdMarker, XmlParseError> {
 		try!(start_element(tag_name, stack));
+
 		let obj = try!(characters(stack));
 		try!(end_element(tag_name, stack));
 		Ok(obj)
@@ -9526,7 +9553,19 @@ struct UploadIdMarkerParser;
 impl UploadIdMarkerParser {
 	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadIdMarker, XmlParseError> {
 		try!(start_element(tag_name, stack));
-		let obj = try!(characters(stack));
+		let mut obj = UploadIdMarker::default();
+
+		// if the contents are blank, we're done.
+		if peek_at_name(stack).unwrap() == "" {
+			println!("bailing early");
+			stack.next();
+			return Ok(obj);
+		}
+		match characters(stack) {
+			Err(why) => println!("got error in UploadIdMarkerParser"), // swallow error, it's okay to be blank
+			Ok(chars) => obj = chars,
+		}
+
 		try!(end_element(tag_name, stack));
 		Ok(obj)
 	}
@@ -11925,7 +11964,7 @@ impl<'a> S3Client<'a> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/");
 
 		let mut params = Params::new();
-		params.put("Uploads", "");
+		params.put("uploads", "");
 		request.set_params(params);
 
 		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
