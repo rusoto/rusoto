@@ -239,7 +239,7 @@ impl<'a> S3Helper<'a> {
 		request.bucket = bucket_name.to_string();
 
 		match self.client.list_multipart_uploads(&request) {
-			Err(why) => panic!("Couldn't do list_multipart_uploads: {:?}", why),
+			Err(why) => Err(AWSError::new(format!("Couldn't do list_multipart_uploads: {:?}", why))),
 			Ok(result) => Ok(result),
 		}
 	}
