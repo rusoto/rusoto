@@ -96,11 +96,10 @@ fn main() {
 		Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
 	}
 
-	// Not yet implemented.
-	// match s3_list_multipart_uploads(&mut s3, &bucket_name) {
-	// 	Err(why) => println!("Erro listing multipart uploads: {:?}", why),
-	// 	Ok(_) => println!("yay listed."),
-	// }
+	match s3_list_multipart_uploads(&mut s3, &bucket_name) {
+		Err(why) => println!("Error listing multipart uploads: {:?}", why),
+		Ok(_) => println!("yay listed."),
+	}
 
 	match s3_delete_bucket_test(&mut s3, &bucket_name, &region) {
 		Ok(_) => { println!("Everything worked for S3 delete bucket."); },
@@ -123,8 +122,8 @@ fn main() {
 
 fn s3_list_multipart_uploads(s3: &mut S3Helper, bucket: &str) -> Result<(), AWSError> {
 	match s3.list_multipart_uploads_for_bucket(bucket) {
-		Err(why) => println!("Error: {:?}", why),
-		Ok(_) => println!("made it"),
+		Err(why) => println!("Error listing multipart uploads: {:?}", why),
+		Ok(result) => println!("in-progress multipart uploads: {:?}", result),
 	}
 	Ok(())
 }

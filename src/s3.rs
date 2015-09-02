@@ -234,15 +234,14 @@ impl<'a> S3Helper<'a> {
 		}
 	}
 
-	pub fn list_multipart_uploads_for_bucket(&mut self, bucket_name: &str) -> Result<String, AWSError> {
+	pub fn list_multipart_uploads_for_bucket(&mut self, bucket_name: &str) -> Result<ListMultipartUploadsOutput, AWSError> {
 		let mut request = ListMultipartUploadsRequest::default();
 		request.bucket = bucket_name.to_string();
 
 		match self.client.list_multipart_uploads(&request) {
 			Err(why) => panic!("Couldn't do list_multipart_uploads: {:?}", why),
-			Ok(result) => println!("result is {:?}", result),
+			Ok(result) => Ok(result),
 		}
-		Ok("yay".to_string())
 	}
 
 	pub fn delete_object(&mut self, bucket_name: &str, object_name: &str) ->  Result<DeleteObjectOutput, AWSError> {
