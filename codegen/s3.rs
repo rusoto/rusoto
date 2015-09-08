@@ -12154,22 +12154,33 @@ impl<'a> S3Client<'a> {
 	}
 	/// Lists the parts that have been uploaded for a specific multipart upload.
 	pub fn list_parts(&mut self, input: &ListPartsRequest) -> Result<ListPartsOutput, AWSError> {
-		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}/{Key+}");
+		let mut request = SignedRequest::new("GET", "s3", &self.region, &format!("/{}", input.key));
+
 		let mut params = Params::new();
-		params.put("Action", "ListParts");
-		ListPartsRequestWriter::write_params(&mut params, "", &input);
+		params.put("uploadId", &input.upload_id.to_string());
 		request.set_params(params);
-		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
+
+		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+		request.set_hostname(Some(hostname));
+
+		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
-		let mut reader = EventReader::new(result);
-		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
-		stack.next(); // xml start tag
-		stack.next();
+
 		match status {
 			200 => {
-				Ok(try!(ListPartsOutputParser::parse_xml("ListPartsOutput", &mut stack)))
+				let mut reader = EventReader::new(result);
+				let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+				stack.next(); // xml start tag
+
+				Ok(try!(ListPartsOutputParser::parse_xml("ListPartsResult", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => {
+				let mut body = String::new();
+			    result.read_to_string(&mut body).unwrap();
+			    println!("Error response body: {}", body);
+
+				Err(AWSError::new("error in list_parts"))
+			}
 		}
 	}
 	/// Returns the access control list (ACL) of an object.

@@ -198,7 +198,7 @@ mod tests {
 	    reader.next();
 
 	    match start_element("ListQueuesResult", &mut reader) {
-	        Ok(_) => println!("Got start"),
+	        Ok(_) => (),
 	        Err(_) => panic!("Couldn't find start element")
 	    }
 	}
@@ -218,8 +218,8 @@ mod tests {
 	    reader.next(); // reader now at ListQueuesResult
 
 	    // now we're set up to use string:
-	    let my_chars = string_field("QueueUrl", &mut reader);
-	    println!("Got {} for string", my_chars.unwrap());
+	    let my_chars = string_field("QueueUrl", &mut reader).unwrap();
+		assert_eq!(my_chars, "https://sqs.us-east-1.amazonaws.com/347452556413/testqueue")
 	}
 
 	#[test]
@@ -243,7 +243,7 @@ mod tests {
 	    reader.next();
 
 	    match end_element("ListQueuesResult", &mut reader) {
-	        Ok(_) => println!("Got end"),
+	        Ok(_) => (),
 	        Err(_) => panic!("Couldn't find end element")
 	    }
 	}
