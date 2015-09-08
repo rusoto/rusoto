@@ -252,6 +252,14 @@ impl<'a> S3Helper<'a> {
 		request.upload_id = upload_id.to_string();
 		self.client.abort_multipart_upload(&request)
 	}
+
+	pub fn multipart_upload_list_parts(&mut self, bucket_name: &str, object_name: &str, upload_id: &str) ->  Result<ListPartsOutput, AWSError> {
+		let mut request = ListPartsRequest::default();
+		request.key = object_name.to_string();
+		request.bucket = bucket_name.to_string();
+		request.upload_id = upload_id.to_string();
+		self.client.list_parts(&request)
+	}
 }
 
 pub fn needs_create_bucket_config(region: &Region) -> bool {
@@ -314,6 +322,7 @@ mod tests {
 	use super::CreateMultipartUploadOutputParser;
 	use super::CompleteMultipartUploadOutputParser;
 	use super::ListMultipartUploadsOutputParser;
+	use super::ListPartsOutputParser;
 	use super::*;
 	use xmlutil::*;
 	use regions::*;
@@ -425,6 +434,47 @@ mod tests {
 				assert_eq!(an_upload.owner.display_name, test_owner.display_name);
 
 				assert_eq!(an_upload.storage_class, "STANDARD");
+			}
+		}
+	}
+
+	#[test]
+	fn list_multipart_upload_parts_happy_path() {
+		let file = File::open("tests/sample-data/s3_multipart_uploads_with_parts.xml").unwrap();
+	    let file = BufReader::new(file);
+	    let mut my_parser  = EventReader::new(file);
+	    let my_stack = my_parser.events().peekable();
+	    let mut reader = XmlResponseFromFile::new(my_stack);
+		reader.next(); // xml start node
+		let result = ListPartsOutputParser::parse_xml("ListPartsResult", &mut reader);
+
+		match result {
+			Err(_) => panic!("Couldn't parse s3_multipart_uploads_with_parts.xml"),
+			Ok(result) => {
+				assert_eq!(result.bucket, "rusoto1440826511");
+				assert_eq!(result.upload_id, "PeePB_uORK5f2AURP_SWcQ4NO1P1oqnGNNNFK3nhFfzMeksdvG7x7nFfH1qk7a3HSossNYB7t8QhcN1Fg6ax7AXbwvAKIZ9DilB4tUcpM7qyUEgkszN4iDmMvSaImGFK");
+				assert_eq!(result.key, "testfile.zip");
+
+				let test_initiator = Initiator {id: "arn:aws:iam::347452556412:user/matthew".to_string(),
+					display_name: "matthew".to_string() };
+
+				assert_eq!(result.initiator.id, test_initiator.id);
+				assert_eq!(result.initiator.display_name, test_initiator.display_name);
+
+				let test_owner = Owner { id: "b84c6b0c308085829b6562b586f6664fc00faab6cfd441e90ad418ea916eed83".to_string(),
+					display_name: "matthew".to_string() };
+
+				assert_eq!(result.owner.id, test_owner.id);
+				assert_eq!(result.owner.display_name, test_owner.display_name);
+
+				assert_eq!(result.storage_class, "STANDARD");
+
+				assert_eq!(result.parts.len(), 2);
+				assert_eq!(result.parts[0].part_number, 1);
+				assert_eq!(result.parts[0].e_tag, "\"ddcaa99616d7cd06d0a5abfef6ccebbb\"");
+				assert_eq!(result.parts[0].size, 5242880);
+				assert_eq!(result.parts[0].last_modified, "2015-09-08T21:02:04.000Z");
+
 			}
 		}
 	}
