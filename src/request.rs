@@ -25,7 +25,7 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
     }
 
     // println!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\n",
-    // 	signed_request.method, final_uri, signed_request.payload);
+    // 	hyper_method, final_uri, signed_request.get_payload());
 
     let client = Client::new();
 
