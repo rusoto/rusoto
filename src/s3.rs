@@ -64,18 +64,14 @@ impl<'a> S3Helper<'a> {
 
 		request.acl = canned_acl;
 
-		// println!("Creating bucket");
 		let result = self.client.create_bucket(&request);
-		// println!("Result is {:?}", result);
 		result
 	}
 
 	pub fn delete_bucket(&mut self, bucket_name: &str, region: &Region) -> Result<(), AWSError> {
 		let mut request = DeleteBucketRequest::default();
 		request.bucket = bucket_name.to_string();
-		// println!("Deleting bucket");
 		let result = self.client.delete_bucket(&request, region);
-		// println!("Result is {:?}", result);
 		result
 	}
 
@@ -84,7 +80,6 @@ impl<'a> S3Helper<'a> {
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
 		let result = self.client.get_object(&request);
-		// println!("Result is {:?}", result);
 		result
 	}
 
@@ -136,7 +131,6 @@ impl<'a> S3Helper<'a> {
 			Ok(parts) => parts_list = parts,
 		}
 
-		// call complete multipart upload with the list of etags
 		let item_list : Vec<u8>;
 		match multipart_upload_finish_xml(&parts_list) {
 			Err(why) => return Err(AWSError::new("oops in multipart_upload_finish_xml")),
@@ -248,8 +242,15 @@ impl<'a> S3Helper<'a> {
 		let mut request = DeleteObjectRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
-		let result = self.client.delete_object(&request);
-		result
+		self.client.delete_object(&request)
+	}
+
+	pub fn abort_multipart_upload(&mut self, bucket_name: &str, object_name: &str, upload_id: &str) ->  Result<AbortMultipartUploadOutput, AWSError> {
+		let mut request = AbortMultipartUploadRequest::default();
+		request.key = object_name.to_string();
+		request.bucket = bucket_name.to_string();
+		request.upload_id = upload_id.to_string();
+		self.client.abort_multipart_upload(&request)
 	}
 }
 

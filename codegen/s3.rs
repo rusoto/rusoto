@@ -1995,24 +1995,6 @@ pub struct AbortMultipartUploadOutput {
 	pub request_charged: RequestCharged,
 }
 
-/// Parse AbortMultipartUploadOutput from XML
-struct AbortMultipartUploadOutputParser;
-impl AbortMultipartUploadOutputParser {
-	fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AbortMultipartUploadOutput, XmlParseError> {
-		try!(start_element(tag_name, stack));
-		let mut obj = AbortMultipartUploadOutput::default();
-		loop {
-			let current_name = try!(peek_at_name(stack));
-			if current_name == "x-amz-request-charged" {
-				obj.request_charged = try!(RequestChargedParser::parse_xml("x-amz-request-charged", stack));
-				continue;
-			}
-			break;
-		}
-		try!(end_element(tag_name, stack));
-		Ok(obj)
-	}
-}
 /// Write AbortMultipartUploadOutput contents to a SignedRequest
 struct AbortMultipartUploadOutputWriter;
 impl AbortMultipartUploadOutputWriter {
@@ -2729,7 +2711,7 @@ impl NextKeyMarkerParser {
 
 		match characters(stack) {
 			Err(why) => return Ok(obj), // swallow error, it's okay to be blank
-			Ok(chars) => println!("got {} for chars", chars),
+			Ok(_) => (),
 		}
 
 		try!(end_element(tag_name, stack));
@@ -12047,22 +12029,26 @@ impl<'a> S3Client<'a> {
 	/// part storage, you should call the List Parts operation and ensure the parts
 	/// list is empty.
 	pub fn abort_multipart_upload(&mut self, input: &AbortMultipartUploadRequest) -> Result<AbortMultipartUploadOutput, AWSError> {
-		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}/{Key+}");
+		let mut request = SignedRequest::new("DELETE", "s3", &self.region, &format!("/{}", input.key));
+
 		let mut params = Params::new();
-		params.put("Action", "AbortMultipartUpload");
-		AbortMultipartUploadRequestWriter::write_params(&mut params, "", &input);
+		params.put("uploadId", &input.upload_id.to_string());
 		request.set_params(params);
+
+		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+		request.set_hostname(Some(hostname));
+
 		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		let mut reader = EventReader::new(result);
 		let mut stack = XmlResponseFromAws::new(reader.events().peekable());
 		stack.next(); // xml start tag
-		stack.next();
+
 		match status {
-			200 => {
-				Ok(try!(AbortMultipartUploadOutputParser::parse_xml("AbortMultipartUploadOutput", &mut stack)))
+			204 => {
+				Ok(AbortMultipartUploadOutput::default())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AWSError::new(format!("error, got return code {}", status))) }
 		}
 	}
 	/// uses the acl subresource to set the access control list (ACL) permissions for
