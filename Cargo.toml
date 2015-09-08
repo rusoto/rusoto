@@ -1,10 +1,10 @@
 [package]
 name = "rusoto"
-version = "0.4.0"
+version = "0.5.0"
 authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>", "Matthew Mayer <matthew@dualspark.com>"]
 license = "MIT"
 readme = "README.md"
-keywords = [ "AWS", "SQS", "Amazon" ]
+keywords = [ "AWS", "SQS", "Amazon", "DynamoDB", "S3" ]
 description = "AWS client libraries for Rust"
 repository = "https://github.com/DualSpark/rust-aws"
 
