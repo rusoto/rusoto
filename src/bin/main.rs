@@ -99,8 +99,14 @@ fn main() {
 
 	match s3_list_multipart_uploads(&mut s3, &bucket_name) {
 		Err(why) => println!("Error listing multipart uploads: {:?}", why),
-		Ok(_) => println!("yay listed."),
+		Ok(_) => (),
 	}
+
+	// Working example, replace bucket name, file name, uploadID for your multipart upload:
+	// match s3_abort_multipart_uploads(&mut s3, &bucket_name, "testfile.zip", "W5J7SeEor1A3vcRMMUhAb.BKrMs68.suzyhErssdb2HFAyDb4z7QhJBMyGkM_GSsoFqKJJLjbHcNSZTHa7MhTFJodewzcswshoDHd7mffXPNUH.xoRWVXbkLjakTETaO") {
+	// 	Err(why) => println!("Error aborting multipart uploads: {:?}", why),
+	// 	Ok(_) => (),
+	// }
 
 	match s3_delete_bucket_test(&mut s3, &bucket_name, &region) {
 		Ok(_) => { println!("Everything worked for S3 delete bucket."); },
@@ -129,9 +135,16 @@ fn s3_list_multipart_uploads(s3: &mut S3Helper, bucket: &str) -> Result<(), AWSE
 	Ok(())
 }
 
+fn s3_abort_multipart_uploads(s3: &mut S3Helper, bucket: &str, object: &str, upload_id: &str) -> Result<(), AWSError> {
+	match s3.abort_multipart_upload(bucket, object, upload_id) {
+		Err(why) => println!("Error aborting multipart upload: {:?}", why),
+		Ok(result) => println!("aborted multipart upload: {:?}", result),
+	}
+	Ok(())
+}
+
 fn s3_list_buckets_tests(s3: &mut S3Helper) -> Result<(), AWSError> {
 	let response = try!(s3.list_buckets());
-	// println!("response is {:?}", response);
 	for q in response.buckets {
 		println!("Existing bucket: {:?}", q.name);
 	}
@@ -162,13 +175,13 @@ fn s3_put_object_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput
 }
 
 // uncomment for multipart upload testing:
-// fn s3_multipart_upload_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+fn s3_multipart_upload_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
 	// Set to a > 5 MB file for testing:
-	// let mut f = File::open("/Users/matthewmayer/Downloads/join.me.zip").unwrap();
-	//
-	// let response = try!(s3.put_multipart_object(bucket, "join.me.zip", &mut f));
-	// Ok(response)
-// }
+	let mut f = File::open("testfile.zip").unwrap();
+
+	let response = try!(s3.put_multipart_object(bucket, "testfile.zip", &mut f));
+	Ok(response)
+}
 
 fn s3_put_object_with_reduced_redundancy_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
 	let mut f = File::open("src/sample-credentials").unwrap();

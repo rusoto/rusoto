@@ -126,11 +126,7 @@ impl <'a> SignedRequest <'a> {
 			self.add_header("X-Amz-Security-Token", token);
 		}
 
-		// Only delete needs to set the query string as empty string.
-		match self.method.as_ref() {
-			"DELETE" => self.canonical_query_string = "".to_string(),
-			_ => self.canonical_query_string = build_canonical_query_string(&self.params),
-		}
+		self.canonical_query_string = build_canonical_query_string(&self.params);
 
 		let date = now_utc();
 		self.add_header("x-amz-date", &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
