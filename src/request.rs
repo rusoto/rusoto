@@ -1,5 +1,6 @@
 use hyper::Client;
 use hyper::client::Response;
+use hyper::client::RedirectPolicy;
 use hyper::header::Headers;
 use hyper::method::Method;
 use signature::SignedRequest;
@@ -27,7 +28,8 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
     // println!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\n",
     // 	hyper_method, final_uri, signed_request.get_payload());
 
-    let client = Client::new();
+    let mut client = Client::new();
+    client.set_redirect_policy(RedirectPolicy::FollowNone);
 
     match signed_request.get_payload() {
         None => client.request(hyper_method, &final_uri).headers(hyper_headers).body("").send().unwrap(),

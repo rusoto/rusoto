@@ -1,6 +1,7 @@
 extern crate regex;
 use credentials::AWSCredentials;
 use hyper::client::Response;
+use hyper::status::StatusCode;
 use openssl::crypto::hash::Type::SHA256;
 use openssl::crypto::hash::hash;
 use openssl::crypto::hmac::hmac;
@@ -15,8 +16,12 @@ use time::now_utc;
 use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
 use regions::*;
 use request::send_request;
+use xmlutil::*;
+use error::*;
 // Debug:
 // use std::io::Read;
+
+const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process
@@ -179,8 +184,19 @@ impl <'a> SignedRequest <'a> {
 	               &creds.get_aws_access_key_id(), scope, signed_headers, signature);
 		self.add_header("authorization", &auth_header);
 
-		// TODO: if Response is a redirect, re-issue request to that location
-		send_request(&self)
+		let response = send_request(&self);
+
+		if response.status == HTTP_TEMPORARY_REDIRECT {
+			// We have to re-sign and resend the request.
+
+			// extract location from response, modify request and re-sign and resend.
+
+			self.set_hostname(Some("new host".to_string()));
+
+			return self.sign_and_execute(creds);
+		}
+
+		response
 	}
 }
 
@@ -305,6 +321,33 @@ fn build_hostname(service: &str, region: &Region) -> String {
 			}
 		_ => format!("{}.{}.amazonaws.com", service, region_in_aws_format(region))
 	}
+}
+
+/// extract_s3_redirect_location takes a Hyper Response and attempts to pull out the temporary endpoint.
+fn extract_s3_redirect_location(response: Response) -> Result<String, AWSError> {
+	// Double checking this feels like belts and suspenders since we're checking the status code
+	// before calling this.  Remove this check?
+
+	// Verify it's a 307 temporary redirect
+	if response.status != HTTP_TEMPORARY_REDIRECT {
+		return Err(AWSError::new("Trying to find temporary location when status is not 307 temp redirect."))
+	}
+
+	// read response body
+	let mut body = String::new();
+	response.read_to_string(&mut body).unwrap();
+
+	// extract and return temporary endpoint location
+	extract_s3_temporary_endpoint_from_xml(body)
+}
+
+/// extract_s3_temporary_endpoint_from_xml takes in XML and tries to find the value of the Endpoint node.
+fn extract_s3_temporary_endpoint_from_xml(body: &str) -> Result<String, AWSError> {
+	
+	try!(start_element(tag_name, stack));
+	let obj = try!(characters(stack));
+	try!(end_element(tag_name, stack));
+	Ok("meh")
 }
 
 
