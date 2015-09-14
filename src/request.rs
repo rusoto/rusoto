@@ -25,8 +25,11 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
         final_uri = final_uri + &format!("?{}", signed_request.get_canonical_query_string());
     }
 
-    // println!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\n",
+    // println!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\nHeaders:\n",
     // 	hyper_method, final_uri, signed_request.get_payload());
+    // for h in hyper_headers.iter() {
+    //     println!("{}:{}", h.name(), h.value_string());
+    // }
 
     let mut client = Client::new();
     client.set_redirect_policy(RedirectPolicy::FollowNone);
