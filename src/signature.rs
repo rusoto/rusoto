@@ -344,15 +344,19 @@ fn extract_s3_redirect_location(response: Response) -> Result<String, AWSError> 
 
 /// extract_s3_temporary_endpoint_from_xml takes in XML and tries to find the value of the Endpoint node.
 fn extract_s3_temporary_endpoint_from_xml<'a, T: Peek + Next>(stack: &mut T) -> Result<String, AWSError> {
-
 	try!(start_element(&"Error".to_string(), stack));
+
 	// now find Endpoint contents
-	let obj = try!(characters(stack));
-	println!("obj is {}", obj);
-
-	try!(end_element(&"Error".to_string(), stack));
-
-	Ok("meh".to_string()) // endpoint location
+	// This may infinite loop if there's no endpoint in the response: how can we prevent that?
+	loop {
+		let current_name = try!(peek_at_name(stack));
+		if current_name == "Endpoint" {
+			let obj = try!(string_field("Endpoint", stack));
+			return Ok(obj);
+		}
+		stack.next();
+	}
+	Err(AWSError::new("Couldn't find redirect location for S3 bucket"))
 }
 
 
