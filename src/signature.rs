@@ -204,11 +204,8 @@ impl <'a> SignedRequest <'a> {
 		let response = send_request(&self);
 
 		if response.status == HTTP_TEMPORARY_REDIRECT {
-			println!("Found temp redirect, attempting to follow.");
-
 			// extract location from response, modify request and re-sign and resend.
 			let new_hostname = extract_s3_redirect_location(response).unwrap();
-			println!("found hostname of {}", new_hostname);
 			self.set_hostname(Some(new_hostname.to_string()));
 
 			// This does a lot of appending and not clearing/creation, so we'll have to do that ourselves:
