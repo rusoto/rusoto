@@ -18,6 +18,7 @@ use regions::*;
 use request::send_request;
 use xmlutil::*;
 use error::*;
+use xml::reader::*;
 // Debug:
 // use std::io::Read;
 
@@ -333,28 +334,37 @@ fn extract_s3_redirect_location(response: Response) -> Result<String, AWSError> 
 		return Err(AWSError::new("Trying to find temporary location when status is not 307 temp redirect."))
 	}
 
-	// read response body
-	let mut body = String::new();
-	response.read_to_string(&mut body).unwrap();
+	let mut reader = EventReader::new(response);
+	let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+	stack.next(); // xml start tag
 
 	// extract and return temporary endpoint location
-	extract_s3_temporary_endpoint_from_xml(body)
+	extract_s3_temporary_endpoint_from_xml(&mut stack)
 }
 
 /// extract_s3_temporary_endpoint_from_xml takes in XML and tries to find the value of the Endpoint node.
-fn extract_s3_temporary_endpoint_from_xml(body: &str) -> Result<String, AWSError> {
-	
-	try!(start_element(tag_name, stack));
+fn extract_s3_temporary_endpoint_from_xml<'a, T: Peek + Next>(stack: &mut T) -> Result<String, AWSError> {
+
+	try!(start_element(&"Error".to_string(), stack));
+	// now find Endpoint contents
 	let obj = try!(characters(stack));
-	try!(end_element(tag_name, stack));
-	Ok("meh")
+	println!("obj is {}", obj);
+
+	try!(end_element(&"Error".to_string(), stack));
+
+	Ok("meh".to_string()) // endpoint location
 }
 
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::SignedRequest;
+	use super::extract_s3_temporary_endpoint_from_xml;
+	use xmlutil::*;
 	use regions::*;
+	use std::io::BufReader;
+	use std::fs::File;
+	use xml::reader::*;
 
 	#[test]
 	fn get_hostname_none_present() {
@@ -369,6 +379,24 @@ mod tests {
 		let mut request = SignedRequest::new("POST", "sqs", &region, "/");
 		request.set_hostname(Some("test-hostname".to_string()));
 		assert_eq!("test-hostname", request.get_hostname());
+	}
+
+	#[test]
+	fn get_redirect_location_from_s3() {
+		let file = File::open("tests/sample-data/s3_temp_redirect.xml").unwrap();
+	    let file = BufReader::new(file);
+	    let mut my_parser  = EventReader::new(file);
+	    let my_stack = my_parser.events().peekable();
+	    let mut reader = XmlResponseFromFile::new(my_stack);
+		reader.next(); // xml start node
+		let result = extract_s3_temporary_endpoint_from_xml(&mut reader);
+
+		match result {
+			Err(_) => panic!("Couldn't parse s3_temp_redirect.xml"),
+			Ok(location) => {
+				assert_eq!(location, "rusoto1441045966.s3-us-west-1.amazonaws.com");
+			}
+		}
 	}
 
 }
