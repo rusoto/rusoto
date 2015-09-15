@@ -11767,14 +11767,17 @@ impl<'a> S3Client<'a> {
 		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
 		request.set_hostname(Some(hostname));
 
-		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
+		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 		match status {
 			204 => {
 				Ok(())
 			}
 			_ => {
-				Err(AWSError::new("delete bucket error, status was not 204"))
+				let mut body = String::new();
+			    result.read_to_string(&mut body).unwrap();
+				println!("resposne body: {}", body);
+				Err(AWSError::new(format!("delete bucket error, status was {}", status)))
 			}
 		}
 	}
