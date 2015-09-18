@@ -154,7 +154,7 @@ impl <'a> SignedRequest <'a> {
 		self.canonical_uri = canonical_uri(&self.path);
 		let canonical_headers = canonical_headers(&self.headers);
 
-		let mut canonical_request : String;
+		let canonical_request : String;
 
 		match self.payload {
 			None => {
