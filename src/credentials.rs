@@ -83,7 +83,7 @@ impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
 	fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
         if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
            self.credentials = Some(try!(get_credentials_from_environment()));
-        } 
+        }
         Ok(self.credentials.as_ref().unwrap())
 	}
 }
@@ -135,9 +135,9 @@ impl ProfileCredentialsProvider {
 
 impl AWSCredentialsProvider for ProfileCredentialsProvider {
     fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
-        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {           
+        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
             match parse_credentials_file(&self.file_name) {
-                Ok(mut profiles) => { 
+                Ok(mut profiles) => {
                     let default_profile = profiles.remove(&self.profile);
                     if default_profile.is_none() {
                         return err("profile not found");
@@ -156,7 +156,7 @@ impl ProfileCredentialsProvider {
         // Default credentials file location:
         // ~/.aws/credentials (Linux/Mac)
         // %USERPROFILE%\.aws\credentials  (Windows)
-        let mut profile_location;
+        let profile_location;
         match env::home_dir() {
             Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
             None => panic!("Couldn't get your home dir.")
@@ -187,7 +187,7 @@ fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCre
     let profile_regex = Regex::new(r"^\[([^\]]+)\]$").unwrap();
     let mut profiles: HashMap<String, AWSCredentials> = HashMap::new();
     let mut access_key: Option<String> = None;
-    let mut secret_key: Option<String> = None;    
+    let mut secret_key: Option<String> = None;
     let mut profile_name: Option<String> = None;
 
     let file_lines = BufReader::new(&file);
@@ -211,7 +211,7 @@ fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCre
             access_key = None;
             secret_key = None;
 
-            let caps = profile_regex.captures(&unwrapped_line).unwrap();            
+            let caps = profile_regex.captures(&unwrapped_line).unwrap();
             profile_name = Some(caps.at(1).unwrap().to_string());
             continue;
         }
@@ -222,14 +222,14 @@ fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCre
         if lower_case_line.contains("aws_access_key_id") {
             if access_key.is_none() {
                 let v: Vec<&str> = unwrapped_line.split("=").collect();
-                if v.len() > 0 {                  
+                if v.len() > 0 {
                     access_key = Some(v[1].trim_matches(' ').to_string());
                 }
             }
         } else if lower_case_line.contains("aws_secret_access_key") {
             if secret_key.is_none() {
                 let v: Vec<&str> = unwrapped_line.split("=").collect();
-                if v.len() > 0 {                  
+                if v.len() > 0 {
                     secret_key = Some(v[1].trim_matches(' ').to_string());
                 }
             }
@@ -246,7 +246,7 @@ fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCre
 
     if profiles.is_empty() {
         return Err(AWSError::new("No credentials found."));
-    } 
+    }
 
     Ok(profiles)
 }
@@ -304,31 +304,31 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
                 Ok(val) => json_object = val
             };
 
-            let mut access_key;
+            let access_key;
             match json_object.find("AccessKeyId") {
                 None => return err("Couldn't find AccessKeyId in response."),
                 Some(val) => access_key = val.to_string().replace("\"", "")
             };
 
-            let mut secret_key;
+            let secret_key;
             match json_object.find("SecretAccessKey") {
                 None => return err("Couldn't find SecretAccessKey in response."),
                 Some(val) => secret_key = val.to_string().replace("\"", "")
             };
 
-            let mut expiration;
+            let expiration;
             match json_object.find("Expiration") {
                 None => return err("Couldn't find Expiration in response."),
                 Some(val) => expiration = val.to_string().replace("\"", "")
             };
 
-            let mut expiration_time;
+            let expiration_time;
             match expiration.parse::<DateTime<UTC>>() {
                 Err(why) => panic!("Kabloey on parse: {}", why),
                 Ok(val) => expiration_time = val
             };
 
-            let mut token_from_response;
+            let token_from_response;
             match json_object.find("Token") {
                 None => return err("Couldn't find Token in response."),
                 Some(val) => token_from_response = val.to_string().replace("\"", "")
@@ -357,9 +357,9 @@ impl AWSCredentialsProvider for DefaultAWSCredentialsProviderChain {
             if let Ok(creds) = EnvironmentCredentialsProvider::new().get_credentials() {
                 //println!("Found creds in env");
                 self.credentials = Some(creds.clone());
-            } else if let Ok(creds) = ProfileCredentialsProvider::new().with_profile(&self.profile).get_credentials() {             
+            } else if let Ok(creds) = ProfileCredentialsProvider::new().with_profile(&self.profile).get_credentials() {
                 //println!("Found creds in file");
-                self.credentials = Some(creds.clone());             
+                self.credentials = Some(creds.clone());
             } else if let Ok(creds) = IAMRoleCredentialsProvider::new().get_credentials() {
                 //println!("Found creds via iam");
                 self.credentials = Some(creds.clone());
@@ -404,7 +404,7 @@ mod tests {
 
         let default_profile = profiles.get("default").unwrap();
         assert_eq!(default_profile.get_aws_access_key_id(), "foo");
-        assert_eq!(default_profile.get_aws_secret_key(), "bar");        
+        assert_eq!(default_profile.get_aws_secret_key(), "bar");
     }
 
     #[test]
@@ -417,11 +417,11 @@ mod tests {
 
         let foo_profile = profiles.get("foo").unwrap();
         assert_eq!(foo_profile.get_aws_access_key_id(), "foo_access_key");
-        assert_eq!(foo_profile.get_aws_secret_key(), "foo_secret_key");   
+        assert_eq!(foo_profile.get_aws_secret_key(), "foo_secret_key");
 
         let bar_profile = profiles.get("bar").unwrap();
         assert_eq!(bar_profile.get_aws_access_key_id(), "bar_access_key");
-        assert_eq!(bar_profile.get_aws_secret_key(), "bar_secret_key");   
+        assert_eq!(bar_profile.get_aws_secret_key(), "bar_secret_key");
 
     }
 
@@ -480,4 +480,3 @@ mod tests {
     }
 
 }
-
