@@ -11184,6 +11184,21 @@ impl<'a> S3Client<'a> {
 			request.add_header("x-amz-storage-class", "REDUCED_REDUNDANCY");
 		}
 
+		match input.server_side_encryption {
+			Some(ref sse) => {
+				if sse.to_string().to_ascii_lowercase() == "aes256" {
+					request.add_header("x-amz-server-side-encryption", &sse);
+				} else {
+					match input.ssekms_key_id {
+						Some(ref key_id) => request.add_header("x-amz-server-side-encryption-aws-kms-key-id", &key_id),
+						None => return Err(AWSError::new("KMS key specified but no key id provided.")),
+					}
+					request.add_header("x-amz-server-side-encryption", "aws:kms");
+				}
+			}
+			None => (),
+		}
+
 		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
 		request.set_hostname(Some(hostname));
 		request.set_payload(input.body);

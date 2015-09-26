@@ -177,6 +177,30 @@ fn s3_delete_object_test(s3: &mut S3Helper, bucket: &str, object_name: &str) -> 
 	Ok(response)
 }
 
+fn s3_put_object_aws_encryption_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+	let mut f = File::open("src/sample-credentials").unwrap();
+	let mut contents : Vec<u8> = Vec::new();
+	match f.read_to_end(&mut contents) {
+		Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
+		Ok(_) => {
+			let response = try!(s3.put_object_with_aws_encryption(bucket, "sample-credentials", &contents));
+			Ok(response)
+		}
+	}
+}
+
+fn s3_put_object_kms_encryption_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+	let mut f = File::open("src/sample-credentials").unwrap();
+	let mut contents : Vec<u8> = Vec::new();
+	match f.read_to_end(&mut contents) {
+		Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
+		Ok(_) => {
+			let response = try!(s3.put_object_with_kms_encryption(bucket, "sample-credentials", &contents, "key-id"));
+			Ok(response)
+		}
+	}
+}
+
 fn s3_put_object_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
 	let mut f = File::open("src/sample-credentials").unwrap();
 	let mut contents : Vec<u8> = Vec::new();

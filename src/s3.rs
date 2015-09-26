@@ -11,6 +11,7 @@ use std::str::FromStr;
 use std::io::BufReader;
 use hyper::client::Response;
 use std::io::Read;
+use std::ascii::AsciiExt;
 
 // include the code generated from the SQS botocore templates
 include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/s3.rs"));
@@ -101,6 +102,35 @@ impl<'a> S3Helper<'a> {
 		let result = self.client.put_object(&request, reduced_redundancy);
 		result
 	}
+
+	pub fn put_object_with_aws_encryption(&mut self, bucket_name: &str, object_name: &str,
+		object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
+
+		let mut request = PutObjectRequest::default();
+		request.key = object_name.to_string();
+		request.bucket = bucket_name.to_string();
+		request.body = Some(object_as_bytes);
+		request.server_side_encryption = Some("AES256".to_string());
+
+		let result = self.client.put_object(&request, false);
+		result
+	}
+
+	pub fn put_object_with_kms_encryption(&mut self, bucket_name: &str, object_name: &str,
+		object_as_bytes: &Vec<u8>, key_id: &str) ->  Result<PutObjectOutput, AWSError> {
+
+		let mut request = PutObjectRequest::default();
+		request.key = object_name.to_string();
+		request.bucket = bucket_name.to_string();
+		request.body = Some(object_as_bytes);
+		request.server_side_encryption = Some("aws:kms".to_string());
+		request.ssekms_key_id = Some(key_id.to_string());
+
+		let result = self.client.put_object(&request, false);
+		result
+	}
+
+	// How about a put object method that takes a PutObjectRequest.  Other things just call that function.
 
 	// TODO: does this make a copy of the object_as_reader or just transfers ownership to this?
 	pub fn put_multipart_object<T: Read>(&mut self, bucket_name: &str, object_name: &str,
