@@ -18,6 +18,8 @@ include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/s3.rs"));
 
 const CHUNK_TO_READ: usize = 5000;
 const S3_MINIMUM_PART_SIZE: usize = 5242880;
+// need to sort this out, but having issues going declaring a String here, not a str.
+// static S3_REDUCED_REDUNDANCY: &'static str = "REDUCED_REDUNDANCY";
 
 pub struct S3Helper<'a> {
 	client: S3Client<'a>
@@ -99,7 +101,10 @@ impl<'a> S3Helper<'a> {
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
 		request.body = Some(object_as_bytes);
-		let result = self.client.put_object(&request, reduced_redundancy);
+		if reduced_redundancy {
+			request.storage_class = Some("REDUCED_REDUNDANCY".to_string());
+		}
+		let result = self.put_object_with_request(&request);
 		result
 	}
 
@@ -112,7 +117,7 @@ impl<'a> S3Helper<'a> {
 		request.body = Some(object_as_bytes);
 		request.server_side_encryption = Some("AES256".to_string());
 
-		let result = self.client.put_object(&request, false);
+		let result = self.put_object_with_request(&request);
 		result
 	}
 
@@ -126,11 +131,16 @@ impl<'a> S3Helper<'a> {
 		request.server_side_encryption = Some("aws:kms".to_string());
 		request.ssekms_key_id = Some(key_id.to_string());
 
-		let result = self.client.put_object(&request, false);
+		let result = self.put_object_with_request(&request);
 		result
 	}
 
-	// How about a put object method that takes a PutObjectRequest.  Other things just call that function.
+	// The most generic of put_object: caller specifies the whole request.
+	pub fn put_object_with_request(&mut self, request: &PutObjectRequest) -> Result<PutObjectOutput, AWSError> {
+		// This may be where we do some basic sanity checking: ensure we have:
+		// bucket name, region, object id, payload.
+		self.client.put_object(&request)
+	}
 
 	// TODO: does this make a copy of the object_as_reader or just transfers ownership to this?
 	pub fn put_multipart_object<T: Read>(&mut self, bucket_name: &str, object_name: &str,

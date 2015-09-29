@@ -11175,13 +11175,16 @@ impl<'a> S3Client<'a> {
 		}
 	}
 	/// Adds an object to a bucket.
-	pub fn put_object(&mut self, input: &PutObjectRequest, use_reduced_redundency: bool) -> Result<PutObjectOutput, AWSError> {
+	pub fn put_object(&mut self, input: &PutObjectRequest) -> Result<PutObjectOutput, AWSError> {
 		let mut uri = String::from("/");
 		uri = uri +  &input.key.to_string();
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, &uri);
 
-		if use_reduced_redundency {
-			request.add_header("x-amz-storage-class", "REDUCED_REDUNDANCY");
+		match input.storage_class {
+			Some(ref class) => {
+				request.add_header("x-amz-storage-class", class);
+			}
+			None => (),
 		}
 
 		match input.server_side_encryption {
@@ -11208,7 +11211,6 @@ impl<'a> S3Client<'a> {
 
 		match status {
 			200 => {
-				// parse headers for result:
 				let mut put_result = PutObjectOutput::default();
 
 				Ok(put_result)
