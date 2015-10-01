@@ -44,11 +44,14 @@ fn main() {
 		Err(err) => { println!("Got error in s3 create bucket: {:#?}", err); }
 	}
 
+	match s3_put_object_with_request_specified_test(&mut s3, &bucket_name) {
+		Ok(_) => println!("Everything worked for S3 put object."),
+		Err(err) => println!("Got error in s3 put object: {:#?}", err),
+	}
+
 	match s3_put_object_test(&mut s3, &bucket_name) {
-		Ok(_) => {
-			println!("Everything worked for S3 put object.");
-		}
-		Err(err) => { println!("Got error in s3 put object: {:#?}", err); }
+		Ok(_) => println!("Everything worked for S3 put object."),
+		Err(err) => println!("Got error in s3 put object: {:#?}", err),
 	}
 
 	match s3_get_object_test(&mut s3, &bucket_name) {
@@ -91,12 +94,12 @@ fn main() {
 	// 	Err(err) => { println!("Got error in s3 multipart upload: {:#?}", err); }
 	// }
 
-	match s3_delete_object_test(&mut s3, &bucket_name, "join.me.zip") {
-		Ok(_) => {
-			println!("Everything worked for S3 delete object.");
-		}
-		Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
-	}
+	// match s3_delete_object_test(&mut s3, &bucket_name, "testfile.zip") {
+	// 	Ok(_) => {
+	// 		println!("Everything worked for S3 delete object.");
+	// 	}
+	// 	Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
+	// }
 
 	match s3_list_multipart_uploads(&mut s3, &bucket_name) {
 		Err(why) => println!("Error listing multipart uploads: {:?}", why),
@@ -208,6 +211,25 @@ fn s3_put_object_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput
 		Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
 		Ok(_) => {
 			let response = try!(s3.put_object(bucket, "sample-credentials", &contents));
+			Ok(response)
+		}
+	}
+}
+
+fn s3_put_object_with_request_specified_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+	let mut f = File::open("src/sample-credentials").unwrap();
+	let mut contents : Vec<u8> = Vec::new();
+	match f.read_to_end(&mut contents) {
+		Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
+		Ok(_) => {
+			let mut request = PutObjectRequest::default();
+			request.key = "sample-credentials".to_string();
+			request.bucket = bucket.to_string();
+			request.body = Some(&contents);
+			// request.content_md5 = Some("foo".to_string());
+
+			let response = try!(s3.put_object_with_request(&mut request));
+
 			Ok(response)
 		}
 	}

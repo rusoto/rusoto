@@ -12,6 +12,9 @@ use std::io::BufReader;
 use hyper::client::Response;
 use std::io::Read;
 use std::ascii::AsciiExt;
+use openssl::crypto::hash::Type::MD5;
+use openssl::crypto::hash::hash;
+use serialize::base64::{ToBase64, STANDARD};
 
 // include the code generated from the SQS botocore templates
 include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/s3.rs"));
@@ -104,7 +107,7 @@ impl<'a> S3Helper<'a> {
 		if reduced_redundancy {
 			request.storage_class = Some("REDUCED_REDUNDANCY".to_string());
 		}
-		let result = self.put_object_with_request(&request);
+		let result = self.put_object_with_request(&mut request);
 		result
 	}
 
@@ -117,7 +120,7 @@ impl<'a> S3Helper<'a> {
 		request.body = Some(object_as_bytes);
 		request.server_side_encryption = Some("AES256".to_string());
 
-		let result = self.put_object_with_request(&request);
+		let result = self.put_object_with_request(&mut request);
 		result
 	}
 
@@ -131,14 +134,18 @@ impl<'a> S3Helper<'a> {
 		request.server_side_encryption = Some("aws:kms".to_string());
 		request.ssekms_key_id = Some(key_id.to_string());
 
-		let result = self.put_object_with_request(&request);
+		let result = self.put_object_with_request(&mut request);
 		result
 	}
 
 	// The most generic of put_object: caller specifies the whole request.
-	pub fn put_object_with_request(&mut self, request: &PutObjectRequest) -> Result<PutObjectOutput, AWSError> {
+	pub fn put_object_with_request(&mut self, request: &mut PutObjectRequest) -> Result<PutObjectOutput, AWSError> {
 		// This may be where we do some basic sanity checking: ensure we have:
 		// bucket name, region, object id, payload.
+
+		// content_md5 hashing for everyone!
+		let hash = hash(MD5, request.body.unwrap()).to_base64(STANDARD);
+
 		self.client.put_object(&request)
 	}
 
@@ -249,8 +256,8 @@ impl<'a> S3Helper<'a> {
 		let mut upload_part_request = UploadPartRequest::default();
 		upload_part_request.body = Some(&buffer);
 
-		// TODO: implement md5 hash:
-		upload_part_request.content_md5 = None; // string
+		let hash = hash(MD5, upload_part_request.body.unwrap()).to_base64(STANDARD);
+		upload_part_request.content_md5 = Some(hash);
 
 		upload_part_request.bucket = bucket_name.to_string();
 		upload_part_request.upload_id = upload_id.to_string();
