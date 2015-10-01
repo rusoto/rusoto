@@ -11152,6 +11152,11 @@ impl<'a> S3Client<'a> {
 		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
 		request.set_hostname(Some(hostname));
 
+		match input.content_md5 {
+			Some(ref md5) => request.add_header("Content-MD5", &md5),
+			None => (),
+		}
+
 		let mut params = Params::new();
 		let ref upload_id = input.upload_id;
 		let ref part_number = input.part_number;
@@ -11159,7 +11164,7 @@ impl<'a> S3Client<'a> {
 		params.put("uploadId", &format!("{}", upload_id));
 		request.set_params(params);
 
-		let result = request.sign_and_execute(try!(self.creds.get_credentials()));
+		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
 
 		match status {
@@ -11171,7 +11176,13 @@ impl<'a> S3Client<'a> {
 				}
 				return Err(AWSError::new("Couldn't find etag in response headers."));
 			}
-			_ => Err(AWSError::new("error: didn't get a 200.")),
+			_ => {
+				println!("Error: Status code was {}", status);
+				let mut body = String::new();
+			    result.read_to_string(&mut body).unwrap();
+			    println!("Error response body: {}", body);
+				return Err(AWSError::new("error: didn't get a 200."));
+			}
 		}
 	}
 	/// Adds an object to a bucket.
@@ -11203,7 +11214,6 @@ impl<'a> S3Client<'a> {
 		}
 
 		match input.content_md5 {
-			// The base64-encoded 128-bit MD5 digest of the message
 			Some(ref md5) => request.add_header("Content-MD5", &md5),
 			None => (),
 		}

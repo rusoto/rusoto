@@ -14,7 +14,6 @@ use std::io::Read;
 use std::ascii::AsciiExt;
 use openssl::crypto::hash::Type::MD5;
 use openssl::crypto::hash::hash;
-use serialize::hex::ToHex;
 use serialize::base64::{ToBase64, STANDARD};
 
 // include the code generated from the SQS botocore templates
@@ -257,8 +256,8 @@ impl<'a> S3Helper<'a> {
 		let mut upload_part_request = UploadPartRequest::default();
 		upload_part_request.body = Some(&buffer);
 
-		// TODO: implement md5 hash:
-		upload_part_request.content_md5 = None; // string
+		let hash = hash(MD5, upload_part_request.body.unwrap()).to_base64(STANDARD);
+		upload_part_request.content_md5 = Some(hash);
 
 		upload_part_request.bucket = bucket_name.to_string();
 		upload_part_request.upload_id = upload_id.to_string();
