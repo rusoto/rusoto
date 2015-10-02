@@ -9,7 +9,7 @@ description = "AWS client libraries for Rust"
 repository = "https://github.com/DualSpark/rusoto"
 
 [dependencies]
-xml-rs = "*"
+xml-rs = "0.1.26"
 time = "*"
 openssl = "*"
 hyper = "0.6.11"

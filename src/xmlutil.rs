@@ -2,12 +2,10 @@ use std::iter::Peekable;
 use std::num::ParseIntError;
 use hyper::client::response::*;
 use std::collections::HashMap;
-
 use xml::reader::*;
 use std::io::BufReader;
 use std::fs::File;
 use xml::reader::events::*;
-
 
 /// generic Error for XML parsing
 #[derive(Debug)]
@@ -35,7 +33,6 @@ pub struct XmlResponseFromAws<'b> {
 	xml_stack: Peekable<Events<'b, Response>> // refactor to use XmlStack type?
 }
 
-// I cannot explain how these lifetimes work to a child, therefore I need to understand them better:
 impl <'b>XmlResponseFromAws<'b> {
 	pub fn new<'c>(stack: Peekable<Events<'b, Response>>) -> XmlResponseFromAws {
 		XmlResponseFromAws {
@@ -44,7 +41,6 @@ impl <'b>XmlResponseFromAws<'b> {
 	}
 }
 
-// Need peek and next implemented.
 impl <'b>Peek for XmlResponseFromAws<'b> {
 	fn peek(&mut self) -> Option<&XmlEvent> {
 		return self.xml_stack.peek();
