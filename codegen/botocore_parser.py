@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 import json
 import re
 import sys
@@ -14,7 +14,9 @@ primitive_types = {
 	'string': 'String',
 	'timestamp': 'String',
 	'integer': 'i32',
-	'double': 'f32',
+        'long': 'i64',
+        'float': 'f32',
+	'double': 'f64',
 	'blob': 'Vec<u8>',
 	'boolean': 'bool'
 }
@@ -72,6 +74,8 @@ def rust_type(name, shape):
 			rust_type = "HashMap<" + shape['key']['shape'] + "," + shape['value']['shape'] + ">"
 		elif shape_type == 'list':
 			rust_type = "Vec<" + shape['member']['shape'] + ">"
+                else:
+			raise Exception("unrecognised type %s. supported types are %s" % (shape_type, primitive_types.keys() + ['map', 'list', 'struct']))
 		# a String is already a String in rust
 		if name != 'String':
 			print "pub type " + name + " = " + rust_type + ";"
