@@ -1,20 +1,23 @@
+//! Parameters for talking to SQS
+
 use std::collections::BTreeMap;
 pub type Params = BTreeMap<String, String>;
 
 macro_rules! params {
-	($($key:expr => $val:expr),*) => { 
+	($($key:expr => $val:expr),*) => {
 		{
 			let mut params:Params = Params::new();
 			$(
 				params.insert($key.to_string(), $val.to_string());
-			)*			
+			)*
 			params
 		}
 	}
 }
 
+/// Key:value pair for an SQS parameter.
 pub trait SQSParams {
-	fn put(&mut self, key: &str, val: &str);	
+	fn put(&mut self, key: &str, val: &str);
 }
 
 impl SQSParams for Params {
@@ -23,9 +26,10 @@ impl SQSParams for Params {
 	}
 }
 
+/// Optional fields for SQS call
 pub trait OptionalMap<T> {
 	fn optional_put(&mut self, name: &str, value_opt: &Option<T>) ;
-	
+
 }
 
 impl OptionalMap<String> for Params {
@@ -43,4 +47,3 @@ impl OptionalMap<i32> for Params {
 		}
 	}
 }
-

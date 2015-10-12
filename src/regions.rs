@@ -1,3 +1,6 @@
+//! AWS Regions and helper functions
+
+/// AWS Region
 #[derive(Debug)]
 pub enum Region {
     UsEast1,
@@ -11,6 +14,7 @@ pub enum Region {
     SaEast1,
 }
 
+/// Translates region enum into AWS format.  EG: us-east-1
 pub fn region_in_aws_format(region: &Region) -> String {
     match region {
         &Region::UsEast1 => "us-east-1".to_string(),

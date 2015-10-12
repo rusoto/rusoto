@@ -1,3 +1,4 @@
+//! Tools for handling XML from AWS with helper functions for testing
 use std::iter::Peekable;
 use std::num::ParseIntError;
 use hyper::client::response::*;
@@ -20,15 +21,17 @@ impl XmlParseError {
 /// syntactic sugar for the XML event stack we pass around
 pub type XmlStack<'a> = Peekable<Events<'a, Response>>;
 
+/// Peek at next items in the XML stack
 pub trait Peek {
     fn peek(&mut self) -> Option<&XmlEvent>;
 }
 
+/// Move to the next part of the XML stack
 pub trait Next {
 	fn next(&mut self) -> Option<XmlEvent>;
 }
 
-// Wraps the Hyper Response type
+/// Wraps the Hyper Response type
 pub struct XmlResponseFromAws<'b> {
 	xml_stack: Peekable<Events<'b, Response>> // refactor to use XmlStack type?
 }
@@ -57,12 +60,11 @@ impl From<ParseIntError> for XmlParseError{
     fn from(_e:ParseIntError) -> XmlParseError { XmlParseError::new("ParseIntError") }
 }
 
-// Testing helper:
+/// Testing helper, reads from file
 pub struct XmlResponseFromFile<'a> {
 	xml_stack: Peekable<Events<'a, BufReader<File>>>,
 }
 
-// I cannot explain how these lifetimes work to a child, therefore I need to understand them better:
 impl <'a>XmlResponseFromFile<'a> {
 	pub fn new<'c>(my_stack: Peekable<Events<'a, BufReader<File>>>) -> XmlResponseFromFile {
 		return XmlResponseFromFile { xml_stack: my_stack };

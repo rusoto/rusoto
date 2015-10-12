@@ -7,6 +7,7 @@ readme = "README.md"
 keywords = [ "AWS", "SQS", "Amazon", "DynamoDB", "S3" ]
 description = "AWS client libraries for Rust"
 repository = "https://github.com/DualSpark/rusoto"
+documentation = "http://dualspark.github.io/rusoto/rusoto/index.html"
 
 [dependencies]
 xml-rs = "=0.1.26"

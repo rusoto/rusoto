@@ -1,3 +1,4 @@
+//! A request to AWS, pre-signed
 use hyper::Client;
 use hyper::client::Response;
 use hyper::client::RedirectPolicy;
@@ -5,6 +6,7 @@ use hyper::header::Headers;
 use hyper::method::Method;
 use signature::SignedRequest;
 
+/// Takes a fully formed and signed request and executes it.
 pub fn send_request(signed_request: &SignedRequest) -> Response {
     let hyper_method = match signed_request.get_method().as_ref() {
         "POST" => Method::Post,

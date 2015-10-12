@@ -1,3 +1,4 @@
+//! AWS credentials
 use std::env::*;
 use std::env;
 use std::fs;
@@ -13,7 +14,6 @@ use hyper::header::Connection;
 use error::*;
 use regex::Regex;
 
-
 extern crate rustc_serialize;
 use self::rustc_serialize::json::*;
 
@@ -21,6 +21,7 @@ extern crate chrono;
 use self::chrono::*;
 
 
+/// Represents AWS credentials.  Includes access key, secret key, token (for IAM profiles) and expiration timestamp.
 #[derive(Clone, Debug)]
 pub struct AWSCredentials {
     key: String,
@@ -74,12 +75,12 @@ fn err(message: &str) -> Result<&AWSCredentials, AWSError> {
     Err(AWSError::new(message))
 }
 
+/// Looks for credentials from environment variables
 pub struct EnvironmentCredentialsProvider {
     credentials: Option<AWSCredentials>
 }
 
 impl AWSCredentialsProvider for EnvironmentCredentialsProvider {
-
 	fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
         if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
            self.credentials = Some(try!(get_credentials_from_environment()));
@@ -112,6 +113,7 @@ fn get_credentials_from_environment<'a>() -> Result<AWSCredentials, AWSError> {
     Ok(AWSCredentials::new(env_key, env_secret, None, in_ten_minutes()))
 }
 
+/// Looks for AWS credentials in a profile in a credentials file.
 pub struct ProfileCredentialsProvider {
     profile: String,
     file_name: String,
@@ -251,6 +253,7 @@ fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCre
     Ok(profiles)
 }
 
+/// IAM profile source of AWS credentials
 pub struct IAMRoleCredentialsProvider {
     credentials: Option<AWSCredentials>
 }
@@ -262,7 +265,6 @@ impl IAMRoleCredentialsProvider {
 }
 
 impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
-
     fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
         if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
             // TODO: backoff and retry on failure.
@@ -341,6 +343,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 	}
 }
 
+/// Internally chains AWS credential providers in priority order.
 #[derive(Debug, Clone)]
 pub struct DefaultAWSCredentialsProviderChain {
     credentials: Option<AWSCredentials>,
@@ -349,7 +352,6 @@ pub struct DefaultAWSCredentialsProviderChain {
 
 // Chain the providers:
 impl AWSCredentialsProvider for DefaultAWSCredentialsProviderChain {
-
     fn get_credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
         if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
             // fetch creds in order: env, file, IAM

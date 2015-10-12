@@ -1,5 +1,7 @@
+//! Errors during AWS communication or parsing
 use xmlutil::XmlParseError;
 
+/// Simple wraper around a String to store the error
 #[derive(Debug, PartialEq)]
 pub struct AWSError(pub String);
 
