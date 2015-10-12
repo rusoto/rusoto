@@ -19,3 +19,13 @@ To publish on crates.io:
 
 1. `cargo package`
 2. `cargo publish`
+
+### Documentation
+
+Docs are on Github Pages at [http://dualspark.github.io/rusoto/](http://dualspark.github.io/rusoto/).
+
+A helper script is included to make this less painful until our CI system handles it.  Run `docgen.sh` to
+use [github pages import](https://github.com/davisp/ghp-import) to upload them to the gh-pages branch.  Install
+ghp-import if you don't have it:
+
+`pip install ghp-import`

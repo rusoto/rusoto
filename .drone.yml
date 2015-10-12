@@ -1,7 +1,7 @@
 image: bantl23/rust
 
 git:
-    path: github.com/DualSpark/rust-aws
+    path: github.com/DualSpark/rustoto
 
 script:
     - uname -a
