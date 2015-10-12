@@ -1,3 +1,4 @@
+//! Tools for signing a request to AWS
 extern crate regex;
 use credentials::AWSCredentials;
 use hyper::client::Response;

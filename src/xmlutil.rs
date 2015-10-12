@@ -1,3 +1,4 @@
+//! Tools for handling XML from AWS with helper functions for testing
 use std::iter::Peekable;
 use std::num::ParseIntError;
 use hyper::client::response::*;

@@ -1,3 +1,5 @@
+//! AWS Regions and helper functions
+
 #[derive(Debug)]
 pub enum Region {
     UsEast1,

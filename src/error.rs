@@ -1,3 +1,4 @@
+//! Errors during AWS communication or parsing
 use xmlutil::XmlParseError;
 
 #[derive(Debug, PartialEq)]

@@ -1,3 +1,4 @@
+//! A request to AWS, pre-signed
 use hyper::Client;
 use hyper::client::Response;
 use hyper::client::RedirectPolicy;
