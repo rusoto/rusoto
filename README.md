@@ -3,10 +3,9 @@
 
 AWS client libraries for Rust.  Work in progress.
 
-#### Currently implemented
+#### Documentation
 
-1. **SQS**: See available functions in [sqs.rs](src/sqs.rs).
-2. **S3**: See available functions in [s3.rs](src/s3.rs).
+Docs are available at [http://dualspark.github.io/rusoto/](http://dualspark.github.io/rusoto/).
 
 ### Installation
 
@@ -33,6 +32,11 @@ For more information on Rusoto's use of AWS credentials such as priority and ref
 Rusoto complies with [semantic versioning 2.0.0](http://semver.org/).  Until reaching 1.0.0 the API is to be considered unstable.  See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/rusoto) for current version.  
 
 Information about how releases are made is in [RELEASING](RELEASING.md).
+
+#### Currently implemented
+
+1. **SQS**: See available functions in [sqs.rs](src/sqs.rs).
+2. **S3**: See available functions in [s3.rs](src/s3.rs).
 
 ### Contributing
 
