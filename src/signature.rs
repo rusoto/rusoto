@@ -228,6 +228,7 @@ fn signing_key(secret: &str, date: Tm, region: &str, service: &str) -> Vec<u8> {
 	hmac(SHA256, &k_service, "aws4_request".as_bytes())
 }
 
+/// Mark string as AWS4-HMAC-SHA256 hashed
 pub fn string_to_sign(date: Tm, hashed_canonical_request: &str, scope: &str) -> String {
 	format!("AWS4-HMAC-SHA256\n{}\n{}\n{}",
 		date.strftime("%Y%m%dT%H%M%SZ").unwrap(),

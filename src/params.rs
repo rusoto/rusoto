@@ -15,6 +15,7 @@ macro_rules! params {
 	}
 }
 
+/// Key:value pair for an SQS parameter.
 pub trait SQSParams {
 	fn put(&mut self, key: &str, val: &str);
 }
@@ -25,6 +26,7 @@ impl SQSParams for Params {
 	}
 }
 
+/// Optional fields for SQS call
 pub trait OptionalMap<T> {
 	fn optional_put(&mut self, name: &str, value_opt: &Option<T>) ;
 

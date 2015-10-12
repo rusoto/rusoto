@@ -24,10 +24,12 @@ const S3_MINIMUM_PART_SIZE: usize = 5242880;
 // need to sort this out, but having issues going declaring a String here, not a str.
 // static S3_REDUCED_REDUNDANCY: &'static str = "REDUCED_REDUNDANCY";
 
+/// Wraps the generated S3 client with a higher level interface
 pub struct S3Helper<'a> {
 	client: S3Client<'a>
 }
 
+/// Canned ACL for S3
 #[derive(Debug)]
 pub enum CannedAcl {
     Private,
@@ -309,6 +311,7 @@ impl<'a> S3Helper<'a> {
 	}
 }
 
+/// Helper function to determine if a create config is needed.
 pub fn needs_create_bucket_config(region: &Region) -> bool {
 	match *region {
 		Region::UsEast1 => false,
@@ -317,6 +320,7 @@ pub fn needs_create_bucket_config(region: &Region) -> bool {
 }
 
 // This is a bit hacky to get functionality until we figure out an XML writing util.
+/// Manually writes out bucket configuration (location constraint) in XML.
 pub fn create_bucket_config_xml(region: &Region) -> Vec<u8> {
 	match *region {
 		Region::UsEast1 => {
@@ -331,6 +335,7 @@ pub fn create_bucket_config_xml(region: &Region) -> Vec<u8> {
 	}
 }
 
+/// Writes out XML with all the parts in it for S3 to complete.
 pub fn multipart_upload_finish_xml(parts: &Vec<String>) -> Result<Vec<u8>, AWSError> {
 	if parts.len() < 1 {
 		return Err(AWSError::new("Can't finish upload on 0 parts."));
@@ -348,6 +353,7 @@ pub fn multipart_upload_finish_xml(parts: &Vec<String>) -> Result<Vec<u8>, AWSEr
 	Ok(response.into_bytes())
 }
 
+/// Maps canned acl to AWS format.  EG public-read.
 pub fn canned_acl_in_aws_format(canned_acl: &CannedAcl) -> String {
 	match *canned_acl {
 		CannedAcl::Private => "private".to_string(),

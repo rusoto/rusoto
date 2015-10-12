@@ -1990,6 +1990,7 @@ impl DeleteMarkersWriter {
 		}
 	}
 }
+/// Output from AbortMultipartUpload call
 #[derive(Debug, Default)]
 pub struct AbortMultipartUploadOutput {
 	pub request_charged: RequestCharged,
@@ -2004,6 +2005,8 @@ impl AbortMultipartUploadOutputWriter {
 		RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
 	}
 }
+
+/// Put bucket policy request
 #[derive(Debug, Default)]
 pub struct PutBucketPolicyRequest {
 	/// The bucket policy as a JSON document.
