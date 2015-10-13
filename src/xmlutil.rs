@@ -129,18 +129,25 @@ pub fn peek_at_name<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseErr
 
 /// consume a StartElement with a specific name or throw an XmlParseError
 pub fn start_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result<HashMap<String, String>, XmlParseError> {
+	println!("in start_element looking for {}", element_name);
 	let next = stack.next();
+	println!("next set...");
 	if let Some(XmlEvent::StartElement { name, attributes, .. }) = next {
+		println!("name.local_name is {}", name.local_name);
 		if name.local_name != element_name {
+			println!("erroring out deal with it");
 			Err(XmlParseError::new(&format!("Expected {} got {}", element_name, name.local_name)))
 		} else {
+			println!("doing hasmap stuff");
 			let mut attr_map = HashMap::new();
 			for attr in attributes {
 				attr_map.insert(attr.name.local_name, attr.value);
 			}
+			println!("done with hashmap stuff");
 			Ok(attr_map)
 		}
 	} else {
+		println!("oh god things are terrible");
 		Err(XmlParseError::new(&format!("Expected StartElement {}", element_name)))
 	}
 }
