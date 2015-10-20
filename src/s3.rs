@@ -41,7 +41,7 @@ pub enum CannedAcl {
 }
 
 impl<'a> S3Helper<'a> {
-	pub fn new(credentials: DefaultAWSCredentialsProviderChain, region:&'a Region) -> S3Helper<'a> {
+	pub fn new<CP: AWSCredentialsProvider + 'a>(credentials: CP, region:&'a Region) -> S3Helper<'a> {
 		S3Helper { client: S3Client::new(credentials, region) }
 	}
 
