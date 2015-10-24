@@ -16,12 +16,14 @@ Rusoto is available on [crates.io](https://crates.io/crates/rusoto).
 More example code in [src/bin/main.rs](src/bin/main.rs).
 
 ```rust
-let sqs = SQSHelper::new(&creds, "us-east-1");
+let provider = DefaultAWSCredentialsProviderChain::new();
+let region = Region::UsEast1;
 
-// list existing queues
+let mut sqs = SQSHelper::new(provider, &region);
+
 let response = try!(sqs.list_queues());
 for q in response.queue_urls {
-  println!("Existing queue: {}", q);
+    println!("Existing queue url: {}", q);
 }
 ```
 
