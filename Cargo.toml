@@ -11,7 +11,7 @@ documentation = "http://dualspark.github.io/rusoto/rusoto/index.html"
 
 [dependencies]
 xml-rs = "=0.1.26"
-time = "=0.1.32"
+time = "> 0.1.32"
 openssl = "=0.6.7"
 hyper = "=0.6.11"
 url = "=0.2.37"
