@@ -1,3 +1,5 @@
 language: rust
 rust:
   - stable
+notifications:
+  email: false
