@@ -1,7 +1,8 @@
 # Rusoto
-[![Build Status](https://ci.dualspark.com/api/badge/github.com/DualSpark/rusoto/status.svg?branch=master)](https://ci.dualspark.com/github.com/DualSpark/rusoto)
 
-AWS client libraries for Rust.  Work in progress.
+[![Build Status](https://travis-ci.org/DualSpark/rusoto.svg)](https://travis-ci.org/DualSpark/rusoto)
+
+AWS client libraries for Rust.
 
 #### Documentation
 
