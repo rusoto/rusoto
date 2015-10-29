@@ -1,4 +1,9 @@
 //! S3 bindings for Rust
+//!
+//! Not all functions are yet implemented.  Check [S3Helper](http://dualspark.github.io/rusoto/rusoto/s3/struct.S3Helper.html)
+//! for implemented functions and convenience functions.
+//!
+
 #![allow(unused_variables, unused_mut)]
 use credentials::*;
 use xml::*;
@@ -41,10 +46,13 @@ pub enum CannedAcl {
 }
 
 impl<'a> S3Helper<'a> {
+
+	/// Creates a new S3 helper
 	pub fn new<CP: AWSCredentialsProvider + 'a>(credentials: CP, region:&'a Region) -> S3Helper<'a> {
 		S3Helper { client: S3Client::new(credentials, region) }
 	}
 
+	/// Lists buckets
 	pub fn list_buckets(&mut self) -> Result<ListBucketsOutput, AWSError> {
 		self.client.list_buckets()
 	}
@@ -76,6 +84,7 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
+	/// Deletes specified bucket
 	pub fn delete_bucket(&mut self, bucket_name: &str, region: &Region) -> Result<(), AWSError> {
 		let mut request = DeleteBucketRequest::default();
 		request.bucket = bucket_name.to_string();
@@ -83,6 +92,7 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
+	/// Download a named object from bucket
 	pub fn get_object(&mut self, bucket_name: &str, object_name: &str) ->  Result<GetObjectOutput, AWSError> {
 		let mut request = GetObjectRequest::default();
 		request.key = object_name.to_string();
@@ -91,10 +101,12 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
+	/// Upload an object to specified bucket
 	pub fn put_object(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
 		self.put_object_with_optional_reduced_redundancy(bucket_name, object_name, object_as_bytes, false)
 	}
 
+	/// Helper: uploads object to specified bucket using reduced redudancy storage settings
 	pub fn put_object_with_reduced_redundancy(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
 		self.put_object_with_optional_reduced_redundancy(bucket_name, object_name, object_as_bytes, true)
 	}
@@ -113,6 +125,7 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
+	/// Uploads object to specified S3 bucket with server side encryption at rest.
 	pub fn put_object_with_aws_encryption(&mut self, bucket_name: &str, object_name: &str,
 		object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
 
@@ -126,6 +139,7 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
+	/// Uploads object to specified S3 bucket using AWS KMS for key management of encryption at rest.
 	pub fn put_object_with_kms_encryption(&mut self, bucket_name: &str, object_name: &str,
 		object_as_bytes: &Vec<u8>, key_id: &str) ->  Result<PutObjectOutput, AWSError> {
 
@@ -140,7 +154,8 @@ impl<'a> S3Helper<'a> {
 		result
 	}
 
-	// The most generic of put_object: caller specifies the whole request.
+	/// Uploads object: lets sender specify options.
+	/// The most generic of put_object: caller specifies the whole request.
 	pub fn put_object_with_request(&mut self, request: &mut PutObjectRequest) -> Result<PutObjectOutput, AWSError> {
 		// This may be where we do some basic sanity checking: ensure we have:
 		// bucket name, region, object id, payload.
@@ -152,6 +167,7 @@ impl<'a> S3Helper<'a> {
 	}
 
 	// TODO: does this make a copy of the object_as_reader or just transfers ownership to this?
+	/// Uploads a multi-part object to specified bucket.  Allows for large file uploads.
 	pub fn put_multipart_object<T: Read>(&mut self, bucket_name: &str, object_name: &str,
 		object_as_reader: &mut T) -> Result<PutObjectOutput, AWSError> { // TODO: return type correct?
 
@@ -277,6 +293,7 @@ impl<'a> S3Helper<'a> {
 		}
 	}
 
+	/// Lists multipart uploads not yet completed for specified bucket
 	pub fn list_multipart_uploads_for_bucket(&mut self, bucket_name: &str) -> Result<ListMultipartUploadsOutput, AWSError> {
 		let mut request = ListMultipartUploadsRequest::default();
 		request.bucket = bucket_name.to_string();
@@ -287,6 +304,7 @@ impl<'a> S3Helper<'a> {
 		}
 	}
 
+	/// Deletes specified object from specified bucket.
 	pub fn delete_object(&mut self, bucket_name: &str, object_name: &str) ->  Result<DeleteObjectOutput, AWSError> {
 		let mut request = DeleteObjectRequest::default();
 		request.key = object_name.to_string();
@@ -294,6 +312,7 @@ impl<'a> S3Helper<'a> {
 		self.client.delete_object(&request)
 	}
 
+	/// Abort multipart upload.
 	pub fn abort_multipart_upload(&mut self, bucket_name: &str, object_name: &str, upload_id: &str) ->  Result<AbortMultipartUploadOutput, AWSError> {
 		let mut request = AbortMultipartUploadRequest::default();
 		request.key = object_name.to_string();
@@ -302,6 +321,7 @@ impl<'a> S3Helper<'a> {
 		self.client.abort_multipart_upload(&request)
 	}
 
+	/// List parts from a multiupload request.
 	pub fn multipart_upload_list_parts(&mut self, bucket_name: &str, object_name: &str, upload_id: &str) ->  Result<ListPartsOutput, AWSError> {
 		let mut request = ListPartsRequest::default();
 		request.key = object_name.to_string();
