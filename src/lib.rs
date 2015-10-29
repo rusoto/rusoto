@@ -4,11 +4,10 @@
 
 //! # Rusoto
 //!
-//! Rusoto is an SDK for [Amazon Web Services](http://aws.amazon.com/).  It follows best practices
+//! Rusoto is a Rust SDK for [Amazon Web Services](http://aws.amazon.com/).  It follows best practices
 //! for [AWS Credentials](https://blogs.aws.amazon.com/security/post/Tx3D6U6WSFGOK2H/A-New-and-Standardized-Way-to-Manage-Credentials-in-the-AWS-SDKs).
 //!
-//! The library is designed with use on AWS EC2 instances in mind but can be used as an
-//! [AWS CLI](https://aws.amazon.com/cli/) replacement.
+//! The library interacts with AWS in the same fashion as Python's [boto3](https://github.com/boto/boto3) SDK.
 //!
 //! ## Credentials
 //!
