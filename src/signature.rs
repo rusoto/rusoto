@@ -1,4 +1,11 @@
 //! Tools for signing a request to AWS
+//!
+//! Follows [AWS Signature 4](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)
+//! algorithm.
+//!
+//! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
+//! newly created S3 buckets not in us-standard/us-east-1.
+
 extern crate regex;
 use credentials::AWSCredentials;
 use hyper::client::Response;

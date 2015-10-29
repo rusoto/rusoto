@@ -1,4 +1,8 @@
 //! Parameters for talking to SQS
+//!
+//! Key-value pairs for SQS requests.
+//!
+//! Supports optional parameters for calling SQS.
 
 use std::collections::BTreeMap;
 pub type Params = BTreeMap<String, String>;

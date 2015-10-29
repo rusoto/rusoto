@@ -1,4 +1,8 @@
 //! A request to AWS, pre-signed
+//!
+//! Wraps the Hyper library to send PUT, POST, DELETE and GET requests.
+//!
+
 use hyper::Client;
 use hyper::client::Response;
 use hyper::client::RedirectPolicy;
