@@ -3,7 +3,8 @@
 Rusoto will search for credentials in this order:
 
 1. Environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
-2. AWS Credentials file: `~/.aws/credentials`.  It will use the first `aws_access_key_id` and `aws_secret_access_key` it finds.  Profiles are not yet supported.
+2. AWS Credentials file: `~/.aws/credentials`.  It will use `aws_access_key_id` and `aws_secret_access_key` fields.  
+Profiles are supported.
 3. IAM instance profile.  Rusoto will query the metadata service for an instance profile/role and fetch the access key, secret access key and token to supply those for requests.
 
 If Rusoto exhausts all three options it will panic.
