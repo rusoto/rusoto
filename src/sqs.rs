@@ -1,4 +1,8 @@
 //! SQS bindings for Rust
+//!
+//! Check [SQSHelper](http://dualspark.github.io/rusoto/rusoto/sqs/struct.SQSHelper.html) for convenience functions.
+//!
+
 #![allow(unused_variables, unused_mut)]
 use credentials::*;
 use xml::*;

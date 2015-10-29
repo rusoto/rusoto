@@ -1,4 +1,9 @@
 //! S3 bindings for Rust
+//!
+//! Not all functions are yet implemented.  Check [S3Helper](http://dualspark.github.io/rusoto/rusoto/s3/struct.S3Helper.html)
+//! for implemented functions and convenience functions.
+//!
+
 #![allow(unused_variables, unused_mut)]
 use credentials::*;
 use xml::*;
@@ -41,6 +46,7 @@ pub enum CannedAcl {
 }
 
 impl<'a> S3Helper<'a> {
+
 	/// Creates a new S3 helper
 	pub fn new<CP: AWSCredentialsProvider + 'a>(credentials: CP, region:&'a Region) -> S3Helper<'a> {
 		S3Helper { client: S3Client::new(credentials, region) }
