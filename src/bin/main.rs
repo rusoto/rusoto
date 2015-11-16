@@ -25,7 +25,7 @@ fn main() {
 
 	match sqs_roundtrip_tests(&mut sqs) {
 		Ok(_) => { println!("Everything worked."); },
-		Err(err) => { println!("Got error: {:#?}", err); }
+		Err(err) => { println!("Got error: {}", err); }
 	}
 
 	// S3 client gets its own provider chain:
@@ -33,7 +33,7 @@ fn main() {
 
 	match s3_list_buckets_tests(&mut s3) {
 		Ok(_) => { println!("Everything worked for S3 list buckets."); },
-		Err(err) => { println!("Got error in s3 list buckets: {:#?}", err); }
+		Err(err) => { println!("Got error in s3 list buckets: {}", err); }
 	}
 
 	let mut bucket_name = format!("rusoto{}", get_time().sec);
@@ -41,17 +41,17 @@ fn main() {
 
 	match s3_create_bucket_test(&mut s3, &bucket_name, &region, None) {
 		Ok(_) => { println!("Everything worked for S3 create bucket."); },
-		Err(err) => { println!("Got error in s3 create bucket: {:#?}", err); }
+		Err(err) => { println!("Got error in s3 create bucket: {}", err); }
 	}
 
 	match s3_put_object_with_request_specified_test(&mut s3, &bucket_name) {
 		Ok(_) => println!("Everything worked for S3 put object."),
-		Err(err) => println!("Got error in s3 put object: {:#?}", err),
+		Err(err) => println!("Got error in s3 put object: {}", err),
 	}
 
 	match s3_put_object_test(&mut s3, &bucket_name) {
 		Ok(_) => println!("Everything worked for S3 put object."),
-		Err(err) => println!("Got error in s3 put object: {:#?}", err),
+		Err(err) => println!("Got error in s3 put object: {}", err),
 	}
 
 	match s3_get_object_test(&mut s3, &bucket_name) {
@@ -63,42 +63,42 @@ fn main() {
 				Ok(_) => (),
 			}
 		}
-		Err(err) => { println!("Got error in s3 get object: {:#?}", err); }
+		Err(err) => { println!("Got error in s3 get object: {}", err); }
 	}
 
 	match s3_delete_object_test(&mut s3, &bucket_name, "sample-credentials") {
 		Ok(_) => {
 			println!("Everything worked for S3 delete object.");
 		}
-		Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
+		Err(err) => { println!("Got error in s3 delete object: {}", err); }
 	}
 
 	match s3_put_object_with_reduced_redundancy_test(&mut s3, &bucket_name) {
 		Ok(_) => {
 			println!("Everything worked for S3 put object with reduced redundancy.");
 		}
-		Err(err) => { println!("Got error in s3 put object with reduced redundancy: {:#?}", err); }
+		Err(err) => { println!("Got error in s3 put object with reduced redundancy: {}", err); }
 	}
 
 	match s3_delete_object_test(&mut s3, &bucket_name, "sample-credentials") {
 		Ok(_) => {
 			println!("Everything worked for S3 delete object.");
 		}
-		Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
+		Err(err) => { println!("Got error in s3 delete object: {}", err); }
 	}
 
 	// Set the file in s3_multipart_upload_test and uncomment this code to test multipart upload:
 	// println!("Making a large upload...");
 	// match s3_multipart_upload_test(&mut s3, &bucket_name) {
 	// 	Ok(_) => { println!("Everything worked for S3 multipart upload."); }
-	// 	Err(err) => { println!("Got error in s3 multipart upload: {:#?}", err); }
+	// 	Err(err) => { println!("Got error in s3 multipart upload: {}", err); }
 	// }
 
 	// match s3_delete_object_test(&mut s3, &bucket_name, "testfile.zip") {
 	// 	Ok(_) => {
 	// 		println!("Everything worked for S3 delete object.");
 	// 	}
-	// 	Err(err) => { println!("Got error in s3 delete object: {:#?}", err); }
+	// 	Err(err) => { println!("Got error in s3 delete object: {}", err); }
 	// }
 
 	match s3_list_multipart_uploads(&mut s3, &bucket_name) {
@@ -120,7 +120,7 @@ fn main() {
 
 	match s3_delete_bucket_test(&mut s3, &bucket_name, &region) {
 		Ok(_) => { println!("Everything worked for S3 delete bucket."); },
-		Err(err) => { println!("Got error in s3 delete bucket: {:#?}", err); }
+		Err(err) => { println!("Got error in s3 delete bucket: {}", err); }
 	}
 
 	// new bucket for canned acl testing!
@@ -128,12 +128,12 @@ fn main() {
 
 	match s3_create_bucket_test(&mut s3, &bucket_name, &region, Some(CannedAcl::AuthenticatedRead)) {
 		Ok(_) => { println!("Everything worked for S3 create bucket with ACL."); },
-		Err(err) => { println!("Got error in s3 create bucket: {:#?}", err); }
+		Err(err) => { println!("Got error in s3 create bucket: {}", err); }
 	}
 
 	match s3_delete_bucket_test(&mut s3, &bucket_name, &region) {
 		Ok(_) => { println!("Everything worked for S3 delete bucket."); },
-		Err(err) => { println!("Got error in s3 delete bucket: {:#?}", err); }
+		Err(err) => { println!("Got error in s3 delete bucket: {}", err); }
 	}
 }
 
