@@ -32,11 +32,16 @@ impl<'a> SQSHelper<'a> {
 		self.client.list_queues(&ListQueuesRequest::default())
 	}
 
-	/// Creates a new queue
+	/// Creates a new queue with given name
 	pub fn create_queue(&mut self, queue_name: &str) -> Result<CreateQueueResult, AWSError> {
 		let mut req = CreateQueueRequest::default();
 		req.queue_name = queue_name.to_string();
-		self.client.create_queue(&req)
+		self.create_queue_with_request(&req)
+	}
+
+	/// Create queue with options specified in request
+	pub fn create_queue_with_request(&mut self, request: &CreateQueueRequest) -> Result<CreateQueueResult, AWSError> {
+		self.client.create_queue(&request)
 	}
 
 	/// Gets a queue URL by the queue's name
@@ -51,14 +56,24 @@ impl<'a> SQSHelper<'a> {
 		let mut req = SendMessageRequest::default();
 		req.queue_url = queue_url.to_string();
 		req.message_body = message_body.to_string();
-		self.client.send_message(&req)
+		self.send_message_with_request(&req)
+	}
+
+	/// Send message with specified request options
+	pub fn send_message_with_request(&mut self, request: &SendMessageRequest) -> Result<SendMessageResult, AWSError> {
+		self.client.send_message(&request)
 	}
 
 	/// Receive a message from specified queue
 	pub fn receive_message(&mut self, queue_url: &str) -> Result<ReceiveMessageResult, AWSError> {
 		let mut req = ReceiveMessageRequest::default();
 		req.queue_url = queue_url.to_string();
-		self.client.receive_message(&req)
+		self.receive_message_with_request(&req)
+	}
+
+	/// Receive message with specified request options
+	pub fn receive_message_with_request(&mut self, request: &ReceiveMessageRequest)-> Result<ReceiveMessageResult, AWSError> {
+		self.client.receive_message(&request)
 	}
 
 	/// Delete a message from the specified queue
@@ -66,14 +81,24 @@ impl<'a> SQSHelper<'a> {
 		let mut req = DeleteMessageRequest::default();
 		req.queue_url = queue_url.to_string();
 		req.receipt_handle = receipt_handle.to_string();
-		self.client.delete_message(&req)
+		self.delete_message_with_request(&req)
+	}
+
+	/// Delete message with specified request options
+	pub fn delete_message_with_request(&mut self, request: &DeleteMessageRequest) -> Result<(), AWSError> {
+		self.client.delete_message(&request)
 	}
 
 	/// Delete the specified queue
 	pub fn delete_queue(&mut self, queue_url: &str) -> Result<(), AWSError> {
 		let mut req = DeleteQueueRequest::default();
 		req.queue_url = queue_url.to_string();
-		self.client.delete_queue(&req)
+		self.delete_queue_with_request(&req)
+	}
+
+	/// Delete the queue with specified request options
+	pub fn delete_queue_with_request(&mut self, request: &DeleteQueueRequest) -> Result<(), AWSError> {
+		self.client.delete_queue(&request)
 	}
 
 }
