@@ -51,7 +51,7 @@ Helper function example:
 ```
 
 4.  Add the new module to publicly accessible modules for the library by adding the new class
-to [lib.rs](../lib.rs):
+to [lib.rs](../src/lib.rs):
 
 ```rust
 pub mod sqs;
