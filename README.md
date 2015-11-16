@@ -51,6 +51,4 @@ Information about how releases are made is in [RELEASING](RELEASING.md).
 
 #### Rust code generation from boto core service definitions:
 
-```bash
-./botocore_parser path/to/some.json ClientClassName > some_module.rs
-```
+See [CODEGEN](codegen/CODEGEN.md).
