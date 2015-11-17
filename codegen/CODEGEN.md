@@ -9,9 +9,12 @@ file and outputs Rust code.  Example:
 ./botocore_parser path/to/some.json ClientClassName > some_module.rs
 ```
 
+JSON definitions come from the [botocore](https://github.com/boto/botocore) repo, under the [botocore/data](https://github.com/boto/botocore/tree/develop/botocore/data) directory.  For each service, copy its definition file by hand to `codegen/` and then follow this document.
+
 ### SQS walkthrough
 
-This is a guide to how SQS was added to Rusoto.  
+This is a guide to how SQS was added to Rusoto.  After placing the sqs.json file from the above
+botocore location into `codegen/sqs.json`:
 
 1. In the `codegen` directory:
 
