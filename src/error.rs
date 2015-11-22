@@ -27,3 +27,5 @@ impl fmt::Display for AWSError {
         write!(f, "{}", self)
     }
 }
+
+pub type AWSResult<T> = Result<T, AWSError>;
