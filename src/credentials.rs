@@ -21,12 +21,8 @@ use hyper::header::Connection;
 use error::*;
 use regex::Regex;
 
-extern crate rustc_serialize;
-use self::rustc_serialize::json::*;
-
-extern crate chrono;
-use self::chrono::*;
-
+use serialize::json::*;
+use chrono::*;
 
 /// Represents AWS credentials.  Includes access key, secret key, token (for IAM profiles) and expiration timestamp.
 #[derive(Clone, Debug)]
@@ -327,11 +323,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
                 Some(val) => expiration = val.to_string().replace("\"", "")
             };
 
-            let expiration_time;
-            match expiration.parse::<DateTime<UTC>>() {
-                Err(why) => panic!("Kabloey on parse: {}", why),
-                Ok(val) => expiration_time = val
-            };
+            let expiration_time = try!(expiration.parse());
 
             let token_from_response;
             match json_object.find("Token") {
