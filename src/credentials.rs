@@ -162,17 +162,17 @@ impl AWSCredentialsProvider for ProfileCredentialsProvider {
 }
 
 impl ProfileCredentialsProvider {
-   pub fn new() -> ProfileCredentialsProvider {
+   pub fn new() -> AWSResult<ProfileCredentialsProvider> {
         // Default credentials file location:
         // ~/.aws/credentials (Linux/Mac)
         // %USERPROFILE%\.aws\credentials  (Windows)
         let profile_location;
         match env::home_dir() {
             Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
-            None => panic!("Couldn't get your home dir.")
+            None => return Err(AWSError::new("Couldn't get your home dir.")),
         }
 
-        ProfileCredentialsProvider { credentials: None, profile: "default".to_string(), file_name: profile_location }
+        Ok(ProfileCredentialsProvider { credentials: None, profile: "default".to_string(), file_name: profile_location })
     }
 }
 
@@ -365,18 +365,28 @@ impl AWSCredentialsProvider for DefaultAWSCredentialsProviderChain {
             // fetch creds in order: env, file, IAM
 
             if let Ok(creds) = EnvironmentCredentialsProvider::new().get_credentials() {
-                //println!("Found creds in env");
                 self.credentials = Some(creds.clone());
-            } else if let Ok(creds) = ProfileCredentialsProvider::new().with_profile(&self.profile).get_credentials() {
-                //println!("Found creds in file");
-                self.credentials = Some(creds.clone());
-            } else if let Ok(creds) = IAMRoleCredentialsProvider::new().get_credentials() {
-                //println!("Found creds via iam");
-                self.credentials = Some(creds.clone());
-            } else {
-               return Err(AWSError::new("Couldn't find AWS credentials in environment, default credential file location or IAM role."))
+
+                return Ok(self.credentials.as_ref().unwrap());
             }
+
+            if let Ok(mut provider) = ProfileCredentialsProvider::new() {
+                if let Ok(creds) = provider.with_profile(&self.profile).get_credentials() {
+                    self.credentials = Some(creds.clone());
+
+                    return Ok(self.credentials.as_ref().unwrap());
+                }
+            }
+
+            if let Ok(creds) = IAMRoleCredentialsProvider::new().get_credentials() {
+                self.credentials = Some(creds.clone());
+
+                return Ok(self.credentials.as_ref().unwrap());
+            }
+
+            return Err(AWSError::new("Couldn't find AWS credentials in environment, default credential file location or IAM role."));
         }
+
         Ok(self.credentials.as_ref().unwrap())
     }
 }
