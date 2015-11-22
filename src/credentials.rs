@@ -12,7 +12,6 @@ use std::env;
 use std::fs;
 use std::fs::File;
 use std::path::Path;
-use std::error::Error;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::ascii::AsciiExt;
@@ -178,7 +177,6 @@ impl ProfileCredentialsProvider {
 
 fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCredentials>, AWSError> {
     let path = Path::new(&file_with_path);
-    let display = path.display();
 
     match fs::metadata(&path) {
         Err(_) => return Err(AWSError::new("Couldn't stat credentials file.")),
@@ -189,10 +187,7 @@ fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCre
         }
     };
 
-    let file = match File::open(&path) {
-        Err(why) => panic!("couldn't open {}: {}", display, Error::description(&why)),
-        Ok(opened_file) => opened_file,
-    };
+    let file = try!(File::open(&path));
 
     let profile_regex = Regex::new(r"^\[([^\]]+)\]$").unwrap();
     let mut profiles: HashMap<String, AWSCredentials> = HashMap::new();
