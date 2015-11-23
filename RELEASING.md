@@ -11,8 +11,6 @@ For pre-1.0.0:
 
 Rusoto uses [semantic versioning 2.0.0](http://semver.org/).  
 
-
-
 ### Git tags
 
 To release version 0.4.0 of Rusoto:
