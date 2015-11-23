@@ -1,8 +1,17 @@
+## Release trains
+
+For pre-1.0.0:
+
+* Targeting two releases a month for minor versions.
+* Regression bug fixes will be released ASAP on best effort for maintainers.  For example, a regression in 0.9.0 means 0.9.1 is released ASAP instead of waiting for the next release train.
+
 ## Release procedure for Rusoto
 
 ### Semantic versioning
 
 Rusoto uses [semantic versioning 2.0.0](http://semver.org/).  
+
+
 
 ### Git tags
 
