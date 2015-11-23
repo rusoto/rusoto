@@ -4,8 +4,10 @@
 //!
 //! EG: UsEast1 to "us-east-1"
 
+use std::str::FromStr;
+
 /// AWS Region
-#[derive(Debug)]
+#[derive(Debug,PartialEq)]
 pub enum Region {
     UsEast1,
     UsWest1,
@@ -16,6 +18,28 @@ pub enum Region {
     ApNortheast1,
     ApSoutheast2,
     SaEast1,
+}
+
+#[derive(Debug,PartialEq)]
+pub struct ParseRegionError;
+
+impl FromStr for Region {
+    type Err = ParseRegionError;
+
+    fn from_str(s: &str) -> Result<Region, ParseRegionError> {
+        match s {
+            "us-east-1" => Ok(Region::UsEast1),
+            "us-west-1" => Ok(Region::UsWest1),
+            "us-west-2" => Ok(Region::UsWest2),
+            "eu-west-1" => Ok(Region::EuWest1),
+            "eu-central-1" => Ok(Region::EuCentral1),
+            "ap-southeast-1" => Ok(Region::ApSoutheast1),
+            "ap-northeast-1" => Ok(Region::ApNortheast1),
+            "ap-southeast-2" => Ok(Region::ApSoutheast2),
+            "sa-east-1" => Ok(Region::SaEast1),
+            _ => Err(ParseRegionError)
+        }
+    }
 }
 
 /// Translates region enum into AWS format.  EG: us-east-1
@@ -36,6 +60,16 @@ pub fn region_in_aws_format(region: &Region) -> String {
 #[cfg(test)]
 mod tests {
 	use super::*;
+    use std::str::FromStr;
+
+    #[test]
+    fn from_str_for_region() {
+        assert_eq!(FromStr::from_str("us-east-1"), Ok(Region::UsEast1));
+        assert_eq!(FromStr::from_str("us-west-1"), Ok(Region::UsWest1));
+        assert_eq!(FromStr::from_str("us-west-2"), Ok(Region::UsWest2));
+        assert_eq!(FromStr::from_str("eu-west-1"), Ok(Region::EuWest1));
+        assert_eq!(FromStr::from_str("eu-central-1"), Ok(Region::EuCentral1));
+    }
 
 	#[test]
 	fn regions_correctly_map_to_aws_strings() {
