@@ -59,7 +59,7 @@ pub fn region_in_aws_format(region: &Region) -> String {
 
 #[cfg(test)]
 mod tests {
-	use super::*;
+    use super::*;
     use std::str::FromStr;
 
     #[test]
@@ -69,10 +69,16 @@ mod tests {
         assert_eq!(FromStr::from_str("us-west-2"), Ok(Region::UsWest2));
         assert_eq!(FromStr::from_str("eu-west-1"), Ok(Region::EuWest1));
         assert_eq!(FromStr::from_str("eu-central-1"), Ok(Region::EuCentral1));
+        assert_eq!(FromStr::from_str("ap-southeast-1"), Ok(Region::ApSoutheast1));
     }
 
-	#[test]
-	fn regions_correctly_map_to_aws_strings() {
+    #[test]
+    fn from_str_errs_on_invalid_region() {
+        assert_eq!(<Region as FromStr>::from_str("not an AWS region"), Err(ParseRegionError));
+    }
+
+    #[test]
+	  fn regions_correctly_map_to_aws_strings() {
         let mut region = Region::UsEast1;
         if region_in_aws_format(&region) != "us-east-1" {
             panic!("Couldn't map us-east-1 enum right.");
