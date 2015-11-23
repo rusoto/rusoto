@@ -14,8 +14,8 @@ primitive_types = {
 	'string': 'String',
 	'timestamp': 'String',
 	'integer': 'i32',
-        'long': 'i64',
-        'float': 'f32',
+	'long': 'i64',
+	'float': 'f32',
 	'double': 'f64',
 	'blob': 'Vec<u8>',
 	'boolean': 'bool'
@@ -23,22 +23,26 @@ primitive_types = {
 
 # rust code to pull primitive types from XML
 primitive_parsers = {
-	'string': 'try!(characters(stack))',
+	'string':    'try!(characters(stack))',
 	'timestamp': 'try!(characters(stack))',
-	'integer': 'i32::from_str(try!(characters(stack)).as_ref()).unwrap()',
-	'double': 'f32::from_str(try!(characters(stack)).as_ref()).unwrap()',
-	'blob': 'try!(characters(stack)).into_bytes()',
-	'boolean': 'bool::from_str(try!(characters(stack)).as_ref()).unwrap()'
+	'integer':   'i32::from_str(try!(characters(stack)).as_ref()).unwrap()',
+	'long':      'i64::from_str(try!(characters(stack)).as_ref()).unwrap()',
+	'float':     'f32::from_str(try!(characters(stack)).as_ref()).unwrap()',
+	'double':    'f64::from_str(try!(characters(stack)).as_ref()).unwrap()',
+	'blob':      'try!(characters(stack)).into_bytes()',
+	'boolean':   'bool::from_str(try!(characters(stack)).as_ref()).unwrap()'
 }
 
 # rust code to write primitive types to a string
 primitive_writers = {
-	'string': 'obj',
+	'string':    'obj',
 	'timestamp': 'obj',
-	'integer': '&obj.to_string()',
-	'double': '&obj.to_string()',
-	'blob': 'str::from_utf8(&obj).unwrap()',
-	'boolean': '&obj.to_string()',
+	'integer':   '&obj.to_string()',
+	'long':      '&obj.to_string()',
+	'float':     '&obj.to_string()',
+	'double':    '&obj.to_string()',
+	'blob':      'str::from_utf8(&obj).unwrap()',
+	'boolean':   '&obj.to_string()',
 }
 
 # convert CamelCase to snake_case
