@@ -455,7 +455,7 @@ mod tests {
 
      #[test]
      fn profile_credentials_provider_profile_name() {
-        let mut provider = ProfileCredentialsProvider::new();
+        let mut provider = ProfileCredentialsProvider::new().unwrap();
         assert_eq!("default", provider.get_profile());
         assert_eq!("foo", provider.with_profile("foo").get_profile());
      }
