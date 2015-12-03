@@ -11708,7 +11708,7 @@ impl<'a> S3Client<'a> {
 						return Ok(CreateBucketOutput{location: header.value_string()});
 					}
 				}
-				panic!("Something went wrong when creating a bucket.");
+				Err(AWSError::new("Something went wrong when creating a bucket."))
 			}
 			_ => {
 				Err(AWSError::new("error in create_bucket"))

@@ -12,7 +12,6 @@ use std::env;
 use std::fs;
 use std::fs::File;
 use std::path::Path;
-use std::error::Error;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::ascii::AsciiExt;
@@ -22,12 +21,8 @@ use hyper::header::Connection;
 use error::*;
 use regex::Regex;
 
-extern crate rustc_serialize;
-use self::rustc_serialize::json::*;
-
-extern crate chrono;
-use self::chrono::*;
-
+use serialize::json::*;
+use chrono::*;
 
 /// Represents AWS credentials.  Includes access key, secret key, token (for IAM profiles) and expiration timestamp.
 #[derive(Clone, Debug)]
@@ -162,23 +157,22 @@ impl AWSCredentialsProvider for ProfileCredentialsProvider {
 }
 
 impl ProfileCredentialsProvider {
-   pub fn new() -> ProfileCredentialsProvider {
+   pub fn new() -> AWSResult<ProfileCredentialsProvider> {
         // Default credentials file location:
         // ~/.aws/credentials (Linux/Mac)
         // %USERPROFILE%\.aws\credentials  (Windows)
         let profile_location;
         match env::home_dir() {
             Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
-            None => panic!("Couldn't get your home dir.")
+            None => return Err(AWSError::new("Couldn't get your home dir.")),
         }
 
-        ProfileCredentialsProvider { credentials: None, profile: "default".to_string(), file_name: profile_location }
+        Ok(ProfileCredentialsProvider { credentials: None, profile: "default".to_string(), file_name: profile_location })
     }
 }
 
 fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCredentials>, AWSError> {
     let path = Path::new(&file_with_path);
-    let display = path.display();
 
     match fs::metadata(&path) {
         Err(_) => return Err(AWSError::new("Couldn't stat credentials file.")),
@@ -189,10 +183,7 @@ fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCre
         }
     };
 
-    let file = match File::open(&path) {
-        Err(why) => panic!("couldn't open {}: {}", display, Error::description(&why)),
-        Ok(opened_file) => opened_file,
-    };
+    let file = try!(File::open(&path));
 
     let profile_regex = Regex::new(r"^\[([^\]]+)\]$").unwrap();
     let mut profiles: HashMap<String, AWSCredentials> = HashMap::new();
@@ -332,11 +323,7 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
                 Some(val) => expiration = val.to_string().replace("\"", "")
             };
 
-            let expiration_time;
-            match expiration.parse::<DateTime<UTC>>() {
-                Err(why) => panic!("Kabloey on parse: {}", why),
-                Ok(val) => expiration_time = val
-            };
+            let expiration_time = try!(expiration.parse());
 
             let token_from_response;
             match json_object.find("Token") {
@@ -365,18 +352,28 @@ impl AWSCredentialsProvider for DefaultAWSCredentialsProviderChain {
             // fetch creds in order: env, file, IAM
 
             if let Ok(creds) = EnvironmentCredentialsProvider::new().get_credentials() {
-                //println!("Found creds in env");
                 self.credentials = Some(creds.clone());
-            } else if let Ok(creds) = ProfileCredentialsProvider::new().with_profile(&self.profile).get_credentials() {
-                //println!("Found creds in file");
-                self.credentials = Some(creds.clone());
-            } else if let Ok(creds) = IAMRoleCredentialsProvider::new().get_credentials() {
-                //println!("Found creds via iam");
-                self.credentials = Some(creds.clone());
-            } else {
-               return Err(AWSError::new("Couldn't find AWS credentials in environment, default credential file location or IAM role."))
+
+                return Ok(self.credentials.as_ref().unwrap());
             }
+
+            if let Ok(mut provider) = ProfileCredentialsProvider::new() {
+                if let Ok(creds) = provider.with_profile(&self.profile).get_credentials() {
+                    self.credentials = Some(creds.clone());
+
+                    return Ok(self.credentials.as_ref().unwrap());
+                }
+            }
+
+            if let Ok(creds) = IAMRoleCredentialsProvider::new().get_credentials() {
+                self.credentials = Some(creds.clone());
+
+                return Ok(self.credentials.as_ref().unwrap());
+            }
+
+            return Err(AWSError::new("Couldn't find AWS credentials in environment, default credential file location or IAM role."));
         }
+
         Ok(self.credentials.as_ref().unwrap())
     }
 }
@@ -458,7 +455,7 @@ mod tests {
 
      #[test]
      fn profile_credentials_provider_profile_name() {
-        let mut provider = ProfileCredentialsProvider::new();
+        let mut provider = ProfileCredentialsProvider::new().unwrap();
         assert_eq!("default", provider.get_profile());
         assert_eq!("foo", provider.with_profile("foo").get_profile());
      }
