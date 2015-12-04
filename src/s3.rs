@@ -19,7 +19,7 @@ use std::io::Read;
 use std::ascii::AsciiExt;
 use openssl::crypto::hash::Type::MD5;
 use openssl::crypto::hash::hash;
-use serialize::base64::{ToBase64, STANDARD};
+use rustc_serialize::base64::{ToBase64, STANDARD};
 
 // include the code generated from the SQS botocore templates
 include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/s3.rs"));
