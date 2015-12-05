@@ -21,7 +21,7 @@ use hyper::header::Connection;
 use error::*;
 use regex::Regex;
 
-use serialize::json::*;
+use rustc_serialize::json::*;
 use chrono::*;
 
 /// Represents AWS credentials.  Includes access key, secret key, token (for IAM profiles) and expiration timestamp.
