@@ -145,8 +145,8 @@ def request_method(operation):
 	print '\t\tlet status = result.status.to_u16();'
         print '\t\tlet mut body = String::new();'
         print '\t\tresult.read_to_string(&mut body).unwrap();'
-#        print '\t\tprintln!("{}", body);'        
-        
+#        print '\t\tprintln!("{}", body);'
+
 	print '\t\tmatch status {'
 
 	print '\t\t\t200 => { '
@@ -184,15 +184,15 @@ def generate_client():
 
 
 def main():
-	with open('dynamodb.json') as data_file:
+	with open('botocore/botocore/data/dynamodb/2012-08-10/service-2.json') as data_file:
 		service = json.load(data_file)
 
 		print "use std::collections::HashMap;"
 		print "use std::error::Error;"
-                print "use rustc_serialize::json;"
-                print "use std::io::Read;"
+		print "use rustc_serialize::json;"
+		print "use std::io::Read;"
 #                print "use regions::*;";
-                
+
 		global shapes
 		global metadata
 		global operations

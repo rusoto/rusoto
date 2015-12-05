@@ -460,7 +460,7 @@ pub struct ListTablesOutput {
 	/// If _LastEvaluatedTableName_ also appears in the output, you can use this value
 	/// as the _ExclusiveStartTableName_ parameter in a subsequent _ListTables_
 	/// request and obtain the next page of results.
-	pub TableNames: TableNameList,
+	pub TableNames: Option<TableNameList>,
 }
 
 pub type ReturnValue = String;

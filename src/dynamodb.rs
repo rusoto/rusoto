@@ -7,7 +7,7 @@ use regions::*;
 use std::result;
 
 // include the code generated from the DynamoDB botocore templates
-include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/dynamodb/dynamodb.rs"));
+include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/dynamodb.rs"));
 
 // Make getting values out of nexted Option objects less verbose
 macro_rules! try_opt {
@@ -68,7 +68,6 @@ impl CreateTableInput {
 		self.TableName = String::from(table_name);
 		self
 	}
-
 
 	pub fn with_write_capacity(mut self, write_capacity: PositiveLongObject) -> CreateTableInput {
 		self.ProvisionedThroughput.WriteCapacityUnits = write_capacity;
@@ -146,7 +145,7 @@ macro_rules! val {
 			let mut attr = AttributeValue::default();
 			attr.S = Some($val.to_string());
 			attr
-		}		
+		}
 	);
 	(N => $val:expr) => (
 	    {
@@ -179,4 +178,3 @@ fn parse_error(body: &str) -> DynamoDBError {
 		DynamoDBError { __type: "DecodeError".to_string(), message: body.to_string() }
 	}
 }
-

@@ -69,7 +69,6 @@ fn main() {
         }
     }
 
-
     match dynamo_delete_table_test(&mut dynamodb, &table_name) {
         Ok(_) => {
             println!("Deleted table {}", table_name);
@@ -78,12 +77,8 @@ fn main() {
             println!("Error deleting DynamoDB table {:#?}", err);
         }
     }
-    
 
-}
-
-fn old_main() {
-	let provider = DefaultAWSCredentialsProviderChain::new();
+    let provider = DefaultAWSCredentialsProviderChain::new();
 	let region = Region::UsEast1;
 
 	let provider2 = DefaultAWSCredentialsProviderChain::new();
