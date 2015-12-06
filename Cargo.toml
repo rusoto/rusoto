@@ -1,14 +1,14 @@
 [package]
 name = "rusoto"
 version = "0.9.0"
-authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>", "Matthew Mayer <matthew@dualspark.com>"]
+authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>", "Matthew Mayer <matthewkmayer@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 keywords = [ "AWS", "SQS", "Amazon", "DynamoDB", "S3" ]
 description = "AWS client libraries for Rust"
 repository = "https://github.com/DualSpark/rusoto"
 documentation = "http://dualspark.github.io/rusoto/rusoto/index.html"
-exclude = [".gitignore", ".travis.yml", "docgen.sh", "codegen/botocore_parser.py", "codegen/requirements.txt", "codegen/*.json"]
+exclude = [".gitignore", ".travis.yml", "docgen.sh", "codegen/*.py", "codegen/requirements.txt", "codegen/botocore/*"]
 
 [dependencies]
 xml-rs = "^0.1.26"
