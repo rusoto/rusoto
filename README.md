@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/DualSpark/rusoto.svg?branch=master)](https://travis-ci.org/DualSpark/rusoto)
 
-AWS client libraries for Rust.
+AWS SDK for Rust.
 
 #### Documentation
 
