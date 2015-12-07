@@ -13,8 +13,8 @@ exclude = [".gitignore", ".travis.yml", "docgen.sh", "codegen/*.py", "codegen/re
 [dependencies]
 xml-rs = "^0.1.26"
 time = "^0.1.32"
-openssl = "^0.6.7"
-hyper = "^0.6.15"
+openssl = "^0.7.1"
+hyper = "^0.7.0"
 url = "^0.2.37"
 rustc-serialize = "^0.3.16"
 regex = "^0.1.41"
