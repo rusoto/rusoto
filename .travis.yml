@@ -1,5 +1,11 @@
 language: rust
 rust:
   - stable
+  - beta
+  - nightly
 notifications:
   email: false
+matrix:
+  allow_failures:
+    - rust: beta
+    - rust: nightly
