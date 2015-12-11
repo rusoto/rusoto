@@ -219,8 +219,8 @@ def param_writer(name, shape):
     print 'struct ' + name + 'Writer;'
     print 'impl ' + name + 'Writer {'
 
-    print '\tfn write_params<\'a>(request: &mut SignedRequest<\'a>, obj: &\'a ' + name + ', location: Option<&ArgumentLocation>, location_name: &str) -> Option<Vec<u8>> {'
-    print '\t\tlet mut body : Option<Vec<u8>> = None;'
+    print '\tfn write_params<\'a>(request: &mut SignedRequest<\'a>, obj: &\'a ' + name + ', location: Option<&ArgumentLocation>, location_name: &str) -> Option<String> {'
+    print '\t\tlet mut body : Option<String> = None;'
 
     shape_type = shape['type']
 
@@ -242,7 +242,7 @@ def param_writer(name, shape):
 
             print '\t\t\t\t\t&ArgumentLocation::Body => {'
             print '//HEY PRINT ' + name + ' TO BODY (goes in return type)'
-            print '\t\t\t\t\t\tbody = Some(obj.to_string().into_bytes());'
+            print '\t\t\t\t\t\tbody = Some(obj.to_string());'
             print '\t\t\t\t\t},'
 
             print '\t\t\t\t\t&ArgumentLocation::Headers => (),'
@@ -289,6 +289,31 @@ def location_name_for_writing(member):
         return 'ArgumentLocation::Uri'
     return 'ArgumentLocation::Body'
 
+def print_xml_tags_if_needed(member):
+    if location_name_for_writing(member) == 'ArgumentLocation::Body':
+        # this needs to be like this:
+        # match location{
+			# 			None => (),
+			# 			Some(loc) => {
+        # let outer_xml_start = format!("<{} xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">", location_name);
+			# 				let outer_xml_end = format!("</{}>", location_name);
+        print '\t\t\t\t\tlet outer_xml_start = "<outer-start>";'
+        print '\t\t\t\t\tlet outer_xml_end = "<outer-end>";'
+
+def print_format_surrounded_by_xml_tags(member):
+    print '\t\t\t\tNone => (),'
+    print '\t\t\t\tSome(body_to_append) => {'
+    print_xml_tags_if_needed(member)
+    print '\t\t\t\t\tmatch body {'
+    print '\t\t\t\t\t\tNone => body = Some(format!("{}{}{}", outer_xml_start, body_to_append, outer_xml_end)),'
+    print '\t\t\t\t\t\tSome(body_to_append_to) => {'
+    print '\t\t\t\t\t\t\tlet body_to_append_wrapped_in_xml = format!("{}{}{}", outer_xml_start, body_to_append, outer_xml_end);'
+    print '\t\t\t\t\t\t\tbody = Some(format!("{}{}", body_to_append_to, body_to_append_wrapped_in_xml));'
+    print '\t\t\t\t\t\t},'
+    print '\t\t\t\t\t}'
+    print '\t\t\t\t},'
+    # and we're needing more tabs here and a close }
+
 # guts of the param_writer for struct shapes
 def struct_writer(shape):
     print '\t\t// STRUCT_WRITER'
@@ -298,15 +323,14 @@ def struct_writer(shape):
         if is_reserved_rust_keyword(shape_name):
             shape_name = reserved_rust_keyword_to_client_name(member['shape'])
 
-        if location_name_for_writing(member) == 'ArgumentLocation::Body':
-            print '// GOES IN BODY, set here from return types?'
-
         if not is_required(shape, name):
             print '\t\t// optional writing for ' + c_to_s(name)
             print "\t\tif let Some(ref obj) = obj." + c_to_s(name) + " {"
 
             if location_name_for_writing(member) == 'ArgumentLocation::Body':
-                print '\t\t\tbody = ' + shape_name + 'Writer::write_params(request, &obj, Some(&' + location_name_for_writing(member) + '), &"' + location_name + '".to_string());'
+                print '\t\t\tmatch ' + shape_name + 'Writer::write_params(request, &obj, Some(&' + location_name_for_writing(member) + '), &"' + location_name + '".to_string()) {'
+                print_format_surrounded_by_xml_tags(member)
+                print '\t\t\t};'
             else:
                 print '\t\t\t' + shape_name + 'Writer::write_params(request, &obj, Some(&' + location_name_for_writing(member) + '), &"' + location_name + '".to_string());'
 
@@ -318,7 +342,9 @@ def struct_writer(shape):
             # print '//' + location_name
             # print '//</' + shape_name + '>'
             if location_name_for_writing(member) == 'ArgumentLocation::Body':
-                print '\t\tbody = ' + shape_name + 'Writer::write_params(request, &obj.' + c_to_s(name) + ', Some(&' + location_name_for_writing(member) + '), &"' + location_name + '".to_string());'
+                print '\t\tmatch ' + shape_name + 'Writer::write_params(request, &obj.' + c_to_s(name) + ', Some(&' + location_name_for_writing(member) + '), &"' + location_name + '".to_string()) {'
+                print_format_surrounded_by_xml_tags(member)
+                print '\t\t};'
             else:
                 print '\t\t' + shape_name + 'Writer::write_params(request, &obj.' + c_to_s(name) + ', Some(&' + location_name_for_writing(member) + '), &"' + location_name + '".to_string());'
 
@@ -687,7 +713,7 @@ def request_method(operation):
             operation['name']) + "(&mut self, input: &" + input_name + ") -> Result<" + output_type + ", AWSError> {"
 
     print '\t\tlet mut uri = String::from("");'
-    print '\t\tlet mut request_body : Vec<u8>;'
+    print '\t\tlet mut request_body : String;'
 
     # Most of these go to just the bucket
 
@@ -703,7 +729,7 @@ def request_method(operation):
         print '\t\t\tNone => (),'
         print '\t\t\tSome(body_val) => {'
         print '\t\t\t\trequest_body = body_val;'
-        print '\t\t\t\trequest.set_payload(Some(&request_body));'
+        print '\t\t\t\trequest.set_payload(Some(&request_body.as_bytes()));'
         print '\t\t\t},'
         print '\t\t};\n'
 
