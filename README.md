@@ -14,7 +14,9 @@ Rusoto is available on [crates.io](https://crates.io/crates/rusoto).
 
 ### Use
 
-More example code in [src/bin/main.rs](src/bin/main.rs).
+Examples are available in [src/tests/](src/tests/) directory.
+
+[SQS example](src/tests/sqs.rs):
 
 ```rust
 let provider = DefaultAWSCredentialsProviderChain::new();
@@ -49,7 +51,7 @@ Information on release schedules and procedures are in [RELEASING](RELEASING.md)
 2. Check out code from github
 3. Set up AWS credentials: environment variables (export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY), ~/.aws/credentials, or use an IAM instance profile.
 4. `cargo build`
-5. `cargo run` - This will create real AWS resources and you may be charged.
+5. `cargo test --verbose --features aws_integration` - This will create real AWS resources and you may be charged.
 
 #### Rust code generation from boto core service definitions:
 
