@@ -20,3 +20,9 @@ rustc-serialize = "^0.3.16"
 regex = "^0.1.41"
 chrono = "^0.2.16"
 rust-crypto = "^0.2.34"
+
+[features]
+aws_integration = ["s3", "sqs", "dynamodb"]
+s3 = []
+sqs = []
+dynamodb = []

@@ -81,3 +81,6 @@ only handles one of them properly, which is seen in the SQS code.  This should b
 fixed so code can be generated from all of the API definitions from botocore.
 
 * The helper functions aren't auto generated.
+
+* integration tests in tests/servicename.rs and add service type in cargo.toml to
+allow running just that service's integration tests.
