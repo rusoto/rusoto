@@ -5,6 +5,7 @@ use signature::*;
 use error::*;
 use regions::*;
 use std::result;
+use std::str;
 
 // include the code generated from the DynamoDB botocore templates
 include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/dynamodb.rs"));
@@ -49,6 +50,10 @@ impl<'a> DynamoDBHelper<'a> {
 
 	pub fn put_item(&mut self, input: &PutItemInput) -> Result<PutItemOutput> {
 		self.client.put_item(input)
+	}
+
+    pub fn get_item(&mut self, input: &GetItemInput) -> Result<GetItemOutput> {
+		self.client.get_item(input)
 	}
 
 }
@@ -154,6 +159,26 @@ macro_rules! val {
 	    	attr
 	    }
 	);
+}
+
+// TODO: make a macro from this?
+pub fn get_str_from_attribute(attr: &AttributeValue) -> Option<&str> {
+    match attr.B {
+        None => (),
+        Some(ref blob_attribute) => return Some(str::from_utf8(blob_attribute).unwrap()),
+    }
+
+    match attr.S {
+        None => (),
+        Some(ref string_attribute) => return Some(string_attribute),
+    }
+
+    match attr.N {
+        None => (),
+        Some(ref number_attribute) => return Some(number_attribute),
+    }
+
+    return None;
 }
 
 #[derive(RustcDecodable, Debug)]
