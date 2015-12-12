@@ -1,6 +1,6 @@
 [package]
 name = "rusoto"
-version = "0.9.0"
+version = "0.10.0"
 authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>", "Matthew Mayer <matthewkmayer@gmail.com>"]
 license = "MIT"
 readme = "README.md"
