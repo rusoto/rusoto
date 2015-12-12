@@ -42,8 +42,9 @@ Information on release schedules and procedures are in [RELEASING](RELEASING.md)
 
 #### Currently implemented
 
-1. **SQS**: See available functions in [sqs.rs](src/sqs.rs).
-2. **S3**: See available functions in [s3.rs](src/s3.rs).
+1. **SQS**: See available functions in [sqs.rs](src/sqs.rs) and uses in [SQS integration tests](tests/sqs.rs).
+2. **S3**: See available functions in [s3.rs](src/s3.rs) and uses in [S3 integration tests](tests/s3.rs).
+2. **DynamoDB**: See available functions in [dynamodb.rs](src/dynamodb.rs) and uses in [DynamoDB integration tests](tests/dynamodb.rs).
 
 ### Contributing
 
