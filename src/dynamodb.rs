@@ -1,4 +1,8 @@
 //! DynamoDB bindings for Rust
+//!
+//! Check [DynamoDBHelper](http://dualspark.github.io/rusoto/rusoto/dynamodb/struct.DynamoDBHelper.html) for convenience functions.
+//!
+
 #![allow(unused_variables, unused_mut, non_snake_case)]
 use credentials::*;
 use signature::*;

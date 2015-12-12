@@ -18,6 +18,7 @@
 //!
 //! * SQS
 //! * S3 (partial implementation)
+//! * DynamoDB 
 //!
 //! ## Requests and request signing
 //!
