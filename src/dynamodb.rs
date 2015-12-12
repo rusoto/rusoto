@@ -162,7 +162,7 @@ macro_rules! val {
 }
 
 // TODO: make a macro from this?
-pub fn get_string_from_attribute(attr: &AttributeValue) -> Option<&str> {
+pub fn get_str_from_attribute(attr: &AttributeValue) -> Option<&str> {
     match attr.B {
         None => (),
         Some(ref blob_attribute) => return Some(str::from_utf8(blob_attribute).unwrap()),

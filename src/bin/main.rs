@@ -12,7 +12,7 @@ use rusoto::s3::*;
 use rusoto::regions::*;
 use rusoto::dynamodb::{DynamoDBHelper, CreateTableInput, AttributeDefinition, KeySchemaElement};
 use rusoto::dynamodb::{DynamoDBError, PutItemInput, PutItemInputAttributeMap, AttributeValue};
-use rusoto::dynamodb::{GetItemInput, GetItemOutput, Key, get_string_from_attribute};
+use rusoto::dynamodb::{GetItemInput, GetItemOutput, Key, get_str_from_attribute};
 use std::thread;
 use time::*;
 use std::fs::File;
@@ -66,7 +66,7 @@ fn main() {
                 None => println!("nothing received from Dynamo, item may not exist"),
                 Some(attributes_map) => {
                     for (column_name, value) in attributes_map {
-                        println!("found column name '{}' with value of '{}'", column_name, get_string_from_attribute(&value).unwrap());
+                        println!("found column name '{}' with value of '{}'", column_name, get_str_from_attribute(&value).unwrap());
                     }
                 },
             }
@@ -96,7 +96,7 @@ fn main() {
                 None => println!("nothing received from Dynamo, item may not exist"),
                 Some(attributes_map) => {
                     for (column_name, value) in attributes_map {
-                        println!("found column name '{}' with value of '{}'", column_name, get_string_from_attribute(&value).unwrap());
+                        println!("found column name '{}' with value of '{}'", column_name, get_str_from_attribute(&value).unwrap());
                     }
                 },
             }
