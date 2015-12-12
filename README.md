@@ -14,9 +14,9 @@ Rusoto is available on [crates.io](https://crates.io/crates/rusoto).
 
 ### Use
 
-Examples are available in [src/tests/](src/tests/) directory.
+Examples are available in [tests](tests) directory.
 
-[SQS example](src/tests/sqs.rs):
+[SQS example](tests/sqs.rs):
 
 ```rust
 let provider = DefaultAWSCredentialsProviderChain::new();

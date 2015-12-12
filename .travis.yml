@@ -5,9 +5,6 @@ rust:
   - nightly
 notifications:
   email: false
-script:
-  - cargo build --verbose
-  - cargo test --verbose --features ci
 matrix:
   allow_failures:
     - rust: beta

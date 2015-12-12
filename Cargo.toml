@@ -26,5 +26,3 @@ aws_integration = ["s3", "sqs", "dynamodb"]
 s3 = []
 sqs = []
 dynamodb = []
-# don't run integration tests in CI:
-ci = []
