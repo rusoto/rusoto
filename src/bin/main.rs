@@ -10,14 +10,9 @@ use rusoto::error::*;
 use rusoto::sqs::*;
 use rusoto::s3::*;
 use rusoto::regions::*;
-use rusoto::dynamodb::DynamoDBHelper;
-use rusoto::dynamodb::CreateTableInput;
-use rusoto::dynamodb::AttributeDefinition;
-use rusoto::dynamodb::KeySchemaElement;
-use rusoto::dynamodb::DynamoDBError;
-use rusoto::dynamodb::PutItemInput;
-use rusoto::dynamodb::PutItemInputAttributeMap;
-use rusoto::dynamodb::AttributeValue;
+use rusoto::dynamodb::{DynamoDBHelper, CreateTableInput, AttributeDefinition, KeySchemaElement};
+use rusoto::dynamodb::{DynamoDBError, PutItemInput, PutItemInputAttributeMap, AttributeValue};
+use rusoto::dynamodb::{GetItemInput, GetItemOutput, Key, get_string_from_attribute};
 use std::thread;
 use time::*;
 use std::fs::File;
@@ -60,12 +55,54 @@ fn main() {
         }
     }
 
+    let mut item = Key::default();
+    item.insert("string".to_string(), val!(S => "foo"));
+    item.insert("number".to_string(), val!(N => "1234"));
+
+    match dynamo_get_item_test(&mut dynamodb, &table_name, item) {
+        Ok(item_from_dynamo) => {
+            println!("Got item back from Dynamo");
+            match item_from_dynamo.Item {
+                None => println!("nothing received from Dynamo, item may not exist"),
+                Some(attributes_map) => {
+                    for (column_name, value) in attributes_map {
+                        println!("found column name '{}' with value of '{}'", column_name, get_string_from_attribute(&value).unwrap());
+                    }
+                },
+            }
+        },
+        Err(err) => {
+            println!("Error retrieving object: {:?}", err);
+        }
+    }
+
     match dynamo_put_item_test(&mut dynamodb, &table_name) {
         Ok(_) => {
             println!("Put item to {}", table_name);
         }
         Err(err) => {
             println!("Error putting item to table {:#?}", err);
+        }
+    }
+
+    println!("Trying the dynamo get again");
+    item = Key::default();
+    item.insert("string".to_string(), val!(S => "foo"));
+    item.insert("number".to_string(), val!(N => "1234"));
+    match dynamo_get_item_test(&mut dynamodb, &table_name, item) {
+        Ok(item_from_dynamo) => {
+            println!("Got item back from Dynamo");
+            match item_from_dynamo.Item {
+                None => println!("nothing received from Dynamo, item may not exist"),
+                Some(attributes_map) => {
+                    for (column_name, value) in attributes_map {
+                        println!("found column name '{}' with value of '{}'", column_name, get_string_from_attribute(&value).unwrap());
+                    }
+                },
+            }
+        },
+        Err(err) => {
+            println!("Error retrieving object: {:?}", err);
         }
     }
 
@@ -400,6 +437,17 @@ fn dynamo_put_item_test(dynamodb: &mut DynamoDBHelper, table_name: &str) -> Resu
     try!(dynamodb.put_item(&input));
 
     Ok(())
+}
+
+fn dynamo_get_item_test(dynamodb: &mut DynamoDBHelper, table_name: &str, item_key: Key) -> Result<GetItemOutput, DynamoDBError> {
+    let mut item_request = GetItemInput::default();
+    item_request.Key = item_key;
+    item_request.TableName = table_name.to_string();
+
+    match dynamodb.get_item(&item_request) {
+        Err(why) => Err(why),
+        Ok(output) => Ok(output),
+    }
 }
 
 fn dynamo_describe_wait_test(dynamodb: &mut DynamoDBHelper,
