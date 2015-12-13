@@ -20,6 +20,10 @@ rustc-serialize = "^0.3.16"
 regex = "^0.1.41"
 chrono = "^0.2.16"
 rust-crypto = "^0.2.34"
+log = "^0.3.3"
+
+[dev-dependencies]
+env_logger = "*"
 
 [features]
 aws_integration = ["s3", "sqs", "dynamodb"]

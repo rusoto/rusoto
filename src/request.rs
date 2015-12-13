@@ -9,6 +9,7 @@ use hyper::client::RedirectPolicy;
 use hyper::header::Headers;
 use hyper::method::Method;
 use signature::SignedRequest;
+use log::LogLevel::Debug;
 
 /// Takes a fully formed and signed request and executes it.
 pub fn send_request(signed_request: &SignedRequest) -> Response {
@@ -31,11 +32,13 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
         final_uri = final_uri + &format!("?{}", signed_request.get_canonical_query_string());
     }
 
-    // println!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\nHeaders:\n",
-    // 	hyper_method, final_uri, signed_request.get_payload());
-    // for h in hyper_headers.iter() {
-    //     println!("{}:{}", h.name(), h.value_string());
-    // }
+    if log_enabled!(Debug) {
+        debug!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\nHeaders:\n",
+        	hyper_method, final_uri, signed_request.get_payload());
+        for h in hyper_headers.iter() {
+            debug!("{}:{}", h.name(), h.value_string());
+        }
+    }
 
     let mut client = Client::new();
     client.set_redirect_policy(RedirectPolicy::FollowNone);
