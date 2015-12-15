@@ -26,14 +26,16 @@ for q in response.queue_urls {
 }
 ```
 
+#### Credentials
+
+For more information on Rusoto's use of AWS credentials such as priority and refreshing, see [AWS Credentials](AWS-CREDENTIALS.md).
+
 #### Debugging
 
 Rusoto uses the [log](https://crates.io/crates/log/) logging facade.  For tests it uses [env_logger](https://crates.io/crates/env_logger/).
 To see output of logging from integration tests, run:
 
 `RUST_LOG=info cargo test --features aws_integration`
-
-For more information on Rusoto's use of AWS credentials such as priority and refreshing, see [AWS Credentials](AWS-CREDENTIALS.md).
 
 ### Semantic versioning
 
@@ -56,6 +58,8 @@ Information on release schedules and procedures are in [RELEASING](RELEASING.md)
 3. Set up AWS credentials: environment variables (export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY), ~/.aws/credentials, or use an IAM instance profile.
 4. `cargo build`
 5. `cargo test --verbose --features aws_integration` - This will create real AWS resources and you may be charged.
+
+If openssl isn't installed you may see an error compiling.  For OSX, running `brew install openssl` then `brew link --force openssl` should fix it.
 
 #### Rust code generation from boto core service definitions:
 
