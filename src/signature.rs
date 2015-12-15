@@ -7,6 +7,7 @@
 //! newly created S3 buckets not in us-standard/us-east-1.
 
 extern crate regex;
+
 use credentials::AWSCredentials;
 use hyper::client::Response;
 use hyper::status::StatusCode;
@@ -44,7 +45,7 @@ pub struct SignedRequest<'a> {
 	params: Params,
 	hostname: Option<String>,
 	payload: Option<&'a [u8]>,
-	content_type: Option<String>,	
+	content_type: Option<String>,
 	canonical_query_string: String,
 	canonical_uri: String,
 }
@@ -61,7 +62,7 @@ impl <'a> SignedRequest <'a> {
 			params: Params::new(),
 			hostname: None,
 			payload: None,
-			content_type: None,			
+			content_type: None,
 			canonical_query_string: String::new(),
 			canonical_uri: String::new(),
 		 }
@@ -142,6 +143,7 @@ impl <'a> SignedRequest <'a> {
 	/// Add the calculated signature to the request headers and execute it
 	/// Return the hyper HTTP response
 	pub fn sign_and_execute(&mut self, creds: &AWSCredentials) -> Response {
+		debug!("Creating request to send to AWS.");
 		let hostname = match self.hostname {
 			Some(ref h) => h.to_string(),
 			None => build_hostname(&self.service, &self.region)
@@ -218,12 +220,14 @@ impl <'a> SignedRequest <'a> {
 		// build the actual auth header
 		let auth_header = format!("AWS4-HMAC-SHA256 Credential={}/{}, SignedHeaders={}, Signature={}",
 	               &creds.get_aws_access_key_id(), scope, signed_headers, signature);
-	   self.remove_header("authorization");
+	    self.remove_header("authorization");
 		self.add_header("authorization", &auth_header);
 
 		let response = send_request(&self);
+		debug!("Sent request to AWS");
 
 		if response.status == HTTP_TEMPORARY_REDIRECT {
+			debug!("Got a redirect response, resending request.");
 			// extract location from response, modify request and re-sign and resend.
 			let new_hostname = extract_s3_redirect_location(response).unwrap();
 			self.set_hostname(Some(new_hostname.to_string()));

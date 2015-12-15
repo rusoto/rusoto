@@ -18,7 +18,7 @@
 //!
 //! * SQS
 //! * S3 (partial implementation)
-//! * DynamoDB 
+//! * DynamoDB
 //!
 //! ## Requests and request signing
 //!
@@ -34,6 +34,9 @@ extern crate rustc_serialize;
 extern crate regex;
 extern crate crypto;
 extern crate chrono;
+
+#[macro_use]
+extern crate log;
 
 #[macro_use] pub mod params;
 #[macro_use] pub mod signature;
