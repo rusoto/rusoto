@@ -4,7 +4,7 @@ version = "0.10.0"
 authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>", "Matthew Mayer <matthewkmayer@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-keywords = [ "AWS", "SQS", "Amazon", "DynamoDB", "S3" ]
+keywords = [ "AWS", "SQS", "Amazon", "DynamoDB", "S3", "KMS" ]
 description = "AWS SDK for Rust"
 repository = "https://github.com/DualSpark/rusoto"
 documentation = "http://dualspark.github.io/rusoto/rusoto/index.html"
@@ -26,7 +26,8 @@ log = "^0.3.3"
 env_logger = "*"
 
 [features]
-aws_integration = ["s3", "sqs", "dynamodb"]
+aws_integration = ["s3", "sqs", "dynamodb", "kms"]
 s3 = []
 sqs = []
 dynamodb = []
+kms = []

@@ -39,7 +39,7 @@ To see output of logging from integration tests, run:
 
 ### Semantic versioning
 
-Rusoto complies with [semantic versioning 2.0.0](http://semver.org/).  Until reaching 1.0.0 the API is to be considered unstable.  See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/rusoto) for current version.  
+Rusoto complies with [semantic versioning 2.0.0](http://semver.org/).  Until reaching 1.0.0 the API is to be considered unstable.  See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/rusoto) for current version.
 
 ### Releases
 
@@ -49,7 +49,8 @@ Information on release schedules and procedures are in [RELEASING](RELEASING.md)
 
 1. **SQS**: See available functions in [sqs.rs](src/sqs.rs) and uses in [SQS integration tests](tests/sqs.rs).
 2. **S3**: See available functions in [s3.rs](src/s3.rs) and uses in [S3 integration tests](tests/s3.rs).
-2. **DynamoDB**: See available functions in [dynamodb.rs](src/dynamodb.rs) and uses in [DynamoDB integration tests](tests/dynamodb.rs).
+3. **DynamoDB**: See available functions in [dynamodb.rs](src/dynamodb.rs) and uses in [DynamoDB integration tests](tests/dynamodb.rs).
+4. **KMS**: See available functions in [kms.rs](src/kms.rs) and uses in [KMS integration tests](tests/kms.rs).
 
 ### Contributing
 

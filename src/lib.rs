@@ -19,6 +19,7 @@
 //! * SQS
 //! * S3 (partial implementation)
 //! * DynamoDB
+//! * KMS
 //!
 //! ## Requests and request signing
 //!
@@ -43,6 +44,7 @@ extern crate log;
 pub mod credentials;
 pub mod dynamodb;
 pub mod error;
+pub mod kms;
 pub mod sqs;
 pub mod s3;
 pub mod xmlutil;
