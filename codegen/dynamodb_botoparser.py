@@ -138,7 +138,7 @@ def request_method(operation):
         print '\t\tlet encoded = json::encode(&input).unwrap();'
         print '\t\tlet mut request = SignedRequest::new("' + http['method'] + '", "' + metadata['endpointPrefix'] + '", &self.region, "' + http['requestUri'] + '");'
         print '\t\trequest.set_content_type("application/x-amz-json-1.0".to_string());'
-        print '\t\trequest.add_header("x-amz-target", "DynamoDB_20120810.' + operation['name'] + '");'
+        print '\t\trequest.add_header("x-amz-target", "' + metadata['targetPrefix'] + '.' + operation['name'] + '");'
         print '\t\trequest.set_payload(Some(encoded.as_bytes()));'
 
         print '\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));'
@@ -165,7 +165,7 @@ def request_method(operation):
 	print "\t}"
 
 def generate_client():
-	client_name = 'DynamoDBClient'
+	client_name = sys.argv[2]
 
 	print "pub struct " + client_name  + "<'a> {"
 	print "\tcreds: Box<AWSCredentialsProvider + 'a>,"
@@ -184,7 +184,7 @@ def generate_client():
 
 
 def main():
-	with open('botocore/botocore/data/dynamodb/2012-08-10/service-2.json') as data_file:
+	with open(sys.argv[1]) as data_file:
 		service = json.load(data_file)
 
 		print "use std::collections::HashMap;"
@@ -204,7 +204,7 @@ def main():
 			# don't pass in reserved Rust keywords.
 			if name == 'Message' or name == 'Error':
 				# print "REASSIGNING"
-				name = 'DynamoDB' + name
+				name = metadata['serviceAbbreviation'] + name
 			rust_type(name, shape)
 
 		generate_client()

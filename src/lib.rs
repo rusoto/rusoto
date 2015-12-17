@@ -19,6 +19,7 @@
 //! * SQS
 //! * S3 (partial implementation)
 //! * DynamoDB
+//! * KMS
 //!
 //! ## Requests and request signing
 //!
