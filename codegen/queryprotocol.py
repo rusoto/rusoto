@@ -45,6 +45,23 @@ class QueryProtocolParser(ParserBase):
         self.param_writer(name, shape)
 
 
+    def rust_struct(self, name, shape):
+        self.append("#[derive(Debug, Default)]")
+        if shape['members']:
+            # print "MEMBERS:" + name
+            self.append("pub struct " + name + " {")
+            for (mname, member) in shape['members'].iteritems():
+                if 'documentation' in member:
+                    self.generate_documentation(member, "\t")
+                rust_type = member['shape']
+
+                if not ParserBase.is_required(shape, mname):
+                    rust_type = "Option<" + rust_type + ">"
+                self.append("\tpub " + ParserBase.c_to_s(mname) + ": " + rust_type + ",")
+            self.append("}\n")
+        else:
+            self.append("pub struct " + name + ";\n")
+
     def type_parser(self, name, shape):
         """
         generate rust code to parse a botocore shape from XML
@@ -193,6 +210,9 @@ class QueryProtocolParser(ParserBase):
         self.append("\t\t\tindex += 1;")
         self.append("\t\t}")
 
+    def add_imports(self):
+        self.append("use std::collections::HashMap;")
+        self.append("use std::str;")
 
     def request_method(self, operation):
         http = operation['http']

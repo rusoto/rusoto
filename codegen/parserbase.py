@@ -20,7 +20,7 @@ class ParserBase(object):
         """
         self.primitive_types = {
             'string': 'String',
-            'timestamp': 'String',
+            'timestamp': 'f64',
             'integer': 'i32',
             'long': 'i64',
             'float': 'f32',
@@ -71,23 +71,7 @@ class ParserBase(object):
         """
         generate a rust declaration for a botocore structure shape        
         """
-
-        self.append("#[derive(Debug, Default)]")
-        if shape['members']:
-            # print "MEMBERS:" + name
-            self.append("pub struct " + name + " {")
-            for (mname, member) in shape['members'].iteritems():
-                if 'documentation' in member:
-                    self.generate_documentation(member, "\t")
-                rust_type = member['shape']
-
-                if not ParserBase.is_required(shape, mname):
-                    rust_type = "Option<" + rust_type + ">"
-                self.append("\tpub " + ParserBase.c_to_s(mname) + ": " + rust_type + ",")
-            self.append("}\n")
-        else:
-            self.append("pub struct " + name + ";\n")
-
+        pass
 
     def generate_client(self):
         """
@@ -192,7 +176,6 @@ class ParserBase(object):
 
     def parse(self):
         self.add_imports()
-        
         for (name, shape) in self.service['shapes'].iteritems():
             self.rust_type(name, shape)
 
@@ -207,5 +190,4 @@ class ParserBase(object):
         self.code += string + "\n"
 
     def add_imports(self):
-        self.append("use std::collections::HashMap;")
-        self.append("use std::str;")
+        pass
