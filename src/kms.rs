@@ -4,14 +4,15 @@
 //!
 
 #![allow(unused_variables, unused_mut, non_snake_case)]
-use credentials::*;
-use signature::*;
-use error::*;
-use regions::*;
 use std::result;
 
+use credentials::AWSCredentialsProvider;
+use error::AWSError;
+use regions::Region;
+use signature::SignedRequest;
+
 // include the code generated from the KMS botocore templates
-include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/kms.rs"));
+include!(concat!(env!("OUT_DIR"), "/kms.rs"));
 
 /// Easier to use KMS client: wraps KMSClient class.
 pub struct KMSHelper<'a> {
@@ -23,7 +24,7 @@ impl<'a> KMSHelper<'a> {
     pub fn new<P: AWSCredentialsProvider + 'a>(credentials: P, region:&'a Region) -> KMSHelper<'a> {
 	KMSHelper { client: KMSClient::new(credentials, region) }
     }
-    
+
     pub fn list_keys(&mut self) -> Result<ListKeysResponse> {
         let mut req = ListKeysRequest::default();
         self.client.list_keys(&req)

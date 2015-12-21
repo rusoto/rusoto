@@ -9,6 +9,11 @@ description = "AWS SDK for Rust"
 repository = "https://github.com/DualSpark/rusoto"
 documentation = "http://dualspark.github.io/rusoto/rusoto/index.html"
 exclude = [".gitignore", ".travis.yml", "docgen.sh", "codegen/*.py", "codegen/requirements.txt", "codegen/botocore/*"]
+build = "build.rs"
+
+[build-dependencies]
+serde_codegen = "^0.6.6"
+syntex = "^0.22.0"
 
 [dependencies]
 xml-rs = "^0.1.26"
@@ -21,6 +26,7 @@ regex = "^0.1.41"
 chrono = "^0.2.16"
 rust-crypto = "^0.2.34"
 log = "^0.3.3"
+serde_json = "^0.6.0"
 
 [dev-dependencies]
 env_logger = "*"

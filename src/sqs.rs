@@ -4,17 +4,29 @@
 //!
 
 #![allow(unused_variables, unused_mut)]
-use credentials::*;
-use xml::*;
-use signature::*;
-use params::*;
-use error::*;
-use xmlutil::*;
+
 use std::str::FromStr;
-use regions::*;
+
+use xml::EventReader;
+
+use credentials::AWSCredentialsProvider;
+use error::AWSError;
+use params::{Params, SQSParams};
+use regions::Region;
+use signature::SignedRequest;
+use xmlutil::{
+    Next,
+    Peek,
+    XmlParseError,
+    XmlResponseFromAws,
+    characters,
+    end_element,
+    peek_at_name,
+    start_element,
+};
 
 // include the code generated from the SQS botocore templates
-include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/sqs.rs"));
+include!(concat!(env!("OUT_DIR"), "/sqs.rs"));
 
 /// Easier to use SQS client: wraps SQSClient class.
 pub struct SQSHelper<'a> {
