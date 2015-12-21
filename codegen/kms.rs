@@ -955,7 +955,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.Encrypt");
+		request.add_header("x-amz-target", "TrentService.Encrypt");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -984,7 +984,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.UpdateAlias");
+		request.add_header("x-amz-target", "TrentService.UpdateAlias");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1008,7 +1008,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.DisableKey");
+		request.add_header("x-amz-target", "TrentService.DisableKey");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1032,7 +1032,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.GenerateDataKeyWithoutPlaintext");
+		request.add_header("x-amz-target", "TrentService.GenerateDataKeyWithoutPlaintext");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1082,7 +1082,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.GenerateDataKey");
+		request.add_header("x-amz-target", "TrentService.GenerateDataKey");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1103,7 +1103,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.ListAliases");
+		request.add_header("x-amz-target", "TrentService.ListAliases");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1130,7 +1130,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.CancelKeyDeletion");
+		request.add_header("x-amz-target", "TrentService.CancelKeyDeletion");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1152,7 +1152,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.GetKeyRotationStatus");
+		request.add_header("x-amz-target", "TrentService.GetKeyRotationStatus");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1173,7 +1173,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.ListKeyPolicies");
+		request.add_header("x-amz-target", "TrentService.ListKeyPolicies");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1195,7 +1195,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.DeleteAlias");
+		request.add_header("x-amz-target", "TrentService.DeleteAlias");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1224,7 +1224,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.RetireGrant");
+		request.add_header("x-amz-target", "TrentService.RetireGrant");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1244,7 +1244,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.DescribeKey");
+		request.add_header("x-amz-target", "TrentService.DescribeKey");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1265,7 +1265,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.ListKeys");
+		request.add_header("x-amz-target", "TrentService.ListKeys");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1286,7 +1286,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.GenerateRandom");
+		request.add_header("x-amz-target", "TrentService.GenerateRandom");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1307,7 +1307,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.GetKeyPolicy");
+		request.add_header("x-amz-target", "TrentService.GetKeyPolicy");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1332,7 +1332,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.CreateGrant");
+		request.add_header("x-amz-target", "TrentService.CreateGrant");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1357,7 +1357,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.CreateKey");
+		request.add_header("x-amz-target", "TrentService.CreateKey");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1388,7 +1388,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.ReEncrypt");
+		request.add_header("x-amz-target", "TrentService.ReEncrypt");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1409,7 +1409,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.DisableKeyRotation");
+		request.add_header("x-amz-target", "TrentService.DisableKeyRotation");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1432,7 +1432,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.ListRetirableGrants");
+		request.add_header("x-amz-target", "TrentService.ListRetirableGrants");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1467,7 +1467,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.ScheduleKeyDeletion");
+		request.add_header("x-amz-target", "TrentService.ScheduleKeyDeletion");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1497,7 +1497,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.CreateAlias");
+		request.add_header("x-amz-target", "TrentService.CreateAlias");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1517,7 +1517,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.EnableKeyRotation");
+		request.add_header("x-amz-target", "TrentService.EnableKeyRotation");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1537,7 +1537,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.ListGrants");
+		request.add_header("x-amz-target", "TrentService.ListGrants");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1558,7 +1558,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.EnableKey");
+		request.add_header("x-amz-target", "TrentService.EnableKey");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1590,7 +1590,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.Decrypt");
+		request.add_header("x-amz-target", "TrentService.Decrypt");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1611,7 +1611,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.UpdateKeyDescription");
+		request.add_header("x-amz-target", "TrentService.UpdateKeyDescription");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1632,7 +1632,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.RevokeGrant");
+		request.add_header("x-amz-target", "TrentService.RevokeGrant");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();
@@ -1652,7 +1652,7 @@ impl<'a> KMSClient<'a> {
 		let encoded = json::encode(&input).unwrap();
 		let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 		request.set_content_type("application/x-amz-json-1.0".to_string());
-		request.add_header("x-amz-target", "DynamoDB_20120810.PutKeyPolicy");
+		request.add_header("x-amz-target", "TrentService.PutKeyPolicy");
 		request.set_payload(Some(encoded.as_bytes()));
 		let mut result = request.sign_and_execute(try!(self.creds.get_credentials()));
 		let status = result.status.to_u16();

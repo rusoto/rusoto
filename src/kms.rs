@@ -19,10 +19,16 @@ pub struct KMSHelper<'a> {
 }
 
 impl<'a> KMSHelper<'a> {
-	/// Creates a new KMS helper
-	pub fn new<P: AWSCredentialsProvider + 'a>(credentials: P, region:&'a Region) -> KMSHelper<'a> {
-		KMSHelper { client: KMSClient::new(credentials, region) }
-	}
+    /// Creates a new KMS helper
+    pub fn new<P: AWSCredentialsProvider + 'a>(credentials: P, region:&'a Region) -> KMSHelper<'a> {
+	KMSHelper { client: KMSClient::new(credentials, region) }
+    }
+    
+    pub fn list_keys(&mut self) -> Result<ListKeysResponse> {
+        let mut req = ListKeysRequest::default();
+        self.client.list_keys(&req)
+    }
+
 }
 
 #[derive(RustcDecodable, Debug)]
