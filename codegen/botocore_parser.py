@@ -91,9 +91,9 @@ def rust_struct(name, shape):
 				documentation(member,"\t")
 			rust_type =  member['shape']
 
-			if rust_type == 'Message':
+#			if rust_type == 'Message':
 				# print "foooo shape"
-				rust_type = sys.argv[2] + rust_type
+#				rust_type = sys.argv[2] + rust_type
 
 			if not is_required(shape, mname):
 				rust_type = "Option<" + rust_type + ">"
@@ -273,11 +273,11 @@ def request_method(operation):
 	input_type = ''
 
 	if not ('input' in operation):
-		print "\tpub fn " + c_to_s(operation['name']) + "(&self"") -> Result<" + output_type + ", AWSError> {"
+		print "\tpub fn " + c_to_s(operation['name']) + "(&mut self"") -> Result<" + output_type + ", AWSError> {"
 	else:
 		input_name = operation['input']['shape']
 		input_type = shapes[input_name]
-		print "\tpub fn " + c_to_s(operation['name']) + "(&self, input: &" + input_name + ") -> Result<" + output_type + ", AWSError> {"
+		print "\tpub fn " + c_to_s(operation['name']) + "(&mut self, input: &" + input_name + ") -> Result<" + output_type + ", AWSError> {"
 
 	print '\t\tlet mut request = SignedRequest::new("' + http['method'] + '", "' + metadata['endpointPrefix'] + '", &self.region, "' + http['requestUri'] + '");'
 	print "\t\tlet mut params = Params::new();"
@@ -287,7 +287,7 @@ def request_method(operation):
 		print '\t\t' + input_name + 'Writer::write_params(&mut params, \"\", &input);'
 
 	print '\t\trequest.set_params(params);'
-	print '\t\tlet result = request.sign_and_execute(&self.creds);'
+        print '\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));'
 	print '\t\tlet status = result.status.to_u16();'
 #	print '\t\tprintln!("{}", output);'
 	print '\t\tlet mut reader = EventReader::new(result);'
@@ -312,13 +312,13 @@ def generate_client():
 	client_name = sys.argv[2]
 
 	print "pub struct " + client_name  + "<'a> {"
-	print "\tcreds: &'a AWSCredentials,"
-	print "\tregion: &'a str"
+	print "\tcreds: Box<AWSCredentialsProvider + 'a>,"
+	print "\tregion: &'a Region"
 	print "}\n"
 
 	print "impl<'a> " + client_name + "<'a> { "
-	print "\tpub fn new(creds: &'a AWSCredentials, region: &'a str) -> " + client_name + "<'a> {"
-	print "\t\t" + client_name + " { creds: creds, region: region }"
+	print "\tpub fn new<P: AWSCredentialsProvider + 'a>(creds: P, region: &'a Region) -> " + client_name + "<'a> {"
+	print "\t\t" + client_name + " { creds: Box::new(creds), region: region }"
 	print "\t}"
 
 	for (name, operation) in operations.iteritems():
@@ -333,7 +333,7 @@ def main():
 
 		print "use std::collections::HashMap;"
 		print "use std::str;"
-		print "use std::error::Error;"
+#		print "use std::error::Error;"
 		global shapes
 		global metadata
 		global operations
@@ -343,9 +343,9 @@ def main():
 
 		for (name, shape) in shapes.iteritems():
 			# don't pass in reserved Rust keywords.
-			if name == 'Message' or name == 'Error':
+#			if name == 'Message' or name == 'Error':
 				# print "REASSIGNING"
-				name = sys.argv[2] + name
+#				name = sys.argv[2] + name
 			rust_type(name, shape)
 			type_parser(name, shape)
 			param_writer(name, shape)
