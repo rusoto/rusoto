@@ -3,6 +3,7 @@ rust:
   - stable
   - beta
   - nightly
+install: "pip install -r codegen/requirements.txt"
 notifications:
   email: false
 matrix:
