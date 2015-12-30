@@ -4,15 +4,16 @@
 //!
 
 #![allow(unused_variables, unused_mut, non_snake_case)]
-use credentials::*;
-use signature::*;
-use error::*;
-use regions::*;
 use std::result;
 use std::str;
 
+use credentials::AWSCredentialsProvider;
+use error::AWSError;
+use regions::Region;
+use signature::SignedRequest;
+
 // include the code generated from the DynamoDB botocore templates
-include!(concat!(env!("CARGO_MANIFEST_DIR"), "/codegen/dynamodb.rs"));
+include!(concat!(env!("OUT_DIR"), "/dynamodb.rs"));
 
 // Make getting values out of nexted Option objects less verbose
 macro_rules! try_opt {

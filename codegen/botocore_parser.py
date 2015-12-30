@@ -1,10 +1,13 @@
 #!/usr/bin/env python
+import codecs
 import sys
 import json
 from queryprotocol import QueryProtocolParser
 from jsonprotocol import JsonProtocolParser
 
 def main():
+    UTF8Writer = codecs.getwriter('utf8')
+    sys.stdout = UTF8Writer(sys.stdout)
 
     if len(sys.argv) < 3:
         print "Usage: botocore_parser.py [service_definition.json] [client_name]"
@@ -14,8 +17,8 @@ def main():
     client_name = sys.argv[2]
 
     with open(service_filename) as data_file:
-        service = json.load(data_file)            
-    
+        service = json.load(data_file)
+
     service_protocol = service['metadata']['protocol']
 
     if service_protocol == 'query':
