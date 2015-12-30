@@ -21,8 +21,8 @@ use hyper::header::Connection;
 use error::*;
 use regex::Regex;
 
-use rustc_serialize::json::*;
 use chrono::*;
+use serde_json::{Value, from_str};
 
 /// Represents AWS credentials.  Includes access key, secret key, token (for IAM profiles) and expiration timestamp.
 #[derive(Clone, Debug)]
@@ -299,8 +299,8 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
                 Ok(_) => (),
             };
 
-            let json_object : Json;
-            match Json::from_str(&body) {
+            let json_object: Value;
+            match from_str(&body) {
                 Err(_) => return err("Couldn't parse metadata response body."),
                 Ok(val) => json_object = val
             };
@@ -308,19 +308,19 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             let access_key;
             match json_object.find("AccessKeyId") {
                 None => return err("Couldn't find AccessKeyId in response."),
-                Some(val) => access_key = val.to_string().replace("\"", "")
+                Some(val) => access_key = val.as_string().expect("AccessKeyId value was not a string").to_owned().replace("\"", "")
             };
 
             let secret_key;
             match json_object.find("SecretAccessKey") {
                 None => return err("Couldn't find SecretAccessKey in response."),
-                Some(val) => secret_key = val.to_string().replace("\"", "")
+                Some(val) => secret_key = val.as_string().expect("SecretAccessKey value was not a string").to_owned().replace("\"", "")
             };
 
             let expiration;
             match json_object.find("Expiration") {
                 None => return err("Couldn't find Expiration in response."),
-                Some(val) => expiration = val.to_string().replace("\"", "")
+                Some(val) => expiration = val.as_string().expect("Expiration value was not a string").to_owned().replace("\"", "")
             };
 
             let expiration_time = try!(expiration.parse());
@@ -328,10 +328,10 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
             let token_from_response;
             match json_object.find("Token") {
                 None => return err("Couldn't find Token in response."),
-                Some(val) => token_from_response = val.to_string().replace("\"", "")
+                Some(val) => token_from_response = val.as_string().expect("Token value was not a string").to_owned().replace("\"", "")
             };
 
-            self.credentials = Some(AWSCredentials::new(access_key, secret_key, Some(token_from_response.to_string()), expiration_time));
+            self.credentials = Some(AWSCredentials::new(access_key, secret_key, Some(token_from_response), expiration_time));
         }
 
 		Ok(&self.credentials.as_ref().unwrap())

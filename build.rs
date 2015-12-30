@@ -13,6 +13,7 @@ use syntex::Registry;
 fn main() {
     let out_dir = var_os("OUT_DIR").expect("OUT_DIR not specified");
     let out_path = Path::new(&out_dir);
+    let src_path = Path::new("src");
 
     // DynamoDB
     generate(
@@ -21,6 +22,10 @@ fn main() {
         out_path,
         "dynamodb",
     );
+    serde_generate(
+        &src_path.join("kms_helpers.in.rs"),
+        &out_path.join("kms_helpers.rs"),
+    );
 
     // KMS
     generate(
@@ -28,6 +33,10 @@ fn main() {
         "KMSClient",
         out_path,
         "kms",
+    );
+    serde_generate(
+        &src_path.join("dynamodb_helpers.in.rs"),
+        &out_path.join("dynamodb_helpers.rs"),
     );
 
     // SQS

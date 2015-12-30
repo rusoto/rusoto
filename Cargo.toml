@@ -26,12 +26,14 @@ regex = "^0.1.41"
 chrono = "^0.2.16"
 rust-crypto = "^0.2.34"
 log = "^0.3.3"
+serde = "0.6.7"
+serde_json = "0.6.0"
 
 [dev-dependencies]
 env_logger = "*"
 
 [features]
-aws_integration = ["s3", "sqs", "dynamodb"]
+aws_integration = ["dynamodb", "kms", "s3", "sqs", "dynamodb"]
 s3 = []
 sqs = []
 dynamodb = []

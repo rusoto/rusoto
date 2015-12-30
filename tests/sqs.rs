@@ -1,18 +1,16 @@
-#![allow(dead_code)]
+#![cfg(feature = "sqs")]
+
 #[macro_use]
 extern crate rusoto;
-extern crate xml;
 extern crate time;
-extern crate regex;
-extern crate rustc_serialize;
 
-use rusoto::credentials::*;
-use rusoto::error::*;
-use rusoto::sqs::*;
-use rusoto::regions::*;
-use time::*;
+use time::get_time;
 
-#[cfg(feature = "sqs")]
+use rusoto::credentials::DefaultAWSCredentialsProviderChain;
+use rusoto::error::AWSError;
+use rusoto::sqs::SQSHelper;
+use rusoto::regions::Region;
+
 #[test]
 fn main() {
     let region = Region::UsWest2;

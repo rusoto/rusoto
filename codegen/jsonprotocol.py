@@ -10,7 +10,7 @@ class JsonProtocolParser(ParserBase):
         Don't use camel_case conversion for json protocol structs
         since the (de)serialization is automatic
         """
-	self.append("#[derive(Debug, Default, RustcDecodable, RustcEncodable)]")
+	self.append("#[derive(Debug, Default, Deserialize, Serialize)]")
 	if shape['members']:
             self.append("pub struct " + name + " {")
             for (mname, member) in shape['members'].iteritems():
@@ -44,7 +44,7 @@ class JsonProtocolParser(ParserBase):
             input_type = self.shape(input_name)
             self.append("\tpub fn " + ParserBase.c_to_s(operation['name']) + "(&mut self, input: &" + input_name + ") -> Result<" + output_type + "> {")
 
-        self.append('\t\tlet encoded = json::encode(&input).unwrap();')
+        self.append('\t\tlet encoded = to_string(&input).expect("failed to convert input to JSON");')
         self.append('\t\tlet mut request = SignedRequest::new("' + http['method'] + '", "' + self.metadata('endpointPrefix') + '", &self.region, "' + http['requestUri'] + '");')
         self.append('\t\trequest.set_content_type("application/x-amz-json-1.0".to_string());')
         self.append('\t\trequest.add_header("x-amz-target", "' + self.metadata('targetPrefix') + '.' + operation['name'] + '");')
@@ -60,7 +60,7 @@ class JsonProtocolParser(ParserBase):
 	if output_type == '()':
             self.append('\t\t\t\tOk(())')
 	else:
-            self.append('\t\t\t\tlet decoded: ' + output_type + ' = json::decode(&body).unwrap();')
+            self.append('\t\t\t\tlet decoded: ' + output_type + ' = from_str(&body).expect("failed to convert JSON into Rust type");')
             self.append('\t\t\t\tOk(decoded)')
 
 	self.append('\t\t\t}')
@@ -76,8 +76,8 @@ class JsonProtocolParser(ParserBase):
     def add_imports(self):
         self.append("use std::collections::HashMap;")
         self.append("use std::error::Error;")
-        self.append("use rustc_serialize::json;")
         self.append("use std::io::Read;")
+        self.append("use serde_json::{from_str, to_string};");
 
 
     @staticmethod
