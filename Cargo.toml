@@ -12,8 +12,8 @@ exclude = [".gitignore", ".travis.yml", "docgen.sh", "codegen/*.py", "codegen/re
 build = "build.rs"
 
 [build-dependencies]
-serde_codegen = "^0.6.6"
-syntex = "^0.22.0"
+serde_codegen = "^0.6.7"
+syntex = "^0.24.0"
 
 [dependencies]
 xml-rs = "^0.1.26"
@@ -26,7 +26,6 @@ regex = "^0.1.41"
 chrono = "^0.2.16"
 rust-crypto = "^0.2.34"
 log = "^0.3.3"
-serde_json = "^0.6.0"
 
 [dev-dependencies]
 env_logger = "*"
