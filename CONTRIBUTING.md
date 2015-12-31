@@ -6,7 +6,7 @@ Install Rust **1.3.0** or later - http://www.rust-lang.org/
 
 Check out code from github.
 
-`pip install --user -r codegen/requirements.txt` to for Python codegen requirements.
+`pip install --user -r codegen/requirements.txt` to install Python codegen required libraries.
 
 If you're on OSX, you'll probably need a new version of openssl.  Run `brew install openssl`.  
 
@@ -29,8 +29,9 @@ Initialize and fetch the git submodule for botocore definitions:
 
 `git submodule update`
 
-Initial setup complete, the above shouldn't be needed again unless you need to
-update the botocore definitions from that upstream project.
+Now run `cargo build` to perform the initial build.
+
+Initial setup is now complete, the above shouldn't be needed again unless you need to update the botocore definitions from that upstream project.
 
 ### Building after initial setup
 
