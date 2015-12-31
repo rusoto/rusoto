@@ -53,15 +53,4 @@ Information on release schedules and procedures are in [RELEASING](RELEASING.md)
 
 ### Contributing
 
-1. Install Rust **1.3.0** or later - http://www.rust-lang.org/
-2. Check out code from github
-3. Set up AWS credentials: environment variables (export AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY), ~/.aws/credentials, or use an IAM instance profile.
-4. `cargo build`
-5. `cargo test --verbose --features aws_integration` - This will create real AWS resources and you may be charged.
-6. (For more verbose test output, you can run `cargo test --verbose --features aws_integration -- --nocapture` )
-
-If openssl isn't installed you may see an error compiling.  For OSX, running `brew install openssl` then `brew link --force openssl` should fix it.
-
-#### Rust code generation from boto core service definitions:
-
-See [CODEGEN](codegen/CODEGEN.md).
+See [CONTRIBUTING](CONTRIBUTING.md).
