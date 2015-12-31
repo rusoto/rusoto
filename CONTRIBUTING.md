@@ -1,6 +1,6 @@
 # Contributing to Rusoto
 
-## Setting up build environment (only needed once)
+### Setting up build environment (only needed once)
 
 Install Rust **1.3.0** or later - http://www.rust-lang.org/
 
@@ -32,14 +32,15 @@ Initialize and fetch the git submodule for botocore definitions:
 Initial setup complete, the above shouldn't be needed again unless you need to
 update the botocore definitions from that upstream project.
 
-## Building after initial setup
+### Building after initial setup
 
 Build the project with `cargo build`.
 
-`cargo test --verbose --features aws_integration` - This will create real AWS resources and you may be charged.
+Integration tests can be executed by running `cargo test --verbose --features aws_integration`.
+This will create real AWS resources and you may be charged.
 
 For more verbose test output, you can run `cargo test --verbose --features aws_integration -- --nocapture`.
 
-## Rust code generation from boto core service definitions:
+### Rust code generation from boto core service definitions:
 
 See [CODEGEN](codegen/CODEGEN.md).
