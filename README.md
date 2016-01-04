@@ -1,8 +1,8 @@
 # Rusoto
 
-[![Build Status](https://travis-ci.org/DualSpark/rusoto.svg?branch=master)](https://travis-ci.org/DualSpark/rusoto)
+[![Build Status](https://travis-ci.org/rusoto/rusoto.svg?branch=master)](https://travis-ci.org/rusoto/rusoto)
 
-AWS SDK for Rust.  [Documentation](http://dualspark.github.io/rusoto/).
+AWS SDK for Rust.  [Documentation](http://rusoto.github.io/rusoto/rusoto/index.html).
 
 ### Installation
 
