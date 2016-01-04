@@ -8,7 +8,7 @@ keywords = [ "AWS", "SQS", "Amazon", "DynamoDB", "S3", "KMS" ]
 description = "AWS SDK for Rust"
 repository = "https://github.com/rusoto/rusoto"
 documentation = "http://rusoto.github.io/rusoto/rusoto/index.html"
-exclude = [".gitignore", ".travis.yml", "docgen.sh", "codegen/*.py", "codegen/requirements.txt", "codegen/botocore/*"]
+exclude = [".gitignore", ".travis.yml", "docgen.sh"]
 build = "build.rs"
 
 [build-dependencies]
