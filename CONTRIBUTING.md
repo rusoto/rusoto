@@ -12,7 +12,9 @@ If you're on OSX, you'll probably need a new version of openssl.  Run `brew inst
 
 If using pre-El Capitan OSX, run `brew link --force openssl`.  
 
-For El Capitan, run:
+For El Capitan, these environment variables need to be set whenever building the openssl crate.
+This includes rebuilding Rusoto after a `cargo clean`.
+They can be added to your shell profile (EG `~/.bash_profile`):
 
 ```bash
 export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include
