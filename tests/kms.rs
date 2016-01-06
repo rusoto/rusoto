@@ -1,16 +1,11 @@
-#![allow(dead_code)]
-#[macro_use]
-extern crate rusoto;
-extern crate xml;
-extern crate time;
-extern crate regex;
-extern crate rustc_serialize;
+#![cfg(feature = "kms")]
 
-use rusoto::credentials::*;
-use rusoto::regions::*;
+extern crate rusoto;
+
+use rusoto::credentials::DefaultAWSCredentialsProviderChain;
+use rusoto::regions::Region;
 use rusoto::kms::{KMSHelper, KMSError};
 
-#[cfg(feature = "kms")]
 #[test]
 fn main() {
     let creds = DefaultAWSCredentialsProviderChain::new();

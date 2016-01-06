@@ -16,9 +16,10 @@
 //!
 //! ## Supported services
 //!
-//! * SQS
-//! * S3 (partial implementation)
 //! * DynamoDB
+//! * KMS
+//! * S3
+//! * SQS
 //!
 //! ## Requests and request signing
 //!
@@ -34,6 +35,8 @@ extern crate rustc_serialize;
 extern crate regex;
 extern crate crypto;
 extern crate chrono;
+extern crate serde;
+extern crate serde_json;
 
 #[macro_use]
 extern crate log;

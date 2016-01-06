@@ -1,20 +1,30 @@
-#![allow(dead_code)]
+#![cfg(feature = "dynamodb")]
+
 #[macro_use]
 extern crate rusoto;
-extern crate xml;
 extern crate time;
-extern crate regex;
-extern crate rustc_serialize;
 
-use rusoto::credentials::*;
-use rusoto::regions::*;
-use rusoto::dynamodb::{DynamoDBHelper, CreateTableInput, AttributeDefinition, KeySchemaElement};
-use rusoto::dynamodb::{DynamoDBError, PutItemInput, PutItemInputAttributeMap, AttributeValue};
-use rusoto::dynamodb::{GetItemInput, GetItemOutput, Key, get_str_from_attribute};
 use std::thread;
-use time::*;
 
-#[cfg(feature = "dynamodb")]
+use time::get_time;
+
+use rusoto::credentials::DefaultAWSCredentialsProviderChain;
+use rusoto::dynamodb::{
+    AttributeDefinition,
+    AttributeValue,
+    CreateTableInput,
+    DynamoDBError,
+    DynamoDBHelper,
+    GetItemInput,
+    GetItemOutput,
+    Key,
+    KeySchemaElement,
+    PutItemInput,
+    PutItemInputAttributeMap,
+    get_str_from_attribute,
+};
+use rusoto::regions::Region;
+
 #[test]
 fn main() {
     let creds = DefaultAWSCredentialsProviderChain::new();
