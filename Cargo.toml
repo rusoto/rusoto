@@ -31,8 +31,6 @@ log = "^0.3.3"
 env_logger = "*"
 
 [features]
-aws_integration = ["s3", "sqs", "dynamodb"]
+aws_integration = ["s3"]
 s3 = []
-sqs = []
-dynamodb = []
 kms = []
