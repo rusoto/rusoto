@@ -36,8 +36,8 @@ extern crate rustc_serialize;
 extern crate regex;
 extern crate crypto;
 extern crate chrono;
-extern crate serde;
 extern crate serde_json;
+extern crate serde;
 
 #[macro_use]
 extern crate log;
@@ -48,8 +48,9 @@ pub mod credentials;
 pub mod dynamodb;
 pub mod ecs;
 pub mod error;
-pub mod kms;
-pub mod sqs;
+//pub mod foo;
+//pub mod kms;
+//pub mod sqs;
 pub mod s3;
 pub mod xmlutil;
 pub mod regions;
