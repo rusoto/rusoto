@@ -13,7 +13,7 @@ build = "build.rs"
 
 [build-dependencies]
 serde_codegen = "^0.6.7"
-syntex = "^0.24.0"
+syntex = "^0.25.0"
 
 [dependencies]
 xml-rs = "^0.1.26"
