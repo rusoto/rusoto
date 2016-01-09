@@ -4,6 +4,8 @@
 
 AWS SDK for Rust.  [Documentation](http://rusoto.github.io/rusoto/rusoto/index.html).
 
+IRC: #rusoto on irc.freenode.net.
+
 ### Installation
 
 Rusoto is available on [crates.io](https://crates.io/crates/rusoto).
