@@ -1,5 +1,19 @@
 from parserbase import ParserBase
 
+# list of reserved rustlang keywords
+# http://doc.rust-lang.org/grammar.html#keywords
+KEYWORDS = set(["abstract", "alignof", "as", "become", "box",
+            "break", "const", "continue", "crate", "do",
+            "else", "enum", "extern", "false", "final"
+            "fn", "for", "if", "impl", "in",
+            "let", "loop","macro", "match", "mod",
+            "move", "mut", "offsetof", "override", "priv",
+            "proc", "pub", "pure", "ref", "return",
+            "Self", "self", "sizeof", "static", "struct",
+            "super", "trait", "true", "type", "typeof",
+            "unsafe", "unsized", "use", "virtual", "where",
+            "while", "yield"])
+
 class JsonProtocolParser(ParserBase):
 
     def __init__(self, service, client_name):
@@ -20,6 +34,9 @@ class JsonProtocolParser(ParserBase):
                 rust_type =  member['shape']
                 if not JsonProtocolParser.is_required(shape, mname):
                     rust_type = "Option<" + rust_type + ">"
+                if mname in KEYWORDS:
+                    self.append("\t#[serde(rename=\""+ mname+"\")]")
+                    mname = "_" + mname
                 self.append("\tpub " + mname + ": " + rust_type + ",")
             self.append("}\n")
 	else:
@@ -37,7 +54,7 @@ class JsonProtocolParser(ParserBase):
 
 	if not ('input' in operation):
             input_name = ''
-            input_type = ''            
+            input_type = ''
             self.append("\tpub fn " + ParserBase.c_to_s(operation['name']) + "(&mut self"") -> Result<" + output_type + "> {")
 	else:
             input_name = operation['input']['shape']

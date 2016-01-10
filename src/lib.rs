@@ -17,6 +17,7 @@
 //! ## Supported services
 //!
 //! * DynamoDB
+//! * [ECS](https://aws.amazon.com/ecs/)
 //! * KMS
 //! * S3
 //! * SQS
@@ -45,6 +46,7 @@ extern crate log;
 #[macro_use] pub mod signature;
 pub mod credentials;
 pub mod dynamodb;
+pub mod ecs;
 pub mod error;
 pub mod kms;
 pub mod sqs;
