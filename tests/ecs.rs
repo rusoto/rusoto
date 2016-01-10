@@ -1,4 +1,4 @@
-//#![cfg(feature = "ecs")]
+#![cfg(feature = "ecs")]
 
 extern crate rusoto;
 
