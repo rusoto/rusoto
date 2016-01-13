@@ -1,0 +1,11 @@
+[package]
+name = "rusoto_codegen"
+version = "0.1.0"
+authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>", "Matthew Mayer <matthewkmayer@gmail.com>"]
+description = "Code generation library for Rusoto."
+license = "MIT"
+repository = "https://github.com/rusoto/rusoto"
+
+[dependencies]
+serde_codegen = "0.6.9"
+syntex = "0.26.0"
