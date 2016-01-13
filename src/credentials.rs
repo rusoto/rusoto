@@ -20,9 +20,9 @@ use hyper::Client;
 use hyper::header::Connection;
 use error::*;
 use regex::Regex;
-
-use chrono::*;
+use chrono::{Duration, UTC, DateTime};
 use serde_json::{Value, from_str};
+use std::time::Duration as StdDuration;
 
 /// Represents AWS credentials.  Includes access key, secret key, token (for IAM profiles) and expiration timestamp.
 #[derive(Clone, Debug)]
@@ -266,10 +266,10 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
         if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
             // TODO: backoff and retry on failure.
 
-            //println!("Calling IAM metadata");
             // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
             let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
-            let client = Client::new();
+            let mut client = Client::new();
+            client.set_read_timeout(Some(StdDuration::from_secs(15)));
             let mut response;
             match client.get(&address)
                 .header(Connection::close()).send() {
