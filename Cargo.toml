@@ -11,9 +11,8 @@ documentation = "http://rusoto.github.io/rusoto/rusoto/index.html"
 exclude = [".gitignore", ".travis.yml", "docgen.sh"]
 build = "build.rs"
 
-[build-dependencies]
-serde_codegen = "^0.6.7"
-syntex = "^0.24.0"
+[build-dependencies.rusoto_codegen]
+path = "codegen"
 
 [dependencies]
 xml-rs = "^0.1.26"
