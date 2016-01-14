@@ -1,3 +1,4 @@
+/*
 #![allow(dead_code)]
 #[macro_use]
 extern crate rusoto;
@@ -33,3 +34,4 @@ fn kms_list_keys_tests(kms: &mut KMSHelper) -> Result<(), KMSError> {
     println!("{:#?}", response);
     Ok(())
 }
+*/

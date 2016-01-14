@@ -14,13 +14,18 @@ build = "build.rs"
 [features]
 default = ["serde_codegen"]
 nightly = ["serde_macros"]
+aws_integration = ["dynamodb"]
+dynamodb = []
 
 [build-dependencies]
+regex = "^0.1.41"
+Inflector = "0.1.6"
+botocore_parser = { path = "../botocore_parser" }
 serde_codegen = { version = "*", optional = true }
+serde_json = "*"
 syntex = "*"
 
 [dependencies]
-Inflector = "0.1.6"
 serde = "*"
 serde_json = "*"
 serde_macros = { version = "*", optional = true }
