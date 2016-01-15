@@ -2,7 +2,7 @@
 
 Rusoto has the ability to source AWS access credentials in a few different ways:
 
-1. Environment variables via `rusoto::credentials::EnvironmentCredentialsProvider`
+1. Environment variables via `rusoto::credentials::EnvironmentCredentialsProvider` (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`)
 2. AWS credentials file via `rusoto::credentials::ProfileCredentialsProvider`
 3. IAM instance profile via `rusoto::credentials::IAMRoleCredentialsProvider`
 
