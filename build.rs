@@ -5,7 +5,7 @@ extern crate serde_json;
 extern crate serde_codegen;
 extern crate syntex;
 
-use botocore_parser::*;
+use botocore_parser::{Service, Shape};
 use std::fs::File;
 use std::io::{Read, Write};
 use inflector::Inflector;

@@ -21,13 +21,13 @@ dynamodb = []
 regex = "^0.1.41"
 Inflector = "0.1.6"
 botocore_parser = { path = "../botocore_parser" }
-serde_codegen = { version = "*", optional = true }
-serde_json = "*"
-syntex = "*"
+serde_codegen = { version = "0.6.9", optional = true }
+serde_json = "0.6.0"
+syntex = "0.26.0"
 
 [dependencies]
 serde = "*"
-serde_json = "*"
+serde_json = "0.6.0"
 serde_macros = { version = "*", optional = true }
 xml-rs = "^0.1.26"
 time = "^0.1.32"
