@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::ecs::ECSClient;
+use rusoto::ecs::{ECSClient, ListClustersRequest};
 use rusoto::credentials::DefaultAWSCredentialsProviderChain;
 use rusoto::regions::Region;
 
@@ -14,7 +14,9 @@ fn main() {
         credentials,
         &region
     );
-    match ecs.list_clusters(&Default::default()) {
+
+    // http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListClusters.html
+    match ecs.list_clusters(&ListClustersRequest::default()) {
         Ok(clusters) => {
             for arn in clusters.clusterArns.unwrap_or(vec![]) {
                 println!("arn -> {:?}", arn);
