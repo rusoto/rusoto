@@ -5,10 +5,10 @@ use std::result;
 pub type Result<T> = result::Result<T, ECSError>;
 
 /// Common error type for ECS requests
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, PartialEq)]
 pub struct ECSError {
-    __type: String,
-    message: Option<String>
+    pub __type: String,
+    pub message: Option<String>
 }
 
 impl From<AWSError> for ECSError {

@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::ecs::{ECSClient, ListClustersRequest};
+use rusoto::ecs::{ECSClient, ECSError, ListClustersRequest};
 use rusoto::credentials::DefaultAWSCredentialsProviderChain;
 use rusoto::regions::Region;
 
@@ -23,7 +23,20 @@ fn main() {
             }
         },
         Err(err) => {
-            println!("Error listing container instances {:#?}", err);
+            panic!("Error listing container instances {:#?}", err);
+        }
+    }
+
+    match ecs.list_clusters(
+        &ListClustersRequest {
+            nextToken: Some("bogus".to_owned()), ..Default::default()
+        }) {
+        Ok(_) => panic!("this should have been an InvalidParameterException ECSError"),
+        Err(err) => {
+            assert_eq!(err,  ECSError {
+                __type: "InvalidParameterException".to_owned(),
+                message: Some("Invalid token bogus".to_owned())
+            })
         }
     }
 }
