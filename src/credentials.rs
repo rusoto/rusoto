@@ -124,6 +124,19 @@ pub struct ProfileCredentialsProvider {
 }
 
 impl ProfileCredentialsProvider {
+   pub fn new() -> AWSResult<ProfileCredentialsProvider> {
+        // Default credentials file location:
+        // ~/.aws/credentials (Linux/Mac)
+        // %USERPROFILE%\.aws\credentials  (Windows)
+        let profile_location;
+        match env::home_dir() {
+            Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
+            None => return Err(AWSError::new("Couldn't get your home dir.")),
+        }
+
+        Ok(ProfileCredentialsProvider { credentials: None, profile: "default".to_string(), file_name: profile_location })
+    }
+
     pub fn with_configuration(profile: &str, file_name: &str) -> ProfileCredentialsProvider {
         ProfileCredentialsProvider { credentials: None, profile: profile.to_string(), file_name: file_name.to_string() }
     }
@@ -154,21 +167,6 @@ impl AWSCredentialsProvider for ProfileCredentialsProvider {
        }
        Ok(self.credentials.as_ref().unwrap())
    }
-}
-
-impl ProfileCredentialsProvider {
-   pub fn new() -> AWSResult<ProfileCredentialsProvider> {
-        // Default credentials file location:
-        // ~/.aws/credentials (Linux/Mac)
-        // %USERPROFILE%\.aws\credentials  (Windows)
-        let profile_location;
-        match env::home_dir() {
-            Some(ref p) => profile_location = p.display().to_string() + "/.aws/credentials",
-            None => return Err(AWSError::new("Couldn't get your home dir.")),
-        }
-
-        Ok(ProfileCredentialsProvider { credentials: None, profile: "default".to_string(), file_name: profile_location })
-    }
 }
 
 fn parse_credentials_file(file_with_path: &str) -> Result<HashMap<String, AWSCredentials>, AWSError> {
@@ -342,7 +340,8 @@ impl AWSCredentialsProvider for IAMRoleCredentialsProvider {
 #[derive(Debug, Clone)]
 pub struct DefaultAWSCredentialsProviderChain {
     credentials: Option<AWSCredentials>,
-    profile: String
+    file_path: Option<String>,
+    profile: String,
 }
 
 // Chain the providers:
@@ -357,8 +356,13 @@ impl AWSCredentialsProvider for DefaultAWSCredentialsProviderChain {
                 return Ok(self.credentials.as_ref().unwrap());
             }
 
-            if let Ok(mut provider) = ProfileCredentialsProvider::new() {
-                if let Ok(creds) = provider.with_profile(&self.profile).get_credentials() {
+            let profile_credentials_provider_result = match self.file_path {
+                Some(ref file_path) => Ok(ProfileCredentialsProvider::with_configuration(&self.profile, file_path)),
+                None => ProfileCredentialsProvider::new(),
+            };
+
+            if let Ok(mut provider) = profile_credentials_provider_result {
+                if let Ok(creds) =  provider.with_profile(&self.profile).get_credentials() {
                     self.credentials = Some(creds.clone());
 
                     return Ok(self.credentials.as_ref().unwrap());
@@ -380,7 +384,30 @@ impl AWSCredentialsProvider for DefaultAWSCredentialsProviderChain {
 
 impl DefaultAWSCredentialsProviderChain {
     pub fn new() -> DefaultAWSCredentialsProviderChain {
-        DefaultAWSCredentialsProviderChain { credentials: None, profile: "default".to_string() }
+        DefaultAWSCredentialsProviderChain {
+            credentials: None,
+            file_path: None,
+            profile: "default".to_owned(),
+        }
+    }
+
+    pub fn with_configuration<'a>(profile: &'a str, file_path: &'a str) -> DefaultAWSCredentialsProviderChain {
+        DefaultAWSCredentialsProviderChain {
+            credentials: None,
+            file_path: Some(file_path.to_string()),
+            profile: profile.to_string(),
+        }
+    }
+
+    pub fn set_file_path<S>(&mut self, file_path: S) where S: Into<String> {
+        self.file_path = Some(file_path.into());
+    }
+
+    pub fn get_file_path(&self) -> Option<&str> {
+        match self.file_path {
+            Some(ref file_path) => Some(file_path),
+            None => None,
+        }
     }
 
     pub fn set_profile<S>(&mut self, profile: S) where S: Into<String> {
@@ -451,22 +478,52 @@ mod tests {
 
         assert!(result.is_err());
         assert_eq!(result.err(), Some(AWSError("profile not found".to_string())));
-     }
+    }
 
-     #[test]
-     fn profile_credentials_provider_profile_name() {
-        let mut provider = ProfileCredentialsProvider::new().unwrap();
-        assert_eq!("default", provider.get_profile());
-        assert_eq!("foo", provider.with_profile("foo").get_profile());
-     }
+    #[test]
+    fn profile_credentials_provider_profile_name() {
+       let mut provider = ProfileCredentialsProvider::new().unwrap();
+       assert_eq!("default", provider.get_profile());
+       assert_eq!("foo", provider.with_profile("foo").get_profile());
+    }
 
-     #[test]
-     fn credential_chain_profile_name() {
+    #[test]
+    fn credential_chain_profile_name() {
+       let mut chain = DefaultAWSCredentialsProviderChain::new();
+       assert_eq!("default", chain.get_profile());
+       chain.set_profile("foo");
+       assert_eq!("foo", chain.get_profile());
+    }
+
+    #[test]
+    fn credential_chain_with_configuration() {
+        let mut chain = DefaultAWSCredentialsProviderChain::with_configuration(
+            "foo",
+            "tests/sample-data/multiple_profile_credentials",
+        );
+
+        let credentials = chain.get_credentials().expect(
+            "Failed to get credentials from default provider chain with configuration",
+        );
+
+        assert_eq!(credentials.get_aws_access_key_id(), "foo_access_key");
+        assert_eq!(credentials.get_aws_secret_key(), "foo_secret_key");
+    }
+
+    #[test]
+    fn credential_chain_manual_configuration() {
         let mut chain = DefaultAWSCredentialsProviderChain::new();
-        assert_eq!("default", chain.get_profile());
+
         chain.set_profile("foo");
-        assert_eq!("foo", chain.get_profile());
-     }
+        chain.set_file_path("tests/sample-data/multiple_profile_credentials");
+
+        let credentials = chain.get_credentials().expect(
+            "Failed to get credentials from default provider chain with manual configuration",
+        );
+
+        assert_eq!(credentials.get_aws_access_key_id(), "foo_access_key");
+        assert_eq!(credentials.get_aws_secret_key(), "foo_secret_key");
+    }
 
     #[test]
     fn existing_file_no_credentials() {

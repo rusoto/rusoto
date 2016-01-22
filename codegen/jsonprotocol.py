@@ -63,7 +63,7 @@ class JsonProtocolParser(ParserBase):
 
         self.append('\t\tlet encoded = to_string(&input).expect("failed to convert input to JSON");')
         self.append('\t\tlet mut request = SignedRequest::new("' + http['method'] + '", "' + self.metadata('endpointPrefix') + '", &self.region, "' + http['requestUri'] + '");')
-        self.append('\t\trequest.set_content_type("application/x-amz-json-1.0".to_string());')
+        self.append('\t\trequest.set_content_type("application/x-amz-json-1.1".to_string());')
         self.append('\t\trequest.add_header("x-amz-target", "' + self.metadata('targetPrefix') + '.' + operation['name'] + '");')
         self.append('\t\trequest.set_payload(Some(encoded.as_bytes()));')
         self.append('\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));')
