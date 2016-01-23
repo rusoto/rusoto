@@ -27,6 +27,18 @@ fn main() {
         &out_path.join("kms_helpers.rs"),
     );
 
+    // ECS
+    generate(
+        "codegen/botocore/botocore/data/ecs/2014-11-13/service-2.json",
+        "ECSClient",
+        out_path,
+        "ecs",
+    );
+    serde_generate(
+        &src_path.join("ecs_helpers.in.rs"),
+        &out_path.join("ecs_helpers.rs"),
+    );
+
     // KMS
     generate(
         "codegen/botocore/botocore/data/kms/2014-11-01/service-2.json",

@@ -41,7 +41,7 @@ To see output of logging from integration tests, run:
 
 ### Semantic versioning
 
-Rusoto complies with [semantic versioning 2.0.0](http://semver.org/).  Until reaching 1.0.0 the API is to be considered unstable.  See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/rusoto) for current version.  
+Rusoto complies with [semantic versioning 2.0.0](http://semver.org/).  Until reaching 1.0.0 the API is to be considered unstable.  See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/rusoto) for current version.
 
 ### Releases
 
@@ -50,6 +50,7 @@ Information on release schedules and procedures are in [RELEASING](RELEASING.md)
 #### Currently implemented
 
 * DynamoDB
+* [ECS](https://aws.amazon.com/ecs/)
 * KMS
 * S3
 * SQS

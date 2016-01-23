@@ -33,7 +33,8 @@ serde_json = "0.6.0"
 env_logger = "*"
 
 [features]
-aws_integration = ["dynamodb", "kms", "s3", "sqs", "dynamodb"]
+aws_integration = ["dynamodb", "ecs", "kms", "s3", "sqs", "dynamodb"]
+ecs = []
 s3 = []
 sqs = []
 dynamodb = []
