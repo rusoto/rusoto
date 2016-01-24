@@ -34,8 +34,9 @@ fn main() {
     
     let services = vec![
         AmazonService::new("dynamodb", "DynamoDBClient", "2012-08-10"),
-        AmazonService::new("kms", "KMSClient", "2014-11-01"),/*,
-        AmazonService::new("sqs", "SQSClient", "2012-11-05")*/
+        AmazonService::new("kms", "KMSClient", "2014-11-01"),
+        AmazonService::new("s3", "S3Client", "2006-03-01")
+        /*AmazonService::new("sqs", "SQSClient", "2012-11-05")*/
     ];
 
     for service in services {        
@@ -67,23 +68,29 @@ fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
         source.push_str("}\n\n");
     }
 
-
+    // generate rust structs for the botocore shapes
     source.push_str(&render_shapes(&service));
 
+    // generate the service client struct
     source.push_str(&format!("pub struct {}<'a> {{", type_name));
     source.push_str("\tcreds: Box<AWSCredentialsProvider + 'a>,");
     source.push_str("\tregion: &'a Region");
     source.push_str("}\n");
-        
+
+    // implement each botocore operation as function for the client
     source.push_str(&format!("impl<'a> {}<'a> {{ ", type_name));
     source.push_str(&format!("\tpub fn new<P: AWSCredentialsProvider + 'a>(creds: P, region: &'a Region) -> {}<'a> {{", type_name));
     source.push_str(&format!("\t\t{} {{ creds: Box::new(creds), region: region }}", type_name));
     source.push_str("\t}");
 
-    source.push_str(&render_operations(&service));
-
+    // each protocol type will require operations performed in different ways
+    let operations = match &*service.metadata.protocol {
+        "rest-xml" => rest_xml_operations(&service),
+        "json" => json_operations(&service),
+        _ => panic!(format!("Unknown protocol type '{}'", service.metadata.protocol))
+    };
+    source.push_str(&operations);
     source.push_str("}");
-
 
     let mut outfile = File::create(destination).expect("couldn't open file for writing");
     let _ = outfile.write_all(source.as_bytes());
@@ -94,8 +101,7 @@ fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
 fn generate(
     service: AmazonService,
     botocore_path: &Path,
-    base_destination: &Path,
-) {
+    base_destination: &Path) {
     let botocore_destination = base_destination.join(format!("{}_botocore.rs", service.name));
     let serde_destination = base_destination.join(format!("{}.rs", service.name));
     let input_location = botocore_path.join(format!("{}/{}/service-2.json", service.name, service.protocol_date));
@@ -119,47 +125,73 @@ impl AmazonService {
     }
 }
 
+// Translate botocore operations to Rust functions for rest-xml services like S3
+fn rest_xml_operations(service: &Service) -> String {
+    let mut src = String::new();
 
-// Translate botocore "operations" to Rust methods that make REST requests
-fn render_operations(service: &Service) -> String {
-	let mut src = String::new();
+    for operation in service.operations.values() {
 
-	for operation in service.operations.values() {
-
-            let output_shape = match operation.output {
-                Some(ref output) => output.shape.clone(),
-                None => "()".to_string()
-            };
-
-		src.push_str(&format!("\tpub fn {}(&mut self, input: &{}) -> Result<{}> {{\n", operation.name.to_snake_case(), operation.input.shape, output_shape));
-		src.push_str("\t\tlet encoded = serde_json::to_string(&input).unwrap();\n");
-		src.push_str(&format!("\t\tlet mut request = SignedRequest::new(\"{}\", \"{}\", &self.region, \"{}\");\n", operation.http.method, service.metadata.endpointPrefix, operation.http.requestUri));
-		src.push_str("\t\trequest.set_content_type(\"application/x-amz-json-1.0\".to_string());\n");
-		src.push_str(&format!("\t\trequest.add_header(\"x-amz-target\", \"{}.{}\");\n", service.metadata.targetPrefix, operation.name));
-		src.push_str("\t\trequest.set_payload(Some(encoded.as_bytes()));\n");
-		src.push_str("\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));\n");
-		src.push_str("\t\tlet status = result.status.to_u16();\n");
-		src.push_str("\t\tlet mut body = String::new();\n");
-		src.push_str("\t\tresult.read_to_string(&mut body).unwrap();\n");
-		src.push_str("\t\tmatch status {\n");
-		src.push_str("\t\t\t200 => {\n");
-
-            if operation.output.is_some() {
-		src.push_str(&format!("\t\t\t\tlet decoded: {} = serde_json::from_str(&body).unwrap();\n", output_shape));
-            } else {
-                src.push_str("\t\t\t\tlet decoded = ();\n");
+        let output_shape = operation.output_shape_or("()");
+       
+        // list_buckets() has no arguments, and thus a different signature
+        match operation.input {
+            Some(ref input) => {
+                src.push_str(&format!("\tpub fn {}(&mut self, input: &{}) -> Result<{}> {{\n", operation.name.to_snake_case(), input.shape, output_shape));
+            },
+            None => {
+                src.push_str(&format!("\tpub fn {}(&mut self) -> Result<{}> {{\n", operation.name.to_snake_case(), output_shape));
             }
-		src.push_str("\t\t\t\tOk(decoded)\n");
-		src.push_str("\t\t\t}\n");
-		src.push_str("\t\t\t_ => {\n");
-		src.push_str("\t\t\t\tErr(parse_error(&body))\n");
-		src.push_str("\t\t\t}\n");
-		src.push_str("\t\t}\n");
-		src.push_str("\t}\n");
+        }
 
-	}
+        // all methods return Err until we implement them
+        src.push_str("\t\tErr(S3Error)\n");
 
-	src
+        src.push_str("\t}\n\n");
+    }
+
+    src
+}
+
+// Translate botocore operations to Rust functions for json services like DynamoDB and KMS
+fn json_operations(service: &Service) -> String {
+    let mut src = String::new();
+    
+    let target_prefix = service.metadata.targetPrefix.as_ref().expect("targetPrefix not defined for json protocol operation");
+
+    for operation in service.operations.values() {
+        
+        let output_shape = operation.output_shape_or("()");
+
+	src.push_str(&format!("\tpub fn {}(&mut self, input: &{}) -> Result<{}> {{\n", operation.name.to_snake_case(), operation.input_shape(), output_shape));
+	src.push_str("\t\tlet encoded = serde_json::to_string(&input).unwrap();\n");
+	src.push_str(&format!("\t\tlet mut request = SignedRequest::new(\"{}\", \"{}\", &self.region, \"{}\");\n", operation.http.method, service.metadata.endpointPrefix, operation.http.requestUri));
+	src.push_str("\t\trequest.set_content_type(\"application/x-amz-json-1.0\".to_string());\n");
+	src.push_str(&format!("\t\trequest.add_header(\"x-amz-target\", \"{}.{}\");\n", target_prefix, operation.name));
+	src.push_str("\t\trequest.set_payload(Some(encoded.as_bytes()));\n");
+	src.push_str("\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));\n");
+	src.push_str("\t\tlet status = result.status.to_u16();\n");
+	src.push_str("\t\tlet mut body = String::new();\n");
+	src.push_str("\t\tresult.read_to_string(&mut body).unwrap();\n");
+	src.push_str("\t\tmatch status {\n");
+	src.push_str("\t\t\t200 => {\n");
+        
+        if operation.output.is_some() {
+	    src.push_str(&format!("\t\t\t\tlet decoded: {} = serde_json::from_str(&body).unwrap();\n", output_shape));
+        } else {
+            src.push_str("\t\t\t\tlet decoded = ();\n");
+        }
+
+	src.push_str("\t\t\t\tOk(decoded)\n");
+	src.push_str("\t\t\t}\n");
+	src.push_str("\t\t\t_ => {\n");
+	src.push_str("\t\t\t\tErr(parse_error(&body))\n");
+	src.push_str("\t\t\t}\n");
+	src.push_str("\t\t}\n");
+	src.push_str("\t}\n");
+        
+    }
+    
+    src
 }
 
 // Translate botocore "shapes" to Rust types
