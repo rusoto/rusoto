@@ -18,7 +18,7 @@ const BOTOCORE_DIR: &'static str = "codegen/botocore/botocore/data/";
 
 struct AmazonService {
     name: String,
-    type_name: String, 
+    type_name: String,
     protocol_date: String
 }
 
@@ -31,7 +31,7 @@ fn main() {
         Some(ref dirname) => Path::new(dirname),
         None => Path::new(BOTOCORE_DIR)
     };
-    
+
     let services = vec![
         AmazonService::new("dynamodb", "DynamoDBClient", "2012-08-10"),
         AmazonService::new("kms", "KMSClient", "2014-11-01"),
@@ -39,14 +39,12 @@ fn main() {
         /*AmazonService::new("sqs", "SQSClient", "2012-11-05")*/
     ];
 
-    for service in services {        
+    for service in services {
         generate(service, botocore_path, out_path);
     }
 }
 
 fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
-
-
     let mut f = File::open(input).unwrap();
     let mut s = String::new();
     let _ = f.read_to_string(&mut s);
@@ -54,10 +52,10 @@ fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
     let service: Service = serde_json::from_str(&s).expect("Invalid botocore input");
 
     let mut source = String::new();
-    
+
     // source.push_str("#![allow(non_snake_case)]\n");
     source.push_str("use serde_json;\n");
-    source.push_str("use std::io::Read;\n");    
+    source.push_str("use std::io::Read;\n");
 
 
     if type_name == "DynamoDBClient" {
@@ -94,7 +92,7 @@ fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
 
     let mut outfile = File::create(destination).expect("couldn't open file for writing");
     let _ = outfile.write_all(source.as_bytes());
-    
+
 
 }
 
@@ -130,9 +128,10 @@ fn rest_xml_operations(service: &Service) -> String {
     let mut src = String::new();
 
     for operation in service.operations.values() {
-
+        src.push_str(&print_docs_for_operation(operation));
         let output_shape = operation.output_shape_or("()");
-       
+
+        // function declaration:
         // list_buckets() has no arguments, and thus a different signature
         match operation.input {
             Some(ref input) => {
@@ -142,12 +141,56 @@ fn rest_xml_operations(service: &Service) -> String {
                 src.push_str(&format!("\tpub fn {}(&mut self) -> Result<{}> {{\n", operation.name.to_snake_case(), output_shape));
             }
         }
-
-        // all methods return Err until we implement them
-        src.push_str("\t\tErr(S3Error)\n");
-
+        src.push_str(&s3_function_guts(operation).to_string());
         src.push_str("\t}\n\n");
     }
+
+    src
+}
+
+fn print_docs_for_operation(op: &botocore_parser::Operation) -> String {
+    let mut doc_string = String::new();
+    match op.documentation {
+        None => (),
+        Some(ref docs) => doc_string.push_str(&format!("\t\t// {}\n", docs)),
+    }
+    match op.documentationUrl {
+        None => (),
+        Some(ref doc_uri) => doc_string.push_str(&format!("\t\t// {}\n", doc_uri)),
+    }
+    doc_string
+}
+
+fn s3_function_guts(op: &botocore_parser::Operation) -> String {
+    let mut src = String::new();
+    src.push_str(&format!("\t\tlet mut uri = String::from(\"\");\n"));
+    src.push_str(&format!("\t\tlet mut request_body : Vec<u8>;\n"));
+    src.push_str(&format!("\t\tlet mut request = SignedRequest::new(\"{}\", \"s3\", &self.region, \"&uri\");\n", op.http.method));
+
+    src.push_str(&format!("\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));\n"));
+
+    src.push_str(&format!("\t\tlet status = result.status.to_u16();\n"));
+    //src.push_str(&format!("\t\t \n"));
+
+    src.push_str(&format!("\t\tmatch status {{\n"));
+    src.push_str(&format!("\t\t\t200 => {{\n"));
+    src.push_str(&format!("\t\t\t\tlet headers = result.headers.clone();\n"));
+    src.push_str(&format!("\t\t\t\tlet mut reader = EventReader::new(result);\n"));
+    src.push_str(&format!("\t\t\t\tlet mut stack = XmlResponseFromAws::new(reader.events().peekable());\n"));
+    src.push_str(&format!("\t\t\t\tstack.next(); // xml start tag\n"));
+    src.push_str(&format!("\t\t\t\tstack.next(); // top level result\n"));
+    src.push_str(&format!("\t\t\t\t// tag name for top level doesn't matter:\n"));
+    src.push_str(&format!("\t\t\t\tlet aws_result = try!({}OutputParser::parse_response(None, None, &headers, &mut stack));\n", op.name));
+    src.push_str(&format!("\t\t\t\tOk(aws_result)\n"));
+    src.push_str(&format!("\t\t\t}}\n"));
+    src.push_str(&format!("\t\t\t_ => {{\n"));
+    src.push_str(&format!("\t\t\t\tprintln!(\"Error: Status code was {{}}\", status);\n"));
+    src.push_str(&format!("\t\t\t\tlet mut body = String::new();\n"));
+    src.push_str(&format!("\t\t\t\tresult.read_to_string(&mut body).unwrap();\n"));
+    src.push_str(&format!("\t\t\t\tprintln!(\"Error response body: {{}}\", body);\n"));
+    src.push_str(&format!("\t\t\t\tErr(AWSError::new(\"S3 error in {}\"))\n", op.name.to_snake_case()));
+    src.push_str(&format!("\t\t\t}}\n"));
+    src.push_str(&format!("\t\t}}\n"));
 
     src
 }
@@ -155,11 +198,11 @@ fn rest_xml_operations(service: &Service) -> String {
 // Translate botocore operations to Rust functions for json services like DynamoDB and KMS
 fn json_operations(service: &Service) -> String {
     let mut src = String::new();
-    
+
     let target_prefix = service.metadata.targetPrefix.as_ref().expect("targetPrefix not defined for json protocol operation");
 
     for operation in service.operations.values() {
-        
+
         let output_shape = operation.output_shape_or("()");
 
 	src.push_str(&format!("\tpub fn {}(&mut self, input: &{}) -> Result<{}> {{\n", operation.name.to_snake_case(), operation.input_shape(), output_shape));
@@ -174,7 +217,7 @@ fn json_operations(service: &Service) -> String {
 	src.push_str("\t\tresult.read_to_string(&mut body).unwrap();\n");
 	src.push_str("\t\tmatch status {\n");
 	src.push_str("\t\t\t200 => {\n");
-        
+
         if operation.output.is_some() {
 	    src.push_str(&format!("\t\t\t\tlet decoded: {} = serde_json::from_str(&body).unwrap();\n", output_shape));
         } else {
@@ -188,17 +231,15 @@ fn json_operations(service: &Service) -> String {
 	src.push_str("\t\t\t}\n");
 	src.push_str("\t\t}\n");
 	src.push_str("\t}\n");
-        
+
     }
-    
+
     src
 }
 
 // Translate botocore "shapes" to Rust types
 fn render_shapes(service: &Service) -> String {
-
 	let mut src = String::new();
-
     for (name, shape) in service.shapes.iter() {
 
     	// String is already a type in Rust
@@ -224,7 +265,7 @@ fn render_shapes(service: &Service) -> String {
 
 
 fn struct_type(name: &str, shape: &Shape) -> String {
-    
+
 	if shape.members.is_empty() {
 		return format!("#[derive(Debug, Serialize, Deserialize, Default)]\npub struct {};", name);
 	}
@@ -254,7 +295,7 @@ fn struct_type(name: &str, shape: &Shape) -> String {
 fn primitive_type(shape_type: &str) -> String {
 	match shape_type {
 		"string" => "String".to_string(),
-		"integer" => "i32".to_string(),		
+		"integer" => "i32".to_string(),
 		"long" => "i64".to_string(),
 		"float" => "f32".to_string(),
 		"double" => "f64".to_string(),
@@ -266,4 +307,3 @@ fn primitive_type(shape_type: &str) -> String {
 		_ => panic!(format!("Unknown type '{}'", shape_type))
 	}
 }
-

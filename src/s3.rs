@@ -7,6 +7,8 @@ use credentials::AWSCredentialsProvider;
 use error::AWSError;
 use regions::Region;
 use signature::SignedRequest;
+use xmlutil::XmlResponseFromAws;
+use xml::reader::EventReader;
 
 // include the code generated from the S3 botocore templates
 include!(concat!(env!("OUT_DIR"), "/s3.rs"));
