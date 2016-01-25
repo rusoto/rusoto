@@ -57,7 +57,6 @@ fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
     source.push_str("use serde_json;\n");
     source.push_str("use std::io::Read;\n");
 
-
     if type_name == "DynamoDBClient" {
         source.push_str("#[derive(Deserialize, Debug, Default)]\n");
         source.push_str("pub struct DynamoDBError {\n");
@@ -68,6 +67,8 @@ fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
 
     // generate rust structs for the botocore shapes
     source.push_str(&render_shapes(&service));
+    // and parsers:
+    source.push_str(&s3_response_struct_parsers(&service));
 
     // generate the service client struct
     source.push_str(&format!("pub struct {}<'a> {{", type_name));
@@ -92,8 +93,6 @@ fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
 
     let mut outfile = File::create(destination).expect("couldn't open file for writing");
     let _ = outfile.write_all(source.as_bytes());
-
-
 }
 
 fn generate(
@@ -135,17 +134,16 @@ fn rest_xml_operations(service: &Service) -> String {
         // list_buckets() has no arguments, and thus a different signature
         match operation.input {
             Some(ref input) => {
-                src.push_str(&format!("\tpub fn {}(&mut self, input: &{}) -> Result<{}> {{\n", operation.name.to_snake_case(), input.shape, output_shape));
+                src.push_str(&format!("\tpub fn {}(&mut self, input: &{}) -> Result<{}, AWSError> {{\n", operation.name.to_snake_case(), input.shape, output_shape));
             },
             None => {
-                src.push_str(&format!("\tpub fn {}(&mut self) -> Result<{}> {{\n", operation.name.to_snake_case(), output_shape));
+                src.push_str(&format!("\tpub fn {}(&mut self) -> Result<{}, AWSError> {{\n", operation.name.to_snake_case(), output_shape));
             }
         }
         // We should probably do something fancier where we split into a special S3 codepath for that service.
         src.push_str(&s3_function_guts(operation).to_string());
         src.push_str("\t}\n\n");
     }
-
     src
 }
 
@@ -181,8 +179,13 @@ fn s3_function_guts(op: &botocore_parser::Operation) -> String {
     src.push_str(&format!("\t\t\t\tstack.next(); // xml start tag\n"));
     src.push_str(&format!("\t\t\t\tstack.next(); // top level result\n"));
     src.push_str(&format!("\t\t\t\t// tag name for top level doesn't matter:\n"));
-    src.push_str(&format!("\t\t\t\tlet aws_result = try!({}OutputParser::parse_response(None, None, &headers, &mut stack));\n", op.name));
-    src.push_str(&format!("\t\t\t\tOk(aws_result)\n"));
+    match op.output {
+        None => src.push_str(&format!("\t\t\t\treturn Ok(());\n")),
+        Some(_) => {
+            src.push_str(&format!("\t\t\t\tlet aws_result = try!({}::parse_response(None, None, &headers, &mut stack));\n", op.output_shape_or("")));
+            src.push_str(&format!("\t\t\t\tOk(aws_result)\n"));
+        },
+    }
     src.push_str(&format!("\t\t\t}}\n"));
     src.push_str(&format!("\t\t\t_ => {{\n"));
     src.push_str(&format!("\t\t\t\tprintln!(\"Error: Status code was {{}}\", status);\n"));
@@ -193,6 +196,21 @@ fn s3_function_guts(op: &botocore_parser::Operation) -> String {
     src.push_str(&format!("\t\t\t}}\n"));
     src.push_str(&format!("\t\t}}\n"));
 
+    src
+}
+
+fn s3_response_struct_parsers(service: &Service) -> String {
+    let mut src = String::new();
+    for (name, shape) in service.shapes.iter() {
+        src.push_str(&format!("// parser for name {}, shape {:?}\n", name, shape));
+        //src.push_str(&format!("struct {};\n", name));
+        src.push_str(&format!("impl {} {{\n", name));
+        src.push_str(&format!("\tpub fn parse_response<'a, T: Peek + Next>(tag_name: Option<&str>, location: Option<&ArgumentLocation>, headers: &Headers, stack: &mut T) -> Result<{}, XmlParseError> {{\n", name));
+        src.push_str(&format!("\t\t// totally a parser\n"));
+        src.push_str(&format!("\t\tErr(XmlParseError::new(\"Not implemented\"))\n"));
+        src.push_str(&format!("\t}}\n"));
+        src.push_str(&format!("}}\n"));
+    }
     src
 }
 
@@ -233,7 +251,6 @@ fn json_operations(service: &Service) -> String {
     	src.push_str("\t\t}\n");
     	src.push_str("\t}\n");
     }
-
     src
 }
 
@@ -241,12 +258,10 @@ fn json_operations(service: &Service) -> String {
 fn render_shapes(service: &Service) -> String {
 	let mut src = String::new();
     for (name, shape) in service.shapes.iter() {
-
     	// String is already a type in Rust
     	if name == "String" {
     		continue;
     	}
-
     	if shape.shape_type == "structure" {
     		src = src + &format!("{}\n", struct_type(name, &shape));
     	} else {
@@ -256,7 +271,6 @@ fn render_shapes(service: &Service) -> String {
     			"list" => format!("Vec<{}>", shape.member()),
     			_ => primitive_type(&shape.shape_type)
     		};
-
     		src = src + &format!("pub type {} = {};\n", name, rust_type);
     	}
     }
