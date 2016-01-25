@@ -141,6 +141,7 @@ fn rest_xml_operations(service: &Service) -> String {
                 src.push_str(&format!("\tpub fn {}(&mut self) -> Result<{}> {{\n", operation.name.to_snake_case(), output_shape));
             }
         }
+        // We should probably do something fancier where we split into a special S3 codepath for that service.
         src.push_str(&s3_function_guts(operation).to_string());
         src.push_str("\t}\n\n");
     }
@@ -152,11 +153,11 @@ fn print_docs_for_operation(op: &botocore_parser::Operation) -> String {
     let mut doc_string = String::new();
     match op.documentation {
         None => (),
-        Some(ref docs) => doc_string.push_str(&format!("\t\t// {}\n", docs)),
+        Some(ref docs) => doc_string.push_str(&format!("\t// {}\n", docs)),
     }
     match op.documentationUrl {
         None => (),
-        Some(ref doc_uri) => doc_string.push_str(&format!("\t\t// {}\n", doc_uri)),
+        Some(ref doc_uri) => doc_string.push_str(&format!("\t// {}\n", doc_uri)),
     }
     doc_string
 }
@@ -202,21 +203,21 @@ fn json_operations(service: &Service) -> String {
     let target_prefix = service.metadata.targetPrefix.as_ref().expect("targetPrefix not defined for json protocol operation");
 
     for operation in service.operations.values() {
-
+        src.push_str(&print_docs_for_operation(operation));
         let output_shape = operation.output_shape_or("()");
 
-	src.push_str(&format!("\tpub fn {}(&mut self, input: &{}) -> Result<{}> {{\n", operation.name.to_snake_case(), operation.input_shape(), output_shape));
-	src.push_str("\t\tlet encoded = serde_json::to_string(&input).unwrap();\n");
-	src.push_str(&format!("\t\tlet mut request = SignedRequest::new(\"{}\", \"{}\", &self.region, \"{}\");\n", operation.http.method, service.metadata.endpointPrefix, operation.http.requestUri));
-	src.push_str("\t\trequest.set_content_type(\"application/x-amz-json-1.0\".to_string());\n");
-	src.push_str(&format!("\t\trequest.add_header(\"x-amz-target\", \"{}.{}\");\n", target_prefix, operation.name));
-	src.push_str("\t\trequest.set_payload(Some(encoded.as_bytes()));\n");
-	src.push_str("\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));\n");
-	src.push_str("\t\tlet status = result.status.to_u16();\n");
-	src.push_str("\t\tlet mut body = String::new();\n");
-	src.push_str("\t\tresult.read_to_string(&mut body).unwrap();\n");
-	src.push_str("\t\tmatch status {\n");
-	src.push_str("\t\t\t200 => {\n");
+    	src.push_str(&format!("\tpub fn {}(&mut self, input: &{}) -> Result<{}> {{\n", operation.name.to_snake_case(), operation.input_shape(), output_shape));
+    	src.push_str("\t\tlet encoded = serde_json::to_string(&input).unwrap();\n");
+    	src.push_str(&format!("\t\tlet mut request = SignedRequest::new(\"{}\", \"{}\", &self.region, \"{}\");\n", operation.http.method, service.metadata.endpointPrefix, operation.http.requestUri));
+    	src.push_str("\t\trequest.set_content_type(\"application/x-amz-json-1.0\".to_string());\n");
+    	src.push_str(&format!("\t\trequest.add_header(\"x-amz-target\", \"{}.{}\");\n", target_prefix, operation.name));
+    	src.push_str("\t\trequest.set_payload(Some(encoded.as_bytes()));\n");
+    	src.push_str("\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));\n");
+    	src.push_str("\t\tlet status = result.status.to_u16();\n");
+    	src.push_str("\t\tlet mut body = String::new();\n");
+    	src.push_str("\t\tresult.read_to_string(&mut body).unwrap();\n");
+    	src.push_str("\t\tmatch status {\n");
+    	src.push_str("\t\t\t200 => {\n");
 
         if operation.output.is_some() {
 	    src.push_str(&format!("\t\t\t\tlet decoded: {} = serde_json::from_str(&body).unwrap();\n", output_shape));
@@ -224,14 +225,13 @@ fn json_operations(service: &Service) -> String {
             src.push_str("\t\t\t\tlet decoded = ();\n");
         }
 
-	src.push_str("\t\t\t\tOk(decoded)\n");
-	src.push_str("\t\t\t}\n");
-	src.push_str("\t\t\t_ => {\n");
-	src.push_str("\t\t\t\tErr(parse_error(&body))\n");
-	src.push_str("\t\t\t}\n");
-	src.push_str("\t\t}\n");
-	src.push_str("\t}\n");
-
+    	src.push_str("\t\t\t\tOk(decoded)\n");
+    	src.push_str("\t\t\t}\n");
+    	src.push_str("\t\t\t_ => {\n");
+    	src.push_str("\t\t\t\tErr(parse_error(&body))\n");
+    	src.push_str("\t\t\t}\n");
+    	src.push_str("\t\t}\n");
+    	src.push_str("\t}\n");
     }
 
     src
