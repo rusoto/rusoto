@@ -30,7 +30,7 @@ serde = "0.6.7"
 serde_json = "0.6.0"
 
 [dev-dependencies]
-env_logger = "*"
+env_logger = "^0.3.2"
 
 [features]
 aws_integration = ["dynamodb", "ecs", "kms", "s3", "sqs", "dynamodb"]
