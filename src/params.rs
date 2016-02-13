@@ -21,33 +21,33 @@ macro_rules! params {
 
 /// Key:value pair for an SQS parameter.
 pub trait SQSParams {
-	fn put(&mut self, key: &str, val: &str);
+    fn put(&mut self, key: &str, val: &str);
 }
 
 impl SQSParams for Params {
-	fn put(&mut self, key: &str, val: &str) {
-		self.insert(key.into(), val.into());
-	}
+    fn put(&mut self, key: &str, val: &str) {
+        self.insert(key.into(), val.into());
+    }
 }
 
 /// Optional fields for SQS call
 pub trait OptionalMap<T> {
-	fn optional_put(&mut self, name: &str, value_opt: &Option<T>) ;
+    fn optional_put(&mut self, name: &str, value_opt: &Option<T>);
 
 }
 
 impl OptionalMap<String> for Params {
-	fn optional_put(&mut self, name: &str, value_opt: &Option<String>) {
-		if let &Some(ref value) = value_opt {
-			self.insert(name.into(), value.to_string());
-		}
-	}
+    fn optional_put(&mut self, name: &str, value_opt: &Option<String>) {
+        if let &Some(ref value) = value_opt {
+            self.insert(name.into(), value.to_string());
+        }
+    }
 }
 
 impl OptionalMap<i32> for Params {
-	fn optional_put(&mut self, name: &str, value_opt: &Option<i32>) {
-		if let &Some(value) = value_opt {
-			self.insert(name.into(), value.to_string());
-		}
-	}
+    fn optional_put(&mut self, name: &str, value_opt: &Option<i32>) {
+        if let &Some(value) = value_opt {
+            self.insert(name.into(), value.to_string());
+        }
+    }
 }

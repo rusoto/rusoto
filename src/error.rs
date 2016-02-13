@@ -15,9 +15,11 @@ use xmlutil::XmlParseError;
 pub struct AWSError(pub String);
 
 impl AWSError {
-	pub fn new<S>(msg:S) -> AWSError where S:Into<String>{
-		AWSError(msg.into())
-	}
+    pub fn new<S>(msg: S) -> AWSError
+        where S: Into<String>
+    {
+        AWSError(msg.into())
+    }
 }
 
 impl From<ChronoParseError> for AWSError {
@@ -33,9 +35,9 @@ impl From<IoError> for AWSError {
 }
 
 impl From<XmlParseError> for AWSError {
-        fn from(err: XmlParseError) -> AWSError {
-                AWSError(format!("{:?}", err))
-        }
+    fn from(err: XmlParseError) -> AWSError {
+        AWSError(format!("{:?}", err))
+    }
 }
 
 impl fmt::Display for AWSError {

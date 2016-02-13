@@ -1,6 +1,8 @@
 //! KMS bindings for Rust
 //!
-//! Check [Helper](http://dualspark.github.io/rusoto/rusoto/kms/struct.KMSHelper.html) for convenience functions.
+//! Check
+//! [Helper](http://dualspark.github.io/rusoto/rusoto/kms/struct.KMSHelper.html)
+//! for convenience functions.
 //!
 
 #![allow(unused_variables, unused_mut, non_snake_case)]

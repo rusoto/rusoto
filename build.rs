@@ -16,48 +16,34 @@ fn main() {
     let src_path = Path::new("src");
 
     // DynamoDB
-    generate(
-        "codegen/botocore/botocore/data/dynamodb/2012-08-10/service-2.json",
-        "DynamoDBClient",
-        out_path,
-        "dynamodb",
-    );
-    serde_generate(
-        &src_path.join("kms_helpers.in.rs"),
-        &out_path.join("kms_helpers.rs"),
-    );
+    generate("codegen/botocore/botocore/data/dynamodb/2012-08-10/service-2.json",
+             "DynamoDBClient",
+             out_path,
+             "dynamodb");
+    serde_generate(&src_path.join("kms_helpers.in.rs"),
+                   &out_path.join("kms_helpers.rs"));
 
     // ECS
-    generate(
-        "codegen/botocore/botocore/data/ecs/2014-11-13/service-2.json",
-        "ECSClient",
-        out_path,
-        "ecs",
-    );
-    serde_generate(
-        &src_path.join("ecs_helpers.in.rs"),
-        &out_path.join("ecs_helpers.rs"),
-    );
+    generate("codegen/botocore/botocore/data/ecs/2014-11-13/service-2.json",
+             "ECSClient",
+             out_path,
+             "ecs");
+    serde_generate(&src_path.join("ecs_helpers.in.rs"),
+                   &out_path.join("ecs_helpers.rs"));
 
     // KMS
-    generate(
-        "codegen/botocore/botocore/data/kms/2014-11-01/service-2.json",
-        "KMSClient",
-        out_path,
-        "kms",
-    );
-    serde_generate(
-        &src_path.join("dynamodb_helpers.in.rs"),
-        &out_path.join("dynamodb_helpers.rs"),
-    );
+    generate("codegen/botocore/botocore/data/kms/2014-11-01/service-2.json",
+             "KMSClient",
+             out_path,
+             "kms");
+    serde_generate(&src_path.join("dynamodb_helpers.in.rs"),
+                   &out_path.join("dynamodb_helpers.rs"));
 
     // SQS
-    generate(
-        "codegen/botocore/botocore/data/sqs/2012-11-05/service-2.json",
-        "SQSClient",
-        out_path,
-        "sqs",
-    )
+    generate("codegen/botocore/botocore/data/sqs/2012-11-05/service-2.json",
+             "SQSClient",
+             out_path,
+             "sqs")
 }
 
 fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
@@ -76,12 +62,7 @@ fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
     copy(&mut &output.stdout[..], &mut file).expect("failed to write generated code to file");
 }
 
-fn generate(
-    input: &str,
-    type_name: &str,
-    base_destination: &Path,
-    service_name: &str,
-) {
+fn generate(input: &str, type_name: &str, base_destination: &Path, service_name: &str) {
     let botocore_destination = base_destination.join(format!("{}_botocore.rs", service_name));
     let serde_destination = base_destination.join(format!("{}.rs", service_name));
 
