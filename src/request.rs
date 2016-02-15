@@ -27,14 +27,18 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
         hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
     }
 
-    let mut final_uri = format!("https://{}{}", signed_request.get_hostname(), signed_request.get_canonical_uri());
+    let mut final_uri = format!("https://{}{}",
+                                signed_request.get_hostname(),
+                                signed_request.get_canonical_uri());
     if signed_request.get_canonical_query_string().len() > 0 {
         final_uri = final_uri + &format!("?{}", signed_request.get_canonical_query_string());
     }
 
     if log_enabled!(Debug) {
         debug!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\nHeaders:\n",
-        	hyper_method, final_uri, signed_request.get_payload());
+               hyper_method,
+               final_uri,
+               signed_request.get_payload());
         for h in hyper_headers.iter() {
             debug!("{}:{}", h.name(), h.value_string());
         }
@@ -44,7 +48,15 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
     client.set_redirect_policy(RedirectPolicy::FollowNone);
 
     match signed_request.get_payload() {
-        None => client.request(hyper_method, &final_uri).headers(hyper_headers).body("").send().unwrap(),
-        Some(payload_contents) => client.request(hyper_method, &final_uri).headers(hyper_headers).body(payload_contents).send().unwrap(),
+        None => {
+            client.request(hyper_method, &final_uri).headers(hyper_headers).body("").send().unwrap()
+        }
+        Some(payload_contents) => {
+            client.request(hyper_method, &final_uri)
+                  .headers(hyper_headers)
+                  .body(payload_contents)
+                  .send()
+                  .unwrap()
+        }
     }
 }
