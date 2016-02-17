@@ -27,7 +27,13 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
         hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
     }
 
-    let mut final_uri = format!("https://{}{}", signed_request.get_hostname(), signed_request.get_canonical_uri());
+    // we should always have something: perhaps error out if we hit the None branch.
+    let hostname = match signed_request.get_hostname() {
+        Some(request_hostname) => request_hostname,
+        None => unreachable!("Hostname not set for request!"),
+    };
+
+    let mut final_uri = format!("https://{}{}", hostname, signed_request.get_canonical_uri());
     if signed_request.get_canonical_query_string().len() > 0 {
         final_uri = final_uri + &format!("?{}", signed_request.get_canonical_query_string());
     }

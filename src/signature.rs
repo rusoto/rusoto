@@ -76,6 +76,14 @@ impl <'a> SignedRequest <'a> {
 		self.hostname = hostname;
 	}
 
+	pub fn set_path(&mut self, path: &str) {
+		self.path = path.to_string();
+	}
+
+	pub fn get_path(&mut self) -> String {
+		self.path.clone()
+	}
+
 	pub fn set_payload(&mut self, payload: Option<&'a [u8]>) {
 		self.payload = payload;
 	}
@@ -100,10 +108,10 @@ impl <'a> SignedRequest <'a> {
 		&self.headers
 	}
 
-	pub fn get_hostname(&self) -> String {
+	pub fn get_hostname(&self) -> Option<String> {
 		match self.hostname {
-			Some(ref h) => h.to_string(),
-			None => build_hostname(&self.service, &self.region)
+			Some(ref h) => Some(h.to_string()),
+			None => None, //build_hostname(&self.service, &self.region)
 		}
 	}
 
@@ -153,6 +161,7 @@ impl <'a> SignedRequest <'a> {
 		// a 307 redirect we end up with Three Stooges in the headers with duplicate values.
 		self.remove_header("host");
 		self.add_header("host", &hostname);
+		self.set_hostname(Some(hostname));
 
 		if let Some(ref token) = *creds.get_token() {
 			self.remove_header("X-Amz-Security-Token");
@@ -350,7 +359,7 @@ fn to_hexdigest_from_bytes(val: &[u8]) -> String {
     h.to_hex().to_string()
 }
 
-fn build_hostname(service: &str, region: &Region) -> String {
+pub fn build_hostname(service: &str, region: &Region) -> String {
 	//iam has only 1 endpoint, other services have region-based endpoints
 	match service {
 		"iam" => format!("{}.amazonaws.com", service),
@@ -417,6 +426,7 @@ fn extract_s3_temporary_endpoint_from_xml<'a, T: Peek + Next>(stack: &mut T) -> 
 #[cfg(test)]
 mod tests {
     use super::SignedRequest;
+	use super::build_hostname;
 	use super::extract_s3_temporary_endpoint_from_xml;
 	use xmlutil::*;
 	use regions::*;
@@ -428,7 +438,8 @@ mod tests {
 	fn get_hostname_none_present() {
 		let region = Region::UsEast1;
 		let request = SignedRequest::new("POST", "sqs", &region, "/");
-		assert_eq!("sqs.us-east-1.amazonaws.com", request.get_hostname());
+		let expected = String::from("sqs.us-east-1.amazonaws.com");
+		assert_eq!(expected, build_hostname(&request.service, &request.region));
 	}
 
 	#[test]
@@ -436,7 +447,7 @@ mod tests {
 		let region = Region::UsEast1;
 		let mut request = SignedRequest::new("POST", "sqs", &region, "/");
 		request.set_hostname(Some("test-hostname".to_string()));
-		assert_eq!("test-hostname", request.get_hostname());
+		assert_eq!("test-hostname", request.get_hostname().unwrap());
 	}
 
 	#[test]

@@ -33,9 +33,9 @@ impl From<IoError> for AWSError {
 }
 
 impl From<XmlParseError> for AWSError {
-        fn from(err: XmlParseError) -> AWSError {
-                AWSError(format!("{:?}", err))
-        }
+    fn from(err: XmlParseError) -> AWSError {
+        AWSError(format!("{:?}", err))
+    }
 }
 
 impl fmt::Display for AWSError {
