@@ -54,17 +54,52 @@ fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
 
     let mut source = String::new();
 
-    if &service.metadata.protocol == "json" {
-        source.push_str("use serde_json;\n");
-    }
-    source.push_str("use std::io::Read;\n");
+    source.push_str("use std::io::Read;\n\n");
 
-    if type_name == "DynamoDBClient" {
-        source.push_str("#[derive(Deserialize, Debug, Default)]\n");
-        source.push_str("pub struct DynamoDBError {\n");
-        source.push_str("__type: String,\n");
-        source.push_str("message: String");
-        source.push_str("}\n\n");
+    if &service.metadata.protocol == "json" {
+        let error_type_name = error_type(type_name);
+
+        source.push_str(&format!("
+use std::result;
+
+use serde_json;
+
+use credentials::AWSCredentialsProvider;
+use error::AWSError;
+use regions::Region;
+use signature::SignedRequest;
+
+#[derive(Debug, Default, Deserialize)]
+pub struct {error_type_name} {{
+    __type: String,
+    message: String,
+}}
+
+pub type Result<T> = result::Result<T, {error_type_name}>;
+
+impl From<AWSError> for {error_type_name} {{
+    fn from(err: AWSError) -> Self {{
+        let AWSError(message) = err;
+
+        {error_type_name} {{
+            __type: \"Unknown\".to_string(),
+            message: message.to_string(),
+        }}
+    }}
+}}
+
+fn parse_error(body: &str) -> {error_type_name} {{
+    if let Ok(decoded) = serde_json::from_str::<{error_type_name}>(&body) {{
+        decoded
+    }} else {{
+        {error_type_name} {{
+            __type: \"DecodeError\".to_string(),
+            message: body.to_string(),
+        }}
+    }}
+}}\n",
+            error_type_name = error_type_name,
+        ));
     }
 
     // generate rust structs for the botocore shapes
@@ -321,4 +356,15 @@ fn primitive_type(shape_type: &str) -> String {
 		"timestamp" => "f64".to_string(),
 		_ => panic!(format!("Unknown type '{}'", shape_type))
 	}
+}
+
+fn error_type(client_type_name: &str) -> &'static str {
+    match client_type_name {
+        "DynamoDBClient" => "DynamoDBError",
+        "KMSClient" => "KMSError",
+        "ECSClient" => "ECSError",
+        "S3Client" => "S3Error",
+        "SQSClient" => "SQSError",
+        _ => panic!("Unknown client type."),
+    }
 }
