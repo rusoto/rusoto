@@ -36,8 +36,9 @@ fn main() {
     let services = vec![
         AmazonService::new("dynamodb", "DynamoDBClient", "2012-08-10"),
         AmazonService::new("kms", "KMSClient", "2014-11-01"),
-        AmazonService::new("s3", "S3Client", "2006-03-01")
-        /*AmazonService::new("sqs", "SQSClient", "2012-11-05")*/
+        AmazonService::new("ecs", "ECSClient", "2014-11-13"),
+        AmazonService::new("s3", "S3Client", "2006-03-01"),
+        /*AmazonService::new("sqs", "SQSClient", "2012-11-05"),*/
     ];
 
     for service in services {
@@ -112,7 +113,7 @@ fn generate(
     botocore_generate(input, &service.type_name, botocore_destination.as_path());
     serde_generate(botocore_destination.as_path(), serde_destination.as_path());
     // clean up the no longer needed serde input AKA code made by botocore_parser:
-    fs::remove_file(botocore_destination.as_path()).expect("Couldn't delete temp botocore generated file");
+    //fs::remove_file(botocore_destination.as_path()).expect("Couldn't delete temp botocore generated file");
 }
 
 fn serde_generate(source: &Path, destination: &Path) {
@@ -288,17 +289,21 @@ fn struct_type(name: &str, shape: &Shape) -> String {
 	if shape.members.is_empty() {
 		return format!("#[derive(Debug, Serialize, Deserialize, Default)]\npub struct {};", name);
 	}
-
 	let mut struct_type = format!("#[derive(Debug, Serialize, Deserialize, Default)]\npub struct {} {{\n", name);
 	for (member_name, member) in shape.members.iter() {
 		if member.documentation.is_some() {
 			//struct_type = struct_type + "\t// documentation\n";
 		}
-
 		if shape.required(member_name) {
 			struct_type = struct_type + &format!("\tpub {}: {},\n", member_name, member.shape);
 		} else {
-			struct_type = struct_type + &format!("\tpub {}: Option<{}>,\n", member_name, member.shape)
+            // There's surely a better way to do this:
+            if member_name == "type" {
+                struct_type = struct_type + &format!("\tpub aws_{}: Option<{}>,\n", member_name, member.shape)
+            }
+            else {
+                struct_type = struct_type + &format!("\tpub {}: Option<{}>,\n", member_name, member.shape)
+            }
 		}
 	}
 	struct_type = struct_type + "}\n";
