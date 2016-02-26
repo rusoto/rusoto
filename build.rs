@@ -5,14 +5,16 @@ extern crate serde_json;
 extern crate serde_codegen;
 extern crate syntex;
 
-use botocore_parser::{Service, Shape};
-use std::fs::File;
-use std::io::{Read, Write};
-use inflector::Inflector;
-use std::path::Path;
 use std::env;
-use syntex::Registry;
+use std::fs::File;
+use std::io::{Read, Write, copy};
+use std::path::Path;
+use std::process::Command;
+
+use botocore_parser::{Service, Shape};
+use inflector::Inflector;
 use serde_codegen::register;
+use syntex::Registry;
 
 const BOTOCORE_DIR: &'static str = "codegen/botocore/botocore/data/";
 
@@ -37,7 +39,7 @@ fn main() {
         AmazonService::new("kms", "KMSClient", "2014-11-01"),
         AmazonService::new("ecs", "ECSClient", "2014-11-13"),
         AmazonService::new("s3", "S3Client", "2006-03-01"),
-        /*AmazonService::new("sqs", "SQSClient", "2012-11-05"),*/
+        AmazonService::new("sqs", "SQSClient", "2012-11-05"),
     ];
 
     for service in services {
@@ -52,14 +54,18 @@ fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
 
     let service: Service = serde_json::from_str(&s).expect("Invalid botocore input");
 
+    if &service.metadata.protocol == "query" {
+        return python_generate(input, type_name, destination);
+    }
+
     let mut source = String::new();
+    let error_type_name = error_type(type_name);
 
-    source.push_str("use std::io::Read;\n\n");
+    source.push_str("use std::io::Read;\n");
 
-    if &service.metadata.protocol == "json" {
-        let error_type_name = error_type(type_name);
-
-        source.push_str(&format!("
+    match &service.metadata.protocol[..] {
+        "json" => {
+            source.push_str(&format!("
 use std::result;
 
 use serde_json;
@@ -98,8 +104,30 @@ fn parse_error(body: &str) -> {error_type_name} {{
         }}
     }}
 }}\n",
-            error_type_name = error_type_name,
-        ));
+                error_type_name = error_type_name,
+            ));
+        }
+        "rest-xml" => {
+            source.push_str("
+use hyper::header::Headers;
+use xml::reader::EventReader;
+
+use credentials::AWSCredentialsProvider;
+use error::AWSError;
+use regions::Region;
+use signature::SignedRequest;
+use xmlutil::{XmlResponseFromAws, XmlParseError, Next, Peek};
+
+#[derive(Debug, PartialEq)]
+pub enum ArgumentLocation {
+	Header,
+	Body,
+	Headers,
+	Querystring,
+	Uri,
+}\n");
+        },
+        _ => {},
     }
 
     // generate rust structs for the botocore shapes
@@ -148,6 +176,23 @@ fn generate(
     serde_generate(botocore_destination.as_path(), serde_destination.as_path());
 }
 
+fn python_generate(input: &str, type_name: &str, destination: &Path) {
+    let mut command = Command::new("codegen/botocore_parser.py");
+
+    command.args(&[input, type_name]);
+
+    let output = command.output().expect("couldn't get output of child process");
+
+    if !output.status.success() {
+        println!("{}", String::from_utf8_lossy(&output.stdout[..]));
+        println!("{}", String::from_utf8_lossy(&output.stderr[..]));
+        panic!("child process was unsuccessful");
+    }
+
+    let mut file = File::create(destination).expect("couldn't open file for writing");
+    copy(&mut &output.stdout[..], &mut file).expect("failed to write generated code to file");
+}
+
 fn serde_generate(source: &Path, destination: &Path) {
     let mut registry = Registry::new();
 
@@ -173,7 +218,7 @@ fn rest_xml_operations(service: &Service) -> String {
         // list_buckets() has no arguments, and thus a different signature
         match operation.input {
             Some(ref input) => {
-                src.push_str(&format!("\tpub fn {}(&mut self, input: &{}) -> Result<{}, AWSError> {{\n", operation.name.to_snake_case(), input.shape, output_shape));
+                src.push_str(&format!("\tpub fn {}(&mut self, _input: &{}) -> Result<{}, AWSError> {{\n", operation.name.to_snake_case(), input.shape, output_shape));
             },
             None => {
                 src.push_str(&format!("\tpub fn {}(&mut self) -> Result<{}, AWSError> {{\n", operation.name.to_snake_case(), output_shape));
@@ -201,9 +246,7 @@ fn print_docs_for_operation(op: &botocore_parser::Operation) -> String {
 
 fn s3_function_guts(op: &botocore_parser::Operation) -> String {
     let mut src = String::new();
-    src.push_str(&format!("\t\tlet mut uri = String::from(\"\");\n"));
-    src.push_str(&format!("\t\tlet mut request_body : Vec<u8>;\n"));
-    src.push_str(&format!("\t\tlet mut request = SignedRequest::new(\"{}\", \"s3\", &self.region, \"&uri\");\n", op.http.method));
+    src.push_str(&format!("\t\tlet mut request = SignedRequest::new(\"{}\", \"s3\", &self.region, \"\");\n", op.http.method));
 
     src.push_str(&format!("\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));\n"));
 
@@ -212,7 +255,9 @@ fn s3_function_guts(op: &botocore_parser::Operation) -> String {
 
     src.push_str(&format!("\t\tmatch status {{\n"));
     src.push_str(&format!("\t\t\t200 => {{\n"));
-    src.push_str(&format!("\t\t\t\tlet headers = result.headers.clone();\n"));
+    if op.output.is_some() {
+        src.push_str(&format!("\t\t\t\tlet headers = result.headers.clone();\n"));
+    }
     src.push_str(&format!("\t\t\t\tlet mut reader = EventReader::new(result);\n"));
     src.push_str(&format!("\t\t\t\tlet mut stack = XmlResponseFromAws::new(reader.events().peekable());\n"));
     src.push_str(&format!("\t\t\t\tstack.next(); // xml start tag\n"));
@@ -244,7 +289,7 @@ fn s3_response_struct_parsers(service: &Service) -> String {
         src.push_str(&format!("// parser for name {}, shape {:?}\n", name, shape));
         src.push_str(&format!("struct {}Parser;\n", name));
         src.push_str(&format!("impl {}Parser {{\n", name));
-        src.push_str(&format!("\tpub fn parse_response<'a, T: Peek + Next>(tag_name: Option<&str>, location: Option<&ArgumentLocation>, headers: &Headers, stack: &mut T) -> Result<{}, XmlParseError> {{\n", name));
+        src.push_str(&format!("\tpub fn parse_response<'a, T: Peek + Next>(_tag_name: Option<&str>, _location: Option<&ArgumentLocation>, _headers: &Headers, _stack: &mut T) -> Result<{}, XmlParseError> {{\n", name));
         src.push_str(&format!("\t\t// totally a parser\n"));
         src.push_str(&format!("\t\tErr(XmlParseError::new(\"Not implemented\"))\n"));
         src.push_str(&format!("\t}}\n"));

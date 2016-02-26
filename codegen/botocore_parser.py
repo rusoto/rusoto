@@ -20,13 +20,14 @@ def main():
         service = json.load(data_file)
 
     service_protocol = service['metadata']['protocol']
+    service_name = service['metadata']['serviceFullName']
 
     if service_protocol == 'query':
         parser = QueryProtocolParser(service, client_name)
     elif service_protocol == 'json':
         parser = JsonProtocolParser(service, client_name)
     else:
-        print "Unkonwn service protocol " + service_protocol + " - aborting"
+        print "Unknown service protocol " + service_protocol + " for service " + service_name + "- aborting"
         sys.exit(1)
 
     generated_code = parser.parse()
