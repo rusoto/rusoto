@@ -10,8 +10,6 @@ use credentials::AWSCredentialsProvider;
 use error::AWSError;
 use regions::Region;
 use signature::SignedRequest;
-use xmlutil::*;
-use hyper::header::Headers;
 
 // include the code generated from the DynamoDB botocore templates
 include!(concat!(env!("OUT_DIR"), "/dynamodb.rs"));

@@ -5,7 +5,6 @@
 //!
 
 #![allow(unused_variables, unused_mut, non_snake_case)]
-use std::result;
 
 use credentials::AWSCredentialsProvider;
 use error::AWSError;

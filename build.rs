@@ -7,7 +7,6 @@ extern crate syntex;
 
 use botocore_parser::{Service, Shape};
 use std::fs::File;
-use std::fs;
 use std::io::{Read, Write};
 use inflector::Inflector;
 use std::path::Path;
@@ -55,10 +54,10 @@ fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
 
     let mut source = String::new();
 
-    // source.push_str("#![allow(non_snake_case)]\n");
-    source.push_str("use serde_json;\n");
+    if &service.metadata.protocol == "json" {
+        source.push_str("use serde_json;\n");
+    }
     source.push_str("use std::io::Read;\n");
-    source.push_str("use std::str;\n");
 
     if type_name == "DynamoDBClient" {
         source.push_str("#[derive(Deserialize, Debug, Default)]\n");
@@ -112,8 +111,6 @@ fn generate(
 
     botocore_generate(input, &service.type_name, botocore_destination.as_path());
     serde_generate(botocore_destination.as_path(), serde_destination.as_path());
-    // clean up the no longer needed serde input AKA code made by botocore_parser:
-    //fs::remove_file(botocore_destination.as_path()).expect("Couldn't delete temp botocore generated file");
 }
 
 fn serde_generate(source: &Path, destination: &Path) {
