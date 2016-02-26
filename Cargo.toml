@@ -27,14 +27,14 @@ Inflector = "0.2.0"
 # for faster development of botocore_parser this can can be set to use a local copy:
 # botocore_parser = { path = "../botocore_parser" }
 botocore_parser = "^0.1.1"
-serde_codegen = { version = "0.6.13", optional = true }
+serde_codegen = { version = "0.6.14", optional = true }
 serde_json = "0.6.0"
 syntex = "^0.29.0"
 
 [dependencies]
-serde = "0.6.14"
+serde = "0.6.15"
 serde_json = "0.6.0"
-serde_macros = { version = "0.6.13", optional = true }
+serde_macros = { version = "0.6.14", optional = true }
 xml-rs = "^0.1.26"
 time = "^0.1.34"
 openssl = "^0.7.5"
