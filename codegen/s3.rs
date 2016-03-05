@@ -19,15 +19,17 @@ impl LifecycleExpirationParser {
 		let mut obj = LifecycleExpiration::default();
 		loop {
 			let current_name = try!(peek_at_name(stack));
-			if current_name == "Date" {
-				obj.date = try!(DateParser::parse_xml("Date", stack));
-				continue;
+			match current_name.as_ref() {
+				"Date" => {
+					obj.date = try!(DateParser::parse_xml("Date", stack));
+					continue;
+				},
+				"Days" => {
+					obj.days = try!(DaysParser::parse_xml("Days", stack));
+					continue;
+				},
+				_ => break,
 			}
-			if current_name == "Days" {
-				obj.days = try!(DaysParser::parse_xml("Days", stack));
-				continue;
-			}
-			break;
 		}
 		try!(end_element(tag_name, stack));
 		Ok(obj)
@@ -58,19 +60,21 @@ impl PutBucketNotificationRequestParser {
 		let mut obj = PutBucketNotificationRequest::default();
 		loop {
 			let current_name = try!(peek_at_name(stack));
-			if current_name == "NotificationConfiguration" {
-				obj.notification_configuration = try!(NotificationConfigurationDeprecatedParser::parse_xml("NotificationConfiguration", stack));
-				continue;
+			match current_name.as_ref() {
+				"NotificationConfiguration" => {
+					obj.notification_configuration = try!(NotificationConfigurationDeprecatedParser::parse_xml("NotificationConfiguration", stack));
+					continue;
+				},
+				"Content-MD5" => {
+					obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
+					continue;
+				},
+				"Bucket" => {
+					obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
+					continue;
+				},
+				_ => break,
 			}
-			if current_name == "Content-MD5" {
-				obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-				continue;
-			}
-			if current_name == "Bucket" {
-				obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-				continue;
-			}
-			break;
 		}
 		try!(end_element(tag_name, stack));
 		Ok(obj)
