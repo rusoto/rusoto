@@ -7,6 +7,7 @@ class ParserBase(object):
     """
     Parent class with common code for all flavors of Botocore parser
     """
+
     def __init__(self, service, client_name):
         self.client_name = client_name
         self.service = service
@@ -40,15 +41,14 @@ class ParserBase(object):
             markdown = re.sub(r"\n+", r"\n" + indent + "/// ", markdown)
             self.append(indent + "/// " + markdown)
 
-    
     def rust_type(self, name, shape):
         """
         generate a rust declaration for a botocore shape
         """
         shape_type = shape['type']
-        
+
         self.generate_documentation(shape)
-        
+
         if shape_type == "structure":
             self.rust_struct(name, shape)
         else:
@@ -66,7 +66,6 @@ class ParserBase(object):
             if name != 'String':
                 self.append("pub type " + name + " = " + rust_type + ";")
 
-
     def rust_struct(self, name, shape):
         """
         generate a rust declaration for a botocore structure shape        
@@ -77,7 +76,6 @@ class ParserBase(object):
         """
         Generate the Rust struct for the client itself
         """
-        
 
         self.append("pub struct " + self.client_name + "<'a> {")
         self.append("\tcreds: Box<AWSCredentialsProvider + 'a>,")
@@ -85,7 +83,8 @@ class ParserBase(object):
         self.append("}\n")
 
         self.append("impl<'a> " + self.client_name + "<'a> { ")
-        self.append("\tpub fn new<P: AWSCredentialsProvider + 'a>(creds: P, region: &'a Region) -> " + self.client_name + "<'a> {")
+        self.append(
+            "\tpub fn new<P: AWSCredentialsProvider + 'a>(creds: P, region: &'a Region) -> " + self.client_name + "<'a> {")
         self.append("\t\t" + self.client_name + " { creds: Box::new(creds), region: region }")
         self.append("\t}")
 
@@ -93,7 +92,6 @@ class ParserBase(object):
 
         self.append("}")
 
-        
     def generate_operations(self):
         for (name, operation) in self.service['operations'].iteritems():
             self.request_method(operation)
@@ -107,10 +105,9 @@ class ParserBase(object):
 
     def shape(self, name):
         return self.service['shapes'][name]
-        
+
     def metadata(self, name):
         return self.service['metadata'][name]
-
 
     def get_location_name(self, name, child):
         """
@@ -118,7 +115,7 @@ class ParserBase(object):
         (sometimes explicitly specified by botocore as 'locationName')
         """
         child_shape = self.shape(child['shape'])
-        
+
         # list elements aren't wrapped in a parent tag, so use their member name
         if child_shape['type'] == 'list':
             tag_name = ParserBase.shape_name(child_shape['member'])
@@ -130,14 +127,12 @@ class ParserBase(object):
 
         return tag_name
 
-
     @staticmethod
     def shape_name(shape):
         if 'locationName' in shape:
             return shape['locationName']
         else:
             return shape['shape']
-
 
     @staticmethod
     def get_output_type(operation):
@@ -149,14 +144,12 @@ class ParserBase(object):
         else:
             return "()"
 
-    
     @staticmethod
     def is_required(shape, field_name):
         if not 'required' in shape:
             return True;
         else:
             return 'required' in shape and field_name in shape['required']
-
 
     @staticmethod
     def c_to_s(name):
@@ -171,8 +164,6 @@ class ParserBase(object):
             # prepend something informative
             s2 = 'foo_' + s2
         return s2
-
-
 
     def parse(self):
         self.add_imports()

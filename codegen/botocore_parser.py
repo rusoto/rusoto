@@ -5,6 +5,7 @@ import json
 from queryprotocol import QueryProtocolParser
 from jsonprotocol import JsonProtocolParser
 
+
 def main():
     UTF8Writer = codecs.getwriter('utf8')
     sys.stdout = UTF8Writer(sys.stdout)
