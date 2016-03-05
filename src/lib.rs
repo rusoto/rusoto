@@ -36,8 +36,8 @@ extern crate rustc_serialize;
 extern crate regex;
 extern crate crypto;
 extern crate chrono;
-extern crate serde;
 extern crate serde_json;
+extern crate serde;
 
 #[macro_use]
 extern crate log;

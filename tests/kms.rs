@@ -1,5 +1,6 @@
-#![cfg(feature = "kms")]
-
+/*
+#![allow(dead_code)]
+#[macro_use]
 extern crate rusoto;
 
 use rusoto::credentials::DefaultAWSCredentialsProviderChain;
@@ -28,3 +29,4 @@ fn kms_list_keys_tests(kms: &mut KMSHelper) -> Result<(), KMSError> {
     println!("{:#?}", response);
     Ok(())
 }
+*/
