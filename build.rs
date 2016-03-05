@@ -6,7 +6,7 @@ extern crate serde_codegen;
 extern crate syntex;
 
 use std::env;
-use std::fs::File;
+use std::fs::{File, copy as fscopy};
 use std::io::{Read, Write, copy};
 use std::path::Path;
 use std::process::Command;
@@ -38,13 +38,18 @@ fn main() {
         AmazonService::new("dynamodb", "DynamoDBClient", "2012-08-10"),
         AmazonService::new("kms", "KMSClient", "2014-11-01"),
         AmazonService::new("ecs", "ECSClient", "2014-11-13"),
-        AmazonService::new("s3", "S3Client", "2006-03-01"),
+        //AmazonService::new("s3", "S3Client", "2006-03-01"),
         AmazonService::new("sqs", "SQSClient", "2012-11-05"),
     ];
 
     for service in services {
         generate(service, botocore_path, out_path);
     }
+
+    // Punting on S3 codegen by copying existing hand crafted code:
+    let s3_out = out_path.join("s3.rs");
+    println!("out_path is {:?}", out_path);
+    fscopy("src/s3.rs.old", s3_out).expect("Couldn't copy existing s3 to s3.rs");
 }
 
 fn botocore_generate(input: &str, type_name: &str, destination: &Path) {
@@ -133,9 +138,9 @@ pub enum ArgumentLocation {
     // generate rust structs for the botocore shapes
     source.push_str(&render_shapes(&service));
     // and parsers:
-    if type_name == "S3Client" {
-        source.push_str(&s3_response_struct_parsers(&service));
-    }
+    // if type_name == "S3Client" {
+    //     source.push_str(&s3_response_struct_parsers(&service));
+    // }
 
     // generate the service client struct
     source.push_str(&format!("pub struct {}<'a> {{", type_name));
@@ -151,7 +156,7 @@ pub enum ArgumentLocation {
 
     // each protocol type will require operations performed in different ways
     let operations = match &*service.metadata.protocol {
-        "rest-xml" => rest_xml_operations(&service),
+        //"rest-xml" => rest_xml_operations(&service),
         "json" => json_operations(&service),
         _ => panic!(format!("Unknown protocol type '{}'", service.metadata.protocol))
     };
@@ -207,29 +212,29 @@ impl AmazonService {
 }
 
 // Translate botocore operations to Rust functions for rest-xml services like S3
-fn rest_xml_operations(service: &Service) -> String {
-    let mut src = String::new();
-
-    for operation in service.operations.values() {
-        src.push_str(&print_docs_for_operation(operation));
-        let output_shape = operation.output_shape_or("()");
-
-        // function declaration:
-        // list_buckets() has no arguments, and thus a different signature
-        match operation.input {
-            Some(ref input) => {
-                src.push_str(&format!("\tpub fn {}(&mut self, _input: &{}) -> Result<{}, AWSError> {{\n", operation.name.to_snake_case(), input.shape, output_shape));
-            },
-            None => {
-                src.push_str(&format!("\tpub fn {}(&mut self) -> Result<{}, AWSError> {{\n", operation.name.to_snake_case(), output_shape));
-            }
-        }
-        // We should probably do something fancier where we split into a special S3 codepath for that service.
-        src.push_str(&s3_function_guts(operation).to_string());
-        src.push_str("\t}\n\n");
-    }
-    src
-}
+// fn rest_xml_operations(service: &Service) -> String {
+//     let mut src = String::new();
+//
+//     for operation in service.operations.values() {
+//         src.push_str(&print_docs_for_operation(operation));
+//         let output_shape = operation.output_shape_or("()");
+//
+//         // function declaration:
+//         // list_buckets() has no arguments, and thus a different signature
+//         match operation.input {
+//             Some(ref input) => {
+//                 src.push_str(&format!("\tpub fn {}(&mut self, _input: &{}) -> Result<{}, AWSError> {{\n", operation.name.to_snake_case(), input.shape, output_shape));
+//             },
+//             None => {
+//                 src.push_str(&format!("\tpub fn {}(&mut self) -> Result<{}, AWSError> {{\n", operation.name.to_snake_case(), output_shape));
+//             }
+//         }
+//         // We should probably do something fancier where we split into a special S3 codepath for that service.
+//         src.push_str(&s3_function_guts(operation).to_string());
+//         src.push_str("\t}\n\n");
+//     }
+//     src
+// }
 
 fn print_docs_for_operation(op: &botocore_parser::Operation) -> String {
     let mut doc_string = String::new();
@@ -244,59 +249,59 @@ fn print_docs_for_operation(op: &botocore_parser::Operation) -> String {
     doc_string
 }
 
-fn s3_function_guts(op: &botocore_parser::Operation) -> String {
-    let mut src = String::new();
-    src.push_str(&format!("\t\tlet mut request = SignedRequest::new(\"{}\", \"s3\", &self.region, \"\");\n", op.http.method));
-
-    src.push_str(&format!("\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));\n"));
-
-    src.push_str(&format!("\t\tlet status = result.status.to_u16();\n"));
-    //src.push_str(&format!("\t\t \n"));
-
-    src.push_str(&format!("\t\tmatch status {{\n"));
-    src.push_str(&format!("\t\t\t200 => {{\n"));
-    if op.output.is_some() {
-        src.push_str(&format!("\t\t\t\tlet headers = result.headers.clone();\n"));
-    }
-    src.push_str(&format!("\t\t\t\tlet mut reader = EventReader::new(result);\n"));
-    src.push_str(&format!("\t\t\t\tlet mut stack = XmlResponseFromAws::new(reader.events().peekable());\n"));
-    src.push_str(&format!("\t\t\t\tstack.next(); // xml start tag\n"));
-    src.push_str(&format!("\t\t\t\tstack.next(); // top level result\n"));
-    src.push_str(&format!("\t\t\t\t// tag name for top level doesn't matter:\n"));
-    match op.output {
-        None => src.push_str(&format!("\t\t\t\treturn Ok(());\n")),
-        Some(_) => {
-            src.push_str(&format!("\t\t\t\tlet aws_result = try!({}Parser::parse_response(None, None, &headers, &mut stack));\n", op.output_shape_or("")));
-            src.push_str(&format!("\t\t\t\tOk(aws_result)\n"));
-        },
-    }
-    src.push_str(&format!("\t\t\t}}\n"));
-    src.push_str(&format!("\t\t\t_ => {{\n"));
-    src.push_str(&format!("\t\t\t\tprintln!(\"Error: Status code was {{}}\", status);\n"));
-    src.push_str(&format!("\t\t\t\tlet mut body = String::new();\n"));
-    src.push_str(&format!("\t\t\t\tresult.read_to_string(&mut body).unwrap();\n"));
-    src.push_str(&format!("\t\t\t\tprintln!(\"Error response body: {{}}\", body);\n"));
-    src.push_str(&format!("\t\t\t\tErr(AWSError::new(\"S3 error in {}\"))\n", op.name.to_snake_case()));
-    src.push_str(&format!("\t\t\t}}\n"));
-    src.push_str(&format!("\t\t}}\n"));
-
-    src
-}
-
-fn s3_response_struct_parsers(service: &Service) -> String {
-    let mut src = String::new();
-    for (name, shape) in service.shapes.iter() {
-        src.push_str(&format!("// parser for name {}, shape {:?}\n", name, shape));
-        src.push_str(&format!("struct {}Parser;\n", name));
-        src.push_str(&format!("impl {}Parser {{\n", name));
-        src.push_str(&format!("\tpub fn parse_response<'a, T: Peek + Next>(_tag_name: Option<&str>, _location: Option<&ArgumentLocation>, _headers: &Headers, _stack: &mut T) -> Result<{}, XmlParseError> {{\n", name));
-        src.push_str(&format!("\t\t// totally a parser\n"));
-        src.push_str(&format!("\t\tErr(XmlParseError::new(\"Not implemented\"))\n"));
-        src.push_str(&format!("\t}}\n"));
-        src.push_str(&format!("}}\n"));
-    }
-    src
-}
+// fn s3_function_guts(op: &botocore_parser::Operation) -> String {
+//     let mut src = String::new();
+//     src.push_str(&format!("\t\tlet mut request = SignedRequest::new(\"{}\", \"s3\", &self.region, \"\");\n", op.http.method));
+//
+//     src.push_str(&format!("\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));\n"));
+//
+//     src.push_str(&format!("\t\tlet status = result.status.to_u16();\n"));
+//     //src.push_str(&format!("\t\t \n"));
+//
+//     src.push_str(&format!("\t\tmatch status {{\n"));
+//     src.push_str(&format!("\t\t\t200 => {{\n"));
+//     if op.output.is_some() {
+//         src.push_str(&format!("\t\t\t\tlet headers = result.headers.clone();\n"));
+//     }
+//     src.push_str(&format!("\t\t\t\tlet mut reader = EventReader::new(result);\n"));
+//     src.push_str(&format!("\t\t\t\tlet mut stack = XmlResponseFromAws::new(reader.events().peekable());\n"));
+//     src.push_str(&format!("\t\t\t\tstack.next(); // xml start tag\n"));
+//     src.push_str(&format!("\t\t\t\tstack.next(); // top level result\n"));
+//     src.push_str(&format!("\t\t\t\t// tag name for top level doesn't matter:\n"));
+//     match op.output {
+//         None => src.push_str(&format!("\t\t\t\treturn Ok(());\n")),
+//         Some(_) => {
+//             src.push_str(&format!("\t\t\t\tlet aws_result = try!({}Parser::parse_response(None, None, &headers, &mut stack));\n", op.output_shape_or("")));
+//             src.push_str(&format!("\t\t\t\tOk(aws_result)\n"));
+//         },
+//     }
+//     src.push_str(&format!("\t\t\t}}\n"));
+//     src.push_str(&format!("\t\t\t_ => {{\n"));
+//     src.push_str(&format!("\t\t\t\tprintln!(\"Error: Status code was {{}}\", status);\n"));
+//     src.push_str(&format!("\t\t\t\tlet mut body = String::new();\n"));
+//     src.push_str(&format!("\t\t\t\tresult.read_to_string(&mut body).unwrap();\n"));
+//     src.push_str(&format!("\t\t\t\tprintln!(\"Error response body: {{}}\", body);\n"));
+//     src.push_str(&format!("\t\t\t\tErr(AWSError::new(\"S3 error in {}\"))\n", op.name.to_snake_case()));
+//     src.push_str(&format!("\t\t\t}}\n"));
+//     src.push_str(&format!("\t\t}}\n"));
+//
+//     src
+// }
+//
+// fn s3_response_struct_parsers(service: &Service) -> String {
+//     let mut src = String::new();
+//     for (name, shape) in service.shapes.iter() {
+//         src.push_str(&format!("// parser for name {}, shape {:?}\n", name, shape));
+//         src.push_str(&format!("struct {}Parser;\n", name));
+//         src.push_str(&format!("impl {}Parser {{\n", name));
+//         src.push_str(&format!("\tpub fn parse_response<'a, T: Peek + Next>(_tag_name: Option<&str>, _location: Option<&ArgumentLocation>, _headers: &Headers, _stack: &mut T) -> Result<{}, XmlParseError> {{\n", name));
+//         src.push_str(&format!("\t\t// totally a parser\n"));
+//         src.push_str(&format!("\t\tErr(XmlParseError::new(\"Not implemented\"))\n"));
+//         src.push_str(&format!("\t}}\n"));
+//         src.push_str(&format!("}}\n"));
+//     }
+//     src
+// }
 
 // Translate botocore operations to Rust functions for json services like DynamoDB and KMS
 fn json_operations(service: &Service) -> String {
@@ -408,7 +413,7 @@ fn error_type(client_type_name: &str) -> &'static str {
         "DynamoDBClient" => "DynamoDBError",
         "KMSClient" => "KMSError",
         "ECSClient" => "ECSError",
-        "S3Client" => "S3Error",
+        //"S3Client" => "S3Error",
         "SQSClient" => "SQSError",
         _ => panic!("Unknown client type."),
     }
