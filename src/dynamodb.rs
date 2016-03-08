@@ -1,4 +1,4 @@
-//! DynamoDB bindings for Rust.
+//! The AWS DynamoDB API.
 
 #![allow(non_snake_case)]
 

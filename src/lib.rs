@@ -4,28 +4,8 @@
 
 //! # Rusoto
 //!
-//! Rusoto is a Rust SDK for [Amazon Web Services](http://aws.amazon.com/).  It follows best practices
-//! for [AWS Credentials](https://blogs.aws.amazon.com/security/post/Tx3D6U6WSFGOK2H/A-New-and-Standardized-Way-to-Manage-Credentials-in-the-AWS-SDKs).
-//!
-//! The library interacts with AWS in the same fashion as Python's [boto3](https://github.com/boto/boto3) SDK.
-//!
-//! ## Credentials
-//!
-//! Credentials are sourced from environment variables, AWS credentials file and IAM instance profiles,
-//! in that order.  IAM instance profile credentials are refreshed automatically as needed.
-//!
-//! ## Supported services
-//!
-//! * DynamoDB
-//! * [ECS](https://aws.amazon.com/ecs/)
-//! * KMS
-//! * S3
-//! * SQS
-//!
-//! ## Requests and request signing
-//!
-//! Rusoto uses [AWS Signature 4](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)
-//! to sign requests.
+//! Rusoto is an AWS SDK for Rust.
+//! A high level overview is available in `README.md` at https://github.com/rusoto/rusoto.
 
 extern crate time;
 extern crate xml;
@@ -45,12 +25,18 @@ extern crate log;
 #[macro_use] pub mod params;
 #[macro_use] pub mod signature;
 pub mod credentials;
-pub mod dynamodb;
-pub mod ecs;
 pub mod error;
-pub mod kms;
-pub mod sqs;
-pub mod s3;
 pub mod xmlutil;
 pub mod regions;
 pub mod request;
+
+#[cfg(feature = "dynamodb")]
+pub mod dynamodb;
+#[cfg(feature = "ecs")]
+pub mod ecs;
+#[cfg(feature = "kms")]
+pub mod kms;
+#[cfg(feature = "s3")]
+pub mod s3;
+#[cfg(feature = "sqs")]
+pub mod sqs;

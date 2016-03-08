@@ -8,9 +8,9 @@ Check out code from github.
 
 `pip install --user -r codegen/requirements.txt` to install Python codegen required libraries.
 
-If you're on OSX, you'll probably need a new version of openssl.  Run `brew install openssl`.  
+If you're on OSX, you'll probably need a new version of openssl.  Run `brew install openssl`.
 
-If using pre-El Capitan OSX, run `brew link --force openssl`.  
+If using pre-El Capitan OSX, run `brew link --force openssl`.
 
 For El Capitan, these environment variables need to be set whenever building the openssl crate.
 This includes rebuilding Rusoto after a `cargo clean`.
@@ -39,10 +39,12 @@ Initial setup is now complete, the above shouldn't be needed again unless you ne
 
 Build the project with `cargo build`.
 
-Integration tests can be executed by running `cargo test --verbose --features aws_integration`.
+Integration tests can be executed by running `cargo test --features FEATURE`, where FEATURE is one or more space-separated Cargo features to test as defined in `Cargo.toml`.
+Each AWS service has a Cargo feature to enable it.
+The feature "all" can be used to test all supported services.
 This will create real AWS resources and you may be charged.
 
-For more verbose test output, you can run `cargo test --verbose --features aws_integration -- --nocapture`.
+For more verbose test output, you can run `cargo test --verbose --features FEATURE -- --nocapture`.
 
 ### Rust code generation from boto core service definitions:
 

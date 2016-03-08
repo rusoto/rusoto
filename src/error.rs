@@ -1,7 +1,4 @@
-//! Errors during AWS communication or parsing
-//!
-//! Wrapper around String to store the error.
-//!
+//! Error and result types.
 
 use std::fmt;
 use std::io::Error as IoError;

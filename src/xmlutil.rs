@@ -1,8 +1,7 @@
-//! Tools for handling XML from AWS with helper functions for testing
+//! Tools for handling XML from AWS with helper functions for testing.
 //!
-//! Wraps an XML stack via traits.  Also provides a method of supplying an XML stack from a file
-//! for testing purposes.
-//!
+//! Wraps an XML stack via traits.
+//! Also provides a method of supplying an XML stack from a file for testing purposes.
 
 use std::iter::Peekable;
 use std::num::ParseIntError;

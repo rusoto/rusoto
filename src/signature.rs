@@ -1,4 +1,4 @@
-//! Tools for signing a request to AWS
+//! AWS API request signatures.
 //!
 //! Follows [AWS Signature 4](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)
 //! algorithm.

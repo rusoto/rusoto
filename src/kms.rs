@@ -1,4 +1,4 @@
-//! KMS bindings for Rust.
+//! The AWS KMS API.
 
 #![allow(non_snake_case)]
 

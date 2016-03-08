@@ -1,4 +1,4 @@
-//! Parameters for talking to SQS
+//! Parameters for talking to SQS.
 //!
 //! Key-value pairs for SQS requests.
 //!
