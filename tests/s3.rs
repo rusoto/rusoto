@@ -33,139 +33,140 @@ fn all_s3_tests() {
     let mut s3 = S3Helper::new(DefaultAWSCredentialsProviderChain::new(), &region);
 
     match s3_list_buckets_tests(&mut s3) {
-        Ok(_) => { println!("Everything worked for S3 list buckets."); },
-        Err(err) => { println!("Got error in s3 list buckets: {}", err); }
+        Ok(_) => { info!("Everything worked for S3 list buckets."); },
+        Err(err) => { info!("Got error in s3 list buckets: {}", err); }
     }
 
-    let mut bucket_name = format!("rusoto{}", get_time().sec);
-    // let bucket_name = "rusoto1440826511";
-
-    match s3_create_bucket_test(&mut s3, &bucket_name, &region, None) {
-        Ok(_) => { println!("Everything worked for S3 create bucket."); },
-        Err(err) => { println!("Got error in s3 create bucket: {}", err); }
-    }
-
-    match s3_put_object_with_request_specified_test(&mut s3, &bucket_name) {
-        Ok(_) => println!("Everything worked for S3 put object."),
-        Err(err) => println!("Got error in s3 put object: {}", err),
-    }
-
-    match s3_put_object_test(&mut s3, &bucket_name) {
-        Ok(_) => println!("Everything worked for S3 put object."),
-        Err(err) => println!("Got error in s3 put object: {}", err),
-    }
-
-    match s3_get_object_test(&mut s3, &bucket_name) {
-        Ok(result) => {
-            println!("Everything worked for S3 get object.");
-            let mut f = File::create("s3-sample-creds").unwrap();
-            match f.write(&(result.body)) {
-                Err(why) => println!("Couldn't create file to save object from S3: {}", why),
-                Ok(_) => (),
-            }
-        }
-        Err(err) => { println!("Got error in s3 get object: {}", err); }
-    }
-
-    match s3_delete_object_test(&mut s3, &bucket_name, "sample-credentials") {
-        Ok(_) => {
-            println!("Everything worked for S3 delete object.");
-        }
-        Err(err) => { println!("Got error in s3 delete object: {}", err); }
-    }
-
-    match s3_put_object_with_reduced_redundancy_test(&mut s3, &bucket_name) {
-        Ok(_) => {
-            println!("Everything worked for S3 put object with reduced redundancy.");
-        }
-        Err(err) => { println!("Got error in s3 put object with reduced redundancy: {}", err); }
-    }
-
-    match s3_delete_object_test(&mut s3, &bucket_name, "sample-credentials") {
-        Ok(_) => {
-            println!("Everything worked for S3 delete object.");
-        }
-        Err(err) => { println!("Got error in s3 delete object: {}", err); }
-    }
+    // let mut bucket_name = format!("rusoto{}", get_time().sec);
+    // // let bucket_name = "rusoto1440826511";
+    //
+    // match s3_create_bucket_test(&mut s3, &bucket_name, &region, None) {
+    //     Ok(_) => { info!("Everything worked for S3 create bucket."); },
+    //     Err(err) => { info!("Got error in s3 create bucket: {}", err); }
+    // }
+    //
+    // match s3_put_object_with_request_specified_test(&mut s3, &bucket_name) {
+    //     Ok(_) => info!("Everything worked for S3 put object."),
+    //     Err(err) => info!("Got error in s3 put object: {}", err),
+    // }
+    //
+    // match s3_put_object_test(&mut s3, &bucket_name) {
+    //     Ok(_) => info!("Everything worked for S3 put object."),
+    //     Err(err) => info!("Got error in s3 put object: {}", err),
+    // }
+    //
+    // match s3_get_object_test(&mut s3, &bucket_name) {
+    //     Ok(result) => {
+    //         info!("Everything worked for S3 get object.");
+    //         let mut f = File::create("s3-sample-creds").unwrap();
+    //         match f.write(&(result.body)) {
+    //             Err(why) => info!("Couldn't create file to save object from S3: {}", why),
+    //             Ok(_) => (),
+    //         }
+    //     }
+    //     Err(err) => { info!("Got error in s3 get object: {}", err); }
+    // }
+    //
+    // match s3_delete_object_test(&mut s3, &bucket_name, "sample-credentials") {
+    //     Ok(_) => {
+    //         info!("Everything worked for S3 delete object.");
+    //     }
+    //     Err(err) => { info!("Got error in s3 delete object: {}", err); }
+    // }
+    //
+    // match s3_put_object_with_reduced_redundancy_test(&mut s3, &bucket_name) {
+    //     Ok(_) => {
+    //         info!("Everything worked for S3 put object with reduced redundancy.");
+    //     }
+    //     Err(err) => { info!("Got error in s3 put object with reduced redundancy: {}", err); }
+    // }
+    //
+    // match s3_delete_object_test(&mut s3, &bucket_name, "sample-credentials") {
+    //     Ok(_) => {
+    //         info!("Everything worked for S3 delete object.");
+    //     }
+    //     Err(err) => { info!("Got error in s3 delete object: {}", err); }
+    // }
 
     // Set the file in s3_multipart_upload_test and uncomment this code to test multipart upload:
-    // println!("Making a large upload...");
+    // info!("Making a large upload...");
     // match s3_multipart_upload_test(&mut s3, &bucket_name) {
-    // 	Ok(_) => { println!("Everything worked for S3 multipart upload."); }
-    // 	Err(err) => { println!("Got error in s3 multipart upload: {}", err); }
+    // 	Ok(_) => { info!("Everything worked for S3 multipart upload."); }
+    // 	Err(err) => { info!("Got error in s3 multipart upload: {}", err); }
     // }
 
     // match s3_delete_object_test(&mut s3, &bucket_name, "testfile.zip") {
     // 	Ok(_) => {
-    // 		println!("Everything worked for S3 delete object.");
+    // 		info!("Everything worked for S3 delete object.");
     // 	}
-    // 	Err(err) => { println!("Got error in s3 delete object: {}", err); }
+    // 	Err(err) => { info!("Got error in s3 delete object: {}", err); }
     // }
 
-    match s3_list_multipart_uploads(&mut s3, &bucket_name) {
-        Err(why) => println!("Error listing multipart uploads: {:?}", why),
-        Ok(_) => (),
-    }
+    // match s3_list_multipart_uploads(&mut s3, &bucket_name) {
+    //     Err(why) => info!("Error listing multipart uploads: {:?}", why),
+    //     Ok(_) => (),
+    // }
 
     // Working example, replace bucket name, file name, uploadID for your multipart upload:
     // match s3_list_multipart_upload_parts(&mut s3, &bucket_name, "testfile.zip", "PeePB_uORK5f2AURP_SWcQ4NO1P1oqnGNNNFK3nhFfzMeksdvG7x7nFfH1qk7a3HSossNYB7t8QhcN1Fg6ax7AXbwvAKIZ9DilB4tUcpM7qyUEgkszN4iDmMvSaImGFK") {
-    // 	Err(why) => println!("Error listing multipart upload parts: {:?}", why),
+    // 	Err(why) => info!("Error listing multipart upload parts: {:?}", why),
     // 	Ok(_) => (),
     // }
 
     // Working example, replace bucket name, file name, uploadID for your multipart upload:
     // match s3_abort_multipart_uploads(&mut s3, &bucket_name, "testfile.zip", "W5J7SeEor1A3vcRMMUhAb.BKrMs68.suzyhErssdb2HFAyDb4z7QhJBMyGkM_GSsoFqKJJLjbHcNSZTHa7MhTFJodewzcswshoDHd7mffXPNUH.xoRWVXbkLjakTETaO") {
-    // 	Err(why) => println!("Error aborting multipart uploads: {:?}", why),
+    // 	Err(why) => info!("Error aborting multipart uploads: {:?}", why),
     // 	Ok(_) => (),
     // }
 
-    match s3_delete_bucket_test(&mut s3, &bucket_name, &region) {
-        Ok(_) => { println!("Everything worked for S3 delete bucket."); },
-        Err(err) => { println!("Got error in s3 delete bucket: {}", err); }
-    }
-
-    // new bucket for canned acl testing!
-    bucket_name = format!("rusoto{}", get_time().sec);
-
-    match s3_create_bucket_test(&mut s3, &bucket_name, &region, Some(CannedAcl::AuthenticatedRead)) {
-        Ok(_) => { println!("Everything worked for S3 create bucket with ACL."); },
-        Err(err) => { println!("Got error in s3 create bucket: {}", err); }
-    }
-
-    match s3_delete_bucket_test(&mut s3, &bucket_name, &region) {
-        Ok(_) => { println!("Everything worked for S3 delete bucket."); },
-        Err(err) => { println!("Got error in s3 delete bucket: {}", err); }
-    }
+    // match s3_delete_bucket_test(&mut s3, &bucket_name, &region) {
+    //     Ok(_) => { info!("Everything worked for S3 delete bucket."); },
+    //     Err(err) => { info!("Got error in s3 delete bucket: {}", err); }
+    // }
+    //
+    // // new bucket for canned acl testing!
+    // bucket_name = format!("rusoto{}", get_time().sec);
+    //
+    // match s3_create_bucket_test(&mut s3, &bucket_name, &region, Some(CannedAcl::AuthenticatedRead)) {
+    //     Ok(_) => { info!("Everything worked for S3 create bucket with ACL."); },
+    //     Err(err) => { info!("Got error in s3 create bucket: {}", err); }
+    // }
+    //
+    // match s3_delete_bucket_test(&mut s3, &bucket_name, &region) {
+    //     Ok(_) => { info!("Everything worked for S3 delete bucket."); },
+    //     Err(err) => { info!("Got error in s3 delete bucket: {}", err); }
+    // }
 }
 
 fn s3_list_multipart_upload_parts(s3: &mut S3Helper, bucket: &str, object: &str, upload_id: &str) -> Result<(), AWSError> {
     match s3.multipart_upload_list_parts(bucket, object, upload_id) {
-        Err(why) => println!("Error listing multipart upload parts: {:?}", why),
-        Ok(result) => println!("Multipart upload parts: {:?}", result),
+        Err(why) => info!("Error listing multipart upload parts: {:?}", why),
+        Ok(result) => info!("Multipart upload parts: {:?}", result),
     }
     Ok(())
 }
 
 fn s3_list_multipart_uploads(s3: &mut S3Helper, bucket: &str) -> Result<(), AWSError> {
     match s3.list_multipart_uploads_for_bucket(bucket) {
-        Err(why) => println!("Error listing multipart uploads: {:?}", why),
-        Ok(result) => println!("in-progress multipart uploads: {:?}", result),
+        Err(why) => info!("Error listing multipart uploads: {:?}", why),
+        Ok(result) => info!("in-progress multipart uploads: {:?}", result),
     }
     Ok(())
 }
 
 fn s3_abort_multipart_uploads(s3: &mut S3Helper, bucket: &str, object: &str, upload_id: &str) -> Result<(), AWSError> {
     match s3.abort_multipart_upload(bucket, object, upload_id) {
-        Err(why) => println!("Error aborting multipart upload: {:?}", why),
-        Ok(result) => println!("aborted multipart upload: {:?}", result),
+        Err(why) => info!("Error aborting multipart upload: {:?}", why),
+        Ok(result) => info!("aborted multipart upload: {:?}", result),
     }
     Ok(())
 }
 
 fn s3_list_buckets_tests(s3: &mut S3Helper) -> Result<(), AWSError> {
     let response = try!(s3.list_buckets());
+    info!("Got list of buckets: {:?}", response);
     for q in response.buckets {
-        println!("Existing bucket: {:?}", q.name);
+        info!("Existing bucket: {:?}", q.name);
     }
 
     Ok(())

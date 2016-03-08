@@ -4983,16 +4983,18 @@ impl ListBucketsOutputParser {
 		let mut obj = ListBucketsOutput::default();
 		loop {
 			let current_name = try!(peek_at_name(stack));
-			if current_name == "Owner" {
-				obj.owner = try!(OwnerParser::parse_xml("Owner", stack));
-				continue;
+			match current_name.as_ref() {
+				"Owner" => {
+					obj.owner = try!(OwnerParser::parse_xml("Owner", stack));
+					continue;
+				},
+				"Buckets" => {
+					stack.next(); // skip Buckets start and go to contents
+					// this will parse all buckets:
+					obj.buckets = try!(BucketsParser::parse_xml("Bucket", stack));
+				},
+				_ => break,
 			}
-			if current_name == "Buckets" {
-				stack.next(); // skip Buckets start and go to contents
-				// this will parse all buckets:
-				obj.buckets = try!(BucketsParser::parse_xml("Bucket", stack));
-			}
-			break;
 		}
 		stack.next(); // skip Buckets end
 		try!(end_element(tag_name, stack));
@@ -5340,15 +5342,17 @@ impl OwnerParser {
 		let mut obj = Owner::default();
 		loop {
 			let current_name = try!(peek_at_name(stack));
-			if current_name == "DisplayName" {
-				obj.display_name = try!(DisplayNameParser::parse_xml("DisplayName", stack));
-				continue;
+			match current_name.as_ref() {
+				"DisplayName" => {
+					obj.display_name = try!(DisplayNameParser::parse_xml("DisplayName", stack));
+					continue;
+				},
+				"ID" => {
+					obj.id = try!(IDParser::parse_xml("ID", stack));
+					continue;
+				},
+				_ => break,
 			}
-			if current_name == "ID" {
-				obj.id = try!(IDParser::parse_xml("ID", stack));
-				continue;
-			}
-			break;
 		}
 		try!(end_element(tag_name, stack));
 		Ok(obj)
