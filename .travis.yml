@@ -4,6 +4,9 @@ rust:
   - beta
   - nightly
 install: "pip install --user -r codegen/requirements.txt"
+script:
+  - cargo build --verbose --features all
+  - cargo test --verbose
 notifications:
   email: false
 matrix:
