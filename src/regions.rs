@@ -1,8 +1,8 @@
-//! AWS Regions and helper functions
+//! AWS Regions and helper functions.
 //!
 //! Mostly used for translating the Region enum to a string AWS accepts.
 //!
-//! EG: UsEast1 to "us-east-1"
+//! For example: UsEast1 to "us-east-1"
 
 use std::str::FromStr;
 

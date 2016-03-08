@@ -1,11 +1,10 @@
-//! AWS credentials: sourcing and supplying for signed requests
+//! Types for loading and managing AWS access credentials for API requests.
 //!
 //! ## Priority order
 //!
 //! 1. Environment variables: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
 //! 2. AWS credentials file.  Usually located at ~/.aws/credentials .
 //! 3. IAM instance profile.  Will only work if running on an EC2 instance with an instance profile/role.
-//!
 
 use std::env::*;
 use std::env;

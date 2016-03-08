@@ -1,4 +1,4 @@
-//! [ECS](https://aws.amazon.com/ecs/) bindings for Rust.
+//! The AWS ECS API.
 
 #![allow(non_snake_case)]
 

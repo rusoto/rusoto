@@ -14,12 +14,12 @@ build = "build.rs"
 [features]
 default = ["serde_codegen"]
 nightly = ["serde_macros"]
-aws_integration = ["dynamodb", "ecs", "kms", "s3", "sqs", "dynamodb"]
+all = ["dynamodb", "ecs", "kms", "s3", "sqs"]
+dynamodb = []
 ecs = []
+kms = []
 s3 = []
 sqs = []
-dynamodb = []
-kms = []
 
 [build-dependencies]
 regex = "^0.1.51"
