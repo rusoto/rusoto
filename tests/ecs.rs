@@ -3,12 +3,12 @@
 extern crate rusoto;
 
 use rusoto::ecs::{ECSClient, ECSError, ListClustersRequest};
-use rusoto::credentials::DefaultAWSCredentialsProviderChain;
+use rusoto::credentials::ChainProvider;
 use rusoto::regions::Region;
 
 #[test]
 fn main() {
-    let credentials = DefaultAWSCredentialsProviderChain::new();
+    let credentials = ChainProvider::new().unwrap();
     let region = Region::UsEast1;
     let mut ecs = ECSClient::new(
         credentials,

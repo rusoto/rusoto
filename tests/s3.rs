@@ -13,7 +13,7 @@ use std::fs::File;
 
 use time::get_time;
 
-use rusoto::credentials::DefaultAWSCredentialsProviderChain;
+use rusoto::credentials::ChainProvider;
 use rusoto::error::AWSError;
 use rusoto::s3::{
     CannedAcl,
@@ -30,7 +30,7 @@ fn all_s3_tests() {
     let _ = env_logger::init();
     info!("s3 integration tests starting up.");
     let region = Region::UsWest2;
-    let mut s3 = S3Helper::new(DefaultAWSCredentialsProviderChain::new(), &region);
+    let mut s3 = S3Helper::new(ChainProvider::new().unwrap(), &region);
 
     match s3_list_buckets_tests(&mut s3) {
         Ok(_) => { info!("Everything worked for S3 list buckets."); },

@@ -6,7 +6,7 @@ use std::str::FromStr;
 
 use xml::EventReader;
 
-use credentials::AWSCredentialsProvider;
+use credentials::ProvideAWSCredentials;
 use error::AWSError;
 use params::{Params, SQSParams};
 use regions::Region;

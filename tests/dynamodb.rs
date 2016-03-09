@@ -8,7 +8,7 @@ use std::thread;
 
 use time::get_time;
 
-use rusoto::credentials::DefaultAWSCredentialsProviderChain;
+use rusoto::credentials::ChainProvider;
 use rusoto::dynamodb::{
     AttributeDefinition,
     AttributeValue,
@@ -27,7 +27,7 @@ use rusoto::regions::Region;
 
 #[test]
 fn main() {
-    let creds = DefaultAWSCredentialsProviderChain::new();
+    let creds = ChainProvider::new().unwrap();
     let region = Region::UsWest2;
 
     let mut dynamodb = DynamoDBHelper::new(creds, &region);

@@ -68,7 +68,7 @@ class ParserBase(object):
 
     def rust_struct(self, name, shape):
         """
-        generate a rust declaration for a botocore structure shape        
+        generate a rust declaration for a botocore structure shape
         """
         pass
 
@@ -78,13 +78,13 @@ class ParserBase(object):
         """
 
         self.append("pub struct " + self.client_name + "<'a> {")
-        self.append("\tcreds: Box<AWSCredentialsProvider + 'a>,")
+        self.append("\tcreds: Box<ProvideAWSCredentials + 'a>,")
         self.append("\tregion: &'a Region")
         self.append("}\n")
 
         self.append("impl<'a> " + self.client_name + "<'a> { ")
         self.append(
-            "\tpub fn new<P: AWSCredentialsProvider + 'a>(creds: P, region: &'a Region) -> " + self.client_name + "<'a> {")
+            "\tpub fn new<P: ProvideAWSCredentials + 'a>(creds: P, region: &'a Region) -> " + self.client_name + "<'a> {")
         self.append("\t\t" + self.client_name + " { creds: Box::new(creds), region: region }")
         self.append("\t}")
 
