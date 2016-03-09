@@ -1,5 +1,6 @@
 from parserbase import ParserBase
 
+
 class QueryProtocolParser(ParserBase):
     """
     Implementation of ParserBase for AWS services with protocol type 'query'
@@ -23,7 +24,6 @@ class QueryProtocolParser(ParserBase):
             'boolean': 'bool::from_str(try!(characters(stack)).as_ref()).unwrap()'
         }
 
-
     def init_primitive_writers(self):
         """
         rust code to write primitive types to a string
@@ -43,7 +43,6 @@ class QueryProtocolParser(ParserBase):
         """
         self.type_parser(name, shape)
         self.param_writer(name, shape)
-
 
     def rust_struct(self, name, shape):
         self.append("#[derive(Debug, Default)]")
@@ -68,11 +67,12 @@ class QueryProtocolParser(ParserBase):
         """
 
         shape_type = shape['type']
-        
+
         self.append("/// Parse " + name + " from XML")
         self.append('struct ' + name + 'Parser;')
         self.append('impl ' + name + 'Parser {')
-        self.append('\tfn parse_xml<\'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<' + name + ', XmlParseError> {')
+        self.append(
+            '\tfn parse_xml<\'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<' + name + ', XmlParseError> {')
 
         if shape_type == 'map':
             self.map_parser(shape)
@@ -89,7 +89,6 @@ class QueryProtocolParser(ParserBase):
         self.append('\t\tOk(obj)')
         self.append('\t}')
         self.append('}')
-
 
     def struct_parser(self, name, shape):
         """
@@ -125,14 +124,15 @@ class QueryProtocolParser(ParserBase):
         self.append("\t\tlet mut obj = HashMap::new();")
         self.append("\t\twhile try!(peek_at_name(stack)) == tag_name {")
         self.append("\t\t\ttry!(start_element(tag_name, stack));")
-        self.append("\t\t\tlet key = try!(" + shape['key']['shape'] + "Parser::parse_xml(\"" + QueryProtocolParser.shape_name(
-            shape['key']) + "\", stack));")
-        self.append("\t\t\tlet value = try!(" + shape['value']['shape'] + "Parser::parse_xml(\"" + QueryProtocolParser.shape_name(
-            shape['value']) + "\", stack));")
+        self.append(
+            "\t\t\tlet key = try!(" + shape['key']['shape'] + "Parser::parse_xml(\"" + QueryProtocolParser.shape_name(
+                    shape['key']) + "\", stack));")
+        self.append("\t\t\tlet value = try!(" + shape['value'][
+            'shape'] + "Parser::parse_xml(\"" + QueryProtocolParser.shape_name(
+                shape['value']) + "\", stack));")
         self.append("\t\t\tobj.insert(key, value);")
         self.append("\t\t\ttry!(end_element(tag_name, stack));")
         self.append("\t\t}")
-        
 
     def list_parser(self, shape):
         """
@@ -140,11 +140,12 @@ class QueryProtocolParser(ParserBase):
         """
 
         self.append("\t\tlet mut obj = Vec::new();")
-        self.append("\t\twhile try!(peek_at_name(stack)) == \"" + QueryProtocolParser.shape_name(shape['member']) + "\" {")
-        self.append("\t\t\tobj.push(try!(" + shape['member']['shape'] + "Parser::parse_xml(\"" + QueryProtocolParser.shape_name(
-            shape['member']) + "\", stack)));")
+        self.append(
+            "\t\twhile try!(peek_at_name(stack)) == \"" + QueryProtocolParser.shape_name(shape['member']) + "\" {")
+        self.append(
+            "\t\t\tobj.push(try!(" + shape['member']['shape'] + "Parser::parse_xml(\"" + QueryProtocolParser.shape_name(
+                    shape['member']) + "\", stack)));")
         self.append("\t\t}")
-
 
     def param_writer(self, name, shape):
         """
@@ -154,9 +155,9 @@ class QueryProtocolParser(ParserBase):
         self.append('struct ' + name + 'Writer;')
         self.append('impl ' + name + 'Writer {')
         self.append('\tfn write_params(params: &mut Params, name: &str, obj: &' + name + ') {')
-        
+
         shape_type = shape['type']
-        
+
         if shape_type in self.primitive_writers:
             self.append('\t\tparams.put(name, ' + self.primitive_writers[shape_type] + ');')
         elif shape_type == 'list':
@@ -186,7 +187,6 @@ class QueryProtocolParser(ParserBase):
                     'shape'] + 'Writer::write_params(params, &(prefix.to_string() + "' + location_name + '"), &obj.' + ParserBase.c_to_s(
                         name) + ');')
 
-
     # guts of the param_writer for list shapes
     def list_writer(self, shape):
         self.append("\t\tlet mut index = 1;")
@@ -195,15 +195,15 @@ class QueryProtocolParser(ParserBase):
         self.append("\t\t\t" + shape['member']['shape'] + "Writer::write_params(params, key, &element);")
         self.append("\t\t\tindex += 1;")
         self.append("\t\t}")
-        
 
     # guts of the param_writer for map shapes
     def map_writer(self, shape):
         self.append("\t\tlet mut index = 1;")
         self.append("\t\tfor (key,value) in obj {")
         self.append("\t\t\tlet prefix = &format!(\"{}.{}\", name, index);")
-        self.append("\t\t\t" + shape['key']['shape'] + "Writer::write_params(params, &format!(\"{}.{}\", prefix, \"" + QueryProtocolParser.shape_name(
-            shape['key']) + "\"), &key);")
+        self.append("\t\t\t" + shape['key'][
+            'shape'] + "Writer::write_params(params, &format!(\"{}.{}\", prefix, \"" + QueryProtocolParser.shape_name(
+                shape['key']) + "\"), &key);")
         self.append("\t\t\t" + shape['value'][
             'shape'] + "Writer::write_params(params, &format!(\"{}.{}\", prefix, \"" + QueryProtocolParser.shape_name(
                 shape['value']) + "\"), &value);")
@@ -219,24 +219,26 @@ class QueryProtocolParser(ParserBase):
 
         output_type = ParserBase.get_output_type(operation)
         self.generate_documentation(operation, "\t")
-        
+
         # This feels so hacky to get around scoping of these in the else block:
         input_name = ''
         input_type = ''
-        
+
         if not ('input' in operation):
-            self.append("\tpub fn " + ParserBase.c_to_s(operation['name']) + "(&mut self"") -> Result<" + output_type + ", AWSError> {")
+            self.append("\tpub fn " + ParserBase.c_to_s(
+                    operation['name']) + "(&mut self"") -> Result<" + output_type + ", AWSError> {")
         else:
             input_name = operation['input']['shape']
             input_type = self.shape(input_name)
             self.append("\tpub fn " + ParserBase.c_to_s(operation[
-                'name']) + "(&mut self, input: &" + input_name + ") -> Result<" + output_type + ", AWSError> {")
+                                                            'name']) + "(&mut self, input: &" + input_name + ") -> Result<" + output_type + ", AWSError> {")
 
-        self.append('\t\tlet mut request = SignedRequest::new("' + http['method'] + '", "' + self.metadata('endpointPrefix') 
-                    + '", &self.region, "' + http['requestUri'] + '");')
+        self.append(
+            '\t\tlet mut request = SignedRequest::new("' + http['method'] + '", "' + self.metadata('endpointPrefix')
+            + '", &self.region, "' + http['requestUri'] + '");')
         self.append("\t\tlet mut params = Params::new();")
         self.append('\t\tparams.put("Action", "' + operation['name'] + '");')
-        
+
         if ('input' in operation):
             self.append('\t\t' + input_name + 'Writer::write_params(&mut params, \"\", &input);')
 
@@ -249,7 +251,7 @@ class QueryProtocolParser(ParserBase):
         self.append('\t\tstack.next(); // xml start tag')
         self.append('\t\tstack.next();')
         self.append('\t\tmatch status {')
-        
+
         self.append('\t\t\t200 => { ')
 
         if output_type == '()':
@@ -258,11 +260,11 @@ class QueryProtocolParser(ParserBase):
             self.append('\t\t\t\tOk(try!(' + output_type + 'Parser::parse_xml("' + output_type + '", &mut stack)))')
 
         self.append('\t\t\t}')
-        self.append('\t\t\t_ => { Err(AWSError::new("error")) }')        
+        self.append('\t\t\t_ => { Err(AWSError::new("error")) }')
         self.append('\t\t}')
         self.append("\t}")
 
-    @staticmethod    
+    @staticmethod
     def shape_name(shape):
         if 'locationName' in shape:
             return shape['locationName']
