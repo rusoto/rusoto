@@ -1,0 +1,16 @@
+[package]
+name = "rusoto_codegen"
+version = "0.1.0"
+authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>", "Matthew Mayer <matthewkmayer@gmail.com>"]
+description = "Code generation library for Rusoto."
+license = "MIT"
+repository = "https://github.com/rusoto/rusoto"
+
+[dependencies]
+regex = "^0.1.51"
+Inflector = "0.2.0"
+# for faster development of botocore_parser this can can be set to use a local copy:
+botocore_parser = { git = "https://github.com/rusoto/botocore_parser.git" }
+serde_codegen = { version = "0.6.14", optional = true }
+serde_json = "0.6.0"
+syntex = "^0.29.0"
