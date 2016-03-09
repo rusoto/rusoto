@@ -80,27 +80,27 @@ impl <'a> SignedRequest <'a> {
 		self.payload = payload;
 	}
 
-	pub fn get_method(&self) -> &str {
+	pub fn method(&self) -> &str {
 		&self.method
 	}
 
-	pub fn get_canonical_uri(&self) -> &str {
+	pub fn canonical_uri(&self) -> &str {
 		&self.canonical_uri
 	}
 
-	pub fn get_canonical_query_string(&self) -> &str {
+	pub fn canonical_query_string(&self) -> &str {
 		&self.canonical_query_string
 	}
 
-	pub fn get_payload(&self) -> Option<&'a [u8]> {
+	pub fn payload(&self) -> Option<&'a [u8]> {
 		self.payload
 	}
 
-	pub fn get_headers(&'a self) -> &'a BTreeMap<String, Vec<Vec<u8>>> {
+	pub fn headers(&'a self) -> &'a BTreeMap<String, Vec<Vec<u8>>> {
 		&self.headers
 	}
 
-	pub fn get_hostname(&self) -> String {
+	pub fn hostname(&self) -> String {
 		match self.hostname {
 			Some(ref h) => h.to_string(),
 			None => build_hostname(&self.service, &self.region)
@@ -428,7 +428,7 @@ mod tests {
 	fn get_hostname_none_present() {
 		let region = Region::UsEast1;
 		let request = SignedRequest::new("POST", "sqs", &region, "/");
-		assert_eq!("sqs.us-east-1.amazonaws.com", request.get_hostname());
+		assert_eq!("sqs.us-east-1.amazonaws.com", request.hostname());
 	}
 
 	#[test]
@@ -436,7 +436,7 @@ mod tests {
 		let region = Region::UsEast1;
 		let mut request = SignedRequest::new("POST", "sqs", &region, "/");
 		request.set_hostname(Some("test-hostname".to_string()));
-		assert_eq!("test-hostname", request.get_hostname());
+		assert_eq!("test-hostname", request.hostname());
 	}
 
 	#[test]
