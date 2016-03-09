@@ -78,7 +78,7 @@ Rusoto uses the [log](https://crates.io/crates/log/) logging facade.
 For tests it uses [env_logger](https://crates.io/crates/env_logger/).
 To see output of logging from integration tests, run:
 
-`RUST_LOG=info cargo test --features aws_integration`
+`RUST_LOG=info cargo test --features all`
 
 ## Semantic versioning
 
