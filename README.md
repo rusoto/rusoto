@@ -33,11 +33,11 @@ A simple example of using the Rusoto's DynamoDB API to list the names of all tab
 ```rust
 extern crate rusoto;
 
-use default::Default;
+use std::default::Default;
 
 use rusoto::credentials::DefaultAWSCredentialsProviderChain;
 use rusoto::dynamodb::{DynamoDBClient, ListTablesInput};
-use rusoto:regions::Region;
+use rusoto::regions::Region;
 
 fn main() {
   let provider = DefaultAWSCredentialsProviderChain::new();
@@ -48,7 +48,7 @@ fn main() {
   match client.list_tables(&list_tables_input) {
     Ok(output) => {
       match output.TableNames {
-        Some(table_name_list) {
+        Some(table_name_list) => {
           println!("Tables in database:");
 
           for table_name in table_name_list {
@@ -59,7 +59,7 @@ fn main() {
       }
     }
     Err(error) => {
-      println!("Error: {}", error);
+      println!("Error: {:?}", error);
     }
   }
 }
@@ -78,7 +78,7 @@ Rusoto uses the [log](https://crates.io/crates/log/) logging facade.
 For tests it uses [env_logger](https://crates.io/crates/env_logger/).
 To see output of logging from integration tests, run:
 
-`RUST_LOG=info cargo test --features aws_integration`
+`RUST_LOG=info cargo test --features all`
 
 ## Semantic versioning
 
