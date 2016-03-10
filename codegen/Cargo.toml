@@ -5,12 +5,21 @@ authors = ["Anthony DiMarco <anthony.dimarco@dualspark.com>", "Matthew Mayer <ma
 description = "Code generation library for Rusoto."
 license = "MIT"
 repository = "https://github.com/rusoto/rusoto"
+build = "build.rs"
+
+[features]
+default = ["serde_codegen", "syntex"]
+nightly = ["serde_macros"]
+
+[build-dependencies]
+serde_codegen = { version = "0.7.0", optional = true }
+syntex = { version = "0.29.0", optional = true }
 
 [dependencies]
-regex = "^0.1.51"
 Inflector = "0.2.0"
-# for faster development of botocore_parser this can can be set to use a local copy:
-botocore_parser = { git = "https://github.com/rusoto/botocore_parser.git" }
-serde_codegen = { version = "0.6.14", optional = true }
-serde_json = "0.6.0"
-syntex = "^0.29.0"
+regex = "0.1.55"
+serde = "0.7.0"
+serde_codegen = { version = "0.7.0", optional = true }
+serde_json = "0.7.0"
+serde_macros = { version = "0.7.0", optional = true }
+syntex = { version = "0.29.0", optional = true }
