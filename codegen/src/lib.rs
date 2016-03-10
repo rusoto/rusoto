@@ -58,7 +58,7 @@ use std::result;
 
 use serde_json;
 
-use credentials::AWSCredentialsProvider;
+use credentials::ProvideAWSCredentials;
 use error::AWSError;
 use regions::Region;
 use signature::SignedRequest;
@@ -100,7 +100,7 @@ fn parse_error(body: &str) -> {error_type_name} {{
 use hyper::header::Headers;
 use xml::reader::EventReader;
 
-use credentials::AWSCredentialsProvider;
+use credentials::ProvideAWSCredentials;
 use error::AWSError;
 use regions::Region;
 use signature::SignedRequest;
@@ -123,13 +123,13 @@ pub enum ArgumentLocation {
 
     // generate the service client struct
     source.push_str(&format!("pub struct {}<'a> {{", type_name));
-    source.push_str("\tcreds: Box<AWSCredentialsProvider + 'a>,");
+    source.push_str("\tcreds: Box<ProvideAWSCredentials + 'a>,");
     source.push_str("\tregion: &'a Region");
     source.push_str("}\n");
 
     // implement each botocore operation as function for the client
     source.push_str(&format!("impl<'a> {}<'a> {{ ", type_name));
-    source.push_str(&format!("\tpub fn new<P: AWSCredentialsProvider + 'a>(creds: P, region: &'a Region) -> {}<'a> {{", type_name));
+    source.push_str(&format!("\tpub fn new<P: ProvideAWSCredentials + 'a>(creds: P, region: &'a Region) -> {}<'a> {{", type_name));
     source.push_str(&format!("\t\t{} {{ creds: Box::new(creds), region: region }}", type_name));
     source.push_str("\t}");
 
@@ -210,7 +210,7 @@ fn json_operations(service: &Service) -> String {
         src.push_str("\t\trequest.set_content_type(\"application/x-amz-json-1.0\".to_string());\n");
         src.push_str(&format!("\t\trequest.add_header(\"x-amz-target\", \"{}.{}\");\n", target_prefix, operation.name));
         src.push_str("\t\trequest.set_payload(Some(encoded.as_bytes()));\n");
-        src.push_str("\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));\n");
+        src.push_str("\t\tlet mut result = request.sign_and_execute(try!(self.creds.credentials()));\n");
         src.push_str("\t\tlet status = result.status.to_u16();\n");
         src.push_str("\t\tlet mut body = String::new();\n");
         src.push_str("\t\tresult.read_to_string(&mut body).unwrap();\n");

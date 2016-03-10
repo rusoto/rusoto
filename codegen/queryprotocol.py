@@ -243,9 +243,9 @@ class QueryProtocolParser(ParserBase):
             self.append('\t\t' + input_name + 'Writer::write_params(&mut params, \"\", &input);')
 
         self.append('\t\trequest.set_params(params);')
-        self.append('\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));')
+        self.append('\t\tlet mut result = request.sign_and_execute(try!(self.creds.credentials()));')
         self.append('\t\tlet status = result.status.to_u16();')
-        #	self.append('\t\tprintln!("{}", output);'
+        #   self.append('\t\tprintln!("{}", output);'
         self.append('\t\tlet mut reader = EventReader::new(result);')
         self.append('\t\tlet mut stack = XmlResponseFromAws::new(reader.events().peekable());')
         self.append('\t\tstack.next(); // xml start tag')

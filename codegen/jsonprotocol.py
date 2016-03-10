@@ -70,7 +70,7 @@ class JsonProtocolParser(ParserBase):
         self.append('\t\trequest.add_header("x-amz-target", "' + self.metadata('targetPrefix') + '.' + operation[
             'name'] + '");')
         self.append('\t\trequest.set_payload(Some(encoded.as_bytes()));')
-        self.append('\t\tlet mut result = request.sign_and_execute(try!(self.creds.get_credentials()));')
+        self.append('\t\tlet mut result = request.sign_and_execute(try!(self.creds.credentials()));')
         self.append('\t\tlet status = result.status.to_u16();')
         self.append('\t\tlet mut body = String::new();')
         self.append('\t\tresult.read_to_string(&mut body).unwrap();')

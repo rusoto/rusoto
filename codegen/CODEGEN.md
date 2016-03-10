@@ -26,17 +26,17 @@ This is a guide to how SQS was added to Rusoto.
 
     ```rust
     fn main() {
-      // ...
+        // ...
 
-      // SQS
-      generate(
-          "codegen/botocore/botocore/data/sqs/2012-11-05/service-2.json",
-          "SQSClient",
-          out_path,
-          "sqs",
-      )
+        // SQS
+        generate(
+            "codegen/botocore/botocore/data/sqs/2012-11-05/service-2.json",
+            "SQSClient",
+            out_path,
+            "sqs",
+        )
 
-      // ...
+        // ...
     }
     ```
 
@@ -62,7 +62,7 @@ This is a guide to how SQS was added to Rusoto.
 
     use xml::EventReader;
 
-    use credentials::AWSCredentialsProvider;
+    use credentials::ProvideAWSCredentials;
     use error::AWSError;
     use params::{Params, SQSParams};
     use regions::Region;
@@ -87,21 +87,21 @@ This is a guide to how SQS was added to Rusoto.
     ```rust
     /// High level SQS client that wraps the generated SQSClient.
     pub struct SQSHelper<'a> {
-      client: SQSClient<'a>
+        client: SQSClient<'a>
     }
 
     impl<'a> SQSHelper<'a> {
-      /// Creates a new SQS helper
-      pub fn new<P: AWSCredentialsProvider + 'a>(credentials: P, region:&'a Region) -> SQSHelper<'a> {
-        SQSHelper { client: SQSClient::new(credentials, region) }
-      }
+        /// Creates a new SQS helper
+        pub fn new<P: ProvideAWSCredentials + 'a>(credentials: P, region:&'a Region) -> SQSHelper<'a> {
+          SQSHelper { client: SQSClient::new(credentials, region) }
+        }
 
-      /// Lists queues
-      pub fn list_queues(&mut self) -> Result<ListQueuesResult, AWSError> {
-        self.client.list_queues(&ListQueuesRequest::default())
-      }
+        /// Lists queues
+        pub fn list_queues(&mut self) -> Result<ListQueuesResult, AWSError> {
+          self.client.list_queues(&ListQueuesRequest::default())
+        }
 
-      // ...
+        // ...
     }
     ```
 

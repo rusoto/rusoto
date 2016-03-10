@@ -3,13 +3,13 @@
 #[macro_use]
 extern crate rusoto;
 
-use rusoto::credentials::DefaultAWSCredentialsProviderChain;
+use rusoto::credentials::ChainProvider;
 use rusoto::regions::Region;
 use rusoto::kms::{KMSHelper, KMSError};
 
 #[test]
 fn main() {
-    let creds = DefaultAWSCredentialsProviderChain::new();
+    let creds = ChainProvider::new().unwrap();
     let region = Region::UsWest2;
 
     let mut kms = KMSHelper::new(creds, &region);
