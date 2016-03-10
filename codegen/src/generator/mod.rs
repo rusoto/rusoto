@@ -1,9 +1,10 @@
 use botocore::{Service, Shape};
-use self::ec2::Ec2Generator;
-use self::json::JsonGenerator;
-use self::query::QueryGenerator;
-use self::rest_json::RestJsonGenerator;
-use self::rest_xml::RestXmlGenerator;
+
+pub use self::ec2::Ec2Generator;
+pub use self::json::JsonGenerator;
+pub use self::query::QueryGenerator;
+pub use self::rest_json::RestJsonGenerator;
+pub use self::rest_xml::RestXmlGenerator;
 
 mod ec2;
 mod json;
@@ -11,26 +12,17 @@ mod query;
 mod rest_json;
 mod rest_xml;
 
-pub struct Generator<'a> {
-    service: &'a Service,
-}
+pub trait Generator {
+    fn generate(&self) -> String;
 
-impl<'a> Generator<'a> {
-    pub fn new(service: &'a Service) -> Self {
-        Generator {
-            service: service,
-        }
+    fn service(&self) -> &Service;
+
+    fn client_type_name(&self) -> String {
+        format!("{}Client", self.service_type_name())
     }
 
-    pub fn generate(&self) -> String {
-        match &self.service.metadata.protocol[..] {
-            "ec2" => Ec2Generator::new(self).generate(),
-            "json" => JsonGenerator::new(self).generate(),
-            "query" => QueryGenerator::new(self).generate(),
-            "rest-json" => RestJsonGenerator::new(self).generate(),
-            "rest-xml" => RestXmlGenerator::new(self).generate(),
-            protocol => panic!("Unknown protocol {}", protocol),
-        }
+    fn error_type_name(&self) -> String {
+        format!("{}Error", self.service_type_name())
     }
 
     fn generate_client_footer(&self) -> String {
@@ -88,10 +80,10 @@ impl<'a> {type_name}<'a> {{
         format!("pub type {} = {};\n", name, primitive_type)
     }
 
-    pub fn generate_shapes(&self) -> String {
+    fn generate_shapes(&self) -> String {
         let mut source = String::new();
 
-        for (name, shape) in self.service.shapes.iter() {
+        for (name, shape) in self.service().shapes.iter() {
             if name == "String" {
                 continue;
             }
@@ -150,15 +142,7 @@ pub struct {} {{
         source
     }
 
-    fn client_type_name(&self) -> String {
-        format!("{}Client", self.service_type_name())
-    }
-
-    pub fn error_type_name(&self) -> String {
-        format!("{}Error", self.service_type_name())
-    }
-
     fn service_type_name(&self) -> String {
-        self.service.metadata.service_abbreviation.replace("Amazon ", "").replace(" ", "")
+        self.service().metadata.service_abbreviation.replace("Amazon ", "").replace(" ", "")
     }
 }

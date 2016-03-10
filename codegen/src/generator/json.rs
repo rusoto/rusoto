@@ -2,17 +2,28 @@ use botocore::Service;
 use super::Generator;
 
 pub struct JsonGenerator<'a> {
-    parent: &'a Generator<'a>,
+    service: &'a Service,
 }
 
 impl<'a> JsonGenerator<'a> {
-    pub fn new(parent: &'a Generator<'a>) -> Self {
+    pub fn new(service: &'a Service) -> Self {
         JsonGenerator {
-            parent: parent,
+            service: service,
         }
     }
 
-    pub fn generate(&self) -> String {
+    fn generate_client(&self) -> String {
+        let mut source = String::new();
+
+        source.push_str(&self.generate_client_header());
+        source.push_str(&self.generate_client_footer());
+
+        source
+    }
+}
+
+impl<'a> Generator for JsonGenerator<'a> {
+    fn generate(&self) -> String {
         let mut source = String::new();
 
         source.push_str(&format!("use std::io::Read;
@@ -54,21 +65,16 @@ fn parse_error(body: &str) -> {error_type_name} {{
         }}
     }}
 }}\n",
-            error_type_name = self.parent.error_type_name(),
+            error_type_name = self.error_type_name(),
         ));
 
-        source.push_str(&self.parent.generate_shapes());
+        source.push_str(&self.generate_shapes());
         source.push_str(&self.generate_client());
 
         source
     }
 
-    fn generate_client(&self) -> String {
-        let mut source = String::new();
-
-        source.push_str(&self.parent.generate_client_header());
-        source.push_str(&self.parent.generate_client_footer());
-
-        source
+    fn service(&self) -> &Service {
+        self.service
     }
 }

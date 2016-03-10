@@ -2,17 +2,23 @@ use botocore::Service;
 use super::Generator;
 
 pub struct Ec2Generator<'a> {
-    parent: &'a Generator<'a>,
+    service: &'a Service,
 }
 
 impl<'a> Ec2Generator<'a> {
-    pub fn new(parent: &'a Generator<'a>) -> Self {
+    pub fn new(service: &'a Service) -> Self {
         Ec2Generator {
-            parent: parent,
+            service: service,
         }
     }
+}
 
-    pub fn generate(&self) -> String {
+impl<'a> Generator for Ec2Generator<'a> {
+    fn generate(&self) -> String {
         "Unimplemented!".to_owned()
+    }
+
+    fn service(&self) -> &Service {
+        self.service
     }
 }

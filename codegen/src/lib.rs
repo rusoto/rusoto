@@ -14,7 +14,14 @@ use std::io::{Read, Write};
 use std::path::Path;
 
 use botocore::Service as BotocoreService;
-use generator::Generator;
+use generator::{
+    Ec2Generator,
+    Generator,
+    JsonGenerator,
+    QueryGenerator,
+    RestJsonGenerator,
+    RestXmlGenerator,
+};
 
 mod botocore;
 mod generator;
@@ -64,7 +71,7 @@ fn botocore_generate(input_path: &Path, output_path: &Path) {
         input_path,
     ));
 
-    let source_code = Generator::new(&service).generate();
+    let source_code = generate_source(&service);
 
     let mut output_file = File::create(output_path).expect(&format!(
         "Couldn't open file for writing: {:?}",
@@ -92,4 +99,15 @@ fn serde_generate(source: &Path, destination: &Path) {
         source,
         destination,
     ));
+}
+
+fn generate_source(service: &BotocoreService) -> String {
+    match &service.metadata.protocol[..] {
+        "ec2" => Ec2Generator::new(service).generate(),
+        "json" => JsonGenerator::new(service).generate(),
+        "query" => QueryGenerator::new(service).generate(),
+        "rest-json" => RestJsonGenerator::new(service).generate(),
+        "rest-xml" => RestXmlGenerator::new(service).generate(),
+        protocol => panic!("Unknown protocol {}", protocol),
+    }
 }
