@@ -1,13 +1,14 @@
 use botocore::Service;
+use super::Generator;
 
 pub struct JsonGenerator<'a> {
-    service: &'a Service,
+    parent: &'a Generator<'a>,
 }
 
 impl<'a> JsonGenerator<'a> {
-    pub fn new(service: &'a Service) -> Self {
+    pub fn new(parent: &'a Generator<'a>) -> Self {
         JsonGenerator {
-            service: service,
+            parent: parent,
         }
     }
 
@@ -54,11 +55,17 @@ fn parse_error(body: &str) -> {error_type_name} {{
         }}
     }}
 }}\n",
-            error_type_name = self.error_type_name(),
+            error_type_name = self.parent.error_type_name(),
         ));
+
+        source.push_str(&self.parent.generate_shapes());
+        source.push_str(&self.generate_client());
+
+        source
     }
 
-    fn error_type_name(&self) -> String {
-        format!("{}Error", self.service.service_abbreviation)
+    fn generate_client(&self) -> String {
+        "unimplemented client".to_owned()
     }
+
 }

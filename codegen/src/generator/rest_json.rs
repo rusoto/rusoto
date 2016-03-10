@@ -1,13 +1,14 @@
 use botocore::Service;
+use super::Generator;
 
 pub struct RestJsonGenerator<'a> {
-    service: &'a Service,
+    parent: &'a Generator<'a>,
 }
 
 impl<'a> RestJsonGenerator<'a> {
-    pub fn new(service: &'a Service) -> Self {
+    pub fn new(parent: &'a Generator<'a>) -> Self {
         RestJsonGenerator {
-            service: service,
+            parent: parent,
         }
     }
 

@@ -1,13 +1,14 @@
 use botocore::Service;
+use super::Generator;
 
 pub struct RestXmlGenerator<'a> {
-    service: &'a Service,
+    parent: &'a Generator<'a>,
 }
 
 impl<'a> RestXmlGenerator<'a> {
-    pub fn new(service: &'a Service) -> Self {
+    pub fn new(parent: &'a Generator<'a>) -> Self {
         RestXmlGenerator {
-            service: service,
+            parent: parent,
         }
     }
 

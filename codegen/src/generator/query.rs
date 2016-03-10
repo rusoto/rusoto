@@ -1,13 +1,14 @@
 use botocore::Service;
+use super::Generator;
 
 pub struct QueryGenerator<'a> {
-    service: &'a Service,
+    parent: &'a Generator<'a>,
 }
 
 impl<'a> QueryGenerator<'a> {
-    pub fn new(service: &'a Service) -> Self {
+    pub fn new(parent: &'a Generator<'a>) -> Self {
         QueryGenerator {
-            service: service,
+            parent: parent,
         }
     }
 

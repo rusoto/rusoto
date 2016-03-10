@@ -1,13 +1,14 @@
 use botocore::Service;
+use super::Generator;
 
 pub struct Ec2Generator<'a> {
-    service: &'a Service,
+    parent: &'a Generator<'a>,
 }
 
 impl<'a> Ec2Generator<'a> {
-    pub fn new(service: &'a Service) -> Self {
+    pub fn new(parent: &'a Generator<'a>) -> Self {
         Ec2Generator {
-            service: service,
+            parent: parent,
         }
     }
 
