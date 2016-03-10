@@ -1,7 +1,6 @@
 extern crate rusoto_codegen;
 
 use std::env;
-use std::fs::copy;
 use std::path::Path;
 
 use rusoto_codegen::{Service, generate};

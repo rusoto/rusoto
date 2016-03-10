@@ -19,11 +19,20 @@ use generator::Generator;
 mod botocore;
 mod generator;
 
-const BOTOCORE_DIR: &'static str = "botocore/botocore/data/";
+const BOTOCORE_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/botocore/data/");
 
 pub struct Service {
     name: String,
     protocol_date: String,
+}
+
+impl Service {
+    pub fn new<S>(name: S, protocol_date: S) -> Self where S: Into<String> {
+        Service {
+            name: name.into(),
+            protocol_date: protocol_date.into()
+        }
+    }
 }
 
 pub fn generate(service: Service, output_path: &Path) {

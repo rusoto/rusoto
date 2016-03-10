@@ -1,7 +1,4 @@
-use botocore::{
-    Service,
-    Shape,
-};
+use botocore::{Service, Shape};
 use self::ec2::Ec2Generator;
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
@@ -36,22 +33,46 @@ impl<'a> Generator<'a> {
         }
     }
 
-    fn generate_list(&self, shape: &Shape) -> String {
-        format!(
-            "Vec<{}>",
-            shape.member(),
+    fn generate_client_footer(&self) -> String {
+        "}\n".to_owned()
+    }
+
+    fn generate_client_header(&self) -> String {
+        format!("
+pub struct {type_name}<'a> {{
+    credential_provider: Box<ProvideAWSCredentials + 'a>,
+    region: &'a Region,
+}}
+
+impl<'a> {type_name}<'a> {{
+    pub fn new<P>(
+        credential_provider: P,
+        region: &'a Region,
+    ) -> Self where P: ProvideAWSCredentials + 'a {{
+        {type_name} {{
+            credential_provider: Box::new(credential_provider),
+            region: region,
+        }}
+    }}
+",
+            type_name = self.client_type_name()
         )
     }
 
-    fn generate_map(&self, shape: &Shape) -> String {
+    fn generate_list(&self, name: &str, shape: &Shape) -> String {
+        format!("pub type {} = Vec<{}>;\n", name, shape.member())
+    }
+
+    fn generate_map(&self, name: &str, shape: &Shape) -> String {
         format!(
-            "::std::collections::HashMap<{}, {}>",
+            "pub type {} = ::std::collections::HashMap<{}, {}>;\n",
+            name,
             shape.key(),
             shape.value(),
         )
     }
 
-    fn generate_primitive_type(&self, shape_type: &str) -> String {
+    fn generate_primitive_type(&self, name: &str, shape_type: &str) -> String {
         let primitive_type = match shape_type {
             "blob" => "Vec<u8>",
             "boolean" => "bool",
@@ -64,7 +85,7 @@ impl<'a> Generator<'a> {
             primitive_type => panic!("Unknown primitive type: {}", primitive_type),
         };
 
-        primitive_type.to_owned()
+        format!("pub type {} = {};\n", name, primitive_type)
     }
 
     pub fn generate_shapes(&self) -> String {
@@ -77,9 +98,9 @@ impl<'a> Generator<'a> {
 
             let shape_source = match &shape.shape_type[..] {
                 "structure" => self.generate_struct(name, shape),
-                "map" => self.generate_map(shape),
-                "list" => self.generate_list(shape),
-                shape_type => self.generate_primitive_type(shape_type),
+                "map" => self.generate_map(name, shape),
+                "list" => self.generate_list(name, shape),
+                shape_type => self.generate_primitive_type(name, shape_type),
             };
 
             source.push_str(&shape_source);
@@ -89,28 +110,55 @@ impl<'a> Generator<'a> {
     }
 
     fn generate_struct(&self, name: &String, shape: &Shape) -> String {
-        let mut source = "#[derive(Debug, Default, Deserialize, Serialize)]\n".to_owned();
-
-        if shape.members.is_empty() {
-            source.push_str(&format!("pub struct {};\n", name));
-
-            return source;
+        if shape.members.is_none() || shape.members.as_ref().unwrap().is_empty() {
+            return format!("
+#[derive(Debug, Default, Deserialize, Serialize)]
+pub struct {};
+",
+                name,
+            );
         }
 
-        source.push_str(&format!("pub struct {} {{\n", name));
+        format!("
+#[derive(Debug, Default, Deserialize, Serialize)]
+pub struct {} {{
+    {}
+}}
+",
+            name,
+            self.generate_struct_fields(shape),
+        )
+    }
 
-        for (member_name, member) in shape.members.iter() {
+    fn generate_struct_fields(&self, shape: &Shape) -> String {
+        let mut source = String::new();
+
+        for (member_name, member) in shape.members.as_ref().unwrap().iter() {
             if let Some(ref docs) = member.documentation {
                 source.push_str(&format!("/// {}\n", docs));
             }
-        }
 
-        source.push_str("}\n");
+            if shape.required(member_name) {
+                source.push_str(&format!("pub {}: {},\n",  member_name, member.shape));
+            } else if member_name == "type" {
+                source.push_str(&format!("pub aws_{}: Option<{}>,\n",  member_name, member.shape));
+            } else {
+                source.push_str(&format!("pub {}: Option<{}>,\n",  member_name, member.shape));
+            }
+        }
 
         source
     }
 
+    fn client_type_name(&self) -> String {
+        format!("{}Client", self.service_type_name())
+    }
+
     pub fn error_type_name(&self) -> String {
-        format!("{}Error", self.service.metadata.service_abbreviation)
+        format!("{}Error", self.service_type_name())
+    }
+
+    fn service_type_name(&self) -> String {
+        self.service.metadata.service_abbreviation.replace("Amazon ", "").replace(" ", "")
     }
 }

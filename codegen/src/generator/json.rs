@@ -15,8 +15,7 @@ impl<'a> JsonGenerator<'a> {
     pub fn generate(&self) -> String {
         let mut source = String::new();
 
-        source.push_str(&format!("
-use std::io::Read;
+        source.push_str(&format!("use std::io::Read;
 use std::result;
 
 use serde_json;
@@ -65,7 +64,11 @@ fn parse_error(body: &str) -> {error_type_name} {{
     }
 
     fn generate_client(&self) -> String {
-        "unimplemented client".to_owned()
-    }
+        let mut source = String::new();
 
+        source.push_str(&self.parent.generate_client_header());
+        source.push_str(&self.parent.generate_client_footer());
+
+        source
+    }
 }

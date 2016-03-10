@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 #[derive(Debug, Deserialize)]
 pub struct Service {
     pub documentation: Option<String>,
-    pub examples: BTreeMap<String, String>,
+    pub examples: Option<BTreeMap<String, String>>,
     pub metadata: Metadata,
     pub operations: BTreeMap<String, Operation>,
     pub shapes: BTreeMap<String, Shape>,
@@ -35,7 +35,7 @@ pub struct Output {
 pub struct Error {
     pub documentation: Option<String>,
     pub error: Option<HttpError>,
-    pub exception: bool,
+    pub exception: Option<bool>,
     pub fault: Option<bool>,
     pub shape: String,
 }
@@ -103,13 +103,13 @@ pub struct Shape {
     pub location_name: Option<String>,
     pub max: Option<i32>,
     pub member: Option<Member>,
-    pub members: BTreeMap<String, Member>,
+    pub members: Option<BTreeMap<String, Member>>,
     pub min: Option<i32>,
     pub pattern: Option<String>,
     pub payload: Option<String>,
     pub required: Option<Vec<String>>,
     #[serde(rename="enum")]
-    pub shape_enum: Vec<String>,
+    pub shape_enum: Option<Vec<String>>,
     #[serde(rename="type")]
     pub shape_type: String,
     pub sensitive: Option<bool>,
