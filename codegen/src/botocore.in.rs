@@ -10,6 +10,20 @@ pub struct Service {
     pub version: String,
 }
 
+impl Service {
+    pub fn client_type_name(&self) -> String {
+        format!("{}Client", self.service_type_name())
+    }
+
+    pub fn error_type_name(&self) -> String {
+        format!("{}Error", self.service_type_name())
+    }
+
+    fn service_type_name(&self) -> String {
+        self.metadata.service_abbreviation.replace("Amazon ", "").replace(" ", "")
+    }
+}
+
 #[derive(Debug, Deserialize)]
 pub struct HttpRequest {
     pub method: String,

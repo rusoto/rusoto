@@ -1,32 +1,30 @@
 use botocore::Service;
 use super::Generator;
 
-pub struct JsonGenerator<'a> {
-    service: &'a Service,
+pub struct JsonGenerator {
+    source: String,
 }
 
-impl<'a> JsonGenerator<'a> {
-    pub fn new(service: &'a Service) -> Self {
+impl JsonGenerator {
+    pub fn new() -> Self {
         JsonGenerator {
-            service: service,
+            source: String::new(),
         }
     }
 
-    fn generate_client(&self) -> String {
-        let mut source = String::new();
+    fn append_client(&mut self, service: &Service) {
+        self.append_client_header(service);
+        self.append_operations();
+        self.append_closing_brace();
+    }
 
-        source.push_str(&self.generate_client_header());
-        source.push_str(&self.generate_client_footer());
-
-        source
+    fn append_operations(&mut self) {
     }
 }
 
-impl<'a> Generator for JsonGenerator<'a> {
-    fn generate(&self) -> String {
-        let mut source = String::new();
-
-        source.push_str(&format!("use std::io::Read;
+impl Generator for JsonGenerator {
+    fn generate(mut self, service: &Service) -> String {
+        self.append(format!("use std::io::Read;
 use std::result;
 
 use serde_json;
@@ -64,17 +62,17 @@ fn parse_error(body: &str) -> {error_type_name} {{
             message: body.to_string(),
         }}
     }}
-}}\n",
-            error_type_name = self.error_type_name(),
+}}",
+            error_type_name = service.error_type_name(),
         ));
 
-        source.push_str(&self.generate_shapes());
-        source.push_str(&self.generate_client());
+        self.append_shapes(service);
+        self.append_client(service);
 
-        source
+        self.source
     }
 
-    fn service(&self) -> &Service {
-        self.service
+    fn source(&mut self) -> &mut String {
+        &mut self.source
     }
 }

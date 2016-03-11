@@ -15,12 +15,8 @@ use std::path::Path;
 
 use botocore::Service as BotocoreService;
 use generator::{
-    Ec2Generator,
     Generator,
     JsonGenerator,
-    QueryGenerator,
-    RestJsonGenerator,
-    RestXmlGenerator,
 };
 
 mod botocore;
@@ -103,11 +99,7 @@ fn serde_generate(source: &Path, destination: &Path) {
 
 fn generate_source(service: &BotocoreService) -> String {
     match &service.metadata.protocol[..] {
-        "ec2" => Ec2Generator::new(service).generate(),
-        "json" => JsonGenerator::new(service).generate(),
-        "query" => QueryGenerator::new(service).generate(),
-        "rest-json" => RestJsonGenerator::new(service).generate(),
-        "rest-xml" => RestXmlGenerator::new(service).generate(),
+        "json" => JsonGenerator::new().generate(service),
         protocol => panic!("Unknown protocol {}", protocol),
     }
 }
