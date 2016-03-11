@@ -1,3 +1,6 @@
 skip_children = true
-fn_call_width = 80
+max_width = 120
+ideal_width = 100
+fn_call_width = 100
 report_todo = "never"
+fn_args_density = "Compressed"
