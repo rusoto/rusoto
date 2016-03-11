@@ -159,7 +159,7 @@ pub struct Operation {
     pub documentation: Option<String>,
     #[serde(rename="documentationUrl")]
     pub documentation_url: Option<String>,
-    pub errors: Vec<Error>,
+    pub errors: Option<Vec<Error>>,
     pub http: HttpRequest,
     pub input: Option<Input>,
     pub name: String,
