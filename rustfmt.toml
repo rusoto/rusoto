@@ -1,0 +1,3 @@
+skip_children = true
+fn_call_width = 80
+report_todo = "never"
