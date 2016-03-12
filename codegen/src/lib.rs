@@ -15,10 +15,7 @@ use std::io::{Read, Write};
 use std::path::Path;
 
 use botocore::Service as BotocoreService;
-use generator::{
-    JsonGenerator,
-    generate as generator_generate,
-};
+use generator::generate_source;
 
 mod botocore;
 mod generator;
@@ -96,11 +93,4 @@ fn serde_generate(source: &Path, destination: &Path) {
         source,
         destination,
     ));
-}
-
-fn generate_source(service: &BotocoreService) -> String {
-    match &service.metadata.protocol[..] {
-        "json" => generator_generate(service, JsonGenerator),
-        protocol => panic!("Unknown protocol {}", protocol),
-    }
 }

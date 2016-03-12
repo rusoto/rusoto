@@ -1,6 +1,6 @@
 use botocore::{Service, Shape};
 
-pub use self::json::JsonGenerator;
+use self::json::JsonGenerator;
 
 mod json;
 
@@ -8,7 +8,14 @@ pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
 }
 
-pub fn generate<P>(service: &Service, protocol_generator: P) -> String where P: GenerateProtocol {
+pub fn generate_source(service: &Service) -> String {
+    match &service.metadata.protocol[..] {
+        "json" => generate(service, JsonGenerator),
+        protocol => panic!("Unknown protocol {}", protocol),
+    }
+}
+
+fn generate<P>(service: &Service, protocol_generator: P) -> String where P: GenerateProtocol {
     format!("use std::io::Read;
 use std::result;
 
