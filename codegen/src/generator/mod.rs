@@ -6,6 +6,12 @@ mod json;
 
 pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
+
+    fn generate_prelude(&self, service: &Service) -> String;
+
+    fn generate_support_types(&self, _service: &Service) -> Option<String> {
+        None
+    }
 }
 
 pub fn generate_source(service: &Service) -> String {
@@ -16,80 +22,41 @@ pub fn generate_source(service: &Service) -> String {
 }
 
 fn generate<P>(service: &Service, protocol_generator: P) -> String where P: GenerateProtocol {
-    format!("use std::io::Read;
-use std::result;
+    format!(
+        "{prelude}
 
-use serde_json;
+        {types}
 
-use credentials::ProvideAWSCredentials;
-use error::AWSError;
-use regions::Region;
-use signature::SignedRequest;
-
-/// An error returned by the {service_name} API.
-#[derive(Debug, Default, Deserialize)]
-pub struct {error_type_name} {{
-    __type: String,
-    message: String,
-}}
-
-/// On success: `T`. On error: `{error_type_name}`.
-pub type Result<T> = result::Result<T, {error_type_name}>;
-
-impl From<AWSError> for {error_type_name} {{
-    fn from(err: AWSError) -> Self {{
-        let AWSError(message) = err;
-
-        {error_type_name} {{
-            __type: \"Unknown\".to_string(),
-            message: message.to_string(),
-        }}
-    }}
-}}
-
-fn parse_error(body: &str) -> {error_type_name} {{
-    if let Ok(decoded) = serde_json::from_str::<{error_type_name}>(&body) {{
-        decoded
-    }} else {{
-        {error_type_name} {{
-            __type: \"DecodeError\".to_string(),
-            message: body.to_string(),
-        }}
-    }}
-}}
-
-{types}
-
-{client}",
-        client = generate_client(service, protocol_generator),
-        error_type_name = service.error_type_name(),
-        service_name = service.service_type_name(),
-        types = generate_types(service),
+        {client}",
+        client = generate_client(service, &protocol_generator),
+        prelude = &protocol_generator.generate_prelude(service),
+        types = generate_types(service, &protocol_generator),
     )
 }
 
-fn generate_client<P>(service: &Service, protocol_generator: P) -> String
+fn generate_client<P>(service: &Service, protocol_generator: &P) -> String
 where P: GenerateProtocol {
-    format!("
-/// A client for the {service_name} API.
-pub struct {type_name}<'a> {{
-    credentials_provider: Box<ProvideAWSCredentials + 'a>,
-    region: &'a Region,
-}}
-
-impl<'a> {type_name}<'a> {{
-    pub fn new<P>(
-        credentials_provider: P,
-        region: &'a Region,
-    ) -> Self where P: ProvideAWSCredentials + 'a {{
-        {type_name} {{
-            credentials_provider: Box::new(credentials_provider),
-            region: region,
+    format!(
+        "/// A client for the {service_name} API.
+        pub struct {type_name}<'a> {{
+            credentials_provider: Box<ProvideAWSCredentials + 'a>,
+            region: &'a Region,
         }}
-    }}
 
-    {methods}
-}}",
+        impl<'a> {type_name}<'a> {{
+            pub fn new<P>(
+                credentials_provider: P,
+                region: &'a Region,
+            ) -> Self where P: ProvideAWSCredentials + 'a {{
+                {type_name} {{
+                    credentials_provider: Box::new(credentials_provider),
+                    region: region,
+                }}
+            }}
+
+            {methods}
+        }}
+        ",
         methods = protocol_generator.generate_methods(service),
         service_name = service.service_type_name(),
         type_name = service.client_type_name(),
@@ -125,13 +92,14 @@ fn generate_primitive_type(name: &str, shape_type: &str) -> String {
     format!("pub type {} = {};", name, primitive_type)
 }
 
-fn generate_types(service: &Service) -> String {
+fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
+where P: GenerateProtocol {
     service.shapes.iter().filter_map(|(name, shape)| {
         if name == "String" {
             return None;
         }
 
-        let mut parts = Vec::with_capacity(2);
+        let mut parts = Vec::with_capacity(3);
 
         if let Some(ref docs) = shape.documentation {
             parts.push(format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")));
@@ -144,6 +112,10 @@ fn generate_types(service: &Service) -> String {
             shape_type => parts.push(generate_primitive_type(name, shape_type)),
         }
 
+        if let Some(support_types) = protocol_generator.generate_support_types(service) {
+            parts.push(support_types);
+        }
+
         Some(parts.join("\n"))
     }).collect::<Vec<String>>().join("\n")
 }
@@ -152,10 +124,12 @@ fn generate_struct(name: &String, shape: &Shape) -> String {
     if shape.members.is_none() || shape.members.as_ref().unwrap().is_empty() {
         format!("#[derive(Debug, Default, Deserialize, Serialize)]\npub struct {};", name)
     } else {
-        format!("#[derive(Debug, Default, Deserialize, Serialize)]
-pub struct {name} {{
-{struct_fields}
-}}",
+        format!(
+            "#[derive(Debug, Default, Deserialize, Serialize)]
+            pub struct {name} {{
+                {struct_fields}
+            }}
+            ",
             name = name,
             struct_fields = generate_struct_fields(shape),
         )
