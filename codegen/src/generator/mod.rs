@@ -1,3 +1,5 @@
+use inflector::Inflector;
+
 use botocore::{Service, Shape};
 
 use self::json::JsonGenerator;
@@ -140,17 +142,18 @@ fn generate_struct(name: &String, shape: &Shape) -> String {
 fn generate_struct_fields(shape: &Shape) -> String {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
         let mut lines = Vec::with_capacity(2);
+        let name = member_name.to_snake_case();
 
         if let Some(ref docs) = member.documentation {
             lines.push(format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")));
         }
 
         if shape.required(member_name) {
-            lines.push(format!("pub {}: {},",  member_name, member.shape));
-        } else if member_name == "type" {
-            lines.push(format!("pub aws_{}: Option<{}>,",  member_name, member.shape));
+            lines.push(format!("pub {}: {},",  name, member.shape));
+        } else if name == "type" {
+            lines.push(format!("pub aws_{}: Option<{}>,",  name, member.shape));
         } else {
-            lines.push(format!("pub {}: Option<{}>,",  member_name, member.shape));
+            lines.push(format!("pub {}: Option<{}>,",  name, member.shape));
         }
 
         lines.join("\n")
