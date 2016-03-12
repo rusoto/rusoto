@@ -19,7 +19,7 @@ impl Service {
         format!("{}Error", self.service_type_name())
     }
 
-    fn service_type_name(&self) -> String {
+    pub fn service_type_name(&self) -> String {
         self.metadata.service_abbreviation.replace("Amazon ", "").replace(" ", "")
     }
 }

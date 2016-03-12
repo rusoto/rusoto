@@ -19,12 +19,14 @@ use error::AWSError;
 use regions::Region;
 use signature::SignedRequest;
 
+/// An error returned by the {service_name} API.
 #[derive(Debug, Default, Deserialize)]
 pub struct {error_type_name} {{
     __type: String,
     message: String,
 }}
 
+/// On success: `T`. On error: `{error_type_name}`.
 pub type Result<T> = result::Result<T, {error_type_name}>;
 
 impl From<AWSError> for {error_type_name} {{
@@ -54,6 +56,7 @@ fn parse_error(body: &str) -> {error_type_name} {{
 {client}",
         client = generate_client(service, protocol_generator),
         error_type_name = service.error_type_name(),
+        service_name = service.service_type_name(),
         types = generate_types(service),
     )
 }
@@ -61,6 +64,7 @@ fn parse_error(body: &str) -> {error_type_name} {{
 fn generate_client<P>(service: &Service, protocol_generator: P) -> String
 where P: GenerateProtocol {
     format!("
+/// A client for the {service_name} API.
 pub struct {type_name}<'a> {{
     credentials_provider: Box<ProvideAWSCredentials + 'a>,
     region: &'a Region,
@@ -80,6 +84,7 @@ impl<'a> {type_name}<'a> {{
     {methods}
 }}",
         methods = protocol_generator.generate_methods(service),
+        service_name = service.service_type_name(),
         type_name = service.client_type_name(),
     )
 }
@@ -119,12 +124,20 @@ fn generate_types(service: &Service) -> String {
             return None;
         }
 
-        match &shape.shape_type[..] {
-            "structure" => Some(generate_struct(name, shape)),
-            "map" => Some(generate_map(name, shape)),
-            "list" => Some(generate_list(name, shape)),
-            shape_type => Some(generate_primitive_type(name, shape_type)),
+        let mut parts = Vec::with_capacity(2);
+
+        if let Some(ref docs) = shape.documentation {
+            parts.push(format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")));
         }
+
+        match &shape.shape_type[..] {
+            "structure" => parts.push(generate_struct(name, shape)),
+            "map" => parts.push(generate_map(name, shape)),
+            "list" => parts.push(generate_list(name, shape)),
+            shape_type => parts.push(generate_primitive_type(name, shape_type)),
+        }
+
+        Some(parts.join("\n"))
     }).collect::<Vec<String>>().join("\n")
 }
 
