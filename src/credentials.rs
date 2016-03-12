@@ -17,7 +17,8 @@ use chrono::{Duration, UTC, DateTime};
 use serde_json::{Value, from_str};
 use std::time::Duration as StdDuration;
 
-/// Represents AWS credentials.  Includes access key, secret key, token (for IAM profiles) and expiration timestamp.
+/// AWS API access credentials, including access key, secret key, token (for IAM profiles), and
+/// expiration timestamp.
 #[derive(Clone, Debug)]
 pub struct AWSCredentials {
     key: String,
@@ -70,7 +71,7 @@ impl AWSCredentials {
     }
 }
 
-/// A type that produces `AWSCredentials`.
+/// A trait for types that produce `AWSCredentials`.
 pub trait ProvideAWSCredentials {
     /// Produce a new `AWSCredentials`.
 	fn credentials(&mut self) -> Result<&AWSCredentials, AWSError>;
@@ -80,7 +81,7 @@ fn err(message: &str) -> Result<&AWSCredentials, AWSError> {
     Err(AWSError::new(message))
 }
 
-/// Looks for AWS credentials in environment variables.
+/// Provides AWS credentials from environment variables.
 pub struct EnvironmentProvider {
     credentials: Option<AWSCredentials>
 }
@@ -118,7 +119,7 @@ fn credentials_from_environment<'a>() -> Result<AWSCredentials, AWSError> {
     Ok(AWSCredentials::new(env_key, env_secret, None, in_ten_minutes()))
 }
 
-/// Looks for AWS credentials in a profile in a credentials file.
+/// Provides AWS credentials from a profile in a credentials file.
 #[derive(Clone, Debug)]
 pub struct ProfileProvider {
     credentials: Option<AWSCredentials>,
@@ -279,7 +280,7 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AWSCredent
     Ok(profiles)
 }
 
-/// Looks for AWS credentials in a resource's IAM role.
+/// Provides AWS credentials from a resource's IAM role.
 pub struct IAMProvider {
     credentials: Option<AWSCredentials>
 }
@@ -365,7 +366,7 @@ impl ProvideAWSCredentials for IAMProvider {
 	}
 }
 
-/// Internally chains AWS credential providers in priority order.
+/// Provides AWS credentials from multiple possible sources using a priority order.
 ///
 /// The following sources are checked in order for credentials when calling `credentials`:
 ///
@@ -380,12 +381,9 @@ pub struct ChainProvider {
     profile_provider: ProfileProvider,
 }
 
-// Chain the providers:
 impl ProvideAWSCredentials for ChainProvider {
     fn credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
         if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
-            // fetch creds in order: env, file, IAM
-
             if let Ok(creds) = EnvironmentProvider::new().credentials() {
                 self.credentials = Some(creds.clone());
 

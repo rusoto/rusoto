@@ -60,7 +60,7 @@ where P: GenerateProtocol {
         }}
         ",
         methods = protocol_generator.generate_methods(service),
-        service_name = service.service_type_name(),
+        service_name = &service.metadata.service_abbreviation,
         type_name = service.client_type_name(),
     )
 }

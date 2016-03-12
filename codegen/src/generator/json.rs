@@ -56,14 +56,14 @@ impl GenerateProtocol for JsonGenerator {
             use regions::Region;
             use signature::SignedRequest;
 
-            /// An error returned by the {service_name} API.
+            /// An error produced when {service_name} API calls are unsuccessful.
             #[derive(Debug, Default, Deserialize)]
             pub struct {error_type_name} {{
                 __type: String,
                 message: String,
             }}
 
-            /// On success: `T`. On error: `{error_type_name}`.
+            /// The result type produced by {service_name} API calls.
             pub type Result<T> = result::Result<T, {error_type_name}>;
 
             impl From<AWSError> for {error_type_name} {{
@@ -89,7 +89,7 @@ impl GenerateProtocol for JsonGenerator {
             }}
             ",
             error_type_name = service.error_type_name(),
-            service_name = service.service_type_name(),
+            service_name = &service.metadata.service_abbreviation,
         )
 
     }

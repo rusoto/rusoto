@@ -6,7 +6,7 @@
 
 use std::str::FromStr;
 
-/// AWS Region
+/// An AWS region.
 #[derive(Debug,PartialEq)]
 pub enum Region {
     UsEast1,
@@ -20,6 +20,7 @@ pub enum Region {
     SaEast1,
 }
 
+/// An error produced when attempting to convert a `str` into a `Region` fails.
 #[derive(Debug,PartialEq)]
 pub struct ParseRegionError;
 

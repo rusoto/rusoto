@@ -7,7 +7,7 @@ use chrono::format::ParseError as ChronoParseError;
 
 use xmlutil::XmlParseError;
 
-/// Simple wrapper around a String to store the error
+/// An error produced when AWS API calls are unsuccessful.
 #[derive(Debug, PartialEq)]
 pub struct AWSError(pub String);
 
@@ -41,4 +41,5 @@ impl fmt::Display for AWSError {
     }
 }
 
+/// The result type produced by AWS API calls.
 pub type AWSResult<T> = Result<T, AWSError>;

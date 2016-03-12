@@ -1,3 +1,3 @@
-//! The AWS DynamoDB API.
+//! Amazon DynamoDB
 
 include!(concat!(env!("OUT_DIR"), "/dynamodb.rs"));
