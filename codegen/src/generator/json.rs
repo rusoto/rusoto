@@ -22,11 +22,7 @@ impl JsonGenerator {
 
     fn append_operation_documentation(&mut self, operation: &Operation) {
         if let Some(ref docs) = operation.documentation {
-            self.append(format!("/// {}", docs));
-        }
-
-        if let Some(ref url) = operation.documentation_url {
-            self.append(format!("/// {}", url));
+            self.append(format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")));
         }
     }
 
