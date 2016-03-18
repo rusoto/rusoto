@@ -91,8 +91,12 @@ impl GenerateProtocol for JsonGenerator {
             error_type_name = service.error_type_name(),
             service_name = &service.metadata.service_abbreviation,
         )
-
     }
+
+    fn generate_struct_attributes(&self) -> String {
+        "#[derive(Debug, Default, Deserialize, Serialize)]".to_owned()
+    }
+
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {

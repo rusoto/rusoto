@@ -94,6 +94,11 @@ pub struct Key {
     pub shape: String,
 }
 
+impl Key {
+    pub fn tag_name(&self) -> String {
+        self.location_name.clone().unwrap_or(self.shape.clone())
+    }
+}
 
 #[derive(Debug, Deserialize)]
 pub struct Value {
@@ -101,6 +106,12 @@ pub struct Value {
     #[serde(rename="locationName")]
     pub location_name: Option<String>,
     pub shape: String,
+}
+
+impl Value {
+    pub fn tag_name(&self) -> String {
+        self.location_name.clone().unwrap_or(self.shape.clone())
+    }
 }
 
 #[derive(Debug, Deserialize)]

@@ -3,15 +3,19 @@ use inflector::Inflector;
 use botocore::{Service, Shape};
 
 use self::json::JsonGenerator;
+use self::query::QueryGenerator;
 
 mod json;
+mod query;
 
 pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
 
     fn generate_prelude(&self, service: &Service) -> String;
 
-    fn generate_support_types(&self, _service: &Service) -> Option<String> {
+    fn generate_struct_attributes(&self) -> String;
+
+    fn generate_support_types(&self, _name: &str, _shape: &Shape) -> Option<String> {
         None
     }
 }
@@ -19,6 +23,7 @@ pub trait GenerateProtocol {
 pub fn generate_source(service: &Service) -> String {
     match &service.metadata.protocol[..] {
         "json" => generate(service, JsonGenerator),
+        "query" => generate(service, QueryGenerator),
         protocol => panic!("Unknown protocol {}", protocol),
     }
 }
@@ -98,7 +103,7 @@ fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
 where P: GenerateProtocol {
     service.shapes.iter().filter_map(|(name, shape)| {
         if name == "String" {
-            return None;
+            return protocol_generator.generate_support_types(name, shape);
         }
 
         let mut parts = Vec::with_capacity(3);
@@ -108,13 +113,13 @@ where P: GenerateProtocol {
         }
 
         match &shape.shape_type[..] {
-            "structure" => parts.push(generate_struct(name, shape)),
+            "structure" => parts.push(generate_struct(name, shape, protocol_generator)),
             "map" => parts.push(generate_map(name, shape)),
             "list" => parts.push(generate_list(name, shape)),
             shape_type => parts.push(generate_primitive_type(name, shape_type)),
         }
 
-        if let Some(support_types) = protocol_generator.generate_support_types(service) {
+        if let Some(support_types) = protocol_generator.generate_support_types(name, shape) {
             parts.push(support_types);
         }
 
@@ -122,16 +127,24 @@ where P: GenerateProtocol {
     }).collect::<Vec<String>>().join("\n")
 }
 
-fn generate_struct(name: &String, shape: &Shape) -> String {
+fn generate_struct<P>(name: &String, shape: &Shape, protocol_generator: &P) -> String
+where P: GenerateProtocol {
     if shape.members.is_none() || shape.members.as_ref().unwrap().is_empty() {
-        format!("#[derive(Debug, Default, Deserialize, Serialize)]\npub struct {};", name)
+        format!(
+            "{attributes}
+            pub struct {name};
+            ",
+            attributes = protocol_generator.generate_struct_attributes(),
+            name = name,
+        )
     } else {
         format!(
-            "#[derive(Debug, Default, Deserialize, Serialize)]
+            "{attributes}
             pub struct {name} {{
                 {struct_fields}
             }}
             ",
+            attributes = protocol_generator.generate_struct_attributes(),
             name = name,
             struct_fields = generate_struct_fields(shape),
         )
