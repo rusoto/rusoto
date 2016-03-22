@@ -16,7 +16,7 @@ impl GenerateProtocol for QueryGenerator {
 
     fn generate_prelude(&self, _service: &Service) -> String {
         "use std::collections::HashMap;
-        use std::str::FromStr;
+        use std::str::{FromStr, from_utf8};
 
         use xml::EventReader;
 
@@ -48,7 +48,7 @@ impl GenerateProtocol for QueryGenerator {
             /// Serialize {name} contents to a `SignedRequest`.
             struct {name}Serializer;
             impl {name}Serializer {{
-                fn serialize(params: &mut Params, name: &str, obj: &{name}) {{
+                {serializer_signature} {{
                     {serializer_body}
                 }}
             }}
@@ -56,6 +56,7 @@ impl GenerateProtocol for QueryGenerator {
             deserializer_body = generate_deserializer_body(name, shape),
             name = name,
             serializer_body = generate_serializer_body(shape),
+            serializer_signature = generate_serializer_signature(name, shape),
         ))
     }
 }
@@ -80,7 +81,7 @@ fn generate_list_deserializer(shape: &Shape) -> String {
 
         Ok(obj)
         ",
-        member_name = shape.member.as_ref().unwrap().shape,
+        member_name = shape.member()
     )
 }
 
@@ -192,15 +193,114 @@ fn generate_struct_field_parse_expression(
         member_name = member_name,
     );
 
-    if shape.required.is_some() && shape.required.as_ref().unwrap().contains(member_name) {
+    if shape.required(member_name) {
         expression
     } else {
         format!("Some({})", expression)
     }
 }
 
-fn generate_serializer_body(_shape: &Shape) -> String {
-    // TODO
+fn generate_serializer_body(shape: &Shape) -> String {
+    match &shape.shape_type[..] {
+        "list" => generate_list_serializer(shape),
+        "map" => generate_map_serializer(shape),
+        "structure" => generate_struct_serializer(shape),
+        _ => generate_primitive_serializer(shape),
+    }
+}
 
-    String::new()
+fn generate_serializer_signature(name: &str, shape: &Shape) -> String {
+    if &shape.shape_type[..] == "structure" && shape.members.as_ref().unwrap().is_empty() {
+        format!("fn serialize(_params: &mut Params, name: &str, _obj: &{})", name)
+    } else {
+        format!("fn serialize(params: &mut Params, name: &str, obj: &{})", name)
+    }
+}
+
+fn generate_list_serializer(shape: &Shape) -> String {
+    format!(
+        "for (index, element) in obj.iter().enumerate() {{
+    let key = format!(\"{{}}.{{}}\", name, index);
+    {name}Serializer::serialize(params, &key, element);
+}}
+        ",
+        name = shape.member(),
+    )
+}
+
+fn generate_map_serializer(shape: &Shape) -> String {
+    format!(
+        "for (index, (key, value)) in obj.iter().enumerate() {{
+    let prefix = format!(\"{{}}.{{}}\", name, index);
+    {key_name}Serializer::serialize(
+        params,
+        &format!(\"{{}}.{{}}\", prefix, \"{key_name}\"),
+        key,
+    );
+    {value_name}Serializer::serialize(
+        params,
+        &format!(\"{{}}.{{}}\", prefix, \"{value_name}\"),
+        value,
+    );
+}}
+        ",
+        key_name = shape.key(),
+        value_name = shape.value(),
+    )
+}
+
+fn generate_struct_serializer(shape: &Shape) -> String {
+    format!(
+        "let mut prefix = name.to_string();
+if prefix != \"\" {{
+    prefix.push_str(\".\");
+}}
+
+{struct_field_serializers}
+        ",
+        struct_field_serializers = generate_struct_field_serializers(shape),
+    )
+}
+
+fn generate_struct_field_serializers(shape: &Shape) -> String {
+    shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
+        if shape.required(member_name) {
+            format!(
+                "{member_shape_name}Serializer::serialize(
+    params,
+    &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
+    &obj.{field_name},
+);
+                ",
+                field_name = member_name.to_snake_case(),
+                member_shape_name = member.shape,
+                tag_name = member.tag_name(),
+            )
+        } else {
+            format!(
+                "if let Some(ref field_value) = obj.{field_name} {{
+    {member_shape_name}Serializer::serialize(
+        params,
+        &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
+        field_value,
+    );
+}}
+                ",
+                field_name = member_name.to_snake_case(),
+                member_shape_name = member.shape,
+                tag_name = member.tag_name(),
+            )
+        }
+    }).collect::<Vec<String>>().join("\n")
+}
+
+fn generate_primitive_serializer(shape: &Shape) -> String {
+    let expression = match &shape.shape_type[..] {
+        "string" | "timestamp" => "obj",
+        "integer" | "double" | "boolean" => "&obj.to_string()",
+        "blob" => "from_utf8(obj).unwrap()",
+        shape_type => panic!("Unknown primitive shape type: {}", shape_type),
+    };
+
+    format!("params.put(name, {});", expression)
 }

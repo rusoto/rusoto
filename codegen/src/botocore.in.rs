@@ -79,6 +79,12 @@ pub struct Member {
     pub xml_namespace: Option<XmlNamespace>,
 }
 
+impl Member {
+    pub fn tag_name(&self) -> String {
+        self.location_name.clone().unwrap_or(self.shape.clone())
+    }
+}
+
 #[derive(Debug, Deserialize)]
 pub struct XmlNamespace {
     pub prefix: Option<String>,
