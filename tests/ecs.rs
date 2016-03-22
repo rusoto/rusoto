@@ -18,7 +18,7 @@ fn main() {
     // http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListClusters.html
     match ecs.list_clusters(&ListClustersRequest::default()) {
         Ok(clusters) => {
-            for arn in clusters.clusterArns.unwrap_or(vec![]) {
+            for arn in clusters.cluster_arns.unwrap_or(vec![]) {
                 println!("arn -> {:?}", arn);
             }
         },
@@ -29,13 +29,13 @@ fn main() {
 
     match ecs.list_clusters(
         &ListClustersRequest {
-            nextToken: Some("bogus".to_owned()), ..Default::default()
+            next_token: Some("bogus".to_owned()), ..Default::default()
         }) {
         Ok(_) => panic!("this should have been an InvalidParameterException ECSError"),
         Err(err) => {
             assert_eq!(err,  ECSError {
                 __type: "InvalidParameterException".to_owned(),
-                message: Some("Invalid token bogus".to_owned())
+                message: "Invalid token bogus".to_owned(),
             })
         }
     }

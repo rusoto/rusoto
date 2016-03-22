@@ -8,7 +8,7 @@ use std::thread;
 
 use time::get_time;
 
-use rusoto::credentials::ChainProvider;
+use rusoto::ChainProvider;
 use rusoto::dynamodb::{
     AttributeDefinition,
     AttributeValue,
@@ -23,7 +23,19 @@ use rusoto::dynamodb::{
     PutItemInputAttributeMap,
     get_str_from_attribute,
 };
-use rusoto::regions::Region;
+use rusoto::Region;
+
+macro_rules! params {
+	($($key:expr => $val:expr),*) => {
+		{
+			let mut params:Params = Params::new();
+			$(
+				params.insert($key.to_string(), $val.to_string());
+			)*
+			params
+		}
+	}
+}
 
 #[test]
 fn main() {
