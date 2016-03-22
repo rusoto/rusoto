@@ -25,18 +25,6 @@ use rusoto::dynamodb::{
 };
 use rusoto::Region;
 
-macro_rules! params {
-	($($key:expr => $val:expr),*) => {
-		{
-			let mut params:Params = Params::new();
-			$(
-				params.insert($key.to_string(), $val.to_string());
-			)*
-			params
-		}
-	}
-}
-
 #[test]
 fn main() {
     let creds = ChainProvider::new().unwrap();
