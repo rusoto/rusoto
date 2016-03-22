@@ -154,12 +154,14 @@ where P: GenerateProtocol {
 
 fn generate_struct_fields(shape: &Shape) -> String {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
-        let mut lines = Vec::with_capacity(2);
+        let mut lines = Vec::with_capacity(3);
         let name = member_name.to_snake_case();
 
         if let Some(ref docs) = member.documentation {
             lines.push(format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")));
         }
+
+        lines.push(format!("#[serde(rename=\"{}\")]", member_name));
 
         if shape.required(member_name) {
             lines.push(format!("pub {}: {},",  name, member.shape));
