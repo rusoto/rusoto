@@ -2,6 +2,8 @@
 //!
 //! Wraps the Hyper library to send PUT, POST, DELETE and GET requests.
 
+use std::io::Read;
+
 use hyper::Client;
 use hyper::client::Response;
 use hyper::client::RedirectPolicy;
@@ -32,8 +34,18 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
     }
 
     if log_enabled!(Debug) {
+        let payload = signed_request.payload().map(|mut payload_bytes| {
+            let mut payload_string = String::new();
+
+            payload_bytes.read_to_string(&mut payload_string).expect(
+                "Failed to read payload to string"
+            );
+
+            payload_string
+        });
+
         debug!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\nHeaders:\n",
-            hyper_method, final_uri, signed_request.payload());
+            hyper_method, final_uri, payload);
         for h in hyper_headers.iter() {
             debug!("{}:{}", h.name(), h.value_string());
         }
