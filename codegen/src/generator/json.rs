@@ -59,8 +59,8 @@ impl GenerateProtocol for JsonGenerator {
             /// An error produced when {service_name} API calls are unsuccessful.
             #[derive(Debug, Default, Deserialize, PartialEq)]
             pub struct {error_type_name} {{
-                __type: String,
-                message: String,
+                pub __type: String,
+                pub message: String,
             }}
 
             /// The result type produced by {service_name} API calls.

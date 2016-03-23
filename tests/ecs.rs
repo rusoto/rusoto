@@ -3,8 +3,7 @@
 extern crate rusoto;
 
 use rusoto::ecs::{ECSClient, ECSError, ListClustersRequest};
-use rusoto::credentials::ChainProvider;
-use rusoto::regions::Region;
+use rusoto::{ChainProvider, Region};
 
 #[test]
 fn main() {
