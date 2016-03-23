@@ -6,30 +6,28 @@
 //! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
 //! newly created S3 buckets not in us-standard/us-east-1.
 
-extern crate regex;
+use std::ascii::AsciiExt;
+use std::collections::BTreeMap;
+use std::collections::btree_map::Entry;
+use std::str;
 
-use credentials::AWSCredentials;
 use hyper::client::Response;
 use hyper::status::StatusCode;
 use openssl::crypto::hash::Type::SHA256;
 use openssl::crypto::hash::hash;
 use openssl::crypto::hmac::hmac;
-use params::Params;
 use rustc_serialize::hex::ToHex;
-use std::ascii::AsciiExt;
-use std::collections::BTreeMap;
-use std::collections::btree_map::Entry;
-use std::str;
 use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
-use regions::*;
-use request::send_request;
 use xmlutil::*;
-use error::*;
 use xml::reader::*;
-// Debug:
-// use std::io::Read;
+
+use credential::AWSCredentials;
+use error::AWSError;
+use param::Params;
+use region::{Region, region_in_aws_format};
+use request::send_request;
 
 const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 
@@ -416,13 +414,15 @@ fn extract_s3_temporary_endpoint_from_xml<'a, T: Peek + Next>(stack: &mut T) -> 
 
 #[cfg(test)]
 mod tests {
+    use std::fs::File;
+    use std::io::BufReader;
+    use xml::reader::*;
+
+    use region::Region;
+    use xmlutil::*;
+
     use super::SignedRequest;
     use super::extract_s3_temporary_endpoint_from_xml;
-    use xmlutil::*;
-    use regions::*;
-    use std::io::BufReader;
-    use std::fs::File;
-    use xml::reader::*;
 
     #[test]
     fn get_hostname_none_present() {

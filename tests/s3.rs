@@ -13,8 +13,7 @@ use std::fs::File;
 
 use time::get_time;
 
-use rusoto::ChainProvider;
-use rusoto::AWSError;
+use rusoto::{AWSError, ChainProvider, Region};
 use rusoto::s3::{
     CannedAcl,
     DeleteObjectOutput,
@@ -23,7 +22,6 @@ use rusoto::s3::{
     PutObjectRequest,
     S3Helper,
 };
-use rusoto::Region;
 
 #[test]
 fn all_s3_tests() {

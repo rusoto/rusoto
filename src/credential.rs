@@ -42,12 +42,12 @@ impl AWSCredentials {
 
     /// Get a reference to the access key ID.
     pub fn aws_access_key_id(&self) -> &str {
-    	&self.key
+        &self.key
     }
 
     /// Get a reference to the secret access key.
     pub fn aws_secret_access_key(&self) -> &str {
-    	&self.secret
+        &self.secret
     }
 
     /// Get a reference to the expiry time.
@@ -74,7 +74,7 @@ impl AWSCredentials {
 /// A trait for types that produce `AWSCredentials`.
 pub trait ProvideAWSCredentials {
     /// Produce a new `AWSCredentials`.
-	fn credentials(&mut self) -> Result<&AWSCredentials, AWSError>;
+    fn credentials(&mut self) -> Result<&AWSCredentials, AWSError>;
 }
 
 fn err(message: &str) -> Result<&AWSCredentials, AWSError> {
@@ -87,12 +87,12 @@ pub struct EnvironmentProvider {
 }
 
 impl ProvideAWSCredentials for EnvironmentProvider {
-	fn credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
+    fn credentials(&mut self) -> Result<&AWSCredentials, AWSError> {
         if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
            self.credentials = Some(try!(credentials_from_environment()));
         }
         Ok(self.credentials.as_ref().unwrap())
-	}
+    }
 }
 
 impl EnvironmentProvider {
@@ -362,8 +362,8 @@ impl ProvideAWSCredentials for IAMProvider {
             self.credentials = Some(AWSCredentials::new(access_key, secret_key, Some(token_from_response), expiration_time));
         }
 
-		Ok(&self.credentials.as_ref().unwrap())
-	}
+        Ok(&self.credentials.as_ref().unwrap())
+    }
 }
 
 /// Provides AWS credentials from multiple possible sources using a priority order.

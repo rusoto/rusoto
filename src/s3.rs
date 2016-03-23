@@ -15,11 +15,11 @@ use openssl::crypto::hash::hash;
 use rustc_serialize::base64::{ToBase64, STANDARD};
 use xml::*;
 
-use credentials::*;
-use error::*;
-use params::*;
-use regions::*;
-use signature::*;
+use credential::ProvideAWSCredentials;
+use error::AWSError;
+use param::{Params, SQSParams};
+use region::{Region, region_in_aws_format};
+use signature::SignedRequest;
 use xmlutil::*;
 
 #[derive(Debug, Default)]
@@ -12719,18 +12719,20 @@ pub fn canned_acl_in_aws_format(canned_acl: &CannedAcl) -> String {
 
 #[cfg(test)]
 mod tests {
-	use xml::reader::*;
 	use std::io::BufReader;
 	use std::fs::File;
 	use std::str;
-	use super::ListBucketsOutputParser;
-	use super::CreateMultipartUploadOutputParser;
+
+	use xml::reader::*;
+
+	use region::Region;
+	use super::*;
 	use super::CompleteMultipartUploadOutputParser;
+	use super::CreateMultipartUploadOutputParser;
+	use super::ListBucketsOutputParser;
 	use super::ListMultipartUploadsOutputParser;
 	use super::ListPartsOutputParser;
-	use super::*;
 	use xmlutil::*;
-	use regions::*;
 
 	#[test]
 	fn list_buckets_happy_path() {

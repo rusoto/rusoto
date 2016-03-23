@@ -59,10 +59,10 @@ impl GenerateProtocol for QueryGenerator {
 
         use xml::EventReader;
 
-        use credentials::ProvideAWSCredentials;
+        use credential::ProvideAWSCredentials;
         use error::AWSError;
-        use params::{Params, SQSParams};
-        use regions::Region;
+        use param::{Params, SQSParams};
+        use region::Region;
         use signature::SignedRequest;
         use xmlutil::{Next, Peek, XmlParseError, XmlResponseFromAws};
         use xmlutil::{characters, end_element, peek_at_name, start_element};

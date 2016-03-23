@@ -51,9 +51,9 @@ impl GenerateProtocol for JsonGenerator {
 
             use serde_json;
 
-            use credentials::ProvideAWSCredentials;
+            use credential::ProvideAWSCredentials;
             use error::AWSError;
-            use regions::Region;
+            use region::Region;
             use signature::SignedRequest;
 
             /// An error produced when {service_name} API calls are unsuccessful.

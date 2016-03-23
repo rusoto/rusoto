@@ -39,7 +39,6 @@ url = "^0.2.37"
 rustc-serialize = "^0.3.18"
 regex = "^0.1.51"
 chrono = "^0.2.19"
-rust-crypto = "^0.2.34"
 log = "^0.3.3"
 serde_macros = { version = "0.7.0", optional = true }
 
