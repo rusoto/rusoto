@@ -12,7 +12,7 @@ impl GenerateProtocol for JsonGenerator {
 
             format!("
                 {documentation}
-                pub fn {method_name}(&mut self, input: &{input_type}) -> Result<{output_type}> {{
+                pub fn {method_name}(&mut self, input: &{input_type}) -> AwsResult<{output_type}> {{
                     let encoded = serde_json::to_string(input).unwrap();
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, \"{request_uri}\");
                     request.set_content_type(\"application/x-amz-json-1.0\".to_owned());
@@ -26,7 +26,7 @@ impl GenerateProtocol for JsonGenerator {
                         200 => {{
                             {ok_response}
                         }}
-                        _ => Err(parse_error(&body)),
+                        _ => Err(parse_json_protocol_error(&body)),
                     }}
                 }}
                 ",
@@ -44,53 +44,16 @@ impl GenerateProtocol for JsonGenerator {
         }).collect::<Vec<String>>().join("\n")
     }
 
-    fn generate_prelude(&self, service: &Service) -> String {
-        format!(
-            "use std::io::Read;
-            use std::result;
+    fn generate_prelude(&self, _service: &Service) -> String {
+        "use std::io::Read;
 
-            use serde_json;
+        use serde_json;
 
-            use credential::ProvideAwsCredentials;
-            use error::AwsError;
-            use region::Region;
-            use signature::SignedRequest;
-
-            /// An error produced when {service_name} API calls are unsuccessful.
-            #[derive(Debug, Default, Deserialize, PartialEq)]
-            pub struct {error_type_name} {{
-                pub __type: String,
-                pub message: String,
-            }}
-
-            /// The result type produced by {service_name} API calls.
-            pub type Result<T> = result::Result<T, {error_type_name}>;
-
-            impl From<AwsError> for {error_type_name} {{
-                fn from(err: AwsError) -> Self {{
-                    let AwsError(message) = err;
-
-                    {error_type_name} {{
-                        __type: \"Unknown\".to_string(),
-                        message: message.to_string(),
-                    }}
-                }}
-            }}
-
-            fn parse_error(body: &str) -> {error_type_name} {{
-                if let Ok(decoded) = serde_json::from_str::<{error_type_name}>(&body) {{
-                    decoded
-                }} else {{
-                    {error_type_name} {{
-                        __type: \"DecodeError\".to_string(),
-                        message: body.to_string(),
-                    }}
-                }}
-            }}
-            ",
-            error_type_name = service.error_type_name(),
-            service_name = &service.metadata.service_abbreviation,
-        )
+        use credential::ProvideAwsCredentials;
+        use error::{AwsResult, parse_json_protocol_error};
+        use region::Region;
+        use signature::SignedRequest;
+        ".to_owned()
     }
 
     fn generate_struct_attributes(&self) -> String {

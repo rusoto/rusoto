@@ -102,7 +102,7 @@ impl EnvironmentProvider {
 
 }
 
-fn credentials_from_environment<'a>() -> Result<AwsCredentials, AwsError> {
+fn credentials_from_environment() -> Result<AwsCredentials, AwsError> {
     let env_key = match var("AWS_ACCESS_KEY_ID") {
         Ok(val) => val,
         Err(_) => return Err(AwsError::new("No AWS_ACCESS_KEY_ID in environment"))
@@ -498,7 +498,7 @@ mod tests {
         let result = provider.credentials();
 
         assert!(result.is_err());
-        assert_eq!(result.err(), Some(AwsError("profile not found".to_string())));
+        assert_eq!(result.err(), Some(AwsError::new("profile not found")));
     }
 
     #[test]

@@ -2,8 +2,8 @@
 
 extern crate rusoto;
 
-use rusoto::ecs::{ECSClient, ECSError, ListClustersRequest};
-use rusoto::{ChainProvider, Region};
+use rusoto::ecs::{ECSClient, ListClustersRequest};
+use rusoto::{AwsError, ChainProvider, Region};
 
 #[test]
 fn main() {
@@ -32,10 +32,7 @@ fn main() {
         }) {
         Ok(_) => panic!("this should have been an InvalidParameterException ECSError"),
         Err(err) => {
-            assert_eq!(err,  ECSError {
-                __type: "InvalidParameterException".to_owned(),
-                message: "Invalid token bogus".to_owned(),
-            })
+            assert_eq!(err,  AwsError::new("InvalidParameterException: Invalid token bogus"))
         }
     }
 }
