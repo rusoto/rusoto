@@ -57,7 +57,7 @@ impl GenerateProtocol for JsonGenerator {
             use signature::SignedRequest;
 
             /// An error produced when {service_name} API calls are unsuccessful.
-            #[derive(Debug, Default, Deserialize)]
+            #[derive(Debug, Default, Deserialize, PartialEq)]
             pub struct {error_type_name} {{
                 __type: String,
                 message: String,
