@@ -20,14 +20,14 @@ extern crate url;
 extern crate xml;
 
 pub use credential::{
-    AWSCredentials,
+    AwsCredentials,
     ChainProvider,
     EnvironmentProvider,
-    IAMProvider,
+    IamProvider,
     ProfileProvider,
-    ProvideAWSCredentials,
+    ProvideAwsCredentials,
 };
-pub use error::{AWSError, AWSResult};
+pub use error::{AwsError, AwsResult};
 pub use region::{ParseRegionError, Region};
 
 mod credential;

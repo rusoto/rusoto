@@ -46,7 +46,7 @@ where P: GenerateProtocol {
     format!(
         "/// A client for the {service_name} API.
         pub struct {type_name}<'a> {{
-            credentials_provider: Box<ProvideAWSCredentials + 'a>,
+            credentials_provider: Box<ProvideAwsCredentials + 'a>,
             region: &'a Region,
         }}
 
@@ -54,7 +54,7 @@ where P: GenerateProtocol {
             pub fn new<P>(
                 credentials_provider: P,
                 region: &'a Region,
-            ) -> Self where P: ProvideAWSCredentials + 'a {{
+            ) -> Self where P: ProvideAwsCredentials + 'a {{
                 {type_name} {{
                     credentials_provider: Box::new(credentials_provider),
                     region: region,

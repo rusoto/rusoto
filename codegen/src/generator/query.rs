@@ -35,7 +35,7 @@ impl GenerateProtocol for QueryGenerator {
         200 => {{
             {method_return_value}
         }}
-        status_code => Err(AWSError::new(
+        status_code => Err(AwsError::new(
             format!(\"HTTP response code for {operation_name}: {{}}\", status_code)
         ))
     }}
@@ -59,8 +59,8 @@ impl GenerateProtocol for QueryGenerator {
 
         use xml::EventReader;
 
-        use credential::ProvideAWSCredentials;
-        use error::AWSError;
+        use credential::ProvideAwsCredentials;
+        use error::AwsError;
         use param::{Params, SQSParams};
         use region::Region;
         use signature::SignedRequest;
@@ -132,14 +132,14 @@ fn generate_method_return_value(operation: &Operation) -> String {
 fn generate_method_signature(operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "pub fn {operation_name}(&mut self, input: &{input_type}) -> Result<{output_type}, AWSError>",
+            "pub fn {operation_name}(&mut self, input: &{input_type}) -> Result<{output_type}, AwsError>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
         )
     } else {
         format!(
-            "pub fn {operation_name}(&mut self) -> Result<{output_type}, AWSError>",
+            "pub fn {operation_name}(&mut self) -> Result<{output_type}, AwsError>",
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
         )

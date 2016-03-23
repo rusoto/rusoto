@@ -51,8 +51,8 @@ impl GenerateProtocol for JsonGenerator {
 
             use serde_json;
 
-            use credential::ProvideAWSCredentials;
-            use error::AWSError;
+            use credential::ProvideAwsCredentials;
+            use error::AwsError;
             use region::Region;
             use signature::SignedRequest;
 
@@ -66,9 +66,9 @@ impl GenerateProtocol for JsonGenerator {
             /// The result type produced by {service_name} API calls.
             pub type Result<T> = result::Result<T, {error_type_name}>;
 
-            impl From<AWSError> for {error_type_name} {{
-                fn from(err: AWSError) -> Self {{
-                    let AWSError(message) = err;
+            impl From<AwsError> for {error_type_name} {{
+                fn from(err: AwsError) -> Self {{
+                    let AwsError(message) = err;
 
                     {error_type_name} {{
                         __type: \"Unknown\".to_string(),

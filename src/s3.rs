@@ -15,8 +15,8 @@ use openssl::crypto::hash::hash;
 use rustc_serialize::base64::{ToBase64, STANDARD};
 use xml::*;
 
-use credential::ProvideAWSCredentials;
-use error::AWSError;
+use credential::ProvideAwsCredentials;
+use error::AwsError;
 use param::{Params, SQSParams};
 use region::{Region, region_in_aws_format};
 use signature::SignedRequest;
@@ -11019,16 +11019,16 @@ impl MaxPartsWriter {
 	}
 }
 pub struct S3Client<'a> {
-	creds: Box<ProvideAWSCredentials + 'a>,
+	creds: Box<ProvideAwsCredentials + 'a>,
 	region: &'a Region
 }
 
 impl<'a> S3Client<'a> {
-	pub fn new<P: ProvideAWSCredentials + 'a>(creds: P, region: &'a Region) -> S3Client<'a> {
+	pub fn new<P: ProvideAwsCredentials + 'a>(creds: P, region: &'a Region) -> S3Client<'a> {
 		S3Client { creds: Box::new(creds), region: region }
 	}
 	/// Returns metadata about all of the versions of objects in a bucket.
-	pub fn list_object_versions(&mut self, input: &ListObjectVersionsRequest) -> Result<ListObjectVersionsOutput, AWSError> {
+	pub fn list_object_versions(&mut self, input: &ListObjectVersionsRequest) -> Result<ListObjectVersionsOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?versions");
 		let mut params = Params::new();
 		params.put("Action", "ListObjectVersions");
@@ -11044,12 +11044,12 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(ListObjectVersionsOutputParser::parse_xml("ListObjectVersionsOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Replaces a policy on a bucket. If the bucket already has a policy, the one in
 	/// this request completely replaces it.
-	pub fn put_bucket_policy(&mut self, input: &PutBucketPolicyRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_policy(&mut self, input: &PutBucketPolicyRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?policy");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketPolicy");
@@ -11065,13 +11065,13 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Returns some or all (up to 1000) of the objects in a bucket. You can use the
 	/// request parameters as selection criteria to return a subset of the objects in
 	/// a bucket.
-	pub fn list_objects(&mut self, input: &ListObjectsRequest) -> Result<ListObjectsOutput, AWSError> {
+	pub fn list_objects(&mut self, input: &ListObjectsRequest) -> Result<ListObjectsOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}");
 		let mut params = Params::new();
 		params.put("Action", "ListObjects");
@@ -11087,11 +11087,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(ListObjectsOutputParser::parse_xml("ListObjectsOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Set the website configuration for a bucket.
-	pub fn put_bucket_website(&mut self, input: &PutBucketWebsiteRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_website(&mut self, input: &PutBucketWebsiteRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?website");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketWebsite");
@@ -11107,11 +11107,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Deprecated, see the PutBucketNotificationConfiguraiton operation.
-	pub fn put_bucket_notification(&mut self, input: &PutBucketNotificationRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_notification(&mut self, input: &PutBucketNotificationRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?notification");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketNotification");
@@ -11127,13 +11127,13 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Set the logging parameters for a bucket and to specify permissions for who can
 	/// view and modify the logging parameters. To set the logging status of a bucket,
 	/// you must be the bucket owner.
-	pub fn put_bucket_logging(&mut self, input: &PutBucketLoggingRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_logging(&mut self, input: &PutBucketLoggingRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?logging");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketLogging");
@@ -11149,12 +11149,12 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Creates a new replication configuration (or replaces an existing one, if
 	/// present).
-	pub fn put_bucket_replication(&mut self, input: &PutBucketReplicationRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_replication(&mut self, input: &PutBucketReplicationRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?replication");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketReplication");
@@ -11170,12 +11170,12 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Uploads a part in a multipart upload.
 	/// **Note:** After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.
-	pub fn upload_part(&mut self, input: &UploadPartRequest) -> Result<String, AWSError> {
+	pub fn upload_part(&mut self, input: &UploadPartRequest) -> Result<String, AwsError> {
 		let ref object_id = input.key;
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, &format!("/{}", object_id));
 
@@ -11206,19 +11206,19 @@ impl<'a> S3Client<'a> {
 						return Ok(header.value_string());
 					}
 				}
-				return Err(AWSError::new("Couldn't find etag in response headers."));
+				return Err(AwsError::new("Couldn't find etag in response headers."));
 			}
 			_ => {
 				println!("Error: Status code was {}", status);
 				let mut body = String::new();
 			    result.read_to_string(&mut body).unwrap();
 			    println!("Error response body: {}", body);
-				return Err(AWSError::new("error: didn't get a 200."));
+				return Err(AwsError::new("error: didn't get a 200."));
 			}
 		}
 	}
 	/// Adds an object to a bucket.
-	pub fn put_object(&mut self, input: &PutObjectRequest) -> Result<PutObjectOutput, AWSError> {
+	pub fn put_object(&mut self, input: &PutObjectRequest) -> Result<PutObjectOutput, AwsError> {
 		let mut uri = String::from("/");
 		uri = uri +  &input.key.to_string();
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, &uri);
@@ -11237,7 +11237,7 @@ impl<'a> S3Client<'a> {
 				} else {
 					match input.ssekms_key_id {
 						Some(ref key_id) => request.add_header("x-amz-server-side-encryption-aws-kms-key-id", &key_id),
-						None => return Err(AWSError::new("KMS key specified but no key id provided.")),
+						None => return Err(AwsError::new("KMS key specified but no key id provided.")),
 					}
 					request.add_header("x-amz-server-side-encryption", "aws:kms");
 				}
@@ -11269,12 +11269,12 @@ impl<'a> S3Client<'a> {
 			    result.read_to_string(&mut body).unwrap();
 			    println!("Error response body: {}", body);
 
-				Err(AWSError::new("error uploading object to S3"))
+				Err(AwsError::new("error uploading object to S3"))
 			}
 		}
 	}
 	/// Deletes the cors configuration information set for the bucket.
-	pub fn delete_bucket_cors(&mut self, input: &DeleteBucketCorsRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_cors(&mut self, input: &DeleteBucketCorsRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?cors");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketCors");
@@ -11290,12 +11290,12 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Sets the versioning state of an existing bucket. To set the versioning state,
 	/// you must be the bucket owner.
-	pub fn put_bucket_versioning(&mut self, input: &PutBucketVersioningRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_versioning(&mut self, input: &PutBucketVersioningRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?versioning");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketVersioning");
@@ -11311,11 +11311,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Returns the cors configuration for the bucket.
-	pub fn get_bucket_cors(&mut self, input: &GetBucketCorsRequest) -> Result<GetBucketCorsOutput, AWSError> {
+	pub fn get_bucket_cors(&mut self, input: &GetBucketCorsRequest) -> Result<GetBucketCorsOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?cors");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketCors");
@@ -11331,12 +11331,12 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetBucketCorsOutputParser::parse_xml("GetBucketCorsOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Sets lifecycle configuration for your bucket. If a lifecycle configuration
 	/// exists, it replaces it.
-	pub fn put_bucket_lifecycle(&mut self, input: &PutBucketLifecycleRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_lifecycle(&mut self, input: &PutBucketLifecycleRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?lifecycle");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketLifecycle");
@@ -11352,11 +11352,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Gets the access control policy for the bucket.
-	pub fn get_bucket_acl(&mut self, input: &GetBucketAclRequest) -> Result<GetBucketAclOutput, AWSError> {
+	pub fn get_bucket_acl(&mut self, input: &GetBucketAclRequest) -> Result<GetBucketAclOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?acl");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketAcl");
@@ -11372,12 +11372,12 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetBucketAclOutputParser::parse_xml("GetBucketAclOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Returns the logging status of a bucket and the permissions users have to view
 	/// and modify that status. To use GET, you must be the bucket owner.
-	pub fn get_bucket_logging(&mut self, input: &GetBucketLoggingRequest) -> Result<GetBucketLoggingOutput, AWSError> {
+	pub fn get_bucket_logging(&mut self, input: &GetBucketLoggingRequest) -> Result<GetBucketLoggingOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?logging");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketLogging");
@@ -11393,12 +11393,12 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetBucketLoggingOutputParser::parse_xml("GetBucketLoggingOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// This operation is useful to determine if a bucket exists and you have
 	/// permission to access it.
-	pub fn head_bucket(&mut self, input: &HeadBucketRequest) -> Result<(), AWSError> {
+	pub fn head_bucket(&mut self, input: &HeadBucketRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("HEAD", "s3", &self.region, "/{Bucket}");
 		let mut params = Params::new();
 		params.put("Action", "HeadBucket");
@@ -11414,11 +11414,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Sets the permissions on a bucket using access control lists (ACL).
-	pub fn put_bucket_acl(&mut self, input: &PutBucketAclRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_acl(&mut self, input: &PutBucketAclRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?acl");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketAcl");
@@ -11433,11 +11433,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// This operation removes the website configuration from the bucket.
-	pub fn delete_bucket_website(&mut self, input: &DeleteBucketWebsiteRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_website(&mut self, input: &DeleteBucketWebsiteRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?website");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketWebsite");
@@ -11453,11 +11453,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Deletes the policy from the bucket.
-	pub fn delete_bucket_policy(&mut self, input: &DeleteBucketPolicyRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_policy(&mut self, input: &DeleteBucketPolicyRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?policy");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketPolicy");
@@ -11473,11 +11473,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Returns the notification configuration of a bucket.
-	pub fn get_bucket_notification_configuration(&mut self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfiguration, AWSError> {
+	pub fn get_bucket_notification_configuration(&mut self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfiguration, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?notification");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketNotificationConfiguration");
@@ -11493,12 +11493,12 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(NotificationConfigurationParser::parse_xml("NotificationConfiguration", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// This operation enables you to delete multiple objects from a bucket using a
 	/// single HTTP request. You may specify up to 1000 keys.
-	pub fn delete_objects(&mut self, input: &DeleteObjectsRequest) -> Result<DeleteObjectsOutput, AWSError> {
+	pub fn delete_objects(&mut self, input: &DeleteObjectsRequest) -> Result<DeleteObjectsOutput, AwsError> {
 		// let mut uri = String::from("/");
 		// uri = uri +  &input.key.to_string();
 		// let mut request = SignedRequest::new("DELETE", "s3", &self.region, &uri);
@@ -11516,11 +11516,11 @@ impl<'a> S3Client<'a> {
 		// 	200 => {
 		// 		Ok(try!(DeleteObjectsOutputParser::parse_xml("DeleteObjectsOutput", &mut stack)))
 		// 	}
-		// 	_ => { Err(AWSError::new("error")) }
+		// 	_ => { Err(AwsError::new("error")) }
 		// }
-		Err(AWSError::new("not implemented"))
+		Err(AwsError::new("not implemented"))
 	}
-	pub fn delete_bucket_replication(&mut self, input: &DeleteBucketReplicationRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_replication(&mut self, input: &DeleteBucketReplicationRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?replication");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketReplication");
@@ -11536,11 +11536,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Creates a copy of an object that is already stored in Amazon S3.
-	pub fn copy_object(&mut self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, AWSError> {
+	pub fn copy_object(&mut self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}/{Key+}");
 		let mut params = Params::new();
 		params.put("Action", "CopyObject");
@@ -11556,12 +11556,12 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(CopyObjectOutputParser::parse_xml("CopyObjectOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Returns a list of all buckets owned by the authenticated sender of the
 	/// request.
-	pub fn list_buckets(&mut self) -> Result<ListBucketsOutput, AWSError> {
+	pub fn list_buckets(&mut self) -> Result<ListBucketsOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/");
 		let mut params = Params::new();
 		params.put("Action", "ListBuckets");
@@ -11578,7 +11578,7 @@ impl<'a> S3Client<'a> {
 				// was "ListBucketsOutput"
 				Ok(try!(ListBucketsOutputParser::parse_xml("ListAllMyBucketsResult", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error in list_buckets")) }
+			_ => { Err(AwsError::new("error in list_buckets")) }
 		}
 	}
 	/// Sets the request payment configuration for a bucket. By default, the bucket
@@ -11587,7 +11587,7 @@ impl<'a> S3Client<'a> {
 	/// will be charged for the download. Documentation on requester pays buckets can
 	/// be found at
 	/// http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html
-	pub fn put_bucket_request_payment(&mut self, input: &PutBucketRequestPaymentRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_request_payment(&mut self, input: &PutBucketRequestPaymentRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?requestPayment");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketRequestPayment");
@@ -11603,11 +11603,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Enables notifications of specified events for a bucket.
-	pub fn put_bucket_notification_configuration(&mut self, input: &PutBucketNotificationConfigurationRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_notification_configuration(&mut self, input: &PutBucketNotificationConfigurationRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?notification");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketNotificationConfiguration");
@@ -11623,13 +11623,13 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// The HEAD operation retrieves metadata from an object without returning the
 	/// object itself. This operation is useful if you're only interested in an
 	/// object's metadata. To use HEAD, you must have READ access to the object.
-	pub fn head_object(&mut self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, AWSError> {
+	pub fn head_object(&mut self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, AwsError> {
 		let mut request = SignedRequest::new("HEAD", "s3", &self.region, "/{Bucket}/{Key+}");
 		let mut params = Params::new();
 		params.put("Action", "HeadObject");
@@ -11645,11 +11645,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(HeadObjectOutputParser::parse_xml("HeadObjectOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Deletes the tags from the bucket.
-	pub fn delete_bucket_tagging(&mut self, input: &DeleteBucketTaggingRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_tagging(&mut self, input: &DeleteBucketTaggingRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?tagging");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketTagging");
@@ -11665,11 +11665,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Return torrent files from a bucket.
-	pub fn get_object_torrent(&mut self, input: &GetObjectTorrentRequest) -> Result<GetObjectTorrentOutput, AWSError> {
+	pub fn get_object_torrent(&mut self, input: &GetObjectTorrentRequest) -> Result<GetObjectTorrentOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}/{Key+}?torrent");
 		let mut params = Params::new();
 		params.put("Action", "GetObjectTorrent");
@@ -11685,11 +11685,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetObjectTorrentOutputParser::parse_xml("GetObjectTorrentOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Returns the lifecycle configuration information set on the bucket.
-	pub fn get_bucket_lifecycle(&mut self, input: &GetBucketLifecycleRequest) -> Result<GetBucketLifecycleOutput, AWSError> {
+	pub fn get_bucket_lifecycle(&mut self, input: &GetBucketLifecycleRequest) -> Result<GetBucketLifecycleOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?lifecycle");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketLifecycle");
@@ -11705,12 +11705,12 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetBucketLifecycleOutputParser::parse_xml("GetBucketLifecycleOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Creates a new bucket.
 	/// All requests go to the us-east-1/us-standard endpoint, but can create buckets anywhere.
-	pub fn create_bucket(&mut self, input: &CreateBucketRequest) -> Result<CreateBucketOutput, AWSError> {
+	pub fn create_bucket(&mut self, input: &CreateBucketRequest) -> Result<CreateBucketOutput, AwsError> {
 		let region = Region::UsEast1;
 		let mut create_config : Vec<u8>;
 		let mut request = SignedRequest::new("PUT", "s3", &region, "");
@@ -11737,15 +11737,15 @@ impl<'a> S3Client<'a> {
 						return Ok(CreateBucketOutput{location: header.value_string()});
 					}
 				}
-				Err(AWSError::new("Something went wrong when creating a bucket."))
+				Err(AwsError::new("Something went wrong when creating a bucket."))
 			}
 			_ => {
-				Err(AWSError::new("error in create_bucket"))
+				Err(AwsError::new("error in create_bucket"))
 			}
 		}
 	}
 	/// Completes a multipart upload by assembling previously uploaded parts.
-	pub fn complete_multipart_upload(&mut self, input: &CompleteMultipartUploadRequest) -> Result<CompleteMultipartUploadOutput, AWSError> {
+	pub fn complete_multipart_upload(&mut self, input: &CompleteMultipartUploadRequest) -> Result<CompleteMultipartUploadOutput, AwsError> {
 		let mut request = SignedRequest::new("POST", "s3", &self.region,
 			&format!("/{}", input.key));
 
@@ -11772,12 +11772,12 @@ impl<'a> S3Client<'a> {
 			_ => {
 				let mut body = String::new();
 			    result.read_to_string(&mut body).unwrap();
-				Err(AWSError::new("error in complete_multipart_upload"))
+				Err(AwsError::new("error in complete_multipart_upload"))
 			}
 		}
 	}
 	/// Returns the website configuration for a bucket.
-	pub fn get_bucket_website(&mut self, input: &GetBucketWebsiteRequest) -> Result<GetBucketWebsiteOutput, AWSError> {
+	pub fn get_bucket_website(&mut self, input: &GetBucketWebsiteRequest) -> Result<GetBucketWebsiteOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?website");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketWebsite");
@@ -11793,12 +11793,12 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetBucketWebsiteOutputParser::parse_xml("GetBucketWebsiteOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Initiates a multipart upload and returns an upload ID.
 	/// **Note:** After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.
-	pub fn create_multipart_upload(&mut self, input: &CreateMultipartUploadRequest) -> Result<CreateMultipartUploadOutput, AWSError> {
+	pub fn create_multipart_upload(&mut self, input: &CreateMultipartUploadRequest) -> Result<CreateMultipartUploadOutput, AwsError> {
 
 		let ref object_name = input.key;
 		let mut request = SignedRequest::new("POST", "s3", &self.region, &format!("/{}", object_name));
@@ -11820,13 +11820,13 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(CreateMultipartUploadOutputParser::parse_xml("InitiateMultipartUploadResult", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Deletes the bucket. All objects (including all object versions and Delete
 	/// Markers) in the bucket must be deleted before the bucket itself can be
 	/// deleted.
-	pub fn delete_bucket(&mut self, input: &DeleteBucketRequest, region: &Region) -> Result<(), AWSError> {
+	pub fn delete_bucket(&mut self, input: &DeleteBucketRequest, region: &Region) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("DELETE", "s3", region, "");
 
 		let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
@@ -11842,24 +11842,24 @@ impl<'a> S3Client<'a> {
 				let mut body = String::new();
 			    result.read_to_string(&mut body).unwrap();
 				println!("resposne body: {}", body);
-				Err(AWSError::new(format!("delete bucket error, status was {}", status)))
+				Err(AwsError::new(format!("delete bucket error, status was {}", status)))
 			}
 		}
 	}
 
-	pub fn get_value_for_header(header_name: String, response: &Response) -> Result<String, AWSError> {
+	pub fn get_value_for_header(header_name: String, response: &Response) -> Result<String, AwsError> {
 		for header in response.headers.iter() {
 			if header.name() == header_name {
 				return Ok(header.value_string());
 			}
 		}
 		Ok(String::new())
-		// Err(AWSError::new(format!("Couldn't find field {} in headers", header_name)))
+		// Err(AwsError::new(format!("Couldn't find field {} in headers", header_name)))
 	}
 
 	/// Use the Hyper resposne to populate the GetObjectOutput
 	// This would be a great candidate for some codegen magicks.
-	pub fn get_object_from_response(response: &mut Response) -> Result<GetObjectOutput, AWSError> {
+	pub fn get_object_from_response(response: &mut Response) -> Result<GetObjectOutput, AwsError> {
 		// get all the goodies for GetObjectOutput
 		let delete_marker_string = try!(S3Client::get_value_for_header("x-amz-delete-marker".to_string(), &response));
 		let delete_marker : bool;
@@ -11934,7 +11934,7 @@ impl<'a> S3Client<'a> {
 	}
 
 	/// Retrieves objects from Amazon S3.
-	pub fn get_object(&mut self, input: &GetObjectRequest) -> Result<GetObjectOutput, AWSError> {
+	pub fn get_object(&mut self, input: &GetObjectRequest) -> Result<GetObjectOutput, AwsError> {
 		let mut uri = String::from("/");
 		uri = uri +  &input.key.to_string();
 		let mut request = SignedRequest::new("GET", "s3", &self.region, &uri);
@@ -11961,13 +11961,13 @@ impl<'a> S3Client<'a> {
 				let mut body = String::new();
 			    result.read_to_string(&mut body).unwrap();
 			    println!("Error response body: {}", body);
-				Err(AWSError::new("error in get_object"))
+				Err(AwsError::new("error in get_object"))
 			}
 		}
 	}
 
 	/// Returns the policy of a specified bucket.
-	pub fn get_bucket_policy(&mut self, input: &GetBucketPolicyRequest) -> Result<GetBucketPolicyOutput, AWSError> {
+	pub fn get_bucket_policy(&mut self, input: &GetBucketPolicyRequest) -> Result<GetBucketPolicyOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?policy");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketPolicy");
@@ -11983,11 +11983,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetBucketPolicyOutputParser::parse_xml("GetBucketPolicyOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Returns the versioning state of a bucket.
-	pub fn get_bucket_versioning(&mut self, input: &GetBucketVersioningRequest) -> Result<GetBucketVersioningOutput, AWSError> {
+	pub fn get_bucket_versioning(&mut self, input: &GetBucketVersioningRequest) -> Result<GetBucketVersioningOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?versioning");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketVersioning");
@@ -12003,11 +12003,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetBucketVersioningOutputParser::parse_xml("GetBucketVersioningOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// This operation lists in-progress multipart uploads.
-	pub fn list_multipart_uploads(&mut self, input: &ListMultipartUploadsRequest) -> Result<ListMultipartUploadsOutput, AWSError> {
+	pub fn list_multipart_uploads(&mut self, input: &ListMultipartUploadsRequest) -> Result<ListMultipartUploadsOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/");
 
 		let mut params = Params::new();
@@ -12028,12 +12028,12 @@ impl<'a> S3Client<'a> {
 				Ok(try!(ListMultipartUploadsOutputParser::parse_xml("ListMultipartUploadsResult", &mut stack)))
 			}
 			_ => {
-				Err(AWSError::new("error"))
+				Err(AwsError::new("error"))
 			}
 		}
 	}
 	/// Returns the request payment configuration of a bucket.
-	pub fn get_bucket_request_payment(&mut self, input: &GetBucketRequestPaymentRequest) -> Result<GetBucketRequestPaymentOutput, AWSError> {
+	pub fn get_bucket_request_payment(&mut self, input: &GetBucketRequestPaymentRequest) -> Result<GetBucketRequestPaymentOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?requestPayment");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketRequestPayment");
@@ -12049,11 +12049,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetBucketRequestPaymentOutputParser::parse_xml("GetBucketRequestPaymentOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Sets the tags for a bucket.
-	pub fn put_bucket_tagging(&mut self, input: &PutBucketTaggingRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_tagging(&mut self, input: &PutBucketTaggingRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?tagging");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketTagging");
@@ -12069,11 +12069,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Returns the tag set associated with the bucket.
-	pub fn get_bucket_tagging(&mut self, input: &GetBucketTaggingRequest) -> Result<GetBucketTaggingOutput, AWSError> {
+	pub fn get_bucket_tagging(&mut self, input: &GetBucketTaggingRequest) -> Result<GetBucketTaggingOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?tagging");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketTagging");
@@ -12089,14 +12089,14 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetBucketTaggingOutputParser::parse_xml("GetBucketTaggingOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Aborts a multipart upload.
 	/// To verify that all parts have been removed, so you don't get charged for the
 	/// part storage, you should call the List Parts operation and ensure the parts
 	/// list is empty.
-	pub fn abort_multipart_upload(&mut self, input: &AbortMultipartUploadRequest) -> Result<AbortMultipartUploadOutput, AWSError> {
+	pub fn abort_multipart_upload(&mut self, input: &AbortMultipartUploadRequest) -> Result<AbortMultipartUploadOutput, AwsError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, &format!("/{}", input.key));
 
 		let mut params = Params::new();
@@ -12116,12 +12116,12 @@ impl<'a> S3Client<'a> {
 			204 => {
 				Ok(AbortMultipartUploadOutput::default())
 			}
-			_ => { Err(AWSError::new(format!("error, got return code {}", status))) }
+			_ => { Err(AwsError::new(format!("error, got return code {}", status))) }
 		}
 	}
 	/// uses the acl subresource to set the access control list (ACL) permissions for
 	/// an object that already exists in a bucket
-	pub fn put_object_acl(&mut self, input: &PutObjectAclRequest) -> Result<PutObjectAclOutput, AWSError> {
+	pub fn put_object_acl(&mut self, input: &PutObjectAclRequest) -> Result<PutObjectAclOutput, AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}/{Key+}?acl");
 		let mut params = Params::new();
 		params.put("Action", "PutObjectAcl");
@@ -12137,11 +12137,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(PutObjectAclOutputParser::parse_xml("PutObjectAclOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Returns the region the bucket resides in.
-	pub fn get_bucket_location(&mut self, input: &GetBucketLocationRequest) -> Result<GetBucketLocationOutput, AWSError> {
+	pub fn get_bucket_location(&mut self, input: &GetBucketLocationRequest) -> Result<GetBucketLocationOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?location");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketLocation");
@@ -12157,11 +12157,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetBucketLocationOutputParser::parse_xml("GetBucketLocationOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Sets the cors configuration for a bucket.
-	pub fn put_bucket_cors(&mut self, input: &PutBucketCorsRequest) -> Result<(), AWSError> {
+	pub fn put_bucket_cors(&mut self, input: &PutBucketCorsRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("PUT", "s3", &self.region, "/{Bucket}?cors");
 		let mut params = Params::new();
 		params.put("Action", "PutBucketCors");
@@ -12177,11 +12177,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Deletes the lifecycle configuration from the bucket.
-	pub fn delete_bucket_lifecycle(&mut self, input: &DeleteBucketLifecycleRequest) -> Result<(), AWSError> {
+	pub fn delete_bucket_lifecycle(&mut self, input: &DeleteBucketLifecycleRequest) -> Result<(), AwsError> {
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, "/{Bucket}?lifecycle");
 		let mut params = Params::new();
 		params.put("Action", "DeleteBucketLifecycle");
@@ -12197,11 +12197,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(())
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Deprecated, see the GetBucketNotificationConfiguration operation.
-	pub fn get_bucket_notification(&mut self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfigurationDeprecated, AWSError> {
+	pub fn get_bucket_notification(&mut self, input: &GetBucketNotificationConfigurationRequest) -> Result<NotificationConfigurationDeprecated, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?notification");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketNotification");
@@ -12217,11 +12217,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(NotificationConfigurationDeprecatedParser::parse_xml("NotificationConfigurationDeprecated", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Lists the parts that have been uploaded for a specific multipart upload.
-	pub fn list_parts(&mut self, input: &ListPartsRequest) -> Result<ListPartsOutput, AWSError> {
+	pub fn list_parts(&mut self, input: &ListPartsRequest) -> Result<ListPartsOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, &format!("/{}", input.key));
 
 		let mut params = Params::new();
@@ -12247,12 +12247,12 @@ impl<'a> S3Client<'a> {
 			    result.read_to_string(&mut body).unwrap();
 			    println!("Error response body: {}", body);
 
-				Err(AWSError::new("error in list_parts"))
+				Err(AwsError::new("error in list_parts"))
 			}
 		}
 	}
 	/// Returns the access control list (ACL) of an object.
-	pub fn get_object_acl(&mut self, input: &GetObjectAclRequest) -> Result<GetObjectAclOutput, AWSError> {
+	pub fn get_object_acl(&mut self, input: &GetObjectAclRequest) -> Result<GetObjectAclOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}/{Key+}?acl");
 		let mut params = Params::new();
 		params.put("Action", "GetObjectAcl");
@@ -12268,11 +12268,11 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetObjectAclOutputParser::parse_xml("GetObjectAclOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 	/// Uploads a part by copying data from an existing object as data source.
-	// pub fn upload_part_copy(&mut self, input: &UploadPartCopyRequest) -> Result<bool, AWSError> {
+	// pub fn upload_part_copy(&mut self, input: &UploadPartCopyRequest) -> Result<bool, AwsError> {
 	// 	let ref part_number = input.part_number;
 	// 	let ref upload_id = input.upload_id;
 	// 	let ref object_id = input.key;
@@ -12286,13 +12286,13 @@ impl<'a> S3Client<'a> {
 	// 		200 => {
 	// 			Ok(true)
 	// 		}
-	// 		_ => { Err(AWSError::new("error")) }
+	// 		_ => { Err(AwsError::new("error")) }
 	// 	}
 	// }
 	/// Removes the null version (if there is one) of an object and inserts a delete
 	/// marker, which becomes the latest version of the object. If there isn't a null
 	/// version, Amazon S3 does not remove any objects.
-	pub fn delete_object(&mut self, input: &DeleteObjectRequest) -> Result<DeleteObjectOutput, AWSError> {
+	pub fn delete_object(&mut self, input: &DeleteObjectRequest) -> Result<DeleteObjectOutput, AwsError> {
 		let mut uri = String::from("/");
 		uri = uri +  &input.key.to_string();
 		let mut request = SignedRequest::new("DELETE", "s3", &self.region, &uri);
@@ -12312,11 +12312,11 @@ impl<'a> S3Client<'a> {
 				Ok(DeleteObjectOutput::default())
 				// Ok(try!(DeleteObjectOutputParser::parse_xml("DeleteObjectOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("delete object error")) }
+			_ => { Err(AwsError::new("delete object error")) }
 		}
 	}
 	/// Restores an archived copy of an object back into Amazon S3
-	pub fn restore_object(&mut self, input: &RestoreObjectRequest) -> Result<RestoreObjectOutput, AWSError> {
+	pub fn restore_object(&mut self, input: &RestoreObjectRequest) -> Result<RestoreObjectOutput, AwsError> {
 		let mut request = SignedRequest::new("POST", "s3", &self.region, "/{Bucket}/{Key+}?restore");
 		let mut params = Params::new();
 		params.put("Action", "RestoreObject");
@@ -12332,10 +12332,10 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(RestoreObjectOutputParser::parse_xml("RestoreObjectOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
-	pub fn get_bucket_replication(&mut self, input: &GetBucketReplicationRequest) -> Result<GetBucketReplicationOutput, AWSError> {
+	pub fn get_bucket_replication(&mut self, input: &GetBucketReplicationRequest) -> Result<GetBucketReplicationOutput, AwsError> {
 		let mut request = SignedRequest::new("GET", "s3", &self.region, "/{Bucket}?replication");
 		let mut params = Params::new();
 		params.put("Action", "GetBucketReplication");
@@ -12351,7 +12351,7 @@ impl<'a> S3Client<'a> {
 			200 => {
 				Ok(try!(GetBucketReplicationOutputParser::parse_xml("GetBucketReplicationOutput", &mut stack)))
 			}
-			_ => { Err(AWSError::new("error")) }
+			_ => { Err(AwsError::new("error")) }
 		}
 	}
 }
@@ -12380,22 +12380,22 @@ pub enum CannedAcl {
 impl<'a> S3Helper<'a> {
 
 	/// Creates a new S3 helper
-	pub fn new<CP: ProvideAWSCredentials + 'a>(credentials: CP, region:&'a Region) -> S3Helper<'a> {
+	pub fn new<CP: ProvideAwsCredentials + 'a>(credentials: CP, region:&'a Region) -> S3Helper<'a> {
 		S3Helper { client: S3Client::new(credentials, region) }
 	}
 
 	/// Lists buckets
-	pub fn list_buckets(&mut self) -> Result<ListBucketsOutput, AWSError> {
+	pub fn list_buckets(&mut self) -> Result<ListBucketsOutput, AwsError> {
 		self.client.list_buckets()
 	}
 
 	/// Creates bucket in default us-east-1/us-standard region.
-	pub fn create_bucket(&mut self, bucket_name: &str, canned_acl: Option<CannedAcl>) -> Result<CreateBucketOutput, AWSError> {
+	pub fn create_bucket(&mut self, bucket_name: &str, canned_acl: Option<CannedAcl>) -> Result<CreateBucketOutput, AwsError> {
 		self.create_bucket_in_region(bucket_name, &Region::UsEast1, canned_acl)
 	}
 
 	/// Creates bucket in specified region.
-	pub fn create_bucket_in_region(&mut self, bucket_name: &str, region: &Region, canned_acl: Option<CannedAcl>) -> Result<CreateBucketOutput, AWSError> {
+	pub fn create_bucket_in_region(&mut self, bucket_name: &str, region: &Region, canned_acl: Option<CannedAcl>) -> Result<CreateBucketOutput, AwsError> {
 		let mut request = CreateBucketRequest::default();
 
 		match *region {
@@ -12417,7 +12417,7 @@ impl<'a> S3Helper<'a> {
 	}
 
 	/// Deletes specified bucket
-	pub fn delete_bucket(&mut self, bucket_name: &str, region: &Region) -> Result<(), AWSError> {
+	pub fn delete_bucket(&mut self, bucket_name: &str, region: &Region) -> Result<(), AwsError> {
 		let mut request = DeleteBucketRequest::default();
 		request.bucket = bucket_name.to_string();
 		let result = self.client.delete_bucket(&request, region);
@@ -12425,7 +12425,7 @@ impl<'a> S3Helper<'a> {
 	}
 
 	/// Download a named object from bucket
-	pub fn get_object(&mut self, bucket_name: &str, object_name: &str) ->  Result<GetObjectOutput, AWSError> {
+	pub fn get_object(&mut self, bucket_name: &str, object_name: &str) ->  Result<GetObjectOutput, AwsError> {
 		let mut request = GetObjectRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
@@ -12434,17 +12434,17 @@ impl<'a> S3Helper<'a> {
 	}
 
 	/// Upload an object to specified bucket
-	pub fn put_object(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
+	pub fn put_object(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AwsError> {
 		self.put_object_with_optional_reduced_redundancy(bucket_name, object_name, object_as_bytes, false)
 	}
 
 	/// Helper: uploads object to specified bucket using reduced redudancy storage settings
-	pub fn put_object_with_reduced_redundancy(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
+	pub fn put_object_with_reduced_redundancy(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AwsError> {
 		self.put_object_with_optional_reduced_redundancy(bucket_name, object_name, object_as_bytes, true)
 	}
 
 	fn put_object_with_optional_reduced_redundancy(&mut self, bucket_name: &str, object_name: &str,
-		object_as_bytes: &Vec<u8>, reduced_redundancy: bool) ->  Result<PutObjectOutput, AWSError> {
+		object_as_bytes: &Vec<u8>, reduced_redundancy: bool) ->  Result<PutObjectOutput, AwsError> {
 
 		let mut request = PutObjectRequest::default();
 		request.key = object_name.to_string();
@@ -12459,7 +12459,7 @@ impl<'a> S3Helper<'a> {
 
 	/// Uploads object to specified S3 bucket with server side encryption at rest.
 	pub fn put_object_with_aws_encryption(&mut self, bucket_name: &str, object_name: &str,
-		object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AWSError> {
+		object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AwsError> {
 
 		let mut request = PutObjectRequest::default();
 		request.key = object_name.to_string();
@@ -12473,7 +12473,7 @@ impl<'a> S3Helper<'a> {
 
 	/// Uploads object to specified S3 bucket using AWS KMS for key management of encryption at rest.
 	pub fn put_object_with_kms_encryption(&mut self, bucket_name: &str, object_name: &str,
-		object_as_bytes: &Vec<u8>, key_id: &str) ->  Result<PutObjectOutput, AWSError> {
+		object_as_bytes: &Vec<u8>, key_id: &str) ->  Result<PutObjectOutput, AwsError> {
 
 		let mut request = PutObjectRequest::default();
 		request.key = object_name.to_string();
@@ -12488,7 +12488,7 @@ impl<'a> S3Helper<'a> {
 
 	/// Uploads object: lets sender specify options.
 	/// The most generic of put_object: caller specifies the whole request.
-	pub fn put_object_with_request(&mut self, request: &mut PutObjectRequest) -> Result<PutObjectOutput, AWSError> {
+	pub fn put_object_with_request(&mut self, request: &mut PutObjectRequest) -> Result<PutObjectOutput, AwsError> {
 		// This may be where we do some basic sanity checking: ensure we have:
 		// bucket name, region, object id, payload.
 
@@ -12501,7 +12501,7 @@ impl<'a> S3Helper<'a> {
 	// TODO: does this make a copy of the object_as_reader or just transfers ownership to this?
 	/// Uploads a multi-part object to specified bucket.  Allows for large file uploads.
 	pub fn put_multipart_object<T: Read>(&mut self, bucket_name: &str, object_name: &str,
-		object_as_reader: &mut T) -> Result<PutObjectOutput, AWSError> { // TODO: return type correct?
+		object_as_reader: &mut T) -> Result<PutObjectOutput, AwsError> { // TODO: return type correct?
 
 		// TODO: make helper function for object PUT requests that handles encryption, reduced redudancy, etc...
 
@@ -12515,7 +12515,7 @@ impl<'a> S3Helper<'a> {
 		match self.client.create_multipart_upload(&multipart_upload_request) {
 			Err(why) => {
 				println!("Couldn't create multipart upload request: {:?}", why);
-				return Err(AWSError::new("oops"));
+				return Err(AwsError::new("oops"));
 			}
 			Ok(response) => upload_id = response.upload_id.to_string(),
 		}
@@ -12524,13 +12524,13 @@ impl<'a> S3Helper<'a> {
 		let mut parts_list : Vec<String>;
 
 		match self.upload_chunks(&mut buffered_reader, &bucket_name, &upload_id, &object_name) {
-			Err(why) => return Err(AWSError::new("oops in upload_chunks")),
+			Err(why) => return Err(AwsError::new("oops in upload_chunks")),
 			Ok(parts) => parts_list = parts,
 		}
 
 		let item_list : Vec<u8>;
 		match multipart_upload_finish_xml(&parts_list) {
-			Err(why) => return Err(AWSError::new("oops in multipart_upload_finish_xml")),
+			Err(why) => return Err(AwsError::new("oops in multipart_upload_finish_xml")),
 			Ok(parts_in_xml) => item_list = parts_in_xml,
 		}
 		let mut complete_upload = CompleteMultipartUploadRequest::default();
@@ -12544,7 +12544,7 @@ impl<'a> S3Helper<'a> {
 		match self.client.complete_multipart_upload(&complete_upload) {
 			Err(why) => {
 				println!("Couldn't mark multipart upload as complete: {:?}", why);
-				return Err(AWSError::new("oops in complete multipart upload"));
+				return Err(AwsError::new("oops in complete multipart upload"));
 			},
 			Ok(_) => (), // TODO: return object output
 		}
@@ -12553,7 +12553,7 @@ impl<'a> S3Helper<'a> {
 	}
 
 	fn upload_chunks<T: Read>(&mut self, buffered_reader: &mut BufReader<T>,
-			bucket_name: &str, upload_id: &str, object_name: &str) -> Result<Vec<String>, AWSError> {
+			bucket_name: &str, upload_id: &str, object_name: &str) -> Result<Vec<String>, AwsError> {
 
 		let mut s3_chunk : Vec<u8> = Vec::with_capacity(S3_MINIMUM_PART_SIZE + CHUNK_TO_READ);
 		let mut buffer = [0u8; CHUNK_TO_READ];
@@ -12585,7 +12585,7 @@ impl<'a> S3Helper<'a> {
 						match self.upload_a_part(&s3_chunk, &part_number, &bucket_name, &upload_id, &object_name) {
 							Err(why) => {
 								println!("Got error uploading a part: {:?}", why);
-								return Err(AWSError::new("oops in upload_chunks"));
+								return Err(AwsError::new("oops in upload_chunks"));
 							}
 							Ok(response) => {
 								parts.push(response);
@@ -12601,7 +12601,7 @@ impl<'a> S3Helper<'a> {
 	}
 
 	fn upload_a_part(&mut self, buffer: &Vec<u8>, part_number: &i32,
-			bucket_name: &str, upload_id: &str, object_name: &str) -> Result<String, AWSError> {
+			bucket_name: &str, upload_id: &str, object_name: &str) -> Result<String, AwsError> {
 
 		let mut upload_part_request = UploadPartRequest::default();
 		upload_part_request.body = Some(&buffer);
@@ -12617,7 +12617,7 @@ impl<'a> S3Helper<'a> {
 		match self.client.upload_part(&upload_part_request) {
 			Err(why) => {
 				println!("Error uploading part: {:?}", why);
-				return Err(AWSError::new("oops in upload_a_part"));
+				return Err(AwsError::new("oops in upload_a_part"));
 			},
 			Ok(response) => {
 				return Ok(response.to_string());
@@ -12626,18 +12626,18 @@ impl<'a> S3Helper<'a> {
 	}
 
 	/// Lists multipart uploads not yet completed for specified bucket
-	pub fn list_multipart_uploads_for_bucket(&mut self, bucket_name: &str) -> Result<ListMultipartUploadsOutput, AWSError> {
+	pub fn list_multipart_uploads_for_bucket(&mut self, bucket_name: &str) -> Result<ListMultipartUploadsOutput, AwsError> {
 		let mut request = ListMultipartUploadsRequest::default();
 		request.bucket = bucket_name.to_string();
 
 		match self.client.list_multipart_uploads(&request) {
-			Err(why) => Err(AWSError::new(format!("Couldn't do list_multipart_uploads: {:?}", why))),
+			Err(why) => Err(AwsError::new(format!("Couldn't do list_multipart_uploads: {:?}", why))),
 			Ok(result) => Ok(result),
 		}
 	}
 
 	/// Deletes specified object from specified bucket.
-	pub fn delete_object(&mut self, bucket_name: &str, object_name: &str) ->  Result<DeleteObjectOutput, AWSError> {
+	pub fn delete_object(&mut self, bucket_name: &str, object_name: &str) ->  Result<DeleteObjectOutput, AwsError> {
 		let mut request = DeleteObjectRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
@@ -12645,7 +12645,7 @@ impl<'a> S3Helper<'a> {
 	}
 
 	/// Abort multipart upload.
-	pub fn abort_multipart_upload(&mut self, bucket_name: &str, object_name: &str, upload_id: &str) ->  Result<AbortMultipartUploadOutput, AWSError> {
+	pub fn abort_multipart_upload(&mut self, bucket_name: &str, object_name: &str, upload_id: &str) ->  Result<AbortMultipartUploadOutput, AwsError> {
 		let mut request = AbortMultipartUploadRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
@@ -12654,7 +12654,7 @@ impl<'a> S3Helper<'a> {
 	}
 
 	/// List parts from a multiupload request.
-	pub fn multipart_upload_list_parts(&mut self, bucket_name: &str, object_name: &str, upload_id: &str) ->  Result<ListPartsOutput, AWSError> {
+	pub fn multipart_upload_list_parts(&mut self, bucket_name: &str, object_name: &str, upload_id: &str) ->  Result<ListPartsOutput, AwsError> {
 		let mut request = ListPartsRequest::default();
 		request.key = object_name.to_string();
 		request.bucket = bucket_name.to_string();
@@ -12688,9 +12688,9 @@ pub fn create_bucket_config_xml(region: &Region) -> Vec<u8> {
 }
 
 /// Writes out XML with all the parts in it for S3 to complete.
-pub fn multipart_upload_finish_xml(parts: &Vec<String>) -> Result<Vec<u8>, AWSError> {
+pub fn multipart_upload_finish_xml(parts: &Vec<String>) -> Result<Vec<u8>, AwsError> {
 	if parts.len() < 1 {
-		return Err(AWSError::new("Can't finish upload on 0 parts."));
+		return Err(AwsError::new("Can't finish upload on 0 parts."));
 	}
 	let mut response = String::from("<CompleteMultipartUpload>");
 
