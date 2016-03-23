@@ -44,7 +44,7 @@ impl GenerateProtocol for JsonGenerator {
         }).collect::<Vec<String>>().join("\n")
     }
 
-    fn generate_prelude(&self, _service: &Service) -> String {
+    fn generate_prelude(&self) -> String {
         "use std::io::Read;
 
         use serde_json;

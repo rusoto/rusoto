@@ -11,7 +11,7 @@ mod query;
 pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
 
-    fn generate_prelude(&self, service: &Service) -> String;
+    fn generate_prelude(&self) -> String;
 
     fn generate_struct_attributes(&self) -> String;
 
@@ -36,7 +36,7 @@ fn generate<P>(service: &Service, protocol_generator: P) -> String where P: Gene
 
         {client}",
         client = generate_client(service, &protocol_generator),
-        prelude = &protocol_generator.generate_prelude(service),
+        prelude = &protocol_generator.generate_prelude(),
         types = generate_types(service, &protocol_generator),
     )
 }
