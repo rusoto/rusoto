@@ -2,14 +2,14 @@
 
 extern crate rusoto;
 
-use rusoto::ecs::{ECSClient, ListClustersRequest};
+use rusoto::ecs::{EcsClient, ListClustersRequest};
 use rusoto::{AwsError, ChainProvider, Region};
 
 #[test]
 fn main() {
     let credentials = ChainProvider::new().unwrap();
     let region = Region::UsEast1;
-    let mut ecs = ECSClient::new(
+    let mut ecs = EcsClient::new(
         credentials,
         &region
     );
