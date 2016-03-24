@@ -36,6 +36,7 @@ mod param;
 mod region;
 mod request;
 mod xmlutil;
+mod serialization;
 #[macro_use] mod signature;
 
 #[cfg(feature = "dynamodb")]

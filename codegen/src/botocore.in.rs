@@ -18,6 +18,10 @@ impl Service {
     pub fn service_type_name(&self) -> String {
         self.metadata.service_abbreviation.replace("Amazon ", "").replace(" ", "")
     }
+
+    pub fn shape_type_for_member<'a>(&'a self, member: &Member) -> Option<&'a str> {
+        self.shapes.get(&member.shape).map(|ref shape| &shape.shape_type[..])
+    }
 }
 
 #[derive(Debug, Deserialize)]

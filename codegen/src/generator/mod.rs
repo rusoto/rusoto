@@ -113,7 +113,7 @@ where P: GenerateProtocol {
         }
 
         match &shape.shape_type[..] {
-            "structure" => parts.push(generate_struct(name, shape, protocol_generator)),
+            "structure" => parts.push(generate_struct(service, name, shape, protocol_generator)),
             "map" => parts.push(generate_map(name, shape)),
             "list" => parts.push(generate_list(name, shape)),
             shape_type => parts.push(generate_primitive_type(name, shape_type)),
@@ -127,8 +127,12 @@ where P: GenerateProtocol {
     }).collect::<Vec<String>>().join("\n")
 }
 
-fn generate_struct<P>(name: &String, shape: &Shape, protocol_generator: &P) -> String
-where P: GenerateProtocol {
+fn generate_struct<P>(
+    service: &Service,
+    name: &String,
+    shape: &Shape,
+    protocol_generator: &P,
+) -> String where P: GenerateProtocol {
     if shape.members.is_none() || shape.members.as_ref().unwrap().is_empty() {
         format!(
             "{attributes}
@@ -146,15 +150,15 @@ where P: GenerateProtocol {
             ",
             attributes = protocol_generator.generate_struct_attributes(),
             name = name,
-            struct_fields = generate_struct_fields(shape),
+            struct_fields = generate_struct_fields(service, shape),
         )
     }
 
 }
 
-fn generate_struct_fields(shape: &Shape) -> String {
+fn generate_struct_fields(service: &Service, shape: &Shape) -> String {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
-        let mut lines = Vec::with_capacity(3);
+        let mut lines = Vec::with_capacity(4);
         let name = member_name.to_snake_case();
 
         if let Some(ref docs) = member.documentation {
@@ -162,6 +166,17 @@ fn generate_struct_fields(shape: &Shape) -> String {
         }
 
         lines.push(format!("#[serde(rename=\"{}\")]", member_name));
+
+        if let Some(shape_type) = service.shape_type_for_member(member) {
+            if shape_type == "blob" {
+                lines.push(
+                    "#[serde(
+                        deserialize_with=\"::serialization::SerdeBlob::deserialize_blob\",
+                        serialize_with=\"::serialization::SerdeBlob::serialize_blob\",
+                    )]".to_owned()
+                );
+            }
+        }
 
         if shape.required(member_name) {
             lines.push(format!("pub {}: {},",  name, member.shape));
