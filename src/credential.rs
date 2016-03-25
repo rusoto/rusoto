@@ -96,7 +96,8 @@ impl ProvideAwsCredentials for EnvironmentProvider {
 }
 
 impl EnvironmentProvider {
-    fn new() -> EnvironmentProvider {
+    /// Create a new `EnvironmentProvider`.
+    pub fn new() -> EnvironmentProvider {
         EnvironmentProvider { credentials: None }
     }
 
@@ -286,7 +287,8 @@ pub struct IamProvider {
 }
 
 impl IamProvider {
-    fn new() -> IamProvider {
+    /// Create a new `IamProvider`.
+    pub fn new() -> IamProvider {
         IamProvider { credentials: None }
     }
 }
