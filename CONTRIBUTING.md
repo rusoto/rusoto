@@ -2,11 +2,9 @@
 
 ### Setting up build environment (only needed once)
 
-Install Rust **1.6.0** or later - http://www.rust-lang.org/
+Install Rust **1.7.0** or later - http://www.rust-lang.org/
 
 Check out code from github.
-
-`pip install --user -r codegen/requirements.txt` to install Python codegen required libraries.
 
 If you're on OSX, you'll probably need a new version of openssl.  Run `brew install openssl`.
 
@@ -48,4 +46,5 @@ For more verbose test output, you can run `cargo test --verbose --features FEATU
 
 ### Rust code generation from boto core service definitions:
 
-See [CODEGEN](codegen/CODEGEN.md).
+See [Cargo.toml](codegen/Cargo.toml) and [build.rs](codegen/build.rs) in the
+rusoto_codegen subcrate.

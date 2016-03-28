@@ -6,6 +6,10 @@ AWS SDK for Rust. [Documentation](http://rusoto.github.io/rusoto/rusoto/index.ht
 
 IRC: #rusoto on irc.freenode.net.
 
+## Requirements
+
+Rust 1.7.0 or later is required.
+
 ## Installation
 
 Rusoto is available on [crates.io](https://crates.io/crates/rusoto).
