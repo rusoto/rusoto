@@ -6,30 +6,28 @@
 //! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
 //! newly created S3 buckets not in us-standard/us-east-1.
 
-extern crate regex;
+use std::ascii::AsciiExt;
+use std::collections::BTreeMap;
+use std::collections::btree_map::Entry;
+use std::str;
 
-use credentials::AWSCredentials;
 use hyper::client::Response;
 use hyper::status::StatusCode;
 use openssl::crypto::hash::Type::SHA256;
 use openssl::crypto::hash::hash;
 use openssl::crypto::hmac::hmac;
-use params::Params;
 use rustc_serialize::hex::ToHex;
-use std::ascii::AsciiExt;
-use std::collections::BTreeMap;
-use std::collections::btree_map::Entry;
-use std::str;
 use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
-use regions::*;
-use request::send_request;
 use xmlutil::*;
-use error::*;
 use xml::reader::*;
-// Debug:
-// use std::io::Read;
+
+use credential::AwsCredentials;
+use error::AwsError;
+use param::Params;
+use region::{Region, region_in_aws_format};
+use request::send_request;
 
 const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 
@@ -142,7 +140,7 @@ impl <'a> SignedRequest <'a> {
     /// Calculate the signature from the credentials provided and the request data
     /// Add the calculated signature to the request headers and execute it
     /// Return the hyper HTTP response
-    pub fn sign_and_execute(&mut self, creds: &AWSCredentials) -> Response {
+    pub fn sign_and_execute(&mut self, creds: &AwsCredentials) -> Response {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
@@ -365,13 +363,13 @@ fn build_hostname(service: &str, region: &Region) -> String {
 }
 
 /// extract_s3_redirect_location takes a Hyper Response and attempts to pull out the temporary endpoint.
-fn extract_s3_redirect_location(response: Response) -> Result<String, AWSError> {
+fn extract_s3_redirect_location(response: Response) -> Result<String, AwsError> {
     // Double checking this feels like belts and suspenders since we're checking the status code
     // before calling this.  Remove this check?
 
     // Verify it's a 307 temporary redirect
     if response.status != HTTP_TEMPORARY_REDIRECT {
-        return Err(AWSError::new("Trying to find temporary location when status is not 307 temp redirect."))
+        return Err(AwsError::new("Trying to find temporary location when status is not 307 temp redirect."))
     }
 
     let mut reader = EventReader::new(response);
@@ -390,7 +388,7 @@ fn field_in_s3_redirect(name: &str) -> bool {
 }
 
 /// extract_s3_temporary_endpoint_from_xml takes in XML and tries to find the value of the Endpoint node.
-fn extract_s3_temporary_endpoint_from_xml<'a, T: Peek + Next>(stack: &mut T) -> Result<String, AWSError> {
+fn extract_s3_temporary_endpoint_from_xml<'a, T: Peek + Next>(stack: &mut T) -> Result<String, AwsError> {
     try!(start_element(&"Error".to_string(), stack));
 
     // now find Endpoint contents
@@ -410,19 +408,21 @@ fn extract_s3_temporary_endpoint_from_xml<'a, T: Peek + Next>(stack: &mut T) -> 
         }
         break;
     }
-    Err(AWSError::new("Couldn't find redirect location for S3 bucket"))
+    Err(AwsError::new("Couldn't find redirect location for S3 bucket"))
 }
 
 
 #[cfg(test)]
 mod tests {
+    use std::fs::File;
+    use std::io::BufReader;
+    use xml::reader::*;
+
+    use region::Region;
+    use xmlutil::*;
+
     use super::SignedRequest;
     use super::extract_s3_temporary_endpoint_from_xml;
-    use xmlutil::*;
-    use regions::*;
-    use std::io::BufReader;
-    use std::fs::File;
-    use xml::reader::*;
 
     #[test]
     fn get_hostname_none_present() {

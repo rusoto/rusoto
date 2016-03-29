@@ -1,5 +1,3 @@
-//! The AWS DynamoDB API.
-
-#![allow(non_snake_case)]
+//! Amazon DynamoDB
 
 include!(concat!(env!("OUT_DIR"), "/dynamodb.rs"));

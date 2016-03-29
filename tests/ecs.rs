@@ -2,15 +2,14 @@
 
 extern crate rusoto;
 
-use rusoto::ecs::{ECSClient, ECSError, ListClustersRequest};
-use rusoto::credentials::ChainProvider;
-use rusoto::regions::Region;
+use rusoto::ecs::{EcsClient, ListClustersRequest};
+use rusoto::{AwsError, ChainProvider, Region};
 
 #[test]
 fn main() {
     let credentials = ChainProvider::new().unwrap();
     let region = Region::UsEast1;
-    let mut ecs = ECSClient::new(
+    let mut ecs = EcsClient::new(
         credentials,
         &region
     );
@@ -18,7 +17,7 @@ fn main() {
     // http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListClusters.html
     match ecs.list_clusters(&ListClustersRequest::default()) {
         Ok(clusters) => {
-            for arn in clusters.clusterArns.unwrap_or(vec![]) {
+            for arn in clusters.cluster_arns.unwrap_or(vec![]) {
                 println!("arn -> {:?}", arn);
             }
         },
@@ -29,14 +28,11 @@ fn main() {
 
     match ecs.list_clusters(
         &ListClustersRequest {
-            nextToken: Some("bogus".to_owned()), ..Default::default()
+            next_token: Some("bogus".to_owned()), ..Default::default()
         }) {
         Ok(_) => panic!("this should have been an InvalidParameterException ECSError"),
         Err(err) => {
-            assert_eq!(err,  ECSError {
-                __type: "InvalidParameterException".to_owned(),
-                message: Some("Invalid token bogus".to_owned())
-            })
+            assert_eq!(err,  AwsError::new("InvalidParameterException: Invalid token bogus"))
         }
     }
 }

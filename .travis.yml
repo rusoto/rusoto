@@ -3,10 +3,9 @@ rust:
   - stable
   - beta
   - nightly
-install: "pip install --user -r codegen/requirements.txt"
 script:
   - cargo build --verbose --features all
-  - cargo test --verbose
+  - cargo test --verbose --lib --features all
 branches:
   only:
     - master

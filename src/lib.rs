@@ -4,33 +4,40 @@
 #![cfg_attr(feature = "nightly", plugin(serde_macros))]
 #![allow(dead_code)]
 
-//! # Rusoto
-//!
-//! Rusoto is an AWS SDK for Rust.
+//! Rusoto is an [AWS](https://aws.amazon.com/) SDK for Rust.
 //! A high level overview is available in `README.md` at https://github.com/rusoto/rusoto.
 
-extern crate time;
-extern crate xml;
-extern crate hyper;
-extern crate openssl;
-extern crate url;
-extern crate rustc_serialize;
-extern crate regex;
-extern crate crypto;
 extern crate chrono;
-extern crate serde_json;
+extern crate hyper;
+#[macro_use] extern crate log;
+extern crate openssl;
+extern crate regex;
+extern crate rustc_serialize;
 extern crate serde;
+extern crate serde_json;
+extern crate time;
+extern crate url;
+extern crate xml;
 
-#[macro_use]
-extern crate log;
+pub use credential::{
+    AwsCredentials,
+    ChainProvider,
+    EnvironmentProvider,
+    IamProvider,
+    ProfileProvider,
+    ProvideAwsCredentials,
+};
+pub use error::{AwsError, AwsResult};
+pub use region::{ParseRegionError, Region};
 
-#[macro_use] pub mod params;
-#[macro_use] pub mod signature;
-pub mod credentials;
-pub mod error;
-pub mod xmlutil;
-pub mod regions;
-pub mod request;
+mod credential;
+mod error;
+mod param;
+mod region;
+mod request;
+mod xmlutil;
+mod serialization;
+#[macro_use] mod signature;
 
 #[cfg(feature = "dynamodb")]
 pub mod dynamodb;

@@ -13,8 +13,7 @@ use std::fs::File;
 
 use time::get_time;
 
-use rusoto::credentials::ChainProvider;
-use rusoto::error::AWSError;
+use rusoto::{AwsError, ChainProvider, Region};
 use rusoto::s3::{
     CannedAcl,
     DeleteObjectOutput,
@@ -23,7 +22,6 @@ use rusoto::s3::{
     PutObjectRequest,
     S3Helper,
 };
-use rusoto::regions::Region;
 
 #[test]
 fn all_s3_tests() {
@@ -138,7 +136,7 @@ fn all_s3_tests() {
     // }
 }
 
-fn s3_list_multipart_upload_parts(s3: &mut S3Helper, bucket: &str, object: &str, upload_id: &str) -> Result<(), AWSError> {
+fn s3_list_multipart_upload_parts(s3: &mut S3Helper, bucket: &str, object: &str, upload_id: &str) -> Result<(), AwsError> {
     match s3.multipart_upload_list_parts(bucket, object, upload_id) {
         Err(why) => info!("Error listing multipart upload parts: {:?}", why),
         Ok(result) => info!("Multipart upload parts: {:?}", result),
@@ -146,7 +144,7 @@ fn s3_list_multipart_upload_parts(s3: &mut S3Helper, bucket: &str, object: &str,
     Ok(())
 }
 
-fn s3_list_multipart_uploads(s3: &mut S3Helper, bucket: &str) -> Result<(), AWSError> {
+fn s3_list_multipart_uploads(s3: &mut S3Helper, bucket: &str) -> Result<(), AwsError> {
     match s3.list_multipart_uploads_for_bucket(bucket) {
         Err(why) => info!("Error listing multipart uploads: {:?}", why),
         Ok(result) => info!("in-progress multipart uploads: {:?}", result),
@@ -154,7 +152,7 @@ fn s3_list_multipart_uploads(s3: &mut S3Helper, bucket: &str) -> Result<(), AWSE
     Ok(())
 }
 
-fn s3_abort_multipart_uploads(s3: &mut S3Helper, bucket: &str, object: &str, upload_id: &str) -> Result<(), AWSError> {
+fn s3_abort_multipart_uploads(s3: &mut S3Helper, bucket: &str, object: &str, upload_id: &str) -> Result<(), AwsError> {
     match s3.abort_multipart_upload(bucket, object, upload_id) {
         Err(why) => info!("Error aborting multipart upload: {:?}", why),
         Ok(result) => info!("aborted multipart upload: {:?}", result),
@@ -162,7 +160,7 @@ fn s3_abort_multipart_uploads(s3: &mut S3Helper, bucket: &str, object: &str, upl
     Ok(())
 }
 
-fn s3_list_buckets_tests(s3: &mut S3Helper) -> Result<(), AWSError> {
+fn s3_list_buckets_tests(s3: &mut S3Helper) -> Result<(), AwsError> {
     let response = try!(s3.list_buckets());
     info!("Got list of buckets: {:?}", response);
     for q in response.buckets {
@@ -172,21 +170,21 @@ fn s3_list_buckets_tests(s3: &mut S3Helper) -> Result<(), AWSError> {
     Ok(())
 }
 
-fn s3_get_object_test(s3: &mut S3Helper, bucket: &str) -> Result<GetObjectOutput, AWSError> {
+fn s3_get_object_test(s3: &mut S3Helper, bucket: &str) -> Result<GetObjectOutput, AwsError> {
     let response = try!(s3.get_object(bucket, "sample-credentials"));
     Ok(response)
 }
 
-fn s3_delete_object_test(s3: &mut S3Helper, bucket: &str, object_name: &str) -> Result<DeleteObjectOutput, AWSError> {
+fn s3_delete_object_test(s3: &mut S3Helper, bucket: &str, object_name: &str) -> Result<DeleteObjectOutput, AwsError> {
     let response = try!(s3.delete_object(bucket, object_name));
     Ok(response)
 }
 
-fn s3_put_object_aws_encryption_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+fn s3_put_object_aws_encryption_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AwsError> {
     let mut f = File::open("src/sample-credentials").unwrap();
     let mut contents : Vec<u8> = Vec::new();
     match f.read_to_end(&mut contents) {
-        Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
+        Err(why) => return Err(AwsError::new(format!("Error opening file to send to S3: {}", why))),
         Ok(_) => {
             let response = try!(s3.put_object_with_aws_encryption(bucket, "sample-credentials", &contents));
             Ok(response)
@@ -194,11 +192,11 @@ fn s3_put_object_aws_encryption_test(s3: &mut S3Helper, bucket: &str) -> Result<
     }
 }
 
-fn s3_put_object_kms_encryption_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+fn s3_put_object_kms_encryption_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AwsError> {
     let mut f = File::open("src/sample-credentials").unwrap();
     let mut contents : Vec<u8> = Vec::new();
     match f.read_to_end(&mut contents) {
-        Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
+        Err(why) => return Err(AwsError::new(format!("Error opening file to send to S3: {}", why))),
         Ok(_) => {
             let response = try!(s3.put_object_with_kms_encryption(bucket, "sample-credentials", &contents, "key-id"));
             Ok(response)
@@ -206,11 +204,11 @@ fn s3_put_object_kms_encryption_test(s3: &mut S3Helper, bucket: &str) -> Result<
     }
 }
 
-fn s3_put_object_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+fn s3_put_object_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AwsError> {
     let mut f = File::open("src/sample-credentials").unwrap();
     let mut contents : Vec<u8> = Vec::new();
     match f.read_to_end(&mut contents) {
-        Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
+        Err(why) => return Err(AwsError::new(format!("Error opening file to send to S3: {}", why))),
         Ok(_) => {
             let response = try!(s3.put_object(bucket, "sample-credentials", &contents));
             Ok(response)
@@ -218,11 +216,11 @@ fn s3_put_object_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput
     }
 }
 
-fn s3_put_object_with_request_specified_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+fn s3_put_object_with_request_specified_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AwsError> {
     let mut f = File::open("src/sample-credentials").unwrap();
     let mut contents : Vec<u8> = Vec::new();
     match f.read_to_end(&mut contents) {
-        Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
+        Err(why) => return Err(AwsError::new(format!("Error opening file to send to S3: {}", why))),
         Ok(_) => {
             let mut request = PutObjectRequest::default();
             request.key = "sample-credentials".to_string();
@@ -237,7 +235,7 @@ fn s3_put_object_with_request_specified_test(s3: &mut S3Helper, bucket: &str) ->
     }
 }
 
-fn s3_multipart_upload_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+fn s3_multipart_upload_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AwsError> {
     // Set to a > 5 MB file for testing:
     let mut f = File::open("testfile.zip").unwrap();
 
@@ -245,11 +243,11 @@ fn s3_multipart_upload_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObject
     Ok(response)
 }
 
-fn s3_put_object_with_reduced_redundancy_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AWSError> {
+fn s3_put_object_with_reduced_redundancy_test(s3: &mut S3Helper, bucket: &str) -> Result<PutObjectOutput, AwsError> {
     let mut f = File::open("src/sample-credentials").unwrap();
     let mut contents = Vec::new();
     match f.read_to_end(&mut contents) {
-        Err(why) => return Err(AWSError::new(format!("Error opening file to send to S3: {}", why))),
+        Err(why) => return Err(AwsError::new(format!("Error opening file to send to S3: {}", why))),
         Ok(_) => {
             let response = try!(s3.put_object_with_reduced_redundancy(bucket, "sample-credentials", &contents));
             Ok(response)
@@ -257,13 +255,13 @@ fn s3_put_object_with_reduced_redundancy_test(s3: &mut S3Helper, bucket: &str) -
     }
 }
 
-fn s3_create_bucket_test(s3: &mut S3Helper, bucket: &str, region: &Region, canned_acl: Option<CannedAcl>) -> Result<(), AWSError> {
+fn s3_create_bucket_test(s3: &mut S3Helper, bucket: &str, region: &Region, canned_acl: Option<CannedAcl>) -> Result<(), AwsError> {
     try!(s3.create_bucket_in_region(bucket, &region, canned_acl));
 
     Ok(())
 }
 
-fn s3_delete_bucket_test(s3: &mut S3Helper, bucket: &str, region: &Region) -> Result<(), AWSError> {
+fn s3_delete_bucket_test(s3: &mut S3Helper, bucket: &str, region: &Region) -> Result<(), AwsError> {
     try!(s3.delete_bucket(bucket, &region));
     Ok(())
 }
