@@ -71,7 +71,7 @@ impl AWSCredentials {
 }
 
 /// A type that produces `AWSCredentials`.
-pub trait ProvideAWSCredentials: Sync {
+pub trait ProvideAWSCredentials: Send + Sync {
     /// Produce a new `AWSCredentials`.
 	fn credentials(&mut self) -> Result<&AWSCredentials, AWSError>;
 }
