@@ -9,7 +9,7 @@ For pre-1.0.0:
 
 ### Semantic versioning
 
-Rusoto uses [semantic versioning 2.0.0](http://semver.org/).  
+Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 
 ### Git tags
 
@@ -26,6 +26,10 @@ To publish on crates.io:
 
 1. `cargo package`
 2. `cargo publish`
+
+### Release notes
+
+Add a list of user-facing changes to a new release for the tagged version on GitHub: https://github.com/rusoto/rusoto/releases
 
 ### Documentation
 

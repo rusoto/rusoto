@@ -8,30 +8,22 @@ Check out code from github.
 
 If you're on OSX, you'll probably need a new version of openssl.  Run `brew install openssl`.
 
-If using pre-El Capitan OSX, run `brew link --force openssl`.
+Do one of the following to make rust-openssl see the Homebrew-installed OpenSSL:
 
-For El Capitan, these environment variables need to be set whenever building the openssl crate.
-This includes rebuilding Rusoto after a `cargo clean`.
-They can be added to your shell profile (EG `~/.bash_profile`):
-
-```bash
-export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include
-export OPENSSL_LIB_DIR=`brew --prefix openssl`/lib
-```
+1.  Run `brew link --force openssl`.
+2.  Run:
+    ``` bash
+    export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include
+    export OPENSSL_LIB_DIR=`brew --prefix openssl`/lib
+    ```
 
 Set up AWS credentials: environment variables (export AWS_ACCESS_KEY_ID and
 AWS_SECRET_ACCESS_KEY), populate the ~/.aws/credentials file, or use an
 IAM instance profile on an EC2 instance.
 
-Initialize and fetch the git submodule for botocore definitions:
-
-`git submodule init`
-
-`git submodule update`
-
-Now run `cargo build` to perform the initial build.
-
-Initial setup is now complete, the above shouldn't be needed again unless you need to update the botocore definitions from that upstream project.
+You are now ready to build the project with `cargo build`.
+Remember to include the appropriate feature flags for the AWS services you want to use.
+See [README](README.md) for a table of available services and their Cargo feature names.
 
 ### Building after initial setup
 
@@ -40,7 +32,8 @@ Build the project with `cargo build`.
 Integration tests can be executed by running `cargo test --features FEATURE`, where FEATURE is one or more space-separated Cargo features to test as defined in `Cargo.toml`.
 Each AWS service has a Cargo feature to enable it.
 The feature "all" can be used to test all supported services.
-This will create real AWS resources and you may be charged.
+The integration tests will create real AWS resources and you may be charged.
+To run only the in-crate unit tests, which don't call out to AWS, include the `--lib` option to `cargo test`.
 
 For more verbose test output, you can run `cargo test --verbose --features FEATURE -- --nocapture`.
 

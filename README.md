@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/rusoto/rusoto.svg?branch=master)](https://travis-ci.org/rusoto/rusoto)
 
-AWS SDK for Rust. [Documentation](http://rusoto.github.io/rusoto/rusoto/index.html).
+AWS SDK for Rust. [Documentation](https://rusoto.github.io/rusoto/rusoto/index.html).
 
 IRC: #rusoto on irc.freenode.net.
 
@@ -29,19 +29,18 @@ You can use the Cargo feature "all" to build Rusoto with support for every avail
 
 Rusoto includes a public module for each AWS service it is compiled for containing Rust types for that service's API.
 A full list of these services and their Cargo feature names are included at the end of this document.
-Other public modules in the crate include types common between AWS APIs, such as credentials management, AWS regions, and API request signing.
-Consult the rustdoc documenation for full details by running `cargo doc`.
+All other public types are reexported to the crate root.
+Consult the rustdoc documenation for full details by running `cargo doc` or visiting the online [documentation](https://rusoto.github.io/rusoto/rusoto/index.html) for the latest crates.io release.
 
-A simple example of using the Rusoto's DynamoDB API to list the names of all tables in a database:
+A simple example of using Rusoto's DynamoDB API to list the names of all tables in a database:
 
 ```rust
 extern crate rusoto;
 
 use std::default::Default;
 
-use rusoto::credentials::ChainProvider;
+use rusoto::{ChainProvider, Region}
 use rusoto::dynamodb::{DynamoDBClient, ListTablesInput};
-use rusoto::regions::Region;
 
 fn main() {
   let provider = ChainProvider::new().unwrap();
