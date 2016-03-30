@@ -12,6 +12,7 @@ Do one of the following to make rust-openssl see the Homebrew-installed OpenSSL:
 
 1.  Run `brew link --force openssl`.
 2.  Run:
+
     ``` bash
     export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include
     export OPENSSL_LIB_DIR=`brew --prefix openssl`/lib
