@@ -44,8 +44,7 @@ use rusoto::dynamodb::{DynamoDBClient, ListTablesInput};
 
 fn main() {
   let provider = ChainProvider::new().unwrap();
-  let region = Region::UsEast1;
-  let mut client = DynamoDBClient::new(provider, &region);
+  let mut client = DynamoDBClient::new(provider, Region::UsEast1);
   let list_tables_input: ListTablesInput = Default::default();
 
   match client.list_tables(&list_tables_input) {

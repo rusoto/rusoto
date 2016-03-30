@@ -14,7 +14,7 @@ impl GenerateProtocol for QueryGenerator {
     let mut request = SignedRequest::new(
         \"{http_method}\",
         \"{endpoint_prefix}\",
-        &self.region,
+        self.region,
         \"{request_uri}\",
     );
     let mut params = Params::new();
