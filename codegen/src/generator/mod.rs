@@ -45,18 +45,15 @@ fn generate_client<P>(service: &Service, protocol_generator: &P) -> String
 where P: GenerateProtocol {
     format!(
         "/// A client for the {service_name} API.
-        pub struct {type_name}<'a> {{
-            credentials_provider: Box<ProvideAwsCredentials + 'a>,
-            region: &'a Region,
+        pub struct {type_name}<P> where P: ProvideAwsCredentials {{
+            credentials_provider: P,
+            region: Region,
         }}
 
-        impl<'a> {type_name}<'a> {{
-            pub fn new<P>(
-                credentials_provider: P,
-                region: &'a Region,
-            ) -> Self where P: ProvideAwsCredentials + 'a {{
+        impl<P> {type_name}<P> where P: ProvideAwsCredentials {{
+            pub fn new(credentials_provider: P, region: Region) -> Self {{
                 {type_name} {{
-                    credentials_provider: Box::new(credentials_provider),
+                    credentials_provider: credentials_provider,
                     region: region,
                 }}
             }}

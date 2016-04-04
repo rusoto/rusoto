@@ -8,11 +8,7 @@ use rusoto::{AwsError, ChainProvider, Region};
 #[test]
 fn main() {
     let credentials = ChainProvider::new().unwrap();
-    let region = Region::UsEast1;
-    let mut ecs = EcsClient::new(
-        credentials,
-        &region
-    );
+    let mut ecs = EcsClient::new(credentials, Region::UsEast1);
 
     // http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListClusters.html
     match ecs.list_clusters(&ListClustersRequest::default()) {

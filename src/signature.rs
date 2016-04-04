@@ -26,7 +26,7 @@ use xml::reader::*;
 use credential::AwsCredentials;
 use error::AwsError;
 use param::Params;
-use region::{Region, region_in_aws_format};
+use region::Region;
 use request::send_request;
 
 const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
@@ -37,7 +37,7 @@ const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 pub struct SignedRequest<'a> {
     method: String,
     service: String,
-    region: &'a Region,
+    region: Region,
     path: String,
     headers: BTreeMap<String, Vec<Vec<u8>>>,
     params: Params,
@@ -50,7 +50,7 @@ pub struct SignedRequest<'a> {
 
 impl <'a> SignedRequest <'a> {
     /// Default constructor
-    pub fn new<'b>(method: &str, service: &str, region: &'a Region, path: &str) -> SignedRequest<'a> {
+    pub fn new<'b>(method: &str, service: &str, region: Region, path: &str) -> SignedRequest<'a> {
         SignedRequest {
             method: method.to_string(),
             service: service.to_string(),
@@ -101,7 +101,7 @@ impl <'a> SignedRequest <'a> {
     pub fn hostname(&self) -> String {
         match self.hostname {
             Some(ref h) => h.to_string(),
-            None => build_hostname(&self.service, &self.region)
+            None => build_hostname(&self.service, self.region)
         }
     }
 
@@ -144,7 +144,7 @@ impl <'a> SignedRequest <'a> {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
-            None => build_hostname(&self.service, &self.region)
+            None => build_hostname(&self.service, self.region)
         };
 
         // Gotta remove and re-add headers since by default they append the value.  If we're following
@@ -208,11 +208,11 @@ impl <'a> SignedRequest <'a> {
 
         // use the hashed canonical request to build the string to sign
         let hashed_canonical_request = to_hexdigest_from_string(&canonical_request);
-        let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), region_in_aws_format(&self.region), &self.service);
+        let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), self.region, &self.service);
         let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
 
         // construct the signing key and sign the string with it
-        let signing_key = signing_key(&creds.aws_secret_access_key(), date, &region_in_aws_format(&self.region), &self.service);
+        let signing_key = signing_key(&creds.aws_secret_access_key(), date, &self.region.to_string(), &self.service);
         let signature = signature(&string_to_sign, signing_key);
 
         // build the actual auth header
@@ -348,17 +348,17 @@ fn to_hexdigest_from_bytes(val: &[u8]) -> String {
     h.to_hex().to_string()
 }
 
-fn build_hostname(service: &str, region: &Region) -> String {
+fn build_hostname(service: &str, region: Region) -> String {
     //iam has only 1 endpoint, other services have region-based endpoints
     match service {
         "iam" => format!("{}.amazonaws.com", service),
         "s3" => {
-                match *region {
+                match region {
                     Region::UsEast1 => return "s3.amazonaws.com".to_string(),
-                    _ => return format!("s3-{}.amazonaws.com", region_in_aws_format(region)),
+                    _ => return format!("s3-{}.amazonaws.com", region),
                 }
             }
-        _ => format!("{}.{}.amazonaws.com", service, region_in_aws_format(region))
+        _ => format!("{}.{}.amazonaws.com", service, region)
     }
 }
 
@@ -426,15 +426,13 @@ mod tests {
 
     #[test]
     fn get_hostname_none_present() {
-        let region = Region::UsEast1;
-        let request = SignedRequest::new("POST", "sqs", &region, "/");
+        let request = SignedRequest::new("POST", "sqs", Region::UsEast1, "/");
         assert_eq!("sqs.us-east-1.amazonaws.com", request.hostname());
     }
 
     #[test]
     fn get_hostname_happy_path() {
-        let region = Region::UsEast1;
-        let mut request = SignedRequest::new("POST", "sqs", &region, "/");
+        let mut request = SignedRequest::new("POST", "sqs", Region::UsEast1, "/");
         request.set_hostname(Some("test-hostname".to_string()));
         assert_eq!("test-hostname", request.hostname());
     }
