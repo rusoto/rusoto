@@ -359,7 +359,7 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
                 ",
                 field_name = member_name.to_snake_case(),
                 member_shape_name = member.shape,
-                tag_name = member.tag_name(),
+                tag_name = member_name,
             )
         } else {
             format!(
