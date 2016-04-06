@@ -43,6 +43,8 @@ mod serialization;
 pub mod dynamodb;
 #[cfg(feature = "ecs")]
 pub mod ecs;
+#[cfg(feature = "ets")]
+pub mod ets;
 #[cfg(feature = "kms")]
 pub mod kms;
 #[cfg(feature = "s3")]

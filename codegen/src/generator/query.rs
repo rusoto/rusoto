@@ -61,7 +61,7 @@ impl GenerateProtocol for QueryGenerator {
 
         use credential::ProvideAwsCredentials;
         use error::AwsError;
-        use param::{Params, SQSParams};
+        use param::{Params, ServiceParams};
         use region::Region;
         use signature::SignedRequest;
         use xmlutil::{Next, Peek, XmlParseError, XmlResponseFromAws};

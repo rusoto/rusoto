@@ -13,6 +13,7 @@ fn main() {
         Service::new("dynamodb", "2012-08-10"),
         Service::new("kms", "2014-11-01"),
         Service::new("ecs", "2014-11-13"),
+        Service::new("elastictranscoder", "2012-09-25"),
         Service::new("sqs", "2012-11-05"),
     ];
 

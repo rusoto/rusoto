@@ -22,6 +22,7 @@ syntex = { version = "0.30.0", optional = true }
 
 [dependencies]
 Inflector = "0.2.0"
+lazy_static = "0.1.16"
 regex = "0.1.55"
 serde = "0.7.0"
 serde_codegen = { version = "0.7.1", optional = true }

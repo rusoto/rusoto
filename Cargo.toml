@@ -19,9 +19,10 @@ build = "build.rs"
 default = ["with-syntex"]
 with-syntex = ["rusoto_codegen/with-syntex"]
 nightly = ["serde_macros", "rusoto_codegen/nightly"]
-all = ["dynamodb", "ecs", "kms", "s3", "sqs"]
+all = ["dynamodb", "ecs", "ets", "kms", "s3", "sqs"]
 dynamodb = []
 ecs = []
+ets = []
 kms = []
 s3 = []
 sqs = []
@@ -46,3 +47,4 @@ serde_macros = { version = "0.7.0", optional = true }
 
 [dev-dependencies]
 env_logger = "^0.3.2"
+rand = "^0.3.14"
