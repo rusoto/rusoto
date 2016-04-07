@@ -16,8 +16,9 @@ exclude = [".gitignore", ".travis.yml", "docgen.sh"]
 build = "build.rs"
 
 [features]
-default = ["rusoto_codegen/serde_codegen"]
-nightly = ["serde_macros"]
+default = ["with-syntex"]
+with-syntex = ["rusoto_codegen/with-syntex"]
+nightly = ["serde_macros", "rusoto_codegen/nightly"]
 all = ["dynamodb", "ecs", "kms", "s3", "sqs"]
 dynamodb = []
 ecs = []
@@ -27,6 +28,7 @@ sqs = []
 
 [build-dependencies.rusoto_codegen]
 path = "codegen"
+default-features = false
 
 [dependencies]
 serde = "0.7.0"
