@@ -12,7 +12,8 @@ repository = "https://github.com/rusoto/rusoto"
 build = "build.rs"
 
 [features]
-default = ["serde_codegen", "syntex"]
+default = ["with-syntex"]
+with-syntex = ["serde_codegen", "syntex"]
 nightly = ["serde_macros"]
 
 [build-dependencies]
