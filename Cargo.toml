@@ -2,7 +2,7 @@
 name = "rusoto"
 version = "0.12.1"
 authors = [
-  "Anthony DiMarco <anthony.dimarco@dualspark.com>",
+  "Anthony DiMarco <ocramida@gmail.com>",
   "Jimmy Cuadra <jimmy@jimmycuadra.com>",
   "Matthew Mayer <matthewkmayer@gmail.com>",
 ]
