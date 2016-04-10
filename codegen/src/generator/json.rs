@@ -40,7 +40,7 @@ impl GenerateProtocol for JsonGenerator {
                 output_type = output_type,
                 request_uri = operation.http.request_uri,
                 target_prefix = service.metadata.target_prefix.as_ref().unwrap(),
-                json_version = service.metadata.json_version.as_ref().map(|x| x as &str).unwrap_or("1.0")
+                json_version = service.metadata.json_version.as_ref().unwrap(),
             )
         }).collect::<Vec<String>>().join("\n")
     }
