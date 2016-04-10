@@ -85,6 +85,10 @@ impl Service {
         }
     }
 
+    pub fn shape_for_member<'a>(&'a self, member: &Member) -> Option<&'a Shape> {
+        self.shapes.get(&member.shape).map(|shape| shape)
+    }
+
     pub fn shape_type_for_member<'a>(&'a self, member: &Member) -> Option<&'a str> {
         self.shapes.get(&member.shape).map(|ref shape| &shape.shape_type[..])
     }
