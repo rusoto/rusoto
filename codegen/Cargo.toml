@@ -2,7 +2,7 @@
 name = "rusoto_codegen"
 version = "0.1.0"
 authors = [
-  "Anthony DiMarco <anthony.dimarco@dualspark.com>",
+  "Anthony DiMarco <ocramida@gmail.com>",
   "Jimmy Cuadra <jimmy@jimmycuadra.com>",
   "Matthew Mayer <matthewkmayer@gmail.com>",
 ]

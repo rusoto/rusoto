@@ -33,7 +33,7 @@ Add a list of user-facing changes to a new release for the tagged version on Git
 
 ### Documentation
 
-Docs are on Github Pages at [http://dualspark.github.io/rusoto/](http://dualspark.github.io/rusoto/).
+Docs are on Github Pages at [https://rusoto.github.io/rusoto](https://rusoto.github.io/rusoto).
 
 A helper script is included to make this less painful until our CI system handles it.  Run `docgen.sh` to
 use [github pages import](https://github.com/davisp/ghp-import) to upload them to the gh-pages branch.  Install
