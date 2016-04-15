@@ -2,6 +2,7 @@
 #![crate_type = "lib"]
 #![cfg_attr(feature = "nightly", feature(custom_derive, plugin))]
 #![cfg_attr(feature = "nightly", plugin(serde_macros))]
+#![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 #![allow(dead_code)]
 
 //! Rusoto is an [AWS](https://aws.amazon.com/) SDK for Rust.

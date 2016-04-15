@@ -1,6 +1,8 @@
 # Rusoto
 
 [![Build Status](https://travis-ci.org/rusoto/rusoto.svg?branch=master)](https://travis-ci.org/rusoto/rusoto)
+[![Clippy Linting
+Result](https://clippy.bashy.io/github/rusoto/rusoto/master/badge.svg)](https://clippy.bashy.io/github/rusoto/rusoto/master/log)
 
 AWS SDK for Rust. [Documentation](https://rusoto.github.io/rusoto/rusoto/index.html).
 

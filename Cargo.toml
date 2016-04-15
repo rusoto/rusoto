@@ -19,6 +19,7 @@ ecs = []
 ets = []
 kms = []
 nightly = ["serde_macros", "rusoto_codegen/nightly"]
+nightly-testing = ["clippy", "nightly"]
 s3 = []
 sqs = []
 with-syntex = ["rusoto_codegen/with-syntex"]
@@ -39,6 +40,10 @@ serde_json = "0.7.0"
 time = "0.1.35"
 url = "0.5.9"
 xml-rs = "0.1.26"
+
+[dependencies.clippy]
+optional = true
+version = "0.0.63"
 
 [dependencies.serde_macros]
 optional = true
