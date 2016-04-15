@@ -1,50 +1,49 @@
 [package]
-name = "rusoto"
-version = "0.12.1"
-authors = [
-  "Anthony DiMarco <ocramida@gmail.com>",
-  "Jimmy Cuadra <jimmy@jimmycuadra.com>",
-  "Matthew Mayer <matthewkmayer@gmail.com>",
-]
-license = "MIT"
-readme = "README.md"
-keywords = ["AWS", "Amazon"]
+authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>"]
+build = "build.rs"
 description = "AWS SDK for Rust"
-repository = "https://github.com/rusoto/rusoto"
 documentation = "http://rusoto.github.io/rusoto/rusoto/index.html"
 exclude = [".gitignore", ".travis.yml", "docgen.sh"]
-build = "build.rs"
+keywords = ["AWS", "Amazon"]
+license = "MIT"
+name = "rusoto"
+readme = "README.md"
+repository = "https://github.com/rusoto/rusoto"
+version = "0.12.1"
 
 [features]
-default = ["with-syntex"]
-with-syntex = ["rusoto_codegen/with-syntex"]
-nightly = ["serde_macros", "rusoto_codegen/nightly"]
 all = ["dynamodb", "ecs", "ets", "kms", "s3", "sqs"]
+default = ["with-syntex"]
 dynamodb = []
 ecs = []
 ets = []
 kms = []
+nightly = ["serde_macros", "rusoto_codegen/nightly"]
 s3 = []
 sqs = []
+with-syntex = ["rusoto_codegen/with-syntex"]
 
 [build-dependencies.rusoto_codegen]
-path = "codegen"
 default-features = false
+path = "codegen"
 
 [dependencies]
+chrono = "0.2.21"
+hyper = "0.8.1"
+log = "0.3.6"
+openssl = "0.7.9"
+regex = "0.1.65"
+rustc-serialize = "0.3.19"
 serde = "0.7.0"
 serde_json = "0.7.0"
-xml-rs = "^0.1.26"
-time = "^0.1.34"
-openssl = "^0.7.7"
-hyper = "^0.7.2"
-url = "^0.2.37"
-rustc-serialize = "^0.3.18"
-regex = "^0.1.51"
-chrono = "^0.2.19"
-log = "^0.3.3"
-serde_macros = { version = "0.7.0", optional = true }
+time = "0.1.35"
+url = "0.5.9"
+xml-rs = "0.1.26"
+
+[dependencies.serde_macros]
+optional = true
+version = "0.7.2"
 
 [dev-dependencies]
-env_logger = "^0.3.2"
+env_logger = "0.3.3"
 rand = "^0.3.14"
