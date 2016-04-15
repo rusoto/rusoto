@@ -41,7 +41,7 @@ pub struct XmlResponseFromAws<'b> {
 }
 
 impl <'b>XmlResponseFromAws<'b> {
-	pub fn new<'c>(stack: Peekable<Events<'b, Response>>) -> XmlResponseFromAws {
+	pub fn new(stack: Peekable<Events<'b, Response>>) -> XmlResponseFromAws {
 		XmlResponseFromAws {
 			xml_stack: stack,
 		}
@@ -50,13 +50,13 @@ impl <'b>XmlResponseFromAws<'b> {
 
 impl <'b>Peek for XmlResponseFromAws<'b> {
 	fn peek(&mut self) -> Option<&XmlEvent> {
-		return self.xml_stack.peek();
+		self.xml_stack.peek()
 	}
 }
 
 impl <'b> Next for XmlResponseFromAws<'b> {
 	fn next(&mut self) -> Option<XmlEvent> {
-		return self.xml_stack.next();
+		self.xml_stack.next()
 	}
 }
 
@@ -70,21 +70,21 @@ pub struct XmlResponseFromFile<'a> {
 }
 
 impl <'a>XmlResponseFromFile<'a> {
-	pub fn new<'c>(my_stack: Peekable<Events<'a, BufReader<File>>>) -> XmlResponseFromFile {
-		return XmlResponseFromFile { xml_stack: my_stack };
+	pub fn new(my_stack: Peekable<Events<'a, BufReader<File>>>) -> XmlResponseFromFile {
+		XmlResponseFromFile { xml_stack: my_stack }
 	}
 }
 
 // Need peek and next implemented.
 impl <'b> Peek for XmlResponseFromFile <'b> {
 	fn peek(&mut self) -> Option<&XmlEvent> {
-		return self.xml_stack.peek();
+		self.xml_stack.peek()
 	}
 }
 
 impl <'b> Next for XmlResponseFromFile <'b> {
 	fn next(&mut self) -> Option<XmlEvent> {
-		return self.xml_stack.next();
+		self.xml_stack.next()
 	}
 }
 // /testing helper
@@ -116,7 +116,7 @@ pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError
 	}
 }
 
-/// get the name of the current element in the stack.  throw a parse error if it's not a StartElement
+/// get the name of the current element in the stack.  throw a parse error if it's not a `StartElement`
 pub fn peek_at_name<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError> {
 	let current = stack.peek();
 	if let Some(&XmlEvent::StartElement{ref name, ..}) = current {
@@ -126,32 +126,32 @@ pub fn peek_at_name<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseErr
 	}
 }
 
-/// consume a StartElement with a specific name or throw an XmlParseError
+/// consume a `StartElement` with a specific name or throw an `XmlParseError`
 pub fn start_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result<HashMap<String, String>, XmlParseError> {
 	let next = stack.next();
 	if let Some(XmlEvent::StartElement { name, attributes, .. }) = next {
-		if name.local_name != element_name {
-			Err(XmlParseError::new(&format!("Expected {} got {}", element_name, name.local_name)))
-		} else {
+		if name.local_name == element_name {
 			let mut attr_map = HashMap::new();
 			for attr in attributes {
 				attr_map.insert(attr.name.local_name, attr.value);
 			}
 			Ok(attr_map)
+		} else {
+			Err(XmlParseError::new(&format!("Expected {} got {}", element_name, name.local_name)))
 		}
 	} else {
 		Err(XmlParseError::new(&format!("Expected StartElement {}", element_name)))
 	}
 }
 
-/// consume an EndElement with a specific name or throw an XmlParseError
+/// consume an `EndElement` with a specific name or throw an `XmlParseError`
 pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result<(), XmlParseError> {
 	let next = stack.next();
 	if let Some(XmlEvent::EndElement { name, .. }) = next {
-		if name.local_name != element_name {
-			Err(XmlParseError::new(&format!("Expected {} got {}", element_name, name.local_name)))
-		} else {
+		if name.local_name == element_name {
 			Ok(())
+		} else {
+			Err(XmlParseError::new(&format!("Expected {} got {}", element_name, name.local_name)))
 		}
 	}else {
 		Err(XmlParseError::new(&format!("Expected EndElement {} got {:?}", element_name, next)))

@@ -64,10 +64,7 @@ impl AwsCredentials {
     fn credentials_are_expired(&self) -> bool {
         // This is a rough hack to hopefully avoid someone requesting creds then sitting on them
         // before issuing the request:
-        if self.expires_at < UTC::now() + Duration::seconds(20) {
-            return true;
-        }
-        return false;
+        self.expires_at < UTC::now() + Duration::seconds(20)
     }
 }
 
@@ -100,7 +97,12 @@ impl EnvironmentProvider {
     pub fn new() -> EnvironmentProvider {
         EnvironmentProvider { credentials: None }
     }
+}
 
+impl Default for EnvironmentProvider {
+    fn default() -> EnvironmentProvider {
+        EnvironmentProvider::new()
+    }
 }
 
 fn credentials_from_environment() -> Result<AwsCredentials, AwsError> {
@@ -249,19 +251,19 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
         // otherwise look for key=value pairs we care about
         let lower_case_line = unwrapped_line.to_ascii_lowercase().to_string();
 
-        if lower_case_line.contains("aws_access_key_id") {
-            if access_key.is_none() {
-                let v: Vec<&str> = unwrapped_line.split("=").collect();
-                if v.len() > 0 {
-                    access_key = Some(v[1].trim_matches(' ').to_string());
-                }
+        if lower_case_line.contains("aws_access_key_id") &&
+            access_key.is_none()
+        {
+            let v: Vec<&str> = unwrapped_line.split('=').collect();
+            if !v.is_empty() {
+                access_key = Some(v[1].trim_matches(' ').to_string());
             }
-        } else if lower_case_line.contains("aws_secret_access_key") {
-            if secret_key.is_none() {
-                let v: Vec<&str> = unwrapped_line.split("=").collect();
-                if v.len() > 0 {
-                    secret_key = Some(v[1].trim_matches(' ').to_string());
-                }
+        } else if lower_case_line.contains("aws_secret_access_key") &&
+            secret_key.is_none()
+        {
+            let v: Vec<&str> = unwrapped_line.split('=').collect();
+            if !v.is_empty() {
+                secret_key = Some(v[1].trim_matches(' ').to_string());
             }
         }
 
@@ -293,6 +295,12 @@ impl IamProvider {
     }
 }
 
+impl Default for IamProvider {
+    fn default() -> IamProvider {
+        IamProvider::new()
+    }
+}
+
 impl ProvideAwsCredentials for IamProvider {
     fn credentials(&mut self) -> Result<&AwsCredentials, AwsError> {
         if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
@@ -310,10 +318,9 @@ impl ProvideAwsCredentials for IamProvider {
                 };
 
             let mut body = String::new();
-            match response.read_to_string(&mut body) {
-                Err(_) => return err("Didn't get a parsable response body from metadata service"),
-                Ok(_) => (),
-            };
+            if let Err(_) = response.read_to_string(&mut body) {
+                return err("Didn't get a parsable response body from metadata service");
+            }
 
             address.push_str("/");
             address.push_str(&body);
@@ -324,10 +331,9 @@ impl ProvideAwsCredentials for IamProvider {
                     Ok(received_response) => response = received_response
                 };
 
-            match response.read_to_string(&mut body) {
-                Err(_) => return err("Had issues with reading iam role response: {}"),
-                Ok(_) => (),
-            };
+            if let Err(_) = response.read_to_string(&mut body) {
+                return err("Had issues with reading iam role response: {}");
+            }
 
             let json_object: Value;
             match from_str(&body) {

@@ -2,7 +2,7 @@
 //!
 //! Mostly used for translating the Region enum to a string AWS accepts.
 //!
-//! For example: UsEast1 to "us-east-1"
+//! For example: `UsEast1` to "us-east-1"
 
 use std::str::FromStr;
 use std::fmt::{Display, Error as FmtError, Formatter};
@@ -27,16 +27,16 @@ pub struct ParseRegionError;
 
 impl Display for Region {
     fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
-        let region_str = match self {
-            &Region::ApNortheast1 => "ap-northeast-1",
-            &Region::ApSoutheast1 => "ap-southeast-1",
-            &Region::ApSoutheast2 => "ap-southeast-2",
-            &Region::EuCentral1 => "eu-central-1",
-            &Region::EuWest1 => "eu-west-1",
-            &Region::SaEast1 => "sa-east-1",
-            &Region::UsEast1 => "us-east-1",
-            &Region::UsWest1 => "us-west-1",
-            &Region::UsWest2 => "us-west-2",
+        let region_str = match *self {
+            Region::ApNortheast1 => "ap-northeast-1",
+            Region::ApSoutheast1 => "ap-southeast-1",
+            Region::ApSoutheast2 => "ap-southeast-2",
+            Region::EuCentral1 => "eu-central-1",
+            Region::EuWest1 => "eu-west-1",
+            Region::SaEast1 => "sa-east-1",
+            Region::UsEast1 => "us-east-1",
+            Region::UsWest1 => "us-west-1",
+            Region::UsWest2 => "us-west-2",
         };
 
         write!(f, "{}", region_str)

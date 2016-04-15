@@ -18,8 +18,7 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
         "POST" => Method::Post,
         "PUT" => Method::Put,
         "DELETE" => Method::Delete,
-        "GET" => Method::Get,
-        _ => Method::Get, // make this unreachable! ?
+        "GET" | _ => Method::Get, // TODO: make the catch-all case unreachable
     };
 
     // translate the headers map to a format Hyper likes
@@ -29,7 +28,7 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
     }
 
     let mut final_uri = format!("https://{}{}", signed_request.hostname(), signed_request.canonical_uri());
-    if signed_request.canonical_query_string().len() > 0 {
+    if !signed_request.canonical_query_string().is_empty() {
         final_uri = final_uri + &format!("?{}", signed_request.canonical_query_string());
     }
 
