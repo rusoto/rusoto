@@ -4,9 +4,11 @@ use botocore::{Service, Shape};
 
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
+use self::rest_json::RestJsonGenerator;
 
 mod json;
 mod query;
+mod rest_json;
 
 pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
@@ -24,6 +26,7 @@ pub fn generate_source(service: &Service) -> String {
     match &service.metadata.protocol[..] {
         "json" => generate(service, JsonGenerator),
         "query" => generate(service, QueryGenerator),
+        "rest-json" => generate(service, RestJsonGenerator),
         protocol => panic!("Unknown protocol {}", protocol),
     }
 }
@@ -62,7 +65,15 @@ where P: GenerateProtocol {
         }}
         ",
         methods = protocol_generator.generate_methods(service),
-        service_name = &service.metadata.service_abbreviation,
+        service_name = match &service.metadata.service_abbreviation {
+            &Some(ref service_abbreviation) => service_abbreviation.as_str(),
+            &None => {
+                match service.metadata.endpoint_prefix {
+                    ref x if x == "elastictranscoder" => "Amazon Elastic Transcoder",
+                    _ => panic!("Unable to determine service abbreviation"),
+                }
+            },
+        },
         type_name = service.client_type_name(),
     )
 }

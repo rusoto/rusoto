@@ -95,6 +95,8 @@ pub struct HttpRequest {
     pub method: String,
     #[serde(rename="requestUri")]
     pub request_uri: String,
+    #[serde(rename="responseCode")]
+    pub response_code: Option<i32>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -122,7 +124,7 @@ pub struct Error {
 
 #[derive(Debug, Deserialize)]
 pub struct HttpError {
-    pub code: String,
+    pub code: Option<String>,
     #[serde(rename="httpStatusCode")]
     pub http_status_code: i32,
     #[serde(rename="senderFault")]
@@ -276,7 +278,7 @@ pub struct Metadata {
     pub json_version: Option<String>,
     pub protocol: String,
     #[serde(rename="serviceAbbreviation")]
-    pub service_abbreviation: String,
+    pub service_abbreviation: Option<String>,
     #[serde(rename="serviceFullName")]
     pub service_full_name: String,
     #[serde(rename="signatureVersion")]

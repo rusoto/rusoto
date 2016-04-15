@@ -1,7 +1,10 @@
+#![cfg_attr(feature = "nightly", feature(const_fn, core_intrinsics))]
 #![cfg_attr(feature = "serde_macros", feature(custom_derive, plugin))]
 #![cfg_attr(feature = "serde_macros", plugin(serde_macros))]
 
 extern crate inflector;
+#[macro_use] extern crate lazy_static;
+extern crate regex;
 extern crate serde;
 extern crate serde_json;
 
