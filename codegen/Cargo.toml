@@ -22,6 +22,10 @@ regex = "0.1.65"
 serde = "0.7.0"
 serde_json = "0.7.0"
 
+[dependencies.clippy]
+optional = true
+version = "0.0.63"
+
 [dependencies.serde_codegen]
 optional = true
 version = "0.7.2"
@@ -37,4 +41,5 @@ version = "0.31.0"
 [features]
 default = ["with-syntex"]
 nightly = ["serde_macros"]
+nightly-testing = ["clippy", "nightly"]
 with-syntex = ["serde_codegen", "syntex"]
