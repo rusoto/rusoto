@@ -139,6 +139,7 @@ All supported services | all
 [ECS](https://aws.amazon.com/ecs/) | ecs
 [Elastic MapReduce](https://aws.amazon.com/elasticmapreduce/) | emr
 [Elastic Transcoder](https://aws.amazon.com/elastictranscoder/) | ets
+[IAM](https://aws.amazon.com/iam/) | iam
 [Inspector](https://aws.amazon.com/inspector/) | inspector
 [Key Management Service](https://aws.amazon.com/kms/) | kms
 [Kinesis](https://aws.amazon.com/kinesis/) | kinesis
