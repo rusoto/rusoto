@@ -173,6 +173,7 @@ fn generate_struct_fields(service: &Service, shape: &Shape) -> String {
             lines.push(format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")));
         }
 
+        lines.push("#[allow(unused_attributes)]".to_owned());
         lines.push(format!("#[serde(rename=\"{}\")]", member_name));
 
         if let Some(shape_type) = service.shape_type_for_member(member) {
