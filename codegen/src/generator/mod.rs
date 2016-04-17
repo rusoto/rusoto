@@ -95,12 +95,11 @@ fn generate_primitive_type(name: &str, shape_type: &str) -> String {
     let primitive_type = match shape_type {
         "blob" => "Vec<u8>",
         "boolean" => "bool",
-        "double" => "f64",
+        "double" | "timestamp" => "f64",
         "float" => "f32",
         "integer" => "i32",
         "long" => "i64",
         "string" => "String",
-        "timestamp" => "f64",
         primitive_type => panic!("Unknown primitive type: {}", primitive_type),
     };
 
@@ -137,7 +136,7 @@ where P: GenerateProtocol {
 
 fn generate_struct<P>(
     service: &Service,
-    name: &String,
+    name: &str,
     shape: &Shape,
     protocol_generator: &P,
 ) -> String where P: GenerateProtocol {

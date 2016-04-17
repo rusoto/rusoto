@@ -50,7 +50,7 @@ pub struct SignedRequest<'a> {
 
 impl <'a> SignedRequest <'a> {
     /// Default constructor
-    pub fn new<'b>(method: &str, service: &str, region: Region, path: &str) -> SignedRequest<'a> {
+    pub fn new(method: &str, service: &str, region: Region, path: &str) -> SignedRequest<'a> {
         SignedRequest {
             method: method.to_string(),
             service: service.to_string(),
@@ -246,7 +246,7 @@ fn signing_key(secret: &str, date: Tm, region: &str, service: &str) -> Vec<u8> {
     let k_date = hmac(SHA256, format!("AWS4{}", secret).as_bytes(), date.strftime("%Y%m%d").unwrap().to_string().as_bytes());
     let k_region = hmac(SHA256, &k_date, region.as_bytes());
     let k_service = hmac(SHA256, &k_region, service.as_bytes());
-    hmac(SHA256, &k_service, "aws4_request".as_bytes())
+    hmac(SHA256, &k_service, b"aws4_request")
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
@@ -261,7 +261,7 @@ fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     let mut signed = String::new();
 
     for (key,_) in headers.iter() {
-        if signed.len() > 0 {
+        if !signed.is_empty() {
             signed.push(';')
         }
 
@@ -285,14 +285,14 @@ fn canonical_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     canonical
 }
 
-fn canonical_values(values: &Vec<Vec<u8>>) -> String {
+fn canonical_values(values: &[Vec<u8>]) -> String {
     let mut st = String::new();
     for v in values {
         let s = str::from_utf8(v).unwrap();
-        if st.len() > 0 {
+        if !st.is_empty() {
             st.push(',')
         }
-        if s.starts_with("\""){
+        if s.starts_with('\"') {
             st.push_str(&s);
         } else {
             st.push_str(s.replace("  ", " ").trim());
@@ -313,13 +313,13 @@ fn canonical_uri(path: &str) -> String {
 }
 
 fn build_canonical_query_string(params: &Params) -> String {
-    if params.len() == 0 {
+    if params.is_empty() {
         return String::new();
     }
 
     let mut output = String::new();
     for item in params.iter() {
-        if output.len() > 0 {
+        if !output.is_empty() {
             output.push_str("&");
         }
         byte_serialize(item.0, &mut output);
@@ -354,15 +354,15 @@ fn build_hostname(service: &str, region: Region) -> String {
         "iam" => format!("{}.amazonaws.com", service),
         "s3" => {
                 match region {
-                    Region::UsEast1 => return "s3.amazonaws.com".to_string(),
-                    _ => return format!("s3-{}.amazonaws.com", region),
+                    Region::UsEast1 => "s3.amazonaws.com".to_string(),
+                    _ => format!("s3-{}.amazonaws.com", region),
                 }
             }
         _ => format!("{}.{}.amazonaws.com", service, region)
     }
 }
 
-/// extract_s3_redirect_location takes a Hyper Response and attempts to pull out the temporary endpoint.
+/// `extract_s3_redirect_location` takes a Hyper `Response` and attempts to pull out the temporary endpoint.
 fn extract_s3_redirect_location(response: Response) -> Result<String, AwsError> {
     // Double checking this feels like belts and suspenders since we're checking the status code
     // before calling this.  Remove this check?
@@ -387,8 +387,8 @@ fn field_in_s3_redirect(name: &str) -> bool {
     false
 }
 
-/// extract_s3_temporary_endpoint_from_xml takes in XML and tries to find the value of the Endpoint node.
-fn extract_s3_temporary_endpoint_from_xml<'a, T: Peek + Next>(stack: &mut T) -> Result<String, AwsError> {
+/// `extract_s3_temporary_endpoint_from_xml` takes in XML and tries to find the value of the Endpoint node.
+fn extract_s3_temporary_endpoint_from_xml<T: Peek + Next>(stack: &mut T) -> Result<String, AwsError> {
     try!(start_element(&"Error".to_string(), stack));
 
     // now find Endpoint contents

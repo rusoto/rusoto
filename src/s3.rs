@@ -1,5 +1,6 @@
 //! The AWS S3 API.
 
+#![cfg_attr(feature = "nightly-testing", allow(cyclomatic_complexity))]
 #![allow(unused_variables, unused_mut)]
 
 use std::ascii::AsciiExt;
@@ -32,10 +33,10 @@ pub struct LifecycleExpiration {
     pub days: Days,
 }
 
-/// Parse LifecycleExpiration from XML
+/// Parse `LifecycleExpiration` from XML
 struct LifecycleExpirationParser;
 impl LifecycleExpirationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LifecycleExpiration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LifecycleExpiration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = LifecycleExpiration::default();
         loop {
@@ -56,7 +57,7 @@ impl LifecycleExpirationParser {
         Ok(obj)
     }
 }
-/// Write LifecycleExpiration contents to a SignedRequest
+/// Write `LifecycleExpiration` contents to a `SignedRequest`
 struct LifecycleExpirationWriter;
 impl LifecycleExpirationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &LifecycleExpiration) {
@@ -73,10 +74,10 @@ pub struct PutBucketNotificationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse PutBucketNotificationRequest from XML
+/// Parse `PutBucketNotificationRequest` from XML
 struct PutBucketNotificationRequestParser;
 impl PutBucketNotificationRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketNotificationRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketNotificationRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutBucketNotificationRequest::default();
         loop {
@@ -101,7 +102,7 @@ impl PutBucketNotificationRequestParser {
         Ok(obj)
     }
 }
-/// Write PutBucketNotificationRequest contents to a SignedRequest
+/// Write `PutBucketNotificationRequest` contents to a `SignedRequest`
 struct PutBucketNotificationRequestWriter;
 impl PutBucketNotificationRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutBucketNotificationRequest) {
@@ -116,10 +117,10 @@ impl PutBucketNotificationRequestWriter {
 }
 
 pub type Errors = Vec<String>;
-/// Parse Errors from XML
+/// Parse `Errors` from XML
 struct ErrorsParser;
 impl ErrorsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Errors, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Errors, XmlParseError> {
         let mut obj : Vec<String> = Vec::new();
         while try!(peek_at_name(stack)) == "Error" {
             obj.push(try!(ErrorsParser::parse_single_error(stack)));
@@ -127,7 +128,7 @@ impl ErrorsParser {
         Ok(obj)
     }
     // hand crafted:
-    fn parse_single_error<'a, T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError> {
+    fn parse_single_error<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError> {
         // TODO: go back to try!
 
         match characters(stack) {
@@ -136,7 +137,7 @@ impl ErrorsParser {
         }
     }
 }
-/// Write Errors contents to a SignedRequest
+/// Write `Errors` contents to a `SignedRequest`
 struct ErrorsWriter;
 impl ErrorsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Errors) {
@@ -162,10 +163,10 @@ pub struct PutBucketVersioningRequest {
     pub versioning_configuration: VersioningConfiguration,
 }
 
-/// Parse PutBucketVersioningRequest from XML
+/// Parse `PutBucketVersioningRequest` from XML
 struct PutBucketVersioningRequestParser;
 impl PutBucketVersioningRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketVersioningRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketVersioningRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutBucketVersioningRequest::default();
         loop {
@@ -192,7 +193,7 @@ impl PutBucketVersioningRequestParser {
         Ok(obj)
     }
 }
-/// Write PutBucketVersioningRequest contents to a SignedRequest
+/// Write `PutBucketVersioningRequest` contents to a `SignedRequest`
 struct PutBucketVersioningRequestWriter;
 impl PutBucketVersioningRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutBucketVersioningRequest) {
@@ -209,17 +210,17 @@ impl PutBucketVersioningRequestWriter {
     }
 }
 pub type CopySourceVersionId = String;
-/// Parse CopySourceVersionId from XML
+/// Parse `CopySourceVersionId` from XML
 struct CopySourceVersionIdParser;
 impl CopySourceVersionIdParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceVersionId, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceVersionId, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CopySourceVersionId contents to a SignedRequest
+/// Write `CopySourceVersionId` contents to a `SignedRequest`
 struct CopySourceVersionIdWriter;
 impl CopySourceVersionIdWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopySourceVersionId) {
@@ -237,10 +238,10 @@ pub struct TopicConfiguration {
     pub events: EventList,
 }
 
-/// Parse TopicConfiguration from XML
+/// Parse `TopicConfiguration` from XML
 struct TopicConfigurationParser;
 impl TopicConfigurationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TopicConfiguration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TopicConfiguration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = TopicConfiguration::default();
         loop {
@@ -263,7 +264,7 @@ impl TopicConfigurationParser {
         Ok(obj)
     }
 }
-/// Write TopicConfiguration contents to a SignedRequest
+/// Write `TopicConfiguration` contents to a `SignedRequest`
 struct TopicConfigurationWriter;
 impl TopicConfigurationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &TopicConfiguration) {
@@ -283,10 +284,10 @@ pub struct Destination {
     pub bucket: BucketName,
 }
 
-/// Parse Destination from XML
+/// Parse `Destination` from XML
 struct DestinationParser;
 impl DestinationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Destination, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Destination, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Destination::default();
         loop {
@@ -301,7 +302,7 @@ impl DestinationParser {
         Ok(obj)
     }
 }
-/// Write Destination contents to a SignedRequest
+/// Write `Destination` contents to a `SignedRequest`
 struct DestinationWriter;
 impl DestinationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Destination) {
@@ -311,17 +312,17 @@ impl DestinationWriter {
     }
 }
 pub type IfNoneMatch = String;
-/// Parse IfNoneMatch from XML
+/// Parse `IfNoneMatch` from XML
 struct IfNoneMatchParser;
 impl IfNoneMatchParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IfNoneMatch, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IfNoneMatch, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write IfNoneMatch contents to a SignedRequest
+/// Write `IfNoneMatch` contents to a `SignedRequest`
 struct IfNoneMatchWriter;
 impl IfNoneMatchWriter {
     fn write_params(params: &mut Params, name: &str, obj: &IfNoneMatch) {
@@ -332,17 +333,17 @@ impl IfNoneMatchWriter {
 #[derive(Debug, Default)]
 pub struct NoSuchBucket;
 
-/// Parse NoSuchBucket from XML
+/// Parse `NoSuchBucket` from XML
 struct NoSuchBucketParser;
 impl NoSuchBucketParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NoSuchBucket, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NoSuchBucket, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = NoSuchBucket::default();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write NoSuchBucket contents to a SignedRequest
+/// Write `NoSuchBucket` contents to a `SignedRequest`
 struct NoSuchBucketWriter;
 impl NoSuchBucketWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NoSuchBucket) {
@@ -351,17 +352,17 @@ impl NoSuchBucketWriter {
     }
 }
 pub type ObjectVersionStorageClass = String;
-/// Parse ObjectVersionStorageClass from XML
+/// Parse `ObjectVersionStorageClass` from XML
 struct ObjectVersionStorageClassParser;
 impl ObjectVersionStorageClassParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectVersionStorageClass, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectVersionStorageClass, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ObjectVersionStorageClass contents to a SignedRequest
+/// Write `ObjectVersionStorageClass` contents to a `SignedRequest`
 struct ObjectVersionStorageClassWriter;
 impl ObjectVersionStorageClassWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectVersionStorageClass) {
@@ -369,17 +370,17 @@ impl ObjectVersionStorageClassWriter {
     }
 }
 pub type MultipartUploadId = String;
-/// Parse MultipartUploadId from XML
+/// Parse `MultipartUploadId` from XML
 struct MultipartUploadIdParser;
 impl MultipartUploadIdParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUploadId, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUploadId, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MultipartUploadId contents to a SignedRequest
+/// Write `MultipartUploadId` contents to a `SignedRequest`
 struct MultipartUploadIdWriter;
 impl MultipartUploadIdWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MultipartUploadId) {
@@ -387,17 +388,17 @@ impl MultipartUploadIdWriter {
     }
 }
 pub type Role = String;
-/// Parse Role from XML
+/// Parse `Role` from XML
 struct RoleParser;
 impl RoleParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Role, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Role, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Role contents to a SignedRequest
+/// Write `Role` contents to a `SignedRequest`
 struct RoleWriter;
 impl RoleWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Role) {
@@ -405,17 +406,17 @@ impl RoleWriter {
     }
 }
 pub type WebsiteRedirectLocation = String;
-/// Parse WebsiteRedirectLocation from XML
+/// Parse `WebsiteRedirectLocation` from XML
 struct WebsiteRedirectLocationParser;
 impl WebsiteRedirectLocationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<WebsiteRedirectLocation, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<WebsiteRedirectLocation, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write WebsiteRedirectLocation contents to a SignedRequest
+/// Write `WebsiteRedirectLocation` contents to a `SignedRequest`
 struct WebsiteRedirectLocationWriter;
 impl WebsiteRedirectLocationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &WebsiteRedirectLocation) {
@@ -423,17 +424,17 @@ impl WebsiteRedirectLocationWriter {
     }
 }
 pub type BucketVersioningStatus = String;
-/// Parse BucketVersioningStatus from XML
+/// Parse `BucketVersioningStatus` from XML
 struct BucketVersioningStatusParser;
 impl BucketVersioningStatusParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketVersioningStatus, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketVersioningStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write BucketVersioningStatus contents to a SignedRequest
+/// Write `BucketVersioningStatus` contents to a `SignedRequest`
 struct BucketVersioningStatusWriter;
 impl BucketVersioningStatusWriter {
     fn write_params(params: &mut Params, name: &str, obj: &BucketVersioningStatus) {
@@ -447,10 +448,10 @@ pub struct PutBucketReplicationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse PutBucketReplicationRequest from XML
+/// Parse `PutBucketReplicationRequest` from XML
 struct PutBucketReplicationRequestParser;
 impl PutBucketReplicationRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketReplicationRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketReplicationRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutBucketReplicationRequest::default();
         loop {
@@ -473,7 +474,7 @@ impl PutBucketReplicationRequestParser {
         Ok(obj)
     }
 }
-/// Write PutBucketReplicationRequest contents to a SignedRequest
+/// Write `PutBucketReplicationRequest` contents to a `SignedRequest`
 struct PutBucketReplicationRequestWriter;
 impl PutBucketReplicationRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutBucketReplicationRequest) {
@@ -493,10 +494,10 @@ pub struct GetObjectTorrentRequest {
     pub key: ObjectKey,
 }
 
-/// Parse GetObjectTorrentRequest from XML
+/// Parse `GetObjectTorrentRequest` from XML
 struct GetObjectTorrentRequestParser;
 impl GetObjectTorrentRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectTorrentRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectTorrentRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetObjectTorrentRequest::default();
         loop {
@@ -519,7 +520,7 @@ impl GetObjectTorrentRequestParser {
         Ok(obj)
     }
 }
-/// Write GetObjectTorrentRequest contents to a SignedRequest
+/// Write `GetObjectTorrentRequest` contents to a `SignedRequest`
 struct GetObjectTorrentRequestWriter;
 impl GetObjectTorrentRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetObjectTorrentRequest) {
@@ -537,10 +538,10 @@ pub struct GetBucketReplicationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketReplicationRequest from XML
+/// Parse `GetBucketReplicationRequest` from XML
 struct GetBucketReplicationRequestParser;
 impl GetBucketReplicationRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketReplicationRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketReplicationRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketReplicationRequest::default();
         loop {
@@ -555,7 +556,7 @@ impl GetBucketReplicationRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketReplicationRequest contents to a SignedRequest
+/// Write `GetBucketReplicationRequest` contents to a `SignedRequest`
 struct GetBucketReplicationRequestWriter;
 impl GetBucketReplicationRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketReplicationRequest) {
@@ -581,10 +582,10 @@ pub struct NoncurrentVersionTransition {
     pub storage_class: TransitionStorageClass,
 }
 
-/// Parse NoncurrentVersionTransition from XML
+/// Parse `NoncurrentVersionTransition` from XML
 struct NoncurrentVersionTransitionParser;
 impl NoncurrentVersionTransitionParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NoncurrentVersionTransition, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NoncurrentVersionTransition, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = NoncurrentVersionTransition::default();
         loop {
@@ -603,7 +604,7 @@ impl NoncurrentVersionTransitionParser {
         Ok(obj)
     }
 }
-/// Write NoncurrentVersionTransition contents to a SignedRequest
+/// Write `NoncurrentVersionTransition` contents to a `SignedRequest`
 struct NoncurrentVersionTransitionWriter;
 impl NoncurrentVersionTransitionWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NoncurrentVersionTransition) {
@@ -618,10 +619,10 @@ pub struct GetBucketTaggingOutput {
     pub tag_set: TagSet,
 }
 
-/// Parse GetBucketTaggingOutput from XML
+/// Parse `GetBucketTaggingOutput` from XML
 struct GetBucketTaggingOutputParser;
 impl GetBucketTaggingOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketTaggingOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketTaggingOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketTaggingOutput::default();
         loop {
@@ -636,7 +637,7 @@ impl GetBucketTaggingOutputParser {
         Ok(obj)
     }
 }
-/// Write GetBucketTaggingOutput contents to a SignedRequest
+/// Write `GetBucketTaggingOutput` contents to a `SignedRequest`
 struct GetBucketTaggingOutputWriter;
 impl GetBucketTaggingOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketTaggingOutput) {
@@ -646,10 +647,10 @@ impl GetBucketTaggingOutputWriter {
     }
 }
 pub type Metadata = HashMap<MetadataKey,MetadataValue>;
-/// Parse Metadata from XML
+/// Parse `Metadata` from XML
 struct MetadataParser;
 impl MetadataParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Metadata, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Metadata, XmlParseError> {
         let mut obj = HashMap::new();
         while try!(peek_at_name(stack)) == tag_name {
             try!(start_element(tag_name, stack));
@@ -661,7 +662,7 @@ impl MetadataParser {
         Ok(obj)
     }
 }
-/// Write Metadata contents to a SignedRequest
+/// Write `Metadata` contents to a `SignedRequest`
 struct MetadataWriter;
 impl MetadataWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Metadata) {
@@ -675,17 +676,17 @@ impl MetadataWriter {
     }
 }
 pub type Body = Vec<u8>;
-/// Parse Body from XML
+/// Parse `Body` from XML
 struct BodyParser;
 impl BodyParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Body, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Body, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack)).into_bytes();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Body contents to a SignedRequest
+/// Write `Body` contents to a `SignedRequest`
 struct BodyWriter;
 impl BodyWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Body) {
@@ -718,10 +719,10 @@ pub struct PutObjectOutput {
     pub ssekms_key_id: SSEKMSKeyId,
 }
 
-/// Parse PutObjectOutput from XML
+/// Parse `PutObjectOutput` from XML
 struct PutObjectOutputParser;
 impl PutObjectOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutObjectOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutObjectOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutObjectOutput::default();
         loop {
@@ -764,7 +765,7 @@ impl PutObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write PutObjectOutput contents to a SignedRequest
+/// Write `PutObjectOutput` contents to a `SignedRequest`
 struct PutObjectOutputWriter;
 impl PutObjectOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutObjectOutput) {
@@ -785,10 +786,10 @@ pub struct PutObjectAclOutput {
     pub request_charged: RequestCharged,
 }
 
-/// Parse PutObjectAclOutput from XML
+/// Parse `PutObjectAclOutput` from XML
 struct PutObjectAclOutputParser;
 impl PutObjectAclOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutObjectAclOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutObjectAclOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutObjectAclOutput::default();
         loop {
@@ -803,7 +804,7 @@ impl PutObjectAclOutputParser {
         Ok(obj)
     }
 }
-/// Write PutObjectAclOutput contents to a SignedRequest
+/// Write `PutObjectAclOutput` contents to a `SignedRequest`
 struct PutObjectAclOutputWriter;
 impl PutObjectAclOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutObjectAclOutput) {
@@ -824,10 +825,10 @@ pub struct ReplicationConfiguration {
     pub role: Role,
 }
 
-/// Parse ReplicationConfiguration from XML
+/// Parse `ReplicationConfiguration` from XML
 struct ReplicationConfigurationParser;
 impl ReplicationConfigurationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplicationConfiguration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplicationConfiguration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ReplicationConfiguration::default();
         loop {
@@ -846,7 +847,7 @@ impl ReplicationConfigurationParser {
         Ok(obj)
     }
 }
-/// Write ReplicationConfiguration contents to a SignedRequest
+/// Write `ReplicationConfiguration` contents to a `SignedRequest`
 struct ReplicationConfigurationWriter;
 impl ReplicationConfigurationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ReplicationConfiguration) {
@@ -862,17 +863,17 @@ impl ReplicationConfigurationWriter {
 /// at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBucket
 /// s.html
 pub type RequestPayer = String;
-/// Parse RequestPayer from XML
+/// Parse `RequestPayer` from XML
 struct RequestPayerParser;
 impl RequestPayerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RequestPayer, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RequestPayer, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write RequestPayer contents to a SignedRequest
+/// Write `RequestPayer` contents to a `SignedRequest`
 struct RequestPayerWriter;
 impl RequestPayerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &RequestPayer) {
@@ -884,10 +885,10 @@ pub struct GetBucketWebsiteRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketWebsiteRequest from XML
+/// Parse `GetBucketWebsiteRequest` from XML
 struct GetBucketWebsiteRequestParser;
 impl GetBucketWebsiteRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketWebsiteRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketWebsiteRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketWebsiteRequest::default();
         loop {
@@ -902,7 +903,7 @@ impl GetBucketWebsiteRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketWebsiteRequest contents to a SignedRequest
+/// Write `GetBucketWebsiteRequest` contents to a `SignedRequest`
 struct GetBucketWebsiteRequestWriter;
 impl GetBucketWebsiteRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketWebsiteRequest) {
@@ -912,10 +913,10 @@ impl GetBucketWebsiteRequestWriter {
     }
 }
 pub type Rules = Vec<Rule>;
-/// Parse Rules from XML
+/// Parse `Rules` from XML
 struct RulesParser;
 impl RulesParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Rules, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Rules, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "Rule" {
             obj.push(try!(RuleParser::parse_xml("Rule", stack)));
@@ -923,7 +924,7 @@ impl RulesParser {
         Ok(obj)
     }
 }
-/// Write Rules contents to a SignedRequest
+/// Write `Rules` contents to a `SignedRequest`
 struct RulesWriter;
 impl RulesWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Rules) {
@@ -949,10 +950,10 @@ pub struct CreateBucketOutput {
     pub location: Location,
 }
 
-/// Parse CreateBucketOutput from XML
+/// Parse `CreateBucketOutput` from XML
 struct CreateBucketOutputParser;
 impl CreateBucketOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateBucketOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateBucketOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CreateBucketOutput::default();
         loop {
@@ -967,7 +968,7 @@ impl CreateBucketOutputParser {
         Ok(obj)
     }
 }
-/// Write CreateBucketOutput contents to a SignedRequest
+/// Write `CreateBucketOutput` contents to a `SignedRequest`
 struct CreateBucketOutputWriter;
 impl CreateBucketOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CreateBucketOutput) {
@@ -990,10 +991,10 @@ pub struct DeleteMarkerEntry {
     pub last_modified: LastModified,
 }
 
-/// Parse DeleteMarkerEntry from XML
+/// Parse `DeleteMarkerEntry` from XML
 struct DeleteMarkerEntryParser;
 impl DeleteMarkerEntryParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMarkerEntry, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMarkerEntry, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteMarkerEntry::default();
         loop {
@@ -1024,7 +1025,7 @@ impl DeleteMarkerEntryParser {
         Ok(obj)
     }
 }
-/// Write DeleteMarkerEntry contents to a SignedRequest
+/// Write `DeleteMarkerEntry` contents to a `SignedRequest`
 struct DeleteMarkerEntryWriter;
 impl DeleteMarkerEntryWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteMarkerEntry) {
@@ -1038,17 +1039,17 @@ impl DeleteMarkerEntryWriter {
     }
 }
 pub type TargetBucket = String;
-/// Parse TargetBucket from XML
+/// Parse `TargetBucket` from XML
 struct TargetBucketParser;
 impl TargetBucketParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetBucket, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetBucket, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write TargetBucket contents to a SignedRequest
+/// Write `TargetBucket` contents to a `SignedRequest`
 struct TargetBucketWriter;
 impl TargetBucketWriter {
     fn write_params(params: &mut Params, name: &str, obj: &TargetBucket) {
@@ -1056,17 +1057,17 @@ impl TargetBucketWriter {
     }
 }
 pub type MFADeleteStatus = String;
-/// Parse MFADeleteStatus from XML
+/// Parse `MFADeleteStatus` from XML
 struct MFADeleteStatusParser;
 impl MFADeleteStatusParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MFADeleteStatus, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MFADeleteStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MFADeleteStatus contents to a SignedRequest
+/// Write `MFADeleteStatus` contents to a `SignedRequest`
 struct MFADeleteStatusWriter;
 impl MFADeleteStatusWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MFADeleteStatus) {
@@ -1074,17 +1075,17 @@ impl MFADeleteStatusWriter {
     }
 }
 pub type MaxKeys = i32;
-/// Parse MaxKeys from XML
+/// Parse `MaxKeys` from XML
 struct MaxKeysParser;
 impl MaxKeysParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MaxKeys, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MaxKeys, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MaxKeys contents to a SignedRequest
+/// Write `MaxKeys` contents to a `SignedRequest`
 struct MaxKeysWriter;
 impl MaxKeysWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MaxKeys) {
@@ -1104,10 +1105,10 @@ pub struct Part {
     pub size: Size,
 }
 
-/// Parse Part from XML
+/// Parse `Part` from XML
 struct PartParser;
 impl PartParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Part, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Part, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Part::default();
         loop {
@@ -1134,7 +1135,7 @@ impl PartParser {
         Ok(obj)
     }
 }
-/// Write Part contents to a SignedRequest
+/// Write `Part` contents to a `SignedRequest`
 struct PartWriter;
 impl PartWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Part) {
@@ -1147,10 +1148,10 @@ impl PartWriter {
     }
 }
 pub type TargetGrants = Vec<TargetGrant>;
-/// Parse TargetGrants from XML
+/// Parse `TargetGrants` from XML
 struct TargetGrantsParser;
 impl TargetGrantsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetGrants, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetGrants, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "Grant" {
             obj.push(try!(TargetGrantParser::parse_xml("Grant", stack)));
@@ -1158,7 +1159,7 @@ impl TargetGrantsParser {
         Ok(obj)
     }
 }
-/// Write TargetGrants contents to a SignedRequest
+/// Write `TargetGrants` contents to a `SignedRequest`
 struct TargetGrantsWriter;
 impl TargetGrantsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &TargetGrants) {
@@ -1192,10 +1193,10 @@ pub struct ListMultipartUploadsRequest {
     pub encoding_type: Option<EncodingType>,
 }
 
-/// Parse ListMultipartUploadsRequest from XML
+/// Parse `ListMultipartUploadsRequest` from XML
 struct ListMultipartUploadsRequestParser;
 impl ListMultipartUploadsRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListMultipartUploadsRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListMultipartUploadsRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ListMultipartUploadsRequest::default();
         loop {
@@ -1234,7 +1235,7 @@ impl ListMultipartUploadsRequestParser {
         Ok(obj)
     }
 }
-/// Write ListMultipartUploadsRequest contents to a SignedRequest
+/// Write `ListMultipartUploadsRequest` contents to a `SignedRequest`
 struct ListMultipartUploadsRequestWriter;
 impl ListMultipartUploadsRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ListMultipartUploadsRequest) {
@@ -1266,10 +1267,10 @@ pub struct GetBucketPolicyRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketPolicyRequest from XML
+/// Parse `GetBucketPolicyRequest` from XML
 struct GetBucketPolicyRequestParser;
 impl GetBucketPolicyRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketPolicyRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketPolicyRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketPolicyRequest::default();
         loop {
@@ -1284,7 +1285,7 @@ impl GetBucketPolicyRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketPolicyRequest contents to a SignedRequest
+/// Write `GetBucketPolicyRequest` contents to a `SignedRequest`
 struct GetBucketPolicyRequestWriter;
 impl GetBucketPolicyRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketPolicyRequest) {
@@ -1294,17 +1295,17 @@ impl GetBucketPolicyRequestWriter {
     }
 }
 pub type CloudFunction = String;
-/// Parse CloudFunction from XML
+/// Parse `CloudFunction` from XML
 struct CloudFunctionParser;
 impl CloudFunctionParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CloudFunction, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CloudFunction, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CloudFunction contents to a SignedRequest
+/// Write `CloudFunction` contents to a `SignedRequest`
 struct CloudFunctionWriter;
 impl CloudFunctionWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CloudFunction) {
@@ -1316,10 +1317,10 @@ pub struct DeleteBucketWebsiteRequest {
     pub bucket: BucketName,
 }
 
-/// Parse DeleteBucketWebsiteRequest from XML
+/// Parse `DeleteBucketWebsiteRequest` from XML
 struct DeleteBucketWebsiteRequestParser;
 impl DeleteBucketWebsiteRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketWebsiteRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketWebsiteRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteBucketWebsiteRequest::default();
         loop {
@@ -1334,7 +1335,7 @@ impl DeleteBucketWebsiteRequestParser {
         Ok(obj)
     }
 }
-/// Write DeleteBucketWebsiteRequest contents to a SignedRequest
+/// Write `DeleteBucketWebsiteRequest` contents to a `SignedRequest`
 struct DeleteBucketWebsiteRequestWriter;
 impl DeleteBucketWebsiteRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteBucketWebsiteRequest) {
@@ -1354,10 +1355,10 @@ pub struct VersioningConfiguration {
     pub mfa_delete: MFADelete,
 }
 
-/// Parse VersioningConfiguration from XML
+/// Parse `VersioningConfiguration` from XML
 struct VersioningConfigurationParser;
 impl VersioningConfigurationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<VersioningConfiguration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<VersioningConfiguration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = VersioningConfiguration::default();
         loop {
@@ -1376,7 +1377,7 @@ impl VersioningConfigurationParser {
         Ok(obj)
     }
 }
-/// Write VersioningConfiguration contents to a SignedRequest
+/// Write `VersioningConfiguration` contents to a `SignedRequest`
 struct VersioningConfigurationWriter;
 impl VersioningConfigurationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &VersioningConfiguration) {
@@ -1391,10 +1392,10 @@ pub struct GetBucketCorsRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketCorsRequest from XML
+/// Parse `GetBucketCorsRequest` from XML
 struct GetBucketCorsRequestParser;
 impl GetBucketCorsRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketCorsRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketCorsRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketCorsRequest::default();
         loop {
@@ -1409,7 +1410,7 @@ impl GetBucketCorsRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketCorsRequest contents to a SignedRequest
+/// Write `GetBucketCorsRequest` contents to a `SignedRequest`
 struct GetBucketCorsRequestWriter;
 impl GetBucketCorsRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketCorsRequest) {
@@ -1428,10 +1429,10 @@ pub struct IndexDocument {
     pub suffix: Suffix,
 }
 
-/// Parse IndexDocument from XML
+/// Parse `IndexDocument` from XML
 struct IndexDocumentParser;
 impl IndexDocumentParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IndexDocument, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IndexDocument, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = IndexDocument::default();
         loop {
@@ -1446,7 +1447,7 @@ impl IndexDocumentParser {
         Ok(obj)
     }
 }
-/// Write IndexDocument contents to a SignedRequest
+/// Write `IndexDocument` contents to a `SignedRequest`
 struct IndexDocumentWriter;
 impl IndexDocumentWriter {
     fn write_params(params: &mut Params, name: &str, obj: &IndexDocument) {
@@ -1456,10 +1457,10 @@ impl IndexDocumentWriter {
     }
 }
 pub type TopicConfigurationList = Vec<TopicConfiguration>;
-/// Parse TopicConfigurationList from XML
+/// Parse `TopicConfigurationList` from XML
 struct TopicConfigurationListParser;
 impl TopicConfigurationListParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TopicConfigurationList, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TopicConfigurationList, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "TopicConfiguration" {
             obj.push(try!(TopicConfigurationParser::parse_xml("TopicConfiguration", stack)));
@@ -1467,7 +1468,7 @@ impl TopicConfigurationListParser {
         Ok(obj)
     }
 }
-/// Write TopicConfigurationList contents to a SignedRequest
+/// Write `TopicConfigurationList` contents to a `SignedRequest`
 struct TopicConfigurationListWriter;
 impl TopicConfigurationListWriter {
     fn write_params(params: &mut Params, name: &str, obj: &TopicConfigurationList) {
@@ -1480,17 +1481,17 @@ impl TopicConfigurationListWriter {
     }
 }
 pub type ReplaceKeyPrefixWith = String;
-/// Parse ReplaceKeyPrefixWith from XML
+/// Parse `ReplaceKeyPrefixWith` from XML
 struct ReplaceKeyPrefixWithParser;
 impl ReplaceKeyPrefixWithParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplaceKeyPrefixWith, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplaceKeyPrefixWith, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ReplaceKeyPrefixWith contents to a SignedRequest
+/// Write `ReplaceKeyPrefixWith` contents to a `SignedRequest`
 struct ReplaceKeyPrefixWithWriter;
 impl ReplaceKeyPrefixWithWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ReplaceKeyPrefixWith) {
@@ -1558,10 +1559,10 @@ pub struct CreateMultipartUploadRequest {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
 }
 
-/// Parse CreateMultipartUploadRequest from XML
+/// Parse `CreateMultipartUploadRequest` from XML
 struct CreateMultipartUploadRequestParser;
 impl CreateMultipartUploadRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateMultipartUploadRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateMultipartUploadRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CreateMultipartUploadRequest::default();
         loop {
@@ -1660,7 +1661,7 @@ impl CreateMultipartUploadRequestParser {
         Ok(obj)
     }
 }
-/// Write CreateMultipartUploadRequest contents to a SignedRequest
+/// Write `CreateMultipartUploadRequest` contents to a `SignedRequest`
 struct CreateMultipartUploadRequestWriter;
 impl CreateMultipartUploadRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CreateMultipartUploadRequest) {
@@ -1737,10 +1738,10 @@ pub struct PutBucketCorsRequest {
     pub cors_configuration: Option<CORSConfiguration>,
 }
 
-/// Parse PutBucketCorsRequest from XML
+/// Parse `PutBucketCorsRequest` from XML
 struct PutBucketCorsRequestParser;
 impl PutBucketCorsRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketCorsRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketCorsRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutBucketCorsRequest::default();
         loop {
@@ -1763,7 +1764,7 @@ impl PutBucketCorsRequestParser {
         Ok(obj)
     }
 }
-/// Write PutBucketCorsRequest contents to a SignedRequest
+/// Write `PutBucketCorsRequest` contents to a `SignedRequest`
 struct PutBucketCorsRequestWriter;
 impl PutBucketCorsRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutBucketCorsRequest) {
@@ -1779,17 +1780,17 @@ impl PutBucketCorsRequestWriter {
     }
 }
 pub type CopySourceSSECustomerAlgorithm = String;
-/// Parse CopySourceSSECustomerAlgorithm from XML
+/// Parse `CopySourceSSECustomerAlgorithm` from XML
 struct CopySourceSSECustomerAlgorithmParser;
 impl CopySourceSSECustomerAlgorithmParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceSSECustomerAlgorithm, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceSSECustomerAlgorithm, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CopySourceSSECustomerAlgorithm contents to a SignedRequest
+/// Write `CopySourceSSECustomerAlgorithm` contents to a `SignedRequest`
 struct CopySourceSSECustomerAlgorithmWriter;
 impl CopySourceSSECustomerAlgorithmWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopySourceSSECustomerAlgorithm) {
@@ -1803,10 +1804,10 @@ pub struct GetBucketAclOutput {
     pub grants: Grants,
 }
 
-/// Parse GetBucketAclOutput from XML
+/// Parse `GetBucketAclOutput` from XML
 struct GetBucketAclOutputParser;
 impl GetBucketAclOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketAclOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketAclOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketAclOutput::default();
         loop {
@@ -1825,7 +1826,7 @@ impl GetBucketAclOutputParser {
         Ok(obj)
     }
 }
-/// Write GetBucketAclOutput contents to a SignedRequest
+/// Write `GetBucketAclOutput` contents to a `SignedRequest`
 struct GetBucketAclOutputWriter;
 impl GetBucketAclOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketAclOutput) {
@@ -1836,17 +1837,17 @@ impl GetBucketAclOutputWriter {
     }
 }
 pub type Days = i32;
-/// Parse Days from XML
+/// Parse `Days` from XML
 struct DaysParser;
 impl DaysParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Days, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Days, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Days contents to a SignedRequest
+/// Write `Days` contents to a `SignedRequest`
 struct DaysWriter;
 impl DaysWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Days) {
@@ -1854,17 +1855,17 @@ impl DaysWriter {
     }
 }
 pub type Value = String;
-/// Parse Value from XML
+/// Parse `Value` from XML
 struct ValueParser;
 impl ValueParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Value, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Value, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Value contents to a SignedRequest
+/// Write `Value` contents to a `SignedRequest`
 struct ValueWriter;
 impl ValueWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Value) {
@@ -1872,10 +1873,10 @@ impl ValueWriter {
     }
 }
 pub type DeletedObjects = Vec<DeletedObject>;
-/// Parse DeletedObjects from XML
+/// Parse `DeletedObjects` from XML
 struct DeletedObjectsParser;
 impl DeletedObjectsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeletedObjects, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeletedObjects, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "DeletedObject" {
             obj.push(try!(DeletedObjectParser::parse_xml("DeletedObject", stack)));
@@ -1883,7 +1884,7 @@ impl DeletedObjectsParser {
         Ok(obj)
     }
 }
-/// Write DeletedObjects contents to a SignedRequest
+/// Write `DeletedObjects` contents to a `SignedRequest`
 struct DeletedObjectsWriter;
 impl DeletedObjectsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeletedObjects) {
@@ -1900,10 +1901,10 @@ pub struct DeleteBucketLifecycleRequest {
     pub bucket: BucketName,
 }
 
-/// Parse DeleteBucketLifecycleRequest from XML
+/// Parse `DeleteBucketLifecycleRequest` from XML
 struct DeleteBucketLifecycleRequestParser;
 impl DeleteBucketLifecycleRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketLifecycleRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketLifecycleRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteBucketLifecycleRequest::default();
         loop {
@@ -1918,7 +1919,7 @@ impl DeleteBucketLifecycleRequestParser {
         Ok(obj)
     }
 }
-/// Write DeleteBucketLifecycleRequest contents to a SignedRequest
+/// Write `DeleteBucketLifecycleRequest` contents to a `SignedRequest`
 struct DeleteBucketLifecycleRequestWriter;
 impl DeleteBucketLifecycleRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteBucketLifecycleRequest) {
@@ -1935,10 +1936,10 @@ pub struct Tag {
     pub key: ObjectKey,
 }
 
-/// Parse Tag from XML
+/// Parse `Tag` from XML
 struct TagParser;
 impl TagParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Tag::default();
         loop {
@@ -1957,7 +1958,7 @@ impl TagParser {
         Ok(obj)
     }
 }
-/// Write Tag contents to a SignedRequest
+/// Write `Tag` contents to a `SignedRequest`
 struct TagWriter;
 impl TagWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Tag) {
@@ -1968,10 +1969,10 @@ impl TagWriter {
     }
 }
 pub type KeyMarker = String;
-/// Parse KeyMarker from XML
+/// Parse `KeyMarker` from XML
 struct KeyMarkerParser;
 impl KeyMarkerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<KeyMarker, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<KeyMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = KeyMarker::default();
 
@@ -1984,7 +1985,7 @@ impl KeyMarkerParser {
         Ok(obj)
     }
 }
-/// Write KeyMarker contents to a SignedRequest
+/// Write `KeyMarker` contents to a `SignedRequest`
 struct KeyMarkerWriter;
 impl KeyMarkerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &KeyMarker) {
@@ -1992,10 +1993,10 @@ impl KeyMarkerWriter {
     }
 }
 pub type DeleteMarkers = Vec<DeleteMarkerEntry>;
-/// Parse DeleteMarkers from XML
+/// Parse `DeleteMarkers` from XML
 struct DeleteMarkersParser;
 impl DeleteMarkersParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMarkers, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMarkers, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "DeleteMarkerEntry" {
             obj.push(try!(DeleteMarkerEntryParser::parse_xml("DeleteMarkerEntry", stack)));
@@ -2003,7 +2004,7 @@ impl DeleteMarkersParser {
         Ok(obj)
     }
 }
-/// Write DeleteMarkers contents to a SignedRequest
+/// Write `DeleteMarkers` contents to a `SignedRequest`
 struct DeleteMarkersWriter;
 impl DeleteMarkersWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteMarkers) {
@@ -2015,13 +2016,13 @@ impl DeleteMarkersWriter {
         }
     }
 }
-/// Output from AbortMultipartUpload call
+/// Output from `AbortMultipartUpload` call
 #[derive(Debug, Default)]
 pub struct AbortMultipartUploadOutput {
     pub request_charged: RequestCharged,
 }
 
-/// Write AbortMultipartUploadOutput contents to a SignedRequest
+/// Write `AbortMultipartUploadOutput` contents to a `SignedRequest`
 struct AbortMultipartUploadOutputWriter;
 impl AbortMultipartUploadOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &AbortMultipartUploadOutput) {
@@ -2040,10 +2041,10 @@ pub struct PutBucketPolicyRequest {
     pub bucket: BucketName,
 }
 
-/// Parse PutBucketPolicyRequest from XML
+/// Parse `PutBucketPolicyRequest` from XML
 struct PutBucketPolicyRequestParser;
 impl PutBucketPolicyRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketPolicyRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketPolicyRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutBucketPolicyRequest::default();
         loop {
@@ -2066,7 +2067,7 @@ impl PutBucketPolicyRequestParser {
         Ok(obj)
     }
 }
-/// Write PutBucketPolicyRequest contents to a SignedRequest
+/// Write `PutBucketPolicyRequest` contents to a `SignedRequest`
 struct PutBucketPolicyRequestWriter;
 impl PutBucketPolicyRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutBucketPolicyRequest) {
@@ -2080,17 +2081,17 @@ impl PutBucketPolicyRequestWriter {
     }
 }
 pub type ResponseContentDisposition = String;
-/// Parse ResponseContentDisposition from XML
+/// Parse `ResponseContentDisposition` from XML
 struct ResponseContentDispositionParser;
 impl ResponseContentDispositionParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseContentDisposition, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseContentDisposition, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ResponseContentDisposition contents to a SignedRequest
+/// Write `ResponseContentDisposition` contents to a `SignedRequest`
 struct ResponseContentDispositionWriter;
 impl ResponseContentDispositionWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ResponseContentDisposition) {
@@ -2098,17 +2099,17 @@ impl ResponseContentDispositionWriter {
     }
 }
 pub type GrantFullControl = String;
-/// Parse GrantFullControl from XML
+/// Parse `GrantFullControl` from XML
 struct GrantFullControlParser;
 impl GrantFullControlParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantFullControl, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantFullControl, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write GrantFullControl contents to a SignedRequest
+/// Write `GrantFullControl` contents to a `SignedRequest`
 struct GrantFullControlWriter;
 impl GrantFullControlWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GrantFullControl) {
@@ -2124,10 +2125,10 @@ pub struct GetObjectAclRequest {
     pub key: ObjectKey,
 }
 
-/// Parse GetObjectAclRequest from XML
+/// Parse `GetObjectAclRequest` from XML
 struct GetObjectAclRequestParser;
 impl GetObjectAclRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectAclRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectAclRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetObjectAclRequest::default();
         loop {
@@ -2154,7 +2155,7 @@ impl GetObjectAclRequestParser {
         Ok(obj)
     }
 }
-/// Write GetObjectAclRequest contents to a SignedRequest
+/// Write `GetObjectAclRequest` contents to a `SignedRequest`
 struct GetObjectAclRequestWriter;
 impl GetObjectAclRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetObjectAclRequest) {
@@ -2171,17 +2172,17 @@ impl GetObjectAclRequestWriter {
     }
 }
 pub type SSECustomerAlgorithm = String;
-/// Parse SSECustomerAlgorithm from XML
+/// Parse `SSECustomerAlgorithm` from XML
 struct SSECustomerAlgorithmParser;
 impl SSECustomerAlgorithmParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSECustomerAlgorithm, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSECustomerAlgorithm, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write SSECustomerAlgorithm contents to a SignedRequest
+/// Write `SSECustomerAlgorithm` contents to a `SignedRequest`
 struct SSECustomerAlgorithmWriter;
 impl SSECustomerAlgorithmWriter {
     fn write_params(params: &mut Params, name: &str, obj: &SSECustomerAlgorithm) {
@@ -2189,10 +2190,10 @@ impl SSECustomerAlgorithmWriter {
     }
 }
 pub type CommonPrefixList = Vec<CommonPrefix>;
-/// Parse CommonPrefixList from XML
+/// Parse `CommonPrefixList` from XML
 struct CommonPrefixListParser;
 impl CommonPrefixListParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CommonPrefixList, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CommonPrefixList, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "CommonPrefix" {
             obj.push(try!(CommonPrefixParser::parse_xml("CommonPrefix", stack)));
@@ -2200,7 +2201,7 @@ impl CommonPrefixListParser {
         Ok(obj)
     }
 }
-/// Write CommonPrefixList contents to a SignedRequest
+/// Write `CommonPrefixList` contents to a `SignedRequest`
 struct CommonPrefixListWriter;
 impl CommonPrefixListWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CommonPrefixList) {
@@ -2213,17 +2214,17 @@ impl CommonPrefixListWriter {
     }
 }
 pub type Protocol = String;
-/// Parse Protocol from XML
+/// Parse `Protocol` from XML
 struct ProtocolParser;
 impl ProtocolParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Protocol, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Protocol, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Protocol contents to a SignedRequest
+/// Write `Protocol` contents to a `SignedRequest`
 struct ProtocolWriter;
 impl ProtocolWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Protocol) {
@@ -2231,17 +2232,17 @@ impl ProtocolWriter {
     }
 }
 pub type Suffix = String;
-/// Parse Suffix from XML
+/// Parse `Suffix` from XML
 struct SuffixParser;
 impl SuffixParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Suffix, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Suffix, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Suffix contents to a SignedRequest
+/// Write `Suffix` contents to a `SignedRequest`
 struct SuffixWriter;
 impl SuffixWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Suffix) {
@@ -2249,17 +2250,17 @@ impl SuffixWriter {
     }
 }
 pub type AllowedMethod = String;
-/// Parse AllowedMethod from XML
+/// Parse `AllowedMethod` from XML
 struct AllowedMethodParser;
 impl AllowedMethodParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedMethod, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedMethod, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write AllowedMethod contents to a SignedRequest
+/// Write `AllowedMethod` contents to a `SignedRequest`
 struct AllowedMethodWriter;
 impl AllowedMethodWriter {
     fn write_params(params: &mut Params, name: &str, obj: &AllowedMethod) {
@@ -2277,10 +2278,10 @@ pub struct QueueConfiguration {
     pub events: EventList,
 }
 
-/// Parse QueueConfiguration from XML
+/// Parse `QueueConfiguration` from XML
 struct QueueConfigurationParser;
 impl QueueConfigurationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueConfiguration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueConfiguration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = QueueConfiguration::default();
         loop {
@@ -2303,7 +2304,7 @@ impl QueueConfigurationParser {
         Ok(obj)
     }
 }
-/// Write QueueConfiguration contents to a SignedRequest
+/// Write `QueueConfiguration` contents to a `SignedRequest`
 struct QueueConfigurationWriter;
 impl QueueConfigurationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &QueueConfiguration) {
@@ -2318,17 +2319,17 @@ impl QueueConfigurationWriter {
 }
 
 pub type SSECustomerKey = String;
-/// Parse SSECustomerKey from XML
+/// Parse `SSECustomerKey` from XML
 struct SSECustomerKeyParser;
 impl SSECustomerKeyParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSECustomerKey, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSECustomerKey, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write SSECustomerKey contents to a SignedRequest
+/// Write `SSECustomerKey` contents to a `SignedRequest`
 struct SSECustomerKeyWriter;
 impl SSECustomerKeyWriter {
     fn write_params(params: &mut Params, name: &str, obj: &SSECustomerKey) {
@@ -2336,17 +2337,17 @@ impl SSECustomerKeyWriter {
     }
 }
 pub type ObjectVersionId = String;
-/// Parse ObjectVersionId from XML
+/// Parse `ObjectVersionId` from XML
 struct ObjectVersionIdParser;
 impl ObjectVersionIdParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectVersionId, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectVersionId, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ObjectVersionId contents to a SignedRequest
+/// Write `ObjectVersionId` contents to a `SignedRequest`
 struct ObjectVersionIdWriter;
 impl ObjectVersionIdWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectVersionId) {
@@ -2358,10 +2359,10 @@ pub struct HeadBucketRequest {
     pub bucket: BucketName,
 }
 
-/// Parse HeadBucketRequest from XML
+/// Parse `HeadBucketRequest` from XML
 struct HeadBucketRequestParser;
 impl HeadBucketRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HeadBucketRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HeadBucketRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = HeadBucketRequest::default();
         loop {
@@ -2376,7 +2377,7 @@ impl HeadBucketRequestParser {
         Ok(obj)
     }
 }
-/// Write HeadBucketRequest contents to a SignedRequest
+/// Write `HeadBucketRequest` contents to a `SignedRequest`
 struct HeadBucketRequestWriter;
 impl HeadBucketRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &HeadBucketRequest) {
@@ -2393,10 +2394,10 @@ pub struct AbortMultipartUploadRequest {
     pub key: ObjectKey,
 }
 
-/// Parse AbortMultipartUploadRequest from XML
+/// Parse `AbortMultipartUploadRequest` from XML
 struct AbortMultipartUploadRequestParser;
 impl AbortMultipartUploadRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AbortMultipartUploadRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AbortMultipartUploadRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = AbortMultipartUploadRequest::default();
         loop {
@@ -2423,7 +2424,7 @@ impl AbortMultipartUploadRequestParser {
         Ok(obj)
     }
 }
-/// Write AbortMultipartUploadRequest contents to a SignedRequest
+/// Write `AbortMultipartUploadRequest` contents to a `SignedRequest`
 struct AbortMultipartUploadRequestWriter;
 impl AbortMultipartUploadRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &AbortMultipartUploadRequest) {
@@ -2438,17 +2439,17 @@ impl AbortMultipartUploadRequestWriter {
     }
 }
 pub type Size = i32;
-/// Parse Size from XML
+/// Parse `Size` from XML
 struct SizeParser;
 impl SizeParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Size, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Size, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Size contents to a SignedRequest
+/// Write `Size` contents to a `SignedRequest`
 struct SizeWriter;
 impl SizeWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Size) {
@@ -2478,10 +2479,10 @@ pub struct UploadPartCopyOutput {
     pub ssekms_key_id: SSEKMSKeyId,
 }
 
-/// Parse UploadPartCopyOutput from XML
+/// Parse `UploadPartCopyOutput` from XML
 struct UploadPartCopyOutputParser;
 impl UploadPartCopyOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadPartCopyOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadPartCopyOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = UploadPartCopyOutput::default();
         loop {
@@ -2520,7 +2521,7 @@ impl UploadPartCopyOutputParser {
         Ok(obj)
     }
 }
-/// Write UploadPartCopyOutput contents to a SignedRequest
+/// Write `UploadPartCopyOutput` contents to a `SignedRequest`
 struct UploadPartCopyOutputWriter;
 impl UploadPartCopyOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &UploadPartCopyOutput) {
@@ -2558,10 +2559,10 @@ pub struct Redirect {
     pub http_redirect_code: HttpRedirectCode,
 }
 
-/// Parse Redirect from XML
+/// Parse `Redirect` from XML
 struct RedirectParser;
 impl RedirectParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Redirect, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Redirect, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Redirect::default();
         loop {
@@ -2592,7 +2593,7 @@ impl RedirectParser {
         Ok(obj)
     }
 }
-/// Write Redirect contents to a SignedRequest
+/// Write `Redirect` contents to a `SignedRequest`
 struct RedirectWriter;
 impl RedirectWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Redirect) {
@@ -2606,17 +2607,17 @@ impl RedirectWriter {
     }
 }
 pub type CopySourceIfNoneMatch = String;
-/// Parse CopySourceIfNoneMatch from XML
+/// Parse `CopySourceIfNoneMatch` from XML
 struct CopySourceIfNoneMatchParser;
 impl CopySourceIfNoneMatchParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceIfNoneMatch, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceIfNoneMatch, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CopySourceIfNoneMatch contents to a SignedRequest
+/// Write `CopySourceIfNoneMatch` contents to a `SignedRequest`
 struct CopySourceIfNoneMatchWriter;
 impl CopySourceIfNoneMatchWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopySourceIfNoneMatch) {
@@ -2628,10 +2629,10 @@ pub struct DeleteBucketCorsRequest {
     pub bucket: BucketName,
 }
 
-/// Parse DeleteBucketCorsRequest from XML
+/// Parse `DeleteBucketCorsRequest` from XML
 struct DeleteBucketCorsRequestParser;
 impl DeleteBucketCorsRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketCorsRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketCorsRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteBucketCorsRequest::default();
         loop {
@@ -2646,7 +2647,7 @@ impl DeleteBucketCorsRequestParser {
         Ok(obj)
     }
 }
-/// Write DeleteBucketCorsRequest contents to a SignedRequest
+/// Write `DeleteBucketCorsRequest` contents to a `SignedRequest`
 struct DeleteBucketCorsRequestWriter;
 impl DeleteBucketCorsRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteBucketCorsRequest) {
@@ -2660,17 +2661,17 @@ impl DeleteBucketCorsRequestWriter {
 #[derive(Debug, Default)]
 pub struct BucketAlreadyExists;
 
-/// Parse BucketAlreadyExists from XML
+/// Parse `BucketAlreadyExists` from XML
 struct BucketAlreadyExistsParser;
 impl BucketAlreadyExistsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketAlreadyExists, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketAlreadyExists, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = BucketAlreadyExists::default();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write BucketAlreadyExists contents to a SignedRequest
+/// Write `BucketAlreadyExists` contents to a `SignedRequest`
 struct BucketAlreadyExistsWriter;
 impl BucketAlreadyExistsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &BucketAlreadyExists) {
@@ -2679,17 +2680,17 @@ impl BucketAlreadyExistsWriter {
     }
 }
 pub type BucketLocationConstraint = String;
-/// Parse BucketLocationConstraint from XML
+/// Parse `BucketLocationConstraint` from XML
 struct BucketLocationConstraintParser;
 impl BucketLocationConstraintParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketLocationConstraint, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketLocationConstraint, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write BucketLocationConstraint contents to a SignedRequest
+/// Write `BucketLocationConstraint` contents to a `SignedRequest`
 struct BucketLocationConstraintWriter;
 impl BucketLocationConstraintWriter {
     fn write_params(params: &mut Params, name: &str, obj: &BucketLocationConstraint) {
@@ -2702,10 +2703,10 @@ pub struct GetBucketNotificationConfigurationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketNotificationConfigurationRequest from XML
+/// Parse `GetBucketNotificationConfigurationRequest` from XML
 struct GetBucketNotificationConfigurationRequestParser;
 impl GetBucketNotificationConfigurationRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketNotificationConfigurationRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketNotificationConfigurationRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketNotificationConfigurationRequest::default();
         loop {
@@ -2720,7 +2721,7 @@ impl GetBucketNotificationConfigurationRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketNotificationConfigurationRequest contents to a SignedRequest
+/// Write `GetBucketNotificationConfigurationRequest` contents to a `SignedRequest`
 struct GetBucketNotificationConfigurationRequestWriter;
 impl GetBucketNotificationConfigurationRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketNotificationConfigurationRequest) {
@@ -2730,23 +2731,22 @@ impl GetBucketNotificationConfigurationRequestWriter {
     }
 }
 pub type NextKeyMarker = String;
-/// Parse NextKeyMarker from XML
+/// Parse `NextKeyMarker` from XML
 struct NextKeyMarkerParser;
 impl NextKeyMarkerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextKeyMarker, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextKeyMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = NextKeyMarker::default();
 
-        match characters(stack) {
-            Err(why) => return Ok(obj), // swallow error, it's okay to be blank
-            Ok(_) => (),
+        if let Err(why) = characters(stack) {
+            return Ok(obj); // swallow error, it's okay to be blank
         }
 
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write NextKeyMarker contents to a SignedRequest
+/// Write `NextKeyMarker` contents to a `SignedRequest`
 struct NextKeyMarkerWriter;
 impl NextKeyMarkerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NextKeyMarker) {
@@ -2754,10 +2754,10 @@ impl NextKeyMarkerWriter {
     }
 }
 pub type AllowedMethods = Vec<AllowedMethod>;
-/// Parse AllowedMethods from XML
+/// Parse `AllowedMethods` from XML
 struct AllowedMethodsParser;
 impl AllowedMethodsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedMethods, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedMethods, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "AllowedMethod" {
             obj.push(try!(AllowedMethodParser::parse_xml("AllowedMethod", stack)));
@@ -2765,7 +2765,7 @@ impl AllowedMethodsParser {
         Ok(obj)
     }
 }
-/// Write AllowedMethods contents to a SignedRequest
+/// Write `AllowedMethods` contents to a `SignedRequest`
 struct AllowedMethodsWriter;
 impl AllowedMethodsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &AllowedMethods) {
@@ -2788,10 +2788,10 @@ pub struct DeleteObjectOutput {
     pub delete_marker: DeleteMarker,
 }
 
-/// Parse DeleteObjectOutput from XML
+/// Parse `DeleteObjectOutput` from XML
 struct DeleteObjectOutputParser;
 impl DeleteObjectOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteObjectOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteObjectOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteObjectOutput::default();
         loop {
@@ -2814,7 +2814,7 @@ impl DeleteObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write DeleteObjectOutput contents to a SignedRequest
+/// Write `DeleteObjectOutput` contents to a `SignedRequest`
 struct DeleteObjectOutputWriter;
 impl DeleteObjectOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteObjectOutput) {
@@ -2826,17 +2826,17 @@ impl DeleteObjectOutputWriter {
     }
 }
 pub type VersionIdMarker = String;
-/// Parse VersionIdMarker from XML
+/// Parse `VersionIdMarker` from XML
 struct VersionIdMarkerParser;
 impl VersionIdMarkerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<VersionIdMarker, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<VersionIdMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write VersionIdMarker contents to a SignedRequest
+/// Write `VersionIdMarker` contents to a `SignedRequest`
 struct VersionIdMarkerWriter;
 impl VersionIdMarkerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &VersionIdMarker) {
@@ -2844,17 +2844,17 @@ impl VersionIdMarkerWriter {
     }
 }
 pub type StorageClass = String;
-/// Parse StorageClass from XML
+/// Parse `StorageClass` from XML
 struct StorageClassParser;
 impl StorageClassParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<StorageClass, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<StorageClass, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write StorageClass contents to a SignedRequest
+/// Write `StorageClass` contents to a `SignedRequest`
 struct StorageClassWriter;
 impl StorageClassWriter {
     fn write_params(params: &mut Params, name: &str, obj: &StorageClass) {
@@ -2869,17 +2869,17 @@ pub struct CreateBucketConfiguration {
 }
 
 pub type BucketLogsPermission = String;
-/// Parse BucketLogsPermission from XML
+/// Parse `BucketLogsPermission` from XML
 struct BucketLogsPermissionParser;
 impl BucketLogsPermissionParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketLogsPermission, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketLogsPermission, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write BucketLogsPermission contents to a SignedRequest
+/// Write `BucketLogsPermission` contents to a `SignedRequest`
 struct BucketLogsPermissionWriter;
 impl BucketLogsPermissionWriter {
     fn write_params(params: &mut Params, name: &str, obj: &BucketLogsPermission) {
@@ -2923,10 +2923,10 @@ pub struct HeadObjectRequest {
     pub if_modified_since: Option<IfModifiedSince>,
 }
 
-/// Parse HeadObjectRequest from XML
+/// Parse `HeadObjectRequest` from XML
 struct HeadObjectRequestParser;
 impl HeadObjectRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HeadObjectRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HeadObjectRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = HeadObjectRequest::default();
         loop {
@@ -2985,7 +2985,7 @@ impl HeadObjectRequestParser {
         Ok(obj)
     }
 }
-/// Write HeadObjectRequest contents to a SignedRequest
+/// Write `HeadObjectRequest` contents to a `SignedRequest`
 struct HeadObjectRequestWriter;
 impl HeadObjectRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &HeadObjectRequest) {
@@ -3026,17 +3026,17 @@ impl HeadObjectRequestWriter {
     }
 }
 pub type DisplayName = String;
-/// Parse DisplayName from XML
+/// Parse `DisplayName` from XML
 struct DisplayNameParser;
 impl DisplayNameParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DisplayName, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DisplayName, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write DisplayName contents to a SignedRequest
+/// Write `DisplayName` contents to a `SignedRequest`
 struct DisplayNameWriter;
 impl DisplayNameWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DisplayName) {
@@ -3044,17 +3044,17 @@ impl DisplayNameWriter {
     }
 }
 pub type GrantReadACP = String;
-/// Parse GrantReadACP from XML
+/// Parse `GrantReadACP` from XML
 struct GrantReadACPParser;
 impl GrantReadACPParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantReadACP, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantReadACP, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write GrantReadACP contents to a SignedRequest
+/// Write `GrantReadACP` contents to a `SignedRequest`
 struct GrantReadACPWriter;
 impl GrantReadACPWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GrantReadACP) {
@@ -3068,10 +3068,10 @@ pub struct Grant {
     pub permission: Permission,
 }
 
-/// Parse Grant from XML
+/// Parse `Grant` from XML
 struct GrantParser;
 impl GrantParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Grant, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Grant, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Grant::default();
         loop {
@@ -3090,7 +3090,7 @@ impl GrantParser {
         Ok(obj)
     }
 }
-/// Write Grant contents to a SignedRequest
+/// Write `Grant` contents to a `SignedRequest`
 struct GrantWriter;
 impl GrantWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Grant) {
@@ -3111,10 +3111,10 @@ pub struct TopicConfigurationDeprecated {
     pub events: EventList,
 }
 
-/// Parse TopicConfigurationDeprecated from XML
+/// Parse `TopicConfigurationDeprecated` from XML
 struct TopicConfigurationDeprecatedParser;
 impl TopicConfigurationDeprecatedParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TopicConfigurationDeprecated, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TopicConfigurationDeprecated, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = TopicConfigurationDeprecated::default();
         loop {
@@ -3141,7 +3141,7 @@ impl TopicConfigurationDeprecatedParser {
         Ok(obj)
     }
 }
-/// Write TopicConfigurationDeprecated contents to a SignedRequest
+/// Write `TopicConfigurationDeprecated` contents to a `SignedRequest`
 struct TopicConfigurationDeprecatedWriter;
 impl TopicConfigurationDeprecatedWriter {
     fn write_params(params: &mut Params, name: &str, obj: &TopicConfigurationDeprecated) {
@@ -3154,17 +3154,17 @@ impl TopicConfigurationDeprecatedWriter {
     }
 }
 pub type CopySourceIfModifiedSince = String;
-/// Parse CopySourceIfModifiedSince from XML
+/// Parse `CopySourceIfModifiedSince` from XML
 struct CopySourceIfModifiedSinceParser;
 impl CopySourceIfModifiedSinceParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceIfModifiedSince, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceIfModifiedSince, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CopySourceIfModifiedSince contents to a SignedRequest
+/// Write `CopySourceIfModifiedSince` contents to a `SignedRequest`
 struct CopySourceIfModifiedSinceWriter;
 impl CopySourceIfModifiedSinceWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopySourceIfModifiedSince) {
@@ -3180,10 +3180,10 @@ pub struct Initiator {
     pub id: ID,
 }
 
-/// Parse Initiator from XML
+/// Parse `Initiator` from XML
 struct InitiatorParser;
 impl InitiatorParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Initiator, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Initiator, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Initiator::default();
         loop {
@@ -3202,7 +3202,7 @@ impl InitiatorParser {
         Ok(obj)
     }
 }
-/// Write Initiator contents to a SignedRequest
+/// Write `Initiator` contents to a `SignedRequest`
 struct InitiatorWriter;
 impl InitiatorWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Initiator) {
@@ -3213,17 +3213,17 @@ impl InitiatorWriter {
     }
 }
 pub type HttpRedirectCode = String;
-/// Parse HttpRedirectCode from XML
+/// Parse `HttpRedirectCode` from XML
 struct HttpRedirectCodeParser;
 impl HttpRedirectCodeParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HttpRedirectCode, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HttpRedirectCode, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write HttpRedirectCode contents to a SignedRequest
+/// Write `HttpRedirectCode` contents to a `SignedRequest`
 struct HttpRedirectCodeWriter;
 impl HttpRedirectCodeWriter {
     fn write_params(params: &mut Params, name: &str, obj: &HttpRedirectCode) {
@@ -3247,10 +3247,10 @@ pub struct ListObjectVersionsRequest {
     pub version_id_marker: Option<VersionIdMarker>,
 }
 
-/// Parse ListObjectVersionsRequest from XML
+/// Parse `ListObjectVersionsRequest` from XML
 struct ListObjectVersionsRequestParser;
 impl ListObjectVersionsRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectVersionsRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectVersionsRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ListObjectVersionsRequest::default();
         loop {
@@ -3289,7 +3289,7 @@ impl ListObjectVersionsRequestParser {
         Ok(obj)
     }
 }
-/// Write ListObjectVersionsRequest contents to a SignedRequest
+/// Write `ListObjectVersionsRequest` contents to a `SignedRequest`
 struct ListObjectVersionsRequestWriter;
 impl ListObjectVersionsRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ListObjectVersionsRequest) {
@@ -3321,10 +3321,10 @@ pub struct DeleteBucketRequest {
     pub bucket: BucketName,
 }
 
-/// Parse DeleteBucketRequest from XML
+/// Parse `DeleteBucketRequest` from XML
 struct DeleteBucketRequestParser;
 impl DeleteBucketRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteBucketRequest::default();
         loop {
@@ -3341,17 +3341,17 @@ impl DeleteBucketRequestParser {
 }
 
 pub type TargetPrefix = String;
-/// Parse TargetPrefix from XML
+/// Parse `TargetPrefix` from XML
 struct TargetPrefixParser;
 impl TargetPrefixParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetPrefix, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetPrefix, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write TargetPrefix contents to a SignedRequest
+/// Write `TargetPrefix` contents to a `SignedRequest`
 struct TargetPrefixWriter;
 impl TargetPrefixWriter {
     fn write_params(params: &mut Params, name: &str, obj: &TargetPrefix) {
@@ -3363,10 +3363,10 @@ pub struct DeleteBucketPolicyRequest {
     pub bucket: BucketName,
 }
 
-/// Parse DeleteBucketPolicyRequest from XML
+/// Parse `DeleteBucketPolicyRequest` from XML
 struct DeleteBucketPolicyRequestParser;
 impl DeleteBucketPolicyRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketPolicyRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketPolicyRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteBucketPolicyRequest::default();
         loop {
@@ -3381,7 +3381,7 @@ impl DeleteBucketPolicyRequestParser {
         Ok(obj)
     }
 }
-/// Write DeleteBucketPolicyRequest contents to a SignedRequest
+/// Write `DeleteBucketPolicyRequest` contents to a `SignedRequest`
 struct DeleteBucketPolicyRequestWriter;
 impl DeleteBucketPolicyRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteBucketPolicyRequest) {
@@ -3391,17 +3391,17 @@ impl DeleteBucketPolicyRequestWriter {
     }
 }
 pub type CloudFunctionInvocationRole = String;
-/// Parse CloudFunctionInvocationRole from XML
+/// Parse `CloudFunctionInvocationRole` from XML
 struct CloudFunctionInvocationRoleParser;
 impl CloudFunctionInvocationRoleParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CloudFunctionInvocationRole, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CloudFunctionInvocationRole, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CloudFunctionInvocationRole contents to a SignedRequest
+/// Write `CloudFunctionInvocationRole` contents to a `SignedRequest`
 struct CloudFunctionInvocationRoleWriter;
 impl CloudFunctionInvocationRoleWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CloudFunctionInvocationRole) {
@@ -3475,10 +3475,10 @@ pub struct HeadObjectOutput {
     pub sse_customer_key_md5: SSECustomerKeyMD5,
 }
 
-/// Parse HeadObjectOutput from XML
+/// Parse `HeadObjectOutput` from XML
 struct HeadObjectOutputParser;
 impl HeadObjectOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HeadObjectOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HeadObjectOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = HeadObjectOutput::default();
         loop {
@@ -3585,7 +3585,7 @@ impl HeadObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write HeadObjectOutput contents to a SignedRequest
+/// Write `HeadObjectOutput` contents to a `SignedRequest`
 struct HeadObjectOutputWriter;
 impl HeadObjectOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &HeadObjectOutput) {
@@ -3622,10 +3622,10 @@ pub struct DeleteBucketReplicationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse DeleteBucketReplicationRequest from XML
+/// Parse `DeleteBucketReplicationRequest` from XML
 struct DeleteBucketReplicationRequestParser;
 impl DeleteBucketReplicationRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketReplicationRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketReplicationRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteBucketReplicationRequest::default();
         loop {
@@ -3640,7 +3640,7 @@ impl DeleteBucketReplicationRequestParser {
         Ok(obj)
     }
 }
-/// Write DeleteBucketReplicationRequest contents to a SignedRequest
+/// Write `DeleteBucketReplicationRequest` contents to a `SignedRequest`
 struct DeleteBucketReplicationRequestWriter;
 impl DeleteBucketReplicationRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteBucketReplicationRequest) {
@@ -3650,17 +3650,17 @@ impl DeleteBucketReplicationRequestWriter {
     }
 }
 pub type PartNumber = i32;
-/// Parse PartNumber from XML
+/// Parse `PartNumber` from XML
 struct PartNumberParser;
 impl PartNumberParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PartNumber, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PartNumber, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write PartNumber contents to a SignedRequest
+/// Write `PartNumber` contents to a `SignedRequest`
 struct PartNumberWriter;
 impl PartNumberWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PartNumber) {
@@ -3668,10 +3668,10 @@ impl PartNumberWriter {
     }
 }
 pub type ExposeHeaders = Vec<ExposeHeader>;
-/// Parse ExposeHeaders from XML
+/// Parse `ExposeHeaders` from XML
 struct ExposeHeadersParser;
 impl ExposeHeadersParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ExposeHeaders, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ExposeHeaders, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "ExposeHeader" {
             obj.push(try!(ExposeHeaderParser::parse_xml("ExposeHeader", stack)));
@@ -3679,7 +3679,7 @@ impl ExposeHeadersParser {
         Ok(obj)
     }
 }
-/// Write ExposeHeaders contents to a SignedRequest
+/// Write `ExposeHeaders` contents to a `SignedRequest`
 struct ExposeHeadersWriter;
 impl ExposeHeadersWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ExposeHeaders) {
@@ -3696,10 +3696,10 @@ pub struct GetBucketLoggingOutput {
     pub logging_enabled: LoggingEnabled,
 }
 
-/// Parse GetBucketLoggingOutput from XML
+/// Parse `GetBucketLoggingOutput` from XML
 struct GetBucketLoggingOutputParser;
 impl GetBucketLoggingOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLoggingOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLoggingOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketLoggingOutput::default();
         loop {
@@ -3714,7 +3714,7 @@ impl GetBucketLoggingOutputParser {
         Ok(obj)
     }
 }
-/// Write GetBucketLoggingOutput contents to a SignedRequest
+/// Write `GetBucketLoggingOutput` contents to a `SignedRequest`
 struct GetBucketLoggingOutputWriter;
 impl GetBucketLoggingOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketLoggingOutput) {
@@ -3738,10 +3738,10 @@ pub struct ListObjectsRequest {
     pub encoding_type: Option<EncodingType>,
 }
 
-/// Parse ListObjectsRequest from XML
+/// Parse `ListObjectsRequest` from XML
 struct ListObjectsRequestParser;
 impl ListObjectsRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectsRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectsRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ListObjectsRequest::default();
         loop {
@@ -3776,7 +3776,7 @@ impl ListObjectsRequestParser {
         Ok(obj)
     }
 }
-/// Write ListObjectsRequest contents to a SignedRequest
+/// Write `ListObjectsRequest` contents to a `SignedRequest`
 struct ListObjectsRequestWriter;
 impl ListObjectsRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ListObjectsRequest) {
@@ -3805,10 +3805,10 @@ pub struct GetBucketReplicationOutput {
     pub replication_configuration: ReplicationConfiguration,
 }
 
-/// Parse GetBucketReplicationOutput from XML
+/// Parse `GetBucketReplicationOutput` from XML
 struct GetBucketReplicationOutputParser;
 impl GetBucketReplicationOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketReplicationOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketReplicationOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketReplicationOutput::default();
         loop {
@@ -3823,7 +3823,7 @@ impl GetBucketReplicationOutputParser {
         Ok(obj)
     }
 }
-/// Write GetBucketReplicationOutput contents to a SignedRequest
+/// Write `GetBucketReplicationOutput` contents to a `SignedRequest`
 struct GetBucketReplicationOutputWriter;
 impl GetBucketReplicationOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketReplicationOutput) {
@@ -3833,17 +3833,17 @@ impl GetBucketReplicationOutputWriter {
     }
 }
 pub type Policy = String;
-/// Parse Policy from XML
+/// Parse `Policy` from XML
 struct PolicyParser;
 impl PolicyParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Policy, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Policy, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Policy contents to a SignedRequest
+/// Write `Policy` contents to a `SignedRequest`
 struct PolicyWriter;
 impl PolicyWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Policy) {
@@ -3882,10 +3882,10 @@ pub struct ListMultipartUploadsOutput {
     pub is_truncated: IsTruncated,
 }
 
-/// Parse ListMultipartUploadsOutput from XML
+/// Parse `ListMultipartUploadsOutput` from XML
 struct ListMultipartUploadsOutputParser;
 impl ListMultipartUploadsOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListMultipartUploadsOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListMultipartUploadsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ListMultipartUploadsOutput::default();
         loop {
@@ -3948,7 +3948,7 @@ impl ListMultipartUploadsOutputParser {
         Ok(obj)
     }
 }
-/// Write ListMultipartUploadsOutput contents to a SignedRequest
+/// Write `ListMultipartUploadsOutput` contents to a `SignedRequest`
 struct ListMultipartUploadsOutputWriter;
 impl ListMultipartUploadsOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ListMultipartUploadsOutput) {
@@ -3969,17 +3969,17 @@ impl ListMultipartUploadsOutputWriter {
     }
 }
 pub type IfUnmodifiedSince = String;
-/// Parse IfUnmodifiedSince from XML
+/// Parse `IfUnmodifiedSince` from XML
 struct IfUnmodifiedSinceParser;
 impl IfUnmodifiedSinceParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IfUnmodifiedSince, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IfUnmodifiedSince, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write IfUnmodifiedSince contents to a SignedRequest
+/// Write `IfUnmodifiedSince` contents to a `SignedRequest`
 struct IfUnmodifiedSinceWriter;
 impl IfUnmodifiedSinceWriter {
     fn write_params(params: &mut Params, name: &str, obj: &IfUnmodifiedSince) {
@@ -3987,17 +3987,17 @@ impl IfUnmodifiedSinceWriter {
     }
 }
 pub type Permission = String;
-/// Parse Permission from XML
+/// Parse `Permission` from XML
 struct PermissionParser;
 impl PermissionParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Permission, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Permission, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Permission contents to a SignedRequest
+/// Write `Permission` contents to a `SignedRequest`
 struct PermissionWriter;
 impl PermissionWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Permission) {
@@ -4010,10 +4010,10 @@ pub struct RequestPaymentConfiguration {
     pub payer: Payer,
 }
 
-/// Parse RequestPaymentConfiguration from XML
+/// Parse `RequestPaymentConfiguration` from XML
 struct RequestPaymentConfigurationParser;
 impl RequestPaymentConfigurationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RequestPaymentConfiguration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RequestPaymentConfiguration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = RequestPaymentConfiguration::default();
         loop {
@@ -4028,7 +4028,7 @@ impl RequestPaymentConfigurationParser {
         Ok(obj)
     }
 }
-/// Write RequestPaymentConfiguration contents to a SignedRequest
+/// Write `RequestPaymentConfiguration` contents to a `SignedRequest`
 struct RequestPaymentConfigurationWriter;
 impl RequestPaymentConfigurationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &RequestPaymentConfiguration) {
@@ -4038,10 +4038,10 @@ impl RequestPaymentConfigurationWriter {
     }
 }
 pub type Grants = Vec<Grant>;
-/// Parse Grants from XML
+/// Parse `Grants` from XML
 struct GrantsParser;
 impl GrantsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Grants, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Grants, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "Grant" {
             obj.push(try!(GrantParser::parse_xml("Grant", stack)));
@@ -4049,7 +4049,7 @@ impl GrantsParser {
         Ok(obj)
     }
 }
-/// Write Grants contents to a SignedRequest
+/// Write `Grants` contents to a `SignedRequest`
 struct GrantsWriter;
 impl GrantsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Grants) {
@@ -4062,17 +4062,17 @@ impl GrantsWriter {
     }
 }
 pub type ObjectStorageClass = String;
-/// Parse ObjectStorageClass from XML
+/// Parse `ObjectStorageClass` from XML
 struct ObjectStorageClassParser;
 impl ObjectStorageClassParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectStorageClass, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectStorageClass, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ObjectStorageClass contents to a SignedRequest
+/// Write `ObjectStorageClass` contents to a `SignedRequest`
 struct ObjectStorageClassWriter;
 impl ObjectStorageClassWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectStorageClass) {
@@ -4080,10 +4080,10 @@ impl ObjectStorageClassWriter {
     }
 }
 pub type EventList = Vec<Event>;
-/// Parse EventList from XML
+/// Parse `EventList` from XML
 struct EventListParser;
 impl EventListParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<EventList, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<EventList, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "Event" {
             obj.push(try!(EventParser::parse_xml("Event", stack)));
@@ -4091,7 +4091,7 @@ impl EventListParser {
         Ok(obj)
     }
 }
-/// Write EventList contents to a SignedRequest
+/// Write `EventList` contents to a `SignedRequest`
 struct EventListWriter;
 impl EventListWriter {
     fn write_params(params: &mut Params, name: &str, obj: &EventList) {
@@ -4104,17 +4104,17 @@ impl EventListWriter {
     }
 }
 pub type EmailAddress = String;
-/// Parse EmailAddress from XML
+/// Parse `EmailAddress` from XML
 struct EmailAddressParser;
 impl EmailAddressParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<EmailAddress, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<EmailAddress, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write EmailAddress contents to a SignedRequest
+/// Write `EmailAddress` contents to a `SignedRequest`
 struct EmailAddressWriter;
 impl EmailAddressWriter {
     fn write_params(params: &mut Params, name: &str, obj: &EmailAddress) {
@@ -4146,10 +4146,10 @@ pub struct CreateMultipartUploadOutput {
     pub ssekms_key_id: SSEKMSKeyId,
 }
 
-/// Parse CreateMultipartUploadOutput from XML
+/// Parse `CreateMultipartUploadOutput` from XML
 struct CreateMultipartUploadOutputParser;
 impl CreateMultipartUploadOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateMultipartUploadOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateMultipartUploadOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CreateMultipartUploadOutput::default();
         loop {
@@ -4192,7 +4192,7 @@ impl CreateMultipartUploadOutputParser {
         Ok(obj)
     }
 }
-/// Write CreateMultipartUploadOutput contents to a SignedRequest
+/// Write `CreateMultipartUploadOutput` contents to a `SignedRequest`
 struct CreateMultipartUploadOutputWriter;
 impl CreateMultipartUploadOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CreateMultipartUploadOutput) {
@@ -4215,10 +4215,10 @@ pub struct PutBucketWebsiteRequest {
     pub website_configuration: WebsiteConfiguration,
 }
 
-/// Parse PutBucketWebsiteRequest from XML
+/// Parse `PutBucketWebsiteRequest` from XML
 struct PutBucketWebsiteRequestParser;
 impl PutBucketWebsiteRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketWebsiteRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketWebsiteRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutBucketWebsiteRequest::default();
         loop {
@@ -4241,7 +4241,7 @@ impl PutBucketWebsiteRequestParser {
         Ok(obj)
     }
 }
-/// Write PutBucketWebsiteRequest contents to a SignedRequest
+/// Write `PutBucketWebsiteRequest` contents to a `SignedRequest`
 struct PutBucketWebsiteRequestWriter;
 impl PutBucketWebsiteRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutBucketWebsiteRequest) {
@@ -4255,10 +4255,10 @@ impl PutBucketWebsiteRequestWriter {
     }
 }
 pub type IsTruncated = bool;
-/// Parse IsTruncated from XML
+/// Parse `IsTruncated` from XML
 struct IsTruncatedParser;
 impl IsTruncatedParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IsTruncated, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IsTruncated, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = IsTruncated::default();
@@ -4272,7 +4272,7 @@ impl IsTruncatedParser {
         Ok(obj)
     }
 }
-/// Write IsTruncated contents to a SignedRequest
+/// Write `IsTruncated` contents to a `SignedRequest`
 struct IsTruncatedWriter;
 impl IsTruncatedWriter {
     fn write_params(params: &mut Params, name: &str, obj: &IsTruncated) {
@@ -4299,17 +4299,17 @@ pub struct CreateBucketRequest {
 }
 
 pub type BucketName = String;
-/// Parse BucketName from XML
+/// Parse `BucketName` from XML
 struct BucketNameParser;
 impl BucketNameParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketName, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketName, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write BucketName contents to a SignedRequest
+/// Write `BucketName` contents to a `SignedRequest`
 struct BucketNameWriter;
 impl BucketNameWriter {
     fn write_params(params: &mut Params, name: &str, obj: &BucketName) {
@@ -4323,10 +4323,10 @@ pub struct TargetGrant {
     pub permission: BucketLogsPermission,
 }
 
-/// Parse TargetGrant from XML
+/// Parse `TargetGrant` from XML
 struct TargetGrantParser;
 impl TargetGrantParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetGrant, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TargetGrant, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = TargetGrant::default();
         loop {
@@ -4345,7 +4345,7 @@ impl TargetGrantParser {
         Ok(obj)
     }
 }
-/// Write TargetGrant contents to a SignedRequest
+/// Write `TargetGrant` contents to a `SignedRequest`
 struct TargetGrantWriter;
 impl TargetGrantWriter {
     fn write_params(params: &mut Params, name: &str, obj: &TargetGrant) {
@@ -4356,17 +4356,17 @@ impl TargetGrantWriter {
     }
 }
 pub type MetadataDirective = String;
-/// Parse MetadataDirective from XML
+/// Parse `MetadataDirective` from XML
 struct MetadataDirectiveParser;
 impl MetadataDirectiveParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MetadataDirective, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MetadataDirective, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MetadataDirective contents to a SignedRequest
+/// Write `MetadataDirective` contents to a `SignedRequest`
 struct MetadataDirectiveWriter;
 impl MetadataDirectiveWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MetadataDirective) {
@@ -4380,10 +4380,10 @@ pub struct PutBucketRequestPaymentRequest {
     pub bucket: BucketName,
 }
 
-/// Parse PutBucketRequestPaymentRequest from XML
+/// Parse `PutBucketRequestPaymentRequest` from XML
 struct PutBucketRequestPaymentRequestParser;
 impl PutBucketRequestPaymentRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketRequestPaymentRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketRequestPaymentRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutBucketRequestPaymentRequest::default();
         loop {
@@ -4406,7 +4406,7 @@ impl PutBucketRequestPaymentRequestParser {
         Ok(obj)
     }
 }
-/// Write PutBucketRequestPaymentRequest contents to a SignedRequest
+/// Write `PutBucketRequestPaymentRequest` contents to a `SignedRequest`
 struct PutBucketRequestPaymentRequestWriter;
 impl PutBucketRequestPaymentRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutBucketRequestPaymentRequest) {
@@ -4441,10 +4441,10 @@ pub struct PutObjectAclRequest {
     pub grant_read_acp: Option<GrantReadACP>,
 }
 
-/// Parse PutObjectAclRequest from XML
+/// Parse `PutObjectAclRequest` from XML
 struct PutObjectAclRequestParser;
 impl PutObjectAclRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutObjectAclRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutObjectAclRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutObjectAclRequest::default();
         loop {
@@ -4495,7 +4495,7 @@ impl PutObjectAclRequestParser {
         Ok(obj)
     }
 }
-/// Write PutObjectAclRequest contents to a SignedRequest
+/// Write `PutObjectAclRequest` contents to a `SignedRequest`
 struct PutObjectAclRequestWriter;
 impl PutObjectAclRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutObjectAclRequest) {
@@ -4538,10 +4538,10 @@ pub struct CloudFunctionConfiguration {
     pub event: Event,
 }
 
-/// Parse CloudFunctionConfiguration from XML
+/// Parse `CloudFunctionConfiguration` from XML
 struct CloudFunctionConfigurationParser;
 impl CloudFunctionConfigurationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CloudFunctionConfiguration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CloudFunctionConfiguration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CloudFunctionConfiguration::default();
         loop {
@@ -4572,7 +4572,7 @@ impl CloudFunctionConfigurationParser {
         Ok(obj)
     }
 }
-/// Write CloudFunctionConfiguration contents to a SignedRequest
+/// Write `CloudFunctionConfiguration` contents to a `SignedRequest`
 struct CloudFunctionConfigurationWriter;
 impl CloudFunctionConfigurationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CloudFunctionConfiguration) {
@@ -4586,17 +4586,17 @@ impl CloudFunctionConfigurationWriter {
     }
 }
 pub type LambdaFunctionArn = String;
-/// Parse LambdaFunctionArn from XML
+/// Parse `LambdaFunctionArn` from XML
 struct LambdaFunctionArnParser;
 impl LambdaFunctionArnParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LambdaFunctionArn, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LambdaFunctionArn, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write LambdaFunctionArn contents to a SignedRequest
+/// Write `LambdaFunctionArn` contents to a `SignedRequest`
 struct LambdaFunctionArnWriter;
 impl LambdaFunctionArnWriter {
     fn write_params(params: &mut Params, name: &str, obj: &LambdaFunctionArn) {
@@ -4604,17 +4604,17 @@ impl LambdaFunctionArnWriter {
     }
 }
 pub type Quiet = bool;
-/// Parse Quiet from XML
+/// Parse `Quiet` from XML
 struct QuietParser;
 impl QuietParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Quiet, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Quiet, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Quiet contents to a SignedRequest
+/// Write `Quiet` contents to a `SignedRequest`
 struct QuietWriter;
 impl QuietWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Quiet) {
@@ -4628,10 +4628,10 @@ pub struct AccessControlPolicy {
     pub grants: Grants,
 }
 
-/// Parse AccessControlPolicy from XML
+/// Parse `AccessControlPolicy` from XML
 struct AccessControlPolicyParser;
 impl AccessControlPolicyParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AccessControlPolicy, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AccessControlPolicy, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = AccessControlPolicy::default();
         loop {
@@ -4650,7 +4650,7 @@ impl AccessControlPolicyParser {
         Ok(obj)
     }
 }
-/// Write AccessControlPolicy contents to a SignedRequest
+/// Write `AccessControlPolicy` contents to a `SignedRequest`
 struct AccessControlPolicyWriter;
 impl AccessControlPolicyWriter {
     fn write_params(params: &mut Params, name: &str, obj: &AccessControlPolicy) {
@@ -4661,17 +4661,17 @@ impl AccessControlPolicyWriter {
     }
 }
 pub type Range = String;
-/// Parse Range from XML
+/// Parse `Range` from XML
 struct RangeParser;
 impl RangeParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Range, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Range, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Range contents to a SignedRequest
+/// Write `Range` contents to a `SignedRequest`
 struct RangeWriter;
 impl RangeWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Range) {
@@ -4679,17 +4679,17 @@ impl RangeWriter {
     }
 }
 pub type GrantRead = String;
-/// Parse GrantRead from XML
+/// Parse `GrantRead` from XML
 struct GrantReadParser;
 impl GrantReadParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantRead, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantRead, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write GrantRead contents to a SignedRequest
+/// Write `GrantRead` contents to a `SignedRequest`
 struct GrantReadWriter;
 impl GrantReadWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GrantRead) {
@@ -4697,17 +4697,17 @@ impl GrantReadWriter {
     }
 }
 pub type SSECustomerKeyMD5 = String;
-/// Parse SSECustomerKeyMD5 from XML
+/// Parse `SSECustomerKeyMD`5 from XML
 struct SSECustomerKeyMD5Parser;
 impl SSECustomerKeyMD5Parser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSECustomerKeyMD5, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSECustomerKeyMD5, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write SSECustomerKeyMD5 contents to a SignedRequest
+/// Write `SSECustomerKeyMD5` contents to a `SignedRequest`
 struct SSECustomerKeyMD5Writer;
 impl SSECustomerKeyMD5Writer {
     fn write_params(params: &mut Params, name: &str, obj: &SSECustomerKeyMD5) {
@@ -4715,10 +4715,10 @@ impl SSECustomerKeyMD5Writer {
     }
 }
 pub type ObjectIdentifierList = Vec<ObjectIdentifier>;
-/// Parse ObjectIdentifierList from XML
+/// Parse `ObjectIdentifierList` from XML
 struct ObjectIdentifierListParser;
 impl ObjectIdentifierListParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectIdentifierList, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectIdentifierList, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "ObjectIdentifier" {
             obj.push(try!(ObjectIdentifierParser::parse_xml("ObjectIdentifier", stack)));
@@ -4726,7 +4726,7 @@ impl ObjectIdentifierListParser {
         Ok(obj)
     }
 }
-/// Write ObjectIdentifierList contents to a SignedRequest
+/// Write `ObjectIdentifierList` contents to a `SignedRequest`
 struct ObjectIdentifierListWriter;
 impl ObjectIdentifierListWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectIdentifierList) {
@@ -4739,17 +4739,17 @@ impl ObjectIdentifierListWriter {
     }
 }
 pub type Restore = String;
-/// Parse Restore from XML
+/// Parse `Restore` from XML
 struct RestoreParser;
 impl RestoreParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Restore, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Restore, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Restore contents to a SignedRequest
+/// Write `Restore` contents to a `SignedRequest`
 struct RestoreWriter;
 impl RestoreWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Restore) {
@@ -4757,17 +4757,17 @@ impl RestoreWriter {
     }
 }
 pub type NextVersionIdMarker = String;
-/// Parse NextVersionIdMarker from XML
+/// Parse `NextVersionIdMarker` from XML
 struct NextVersionIdMarkerParser;
 impl NextVersionIdMarkerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextVersionIdMarker, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextVersionIdMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write NextVersionIdMarker contents to a SignedRequest
+/// Write `NextVersionIdMarker` contents to a `SignedRequest`
 struct NextVersionIdMarkerWriter;
 impl NextVersionIdMarkerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NextVersionIdMarker) {
@@ -4782,10 +4782,10 @@ pub struct Delete {
     pub quiet: Option<Quiet>,
 }
 
-/// Parse Delete from XML
+/// Parse `Delete` from XML
 struct DeleteParser;
 impl DeleteParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Delete, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Delete, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Delete::default();
         loop {
@@ -4804,7 +4804,7 @@ impl DeleteParser {
         Ok(obj)
     }
 }
-/// Write Delete contents to a SignedRequest
+/// Write `Delete` contents to a `SignedRequest`
 struct DeleteWriter;
 impl DeleteWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Delete) {
@@ -4817,17 +4817,17 @@ impl DeleteWriter {
     }
 }
 pub type ResponseContentLanguage = String;
-/// Parse ResponseContentLanguage from XML
+/// Parse `ResponseContentLanguage` from XML
 struct ResponseContentLanguageParser;
 impl ResponseContentLanguageParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseContentLanguage, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseContentLanguage, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ResponseContentLanguage contents to a SignedRequest
+/// Write `ResponseContentLanguage` contents to a `SignedRequest`
 struct ResponseContentLanguageWriter;
 impl ResponseContentLanguageWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ResponseContentLanguage) {
@@ -4858,10 +4858,10 @@ pub struct ListObjectsOutput {
     pub common_prefixes: CommonPrefixList,
 }
 
-/// Parse ListObjectsOutput from XML
+/// Parse `ListObjectsOutput` from XML
 struct ListObjectsOutputParser;
 impl ListObjectsOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectsOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ListObjectsOutput::default();
         loop {
@@ -4912,7 +4912,7 @@ impl ListObjectsOutputParser {
         Ok(obj)
     }
 }
-/// Write ListObjectsOutput contents to a SignedRequest
+/// Write `ListObjectsOutput` contents to a `SignedRequest`
 struct ListObjectsOutputWriter;
 impl ListObjectsOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ListObjectsOutput) {
@@ -4931,17 +4931,17 @@ impl ListObjectsOutputWriter {
     }
 }
 pub type GrantWriteACP = String;
-/// Parse GrantWriteACP from XML
+/// Parse `GrantWriteACP` from XML
 struct GrantWriteACPParser;
 impl GrantWriteACPParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantWriteACP, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantWriteACP, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write GrantWriteACP contents to a SignedRequest
+/// Write `GrantWriteACP` contents to a `SignedRequest`
 struct GrantWriteACPWriter;
 impl GrantWriteACPWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GrantWriteACP) {
@@ -4949,10 +4949,10 @@ impl GrantWriteACPWriter {
     }
 }
 pub type CORSRules = Vec<CORSRule>;
-/// Parse CORSRules from XML
+/// Parse `CORSRules` from XML
 struct CORSRulesParser;
 impl CORSRulesParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CORSRules, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CORSRules, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "CORSRule" {
             obj.push(try!(CORSRuleParser::parse_xml("CORSRule", stack)));
@@ -4960,7 +4960,7 @@ impl CORSRulesParser {
         Ok(obj)
     }
 }
-/// Write CORSRules contents to a SignedRequest
+/// Write `CORSRules` contents to a `SignedRequest`
 struct CORSRulesWriter;
 impl CORSRulesWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CORSRules) {
@@ -4973,17 +4973,17 @@ impl CORSRulesWriter {
     }
 }
 pub type ContentLanguage = String;
-/// Parse ContentLanguage from XML
+/// Parse `ContentLanguage` from XML
 struct ContentLanguageParser;
 impl ContentLanguageParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentLanguage, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentLanguage, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ContentLanguage contents to a SignedRequest
+/// Write `ContentLanguage` contents to a `SignedRequest`
 struct ContentLanguageWriter;
 impl ContentLanguageWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ContentLanguage) {
@@ -4996,10 +4996,10 @@ pub struct ListBucketsOutput {
     pub buckets: Buckets,
 }
 
-/// Parse ListBucketsOutput from XML
+/// Parse `ListBucketsOutput` from XML
 struct ListBucketsOutputParser;
 impl ListBucketsOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListBucketsOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListBucketsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ListBucketsOutput::default();
         loop {
@@ -5022,7 +5022,7 @@ impl ListBucketsOutputParser {
         Ok(obj)
     }
 }
-/// Write ListBucketsOutput contents to a SignedRequest
+/// Write `ListBucketsOutput` contents to a `SignedRequest`
 struct ListBucketsOutputWriter;
 impl ListBucketsOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ListBucketsOutput) {
@@ -5044,10 +5044,10 @@ pub struct DeleteObjectRequest {
     pub key: ObjectKey,
 }
 
-/// Parse DeleteObjectRequest from XML
+/// Parse `DeleteObjectRequest` from XML
 struct DeleteObjectRequestParser;
 impl DeleteObjectRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteObjectRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteObjectRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteObjectRequest::default();
         loop {
@@ -5078,7 +5078,7 @@ impl DeleteObjectRequestParser {
         Ok(obj)
     }
 }
-/// Write DeleteObjectRequest contents to a SignedRequest
+/// Write `DeleteObjectRequest` contents to a `SignedRequest`
 struct DeleteObjectRequestWriter;
 impl DeleteObjectRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteObjectRequest) {
@@ -5098,10 +5098,10 @@ impl DeleteObjectRequestWriter {
     }
 }
 pub type CompletedPartList = Vec<CompletedPart>;
-/// Parse CompletedPartList from XML
+/// Parse `CompletedPartList` from XML
 struct CompletedPartListParser;
 impl CompletedPartListParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CompletedPartList, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CompletedPartList, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "CompletedPart" {
             obj.push(try!(CompletedPartParser::parse_xml("CompletedPart", stack)));
@@ -5109,7 +5109,7 @@ impl CompletedPartListParser {
         Ok(obj)
     }
 }
-/// Write CompletedPartList contents to a SignedRequest
+/// Write `CompletedPartList` contents to a `SignedRequest`
 struct CompletedPartListWriter;
 impl CompletedPartListWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CompletedPartList) {
@@ -5129,10 +5129,10 @@ pub struct DeletedObject {
     pub delete_marker: DeleteMarker,
 }
 
-/// Parse DeletedObject from XML
+/// Parse `DeletedObject` from XML
 struct DeletedObjectParser;
 impl DeletedObjectParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeletedObject, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeletedObject, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeletedObject::default();
         loop {
@@ -5159,7 +5159,7 @@ impl DeletedObjectParser {
         Ok(obj)
     }
 }
-/// Write DeletedObject contents to a SignedRequest
+/// Write `DeletedObject` contents to a `SignedRequest`
 struct DeletedObjectWriter;
 impl DeletedObjectWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeletedObject) {
@@ -5189,10 +5189,10 @@ pub struct CORSRule {
     pub allowed_origins: AllowedOrigins,
 }
 
-/// Parse CORSRule from XML
+/// Parse `CORSRule` from XML
 struct CORSRuleParser;
 impl CORSRuleParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CORSRule, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CORSRule, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CORSRule::default();
         loop {
@@ -5223,7 +5223,7 @@ impl CORSRuleParser {
         Ok(obj)
     }
 }
-/// Write CORSRule contents to a SignedRequest
+/// Write `CORSRule` contents to a `SignedRequest`
 struct CORSRuleWriter;
 impl CORSRuleWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CORSRule) {
@@ -5251,10 +5251,10 @@ pub struct LoggingEnabled {
     pub target_grants: TargetGrants,
 }
 
-/// Parse LoggingEnabled from XML
+/// Parse `LoggingEnabled` from XML
 struct LoggingEnabledParser;
 impl LoggingEnabledParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LoggingEnabled, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LoggingEnabled, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = LoggingEnabled::default();
         loop {
@@ -5277,7 +5277,7 @@ impl LoggingEnabledParser {
         Ok(obj)
     }
 }
-/// Write LoggingEnabled contents to a SignedRequest
+/// Write `LoggingEnabled` contents to a `SignedRequest`
 struct LoggingEnabledWriter;
 impl LoggingEnabledWriter {
     fn write_params(params: &mut Params, name: &str, obj: &LoggingEnabled) {
@@ -5289,17 +5289,17 @@ impl LoggingEnabledWriter {
     }
 }
 pub type KeyPrefixEquals = String;
-/// Parse KeyPrefixEquals from XML
+/// Parse `KeyPrefixEquals` from XML
 struct KeyPrefixEqualsParser;
 impl KeyPrefixEqualsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<KeyPrefixEquals, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<KeyPrefixEquals, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write KeyPrefixEquals contents to a SignedRequest
+/// Write `KeyPrefixEquals` contents to a `SignedRequest`
 struct KeyPrefixEqualsWriter;
 impl KeyPrefixEqualsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &KeyPrefixEquals) {
@@ -5315,10 +5315,10 @@ pub struct RedirectAllRequestsTo {
     pub protocol: Option<Protocol>,
 }
 
-/// Parse RedirectAllRequestsTo from XML
+/// Parse `RedirectAllRequestsTo` from XML
 struct RedirectAllRequestsToParser;
 impl RedirectAllRequestsToParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RedirectAllRequestsTo, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RedirectAllRequestsTo, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = RedirectAllRequestsTo::default();
         loop {
@@ -5337,7 +5337,7 @@ impl RedirectAllRequestsToParser {
         Ok(obj)
     }
 }
-/// Write RedirectAllRequestsTo contents to a SignedRequest
+/// Write `RedirectAllRequestsTo` contents to a `SignedRequest`
 struct RedirectAllRequestsToWriter;
 impl RedirectAllRequestsToWriter {
     fn write_params(params: &mut Params, name: &str, obj: &RedirectAllRequestsTo) {
@@ -5355,10 +5355,10 @@ pub struct Owner {
     pub id: ID,
 }
 
-/// Parse Owner from XML
+/// Parse `Owner` from XML
 struct OwnerParser;
 impl OwnerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Owner, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Owner, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Owner::default();
         loop {
@@ -5379,7 +5379,7 @@ impl OwnerParser {
         Ok(obj)
     }
 }
-/// Write Owner contents to a SignedRequest
+/// Write `Owner` contents to a `SignedRequest`
 struct OwnerWriter;
 impl OwnerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Owner) {
@@ -5395,10 +5395,10 @@ pub struct CopyObjectResult {
     pub e_tag: ETag,
 }
 
-/// Parse CopyObjectResult from XML
+/// Parse `CopyObjectResult` from XML
 struct CopyObjectResultParser;
 impl CopyObjectResultParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopyObjectResult, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopyObjectResult, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CopyObjectResult::default();
         loop {
@@ -5417,7 +5417,7 @@ impl CopyObjectResultParser {
         Ok(obj)
     }
 }
-/// Write CopyObjectResult contents to a SignedRequest
+/// Write `CopyObjectResult` contents to a `SignedRequest`
 struct CopyObjectResultWriter;
 impl CopyObjectResultWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopyObjectResult) {
@@ -5428,17 +5428,17 @@ impl CopyObjectResultWriter {
     }
 }
 pub type S3ClientMessage = String;
-/// Parse S3ClientMessage from XML
+/// Parse `S`3ClientMessage from XML
 struct S3ClientMessageParser;
 impl S3ClientMessageParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<S3ClientMessage, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<S3ClientMessage, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write S3ClientMessage contents to a SignedRequest
+/// Write `S3ClientMessage` contents to a `SignedRequest`
 struct S3ClientMessageWriter;
 impl S3ClientMessageWriter {
     fn write_params(params: &mut Params, name: &str, obj: &S3ClientMessage) {
@@ -5446,10 +5446,10 @@ impl S3ClientMessageWriter {
     }
 }
 pub type ObjectList = Vec<Object>;
-/// Parse ObjectList from XML
+/// Parse `ObjectList` from XML
 struct ObjectListParser;
 impl ObjectListParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectList, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectList, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "Object" {
             obj.push(try!(ObjectParser::parse_xml("Object", stack)));
@@ -5457,7 +5457,7 @@ impl ObjectListParser {
         Ok(obj)
     }
 }
-/// Write ObjectList contents to a SignedRequest
+/// Write `ObjectList` contents to a `SignedRequest`
 struct ObjectListWriter;
 impl ObjectListWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectList) {
@@ -5474,10 +5474,10 @@ pub struct GetBucketLifecycleOutput {
     pub rules: Rules,
 }
 
-/// Parse GetBucketLifecycleOutput from XML
+/// Parse `GetBucketLifecycleOutput` from XML
 struct GetBucketLifecycleOutputParser;
 impl GetBucketLifecycleOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLifecycleOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLifecycleOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketLifecycleOutput::default();
         loop {
@@ -5492,7 +5492,7 @@ impl GetBucketLifecycleOutputParser {
         Ok(obj)
     }
 }
-/// Write GetBucketLifecycleOutput contents to a SignedRequest
+/// Write `GetBucketLifecycleOutput` contents to a `SignedRequest`
 struct GetBucketLifecycleOutputWriter;
 impl GetBucketLifecycleOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketLifecycleOutput) {
@@ -5503,17 +5503,17 @@ impl GetBucketLifecycleOutputWriter {
 }
 /// Bucket event for which to send notifications.
 pub type Event = String;
-/// Parse Event from XML
+/// Parse `Event` from XML
 struct EventParser;
 impl EventParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Event, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Event, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Event contents to a SignedRequest
+/// Write `Event` contents to a `SignedRequest`
 struct EventWriter;
 impl EventWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Event) {
@@ -5521,10 +5521,10 @@ impl EventWriter {
     }
 }
 pub type ReplicationRules = Vec<ReplicationRule>;
-/// Parse ReplicationRules from XML
+/// Parse `ReplicationRules` from XML
 struct ReplicationRulesParser;
 impl ReplicationRulesParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplicationRules, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplicationRules, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "ReplicationRule" {
             obj.push(try!(ReplicationRuleParser::parse_xml("ReplicationRule", stack)));
@@ -5532,7 +5532,7 @@ impl ReplicationRulesParser {
         Ok(obj)
     }
 }
-/// Write ReplicationRules contents to a SignedRequest
+/// Write `ReplicationRules` contents to a `SignedRequest`
 struct ReplicationRulesWriter;
 impl ReplicationRulesWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ReplicationRules) {
@@ -5553,10 +5553,10 @@ pub struct NotificationConfiguration {
     pub topic_configurations: TopicConfigurationList,
 }
 
-/// Parse NotificationConfiguration from XML
+/// Parse `NotificationConfiguration` from XML
 struct NotificationConfigurationParser;
 impl NotificationConfigurationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NotificationConfiguration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NotificationConfiguration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = NotificationConfiguration::default();
         loop {
@@ -5579,7 +5579,7 @@ impl NotificationConfigurationParser {
         Ok(obj)
     }
 }
-/// Write NotificationConfiguration contents to a SignedRequest
+/// Write `NotificationConfiguration` contents to a `SignedRequest`
 struct NotificationConfigurationWriter;
 impl NotificationConfigurationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NotificationConfiguration) {
@@ -5601,10 +5601,10 @@ pub struct Object {
     pub size: Size,
 }
 
-/// Parse Object from XML
+/// Parse `Object` from XML
 struct ObjectParser;
 impl ObjectParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Object, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Object, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Object::default();
         loop {
@@ -5639,7 +5639,7 @@ impl ObjectParser {
         Ok(obj)
     }
 }
-/// Write Object contents to a SignedRequest
+/// Write `Object` contents to a `SignedRequest`
 struct ObjectWriter;
 impl ObjectWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Object) {
@@ -5654,17 +5654,17 @@ impl ObjectWriter {
     }
 }
 pub type NextMarker = String;
-/// Parse NextMarker from XML
+/// Parse `NextMarker` from XML
 struct NextMarkerParser;
 impl NextMarkerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextMarker, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write NextMarker contents to a SignedRequest
+/// Write `NextMarker` contents to a `SignedRequest`
 struct NextMarkerWriter;
 impl NextMarkerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NextMarker) {
@@ -5672,17 +5672,17 @@ impl NextMarkerWriter {
     }
 }
 pub type ContentEncoding = String;
-/// Parse ContentEncoding from XML
+/// Parse `ContentEncoding` from XML
 struct ContentEncodingParser;
 impl ContentEncodingParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentEncoding, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentEncoding, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ContentEncoding contents to a SignedRequest
+/// Write `ContentEncoding` contents to a `SignedRequest`
 struct ContentEncodingWriter;
 impl ContentEncodingWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ContentEncoding) {
@@ -5697,10 +5697,10 @@ pub struct WebsiteConfiguration {
     pub routing_rules: RoutingRules,
 }
 
-/// Parse WebsiteConfiguration from XML
+/// Parse `WebsiteConfiguration` from XML
 struct WebsiteConfigurationParser;
 impl WebsiteConfigurationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<WebsiteConfiguration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<WebsiteConfiguration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = WebsiteConfiguration::default();
         loop {
@@ -5727,7 +5727,7 @@ impl WebsiteConfigurationParser {
         Ok(obj)
     }
 }
-/// Write WebsiteConfiguration contents to a SignedRequest
+/// Write `WebsiteConfiguration` contents to a `SignedRequest`
 struct WebsiteConfigurationWriter;
 impl WebsiteConfigurationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &WebsiteConfiguration) {
@@ -5740,17 +5740,17 @@ impl WebsiteConfigurationWriter {
     }
 }
 pub type MFADelete = String;
-/// Parse MFADelete from XML
+/// Parse `MFADelete` from XML
 struct MFADeleteParser;
 impl MFADeleteParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MFADelete, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MFADelete, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MFADelete contents to a SignedRequest
+/// Write `MFADelete` contents to a `SignedRequest`
 struct MFADeleteWriter;
 impl MFADeleteWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MFADelete) {
@@ -5758,17 +5758,17 @@ impl MFADeleteWriter {
     }
 }
 pub type CopySourceSSECustomerKey = String;
-/// Parse CopySourceSSECustomerKey from XML
+/// Parse `CopySourceSSECustomerKey` from XML
 struct CopySourceSSECustomerKeyParser;
 impl CopySourceSSECustomerKeyParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceSSECustomerKey, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceSSECustomerKey, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CopySourceSSECustomerKey contents to a SignedRequest
+/// Write `CopySourceSSECustomerKey` contents to a `SignedRequest`
 struct CopySourceSSECustomerKeyWriter;
 impl CopySourceSSECustomerKeyWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopySourceSSECustomerKey) {
@@ -5776,17 +5776,17 @@ impl CopySourceSSECustomerKeyWriter {
     }
 }
 pub type ResponseContentType = String;
-/// Parse ResponseContentType from XML
+/// Parse `ResponseContentType` from XML
 struct ResponseContentTypeParser;
 impl ResponseContentTypeParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseContentType, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseContentType, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ResponseContentType contents to a SignedRequest
+/// Write `ResponseContentType` contents to a `SignedRequest`
 struct ResponseContentTypeWriter;
 impl ResponseContentTypeWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ResponseContentType) {
@@ -5814,10 +5814,10 @@ pub struct CompleteMultipartUploadOutput {
     pub expiration: Expiration,
 }
 
-/// Parse CompleteMultipartUploadOutput from XML
+/// Parse `CompleteMultipartUploadOutput` from XML
 struct CompleteMultipartUploadOutputParser;
 impl CompleteMultipartUploadOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CompleteMultipartUploadOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CompleteMultipartUploadOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CompleteMultipartUploadOutput::default();
         loop {
@@ -5864,7 +5864,7 @@ impl CompleteMultipartUploadOutputParser {
         Ok(obj)
     }
 }
-/// Write CompleteMultipartUploadOutput contents to a SignedRequest
+/// Write `CompleteMultipartUploadOutput` contents to a `SignedRequest`
 struct CompleteMultipartUploadOutputWriter;
 impl CompleteMultipartUploadOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CompleteMultipartUploadOutput) {
@@ -5882,17 +5882,17 @@ impl CompleteMultipartUploadOutputWriter {
     }
 }
 pub type ExposeHeader = String;
-/// Parse ExposeHeader from XML
+/// Parse `ExposeHeader` from XML
 struct ExposeHeaderParser;
 impl ExposeHeaderParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ExposeHeader, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ExposeHeader, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ExposeHeader contents to a SignedRequest
+/// Write `ExposeHeader` contents to a `SignedRequest`
 struct ExposeHeaderWriter;
 impl ExposeHeaderWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ExposeHeader) {
@@ -5907,10 +5907,10 @@ pub struct CopyPartResult {
     pub e_tag: ETag,
 }
 
-/// Parse CopyPartResult from XML
+/// Parse `CopyPartResult` from XML
 struct CopyPartResultParser;
 impl CopyPartResultParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopyPartResult, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopyPartResult, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CopyPartResult::default();
         loop {
@@ -5929,7 +5929,7 @@ impl CopyPartResultParser {
         Ok(obj)
     }
 }
-/// Write CopyPartResult contents to a SignedRequest
+/// Write `CopyPartResult` contents to a `SignedRequest`
 struct CopyPartResultWriter;
 impl CopyPartResultWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopyPartResult) {
@@ -5944,10 +5944,10 @@ pub struct GetBucketAclRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketAclRequest from XML
+/// Parse `GetBucketAclRequest` from XML
 struct GetBucketAclRequestParser;
 impl GetBucketAclRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketAclRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketAclRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketAclRequest::default();
         loop {
@@ -5962,7 +5962,7 @@ impl GetBucketAclRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketAclRequest contents to a SignedRequest
+/// Write `GetBucketAclRequest` contents to a `SignedRequest`
 struct GetBucketAclRequestWriter;
 impl GetBucketAclRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketAclRequest) {
@@ -5972,17 +5972,17 @@ impl GetBucketAclRequestWriter {
     }
 }
 pub type HostName = String;
-/// Parse HostName from XML
+/// Parse `HostName` from XML
 struct HostNameParser;
 impl HostNameParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HostName, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HostName, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write HostName contents to a SignedRequest
+/// Write `HostName` contents to a `SignedRequest`
 struct HostNameWriter;
 impl HostNameWriter {
     fn write_params(params: &mut Params, name: &str, obj: &HostName) {
@@ -5990,10 +5990,10 @@ impl HostNameWriter {
     }
 }
 pub type NextUploadIdMarker = String;
-/// Parse NextUploadIdMarker from XML
+/// Parse `NextUploadIdMarker` from XML
 struct NextUploadIdMarkerParser;
 impl NextUploadIdMarkerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextUploadIdMarker, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextUploadIdMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = NextUploadIdMarker::default();
@@ -6007,7 +6007,7 @@ impl NextUploadIdMarkerParser {
         Ok(obj)
     }
 }
-/// Write NextUploadIdMarker contents to a SignedRequest
+/// Write `NextUploadIdMarker` contents to a `SignedRequest`
 struct NextUploadIdMarkerWriter;
 impl NextUploadIdMarkerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NextUploadIdMarker) {
@@ -6037,10 +6037,10 @@ pub struct CopyObjectOutput {
     pub ssekms_key_id: SSEKMSKeyId,
 }
 
-/// Parse CopyObjectOutput from XML
+/// Parse `CopyObjectOutput` from XML
 struct CopyObjectOutputParser;
 impl CopyObjectOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopyObjectOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopyObjectOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CopyObjectOutput::default();
         loop {
@@ -6083,7 +6083,7 @@ impl CopyObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write CopyObjectOutput contents to a SignedRequest
+/// Write `CopyObjectOutput` contents to a `SignedRequest`
 struct CopyObjectOutputWriter;
 impl CopyObjectOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopyObjectOutput) {
@@ -6100,17 +6100,17 @@ impl CopyObjectOutputWriter {
     }
 }
 pub type AcceptRanges = String;
-/// Parse AcceptRanges from XML
+/// Parse `AcceptRanges` from XML
 struct AcceptRangesParser;
 impl AcceptRangesParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AcceptRanges, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AcceptRanges, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write AcceptRanges contents to a SignedRequest
+/// Write `AcceptRanges` contents to a `SignedRequest`
 struct AcceptRangesWriter;
 impl AcceptRangesWriter {
     fn write_params(params: &mut Params, name: &str, obj: &AcceptRanges) {
@@ -6121,17 +6121,17 @@ impl AcceptRangesWriter {
 #[derive(Debug, Default)]
 pub struct ObjectAlreadyInActiveTierError;
 
-/// Parse ObjectAlreadyInActiveTierError from XML
+/// Parse `ObjectAlreadyInActiveTierError` from XML
 struct ObjectAlreadyInActiveTierErrorParser;
 impl ObjectAlreadyInActiveTierErrorParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectAlreadyInActiveTierError, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectAlreadyInActiveTierError, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ObjectAlreadyInActiveTierError::default();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ObjectAlreadyInActiveTierError contents to a SignedRequest
+/// Write `ObjectAlreadyInActiveTierError` contents to a `SignedRequest`
 struct ObjectAlreadyInActiveTierErrorWriter;
 impl ObjectAlreadyInActiveTierErrorWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectAlreadyInActiveTierError) {
@@ -6144,10 +6144,10 @@ pub struct CompletedMultipartUpload {
     pub parts: CompletedPartList,
 }
 
-/// Parse CompletedMultipartUpload from XML
+/// Parse `CompletedMultipartUpload` from XML
 struct CompletedMultipartUploadParser;
 impl CompletedMultipartUploadParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CompletedMultipartUpload, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CompletedMultipartUpload, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CompletedMultipartUpload::default();
         loop {
@@ -6162,7 +6162,7 @@ impl CompletedMultipartUploadParser {
         Ok(obj)
     }
 }
-/// Write CompletedMultipartUpload contents to a SignedRequest
+/// Write `CompletedMultipartUpload` contents to a `SignedRequest`
 struct CompletedMultipartUploadWriter;
 impl CompletedMultipartUploadWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CompletedMultipartUpload) {
@@ -6172,17 +6172,17 @@ impl CompletedMultipartUploadWriter {
     }
 }
 pub type Initiated = String;
-/// Parse Initiated from XML
+/// Parse `Initiated` from XML
 struct InitiatedParser;
 impl InitiatedParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Initiated, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Initiated, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Initiated contents to a SignedRequest
+/// Write `Initiated` contents to a `SignedRequest`
 struct InitiatedWriter;
 impl InitiatedWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Initiated) {
@@ -6230,10 +6230,10 @@ pub struct UploadPartOutput {
     pub ssekms_key_id: SSEKMSKeyId,
 }
 
-/// Parse UploadPartOutput from XML
+/// Parse `UploadPartOutput` from XML
 struct UploadPartOutputParser;
 impl UploadPartOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadPartOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadPartOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = UploadPartOutput::default();
         loop {
@@ -6268,7 +6268,7 @@ impl UploadPartOutputParser {
         Ok(obj)
     }
 }
-/// Write UploadPartOutput contents to a SignedRequest
+/// Write `UploadPartOutput` contents to a `SignedRequest`
 struct UploadPartOutputWriter;
 impl UploadPartOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &UploadPartOutput) {
@@ -6283,17 +6283,17 @@ impl UploadPartOutputWriter {
     }
 }
 pub type CopySource = String;
-/// Parse CopySource from XML
+/// Parse `CopySource` from XML
 struct CopySourceParser;
 impl CopySourceParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySource, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySource, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CopySource contents to a SignedRequest
+/// Write `CopySource` contents to a `SignedRequest`
 struct CopySourceWriter;
 impl CopySourceWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopySource) {
@@ -6301,10 +6301,10 @@ impl CopySourceWriter {
     }
 }
 pub type QueueConfigurationList = Vec<QueueConfiguration>;
-/// Parse QueueConfigurationList from XML
+/// Parse `QueueConfigurationList` from XML
 struct QueueConfigurationListParser;
 impl QueueConfigurationListParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueConfigurationList, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueConfigurationList, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "QueueConfiguration" {
             obj.push(try!(QueueConfigurationParser::parse_xml("QueueConfiguration", stack)));
@@ -6312,7 +6312,7 @@ impl QueueConfigurationListParser {
         Ok(obj)
     }
 }
-/// Write QueueConfigurationList contents to a SignedRequest
+/// Write `QueueConfigurationList` contents to a `SignedRequest`
 struct QueueConfigurationListWriter;
 impl QueueConfigurationListWriter {
     fn write_params(params: &mut Params, name: &str, obj: &QueueConfigurationList) {
@@ -6329,17 +6329,17 @@ impl QueueConfigurationListWriter {
 #[derive(Debug, Default)]
 pub struct ObjectNotInActiveTierError;
 
-/// Parse ObjectNotInActiveTierError from XML
+/// Parse `ObjectNotInActiveTierError` from XML
 struct ObjectNotInActiveTierErrorParser;
 impl ObjectNotInActiveTierErrorParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectNotInActiveTierError, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectNotInActiveTierError, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ObjectNotInActiveTierError::default();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ObjectNotInActiveTierError contents to a SignedRequest
+/// Write `ObjectNotInActiveTierError` contents to a `SignedRequest`
 struct ObjectNotInActiveTierErrorWriter;
 impl ObjectNotInActiveTierErrorWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectNotInActiveTierError) {
@@ -6348,17 +6348,17 @@ impl ObjectNotInActiveTierErrorWriter {
     }
 }
 pub type TransitionStorageClass = String;
-/// Parse TransitionStorageClass from XML
+/// Parse `TransitionStorageClass` from XML
 struct TransitionStorageClassParser;
 impl TransitionStorageClassParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TransitionStorageClass, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TransitionStorageClass, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write TransitionStorageClass contents to a SignedRequest
+/// Write `TransitionStorageClass` contents to a `SignedRequest`
 struct TransitionStorageClassWriter;
 impl TransitionStorageClassWriter {
     fn write_params(params: &mut Params, name: &str, obj: &TransitionStorageClass) {
@@ -6366,17 +6366,17 @@ impl TransitionStorageClassWriter {
     }
 }
 pub type DeleteMarker = bool;
-/// Parse DeleteMarker from XML
+/// Parse `DeleteMarker` from XML
 struct DeleteMarkerParser;
 impl DeleteMarkerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMarker, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write DeleteMarker contents to a SignedRequest
+/// Write `DeleteMarker` contents to a `SignedRequest`
 struct DeleteMarkerWriter;
 impl DeleteMarkerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteMarker) {
@@ -6399,10 +6399,10 @@ pub struct Rule {
     pub id: Option<ID>,
 }
 
-/// Parse Rule from XML
+/// Parse `Rule` from XML
 struct RuleParser;
 impl RuleParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Rule, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Rule, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Rule::default();
         loop {
@@ -6441,7 +6441,7 @@ impl RuleParser {
         Ok(obj)
     }
 }
-/// Write Rule contents to a SignedRequest
+/// Write `Rule` contents to a `SignedRequest`
 struct RuleWriter;
 impl RuleWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Rule) {
@@ -6467,10 +6467,10 @@ impl RuleWriter {
     }
 }
 pub type RoutingRules = Vec<RoutingRule>;
-/// Parse RoutingRules from XML
+/// Parse `RoutingRules` from XML
 struct RoutingRulesParser;
 impl RoutingRulesParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RoutingRules, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RoutingRules, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "RoutingRule" {
             obj.push(try!(RoutingRuleParser::parse_xml("RoutingRule", stack)));
@@ -6478,7 +6478,7 @@ impl RoutingRulesParser {
         Ok(obj)
     }
 }
-/// Write RoutingRules contents to a SignedRequest
+/// Write `RoutingRules` contents to a `SignedRequest`
 struct RoutingRulesWriter;
 impl RoutingRulesWriter {
     fn write_params(params: &mut Params, name: &str, obj: &RoutingRules) {
@@ -6504,10 +6504,10 @@ pub struct ReplicationRule {
     pub id: Option<ID>,
 }
 
-/// Parse ReplicationRule from XML
+/// Parse `ReplicationRule` from XML
 struct ReplicationRuleParser;
 impl ReplicationRuleParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplicationRule, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplicationRule, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ReplicationRule::default();
         loop {
@@ -6534,7 +6534,7 @@ impl ReplicationRuleParser {
         Ok(obj)
     }
 }
-/// Write ReplicationRule contents to a SignedRequest
+/// Write `ReplicationRule` contents to a `SignedRequest`
 struct ReplicationRuleWriter;
 impl ReplicationRuleWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ReplicationRule) {
@@ -6549,17 +6549,17 @@ impl ReplicationRuleWriter {
     }
 }
 pub type Date = String;
-/// Parse Date from XML
+/// Parse `Date` from XML
 struct DateParser;
 impl DateParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Date, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Date, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Date contents to a SignedRequest
+/// Write `Date` contents to a `SignedRequest`
 struct DateWriter;
 impl DateWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Date) {
@@ -6567,17 +6567,17 @@ impl DateWriter {
     }
 }
 pub type CacheControl = String;
-/// Parse CacheControl from XML
+/// Parse `CacheControl` from XML
 struct CacheControlParser;
 impl CacheControlParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CacheControl, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CacheControl, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CacheControl contents to a SignedRequest
+/// Write `CacheControl` contents to a `SignedRequest`
 struct CacheControlWriter;
 impl CacheControlWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CacheControl) {
@@ -6585,17 +6585,17 @@ impl CacheControlWriter {
     }
 }
 pub type AllowedOrigin = String;
-/// Parse AllowedOrigin from XML
+/// Parse `AllowedOrigin` from XML
 struct AllowedOriginParser;
 impl AllowedOriginParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedOrigin, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedOrigin, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write AllowedOrigin contents to a SignedRequest
+/// Write `AllowedOrigin` contents to a `SignedRequest`
 struct AllowedOriginWriter;
 impl AllowedOriginWriter {
     fn write_params(params: &mut Params, name: &str, obj: &AllowedOrigin) {
@@ -6603,17 +6603,17 @@ impl AllowedOriginWriter {
     }
 }
 pub type IfModifiedSince = String;
-/// Parse IfModifiedSince from XML
+/// Parse `IfModifiedSince` from XML
 struct IfModifiedSinceParser;
 impl IfModifiedSinceParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IfModifiedSince, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IfModifiedSince, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write IfModifiedSince contents to a SignedRequest
+/// Write `IfModifiedSince` contents to a `SignedRequest`
 struct IfModifiedSinceWriter;
 impl IfModifiedSinceWriter {
     fn write_params(params: &mut Params, name: &str, obj: &IfModifiedSince) {
@@ -6638,10 +6638,10 @@ pub struct Condition {
     pub key_prefix_equals: KeyPrefixEquals,
 }
 
-/// Parse Condition from XML
+/// Parse `Condition` from XML
 struct ConditionParser;
 impl ConditionParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Condition, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Condition, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Condition::default();
         loop {
@@ -6660,7 +6660,7 @@ impl ConditionParser {
         Ok(obj)
     }
 }
-/// Write Condition contents to a SignedRequest
+/// Write `Condition` contents to a `SignedRequest`
 struct ConditionWriter;
 impl ConditionWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Condition) {
@@ -6677,10 +6677,10 @@ pub struct DeleteObjectsOutput {
     pub request_charged: RequestCharged,
 }
 
-/// Parse DeleteObjectsOutput from XML
+/// Parse `DeleteObjectsOutput` from XML
 struct DeleteObjectsOutputParser;
 impl DeleteObjectsOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteObjectsOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteObjectsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteObjectsOutput::default();
         loop {
@@ -6703,7 +6703,7 @@ impl DeleteObjectsOutputParser {
         Ok(obj)
     }
 }
-/// Write DeleteObjectsOutput contents to a SignedRequest
+/// Write `DeleteObjectsOutput` contents to a `SignedRequest`
 struct DeleteObjectsOutputWriter;
 impl DeleteObjectsOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteObjectsOutput) {
@@ -6720,10 +6720,10 @@ pub struct ErrorDocument {
     pub key: ObjectKey,
 }
 
-/// Parse ErrorDocument from XML
+/// Parse `ErrorDocument` from XML
 struct ErrorDocumentParser;
 impl ErrorDocumentParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ErrorDocument, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ErrorDocument, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ErrorDocument::default();
         loop {
@@ -6738,7 +6738,7 @@ impl ErrorDocumentParser {
         Ok(obj)
     }
 }
-/// Write ErrorDocument contents to a SignedRequest
+/// Write `ErrorDocument` contents to a `SignedRequest`
 struct ErrorDocumentWriter;
 impl ErrorDocumentWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ErrorDocument) {
@@ -6748,17 +6748,17 @@ impl ErrorDocumentWriter {
     }
 }
 pub type Payer = String;
-/// Parse Payer from XML
+/// Parse `Payer` from XML
 struct PayerParser;
 impl PayerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Payer, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Payer, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Payer contents to a SignedRequest
+/// Write `Payer` contents to a `SignedRequest`
 struct PayerWriter;
 impl PayerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Payer) {
@@ -6772,10 +6772,10 @@ pub struct PutBucketLifecycleRequest {
     pub bucket: BucketName,
 }
 
-/// Parse PutBucketLifecycleRequest from XML
+/// Parse `PutBucketLifecycleRequest` from XML
 struct PutBucketLifecycleRequestParser;
 impl PutBucketLifecycleRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketLifecycleRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketLifecycleRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutBucketLifecycleRequest::default();
         loop {
@@ -6798,7 +6798,7 @@ impl PutBucketLifecycleRequestParser {
         Ok(obj)
     }
 }
-/// Write PutBucketLifecycleRequest contents to a SignedRequest
+/// Write `PutBucketLifecycleRequest` contents to a `SignedRequest`
 struct PutBucketLifecycleRequestWriter;
 impl PutBucketLifecycleRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutBucketLifecycleRequest) {
@@ -6819,10 +6819,10 @@ pub struct GetObjectTorrentOutput {
     pub request_charged: RequestCharged,
 }
 
-/// Parse GetObjectTorrentOutput from XML
+/// Parse `GetObjectTorrentOutput` from XML
 struct GetObjectTorrentOutputParser;
 impl GetObjectTorrentOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectTorrentOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectTorrentOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetObjectTorrentOutput::default();
         loop {
@@ -6841,7 +6841,7 @@ impl GetObjectTorrentOutputParser {
         Ok(obj)
     }
 }
-/// Write GetObjectTorrentOutput contents to a SignedRequest
+/// Write `GetObjectTorrentOutput` contents to a `SignedRequest`
 struct GetObjectTorrentOutputWriter;
 impl GetObjectTorrentOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetObjectTorrentOutput) {
@@ -6852,17 +6852,17 @@ impl GetObjectTorrentOutputWriter {
     }
 }
 pub type ContentLength = i32;
-/// Parse ContentLength from XML
+/// Parse `ContentLength` from XML
 struct ContentLengthParser;
 impl ContentLengthParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentLength, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentLength, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ContentLength contents to a SignedRequest
+/// Write `ContentLength` contents to a `SignedRequest`
 struct ContentLengthWriter;
 impl ContentLengthWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ContentLength) {
@@ -6881,10 +6881,10 @@ pub struct Transition {
     pub storage_class: TransitionStorageClass,
 }
 
-/// Parse Transition from XML
+/// Parse `Transition` from XML
 struct TransitionParser;
 impl TransitionParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Transition, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Transition, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Transition::default();
         loop {
@@ -6907,7 +6907,7 @@ impl TransitionParser {
         Ok(obj)
     }
 }
-/// Write Transition contents to a SignedRequest
+/// Write `Transition` contents to a `SignedRequest`
 struct TransitionWriter;
 impl TransitionWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Transition) {
@@ -6926,10 +6926,10 @@ pub struct QueueConfigurationDeprecated {
     pub event: Event,
 }
 
-/// Parse QueueConfigurationDeprecated from XML
+/// Parse `QueueConfigurationDeprecated` from XML
 struct QueueConfigurationDeprecatedParser;
 impl QueueConfigurationDeprecatedParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueConfigurationDeprecated, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueConfigurationDeprecated, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = QueueConfigurationDeprecated::default();
         loop {
@@ -6956,7 +6956,7 @@ impl QueueConfigurationDeprecatedParser {
         Ok(obj)
     }
 }
-/// Write QueueConfigurationDeprecated contents to a SignedRequest
+/// Write `QueueConfigurationDeprecated` contents to a `SignedRequest`
 struct QueueConfigurationDeprecatedWriter;
 impl QueueConfigurationDeprecatedWriter {
     fn write_params(params: &mut Params, name: &str, obj: &QueueConfigurationDeprecated) {
@@ -7039,10 +7039,10 @@ pub struct GetObjectOutput {
     pub sse_customer_key_md5: SSECustomerKeyMD5,
 }
 
-/// Parse GetObjectOutput from XML
+/// Parse `GetObjectOutput` from XML
 struct GetObjectOutputParser;
 impl GetObjectOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetObjectOutput::default();
         loop {
@@ -7157,7 +7157,7 @@ impl GetObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write GetObjectOutput contents to a SignedRequest
+/// Write `GetObjectOutput` contents to a `SignedRequest`
 struct GetObjectOutputWriter;
 impl GetObjectOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetObjectOutput) {
@@ -7196,10 +7196,10 @@ pub struct GetBucketLifecycleRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketLifecycleRequest from XML
+/// Parse `GetBucketLifecycleRequest` from XML
 struct GetBucketLifecycleRequestParser;
 impl GetBucketLifecycleRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLifecycleRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLifecycleRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketLifecycleRequest::default();
         loop {
@@ -7214,7 +7214,7 @@ impl GetBucketLifecycleRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketLifecycleRequest contents to a SignedRequest
+/// Write `GetBucketLifecycleRequest` contents to a `SignedRequest`
 struct GetBucketLifecycleRequestWriter;
 impl GetBucketLifecycleRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketLifecycleRequest) {
@@ -7224,17 +7224,17 @@ impl GetBucketLifecycleRequestWriter {
     }
 }
 pub type CopySourceSSECustomerKeyMD5 = String;
-/// Parse CopySourceSSECustomerKeyMD5 from XML
+/// Parse `CopySourceSSECustomerKeyMD`5 from XML
 struct CopySourceSSECustomerKeyMD5Parser;
 impl CopySourceSSECustomerKeyMD5Parser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceSSECustomerKeyMD5, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceSSECustomerKeyMD5, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CopySourceSSECustomerKeyMD5 contents to a SignedRequest
+/// Write `CopySourceSSECustomerKeyMD5` contents to a `SignedRequest`
 struct CopySourceSSECustomerKeyMD5Writer;
 impl CopySourceSSECustomerKeyMD5Writer {
     fn write_params(params: &mut Params, name: &str, obj: &CopySourceSSECustomerKeyMD5) {
@@ -7249,10 +7249,10 @@ pub struct S3ClientError {
     pub key: ObjectKey,
 }
 
-/// Parse S3ClientError from XML
+/// Parse `S`3ClientError from XML
 struct S3ClientErrorParser;
 impl S3ClientErrorParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<S3ClientError, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<S3ClientError, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = S3ClientError::default();
         loop {
@@ -7279,7 +7279,7 @@ impl S3ClientErrorParser {
         Ok(obj)
     }
 }
-/// Write S3ClientError contents to a SignedRequest
+/// Write `S3ClientError` contents to a `SignedRequest`
 struct S3ClientErrorWriter;
 impl S3ClientErrorWriter {
     fn write_params(params: &mut Params, name: &str, obj: &S3ClientError) {
@@ -7296,10 +7296,10 @@ pub struct BucketLoggingStatus {
     pub logging_enabled: LoggingEnabled,
 }
 
-/// Parse BucketLoggingStatus from XML
+/// Parse `BucketLoggingStatus` from XML
 struct BucketLoggingStatusParser;
 impl BucketLoggingStatusParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketLoggingStatus, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<BucketLoggingStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = BucketLoggingStatus::default();
         loop {
@@ -7314,7 +7314,7 @@ impl BucketLoggingStatusParser {
         Ok(obj)
     }
 }
-/// Write BucketLoggingStatus contents to a SignedRequest
+/// Write `BucketLoggingStatus` contents to a `SignedRequest`
 struct BucketLoggingStatusWriter;
 impl BucketLoggingStatusWriter {
     fn write_params(params: &mut Params, name: &str, obj: &BucketLoggingStatus) {
@@ -7324,17 +7324,17 @@ impl BucketLoggingStatusWriter {
     }
 }
 pub type IsLatest = bool;
-/// Parse IsLatest from XML
+/// Parse `IsLatest` from XML
 struct IsLatestParser;
 impl IsLatestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IsLatest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IsLatest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write IsLatest contents to a SignedRequest
+/// Write `IsLatest` contents to a `SignedRequest`
 struct IsLatestWriter;
 impl IsLatestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &IsLatest) {
@@ -7342,17 +7342,17 @@ impl IsLatestWriter {
     }
 }
 pub type MaxUploads = i32;
-/// Parse MaxUploads from XML
+/// Parse `MaxUploads` from XML
 struct MaxUploadsParser;
 impl MaxUploadsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MaxUploads, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MaxUploads, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MaxUploads contents to a SignedRequest
+/// Write `MaxUploads` contents to a `SignedRequest`
 struct MaxUploadsWriter;
 impl MaxUploadsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MaxUploads) {
@@ -7372,10 +7372,10 @@ pub struct RoutingRule {
     pub condition: Option<Condition>,
 }
 
-/// Parse RoutingRule from XML
+/// Parse `RoutingRule` from XML
 struct RoutingRuleParser;
 impl RoutingRuleParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RoutingRule, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RoutingRule, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = RoutingRule::default();
         loop {
@@ -7394,7 +7394,7 @@ impl RoutingRuleParser {
         Ok(obj)
     }
 }
-/// Write RoutingRule contents to a SignedRequest
+/// Write `RoutingRule` contents to a `SignedRequest`
 struct RoutingRuleWriter;
 impl RoutingRuleWriter {
     fn write_params(params: &mut Params, name: &str, obj: &RoutingRule) {
@@ -7407,17 +7407,17 @@ impl RoutingRuleWriter {
     }
 }
 pub type MissingMeta = i32;
-/// Parse MissingMeta from XML
+/// Parse `MissingMeta` from XML
 struct MissingMetaParser;
 impl MissingMetaParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MissingMeta, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MissingMeta, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MissingMeta contents to a SignedRequest
+/// Write `MissingMeta` contents to a `SignedRequest`
 struct MissingMetaWriter;
 impl MissingMetaWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MissingMeta) {
@@ -7425,17 +7425,17 @@ impl MissingMetaWriter {
     }
 }
 pub type SSEKMSKeyId = String;
-/// Parse SSEKMSKeyId from XML
+/// Parse `SSEKMSKeyId` from XML
 struct SSEKMSKeyIdParser;
 impl SSEKMSKeyIdParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSEKMSKeyId, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSEKMSKeyId, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write SSEKMSKeyId contents to a SignedRequest
+/// Write `SSEKMSKeyId` contents to a `SignedRequest`
 struct SSEKMSKeyIdWriter;
 impl SSEKMSKeyIdWriter {
     fn write_params(params: &mut Params, name: &str, obj: &SSEKMSKeyId) {
@@ -7443,10 +7443,10 @@ impl SSEKMSKeyIdWriter {
     }
 }
 pub type AllowedOrigins = Vec<AllowedOrigin>;
-/// Parse AllowedOrigins from XML
+/// Parse `AllowedOrigins` from XML
 struct AllowedOriginsParser;
 impl AllowedOriginsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedOrigins, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedOrigins, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "AllowedOrigin" {
             obj.push(try!(AllowedOriginParser::parse_xml("AllowedOrigin", stack)));
@@ -7454,7 +7454,7 @@ impl AllowedOriginsParser {
         Ok(obj)
     }
 }
-/// Write AllowedOrigins contents to a SignedRequest
+/// Write `AllowedOrigins` contents to a `SignedRequest`
 struct AllowedOriginsWriter;
 impl AllowedOriginsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &AllowedOrigins) {
@@ -7470,17 +7470,17 @@ impl AllowedOriginsWriter {
 #[derive(Debug, Default)]
 pub struct NoSuchUpload;
 
-/// Parse NoSuchUpload from XML
+/// Parse `NoSuchUpload` from XML
 struct NoSuchUploadParser;
 impl NoSuchUploadParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NoSuchUpload, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NoSuchUpload, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = NoSuchUpload::default();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write NoSuchUpload contents to a SignedRequest
+/// Write `NoSuchUpload` contents to a `SignedRequest`
 struct NoSuchUploadWriter;
 impl NoSuchUploadWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NoSuchUpload) {
@@ -7556,17 +7556,17 @@ pub struct PutObjectRequest<'a> {
 }
 
 pub type Code = String;
-/// Parse Code from XML
+/// Parse `Code` from XML
 struct CodeParser;
 impl CodeParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Code, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Code, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Code contents to a SignedRequest
+/// Write `Code` contents to a `SignedRequest`
 struct CodeWriter;
 impl CodeWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Code) {
@@ -7574,17 +7574,17 @@ impl CodeWriter {
     }
 }
 pub type ReplicationStatus = String;
-/// Parse ReplicationStatus from XML
+/// Parse `ReplicationStatus` from XML
 struct ReplicationStatusParser;
 impl ReplicationStatusParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplicationStatus, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplicationStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ReplicationStatus contents to a SignedRequest
+/// Write `ReplicationStatus` contents to a `SignedRequest`
 struct ReplicationStatusWriter;
 impl ReplicationStatusWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ReplicationStatus) {
@@ -7592,10 +7592,10 @@ impl ReplicationStatusWriter {
     }
 }
 pub type AllowedHeaders = Vec<AllowedHeader>;
-/// Parse AllowedHeaders from XML
+/// Parse `AllowedHeaders` from XML
 struct AllowedHeadersParser;
 impl AllowedHeadersParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedHeaders, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedHeaders, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "AllowedHeader" {
             obj.push(try!(AllowedHeaderParser::parse_xml("AllowedHeader", stack)));
@@ -7603,7 +7603,7 @@ impl AllowedHeadersParser {
         Ok(obj)
     }
 }
-/// Write AllowedHeaders contents to a SignedRequest
+/// Write `AllowedHeaders` contents to a `SignedRequest`
 struct AllowedHeadersWriter;
 impl AllowedHeadersWriter {
     fn write_params(params: &mut Params, name: &str, obj: &AllowedHeaders) {
@@ -7620,10 +7620,10 @@ pub struct Tagging {
     pub tag_set: TagSet,
 }
 
-/// Parse Tagging from XML
+/// Parse `Tagging` from XML
 struct TaggingParser;
 impl TaggingParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tagging, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tagging, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Tagging::default();
         loop {
@@ -7638,7 +7638,7 @@ impl TaggingParser {
         Ok(obj)
     }
 }
-/// Write Tagging contents to a SignedRequest
+/// Write `Tagging` contents to a `SignedRequest`
 struct TaggingWriter;
 impl TaggingWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Tagging) {
@@ -7648,17 +7648,17 @@ impl TaggingWriter {
     }
 }
 pub type ContentMD5 = String;
-/// Parse ContentMD5 from XML
+/// Parse `ContentMD`5 from XML
 struct ContentMD5Parser;
 impl ContentMD5Parser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentMD5, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentMD5, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ContentMD5 contents to a SignedRequest
+/// Write `ContentMD5` contents to a `SignedRequest`
 struct ContentMD5Writer;
 impl ContentMD5Writer {
     fn write_params(params: &mut Params, name: &str, obj: &ContentMD5) {
@@ -7684,10 +7684,10 @@ pub struct ObjectVersion {
     pub size: Size,
 }
 
-/// Parse ObjectVersion from XML
+/// Parse `ObjectVersion` from XML
 struct ObjectVersionParser;
 impl ObjectVersionParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectVersion, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectVersion, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ObjectVersion::default();
         loop {
@@ -7730,7 +7730,7 @@ impl ObjectVersionParser {
         Ok(obj)
     }
 }
-/// Write ObjectVersion contents to a SignedRequest
+/// Write `ObjectVersion` contents to a `SignedRequest`
 struct ObjectVersionWriter;
 impl ObjectVersionWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectVersion) {
@@ -7773,10 +7773,10 @@ pub struct ListObjectVersionsOutput {
     pub common_prefixes: CommonPrefixList,
 }
 
-/// Parse ListObjectVersionsOutput from XML
+/// Parse `ListObjectVersionsOutput` from XML
 struct ListObjectVersionsOutputParser;
 impl ListObjectVersionsOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectVersionsOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectVersionsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ListObjectVersionsOutput::default();
         loop {
@@ -7839,7 +7839,7 @@ impl ListObjectVersionsOutputParser {
         Ok(obj)
     }
 }
-/// Write ListObjectVersionsOutput contents to a SignedRequest
+/// Write `ListObjectVersionsOutput` contents to a `SignedRequest`
 struct ListObjectVersionsOutputWriter;
 impl ListObjectVersionsOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ListObjectVersionsOutput) {
@@ -7866,10 +7866,10 @@ pub struct PutBucketNotificationConfigurationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse PutBucketNotificationConfigurationRequest from XML
+/// Parse `PutBucketNotificationConfigurationRequest` from XML
 struct PutBucketNotificationConfigurationRequestParser;
 impl PutBucketNotificationConfigurationRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketNotificationConfigurationRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketNotificationConfigurationRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutBucketNotificationConfigurationRequest::default();
         loop {
@@ -7888,7 +7888,7 @@ impl PutBucketNotificationConfigurationRequestParser {
         Ok(obj)
     }
 }
-/// Write PutBucketNotificationConfigurationRequest contents to a SignedRequest
+/// Write `PutBucketNotificationConfigurationRequest` contents to a `SignedRequest`
 struct PutBucketNotificationConfigurationRequestWriter;
 impl PutBucketNotificationConfigurationRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutBucketNotificationConfigurationRequest) {
@@ -7899,17 +7899,17 @@ impl PutBucketNotificationConfigurationRequestWriter {
     }
 }
 pub type Prefix = String;
-/// Parse Prefix from XML
+/// Parse `Prefix` from XML
 struct PrefixParser;
 impl PrefixParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Prefix, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Prefix, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Prefix contents to a SignedRequest
+/// Write `Prefix` contents to a `SignedRequest`
 struct PrefixWriter;
 impl PrefixWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Prefix) {
@@ -7917,10 +7917,10 @@ impl PrefixWriter {
     }
 }
 pub type Parts = Vec<Part>;
-/// Parse Parts from XML
+/// Parse `Parts` from XML
 struct PartsParser;
 impl PartsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Parts, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Parts, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "Part" {
             obj.push(try!(PartParser::parse_xml("Part", stack)));
@@ -7928,7 +7928,7 @@ impl PartsParser {
         Ok(obj)
     }
 }
-/// Write Parts contents to a SignedRequest
+/// Write `Parts` contents to a `SignedRequest`
 struct PartsWriter;
 impl PartsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Parts) {
@@ -8027,10 +8027,10 @@ pub struct CopyObjectRequest {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
 }
 
-/// Parse CopyObjectRequest from XML
+/// Parse `CopyObjectRequest` from XML
 struct CopyObjectRequestParser;
 impl CopyObjectRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopyObjectRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopyObjectRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CopyObjectRequest::default();
         loop {
@@ -8161,7 +8161,7 @@ impl CopyObjectRequestParser {
         Ok(obj)
     }
 }
-/// Write CopyObjectRequest contents to a SignedRequest
+/// Write `CopyObjectRequest` contents to a `SignedRequest`
 struct CopyObjectRequestWriter;
 impl CopyObjectRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopyObjectRequest) {
@@ -8263,10 +8263,10 @@ pub struct DeleteObjectsRequest {
     pub delete: Delete,
 }
 
-/// Parse DeleteObjectsRequest from XML
+/// Parse `DeleteObjectsRequest` from XML
 struct DeleteObjectsRequestParser;
 impl DeleteObjectsRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteObjectsRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteObjectsRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteObjectsRequest::default();
         loop {
@@ -8293,7 +8293,7 @@ impl DeleteObjectsRequestParser {
         Ok(obj)
     }
 }
-/// Write DeleteObjectsRequest contents to a SignedRequest
+/// Write `DeleteObjectsRequest` contents to a `SignedRequest`
 struct DeleteObjectsRequestWriter;
 impl DeleteObjectsRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteObjectsRequest) {
@@ -8336,10 +8336,10 @@ pub struct ListPartsOutput {
     pub part_number_marker: PartNumberMarker,
 }
 
-/// Parse ListPartsOutput from XML
+/// Parse `ListPartsOutput` from XML
 struct ListPartsOutputParser;
 impl ListPartsOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListPartsOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListPartsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ListPartsOutput::default();
         loop {
@@ -8398,7 +8398,7 @@ impl ListPartsOutputParser {
         Ok(obj)
     }
 }
-/// Write ListPartsOutput contents to a SignedRequest
+/// Write `ListPartsOutput` contents to a `SignedRequest`
 struct ListPartsOutputWriter;
 impl ListPartsOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ListPartsOutput) {
@@ -8419,17 +8419,17 @@ impl ListPartsOutputWriter {
     }
 }
 pub type Marker = String;
-/// Parse Marker from XML
+/// Parse `Marker` from XML
 struct MarkerParser;
 impl MarkerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Marker, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Marker, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Marker contents to a SignedRequest
+/// Write `Marker` contents to a `SignedRequest`
 struct MarkerWriter;
 impl MarkerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Marker) {
@@ -8437,17 +8437,17 @@ impl MarkerWriter {
     }
 }
 pub type ObjectCannedACL = String;
-/// Parse ObjectCannedACL from XML
+/// Parse `ObjectCannedACL` from XML
 struct ObjectCannedACLParser;
 impl ObjectCannedACLParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectCannedACL, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectCannedACL, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ObjectCannedACL contents to a SignedRequest
+/// Write `ObjectCannedACL` contents to a `SignedRequest`
 struct ObjectCannedACLWriter;
 impl ObjectCannedACLWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectCannedACL) {
@@ -8460,10 +8460,10 @@ pub struct RestoreRequest {
     pub days: Days,
 }
 
-/// Parse RestoreRequest from XML
+/// Parse `RestoreRequest` from XML
 struct RestoreRequestParser;
 impl RestoreRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RestoreRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RestoreRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = RestoreRequest::default();
         loop {
@@ -8478,7 +8478,7 @@ impl RestoreRequestParser {
         Ok(obj)
     }
 }
-/// Write RestoreRequest contents to a SignedRequest
+/// Write `RestoreRequest` contents to a `SignedRequest`
 struct RestoreRequestWriter;
 impl RestoreRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &RestoreRequest) {
@@ -8496,10 +8496,10 @@ pub struct CompletedPart {
     pub e_tag: ETag,
 }
 
-/// Parse CompletedPart from XML
+/// Parse `CompletedPart` from XML
 struct CompletedPartParser;
 impl CompletedPartParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CompletedPart, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CompletedPart, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CompletedPart::default();
         loop {
@@ -8518,7 +8518,7 @@ impl CompletedPartParser {
         Ok(obj)
     }
 }
-/// Write CompletedPart contents to a SignedRequest
+/// Write `CompletedPart` contents to a `SignedRequest`
 struct CompletedPartWriter;
 impl CompletedPartWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CompletedPart) {
@@ -8529,17 +8529,17 @@ impl CompletedPartWriter {
     }
 }
 pub type QueueArn = String;
-/// Parse QueueArn from XML
+/// Parse `QueueArn` from XML
 struct QueueArnParser;
 impl QueueArnParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueArn, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<QueueArn, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write QueueArn contents to a SignedRequest
+/// Write `QueueArn` contents to a `SignedRequest`
 struct QueueArnWriter;
 impl QueueArnWriter {
     fn write_params(params: &mut Params, name: &str, obj: &QueueArn) {
@@ -8547,17 +8547,17 @@ impl QueueArnWriter {
     }
 }
 pub type Location = String;
-/// Parse Location from XML
+/// Parse `Location` from XML
 struct LocationParser;
 impl LocationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Location, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Location, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Location contents to a SignedRequest
+/// Write `Location` contents to a `SignedRequest`
 struct LocationWriter;
 impl LocationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Location) {
@@ -8565,17 +8565,17 @@ impl LocationWriter {
     }
 }
 pub type HttpErrorCodeReturnedEquals = String;
-/// Parse HttpErrorCodeReturnedEquals from XML
+/// Parse `HttpErrorCodeReturnedEquals` from XML
 struct HttpErrorCodeReturnedEqualsParser;
 impl HttpErrorCodeReturnedEqualsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HttpErrorCodeReturnedEquals, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HttpErrorCodeReturnedEquals, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write HttpErrorCodeReturnedEquals contents to a SignedRequest
+/// Write `HttpErrorCodeReturnedEquals` contents to a `SignedRequest`
 struct HttpErrorCodeReturnedEqualsWriter;
 impl HttpErrorCodeReturnedEqualsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &HttpErrorCodeReturnedEquals) {
@@ -8589,10 +8589,10 @@ pub struct NotificationConfigurationDeprecated {
     pub topic_configuration: TopicConfigurationDeprecated,
 }
 
-/// Parse NotificationConfigurationDeprecated from XML
+/// Parse `NotificationConfigurationDeprecated` from XML
 struct NotificationConfigurationDeprecatedParser;
 impl NotificationConfigurationDeprecatedParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NotificationConfigurationDeprecated, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NotificationConfigurationDeprecated, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = NotificationConfigurationDeprecated::default();
         loop {
@@ -8615,7 +8615,7 @@ impl NotificationConfigurationDeprecatedParser {
         Ok(obj)
     }
 }
-/// Write NotificationConfigurationDeprecated contents to a SignedRequest
+/// Write `NotificationConfigurationDeprecated` contents to a `SignedRequest`
 struct NotificationConfigurationDeprecatedWriter;
 impl NotificationConfigurationDeprecatedWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NotificationConfigurationDeprecated) {
@@ -8680,10 +8680,10 @@ pub struct UploadPartCopyRequest {
     pub part_number: PartNumber,
 }
 
-/// Parse UploadPartCopyRequest from XML
+/// Parse `UploadPartCopyRequest` from XML
 struct UploadPartCopyRequestParser;
 impl UploadPartCopyRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadPartCopyRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadPartCopyRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = UploadPartCopyRequest::default();
         loop {
@@ -8762,7 +8762,7 @@ impl UploadPartCopyRequestParser {
         Ok(obj)
     }
 }
-/// Write UploadPartCopyRequest contents to a SignedRequest
+/// Write `UploadPartCopyRequest` contents to a `SignedRequest`
 struct UploadPartCopyRequestWriter;
 impl UploadPartCopyRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &UploadPartCopyRequest) {
@@ -8816,10 +8816,10 @@ pub struct CORSConfiguration {
     pub cors_rules: CORSRules,
 }
 
-/// Parse CORSConfiguration from XML
+/// Parse `CORSConfiguration` from XML
 struct CORSConfigurationParser;
 impl CORSConfigurationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CORSConfiguration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CORSConfiguration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CORSConfiguration::default();
         loop {
@@ -8834,7 +8834,7 @@ impl CORSConfigurationParser {
         Ok(obj)
     }
 }
-/// Write CORSConfiguration contents to a SignedRequest
+/// Write `CORSConfiguration` contents to a `SignedRequest`
 struct CORSConfigurationWriter;
 impl CORSConfigurationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CORSConfiguration) {
@@ -8844,17 +8844,17 @@ impl CORSConfigurationWriter {
     }
 }
 pub type LastModified = String;
-/// Parse LastModified from XML
+/// Parse `LastModified` from XML
 struct LastModifiedParser;
 impl LastModifiedParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LastModified, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LastModified, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write LastModified contents to a SignedRequest
+/// Write `LastModified` contents to a `SignedRequest`
 struct LastModifiedWriter;
 impl LastModifiedWriter {
     fn write_params(params: &mut Params, name: &str, obj: &LastModified) {
@@ -8862,17 +8862,17 @@ impl LastModifiedWriter {
     }
 }
 pub type ContentRange = String;
-/// Parse ContentRange from XML
+/// Parse `ContentRange` from XML
 struct ContentRangeParser;
 impl ContentRangeParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentRange, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentRange, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ContentRange contents to a SignedRequest
+/// Write `ContentRange` contents to a `SignedRequest`
 struct ContentRangeWriter;
 impl ContentRangeWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ContentRange) {
@@ -8893,10 +8893,10 @@ pub struct Grantee {
     pub uri: Option<URI>,
 }
 
-/// Parse Grantee from XML
+/// Parse `Grantee` from XML
 struct GranteeParser;
 impl GranteeParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Grantee, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Grantee, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Grantee::default();
         loop {
@@ -8927,7 +8927,7 @@ impl GranteeParser {
         Ok(obj)
     }
 }
-/// Write Grantee contents to a SignedRequest
+/// Write `Grantee` contents to a `SignedRequest`
 struct GranteeWriter;
 impl GranteeWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Grantee) {
@@ -8949,17 +8949,17 @@ impl GranteeWriter {
     }
 }
 pub type ExpirationStatus = String;
-/// Parse ExpirationStatus from XML
+/// Parse `ExpirationStatus` from XML
 struct ExpirationStatusParser;
 impl ExpirationStatusParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ExpirationStatus, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ExpirationStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ExpirationStatus contents to a SignedRequest
+/// Write `ExpirationStatus` contents to a `SignedRequest`
 struct ExpirationStatusWriter;
 impl ExpirationStatusWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ExpirationStatus) {
@@ -8967,17 +8967,17 @@ impl ExpirationStatusWriter {
     }
 }
 pub type CopySourceIfUnmodifiedSince = String;
-/// Parse CopySourceIfUnmodifiedSince from XML
+/// Parse `CopySourceIfUnmodifiedSince` from XML
 struct CopySourceIfUnmodifiedSinceParser;
 impl CopySourceIfUnmodifiedSinceParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceIfUnmodifiedSince, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceIfUnmodifiedSince, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CopySourceIfUnmodifiedSince contents to a SignedRequest
+/// Write `CopySourceIfUnmodifiedSince` contents to a `SignedRequest`
 struct CopySourceIfUnmodifiedSinceWriter;
 impl CopySourceIfUnmodifiedSinceWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopySourceIfUnmodifiedSince) {
@@ -8989,10 +8989,10 @@ pub struct GetBucketVersioningRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketVersioningRequest from XML
+/// Parse `GetBucketVersioningRequest` from XML
 struct GetBucketVersioningRequestParser;
 impl GetBucketVersioningRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketVersioningRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketVersioningRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketVersioningRequest::default();
         loop {
@@ -9007,7 +9007,7 @@ impl GetBucketVersioningRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketVersioningRequest contents to a SignedRequest
+/// Write `GetBucketVersioningRequest` contents to a `SignedRequest`
 struct GetBucketVersioningRequestWriter;
 impl GetBucketVersioningRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketVersioningRequest) {
@@ -9031,10 +9031,10 @@ pub struct MultipartUpload {
     pub owner: Owner,
 }
 
-/// Parse MultipartUpload from XML
+/// Parse `MultipartUpload` from XML
 struct MultipartUploadParser;
 impl MultipartUploadParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUpload, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUpload, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = MultipartUpload::default();
         loop {
@@ -9069,7 +9069,7 @@ impl MultipartUploadParser {
         Ok(obj)
     }
 }
-/// Write MultipartUpload contents to a SignedRequest
+/// Write `MultipartUpload` contents to a `SignedRequest`
 struct MultipartUploadWriter;
 impl MultipartUploadWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MultipartUpload) {
@@ -9084,17 +9084,17 @@ impl MultipartUploadWriter {
     }
 }
 pub type GrantWrite = String;
-/// Parse GrantWrite from XML
+/// Parse `GrantWrite` from XML
 struct GrantWriteParser;
 impl GrantWriteParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantWrite, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GrantWrite, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write GrantWrite contents to a SignedRequest
+/// Write `GrantWrite` contents to a `SignedRequest`
 struct GrantWriteWriter;
 impl GrantWriteWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GrantWrite) {
@@ -9102,10 +9102,10 @@ impl GrantWriteWriter {
     }
 }
 pub type TagSet = Vec<Tag>;
-/// Parse TagSet from XML
+/// Parse `TagSet` from XML
 struct TagSetParser;
 impl TagSetParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TagSet, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TagSet, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "Tag" {
             obj.push(try!(TagParser::parse_xml("Tag", stack)));
@@ -9113,7 +9113,7 @@ impl TagSetParser {
         Ok(obj)
     }
 }
-/// Write TagSet contents to a SignedRequest
+/// Write `TagSet` contents to a `SignedRequest`
 struct TagSetWriter;
 impl TagSetWriter {
     fn write_params(params: &mut Params, name: &str, obj: &TagSet) {
@@ -9126,10 +9126,10 @@ impl TagSetWriter {
     }
 }
 pub type LambdaFunctionConfigurationList = Vec<LambdaFunctionConfiguration>;
-/// Parse LambdaFunctionConfigurationList from XML
+/// Parse `LambdaFunctionConfigurationList` from XML
 struct LambdaFunctionConfigurationListParser;
 impl LambdaFunctionConfigurationListParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LambdaFunctionConfigurationList, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LambdaFunctionConfigurationList, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "LambdaFunctionConfiguration" {
             obj.push(try!(LambdaFunctionConfigurationParser::parse_xml("LambdaFunctionConfiguration", stack)));
@@ -9137,7 +9137,7 @@ impl LambdaFunctionConfigurationListParser {
         Ok(obj)
     }
 }
-/// Write LambdaFunctionConfigurationList contents to a SignedRequest
+/// Write `LambdaFunctionConfigurationList` contents to a `SignedRequest`
 struct LambdaFunctionConfigurationListWriter;
 impl LambdaFunctionConfigurationListWriter {
     fn write_params(params: &mut Params, name: &str, obj: &LambdaFunctionConfigurationList) {
@@ -9150,17 +9150,17 @@ impl LambdaFunctionConfigurationListWriter {
     }
 }
 pub type ServerSideEncryption = String;
-/// Parse ServerSideEncryption from XML
+/// Parse `ServerSideEncryption` from XML
 struct ServerSideEncryptionParser;
 impl ServerSideEncryptionParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ServerSideEncryption, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ServerSideEncryption, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ServerSideEncryption contents to a SignedRequest
+/// Write `ServerSideEncryption` contents to a `SignedRequest`
 struct ServerSideEncryptionWriter;
 impl ServerSideEncryptionWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ServerSideEncryption) {
@@ -9178,10 +9178,10 @@ pub struct GetBucketVersioningOutput {
     pub mfa_delete: MFADeleteStatus,
 }
 
-/// Parse GetBucketVersioningOutput from XML
+/// Parse `GetBucketVersioningOutput` from XML
 struct GetBucketVersioningOutputParser;
 impl GetBucketVersioningOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketVersioningOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketVersioningOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketVersioningOutput::default();
         loop {
@@ -9200,7 +9200,7 @@ impl GetBucketVersioningOutputParser {
         Ok(obj)
     }
 }
-/// Write GetBucketVersioningOutput contents to a SignedRequest
+/// Write `GetBucketVersioningOutput` contents to a `SignedRequest`
 struct GetBucketVersioningOutputWriter;
 impl GetBucketVersioningOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketVersioningOutput) {
@@ -9225,10 +9225,10 @@ pub struct NoncurrentVersionExpiration {
     pub noncurrent_days: Days,
 }
 
-/// Parse NoncurrentVersionExpiration from XML
+/// Parse `NoncurrentVersionExpiration` from XML
 struct NoncurrentVersionExpirationParser;
 impl NoncurrentVersionExpirationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NoncurrentVersionExpiration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NoncurrentVersionExpiration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = NoncurrentVersionExpiration::default();
         loop {
@@ -9243,7 +9243,7 @@ impl NoncurrentVersionExpirationParser {
         Ok(obj)
     }
 }
-/// Write NoncurrentVersionExpiration contents to a SignedRequest
+/// Write `NoncurrentVersionExpiration` contents to a `SignedRequest`
 struct NoncurrentVersionExpirationWriter;
 impl NoncurrentVersionExpirationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NoncurrentVersionExpiration) {
@@ -9258,10 +9258,10 @@ pub struct GetBucketRequestPaymentOutput {
     pub payer: Payer,
 }
 
-/// Parse GetBucketRequestPaymentOutput from XML
+/// Parse `GetBucketRequestPaymentOutput` from XML
 struct GetBucketRequestPaymentOutputParser;
 impl GetBucketRequestPaymentOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketRequestPaymentOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketRequestPaymentOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketRequestPaymentOutput::default();
         loop {
@@ -9276,7 +9276,7 @@ impl GetBucketRequestPaymentOutputParser {
         Ok(obj)
     }
 }
-/// Write GetBucketRequestPaymentOutput contents to a SignedRequest
+/// Write `GetBucketRequestPaymentOutput` contents to a `SignedRequest`
 struct GetBucketRequestPaymentOutputWriter;
 impl GetBucketRequestPaymentOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketRequestPaymentOutput) {
@@ -9334,10 +9334,10 @@ pub struct GetObjectRequest {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
 }
 
-/// Parse GetObjectRequest from XML
+/// Parse `GetObjectRequest` from XML
 struct GetObjectRequestParser;
 impl GetObjectRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetObjectRequest::default();
         loop {
@@ -9420,7 +9420,7 @@ impl GetObjectRequestParser {
         Ok(obj)
     }
 }
-/// Write GetObjectRequest contents to a SignedRequest
+/// Write `GetObjectRequest` contents to a `SignedRequest`
 struct GetObjectRequestWriter;
 impl GetObjectRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetObjectRequest) {
@@ -9479,17 +9479,17 @@ impl GetObjectRequestWriter {
     }
 }
 pub type ContentDisposition = String;
-/// Parse ContentDisposition from XML
+/// Parse `ContentDisposition` from XML
 struct ContentDispositionParser;
 impl ContentDispositionParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentDisposition, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentDisposition, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ContentDisposition contents to a SignedRequest
+/// Write `ContentDisposition` contents to a `SignedRequest`
 struct ContentDispositionWriter;
 impl ContentDispositionWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ContentDisposition) {
@@ -9497,17 +9497,17 @@ impl ContentDispositionWriter {
     }
 }
 pub type MetadataKey = String;
-/// Parse MetadataKey from XML
+/// Parse `MetadataKey` from XML
 struct MetadataKeyParser;
 impl MetadataKeyParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MetadataKey, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MetadataKey, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MetadataKey contents to a SignedRequest
+/// Write `MetadataKey` contents to a `SignedRequest`
 struct MetadataKeyWriter;
 impl MetadataKeyWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MetadataKey) {
@@ -9515,17 +9515,17 @@ impl MetadataKeyWriter {
     }
 }
 pub type ResponseContentEncoding = String;
-/// Parse ResponseContentEncoding from XML
+/// Parse `ResponseContentEncoding` from XML
 struct ResponseContentEncodingParser;
 impl ResponseContentEncodingParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseContentEncoding, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseContentEncoding, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ResponseContentEncoding contents to a SignedRequest
+/// Write `ResponseContentEncoding` contents to a `SignedRequest`
 struct ResponseContentEncodingWriter;
 impl ResponseContentEncodingWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ResponseContentEncoding) {
@@ -9537,10 +9537,10 @@ pub struct GetBucketLoggingRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketLoggingRequest from XML
+/// Parse `GetBucketLoggingRequest` from XML
 struct GetBucketLoggingRequestParser;
 impl GetBucketLoggingRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLoggingRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLoggingRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketLoggingRequest::default();
         loop {
@@ -9555,7 +9555,7 @@ impl GetBucketLoggingRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketLoggingRequest contents to a SignedRequest
+/// Write `GetBucketLoggingRequest` contents to a `SignedRequest`
 struct GetBucketLoggingRequestWriter;
 impl GetBucketLoggingRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketLoggingRequest) {
@@ -9565,10 +9565,10 @@ impl GetBucketLoggingRequestWriter {
     }
 }
 pub type UploadIdMarker = String;
-/// Parse UploadIdMarker from XML
+/// Parse `UploadIdMarker` from XML
 struct UploadIdMarkerParser;
 impl UploadIdMarkerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadIdMarker, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadIdMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = UploadIdMarker::default();
 
@@ -9581,7 +9581,7 @@ impl UploadIdMarkerParser {
         Ok(obj)
     }
 }
-/// Write UploadIdMarker contents to a SignedRequest
+/// Write `UploadIdMarker` contents to a `SignedRequest`
 struct UploadIdMarkerWriter;
 impl UploadIdMarkerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &UploadIdMarker) {
@@ -9589,17 +9589,17 @@ impl UploadIdMarkerWriter {
     }
 }
 pub type Type = String;
-/// Parse Type from XML
+/// Parse `Type` from XML
 struct TypeParser;
 impl TypeParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Type, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Type, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Type contents to a SignedRequest
+/// Write `Type` contents to a `SignedRequest`
 struct TypeWriter;
 impl TypeWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Type) {
@@ -9607,10 +9607,10 @@ impl TypeWriter {
     }
 }
 pub type Buckets = Vec<Bucket>;
-/// Parse Buckets from XML
+/// Parse `Buckets` from XML
 struct BucketsParser;
 impl BucketsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Buckets, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Buckets, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "Bucket" {
             obj.push(try!(BucketParser::parse_xml("Bucket", stack)));
@@ -9618,7 +9618,7 @@ impl BucketsParser {
         Ok(obj)
     }
 }
-/// Write Buckets contents to a SignedRequest
+/// Write `Buckets` contents to a `SignedRequest`
 struct BucketsWriter;
 impl BucketsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Buckets) {
@@ -9631,17 +9631,17 @@ impl BucketsWriter {
     }
 }
 pub type Expires = String;
-/// Parse Expires from XML
+/// Parse `Expires` from XML
 struct ExpiresParser;
 impl ExpiresParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Expires, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Expires, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Expires contents to a SignedRequest
+/// Write `Expires` contents to a `SignedRequest`
 struct ExpiresWriter;
 impl ExpiresWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Expires) {
@@ -9653,10 +9653,10 @@ pub struct RestoreObjectOutput {
     pub request_charged: RequestCharged,
 }
 
-/// Parse RestoreObjectOutput from XML
+/// Parse `RestoreObjectOutput` from XML
 struct RestoreObjectOutputParser;
 impl RestoreObjectOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RestoreObjectOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RestoreObjectOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = RestoreObjectOutput::default();
         loop {
@@ -9671,7 +9671,7 @@ impl RestoreObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write RestoreObjectOutput contents to a SignedRequest
+/// Write `RestoreObjectOutput` contents to a `SignedRequest`
 struct RestoreObjectOutputWriter;
 impl RestoreObjectOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &RestoreObjectOutput) {
@@ -9689,10 +9689,10 @@ pub struct RestoreObjectRequest {
     pub key: ObjectKey,
 }
 
-/// Parse RestoreObjectRequest from XML
+/// Parse `RestoreObjectRequest` from XML
 struct RestoreObjectRequestParser;
 impl RestoreObjectRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RestoreObjectRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RestoreObjectRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = RestoreObjectRequest::default();
         loop {
@@ -9723,7 +9723,7 @@ impl RestoreObjectRequestParser {
         Ok(obj)
     }
 }
-/// Write RestoreObjectRequest contents to a SignedRequest
+/// Write `RestoreObjectRequest` contents to a `SignedRequest`
 struct RestoreObjectRequestWriter;
 impl RestoreObjectRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &RestoreObjectRequest) {
@@ -9747,10 +9747,10 @@ pub struct GetBucketLocationOutput {
     pub location_constraint: BucketLocationConstraint,
 }
 
-/// Parse GetBucketLocationOutput from XML
+/// Parse `GetBucketLocationOutput` from XML
 struct GetBucketLocationOutputParser;
 impl GetBucketLocationOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLocationOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLocationOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketLocationOutput::default();
         loop {
@@ -9765,7 +9765,7 @@ impl GetBucketLocationOutputParser {
         Ok(obj)
     }
 }
-/// Write GetBucketLocationOutput contents to a SignedRequest
+/// Write `GetBucketLocationOutput` contents to a `SignedRequest`
 struct GetBucketLocationOutputWriter;
 impl GetBucketLocationOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketLocationOutput) {
@@ -9782,10 +9782,10 @@ pub struct GetObjectAclOutput {
     pub request_charged: RequestCharged,
 }
 
-/// Parse GetObjectAclOutput from XML
+/// Parse `GetObjectAclOutput` from XML
 struct GetObjectAclOutputParser;
 impl GetObjectAclOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectAclOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectAclOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetObjectAclOutput::default();
         loop {
@@ -9808,7 +9808,7 @@ impl GetObjectAclOutputParser {
         Ok(obj)
     }
 }
-/// Write GetObjectAclOutput contents to a SignedRequest
+/// Write `GetObjectAclOutput` contents to a `SignedRequest`
 struct GetObjectAclOutputWriter;
 impl GetObjectAclOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetObjectAclOutput) {
@@ -9820,17 +9820,17 @@ impl GetObjectAclOutputWriter {
     }
 }
 pub type ReplaceKeyWith = String;
-/// Parse ReplaceKeyWith from XML
+/// Parse `ReplaceKeyWith` from XML
 struct ReplaceKeyWithParser;
 impl ReplaceKeyWithParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplaceKeyWith, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplaceKeyWith, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ReplaceKeyWith contents to a SignedRequest
+/// Write `ReplaceKeyWith` contents to a `SignedRequest`
 struct ReplaceKeyWithWriter;
 impl ReplaceKeyWithWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ReplaceKeyWith) {
@@ -9838,17 +9838,17 @@ impl ReplaceKeyWithWriter {
     }
 }
 pub type ObjectKey = String;
-/// Parse ObjectKey from XML
+/// Parse `ObjectKey` from XML
 struct ObjectKeyParser;
 impl ObjectKeyParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectKey, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectKey, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ObjectKey contents to a SignedRequest
+/// Write `ObjectKey` contents to a `SignedRequest`
 struct ObjectKeyWriter;
 impl ObjectKeyWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectKey) {
@@ -9860,10 +9860,10 @@ pub struct GetBucketTaggingRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketTaggingRequest from XML
+/// Parse `GetBucketTaggingRequest` from XML
 struct GetBucketTaggingRequestParser;
 impl GetBucketTaggingRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketTaggingRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketTaggingRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketTaggingRequest::default();
         loop {
@@ -9878,7 +9878,7 @@ impl GetBucketTaggingRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketTaggingRequest contents to a SignedRequest
+/// Write `GetBucketTaggingRequest` contents to a `SignedRequest`
 struct GetBucketTaggingRequestWriter;
 impl GetBucketTaggingRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketTaggingRequest) {
@@ -9893,10 +9893,10 @@ pub struct GetBucketPolicyOutput {
     pub policy: Policy,
 }
 
-/// Parse GetBucketPolicyOutput from XML
+/// Parse `GetBucketPolicyOutput` from XML
 struct GetBucketPolicyOutputParser;
 impl GetBucketPolicyOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketPolicyOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketPolicyOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketPolicyOutput::default();
         loop {
@@ -9911,7 +9911,7 @@ impl GetBucketPolicyOutputParser {
         Ok(obj)
     }
 }
-/// Write GetBucketPolicyOutput contents to a SignedRequest
+/// Write `GetBucketPolicyOutput` contents to a `SignedRequest`
 struct GetBucketPolicyOutputWriter;
 impl GetBucketPolicyOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketPolicyOutput) {
@@ -9921,17 +9921,17 @@ impl GetBucketPolicyOutputWriter {
     }
 }
 pub type MaxAgeSeconds = i32;
-/// Parse MaxAgeSeconds from XML
+/// Parse `MaxAgeSeconds` from XML
 struct MaxAgeSecondsParser;
 impl MaxAgeSecondsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MaxAgeSeconds, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MaxAgeSeconds, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MaxAgeSeconds contents to a SignedRequest
+/// Write `MaxAgeSeconds` contents to a `SignedRequest`
 struct MaxAgeSecondsWriter;
 impl MaxAgeSecondsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MaxAgeSeconds) {
@@ -9939,17 +9939,17 @@ impl MaxAgeSecondsWriter {
     }
 }
 pub type CopySourceRange = String;
-/// Parse CopySourceRange from XML
+/// Parse `CopySourceRange` from XML
 struct CopySourceRangeParser;
 impl CopySourceRangeParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceRange, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceRange, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CopySourceRange contents to a SignedRequest
+/// Write `CopySourceRange` contents to a `SignedRequest`
 struct CopySourceRangeWriter;
 impl CopySourceRangeWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopySourceRange) {
@@ -9957,17 +9957,17 @@ impl CopySourceRangeWriter {
     }
 }
 pub type TopicArn = String;
-/// Parse TopicArn from XML
+/// Parse `TopicArn` from XML
 struct TopicArnParser;
 impl TopicArnParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TopicArn, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<TopicArn, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write TopicArn contents to a SignedRequest
+/// Write `TopicArn` contents to a `SignedRequest`
 struct TopicArnWriter;
 impl TopicArnWriter {
     fn write_params(params: &mut Params, name: &str, obj: &TopicArn) {
@@ -9981,10 +9981,10 @@ pub struct PutBucketTaggingRequest {
     pub tagging: Tagging,
 }
 
-/// Parse PutBucketTaggingRequest from XML
+/// Parse `PutBucketTaggingRequest` from XML
 struct PutBucketTaggingRequestParser;
 impl PutBucketTaggingRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketTaggingRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketTaggingRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutBucketTaggingRequest::default();
         loop {
@@ -10007,7 +10007,7 @@ impl PutBucketTaggingRequestParser {
         Ok(obj)
     }
 }
-/// Write PutBucketTaggingRequest contents to a SignedRequest
+/// Write `PutBucketTaggingRequest` contents to a `SignedRequest`
 struct PutBucketTaggingRequestWriter;
 impl PutBucketTaggingRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutBucketTaggingRequest) {
@@ -10025,10 +10025,10 @@ pub struct GetBucketRequestPaymentRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketRequestPaymentRequest from XML
+/// Parse `GetBucketRequestPaymentRequest` from XML
 struct GetBucketRequestPaymentRequestParser;
 impl GetBucketRequestPaymentRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketRequestPaymentRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketRequestPaymentRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketRequestPaymentRequest::default();
         loop {
@@ -10043,7 +10043,7 @@ impl GetBucketRequestPaymentRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketRequestPaymentRequest contents to a SignedRequest
+/// Write `GetBucketRequestPaymentRequest` contents to a `SignedRequest`
 struct GetBucketRequestPaymentRequestWriter;
 impl GetBucketRequestPaymentRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketRequestPaymentRequest) {
@@ -10057,10 +10057,10 @@ pub struct CommonPrefix {
     pub prefix: Prefix,
 }
 
-/// Parse CommonPrefix from XML
+/// Parse `CommonPrefix` from XML
 struct CommonPrefixParser;
 impl CommonPrefixParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CommonPrefix, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CommonPrefix, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = CommonPrefix::default();
         loop {
@@ -10075,7 +10075,7 @@ impl CommonPrefixParser {
         Ok(obj)
     }
 }
-/// Write CommonPrefix contents to a SignedRequest
+/// Write `CommonPrefix` contents to a `SignedRequest`
 struct CommonPrefixWriter;
 impl CommonPrefixWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CommonPrefix) {
@@ -10088,17 +10088,17 @@ impl CommonPrefixWriter {
 #[derive(Debug, Default)]
 pub struct NoSuchKey;
 
-/// Parse NoSuchKey from XML
+/// Parse `NoSuchKey` from XML
 struct NoSuchKeyParser;
 impl NoSuchKeyParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NoSuchKey, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NoSuchKey, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = NoSuchKey::default();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write NoSuchKey contents to a SignedRequest
+/// Write `NoSuchKey` contents to a `SignedRequest`
 struct NoSuchKeyWriter;
 impl NoSuchKeyWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NoSuchKey) {
@@ -10138,10 +10138,10 @@ pub struct UploadPartRequest <'a> {
 
 
 pub type ObjectVersionList = Vec<ObjectVersion>;
-/// Parse ObjectVersionList from XML
+/// Parse `ObjectVersionList` from XML
 struct ObjectVersionListParser;
 impl ObjectVersionListParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectVersionList, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectVersionList, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "ObjectVersion" {
             obj.push(try!(ObjectVersionParser::parse_xml("ObjectVersion", stack)));
@@ -10149,7 +10149,7 @@ impl ObjectVersionListParser {
         Ok(obj)
     }
 }
-/// Write ObjectVersionList contents to a SignedRequest
+/// Write `ObjectVersionList` contents to a `SignedRequest`
 struct ObjectVersionListWriter;
 impl ObjectVersionListWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectVersionList) {
@@ -10162,17 +10162,17 @@ impl ObjectVersionListWriter {
     }
 }
 pub type MFA = String;
-/// Parse MFA from XML
+/// Parse `MFA` from XML
 struct MFAParser;
 impl MFAParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MFA, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MFA, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MFA contents to a SignedRequest
+/// Write `MFA` contents to a `SignedRequest`
 struct MFAWriter;
 impl MFAWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MFA) {
@@ -10180,10 +10180,10 @@ impl MFAWriter {
     }
 }
 pub type MultipartUploadList = Vec<MultipartUpload>;
-/// Parse MultipartUploadList from XML
+/// Parse `MultipartUploadList` from XML
 struct MultipartUploadListParser;
 impl MultipartUploadListParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUploadList, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MultipartUploadList, XmlParseError> {
         let mut obj = Vec::new();
         while try!(peek_at_name(stack)) == "MultipartUpload" {
             obj.push(try!(MultipartUploadParser::parse_xml("MultipartUpload", stack)));
@@ -10191,7 +10191,7 @@ impl MultipartUploadListParser {
         Ok(obj)
     }
 }
-/// Write MultipartUploadList contents to a SignedRequest
+/// Write `MultipartUploadList` contents to a `SignedRequest`
 struct MultipartUploadListWriter;
 impl MultipartUploadListWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MultipartUploadList) {
@@ -10204,17 +10204,17 @@ impl MultipartUploadListWriter {
     }
 }
 pub type AllowedHeader = String;
-/// Parse AllowedHeader from XML
+/// Parse `AllowedHeader` from XML
 struct AllowedHeaderParser;
 impl AllowedHeaderParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedHeader, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AllowedHeader, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write AllowedHeader contents to a SignedRequest
+/// Write `AllowedHeader` contents to a `SignedRequest`
 struct AllowedHeaderWriter;
 impl AllowedHeaderWriter {
     fn write_params(params: &mut Params, name: &str, obj: &AllowedHeader) {
@@ -10229,10 +10229,10 @@ pub struct Bucket {
     pub name: BucketName,
 }
 
-/// Parse Bucket from XML
+/// Parse `Bucket` from XML
 struct BucketParser;
 impl BucketParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Bucket, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Bucket, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = Bucket::default();
         loop {
@@ -10251,7 +10251,7 @@ impl BucketParser {
         Ok(obj)
     }
 }
-/// Write Bucket contents to a SignedRequest
+/// Write `Bucket` contents to a `SignedRequest`
 struct BucketWriter;
 impl BucketWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Bucket) {
@@ -10262,17 +10262,17 @@ impl BucketWriter {
     }
 }
 pub type URI = String;
-/// Parse URI from XML
+/// Parse `URI` from XML
 struct URIParser;
 impl URIParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<URI, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<URI, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write URI contents to a SignedRequest
+/// Write `URI` contents to a `SignedRequest`
 struct URIWriter;
 impl URIWriter {
     fn write_params(params: &mut Params, name: &str, obj: &URI) {
@@ -10282,17 +10282,17 @@ impl URIWriter {
 /// If present, indicates that the requester was successfully charged for the
 /// request.
 pub type RequestCharged = String;
-/// Parse RequestCharged from XML
+/// Parse `RequestCharged` from XML
 struct RequestChargedParser;
 impl RequestChargedParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RequestCharged, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RequestCharged, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write RequestCharged contents to a SignedRequest
+/// Write `RequestCharged` contents to a `SignedRequest`
 struct RequestChargedWriter;
 impl RequestChargedWriter {
     fn write_params(params: &mut Params, name: &str, obj: &RequestCharged) {
@@ -10306,10 +10306,10 @@ pub struct PutBucketLoggingRequest {
     pub bucket: BucketName,
 }
 
-/// Parse PutBucketLoggingRequest from XML
+/// Parse `PutBucketLoggingRequest` from XML
 struct PutBucketLoggingRequestParser;
 impl PutBucketLoggingRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketLoggingRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketLoggingRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = PutBucketLoggingRequest::default();
         loop {
@@ -10332,7 +10332,7 @@ impl PutBucketLoggingRequestParser {
         Ok(obj)
     }
 }
-/// Write PutBucketLoggingRequest contents to a SignedRequest
+/// Write `PutBucketLoggingRequest` contents to a `SignedRequest`
 struct PutBucketLoggingRequestWriter;
 impl PutBucketLoggingRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PutBucketLoggingRequest) {
@@ -10346,17 +10346,17 @@ impl PutBucketLoggingRequestWriter {
     }
 }
 pub type Delimiter = String;
-/// Parse Delimiter from XML
+/// Parse `Delimiter` from XML
 struct DelimiterParser;
 impl DelimiterParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Delimiter, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Delimiter, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Delimiter contents to a SignedRequest
+/// Write `Delimiter` contents to a `SignedRequest`
 struct DelimiterWriter;
 impl DelimiterWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Delimiter) {
@@ -10364,17 +10364,17 @@ impl DelimiterWriter {
     }
 }
 pub type MetadataValue = String;
-/// Parse MetadataValue from XML
+/// Parse `MetadataValue` from XML
 struct MetadataValueParser;
 impl MetadataValueParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MetadataValue, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MetadataValue, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MetadataValue contents to a SignedRequest
+/// Write `MetadataValue` contents to a `SignedRequest`
 struct MetadataValueWriter;
 impl MetadataValueWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MetadataValue) {
@@ -10386,10 +10386,10 @@ pub struct LifecycleConfiguration {
     pub rules: Rules,
 }
 
-/// Parse LifecycleConfiguration from XML
+/// Parse `LifecycleConfiguration` from XML
 struct LifecycleConfigurationParser;
 impl LifecycleConfigurationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LifecycleConfiguration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LifecycleConfiguration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = LifecycleConfiguration::default();
         loop {
@@ -10404,7 +10404,7 @@ impl LifecycleConfigurationParser {
         Ok(obj)
     }
 }
-/// Write LifecycleConfiguration contents to a SignedRequest
+/// Write `LifecycleConfiguration` contents to a `SignedRequest`
 struct LifecycleConfigurationWriter;
 impl LifecycleConfigurationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &LifecycleConfiguration) {
@@ -10414,17 +10414,17 @@ impl LifecycleConfigurationWriter {
     }
 }
 pub type Expiration = String;
-/// Parse Expiration from XML
+/// Parse `Expiration` from XML
 struct ExpirationParser;
 impl ExpirationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Expiration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Expiration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write Expiration contents to a SignedRequest
+/// Write `Expiration` contents to a `SignedRequest`
 struct ExpirationWriter;
 impl ExpirationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Expiration) {
@@ -10432,17 +10432,17 @@ impl ExpirationWriter {
     }
 }
 pub type IfMatch = String;
-/// Parse IfMatch from XML
+/// Parse `IfMatch` from XML
 struct IfMatchParser;
 impl IfMatchParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IfMatch, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<IfMatch, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write IfMatch contents to a SignedRequest
+/// Write `IfMatch` contents to a `SignedRequest`
 struct IfMatchWriter;
 impl IfMatchWriter {
     fn write_params(params: &mut Params, name: &str, obj: &IfMatch) {
@@ -10450,17 +10450,17 @@ impl IfMatchWriter {
     }
 }
 pub type ResponseExpires = String;
-/// Parse ResponseExpires from XML
+/// Parse `ResponseExpires` from XML
 struct ResponseExpiresParser;
 impl ResponseExpiresParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseExpires, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseExpires, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ResponseExpires contents to a SignedRequest
+/// Write `ResponseExpires` contents to a `SignedRequest`
 struct ResponseExpiresWriter;
 impl ResponseExpiresWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ResponseExpires) {
@@ -10472,10 +10472,10 @@ pub struct DeleteBucketTaggingRequest {
     pub bucket: BucketName,
 }
 
-/// Parse DeleteBucketTaggingRequest from XML
+/// Parse `DeleteBucketTaggingRequest` from XML
 struct DeleteBucketTaggingRequestParser;
 impl DeleteBucketTaggingRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketTaggingRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketTaggingRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = DeleteBucketTaggingRequest::default();
         loop {
@@ -10490,7 +10490,7 @@ impl DeleteBucketTaggingRequestParser {
         Ok(obj)
     }
 }
-/// Write DeleteBucketTaggingRequest contents to a SignedRequest
+/// Write `DeleteBucketTaggingRequest` contents to a `SignedRequest`
 struct DeleteBucketTaggingRequestWriter;
 impl DeleteBucketTaggingRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteBucketTaggingRequest) {
@@ -10509,10 +10509,10 @@ pub struct LambdaFunctionConfiguration {
     pub events: EventList,
 }
 
-/// Parse LambdaFunctionConfiguration from XML
+/// Parse `LambdaFunctionConfiguration` from XML
 struct LambdaFunctionConfigurationParser;
 impl LambdaFunctionConfigurationParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LambdaFunctionConfiguration, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<LambdaFunctionConfiguration, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = LambdaFunctionConfiguration::default();
         loop {
@@ -10535,7 +10535,7 @@ impl LambdaFunctionConfigurationParser {
         Ok(obj)
     }
 }
-/// Write LambdaFunctionConfiguration contents to a SignedRequest
+/// Write `LambdaFunctionConfiguration` contents to a `SignedRequest`
 struct LambdaFunctionConfigurationWriter;
 impl LambdaFunctionConfigurationWriter {
     fn write_params(params: &mut Params, name: &str, obj: &LambdaFunctionConfiguration) {
@@ -10555,17 +10555,17 @@ impl LambdaFunctionConfigurationWriter {
 /// you can add this parameter to request that Amazon S3 encode the keys in the
 /// response.
 pub type EncodingType = String;
-/// Parse EncodingType from XML
+/// Parse `EncodingType` from XML
 struct EncodingTypeParser;
 impl EncodingTypeParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<EncodingType, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<EncodingType, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write EncodingType contents to a SignedRequest
+/// Write `EncodingType` contents to a `SignedRequest`
 struct EncodingTypeWriter;
 impl EncodingTypeWriter {
     fn write_params(params: &mut Params, name: &str, obj: &EncodingType) {
@@ -10573,17 +10573,17 @@ impl EncodingTypeWriter {
     }
 }
 pub type ID = String;
-/// Parse ID from XML
+/// Parse `ID` from XML
 struct IDParser;
 impl IDParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ID, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ID, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ID contents to a SignedRequest
+/// Write `ID` contents to a `SignedRequest`
 struct IDWriter;
 impl IDWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ID) {
@@ -10591,17 +10591,17 @@ impl IDWriter {
     }
 }
 pub type PartNumberMarker = i32;
-/// Parse PartNumberMarker from XML
+/// Parse `PartNumberMarker` from XML
 struct PartNumberMarkerParser;
 impl PartNumberMarkerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PartNumberMarker, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PartNumberMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write PartNumberMarker contents to a SignedRequest
+/// Write `PartNumberMarker` contents to a `SignedRequest`
 struct PartNumberMarkerWriter;
 impl PartNumberMarkerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &PartNumberMarker) {
@@ -10609,17 +10609,17 @@ impl PartNumberMarkerWriter {
     }
 }
 pub type DeleteMarkerVersionId = String;
-/// Parse DeleteMarkerVersionId from XML
+/// Parse `DeleteMarkerVersionId` from XML
 struct DeleteMarkerVersionIdParser;
 impl DeleteMarkerVersionIdParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMarkerVersionId, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteMarkerVersionId, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write DeleteMarkerVersionId contents to a SignedRequest
+/// Write `DeleteMarkerVersionId` contents to a `SignedRequest`
 struct DeleteMarkerVersionIdWriter;
 impl DeleteMarkerVersionIdWriter {
     fn write_params(params: &mut Params, name: &str, obj: &DeleteMarkerVersionId) {
@@ -10634,10 +10634,10 @@ pub struct GetBucketWebsiteOutput {
     pub routing_rules: RoutingRules,
 }
 
-/// Parse GetBucketWebsiteOutput from XML
+/// Parse `GetBucketWebsiteOutput` from XML
 struct GetBucketWebsiteOutputParser;
 impl GetBucketWebsiteOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketWebsiteOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketWebsiteOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketWebsiteOutput::default();
         loop {
@@ -10664,7 +10664,7 @@ impl GetBucketWebsiteOutputParser {
         Ok(obj)
     }
 }
-/// Write GetBucketWebsiteOutput contents to a SignedRequest
+/// Write `GetBucketWebsiteOutput` contents to a `SignedRequest`
 struct GetBucketWebsiteOutputWriter;
 impl GetBucketWebsiteOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketWebsiteOutput) {
@@ -10677,17 +10677,17 @@ impl GetBucketWebsiteOutputWriter {
     }
 }
 pub type CopySourceIfMatch = String;
-/// Parse CopySourceIfMatch from XML
+/// Parse `CopySourceIfMatch` from XML
 struct CopySourceIfMatchParser;
 impl CopySourceIfMatchParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceIfMatch, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopySourceIfMatch, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CopySourceIfMatch contents to a SignedRequest
+/// Write `CopySourceIfMatch` contents to a `SignedRequest`
 struct CopySourceIfMatchWriter;
 impl CopySourceIfMatchWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CopySourceIfMatch) {
@@ -10695,17 +10695,17 @@ impl CopySourceIfMatchWriter {
     }
 }
 pub type ReplicationRuleStatus = String;
-/// Parse ReplicationRuleStatus from XML
+/// Parse `ReplicationRuleStatus` from XML
 struct ReplicationRuleStatusParser;
 impl ReplicationRuleStatusParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplicationRuleStatus, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ReplicationRuleStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ReplicationRuleStatus contents to a SignedRequest
+/// Write `ReplicationRuleStatus` contents to a `SignedRequest`
 struct ReplicationRuleStatusWriter;
 impl ReplicationRuleStatusWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ReplicationRuleStatus) {
@@ -10713,17 +10713,17 @@ impl ReplicationRuleStatusWriter {
     }
 }
 pub type ContentType = String;
-/// Parse ContentType from XML
+/// Parse `ContentType` from XML
 struct ContentTypeParser;
 impl ContentTypeParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentType, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ContentType, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ContentType contents to a SignedRequest
+/// Write `ContentType` contents to a `SignedRequest`
 struct ContentTypeWriter;
 impl ContentTypeWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ContentType) {
@@ -10735,10 +10735,10 @@ pub struct GetBucketLocationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse GetBucketLocationRequest from XML
+/// Parse `GetBucketLocationRequest` from XML
 struct GetBucketLocationRequestParser;
 impl GetBucketLocationRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLocationRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLocationRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketLocationRequest::default();
         loop {
@@ -10753,7 +10753,7 @@ impl GetBucketLocationRequestParser {
         Ok(obj)
     }
 }
-/// Write GetBucketLocationRequest contents to a SignedRequest
+/// Write `GetBucketLocationRequest` contents to a `SignedRequest`
 struct GetBucketLocationRequestWriter;
 impl GetBucketLocationRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketLocationRequest) {
@@ -10763,17 +10763,17 @@ impl GetBucketLocationRequestWriter {
     }
 }
 pub type NextPartNumberMarker = i32;
-/// Parse NextPartNumberMarker from XML
+/// Parse `NextPartNumberMarker` from XML
 struct NextPartNumberMarkerParser;
 impl NextPartNumberMarkerParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextPartNumberMarker, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NextPartNumberMarker, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write NextPartNumberMarker contents to a SignedRequest
+/// Write `NextPartNumberMarker` contents to a `SignedRequest`
 struct NextPartNumberMarkerWriter;
 impl NextPartNumberMarkerWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NextPartNumberMarker) {
@@ -10794,10 +10794,10 @@ pub struct ListPartsRequest {
     pub part_number_marker: Option<PartNumberMarker>,
 }
 
-/// Parse ListPartsRequest from XML
+/// Parse `ListPartsRequest` from XML
 struct ListPartsRequestParser;
 impl ListPartsRequestParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListPartsRequest, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListPartsRequest, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ListPartsRequest::default();
         loop {
@@ -10832,7 +10832,7 @@ impl ListPartsRequestParser {
         Ok(obj)
     }
 }
-/// Write ListPartsRequest contents to a SignedRequest
+/// Write `ListPartsRequest` contents to a `SignedRequest`
 struct ListPartsRequestWriter;
 impl ListPartsRequestWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ListPartsRequest) {
@@ -10853,17 +10853,17 @@ impl ListPartsRequestWriter {
     }
 }
 pub type ResponseCacheControl = String;
-/// Parse ResponseCacheControl from XML
+/// Parse `ResponseCacheControl` from XML
 struct ResponseCacheControlParser;
 impl ResponseCacheControlParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseCacheControl, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ResponseCacheControl, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ResponseCacheControl contents to a SignedRequest
+/// Write `ResponseCacheControl` contents to a `SignedRequest`
 struct ResponseCacheControlWriter;
 impl ResponseCacheControlWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ResponseCacheControl) {
@@ -10871,17 +10871,17 @@ impl ResponseCacheControlWriter {
     }
 }
 pub type ETag = String;
-/// Parse ETag from XML
+/// Parse `ETag` from XML
 struct ETagParser;
 impl ETagParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ETag, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ETag, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write ETag contents to a SignedRequest
+/// Write `ETag` contents to a `SignedRequest`
 struct ETagWriter;
 impl ETagWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ETag) {
@@ -10896,10 +10896,10 @@ pub struct ObjectIdentifier {
     pub key: ObjectKey,
 }
 
-/// Parse ObjectIdentifier from XML
+/// Parse `ObjectIdentifier` from XML
 struct ObjectIdentifierParser;
 impl ObjectIdentifierParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectIdentifier, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectIdentifier, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = ObjectIdentifier::default();
         loop {
@@ -10918,7 +10918,7 @@ impl ObjectIdentifierParser {
         Ok(obj)
     }
 }
-/// Write ObjectIdentifier contents to a SignedRequest
+/// Write `ObjectIdentifier` contents to a `SignedRequest`
 struct ObjectIdentifierWriter;
 impl ObjectIdentifierWriter {
     fn write_params(params: &mut Params, name: &str, obj: &ObjectIdentifier) {
@@ -10933,17 +10933,17 @@ impl ObjectIdentifierWriter {
 /// Optional unique identifier for configurations in a notification configuration.
 /// If you don't provide one, Amazon S3 will assign an ID.
 pub type NotificationId = String;
-/// Parse NotificationId from XML
+/// Parse `NotificationId` from XML
 struct NotificationIdParser;
 impl NotificationIdParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NotificationId, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<NotificationId, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write NotificationId contents to a SignedRequest
+/// Write `NotificationId` contents to a `SignedRequest`
 struct NotificationIdWriter;
 impl NotificationIdWriter {
     fn write_params(params: &mut Params, name: &str, obj: &NotificationId) {
@@ -10955,10 +10955,10 @@ pub struct GetBucketCorsOutput {
     pub cors_rules: CORSRules,
 }
 
-/// Parse GetBucketCorsOutput from XML
+/// Parse `GetBucketCorsOutput` from XML
 struct GetBucketCorsOutputParser;
 impl GetBucketCorsOutputParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketCorsOutput, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketCorsOutput, XmlParseError> {
         try!(start_element(tag_name, stack));
         let mut obj = GetBucketCorsOutput::default();
         loop {
@@ -10973,7 +10973,7 @@ impl GetBucketCorsOutputParser {
         Ok(obj)
     }
 }
-/// Write GetBucketCorsOutput contents to a SignedRequest
+/// Write `GetBucketCorsOutput` contents to a `SignedRequest`
 struct GetBucketCorsOutputWriter;
 impl GetBucketCorsOutputWriter {
     fn write_params(params: &mut Params, name: &str, obj: &GetBucketCorsOutput) {
@@ -10983,17 +10983,17 @@ impl GetBucketCorsOutputWriter {
     }
 }
 pub type CreationDate = String;
-/// Parse CreationDate from XML
+/// Parse `CreationDate` from XML
 struct CreationDateParser;
 impl CreationDateParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreationDate, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreationDate, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write CreationDate contents to a SignedRequest
+/// Write `CreationDate` contents to a `SignedRequest`
 struct CreationDateWriter;
 impl CreationDateWriter {
     fn write_params(params: &mut Params, name: &str, obj: &CreationDate) {
@@ -11001,17 +11001,17 @@ impl CreationDateWriter {
     }
 }
 pub type MaxParts = i32;
-/// Parse MaxParts from XML
+/// Parse `MaxParts` from XML
 struct MaxPartsParser;
 impl MaxPartsParser {
-    fn parse_xml<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MaxParts, XmlParseError> {
+    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<MaxParts, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
         Ok(obj)
     }
 }
-/// Write MaxParts contents to a SignedRequest
+/// Write `MaxParts` contents to a `SignedRequest`
 struct MaxPartsWriter;
 impl MaxPartsWriter {
     fn write_params(params: &mut Params, name: &str, obj: &MaxParts) {
@@ -11177,7 +11177,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
     /// Uploads a part in a multipart upload.
     /// **Note:** After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.
     pub fn upload_part(&mut self, input: &UploadPartRequest) -> Result<String, AwsError> {
-        let ref object_id = input.key;
+        let object_id = &input.key;
         let mut request = SignedRequest::new("PUT", "s3", self.region, &format!("/{}", object_id));
 
         request.set_payload(input.body);
@@ -11185,16 +11185,15 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
         request.set_hostname(Some(hostname));
 
-        match input.content_md5 {
-            Some(ref md5) => request.add_header("Content-MD5", &md5),
-            None => (),
+        if let Some(ref md5) = input.content_md5 {
+            request.add_header("Content-MD5", &md5);
         }
 
         let mut params = Params::new();
-        let ref upload_id = input.upload_id;
-        let ref part_number = input.part_number;
+        let upload_id = &input.upload_id;
+        let part_number = &input.part_number;
         params.put("partNumber", &format!("{}", part_number));
-        params.put("uploadId", &format!("{}", upload_id));
+        params.put("uploadId", &upload_id);
         request.set_params(params);
 
         let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
@@ -11207,14 +11206,14 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
                         return Ok(header.value_string());
                     }
                 }
-                return Err(AwsError::new("Couldn't find etag in response headers."));
+                Err(AwsError::new("Couldn't find etag in response headers."))
             }
             _ => {
                 println!("Error: Status code was {}", status);
                 let mut body = String::new();
                 result.read_to_string(&mut body).unwrap();
                 println!("Error response body: {}", body);
-                return Err(AwsError::new("error: didn't get a 200."));
+                Err(AwsError::new("error: didn't get a 200."))
             }
         }
     }
@@ -11224,31 +11223,24 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         uri = uri +  &input.key.to_string();
         let mut request = SignedRequest::new("PUT", "s3", self.region, &uri);
 
-        match input.storage_class {
-            Some(ref class) => {
-                request.add_header("x-amz-storage-class", class);
-            }
-            None => (),
+        if let Some(ref class) = input.storage_class {
+            request.add_header("x-amz-storage-class", class);
         }
 
-        match input.server_side_encryption {
-            Some(ref sse) => {
-                if sse.to_string().to_ascii_lowercase() == "aes256" {
-                    request.add_header("x-amz-server-side-encryption", &sse);
-                } else {
-                    match input.ssekms_key_id {
-                        Some(ref key_id) => request.add_header("x-amz-server-side-encryption-aws-kms-key-id", &key_id),
-                        None => return Err(AwsError::new("KMS key specified but no key id provided.")),
-                    }
-                    request.add_header("x-amz-server-side-encryption", "aws:kms");
+        if let Some(ref sse) = input.server_side_encryption {
+            if sse.to_string().to_ascii_lowercase() == "aes256" {
+                request.add_header("x-amz-server-side-encryption", &sse);
+            } else {
+                match input.ssekms_key_id {
+                    Some(ref key_id) => request.add_header("x-amz-server-side-encryption-aws-kms-key-id", &key_id),
+                    None => return Err(AwsError::new("KMS key specified but no key id provided.")),
                 }
+                request.add_header("x-amz-server-side-encryption", "aws:kms");
             }
-            None => (),
         }
 
-        match input.content_md5 {
-            Some(ref md5) => request.add_header("Content-MD5", &md5),
-            None => (),
+        if let Some(ref md5) = input.content_md5 {
+            request.add_header("Content-MD5", &md5);
         }
 
         let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
@@ -11801,7 +11793,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
     /// **Note:** After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.
     pub fn create_multipart_upload(&mut self, input: &CreateMultipartUploadRequest) -> Result<CreateMultipartUploadOutput, AwsError> {
 
-        let ref object_name = input.key;
+        let object_name = &input.key;
         let mut request = SignedRequest::new("POST", "s3", self.region, &format!("/{}", object_name));
 
         let mut params = Params::new();
@@ -11864,10 +11856,10 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         // get all the goodies for GetObjectOutput
         let delete_marker_string = try!(S3Client::<P>::get_value_for_header("x-amz-delete-marker".to_string(), &response));
         let delete_marker : bool;
-        if delete_marker_string.len() > 0 {
-            delete_marker = bool::from_str(&delete_marker_string).unwrap();
-        } else {
+        if delete_marker_string.is_empty() {
             delete_marker = false;
+        } else {
+            delete_marker = bool::from_str(&delete_marker_string).unwrap();
         }
         let accept_ranges = try!(S3Client::<P>::get_value_for_header("accept-ranges".to_string(), response));
         let last_modified = try!(S3Client::<P>::get_value_for_header("Last-Modified".to_string(), response));
@@ -11888,10 +11880,10 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let expiration = try!(S3Client::<P>::get_value_for_header("x-amz-expiration".to_string(), response));
         let missing_meta_string = try!(S3Client::<P>::get_value_for_header("x-amz-missing-meta".to_string(), response));
         let missing_meta : i32;
-        if missing_meta_string.len() > 0 {
-            missing_meta = missing_meta_string.parse::<i32>().unwrap();
-        } else {
+        if missing_meta_string.is_empty() {
             missing_meta = 0;
+        } else {
+            missing_meta = missing_meta_string.parse::<i32>().unwrap();
         }
         let restore = try!(S3Client::<P>::get_value_for_header("x-amz-restore".to_string(), response));
         let sse_customer_algorithm = try!(S3Client::<P>::get_value_for_header("x-amz-server-side-encryption-customer-algorithm".to_string(), response));
@@ -11955,7 +11947,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
             200 => {
                 let s3_object = try!(S3Client::<P>::get_object_from_response(&mut result));
 
-                return Ok(s3_object);
+                Ok(s3_object)
             }
             _ => {
                 println!("Error: Status code was {}", status);
@@ -12416,16 +12408,14 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
 
         request.acl = canned_acl;
 
-        let result = self.client.create_bucket(&request);
-        result
+        self.client.create_bucket(&request)
     }
 
     /// Deletes specified bucket
     pub fn delete_bucket(&mut self, bucket_name: &str, region: Region) -> Result<(), AwsError> {
         let mut request = DeleteBucketRequest::default();
         request.bucket = bucket_name.to_string();
-        let result = self.client.delete_bucket(&request, region);
-        result
+        self.client.delete_bucket(&request, region)
     }
 
     /// Download a named object from bucket
@@ -12433,22 +12423,21 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
         let mut request = GetObjectRequest::default();
         request.key = object_name.to_string();
         request.bucket = bucket_name.to_string();
-        let result = self.client.get_object(&request);
-        result
+        self.client.get_object(&request)
     }
 
     /// Upload an object to specified bucket
-    pub fn put_object(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AwsError> {
+    pub fn put_object(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &[u8]) ->  Result<PutObjectOutput, AwsError> {
         self.put_object_with_optional_reduced_redundancy(bucket_name, object_name, object_as_bytes, false)
     }
 
     /// Helper: uploads object to specified bucket using reduced redudancy storage settings
-    pub fn put_object_with_reduced_redundancy(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AwsError> {
+    pub fn put_object_with_reduced_redundancy(&mut self, bucket_name: &str, object_name: &str, object_as_bytes: &[u8]) ->  Result<PutObjectOutput, AwsError> {
         self.put_object_with_optional_reduced_redundancy(bucket_name, object_name, object_as_bytes, true)
     }
 
     fn put_object_with_optional_reduced_redundancy(&mut self, bucket_name: &str, object_name: &str,
-        object_as_bytes: &Vec<u8>, reduced_redundancy: bool) ->  Result<PutObjectOutput, AwsError> {
+        object_as_bytes: &[u8], reduced_redundancy: bool) ->  Result<PutObjectOutput, AwsError> {
 
         let mut request = PutObjectRequest::default();
         request.key = object_name.to_string();
@@ -12457,13 +12446,12 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
         if reduced_redundancy {
             request.storage_class = Some("REDUCED_REDUNDANCY".to_string());
         }
-        let result = self.put_object_with_request(&mut request);
-        result
+        self.put_object_with_request(&mut request)
     }
 
     /// Uploads object to specified S3 bucket with server side encryption at rest.
     pub fn put_object_with_aws_encryption(&mut self, bucket_name: &str, object_name: &str,
-        object_as_bytes: &Vec<u8>) ->  Result<PutObjectOutput, AwsError> {
+        object_as_bytes: &[u8]) ->  Result<PutObjectOutput, AwsError> {
 
         let mut request = PutObjectRequest::default();
         request.key = object_name.to_string();
@@ -12471,13 +12459,12 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
         request.body = Some(object_as_bytes);
         request.server_side_encryption = Some("AES256".to_string());
 
-        let result = self.put_object_with_request(&mut request);
-        result
+        self.put_object_with_request(&mut request)
     }
 
     /// Uploads object to specified S3 bucket using AWS KMS for key management of encryption at rest.
     pub fn put_object_with_kms_encryption(&mut self, bucket_name: &str, object_name: &str,
-        object_as_bytes: &Vec<u8>, key_id: &str) ->  Result<PutObjectOutput, AwsError> {
+        object_as_bytes: &[u8], key_id: &str) ->  Result<PutObjectOutput, AwsError> {
 
         let mut request = PutObjectRequest::default();
         request.key = object_name.to_string();
@@ -12486,8 +12473,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
         request.server_side_encryption = Some("aws:kms".to_string());
         request.ssekms_key_id = Some(key_id.to_string());
 
-        let result = self.put_object_with_request(&mut request);
-        result
+        self.put_object_with_request(&mut request)
     }
 
     /// Uploads object: lets sender specify options.
@@ -12580,7 +12566,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
                     for i in buffer.iter() {
                         if bytes_copied < bytes_read
                         {
-                            s3_chunk.push(i.clone()); // I think this copying is unavoidable
+                            s3_chunk.push(*i);
                             bytes_copied += 1;
                         }
                     }
@@ -12604,7 +12590,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
         Ok(parts)
     }
 
-    fn upload_a_part(&mut self, buffer: &Vec<u8>, part_number: &i32,
+    fn upload_a_part(&mut self, buffer: &[u8], part_number: &i32,
             bucket_name: &str, upload_id: &str, object_name: &str) -> Result<String, AwsError> {
 
         let mut upload_part_request = UploadPartRequest::default();
@@ -12615,16 +12601,16 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
 
         upload_part_request.bucket = bucket_name.to_string();
         upload_part_request.upload_id = upload_id.to_string();
-        upload_part_request.part_number = part_number.clone();
+        upload_part_request.part_number = *part_number;
         upload_part_request.key = object_name.to_string();
 
         match self.client.upload_part(&upload_part_request) {
             Err(why) => {
                 println!("Error uploading part: {:?}", why);
-                return Err(AwsError::new("oops in upload_a_part"));
+                Err(AwsError::new("oops in upload_a_part"))
             },
             Ok(response) => {
-                return Ok(response.to_string());
+                Ok(response.to_string())
             }
         }
     }
@@ -12692,7 +12678,7 @@ pub fn create_bucket_config_xml(region: Region) -> Vec<u8> {
 }
 
 /// Writes out XML with all the parts in it for S3 to complete.
-pub fn multipart_upload_finish_xml(parts: &Vec<String>) -> Result<Vec<u8>, AwsError> {
+pub fn multipart_upload_finish_xml(parts: &[String]) -> Result<Vec<u8>, AwsError> {
     if parts.len() < 1 {
         return Err(AwsError::new("Can't finish upload on 0 parts."));
     }

@@ -75,7 +75,7 @@ impl GenerateProtocol for QueryGenerator {
 
     fn generate_support_types(&self, name: &str, shape: &Shape) -> Option<String> {
         Some(format!(
-            "/// Deserializes {name} from XML.
+            "/// Deserializes `{name}` from XML.
             struct {name}Deserializer;
             impl {name}Deserializer {{
                 fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
@@ -84,7 +84,7 @@ impl GenerateProtocol for QueryGenerator {
                 }}
             }}
 
-            /// Serialize {name} contents to a `SignedRequest`.
+            /// Serialize `{name}` contents to a `SignedRequest`.
             struct {name}Serializer;
             impl {name}Serializer {{
                 {serializer_signature} {{
@@ -197,8 +197,7 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 
 fn generate_primitive_deserializer(shape: &Shape) -> String {
     let statement =  match &shape.shape_type[..] {
-        "string" => "try!(characters(stack))",
-        "timestamp" => "try!(characters(stack))",
+        "string" | "timestamp" => "try!(characters(stack))",
         "integer" => "i32::from_str(try!(characters(stack)).as_ref()).unwrap()",
         "double" => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
         "blob" => "try!(characters(stack)).into_bytes()",
@@ -269,7 +268,7 @@ fn generate_struct_field_deserializers(shape: &Shape) -> String {
 
 fn generate_struct_field_parse_expression(
     shape: &Shape,
-    member_name: &String,
+    member_name: &str,
     member: &Member,
 ) -> String {
     let expression = format!(

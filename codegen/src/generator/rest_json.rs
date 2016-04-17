@@ -108,24 +108,18 @@ impl GenerateProtocol for RestJsonGenerator {
 }
 
 fn generate_encoding_string(load_payload: bool) -> String {
-    match load_payload {
-        false => "".to_owned(),
-        true => {
-            format!(
-                "let encoded = serde_json::to_string(input).unwrap();"
-            )
-        },
+    if load_payload {
+       "let encoded = serde_json::to_string(input).unwrap();".to_owned()
+    } else {
+        "".to_owned()
     }
  }
 
 fn generate_payload_loading_string(load_payload: bool) -> String {
-    match load_payload {
-        false => "".to_owned(),
-        true => {
-            format!(
-                "request.set_payload(Some(encoded.as_bytes()));"
-            )
-        },
+    if load_payload {
+        "request.set_payload(Some(encoded.as_bytes()));".to_owned()
+    } else {
+        "".to_owned()
     }
 }
 
@@ -139,7 +133,7 @@ fn generate_snake_case_uri(request_uri: &str) -> String {
     })
 }
 
-fn generate_params_loading_string(param_strings: &Vec<String>) -> String {
+fn generate_params_loading_string(param_strings: &[String]) -> String {
     match param_strings.len() {
         0 => "".to_owned(),
         _ => {
@@ -176,7 +170,7 @@ fn generate_param_load_string(member_name: &str, member: &Member) -> Option<Stri
     }
 }
 
-fn generate_uri_formatter(request_uri: &str, uri_strings: &Vec<String>) -> String {
+fn generate_uri_formatter(request_uri: &str, uri_strings: &[String]) -> String {
     match uri_strings.len() {
         0 => {
             format!(
