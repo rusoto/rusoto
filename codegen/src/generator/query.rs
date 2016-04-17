@@ -17,6 +17,7 @@ impl GenerateProtocol for QueryGenerator {
                     let mut params = Params::new();
 
                     params.put(\"Action\", \"{operation_name}\");
+                    params.put(\"Version\", \"{api_version}\");
                     {serialize_input}
                     request.set_params(params);
 
@@ -37,9 +38,9 @@ impl GenerateProtocol for QueryGenerator {
                             Err({error_type}::from_body(&result.body))
                         }}
                     }}
-
                 }}
                 ",
+                api_version = &service.metadata.api_version,
                 documentation = generate_documentation(operation),
                 error_type = operation.error_type_name(),
                 http_method = &operation.http.method,
