@@ -25,6 +25,7 @@ use generator::generate_source;
 
 mod botocore;
 mod generator;
+mod serialization;
 
 const BOTOCORE_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/botocore/data/");
 

@@ -1,11 +1,14 @@
 use std::collections::BTreeMap;
 
+use serialization::{ShapesMap, ShapeName};
+
 #[derive(Debug, Deserialize)]
 pub struct Service {
     pub documentation: Option<String>,
     pub examples: Option<BTreeMap<String, String>>,
     pub metadata: Metadata,
     pub operations: BTreeMap<String, Operation>,
+    #[serde(deserialize_with="ShapesMap::deserialize_shapes_map")]
     pub shapes: BTreeMap<String, Shape>,
     pub version: String,
 }
@@ -113,6 +116,7 @@ pub struct HttpRequest {
 #[derive(Debug, Deserialize)]
 pub struct Input {
     pub documentation: Option<String>,
+    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
 }
 
@@ -121,6 +125,7 @@ pub struct Output {
     pub documentation: Option<String>,
     #[serde(rename="resultWrapper")]
     pub result_wrapper: Option<String>,
+    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
 }
 
@@ -156,6 +161,7 @@ pub struct Member {
     pub location: Option<String>,
     #[serde(rename="locationName")]
     pub location_name: Option<String>,
+    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
     pub streaming: Option<bool>,
     #[serde(rename="xmlAttribute")]
@@ -182,6 +188,7 @@ pub struct Key {
     #[serde(rename="locationName")]
     pub location_name: Option<String>,
     pub required: Option<bool>,
+    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
 }
 
@@ -196,6 +203,7 @@ pub struct Value {
     pub documentation: Option<String>,
     #[serde(rename="locationName")]
     pub location_name: Option<String>,
+    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
 }
 
