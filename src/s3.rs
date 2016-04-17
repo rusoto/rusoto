@@ -12812,7 +12812,7 @@ mod tests {
             Err(_) => panic!("Couldn't parse s3_list_multipart_uploads.xml"),
             Ok(result) => {
                 assert_eq!(result.bucket, "rusoto1440826511");
-                let ref an_upload = result.uploads[0];
+                let an_upload = &result.uploads[0];
                 assert_eq!(an_upload.upload_id, "eUeGzA6xR2jAH7KUhTSwrrNVfu8XPIYdoWpa7meOiceoGQLQhtKfPg_APCnuVRsyWd7bx8SS5jNssgdtTU5tTziGOz.j1URgseoqpdHqnyZRikJHTLd6iXF.GjKBEhky");
                 assert_eq!(an_upload.key, "join.me.zip");
 
@@ -12913,17 +12913,15 @@ mod tests {
 
     #[test]
     fn create_bucket_constraint_needed() {
-        match needs_create_bucket_config(Region::UsWest2) {
-            false => panic!("us-west-2 should have bucket constraint."),
-            true => return,
+        if !needs_create_bucket_config(Region::UsWest2) {
+            panic!("us-west-2 should have bucket constraint.");
         }
     }
 
     #[test]
     fn create_bucket_no_constraint_needed() {
-        match needs_create_bucket_config(Region::UsEast1) {
-            true => panic!("us-east-1 should not have bucket constraint."),
-            false => return,
+        if needs_create_bucket_config(Region::UsEast1) {
+            panic!("us-east-1 should not have bucket constraint.");
         }
     }
 }
