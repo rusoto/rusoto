@@ -24,14 +24,7 @@ impl GenerateProtocol for QueryGenerator {
                     request.sign(&try!(self.credentials_provider.credentials()));
                     let result = try!(self.dispatcher.dispatch(&request));
 
-                    let mut reader = EventReader::with_config(
-                        result.body.as_bytes(),
-                        ParserConfig::new().trim_whitespace(true)
-                    );
-                    let mut stack = XmlResponse::new(reader.events().peekable());
-
-                    let _start_document = stack.next();
-                    let _response_envelope = stack.next();
+                    {xml_stack_loader}
 
                     match result.status {{
                         200 => {{
@@ -51,6 +44,7 @@ impl GenerateProtocol for QueryGenerator {
                 method_return_value = generate_method_return_value(operation),
                 method_signature = generate_method_signature(operation),
                 operation_name = &operation.name,
+                xml_stack_loader = generate_xml_stack_loader(&operation.output_shape_or("()")),
                 request_uri = &operation.http.request_uri,
                 serialize_input = generate_method_input_serialization(operation),
             )
@@ -171,6 +165,33 @@ fn generate_method_signature(operation: &Operation) -> String {
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
             error_type = operation.error_type_name(),
+        )
+    }
+}
+
+fn generate_xml_stack_loader(output_type: &str) -> String {
+    if output_type == "()" {
+        "".to_owned()
+    } else {
+        format!(
+            "let mut reader = EventReader::with_config(
+                result.body.as_bytes(),
+                ParserConfig::new().trim_whitespace(true)
+            );
+            let mut stack = XmlResponse::new(reader.events().peekable());
+
+            // Look through the stack for the `StartElement` `XmlEvent` for the
+            // `{output_type}`. This is necessary so that we being deserializing at the
+            // correct tag in the XML. This loop continues until we either encounter an
+            // error or the end of the stack.
+            while let Ok(name) = peek_at_name(&mut stack) {{
+                if name == \"{output_type}\" || stack.peek() == None {{
+                    break;
+                }}
+
+                stack.next();
+            }}",
+            output_type = output_type,
         )
     }
 }
