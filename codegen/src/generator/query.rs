@@ -24,7 +24,10 @@ impl GenerateProtocol for QueryGenerator {
                     request.sign(&try!(self.credentials_provider.credentials()));
                     let result = try!(self.dispatcher.dispatch(&request));
 
-                    let mut reader = EventReader::from_str(&result.body);
+                    let mut reader = EventReader::with_config(
+                        result.body.as_bytes(),
+                        ParserConfig::new().trim_whitespace(true)
+                    );
                     let mut stack = XmlResponse::new(reader.events().peekable());
 
                     let _start_document = stack.next();
@@ -58,6 +61,7 @@ impl GenerateProtocol for QueryGenerator {
         "use std::collections::HashMap;
         use std::str::{FromStr, from_utf8};
         use xml::EventReader;
+        use xml::reader::ParserConfig;
 
         use param::{Params, ServiceParams};
         use signature::SignedRequest;
