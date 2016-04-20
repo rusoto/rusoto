@@ -4,6 +4,7 @@
 //!
 //! For example: `UsEast1` to "us-east-1"
 
+use std::error::Error;
 use std::str::FromStr;
 use std::fmt::{Display, Error as FmtError, Formatter};
 
@@ -23,7 +24,9 @@ pub enum Region {
 
 /// An error produced when attempting to convert a `str` into a `Region` fails.
 #[derive(Debug,PartialEq)]
-pub struct ParseRegionError;
+pub struct ParseRegionError {
+    message: String,
+}
 
 impl Display for Region {
     fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
@@ -57,28 +60,52 @@ impl FromStr for Region {
             "us-east-1" => Ok(Region::UsEast1),
             "us-west-1" => Ok(Region::UsWest1),
             "us-west-2" => Ok(Region::UsWest2),
-            _ => Err(ParseRegionError)
+            s => Err(ParseRegionError::new(s))
         }
+    }
+}
+
+impl ParseRegionError {
+    pub fn new(input: &str) -> Self {
+        ParseRegionError {
+            message: format!("Not a valid AWS region: {}", input)
+        }
+    }
+}
+
+impl Error for ParseRegionError {
+    fn description(&self) -> &str {
+        &self.message
+    }
+}
+
+impl Display for ParseRegionError {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
+        write!(f, "{}", self.message)
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::str::FromStr;
 
     #[test]
     fn from_str() {
-        assert_eq!(<Region as FromStr>::from_str("not an AWS region"), Err(ParseRegionError));
-        assert_eq!(FromStr::from_str("ap-northeast-1"), Ok(Region::ApNortheast1));
-        assert_eq!(FromStr::from_str("ap-southeast-1"), Ok(Region::ApSoutheast1));
-        assert_eq!(FromStr::from_str("ap-southeast-2"), Ok(Region::ApSoutheast2));
-        assert_eq!(FromStr::from_str("eu-central-1"), Ok(Region::EuCentral1));
-        assert_eq!(FromStr::from_str("eu-west-1"), Ok(Region::EuWest1));
-        assert_eq!(FromStr::from_str("sa-east-1"), Ok(Region::SaEast1));
-        assert_eq!(FromStr::from_str("us-east-1"), Ok(Region::UsEast1));
-        assert_eq!(FromStr::from_str("us-west-1"), Ok(Region::UsWest1));
-        assert_eq!(FromStr::from_str("us-west-2"), Ok(Region::UsWest2));
+        assert_eq!(
+            "foo".parse::<Region>().err().expect(
+                "Parsing foo as a Region was not an error"
+            ).to_string(),
+            "Not a valid AWS region: foo".to_owned()
+        );
+        assert_eq!("ap-northeast-1".parse(), Ok(Region::ApNortheast1));
+        assert_eq!("ap-southeast-1".parse(), Ok(Region::ApSoutheast1));
+        assert_eq!("ap-southeast-2".parse(), Ok(Region::ApSoutheast2));
+        assert_eq!("eu-central-1".parse(), Ok(Region::EuCentral1));
+        assert_eq!("eu-west-1".parse(), Ok(Region::EuWest1));
+        assert_eq!("sa-east-1".parse(), Ok(Region::SaEast1));
+        assert_eq!("us-east-1".parse(), Ok(Region::UsEast1));
+        assert_eq!("us-west-1".parse(), Ok(Region::UsWest1));
+        assert_eq!("us-west-2".parse(), Ok(Region::UsWest2));
     }
 
     #[test]
