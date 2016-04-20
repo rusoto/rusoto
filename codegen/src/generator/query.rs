@@ -256,30 +256,26 @@ fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> Stri
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
         // look up member.shape in all_shapes.  use that shape.member.location_name
         let mut location_name = member_name.to_string();
-        let mut parse_expression = generate_struct_field_parse_expression(shape, member_name, member, None);
 
-        match service.shape_for_member(member) {
-            Some(ref child_shape) => {
-                match child_shape.flattened {
-                    Some(_) => {
-                        match child_shape.member {
-                            Some(ref child_member) => {
-                                match child_member.location_name {
-                                    Some(ref loc_name) => {
-                                        location_name = loc_name.to_string();
-                                        parse_expression = generate_struct_field_parse_expression(shape, member_name, member, Some(&location_name));
-                                    },
-                                    None => (),
-                                }
-                            },
-                            None => (),
-                        }
+        let parse_expression_location_name = if let Some(ref child_shape) = service.shape_for_member(member) {
+            if child_shape.flattened.is_some() {
+                if let Some(ref child_member) = child_shape.member {
+                    if let Some(ref loc_name) = child_member.location_name {
+                        location_name = loc_name.to_string();
+                        Some(&location_name)
+                    } else {
+                        None
                     }
-                    None => (),
-                };
-            },
-            None => (),
-        }
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
+        } else {
+            None
+        };
+        let parse_expression = generate_struct_field_parse_expression(shape, member_name, member, parse_expression_location_name);
         format!(
             "\"{location_name}\" => {{
                 obj.{field_name} = {parse_expression};
