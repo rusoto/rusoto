@@ -301,8 +301,8 @@ fn generate_struct_field_parse_expression(
 ) -> String {
 
     let location_to_use = match location_name {
-        Some(loc) => loc,
-        None => member_name,
+        Some(loc) => loc.to_string(),
+        None => member_name.to_string(),
     };
     let expression = format!(
         "try!({name}Deserializer::deserialize(\"{location}\", stack))",
