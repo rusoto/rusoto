@@ -17,7 +17,8 @@ pub trait GenerateProtocol {
 
     fn generate_struct_attributes(&self) -> String;
 
-    fn generate_support_types(&self, _name: &str, _shape: &Shape) -> Option<String> {
+    fn generate_support_types(&self, _name: &str, _shape: &Shape, _service: &Service)
+        -> Option<String> {
         None
     }
 }
@@ -110,7 +111,7 @@ fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
 where P: GenerateProtocol {
     service.shapes.iter().filter_map(|(name, shape)| {
         if name == "String" {
-            return protocol_generator.generate_support_types(name, shape);
+            return protocol_generator.generate_support_types(name, shape, &service);
         }
 
         let mut parts = Vec::with_capacity(3);
@@ -126,7 +127,7 @@ where P: GenerateProtocol {
             shape_type => parts.push(generate_primitive_type(name, shape_type)),
         }
 
-        if let Some(support_types) = protocol_generator.generate_support_types(name, shape) {
+        if let Some(support_types) = protocol_generator.generate_support_types(name, shape, &service) {
             parts.push(support_types);
         }
 

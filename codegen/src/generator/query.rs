@@ -73,7 +73,7 @@ impl GenerateProtocol for QueryGenerator {
         "#[derive(Debug, Default)]".to_owned()
     }
 
-    fn generate_support_types(&self, name: &str, shape: &Shape) -> Option<String> {
+    fn generate_support_types(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
         Some(format!(
             "/// Deserializes `{name}` from XML.
             struct {name}Deserializer;
@@ -92,7 +92,7 @@ impl GenerateProtocol for QueryGenerator {
                 }}
             }}
             ",
-            deserializer_body = generate_deserializer_body(name, shape),
+            deserializer_body = generate_deserializer_body(name, shape, service),
             name = name,
             serializer_body = generate_serializer_body(shape),
             serializer_signature = generate_serializer_signature(name, shape),
@@ -146,11 +146,11 @@ fn generate_method_signature(operation: &Operation) -> String {
     }
 }
 
-fn generate_deserializer_body(name: &str, shape: &Shape) -> String {
+fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> String {
     match &shape.shape_type[..] {
         "list" => generate_list_deserializer(shape),
         "map" => generate_map_deserializer(shape),
-        "structure" => generate_struct_deserializer(name, shape),
+        "structure" => generate_struct_deserializer(name, shape, service),
         _ => generate_primitive_deserializer(shape),
     }
 }
@@ -216,7 +216,7 @@ fn generate_primitive_deserializer(shape: &Shape) -> String {
     )
 }
 
-fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
+fn generate_struct_deserializer(name: &str, shape: &Shape, service: &Service) -> String {
     if shape.members.as_ref().unwrap().is_empty() {
         return format!(
             "try!(start_element(tag_name, stack));
@@ -243,26 +243,49 @@ fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
             }}
         }}
 
-        try!(end_element ( tag_name , stack ));
+        try!(end_element(tag_name, stack));
 
         Ok(obj)
         ",
         name = name,
-        struct_field_deserializers = generate_struct_field_deserializers(shape),
+        struct_field_deserializers = generate_struct_field_deserializers(shape, service),
     )
 }
 
-fn generate_struct_field_deserializers(shape: &Shape) -> String {
+fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> String {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
+        // look up member.shape in all_shapes.  use that shape.member.location_name
+        let mut location_name = member_name.to_string();
+
+        let parse_expression_location_name = if let Some(ref child_shape) = service.shape_for_member(member) {
+            if child_shape.flattened.is_some() {
+                if let Some(ref child_member) = child_shape.member {
+                    if let Some(ref loc_name) = child_member.location_name {
+                        location_name = loc_name.to_string();
+                        Some(&location_name)
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
+        } else {
+            None
+        };
+        let parse_expression = generate_struct_field_parse_expression(shape, member_name, member, parse_expression_location_name);
         format!(
-            "\"{member_name}\" => {{
+            "\"{location_name}\" => {{
                 obj.{field_name} = {parse_expression};
                 continue;
             }}",
             field_name = member_name.to_snake_case(),
-            parse_expression = generate_struct_field_parse_expression(shape, member_name, member),
-            member_name = member_name,
+            parse_expression = parse_expression,
+            location_name = location_name,
         )
+
     }).collect::<Vec<String>>().join("\n")
 }
 
@@ -270,11 +293,17 @@ fn generate_struct_field_parse_expression(
     shape: &Shape,
     member_name: &str,
     member: &Member,
+    location_name: Option<&String>,
 ) -> String {
+
+    let location_to_use = match location_name {
+        Some(loc) => loc.to_string(),
+        None => member_name.to_string(),
+    };
     let expression = format!(
-        "try!({name}Deserializer::deserialize(\"{member_name}\", stack))",
+        "try!({name}Deserializer::deserialize(\"{location}\", stack))",
         name = member.shape,
-        member_name = member_name,
+        location = location_to_use,
     );
 
     if shape.required(member_name) {
