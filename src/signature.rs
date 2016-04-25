@@ -346,14 +346,25 @@ fn to_hexdigest_from_bytes(val: &[u8]) -> String {
 fn build_hostname(service: &str, region: Region) -> String {
     //iam has only 1 endpoint, other services have region-based endpoints
     match service {
-        "iam" => format!("{}.amazonaws.com", service),
+        "iam" => {
+                match region {
+                    Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
+                    _ => format!("{}.amazonaws.com", service),
+                }
+            }
         "s3" => {
                 match region {
                     Region::UsEast1 => "s3.amazonaws.com".to_string(),
+                    Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region),
                     _ => format!("s3-{}.amazonaws.com", region),
                 }
             }
-        _ => format!("{}.{}.amazonaws.com", service, region)
+        _ => {
+                match region {
+                    Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
+                    _ => format!("{}.{}.amazonaws.com", service, region),
+                }
+            }
     }
 }
 
