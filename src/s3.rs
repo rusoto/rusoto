@@ -11182,7 +11182,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
 
         request.set_payload(input.body);
 
-        let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
         if let Some(ref md5) = input.content_md5 {
@@ -11243,7 +11243,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
             request.add_header("Content-MD5", &md5);
         }
 
-        let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
         request.set_payload(input.body);
 
@@ -11497,7 +11497,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         // let mut request = SignedRequest::new("DELETE", "s3", self.region, &uri);
         // let mut params = Params::new();
         //
-        // let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+        // let hostname = self.hostname(Some(&input.bucket));
         // request.set_hostname(Some(hostname));
         //
         // params.put("Action", "DeleteObjects");
@@ -11707,7 +11707,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let region = Region::UsEast1;
         let mut create_config : Vec<u8>;
         let mut request = SignedRequest::new("PUT", "s3", region, "");
-        let hostname = format!("{}.s3.amazonaws.com", input.bucket);
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
         if needs_create_bucket_config(self.region) {
@@ -11746,7 +11746,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         params.put("uploadId", &input.upload_id.to_string());
         request.set_params(params);
 
-        let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
         request.set_payload(input.multipart_upload);
@@ -11800,7 +11800,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         params.put("uploads", "");
         request.set_params(params);
 
-        let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
@@ -11822,7 +11822,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
     pub fn delete_bucket(&mut self, input: &DeleteBucketRequest, region: Region) -> Result<(), AwsError> {
         let mut request = SignedRequest::new("DELETE", "s3", region, "");
 
-        let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
         let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
@@ -11933,7 +11933,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, &uri);
         let mut params = Params::new();
 
-        let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
         params.put("Action", "GetObject");
@@ -12007,7 +12007,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         params.put("uploads", "");
         request.set_params(params);
 
-        let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
@@ -12096,7 +12096,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         params.put("uploadId", &input.upload_id.to_string());
         request.set_params(params);
 
-        let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
@@ -12221,7 +12221,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         params.put("uploadId", &input.upload_id.to_string());
         request.set_params(params);
 
-        let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
         let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
@@ -12291,7 +12291,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &uri);
         let mut params = Params::new();
 
-        let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
 
         params.put("Action", "DeleteObject");
@@ -12345,6 +12345,19 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
                 Ok(try!(GetBucketReplicationOutputParser::parse_xml("GetBucketReplicationOutput", &mut stack)))
             }
             _ => { Err(AwsError::new("error")) }
+        }
+    }
+
+    fn hostname(&self, bucket: Option<&BucketName>) -> String {
+        let host = match self.region {
+                    Region::UsEast1 => "s3.amazonaws.com".to_string(),
+                    Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", self.region),
+                    _ => format!("s3-{}.amazonaws.com", self.region),
+                };
+
+        match bucket {
+            Some(b) => format!("{}.s3.amazonaws.com", b),
+            None => host,
         }
     }
 }

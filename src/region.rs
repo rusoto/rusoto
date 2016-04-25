@@ -20,6 +20,7 @@ pub enum Region {
     UsEast1,
     UsWest1,
     UsWest2,
+    CnNorth1,
 }
 
 /// An error produced when attempting to convert a `str` into a `Region` fails.
@@ -40,6 +41,7 @@ impl Display for Region {
             Region::UsEast1 => "us-east-1",
             Region::UsWest1 => "us-west-1",
             Region::UsWest2 => "us-west-2",
+            Region::CnNorth1 => "cn-north-1",
         };
 
         write!(f, "{}", region_str)
@@ -60,6 +62,7 @@ impl FromStr for Region {
             "us-east-1" => Ok(Region::UsEast1),
             "us-west-1" => Ok(Region::UsWest1),
             "us-west-2" => Ok(Region::UsWest2),
+            "cn-north-1" => Ok(Region::CnNorth1),
             s => Err(ParseRegionError::new(s))
         }
     }
@@ -106,6 +109,7 @@ mod tests {
         assert_eq!("us-east-1".parse(), Ok(Region::UsEast1));
         assert_eq!("us-west-1".parse(), Ok(Region::UsWest1));
         assert_eq!("us-west-2".parse(), Ok(Region::UsWest2));
+        assert_eq!("cn-north-1".parse(), Ok(Region::CnNorth1));
     }
 
     #[test]
@@ -119,5 +123,6 @@ mod tests {
         assert_eq!(Region::UsEast1.to_string(), "us-east-1".to_owned());
         assert_eq!(Region::UsWest1.to_string(), "us-west-1".to_owned());
         assert_eq!(Region::UsWest2.to_string(), "us-west-2".to_owned());
+        assert_eq!(Region::CnNorth1.to_string(), "cn-north-1".to_owned());
     }
 }
