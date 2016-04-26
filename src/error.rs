@@ -38,11 +38,11 @@ pub fn parse_json_protocol_error(body: &str) -> AwsError {
 
 impl AwsError {
     /// Create a new error with the given message.
-	pub fn new<S>(message: S) -> AwsError where S: Into<String> {
-		AwsError {
+    pub fn new<S>(message: S) -> AwsError where S: Into<String> {
+        AwsError {
             message: message.into(),
         }
-	}
+    }
 }
 
 impl Error for AwsError {
