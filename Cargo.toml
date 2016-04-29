@@ -27,6 +27,7 @@ with-syntex = ["rusoto_codegen/with-syntex"]
 [build-dependencies.rusoto_codegen]
 default-features = false
 path = "codegen"
+version = ">= 0.0.1"
 
 [dependencies]
 chrono = "0.2.21"
