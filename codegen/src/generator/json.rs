@@ -56,7 +56,7 @@ impl GenerateProtocol for JsonGenerator {
             use serde_json;
 
             use credential::ProvideAwsCredentials;
-            use region::Region;
+            use region;
             use signature::SignedRequest;
 
             {error_imports}",
@@ -88,7 +88,12 @@ impl GenerateProtocol for JsonGenerator {
         } else {
            None
         }
-   }
+    }
+
+    fn timestamp_type(&self) -> &'static str {
+        "f64"
+    }
+
 }
 
 
@@ -141,7 +146,7 @@ pub fn generate_error_type(operation: &Operation, error_documentation: &HashMap<
        error_types = generate_error_enum_types(operation, error_documentation).unwrap_or(String::from("")),
        type_matchers = generate_error_type_matchers(operation).unwrap_or(String::from("")),
        description_matchers = generate_error_description_matchers(operation).unwrap_or(String::from(""))))
-    }
+}
 
 fn generate_error_enum_types(operation: &Operation, error_documentation: &HashMap<&String, &String>) -> Option<String> {
     let mut enum_types: Vec<String> = Vec::new();
@@ -193,6 +198,7 @@ fn generate_error_description_matchers(operation: &Operation) -> Option<String> 
    type_matchers.push(format!("{error_type}::Unknown(ref cause) => cause", error_type = error_type));
    Some(type_matchers.join(","))
 }
+
 fn generate_result_type<'a>(service: &Service, operation: &Operation, output_type: &'a str) -> String {
     if service.typed_errors() {
         format!("Result<{}, {}>", output_type, operation.error_type_name())

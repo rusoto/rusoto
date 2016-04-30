@@ -44,9 +44,10 @@ env_logger = "0.3.3"
 rand = "^0.3.14"
 
 [features]
-all = ["dynamodb", "firehose", "ecs", "ets", "kinesis", "kms", "s3", "sqs"]
+all = ["dynamodb", "firehose", "ec2", "ecs", "ets", "kinesis", "kms", "s3", "sqs"]
 default = ["with-syntex"]
 dynamodb = []
+ec2 = []
 ecs = []
 ets = []
 firehose = []
