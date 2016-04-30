@@ -92,6 +92,10 @@ impl Service {
     pub fn shape_type_for_member<'a>(&'a self, member: &Member) -> Option<&'a str> {
         self.shapes.get(&member.shape).map(|ref shape| &shape.shape_type[..])
     }
+
+    pub fn typed_errors(&self) -> bool {
+        self.service_type_name() == "Kinesis"
+    }
 }
 
 #[derive(Debug, Deserialize)]

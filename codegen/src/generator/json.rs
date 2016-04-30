@@ -5,14 +5,23 @@ use super::GenerateProtocol;
 
 pub struct JsonGenerator;
 
+fn generate_result_type<'a>(service: &Service, operation: &Operation, output_type: &'a str) -> String {
+    if service.typed_errors() {
+        format!("Result<{}, {}>", output_type, operation.error_type_name())       
+    } else {
+        format!("AwsResult<{}>", output_type)        
+    }
+}
+
 impl GenerateProtocol for JsonGenerator {
     fn generate_methods(&self, service: &Service) -> String {
         service.operations.values().map(|operation| {
+
             let output_type = operation.output_shape_or("()");
 
             format!("
                 {documentation}
-                pub fn {method_name}(&mut self, input: &{input_type}) -> AwsResult<{output_type}> {{
+                pub fn {method_name}(&mut self, input: &{input_type}) -> {result_type} {{
                     let encoded = serde_json::to_string(input).unwrap();
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, \"{request_uri}\");
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
@@ -26,7 +35,7 @@ impl GenerateProtocol for JsonGenerator {
                         200 => {{
                             {ok_response}
                         }}
-                        _ => Err(parse_json_protocol_error(&body)),
+                        _ => {err_response},
                     }}
                 }}
                 ",
@@ -37,7 +46,8 @@ impl GenerateProtocol for JsonGenerator {
                 method_name = operation.name.to_snake_case(),
                 name = operation.name,
                 ok_response = generate_ok_response(operation, output_type),
-                output_type = output_type,
+                err_response = generate_err_response(service, operation),
+                result_type = generate_result_type(service, operation, output_type),
                 request_uri = operation.http.request_uri,
                 target_prefix = service.metadata.target_prefix.as_ref().unwrap(),
                 json_version = service.metadata.json_version.as_ref().unwrap(),
@@ -45,16 +55,27 @@ impl GenerateProtocol for JsonGenerator {
         }).collect::<Vec<String>>().join("\n")
     }
 
-    fn generate_prelude(&self) -> String {
-        "use std::io::Read;
+    fn generate_prelude(&self, service: &Service) -> String {
+        let base = "use std::io::Read;
 
         use serde_json;
 
         use credential::ProvideAwsCredentials;
-        use error::{AwsResult, parse_json_protocol_error};
         use region::Region;
         use signature::SignedRequest;
-        ".to_owned()
+
+        ".to_owned();
+
+        let error_imports = if service.typed_errors() {
+           "use error::AwsError;
+           use std::error::Error;
+           use std::fmt;
+           use serde_json::{Value, from_str};"
+        } else {
+            "use error::{AwsResult, parse_json_protocol_error};"
+        };
+
+        base + error_imports
     }
 
     fn generate_struct_attributes(&self) -> String {
@@ -74,5 +95,13 @@ fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
         format!("Ok(serde_json::from_str::<{}>(&body).unwrap())", output_type)
     } else {
         "Ok(())".to_owned()
+    }
+}
+
+fn generate_err_response(service: &Service, operation: &Operation) -> String {
+    if service.typed_errors() {
+        format!("Err({}::from_body(&body))", operation.error_type_name())
+    } else {
+        String::from("Err(parse_json_protocol_error(&body))") 
     }
 }

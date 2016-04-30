@@ -11,6 +11,7 @@ fn main() {
 
     let services = vec![
         Service::new("dynamodb", "2012-08-10"),
+        Service::new("kinesis", "2013-12-02"),
         Service::new("kms", "2014-11-01"),
         Service::new("ecs", "2014-11-13"),
         Service::new("elastictranscoder", "2012-09-25"),

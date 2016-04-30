@@ -1,6 +1,6 @@
 use inflector::Inflector;
 
-use botocore::{Service, Shape};
+use botocore::{Service, Shape, Operation};
 
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
@@ -13,7 +13,7 @@ mod rest_json;
 pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
 
-    fn generate_prelude(&self) -> String;
+    fn generate_prelude(&self, service: &Service) -> String;
 
     fn generate_struct_attributes(&self) -> String;
 
@@ -37,11 +37,13 @@ fn generate<P>(service: &Service, protocol_generator: P) -> String where P: Gene
         "{prelude}
 
         {types}
+        {error_types}
 
         {client}",
         client = generate_client(service, &protocol_generator),
-        prelude = &protocol_generator.generate_prelude(),
+        prelude = &protocol_generator.generate_prelude(service),
         types = generate_types(service, &protocol_generator),
+        error_types = generate_error_types(service),
     )
 }
 
@@ -135,6 +137,14 @@ where P: GenerateProtocol {
     }).collect::<Vec<String>>().join("\n")
 }
 
+fn generate_error_types(service: &Service) -> String {
+    if service.typed_errors() {
+        service.operations.iter().map(|(_, operation)| { error_type(operation) }).collect::<Vec<String>>().join("\n") 
+    } else {
+        String::from("")
+    }
+}
+
 fn generate_struct<P>(
     service: &Service,
     name: &str,
@@ -198,3 +208,78 @@ fn generate_struct_fields(service: &Service, shape: &Shape) -> String {
         lines.join("\n")
     }).collect::<Vec<String>>().join("\n")
 }
+
+impl Operation {
+    pub fn error_type_name(&self) -> String {
+        format!("{}Error", self.name)
+    }
+}
+
+pub fn error_type(operation: &Operation) -> String {
+
+    if operation.errors.is_none() {
+        return String::from("");
+    }
+
+    let error_iter = operation.errors.as_ref().unwrap().iter();
+
+    format!("
+        #[derive(Debug, PartialEq)]
+        pub enum {type_name} {{ {error_types}, UnknownException(String) }}
+    
+        impl {type_name} {{
+        pub fn from_body(body: &str) -> {type_name} {{
+            match from_str::<Value>(body) {{
+                Ok(json) => {{
+                    let error_type: &str = match json.find(\"__type\") {{
+                        Some(error_type) => error_type.as_string().unwrap_or(\"UnknownException\"),
+                        None => \"UnknownException\",
+                    }};
+
+                    match error_type {{
+                        {type_matchers}
+                        _ => {type_name}::UnknownException(String::from(error_type))
+                    }}
+                }},
+                Err(_) => {type_name}::UnknownException(String::from(body))
+            }}
+        }}
+    }}
+    impl From<AwsError> for {type_name} {{
+        fn from(err: AwsError) -> {type_name} {{
+            {type_name}::UnknownException(err.message)
+        }}
+    }}
+    impl fmt::Display for {type_name} {{
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
+            write!(f, \"{{}}\", self.description())
+        }}
+    }}
+    impl Error for {type_name} {{
+        fn description(&self) -> &str {{
+           match *self {{
+               {display_matchers}
+               {type_name}::UnknownException(ref cause) => cause
+           }}
+        }}
+    }}
+    ", 
+    type_name = operation.error_type_name(),
+    error_types = error_iter.map(|error|{ format!("{}(String)", error.shape.clone()) }).collect::<Vec<String>>().join(","),
+    type_matchers = generate_error_type_matchers(operation),
+    display_matchers = generate_error_display_matchers(operation)
+    )
+}   
+
+fn generate_error_type_matchers(operation: &Operation) -> String {
+    let error_type = operation.error_type_name();
+    let error_iter = operation.errors.as_ref().unwrap().iter();       
+    error_iter.map(|error| { format!("\"{}\" => {}::{}(String::from(body)),", error.shape, error_type, error.shape) }).collect::<Vec<String>>().join("\n")
+}
+
+fn generate_error_display_matchers(operation: &Operation) -> String {
+    let error_type = operation.error_type_name();
+    let error_iter = operation.errors.as_ref().unwrap().iter();       
+    error_iter.map(|error| { format!("{}::{}(ref cause) => cause,", error_type, error.shape) }).collect::<Vec<String>>().join("\n")
+}
+

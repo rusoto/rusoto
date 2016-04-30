@@ -47,6 +47,8 @@ pub mod dynamodb;
 pub mod ecs;
 #[cfg(feature = "ets")]
 pub mod ets;
+#[cfg(feature = "kinesis")]
+pub mod kinesis;
 #[cfg(feature = "kms")]
 pub mod kms;
 #[cfg(feature = "s3")]
