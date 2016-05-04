@@ -5,6 +5,7 @@
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 #![cfg_attr(feature = "nightly-testing", allow(used_underscore_binding, ptr_arg))]
 #![allow(dead_code)]
+#![cfg_attr(not(feature = "nightly"), deny(warnings))]
 
 //! Rusoto is an [AWS](https://aws.amazon.com/) SDK for Rust.
 //! A high level overview is available in `README.md` at https://github.com/rusoto/rusoto.
