@@ -11,18 +11,7 @@ readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
 version = "0.13.0"
 
-[features]
-all = ["dynamodb", "ecs", "ets", "kms", "s3", "sqs"]
-default = ["with-syntex"]
-dynamodb = []
-ecs = []
-ets = []
-kms = []
-nightly = ["serde_macros", "rusoto_codegen/nightly"]
-nightly-testing = ["clippy", "nightly"]
-s3 = []
-sqs = []
-with-syntex = ["rusoto_codegen/with-syntex"]
+[build-dependencies]
 
 [build-dependencies.rusoto_codegen]
 default-features = false
@@ -36,7 +25,7 @@ log = "0.3.6"
 openssl = "0.7.9"
 regex = "0.1.65"
 rustc-serialize = "0.3.19"
-serde = "0.7.0"
+serde = "0.7.4"
 serde_json = "0.7.0"
 time = "0.1.35"
 url = "0.5.9"
@@ -48,8 +37,21 @@ version = "0.0.63"
 
 [dependencies.serde_macros]
 optional = true
-version = "0.7.2"
+version = "0.7.4"
 
 [dev-dependencies]
 env_logger = "0.3.3"
 rand = "^0.3.14"
+
+[features]
+all = ["dynamodb", "ecs", "ets", "kms", "s3", "sqs"]
+default = ["with-syntex"]
+dynamodb = []
+ecs = []
+ets = []
+kms = []
+nightly = ["serde_macros", "rusoto_codegen/nightly"]
+nightly-testing = ["clippy", "nightly"]
+s3 = []
+sqs = []
+with-syntex = ["rusoto_codegen/with-syntex"]

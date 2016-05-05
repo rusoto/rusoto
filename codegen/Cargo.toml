@@ -9,17 +9,17 @@ version = "0.1.0"
 
 [build-dependencies.serde_codegen]
 optional = true
-version = "0.7.2"
+version = "0.7.4"
 
 [build-dependencies.syntex]
 optional = true
-version = "0.31.0"
+version = "0.32.0"
 
 [dependencies]
 Inflector = "0.2.0"
 lazy_static = "0.1.16"
 regex = "0.1.65"
-serde = "0.7.0"
+serde = "0.7.4"
 serde_json = "0.7.0"
 
 [dependencies.clippy]
@@ -28,15 +28,15 @@ version = "0.0.63"
 
 [dependencies.serde_codegen]
 optional = true
-version = "0.7.2"
+version = "0.7.4"
 
 [dependencies.serde_macros]
 optional = true
-version = "0.7.2"
+version = "0.7.4"
 
 [dependencies.syntex]
 optional = true
-version = "0.31.0"
+version = "0.32.0"
 
 [features]
 default = ["with-syntex"]
