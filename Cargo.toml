@@ -9,7 +9,7 @@ license = "MIT"
 name = "rusoto"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.13.0"
+version = "0.13.1"
 
 [build-dependencies]
 
