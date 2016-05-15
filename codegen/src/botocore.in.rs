@@ -94,7 +94,8 @@ impl Service {
     }
 
     pub fn typed_errors(&self) -> bool {
-        self.service_type_name() == "Kinesis"
+        self.service_type_name() == "Kinesis" ||
+        self.service_type_name() == "KinesisFirehose"
     }
 }
 
