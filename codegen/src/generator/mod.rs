@@ -1,6 +1,6 @@
 use inflector::Inflector;
 
-use botocore::{Service, Shape, Operation};
+use botocore::{Service, Shape, Operation, Error};
 
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
@@ -223,7 +223,9 @@ impl Operation {
 
 pub fn error_type(operation: &Operation) -> Option<String> {
 
-    operation.errors.as_ref().and(
+    let error_type_name = operation.error_type_name();
+
+    operation.errors.as_ref().and_then(|errors|
         Some(format!("
             #[derive(Debug, PartialEq)]
             pub enum {type_name} {{ {error_types}, UnknownException(String) }}
@@ -259,42 +261,42 @@ pub fn error_type(operation: &Operation) -> Option<String> {
             impl Error for {type_name} {{
                 fn description(&self) -> &str {{
                  match *self {{
-                     {display_matchers}
+                     {description_matchers}
                      {type_name}::UnknownException(ref cause) => cause
                  }}
              }}
          }}
          ",
-         type_name = operation.error_type_name(),
-         error_types = generate_operation_errors(operation),
-         type_matchers = generate_error_type_matchers(operation),
-         display_matchers = generate_error_display_matchers(operation))))
+         type_name = error_type_name,
+         error_types = generate_error_enum_types(errors),
+         type_matchers = generate_error_type_matchers(errors, &error_type_name),
+         description_matchers = generate_error_description_matchers(errors, &error_type_name))))
     }
 
-fn generate_operation_errors(operation: &Operation) -> String {
-    operation.errors.as_ref().unwrap().iter()
+fn generate_error_enum_types(errors: &Vec<Error>) -> String {
+    errors.iter()
         .map(|error| format!("{}(String)", error.shape))
         .collect::<Vec<String>>()
-        .join(",")
+        .join(",")        
 }
 
-fn generate_error_type_matchers(operation: &Operation) -> String {
-    operation.errors.as_ref().unwrap().iter()
+fn generate_error_type_matchers(errors: &Vec<Error>, error_type: &str) -> String {
+    errors.iter()
         .map(|error|
             format!("\"{error_shape}\" => {error_type}::{error_shape}(String::from(body)),",
                 error_shape = error.shape,
-                error_type = operation.error_type_name())
+                error_type = error_type)
             )
         .collect::<Vec<String>>()
         .join("\n")
 }
 
-fn generate_error_display_matchers(operation: &Operation) -> String {
-    operation.errors.as_ref().unwrap().iter()
+fn generate_error_description_matchers(errors: &Vec<Error>, error_type: &str) -> String {
+    errors.iter()
         .map(|error|
-            format!("{}::{}(ref cause) => cause,",
-                operation.error_type_name(),
-                error.shape)
+            format!("{error_type}::{error_shape}(ref cause) => cause,",
+                error_type = error_type,
+                error_shape = error.shape)
             )
         .collect::<Vec<String>>()
         .join("\n")
