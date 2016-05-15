@@ -16,7 +16,6 @@ pub struct AwsError {
 }
 
 pub fn parse_json_protocol_error(body: &str) -> AwsError {
-    println!("{}", body);
     match from_str::<Value>(body) {
         Ok(json) => {
             let error_type: &str = match json.find("__type") {
@@ -41,9 +40,9 @@ impl AwsError {
     /// Create a new error with the given message.
     pub fn new<S>(message: S) -> AwsError where S: Into<String> {
         AwsError {
-            message: message.into()
+            message: message.into(),
         }
-    }   
+    }
 }
 
 impl Error for AwsError {
