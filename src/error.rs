@@ -12,7 +12,7 @@ use xmlutil::XmlParseError;
 /// An error produced when AWS API calls are unsuccessful.
 #[derive(Debug, PartialEq)]
 pub struct AwsError {
-    message: String
+    pub message: String
 }
 
 pub fn parse_json_protocol_error(body: &str) -> AwsError {
