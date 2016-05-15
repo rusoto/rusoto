@@ -243,6 +243,10 @@ impl<'a> Shape {
     pub fn required(&self, field: &'a str) -> bool {
         self.required.is_some() && self.required.as_ref().unwrap().contains(&String::from(field))
     }
+
+    pub fn exception(&self) -> bool {
+        self.exception.is_some() && self.exception.unwrap()
+    }
 }
 
 #[derive(Debug, Deserialize)]

@@ -6,6 +6,8 @@ use self::json::JsonGenerator;
 use self::query::QueryGenerator;
 use self::rest_json::RestJsonGenerator;
 
+use std::collections::HashMap;
+
 mod json;
 mod query;
 mod rest_json;
@@ -116,6 +118,10 @@ where P: GenerateProtocol {
             return protocol_generator.generate_support_types(name, shape, &service);
         }
 
+        if shape.exception() && service.typed_errors() {
+            return None;
+        }
+
         let mut parts = Vec::with_capacity(3);
 
         if let Some(ref docs) = shape.documentation {
@@ -139,10 +145,19 @@ where P: GenerateProtocol {
 
 fn generate_error_types(service: &Service) -> Option<String> {
     if service.typed_errors() {
+
+        // grab error type documentation for use with error enums in generated code
+        // botocore presents errors as structs.  we filter those out in generate_types.
+        let mut error_documentation = HashMap::new();
+
+        for (name, shape) in service.shapes.iter() {
+            if shape.exception() && shape.documentation.is_some() {
+                error_documentation.insert(name, shape.documentation.as_ref().unwrap());
+            }
+        }
+
        Some(service.operations.iter()
-        .map(|(_, operation)| error_type(operation) )
-        .filter(|e| e.is_some())
-        .map(|e| e.unwrap())
+        .filter_map(|(_, operation)| error_type(operation, &error_documentation) )
         .collect::<Vec<String>>()
         .join("\n")
         )
@@ -221,14 +236,18 @@ impl Operation {
     }
 }
 
-pub fn error_type(operation: &Operation) -> Option<String> {
+pub fn error_type(operation: &Operation, error_documentation: &HashMap<&String, &String>) -> Option<String> {
 
     let error_type_name = operation.error_type_name();
 
     operation.errors.as_ref().and_then(|errors|
         Some(format!("
             #[derive(Debug, PartialEq)]
-            pub enum {type_name} {{ {error_types}, UnknownException(String) }}
+            pub enum {type_name} {{
+                {error_types},
+                /// An unknown exception occurred.  The raw HTTP response is provided.
+                UnknownException(String)
+            }}
 
             impl {type_name} {{
                 pub fn from_body(body: &str) -> {type_name} {{
@@ -268,14 +287,14 @@ pub fn error_type(operation: &Operation) -> Option<String> {
          }}
          ",
          type_name = error_type_name,
-         error_types = generate_error_enum_types(errors),
+         error_types = generate_error_enum_types(errors, error_documentation),
          type_matchers = generate_error_type_matchers(errors, &error_type_name),
          description_matchers = generate_error_description_matchers(errors, &error_type_name))))
     }
 
-fn generate_error_enum_types(errors: &Vec<Error>) -> String {
+fn generate_error_enum_types(errors: &Vec<Error>, error_documentation: &HashMap<&String, &String>) -> String {
     errors.iter()
-        .map(|error| format!("{}(String)", error.shape))
+        .map(|error| format!("\n///{}\n{}(String)", error_documentation.get(&error.shape).unwrap_or(&&String::from("")), error.shape))
         .collect::<Vec<String>>()
         .join(",")        
 }
