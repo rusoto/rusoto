@@ -43,7 +43,7 @@ fn generate<P>(service: &Service, protocol_generator: P) -> String where P: Gene
         client = generate_client(service, &protocol_generator),
         prelude = &protocol_generator.generate_prelude(service),
         types = generate_types(service, &protocol_generator),
-        error_types = generate_error_types(service),
+        error_types = generate_error_types(service).unwrap_or("".to_string()),
     )
 }
 
@@ -137,11 +137,17 @@ where P: GenerateProtocol {
     }).collect::<Vec<String>>().join("\n")
 }
 
-fn generate_error_types(service: &Service) -> String {
+fn generate_error_types(service: &Service) -> Option<String> {
     if service.typed_errors() {
-        service.operations.iter().map(|(_, operation)| { error_type(operation) }).collect::<Vec<String>>().join("\n") 
+       Some(service.operations.iter()
+        .map(|(_, operation)| error_type(operation) )
+        .filter(|e| e.is_some())
+        .map(|e| e.unwrap())
+        .collect::<Vec<String>>()
+        .join("\n")
+        )
     } else {
-        String::from("")
+       None
     }
 }
 
@@ -215,71 +221,82 @@ impl Operation {
     }
 }
 
-pub fn error_type(operation: &Operation) -> String {
+pub fn error_type(operation: &Operation) -> Option<String> {
 
-    if operation.errors.is_none() {
-        return String::from("");
+    operation.errors.as_ref().and(
+        Some(format!("
+            #[derive(Debug, PartialEq)]
+            pub enum {type_name} {{ {error_types}, UnknownException(String) }}
+
+            impl {type_name} {{
+                pub fn from_body(body: &str) -> {type_name} {{
+                    match from_str::<Value>(body) {{
+                        Ok(json) => {{
+                            let error_type: &str = match json.find(\"__type\") {{
+                                Some(error_type) => error_type.as_string().unwrap_or(\"UnknownException\"),
+                                None => \"UnknownException\",
+                            }};
+
+                            match error_type {{
+                                {type_matchers}
+                                _ => {type_name}::UnknownException(String::from(error_type))
+                            }}
+                        }},
+                        Err(_) => {type_name}::UnknownException(String::from(body))
+                    }}
+                }}
+            }}
+            impl From<AwsError> for {type_name} {{
+                fn from(err: AwsError) -> {type_name} {{
+                    {type_name}::UnknownException(err.message)
+                }}
+            }}
+            impl fmt::Display for {type_name} {{
+                fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
+                    write!(f, \"{{}}\", self.description())
+                }}
+            }}
+            impl Error for {type_name} {{
+                fn description(&self) -> &str {{
+                 match *self {{
+                     {display_matchers}
+                     {type_name}::UnknownException(ref cause) => cause
+                 }}
+             }}
+         }}
+         ",
+         type_name = operation.error_type_name(),
+         error_types = generate_operation_errors(operation),
+         type_matchers = generate_error_type_matchers(operation),
+         display_matchers = generate_error_display_matchers(operation))))
     }
 
-    let error_iter = operation.errors.as_ref().unwrap().iter();
-
-    format!("
-        #[derive(Debug, PartialEq)]
-        pub enum {type_name} {{ {error_types}, UnknownException(String) }}
-    
-        impl {type_name} {{
-        pub fn from_body(body: &str) -> {type_name} {{
-            match from_str::<Value>(body) {{
-                Ok(json) => {{
-                    let error_type: &str = match json.find(\"__type\") {{
-                        Some(error_type) => error_type.as_string().unwrap_or(\"UnknownException\"),
-                        None => \"UnknownException\",
-                    }};
-
-                    match error_type {{
-                        {type_matchers}
-                        _ => {type_name}::UnknownException(String::from(error_type))
-                    }}
-                }},
-                Err(_) => {type_name}::UnknownException(String::from(body))
-            }}
-        }}
-    }}
-    impl From<AwsError> for {type_name} {{
-        fn from(err: AwsError) -> {type_name} {{
-            {type_name}::UnknownException(err.message)
-        }}
-    }}
-    impl fmt::Display for {type_name} {{
-        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
-            write!(f, \"{{}}\", self.description())
-        }}
-    }}
-    impl Error for {type_name} {{
-        fn description(&self) -> &str {{
-           match *self {{
-               {display_matchers}
-               {type_name}::UnknownException(ref cause) => cause
-           }}
-        }}
-    }}
-    ", 
-    type_name = operation.error_type_name(),
-    error_types = error_iter.map(|error|{ format!("{}(String)", error.shape.clone()) }).collect::<Vec<String>>().join(","),
-    type_matchers = generate_error_type_matchers(operation),
-    display_matchers = generate_error_display_matchers(operation)
-    )
-}   
+fn generate_operation_errors(operation: &Operation) -> String {
+    operation.errors.as_ref().unwrap().iter()
+        .map(|error| format!("{}(String)", error.shape.clone()) )
+        .collect::<Vec<String>>()
+        .join(",")
+}
 
 fn generate_error_type_matchers(operation: &Operation) -> String {
-    let error_type = operation.error_type_name();
-    let error_iter = operation.errors.as_ref().unwrap().iter();       
-    error_iter.map(|error| { format!("\"{}\" => {}::{}(String::from(body)),", error.shape, error_type, error.shape) }).collect::<Vec<String>>().join("\n")
+    operation.errors.as_ref().unwrap().iter()
+        .map(|error|
+            format!("\"{error_shape}\" => {error_type}::{error_shape}(String::from(body)),",
+                error_shape = error.shape,
+                error_type = operation.error_type_name())
+            )
+        .collect::<Vec<String>>()
+        .join("\n")
 }
 
 fn generate_error_display_matchers(operation: &Operation) -> String {
-    let error_type = operation.error_type_name();
-    let error_iter = operation.errors.as_ref().unwrap().iter();       
-    error_iter.map(|error| { format!("{}::{}(ref cause) => cause,", error_type, error.shape) }).collect::<Vec<String>>().join("\n")
+    operation.errors.as_ref().unwrap().iter()
+        .map(|error|
+            format!("{}::{}(ref cause) => cause,",
+                operation.error_type_name(),
+                error.shape)
+            )
+        .collect::<Vec<String>>()
+        .join("\n")
 }
 

@@ -56,32 +56,33 @@ impl GenerateProtocol for JsonGenerator {
     }
 
     fn generate_prelude(&self, service: &Service) -> String {
-        let base = "use std::io::Read;
+        format!(
+            "use std::io::Read;
 
-        use serde_json;
+            use serde_json;
 
-        use credential::ProvideAwsCredentials;
-        use region::Region;
-        use signature::SignedRequest;
+            use credential::ProvideAwsCredentials;
+            use region::Region;
+            use signature::SignedRequest;
 
-        ".to_owned();
-
-        let error_imports = if service.typed_errors() {
-           "use error::AwsError;
-           use std::error::Error;
-           use std::fmt;
-           use serde_json::{Value, from_str};"
-        } else {
-            "use error::{AwsResult, parse_json_protocol_error};"
-        };
-
-        base + error_imports
+            {error_imports}",
+            error_imports = generate_error_imports(service))
     }
 
     fn generate_struct_attributes(&self) -> String {
         "#[derive(Debug, Default, Deserialize, Serialize)]".to_owned()
     }
+}
 
+fn generate_error_imports(service: &Service) -> &'static str {
+    if service.typed_errors() {
+        "use error::AwsError;
+        use std::error::Error;
+        use std::fmt;
+        use serde_json::{Value, from_str};"
+    } else {
+        "use error::{AwsResult, parse_json_protocol_error};"
+    }
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
