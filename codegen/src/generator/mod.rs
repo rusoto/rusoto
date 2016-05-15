@@ -273,7 +273,7 @@ pub fn error_type(operation: &Operation) -> Option<String> {
 
 fn generate_operation_errors(operation: &Operation) -> String {
     operation.errors.as_ref().unwrap().iter()
-        .map(|error| format!("{}(String)", error.shape.clone()) )
+        .map(|error| format!("{}(String)", error.shape))
         .collect::<Vec<String>>()
         .join(",")
 }
