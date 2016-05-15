@@ -30,7 +30,7 @@ You can use the Cargo feature "all" to build Rusoto with support for every avail
 Rusoto includes a public module for each AWS service it is compiled for containing Rust types for that service's API.
 A full list of these services and their Cargo feature names are included at the end of this document.
 All other public types are reexported to the crate root.
-Consult the rustdoc documenation for full details by running `cargo doc` or visiting the online [documentation](https://rusoto.github.io/rusoto/rusoto/index.html) for the latest crates.io release.
+Consult the rustdoc documentation for full details by running `cargo doc` or visiting the online [documentation](https://rusoto.github.io/rusoto/rusoto/index.html) for the latest crates.io release.
 
 A simple example of using Rusoto's DynamoDB API to list the names of all tables in a database:
 
