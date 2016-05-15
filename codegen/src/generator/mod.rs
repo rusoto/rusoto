@@ -157,7 +157,7 @@ fn generate_error_types(service: &Service) -> Option<String> {
         }
 
        Some(service.operations.iter()
-        .filter_map(|(_, operation)| error_type(operation, &error_documentation) )
+        .filter_map(|(_, operation)| generate_error_type(operation, &error_documentation) )
         .collect::<Vec<String>>()
         .join("\n")
         )
@@ -236,7 +236,7 @@ impl Operation {
     }
 }
 
-pub fn error_type(operation: &Operation, error_documentation: &HashMap<&String, &String>) -> Option<String> {
+pub fn generate_error_type(operation: &Operation, error_documentation: &HashMap<&String, &String>) -> Option<String> {
 
     let error_type_name = operation.error_type_name();
 
