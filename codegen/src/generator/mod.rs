@@ -257,7 +257,6 @@ pub fn generate_error_type(operation: &Operation, error_documentation: &HashMap<
 
                         match error_type {{
                             {type_matchers}
-                            _ => {type_name}::UnknownException(String::from(error_type))
                         }}
                     }},
                     Err(_) => {type_name}::UnknownException(String::from(body))
@@ -278,7 +277,6 @@ pub fn generate_error_type(operation: &Operation, error_documentation: &HashMap<
             fn description(&self) -> &str {{
                match *self {{
                    {description_matchers}
-                   {type_name}::UnknownException(ref cause) => cause
                }}
            }}
        }}
@@ -300,31 +298,42 @@ fn generate_error_enum_types(operation: &Operation, error_documentation: &HashMa
         }
     }
 
+    enum_types.push("/// A validation exception occurred.  Details from AWS are provided.\nValidationException(String)".to_string());
     enum_types.push("/// An unknown exception occurred.  The raw HTTP response is provided.\nUnknownException(String)".to_string());
     Some(enum_types.join(","))
 }
 
 fn generate_error_type_matchers(operation: &Operation) -> Option<String> {
-    operation.errors.as_ref().and_then(|errors|
-        Some(errors.iter()
-        .map(|error|
-            format!("\"{error_shape}\" => {error_type}::{error_shape}(String::from(body)),",
+    let mut type_matchers: Vec<String> = Vec::new();
+    let error_type = operation.error_type_name();
+
+    if operation.errors.is_some() {
+        for error in operation.errors.as_ref().unwrap().iter() {
+            type_matchers.push(format!("\"{error_shape}\" => {error_type}::{error_shape}(String::from(body))",
                 error_shape = error.shape,
-                error_type = operation.error_type_name())
-            )
-        .collect::<Vec<String>>()
-        .join("\n")))
+                error_type = error_type))
+        }
+    }
+
+   type_matchers.push(format!("\"ValidationException\" => {error_type}::ValidationException(String::from(body))", error_type = error_type));
+   type_matchers.push(format!("_ => {error_type}::UnknownException(String::from(body))",  error_type = error_type));
+   Some(type_matchers.join(","))
 }
 
 fn generate_error_description_matchers(operation: &Operation) -> Option<String> {
-    operation.errors.as_ref().and_then(|errors|
-    Some(errors.iter()
-        .map(|error|
-            format!("{error_type}::{error_shape}(ref cause) => cause,",
+    let mut type_matchers: Vec<String> = Vec::new();
+    let error_type = operation.error_type_name();
+
+    if operation.errors.is_some() {
+        for error in operation.errors.as_ref().unwrap().iter() {
+            type_matchers.push(format!("{error_type}::{error_shape}(ref cause) => cause",
                 error_type = operation.error_type_name(),
-                error_shape = error.shape)
-            )
-        .collect::<Vec<String>>()
-        .join("\n")))
+                error_shape = error.shape))
+        }
+    }
+
+   type_matchers.push(format!("{error_type}::ValidationException(ref cause) => cause", error_type = error_type));
+   type_matchers.push(format!("{error_type}::UnknownException(ref cause) => cause", error_type = error_type));
+   Some(type_matchers.join(","))
 }
 
