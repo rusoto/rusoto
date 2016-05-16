@@ -94,8 +94,10 @@ impl Service {
     }
 
     pub fn typed_errors(&self) -> bool {
-        self.service_type_name() == "Kinesis" ||
-        self.service_type_name() == "KinesisFirehose"
+        match self.service_type_name() {
+            "Kinesis" | "KinesisFirehose" => true,
+            _ => false
+        }
     }
 }
 
@@ -129,6 +131,12 @@ pub struct Error {
     pub exception: Option<bool>,
     pub fault: Option<bool>,
     pub shape: String,
+}
+
+impl Error {
+    pub fn idiomatic_error_name(&self) -> String {
+        self.shape.replace("Exception","")
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -246,7 +254,7 @@ impl<'a> Shape {
     }
 
     pub fn exception(&self) -> bool {
-        self.exception.is_some() && self.exception.unwrap()
+        self.exception.unwrap_or(false)
     }
 }
 

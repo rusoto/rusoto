@@ -5,14 +5,6 @@ use super::GenerateProtocol;
 
 pub struct JsonGenerator;
 
-fn generate_result_type<'a>(service: &Service, operation: &Operation, output_type: &'a str) -> String {
-    if service.typed_errors() {
-        format!("Result<{}, {}>", output_type, operation.error_type_name())       
-    } else {
-        format!("AwsResult<{}>", output_type)        
-    }
-}
-
 impl GenerateProtocol for JsonGenerator {
     fn generate_methods(&self, service: &Service) -> String {
         service.operations.values().map(|operation| {
@@ -71,6 +63,14 @@ impl GenerateProtocol for JsonGenerator {
 
     fn generate_struct_attributes(&self) -> String {
         "#[derive(Debug, Default, Deserialize, Serialize)]".to_owned()
+    }
+}
+
+fn generate_result_type<'a>(service: &Service, operation: &Operation, output_type: &'a str) -> String {
+    if service.typed_errors() {
+        format!("Result<{}, {}>", output_type, operation.error_type_name())
+    } else {
+        format!("AwsResult<{}>", output_type)
     }
 }
 
