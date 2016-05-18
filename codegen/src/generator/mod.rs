@@ -182,6 +182,7 @@ fn generate_struct_fields(service: &Service, shape: &Shape) -> String {
                     "#[serde(
                         deserialize_with=\"::serialization::SerdeBlob::deserialize_blob\",
                         serialize_with=\"::serialization::SerdeBlob::serialize_blob\",
+                        default,
                     )]".to_owned()
                 );
             }
