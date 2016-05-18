@@ -22,7 +22,5 @@ The `SQSHelper` object takes care of keeping the provider and region, so it can 
 
 ## Development
 
-This splitting of the Rusoto crate is still in progress and the [Cargo.toml](Cargo.toml)
-file requires Rusoto to be checked out in a sibling directory.  The plan is to
-split things cleanly so Rusoto helpers will use a published Rusoto crate as a
-dependency.
+The Rusoto helpers crate is packaged and published separately from the Rusoto crate itself.  The  [Cargo.toml](Cargo.toml)
+file has a dependency to Rusoto in the parent directory `..`, as these crates share a common git repository.  This local dependency helps to synchronize development of features in the helper crate with any changes necessary in the parent.  The helpers crate is published with a versioned dependency on the Rusoto crate as provided by crates.io.
