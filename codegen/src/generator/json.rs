@@ -18,7 +18,7 @@ impl GenerateProtocol for JsonGenerator {
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     request.set_payload(Some(encoded.as_bytes()));
-                    let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
+                    let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
                     let status = result.status.to_u16();
                     let mut body = String::new();
                     result.read_to_string(&mut body).unwrap();

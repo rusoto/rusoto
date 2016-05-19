@@ -24,7 +24,7 @@ impl GenerateProtocol for QueryGenerator {
 
     request.set_params(params);
 
-    let result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
+    let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
     let status = result.status.to_u16();
     let mut reader = EventReader::new(result);
     let mut stack = XmlResponseFromAws::new(reader.events().peekable());

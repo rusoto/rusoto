@@ -47,7 +47,7 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_payload}
                     {load_params}
 
-                    let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
+                    let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
                     let status = result.status.to_u16();
                     let mut body = String::new();
                     result.read_to_string(&mut body).unwrap();
