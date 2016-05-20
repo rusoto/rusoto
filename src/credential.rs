@@ -370,7 +370,7 @@ impl ProvideAwsCredentials for IamProvider {
             self.credentials = Some(AwsCredentials::new(access_key, secret_key, Some(token_from_response), expiration_time));
         }
 
-        Ok(&self.credentials.as_ref().unwrap())
+        Ok(self.credentials.as_ref().unwrap())
     }
 }
 

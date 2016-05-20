@@ -144,7 +144,7 @@ impl ErrorsWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            ErrorsWriter::write_param(params, key, &element);
+            ErrorsWriter::write_param(params, key, element);
             index += 1;
         }
     }
@@ -669,8 +669,8 @@ impl MetadataWriter {
         let mut index = 1;
         for (key,value) in obj {
             let prefix = &format!("{}.{}", name, index);
-            MetadataKeyWriter::write_params(params, &format!("{}.{}", prefix, "MetadataKey"), &key);
-            MetadataValueWriter::write_params(params, &format!("{}.{}", prefix, "MetadataValue"), &value);
+            MetadataKeyWriter::write_params(params, &format!("{}.{}", prefix, "MetadataKey"), key);
+            MetadataValueWriter::write_params(params, &format!("{}.{}", prefix, "MetadataValue"), value);
             index += 1;
         }
     }
@@ -690,7 +690,7 @@ impl BodyParser {
 struct BodyWriter;
 impl BodyWriter {
     fn write_params(params: &mut Params, name: &str, obj: &Body) {
-        params.put(name, str::from_utf8(&obj).unwrap());
+        params.put(name, str::from_utf8(obj).unwrap());
     }
 }
 #[derive(Debug, Default)]
@@ -860,8 +860,7 @@ impl ReplicationConfigurationWriter {
 /// Confirms that the requester knows that she or he will be charged for the
 /// request. Bucket owners need not specify this parameter in their requests.
 /// Documentation on downloading objects from requester pays buckets can be found
-/// at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBucket
-/// s.html
+/// [here](http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html).
 pub type RequestPayer = String;
 /// Parse `RequestPayer` from XML
 struct RequestPayerParser;
@@ -931,7 +930,7 @@ impl RulesWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            RuleWriter::write_params(params, key, &element);
+            RuleWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -1166,7 +1165,7 @@ impl TargetGrantsWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            TargetGrantWriter::write_params(params, key, &element);
+            TargetGrantWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -1475,7 +1474,7 @@ impl TopicConfigurationListWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            TopicConfigurationWriter::write_params(params, key, &element);
+            TopicConfigurationWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -1891,7 +1890,7 @@ impl DeletedObjectsWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            DeletedObjectWriter::write_params(params, key, &element);
+            DeletedObjectWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -2011,7 +2010,7 @@ impl DeleteMarkersWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            DeleteMarkerEntryWriter::write_params(params, key, &element);
+            DeleteMarkerEntryWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -2208,7 +2207,7 @@ impl CommonPrefixListWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            CommonPrefixWriter::write_params(params, key, &element);
+            CommonPrefixWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -2772,7 +2771,7 @@ impl AllowedMethodsWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            AllowedMethodWriter::write_params(params, key, &element);
+            AllowedMethodWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -3686,7 +3685,7 @@ impl ExposeHeadersWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            ExposeHeaderWriter::write_params(params, key, &element);
+            ExposeHeaderWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -4056,7 +4055,7 @@ impl GrantsWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            GrantWriter::write_params(params, key, &element);
+            GrantWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -4098,7 +4097,7 @@ impl EventListWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            EventWriter::write_params(params, key, &element);
+            EventWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -4733,7 +4732,7 @@ impl ObjectIdentifierListWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            ObjectIdentifierWriter::write_params(params, key, &element);
+            ObjectIdentifierWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -4967,7 +4966,7 @@ impl CORSRulesWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            CORSRuleWriter::write_params(params, key, &element);
+            CORSRuleWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -5116,7 +5115,7 @@ impl CompletedPartListWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            CompletedPartWriter::write_params(params, key, &element);
+            CompletedPartWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -5464,7 +5463,7 @@ impl ObjectListWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            ObjectWriter::write_params(params, key, &element);
+            ObjectWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -5539,7 +5538,7 @@ impl ReplicationRulesWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            ReplicationRuleWriter::write_params(params, key, &element);
+            ReplicationRuleWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -6319,7 +6318,7 @@ impl QueueConfigurationListWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            QueueConfigurationWriter::write_params(params, key, &element);
+            QueueConfigurationWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -6485,7 +6484,7 @@ impl RoutingRulesWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            RoutingRuleWriter::write_params(params, key, &element);
+            RoutingRuleWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -7461,7 +7460,7 @@ impl AllowedOriginsWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            AllowedOriginWriter::write_params(params, key, &element);
+            AllowedOriginWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -7610,7 +7609,7 @@ impl AllowedHeadersWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            AllowedHeaderWriter::write_params(params, key, &element);
+            AllowedHeaderWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -7935,7 +7934,7 @@ impl PartsWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            PartWriter::write_params(params, key, &element);
+            PartWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -9120,7 +9119,7 @@ impl TagSetWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            TagWriter::write_params(params, key, &element);
+            TagWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -9144,7 +9143,7 @@ impl LambdaFunctionConfigurationListWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            LambdaFunctionConfigurationWriter::write_params(params, key, &element);
+            LambdaFunctionConfigurationWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -9625,7 +9624,7 @@ impl BucketsWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            BucketWriter::write_params(params, key, &element);
+            BucketWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -10156,7 +10155,7 @@ impl ObjectVersionListWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            ObjectVersionWriter::write_params(params, key, &element);
+            ObjectVersionWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -10198,7 +10197,7 @@ impl MultipartUploadListWriter {
         let mut index = 1;
         for element in obj.iter() {
             let key = &format!("{}.{}", name, index);
-            MultipartUploadWriter::write_params(params, key, &element);
+            MultipartUploadWriter::write_params(params, key, element);
             index += 1;
         }
     }
@@ -11040,7 +11039,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?versions");
         let mut params = Params::new();
         params.put("Action", "ListObjectVersions");
-        ListObjectVersionsRequestWriter::write_params(&mut params, "", &input);
+        ListObjectVersionsRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11061,7 +11060,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}?policy");
         let mut params = Params::new();
         params.put("Action", "PutBucketPolicy");
-        PutBucketPolicyRequestWriter::write_params(&mut params, "", &input);
+        PutBucketPolicyRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11083,7 +11082,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}");
         let mut params = Params::new();
         params.put("Action", "ListObjects");
-        ListObjectsRequestWriter::write_params(&mut params, "", &input);
+        ListObjectsRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11103,7 +11102,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}?website");
         let mut params = Params::new();
         params.put("Action", "PutBucketWebsite");
-        PutBucketWebsiteRequestWriter::write_params(&mut params, "", &input);
+        PutBucketWebsiteRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11123,7 +11122,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}?notification");
         let mut params = Params::new();
         params.put("Action", "PutBucketNotification");
-        PutBucketNotificationRequestWriter::write_params(&mut params, "", &input);
+        PutBucketNotificationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11145,7 +11144,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}?logging");
         let mut params = Params::new();
         params.put("Action", "PutBucketLogging");
-        PutBucketLoggingRequestWriter::write_params(&mut params, "", &input);
+        PutBucketLoggingRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11166,7 +11165,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}?replication");
         let mut params = Params::new();
         params.put("Action", "PutBucketReplication");
-        PutBucketReplicationRequestWriter::write_params(&mut params, "", &input);
+        PutBucketReplicationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11193,14 +11192,14 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         request.set_hostname(Some(hostname));
 
         if let Some(ref md5) = input.content_md5 {
-            request.add_header("Content-MD5", &md5);
+            request.add_header("Content-MD5", md5);
         }
 
         let mut params = Params::new();
         let upload_id = &input.upload_id;
         let part_number = &input.part_number;
         params.put("partNumber", &format!("{}", part_number));
-        params.put("uploadId", &upload_id);
+        params.put("uploadId", upload_id);
         request.set_params(params);
 
         let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
@@ -11236,10 +11235,10 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
 
         if let Some(ref sse) = input.server_side_encryption {
             if sse.to_string().to_ascii_lowercase() == "aes256" {
-                request.add_header("x-amz-server-side-encryption", &sse);
+                request.add_header("x-amz-server-side-encryption", sse);
             } else {
                 match input.ssekms_key_id {
-                    Some(ref key_id) => request.add_header("x-amz-server-side-encryption-aws-kms-key-id", &key_id),
+                    Some(ref key_id) => request.add_header("x-amz-server-side-encryption-aws-kms-key-id", key_id),
                     None => return Err(AwsError::new("KMS key specified but no key id provided.")),
                 }
                 request.add_header("x-amz-server-side-encryption", "aws:kms");
@@ -11247,7 +11246,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         }
 
         if let Some(ref md5) = input.content_md5 {
-            request.add_header("Content-MD5", &md5);
+            request.add_header("Content-MD5", md5);
         }
 
         let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
@@ -11278,7 +11277,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("DELETE", "s3", self.region, "/{Bucket}?cors");
         let mut params = Params::new();
         params.put("Action", "DeleteBucketCors");
-        DeleteBucketCorsRequestWriter::write_params(&mut params, "", &input);
+        DeleteBucketCorsRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11299,7 +11298,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}?versioning");
         let mut params = Params::new();
         params.put("Action", "PutBucketVersioning");
-        PutBucketVersioningRequestWriter::write_params(&mut params, "", &input);
+        PutBucketVersioningRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11319,7 +11318,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?cors");
         let mut params = Params::new();
         params.put("Action", "GetBucketCors");
-        GetBucketCorsRequestWriter::write_params(&mut params, "", &input);
+        GetBucketCorsRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11340,7 +11339,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}?lifecycle");
         let mut params = Params::new();
         params.put("Action", "PutBucketLifecycle");
-        PutBucketLifecycleRequestWriter::write_params(&mut params, "", &input);
+        PutBucketLifecycleRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11360,7 +11359,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?acl");
         let mut params = Params::new();
         params.put("Action", "GetBucketAcl");
-        GetBucketAclRequestWriter::write_params(&mut params, "", &input);
+        GetBucketAclRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11381,7 +11380,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?logging");
         let mut params = Params::new();
         params.put("Action", "GetBucketLogging");
-        GetBucketLoggingRequestWriter::write_params(&mut params, "", &input);
+        GetBucketLoggingRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11402,7 +11401,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("HEAD", "s3", self.region, "/{Bucket}");
         let mut params = Params::new();
         params.put("Action", "HeadBucket");
-        HeadBucketRequestWriter::write_params(&mut params, "", &input);
+        HeadBucketRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11441,7 +11440,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("DELETE", "s3", self.region, "/{Bucket}?website");
         let mut params = Params::new();
         params.put("Action", "DeleteBucketWebsite");
-        DeleteBucketWebsiteRequestWriter::write_params(&mut params, "", &input);
+        DeleteBucketWebsiteRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11461,7 +11460,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("DELETE", "s3", self.region, "/{Bucket}?policy");
         let mut params = Params::new();
         params.put("Action", "DeleteBucketPolicy");
-        DeleteBucketPolicyRequestWriter::write_params(&mut params, "", &input);
+        DeleteBucketPolicyRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11481,7 +11480,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?notification");
         let mut params = Params::new();
         params.put("Action", "GetBucketNotificationConfiguration");
-        GetBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", &input);
+        GetBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11508,7 +11507,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         // request.set_hostname(Some(hostname));
         //
         // params.put("Action", "DeleteObjects");
-        // DeleteObjectsRequestWriter::write_params(&mut params, "", &input);
+        // DeleteObjectsRequestWriter::write_params(&mut params, "", input);
         // request.set_params(params);
         // let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         // let status = result.status.to_u16();
@@ -11524,7 +11523,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("DELETE", "s3", self.region, "/{Bucket}?replication");
         let mut params = Params::new();
         params.put("Action", "DeleteBucketReplication");
-        DeleteBucketReplicationRequestWriter::write_params(&mut params, "", &input);
+        DeleteBucketReplicationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11544,7 +11543,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}/{Key+}");
         let mut params = Params::new();
         params.put("Action", "CopyObject");
-        CopyObjectRequestWriter::write_params(&mut params, "", &input);
+        CopyObjectRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11591,7 +11590,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}?requestPayment");
         let mut params = Params::new();
         params.put("Action", "PutBucketRequestPayment");
-        PutBucketRequestPaymentRequestWriter::write_params(&mut params, "", &input);
+        PutBucketRequestPaymentRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11611,7 +11610,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}?notification");
         let mut params = Params::new();
         params.put("Action", "PutBucketNotificationConfiguration");
-        PutBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", &input);
+        PutBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11633,7 +11632,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("HEAD", "s3", self.region, "/{Bucket}/{Key+}");
         let mut params = Params::new();
         params.put("Action", "HeadObject");
-        HeadObjectRequestWriter::write_params(&mut params, "", &input);
+        HeadObjectRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11653,7 +11652,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("DELETE", "s3", self.region, "/{Bucket}?tagging");
         let mut params = Params::new();
         params.put("Action", "DeleteBucketTagging");
-        DeleteBucketTaggingRequestWriter::write_params(&mut params, "", &input);
+        DeleteBucketTaggingRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11673,7 +11672,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}/{Key+}?torrent");
         let mut params = Params::new();
         params.put("Action", "GetObjectTorrent");
-        GetObjectTorrentRequestWriter::write_params(&mut params, "", &input);
+        GetObjectTorrentRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11693,7 +11692,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?lifecycle");
         let mut params = Params::new();
         params.put("Action", "GetBucketLifecycle");
-        GetBucketLifecycleRequestWriter::write_params(&mut params, "", &input);
+        GetBucketLifecycleRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11724,7 +11723,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
 
         match input.acl {
             None => (),
-            Some(ref canned_acl) => request.add_header("x-amz-acl", &canned_acl_in_aws_format(&canned_acl)),
+            Some(ref canned_acl) => request.add_header("x-amz-acl", &canned_acl_in_aws_format(canned_acl)),
         }
 
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
@@ -11781,7 +11780,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?website");
         let mut params = Params::new();
         params.put("Action", "GetBucketWebsite");
-        GetBucketWebsiteRequestWriter::write_params(&mut params, "", &input);
+        GetBucketWebsiteRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11944,7 +11943,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         request.set_hostname(Some(hostname));
 
         params.put("Action", "GetObject");
-        GetObjectRequestWriter::write_params(&mut params, "", &input);
+        GetObjectRequestWriter::write_params(&mut params, "", input);
 
         request.set_params(params);
         let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
@@ -11971,7 +11970,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?policy");
         let mut params = Params::new();
         params.put("Action", "GetBucketPolicy");
-        GetBucketPolicyRequestWriter::write_params(&mut params, "", &input);
+        GetBucketPolicyRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -11991,7 +11990,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?versioning");
         let mut params = Params::new();
         params.put("Action", "GetBucketVersioning");
-        GetBucketVersioningRequestWriter::write_params(&mut params, "", &input);
+        GetBucketVersioningRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12037,7 +12036,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?requestPayment");
         let mut params = Params::new();
         params.put("Action", "GetBucketRequestPayment");
-        GetBucketRequestPaymentRequestWriter::write_params(&mut params, "", &input);
+        GetBucketRequestPaymentRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12057,7 +12056,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}?tagging");
         let mut params = Params::new();
         params.put("Action", "PutBucketTagging");
-        PutBucketTaggingRequestWriter::write_params(&mut params, "", &input);
+        PutBucketTaggingRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12077,7 +12076,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?tagging");
         let mut params = Params::new();
         params.put("Action", "GetBucketTagging");
-        GetBucketTaggingRequestWriter::write_params(&mut params, "", &input);
+        GetBucketTaggingRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12125,7 +12124,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}/{Key+}?acl");
         let mut params = Params::new();
         params.put("Action", "PutObjectAcl");
-        PutObjectAclRequestWriter::write_params(&mut params, "", &input);
+        PutObjectAclRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12145,7 +12144,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?location");
         let mut params = Params::new();
         params.put("Action", "GetBucketLocation");
-        GetBucketLocationRequestWriter::write_params(&mut params, "", &input);
+        GetBucketLocationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12165,7 +12164,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("PUT", "s3", self.region, "/{Bucket}?cors");
         let mut params = Params::new();
         params.put("Action", "PutBucketCors");
-        PutBucketCorsRequestWriter::write_params(&mut params, "", &input);
+        PutBucketCorsRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12185,7 +12184,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("DELETE", "s3", self.region, "/{Bucket}?lifecycle");
         let mut params = Params::new();
         params.put("Action", "DeleteBucketLifecycle");
-        DeleteBucketLifecycleRequestWriter::write_params(&mut params, "", &input);
+        DeleteBucketLifecycleRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12205,7 +12204,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?notification");
         let mut params = Params::new();
         params.put("Action", "GetBucketNotification");
-        GetBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", &input);
+        GetBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12256,7 +12255,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}/{Key+}?acl");
         let mut params = Params::new();
         params.put("Action", "GetObjectAcl");
-        GetObjectAclRequestWriter::write_params(&mut params, "", &input);
+        GetObjectAclRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12302,7 +12301,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         request.set_hostname(Some(hostname));
 
         params.put("Action", "DeleteObject");
-        DeleteObjectRequestWriter::write_params(&mut params, "", &input);
+        DeleteObjectRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12320,7 +12319,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("POST", "s3", self.region, "/{Bucket}/{Key+}?restore");
         let mut params = Params::new();
         params.put("Action", "RestoreObject");
-        RestoreObjectRequestWriter::write_params(&mut params, "", &input);
+        RestoreObjectRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12339,7 +12338,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}?replication");
         let mut params = Params::new();
         params.put("Action", "GetBucketReplication");
-        GetBucketReplicationRequestWriter::write_params(&mut params, "", &input);
+        GetBucketReplicationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = request.sign_and_execute(try!(self.credentials_provider.credentials()), &self.client);
         let status = result.status.to_u16();
@@ -12492,7 +12491,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
         // content_md5 hashing for everyone!
         let hash = hash(MD5, request.body.unwrap()).to_base64(STANDARD);
 
-        self.client.put_object(&request)
+        self.client.put_object(request)
     }
 
     // TODO: does this make a copy of the object_as_reader or just transfers ownership to this?
@@ -12520,7 +12519,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
         let mut buffered_reader = BufReader::new(object_as_reader);
         let mut parts_list : Vec<String>;
 
-        match self.upload_chunks(&mut buffered_reader, &bucket_name, &upload_id, &object_name) {
+        match self.upload_chunks(&mut buffered_reader, bucket_name, &upload_id, object_name) {
             Err(why) => return Err(AwsError::new("oops in upload_chunks")),
             Ok(parts) => parts_list = parts,
         }
@@ -12579,7 +12578,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
                     }
 
                     if s3_chunk.len() >= S3_MINIMUM_PART_SIZE || !more_chunks_to_go {
-                        match self.upload_a_part(&s3_chunk, &part_number, &bucket_name, &upload_id, &object_name) {
+                        match self.upload_a_part(&s3_chunk, &part_number, bucket_name, upload_id, object_name) {
                             Err(why) => {
                                 println!("Got error uploading a part: {:?}", why);
                                 return Err(AwsError::new("oops in upload_chunks"));
@@ -12601,7 +12600,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
             bucket_name: &str, upload_id: &str, object_name: &str) -> Result<String, AwsError> {
 
         let mut upload_part_request = UploadPartRequest::default();
-        upload_part_request.body = Some(&buffer);
+        upload_part_request.body = Some(buffer);
 
         let hash = hash(MD5, upload_part_request.body.unwrap()).to_base64(STANDARD);
         upload_part_request.content_md5 = Some(hash);
