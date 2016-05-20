@@ -24,7 +24,7 @@ serde_json = "0.7.0"
 
 [dependencies.clippy]
 optional = true
-version = "0.0.63"
+version = "0.0"
 
 [dependencies.serde_codegen]
 optional = true

@@ -33,7 +33,7 @@ xml-rs = "0.1.26"
 
 [dependencies.clippy]
 optional = true
-version = "0.0.63"
+version = "0.0"
 
 [dependencies.serde_macros]
 optional = true

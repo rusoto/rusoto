@@ -212,7 +212,7 @@ impl <'a> SignedRequest <'a> {
         let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
 
         // construct the signing key and sign the string with it
-        let signing_key = signing_key(&creds.aws_secret_access_key(), date, &self.region.to_string(), &self.service);
+        let signing_key = signing_key(creds.aws_secret_access_key(), date, &self.region.to_string(), &self.service);
         let signature = signature(&string_to_sign, signing_key);
 
         // build the actual auth header
@@ -221,7 +221,7 @@ impl <'a> SignedRequest <'a> {
         self.remove_header("authorization");
         self.add_header("authorization", &auth_header);
 
-        let response = send_request(&self);
+        let response = send_request(self);
         debug!("Sent request to AWS");
 
         if response.status == HTTP_TEMPORARY_REDIRECT {
@@ -293,7 +293,7 @@ fn canonical_values(values: &[Vec<u8>]) -> String {
             st.push(',')
         }
         if s.starts_with('\"') {
-            st.push_str(&s);
+            st.push_str(s);
         } else {
             st.push_str(s.replace("  ", " ").trim());
         }
