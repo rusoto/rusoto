@@ -20,4 +20,6 @@ fn main() {
     for service in services {
         generate(service, out_path);
     }
+
+    println!("cargo:rerun-if-changed=codegen");
 }
