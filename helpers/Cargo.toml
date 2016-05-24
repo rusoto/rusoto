@@ -1,5 +1,5 @@
 [package]
-authors = ["Anthony DiMarco <ocramida@gmail.com>", "Matthew Mayer <matthewkmayer@gmail.com>"]
+authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>"]
 license = "MIT"
 name = "rusoto_helpers"
 readme = "README.md"
