@@ -53,7 +53,7 @@ impl GenerateProtocol for QueryGenerator {
         }).collect::<Vec<String>>().join("\n")
     }
 
-    fn generate_prelude(&self) -> String {
+    fn generate_prelude(&self, _: &Service) -> String {
         "use std::collections::HashMap;
         use std::str::{FromStr, from_utf8};
 

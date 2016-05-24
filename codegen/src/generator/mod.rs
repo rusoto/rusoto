@@ -1,6 +1,6 @@
 use inflector::Inflector;
 
-use botocore::{Service, Shape};
+use botocore::{Service, Shape, Operation};
 
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
@@ -13,12 +13,16 @@ mod rest_json;
 pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
 
-    fn generate_prelude(&self) -> String;
+    fn generate_prelude(&self, service: &Service) -> String;
 
     fn generate_struct_attributes(&self) -> String;
 
     fn generate_support_types(&self, _name: &str, _shape: &Shape, _service: &Service)
         -> Option<String> {
+        None
+    }
+
+    fn generate_error_types(&self, _service: &Service) -> Option<String> {
         None
     }
 }
@@ -37,11 +41,13 @@ fn generate<P>(service: &Service, protocol_generator: P) -> String where P: Gene
         "{prelude}
 
         {types}
+        {error_types}
 
         {client}",
         client = generate_client(service, &protocol_generator),
-        prelude = &protocol_generator.generate_prelude(),
+        prelude = &protocol_generator.generate_prelude(service),
         types = generate_types(service, &protocol_generator),
+        error_types = protocol_generator.generate_error_types(service).unwrap_or("".to_string()),
     )
 }
 
@@ -114,6 +120,10 @@ where P: GenerateProtocol {
             return protocol_generator.generate_support_types(name, shape, &service);
         }
 
+        if shape.exception() && service.typed_errors() {
+            return None;
+        }
+
         let mut parts = Vec::with_capacity(3);
 
         if let Some(ref docs) = shape.documentation {
@@ -134,6 +144,8 @@ where P: GenerateProtocol {
         Some(parts.join("\n"))
     }).collect::<Vec<String>>().join("\n")
 }
+
+
 
 fn generate_struct<P>(
     service: &Service,
@@ -198,4 +210,10 @@ fn generate_struct_fields(service: &Service, shape: &Shape) -> String {
 
         lines.join("\n")
     }).collect::<Vec<String>>().join("\n")
+}
+
+impl Operation {
+    pub fn error_type_name(&self) -> String {
+        format!("{}Error", self.name)
+    }
 }

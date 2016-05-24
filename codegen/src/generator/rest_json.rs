@@ -89,7 +89,7 @@ impl GenerateProtocol for RestJsonGenerator {
         }).collect::<Vec<String>>().join("\n")
     }
 
-    fn generate_prelude(&self) -> String {
+    fn generate_prelude(&self, _: &Service) -> String {
         "use std::io::Read;
 
         use serde_json;

@@ -92,6 +92,13 @@ impl Service {
     pub fn shape_type_for_member<'a>(&'a self, member: &Member) -> Option<&'a str> {
         self.shapes.get(&member.shape).map(|ref shape| &shape.shape_type[..])
     }
+
+    pub fn typed_errors(&self) -> bool {
+        match self.service_type_name() {
+            "Kinesis" | "KinesisFirehose" => true,
+            _ => false
+        }
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -124,6 +131,12 @@ pub struct Error {
     pub exception: Option<bool>,
     pub fault: Option<bool>,
     pub shape: String,
+}
+
+impl Error {
+    pub fn idiomatic_error_name(&self) -> String {
+        self.shape.replace("Exception","")
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -238,6 +251,10 @@ impl<'a> Shape {
 
     pub fn required(&self, field: &'a str) -> bool {
         self.required.is_some() && self.required.as_ref().unwrap().contains(&String::from(field))
+    }
+
+    pub fn exception(&self) -> bool {
+        self.exception.unwrap_or(false)
     }
 }
 
