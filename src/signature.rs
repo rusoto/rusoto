@@ -11,7 +11,7 @@ use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
 
-use hyper::client::Response;
+use hyper::client::{Client, Response};
 use hyper::status::StatusCode;
 use openssl::crypto::hash::Type::SHA256;
 use openssl::crypto::hash::hash;
@@ -140,7 +140,7 @@ impl <'a> SignedRequest <'a> {
     /// Calculate the signature from the credentials provided and the request data
     /// Add the calculated signature to the request headers and execute it
     /// Return the hyper HTTP response
-    pub fn sign_and_execute(&mut self, creds: &AwsCredentials) -> Response {
+    pub fn sign_and_execute(&mut self, creds: &AwsCredentials, client: &Client) -> Response {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
@@ -221,7 +221,8 @@ impl <'a> SignedRequest <'a> {
         self.remove_header("authorization");
         self.add_header("authorization", &auth_header);
 
-        let response = send_request(self);
+        let response = send_request(self, client);
+
         debug!("Sent request to AWS");
 
         if response.status == HTTP_TEMPORARY_REDIRECT {
@@ -231,7 +232,7 @@ impl <'a> SignedRequest <'a> {
             self.set_hostname(Some(new_hostname.to_string()));
 
             // This does a lot of appending and not clearing/creation, so we'll have to do that ourselves:
-            return self.sign_and_execute(creds);
+            return self.sign_and_execute(creds, client);
         }
 
         response

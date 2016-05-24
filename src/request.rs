@@ -6,14 +6,13 @@ use std::io::Read;
 
 use hyper::Client;
 use hyper::client::Response;
-use hyper::client::RedirectPolicy;
 use hyper::header::Headers;
 use hyper::method::Method;
 use signature::SignedRequest;
 use log::LogLevel::Debug;
 
 /// Takes a fully formed and signed request and executes it.
-pub fn send_request(signed_request: &SignedRequest) -> Response {
+pub fn send_request(signed_request: &SignedRequest, client: &Client) -> Response {
     let hyper_method = match signed_request.method().as_ref() {
         "POST" => Method::Post,
         "PUT" => Method::Put,
@@ -49,9 +48,6 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
             debug!("{}:{}", h.name(), h.value_string());
         }
     }
-
-    let mut client = Client::new();
-    client.set_redirect_policy(RedirectPolicy::FollowNone);
 
     match signed_request.payload() {
         None => client.request(hyper_method, &final_uri).headers(hyper_headers).body("").send().unwrap(),

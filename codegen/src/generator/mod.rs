@@ -38,7 +38,9 @@ pub fn generate_source(service: &Service) -> String {
 
 fn generate<P>(service: &Service, protocol_generator: P) -> String where P: GenerateProtocol {
     format!(
-        "{prelude}
+        "
+        use hyper::client::{{Client, RedirectPolicy}};
+        {prelude}
 
         {types}
         {error_types}
@@ -58,13 +60,17 @@ where P: GenerateProtocol {
         pub struct {type_name}<P> where P: ProvideAwsCredentials {{
             credentials_provider: P,
             region: Region,
+            client: Client
         }}
 
         impl<P> {type_name}<P> where P: ProvideAwsCredentials {{
             pub fn new(credentials_provider: P, region: Region) -> Self {{
+                let mut client = Client::new();
+                client.set_redirect_policy(RedirectPolicy::FollowNone);
                 {type_name} {{
                     credentials_provider: credentials_provider,
                     region: region,
+                    client: client
                 }}
             }}
 
