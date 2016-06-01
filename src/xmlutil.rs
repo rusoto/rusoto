@@ -109,11 +109,18 @@ pub fn string_field<T: Peek + Next>(name: &str, stack: &mut T) -> Result<String,
 
 /// return some XML Characters
 pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError> {
+
+    // AWS can send an empty tag (like <reason/>) when content is empty
+    if let Some(&XmlEvent::EndElement { .. }) = stack.peek() {
+        return Ok(String::new());
+    }
+
     if let Some(XmlEvent::Characters(data)) = stack.next() {
         Ok(data.to_string())
     } else {
         Err(XmlParseError::new("Expected characters"))
     }
+
 }
 
 /// get the name of the current element in the stack.  throw a parse error if it's not a `StartElement`
@@ -126,21 +133,24 @@ pub fn peek_at_name<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseErr
     }
 }
 
-/// consume a `StartElement` with a specific name or throw an `XmlParseError`
+/// consume a `StartElement` with a specific name or throw an `XmlParseError`. Skip Whitespace events
 pub fn start_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result<HashMap<String, String>, XmlParseError> {
-    let next = stack.next();
-    if let Some(XmlEvent::StartElement { name, attributes, .. }) = next {
-        if name.local_name == element_name {
-            let mut attr_map = HashMap::new();
-            for attr in attributes {
-                attr_map.insert(attr.name.local_name, attr.value);
-            }
-            Ok(attr_map)
-        } else {
-            Err(XmlParseError::new(&format!("Expected {} got {}", element_name, name.local_name)))
+    loop {
+        match stack.next() {
+            Some(XmlEvent::Whitespace(_)) => continue,
+            Some(XmlEvent::StartElement { name, attributes, .. }) => {
+                if name.local_name == element_name {
+                    let mut attr_map = HashMap::new();
+                    for attr in attributes {
+                        attr_map.insert(attr.name.local_name, attr.value);
+                    }
+                    return Ok(attr_map);
+                } else {
+                    return Err(XmlParseError::new(&format!("Expected {} got {}", element_name, name.local_name)));
+                }
+            },
+            other => return Err(XmlParseError::new(&format!("Expected StartElement {}, got {:?}", element_name, other))),
         }
-    } else {
-        Err(XmlParseError::new(&format!("Expected StartElement {}", element_name)))
     }
 }
 
@@ -156,6 +166,28 @@ pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result
     }else {
         Err(XmlParseError::new(&format!("Expected EndElement {} got {:?}", element_name, next)))
     }
+}
+
+/// skip a tag and all its children
+pub fn skip_tree<T: Peek + Next>(stack: &mut T) {
+
+    let mut deep: usize = 0;
+
+    loop {
+        match stack.next() {
+            None => break,
+            Some(XmlEvent::StartElement { .. }) => deep += 1,
+            Some(XmlEvent::EndElement { ..}) => {
+                if deep > 1 {
+                    deep -= 1;
+                } else {
+                    break;
+                }
+            },
+            _ => (),
+        }
+    }
+
 }
 
 #[cfg(test)]
@@ -248,6 +280,25 @@ mod tests {
             Ok(_) => (),
             Err(_) => panic!("Couldn't find end element")
         }
+    }
+
+    #[test]
+    fn skip_tree_with_subtree() {
+        let file = File::open("tests/sample-data/skip_tree.xml").unwrap();
+        let file = BufReader::new(file);
+        let mut my_parser  = EventReader::new(file);
+        let my_stack = my_parser.events().peekable();
+        let mut reader = XmlResponseFromFile::new(my_stack);
+
+        // skip two leading fields since we ignore them (xml declaration, return type declaration)
+        reader.next();
+        reader.next();
+
+        // skip tag a
+        skip_tree(&mut reader);
+
+        // expect tag f
+        start_element("f", &mut reader).expect("Missing tag f");
     }
 
 }

@@ -98,6 +98,7 @@ Service | Cargo feature
 --------|--------------
 All supported services | all
 [DynamoDB](https://aws.amazon.com/dynamodb/) | dynamodb
+[EC2](https://aws.amazon.com/ec2/) | ec2
 [ECS](https://aws.amazon.com/ecs/) | ecs
 [Elastic Transcoder](https://aws.amazon.com/elastictranscoder/) | ets
 [KMS](https://aws.amazon.com/kms/) | kms

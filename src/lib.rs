@@ -44,6 +44,8 @@ mod serialization;
 
 #[cfg(feature = "dynamodb")]
 pub mod dynamodb;
+#[cfg(feature = "ec2")]
+pub mod ec2;
 #[cfg(feature = "ecs")]
 pub mod ecs;
 #[cfg(feature = "ets")]
