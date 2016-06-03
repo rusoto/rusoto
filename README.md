@@ -68,7 +68,7 @@ fn main() {
 ```
 
 Rusoto exposes relatively low level types for AWS's APIs.
-It may be convenient to use higher level types, which can be found in the [rusoto_helpers](https://github.com/rusoto/rusoto_helpers) crate.
+It may be convenient to use higher level types, which can be found in the [rusoto_helpers](helpers) crate.
 
 ### Credentials
 
