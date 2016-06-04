@@ -140,7 +140,7 @@ impl <'a> SignedRequest <'a> {
     /// Calculate the signature from the credentials provided and the request data
     /// Add the calculated signature to the request headers and execute it
     /// Return the hyper HTTP response
-    pub fn sign_and_execute(&mut self, creds: &AwsCredentials) -> Response {
+    pub fn sign_and_execute(&mut self, creds: AwsCredentials) -> Response {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),

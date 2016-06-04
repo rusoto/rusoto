@@ -15,7 +15,7 @@ impl GenerateProtocol for JsonGenerator {
 
             format!("
                 {documentation}
-                pub fn {method_name}(&mut self, input: &{input_type}) -> {result_type} {{
+                pub fn {method_name}(&self, input: &{input_type}) -> {result_type} {{
                     let encoded = serde_json::to_string(input).unwrap();
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, \"{request_uri}\");
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
