@@ -10,6 +10,7 @@ use std::io::BufReader;
 use std::ascii::AsciiExt;
 use std::collections::HashMap;
 use std::sync::Mutex;
+use std::cell::RefCell;
 use hyper::Client;
 use hyper::header::Connection;
 use error::*;
@@ -101,7 +102,6 @@ fn credentials_from_environment() -> Result<AwsCredentials, AwsError> {
     if env_key.is_empty() || env_secret.is_empty() {
         return Err(AwsError::new("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment."));
     }
-
     Ok(AwsCredentials::new(env_key, env_secret, None, in_ten_minutes()))
 }
 
@@ -172,7 +172,7 @@ impl ProfileProvider {
 impl ProvideAwsCredentials for ProfileProvider {
     fn credentials(&self) -> Result<AwsCredentials, AwsError> {
     	parse_credentials_file(self.file_path()).and_then(|mut profiles| {
-	    	profiles.remove(self.profile()).ok_or(AwsError::new("Profile not found"))
+            profiles.remove(self.profile()).ok_or(AwsError::new("profile not found"))
     	})
    }
 }
@@ -330,29 +330,64 @@ impl ProvideAwsCredentials for IamProvider {
     }
 }
 
-/// Threadsafe wrapper for ProvideAwsCredentials that caches the credentials returned by the
+/// Wrapper for ProvideAwsCredentials that caches the credentials returned by the
 /// wrapped provider.  Each time the credentials are accessed, they are checked to see if
 /// they have expired, in which case they are retrieved from the wrapped provider again.
-pub struct ExpiringProvider<P> {
+pub struct BaseAutoRefreshingProvider<P, T> {
 	credentials_provider: P,
-	cached_credentials: Mutex<Option<AwsCredentials>>
+	cached_credentials: T
 }
 
-impl <P: ProvideAwsCredentials> ExpiringProvider<P> {
-	fn new(provider: P) -> ExpiringProvider<P> {
-		ExpiringProvider{ credentials_provider: provider, cached_credentials: Mutex::new(None) }
+/// Threadsafe AutoRefreshingProvider that locks cached credentials with a Mutex
+type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>;
+
+impl <P: ProvideAwsCredentials> BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>> {
+	fn new(provider: P) -> Result<BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>, AwsError> {
+		let creds = try!(provider.credentials());
+		Ok(BaseAutoRefreshingProvider { 
+			credentials_provider: provider, 
+			cached_credentials: Mutex::new(creds) 
+		})
 	}
 }
 
-impl <P: ProvideAwsCredentials> ProvideAwsCredentials for ExpiringProvider<P> {
+impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>> {
 	fn credentials(&self) -> Result<AwsCredentials, AwsError> {
 		let mut creds = self.cached_credentials.lock().unwrap();
-		if creds.is_none() || creds.as_ref().unwrap().credentials_are_expired() {			
-			*creds = Some(try!(self.credentials_provider.credentials()));
+		if creds.credentials_are_expired() {			
+			*creds = try!(self.credentials_provider.credentials());
 		}
-		Ok(creds.as_ref().unwrap().clone())
+		Ok(creds.clone())
 	}
 }
+
+/// !Sync AutoRefreshingProvider that caches credentials in a RefCell
+type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>;
+
+impl <P: ProvideAwsCredentials> BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>> {
+	fn new(provider: P) -> Result<BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>, AwsError> {
+		let creds = try!(provider.credentials());
+		Ok(BaseAutoRefreshingProvider { 
+			credentials_provider: provider, 
+			cached_credentials: RefCell::new(creds) 
+		})
+	}
+}
+
+impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>> {
+	fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+
+		let mut creds = self.cached_credentials.borrow_mut();
+		
+		if creds.credentials_are_expired() {
+			*creds = try!(self.credentials_provider.credentials());
+		}	
+
+		Ok(creds.clone())
+	}
+}
+
+
 
 /// Provides AWS credentials from multiple possible sources using a priority order.
 ///

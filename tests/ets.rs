@@ -91,7 +91,7 @@ impl<P> Drop for TestEtsClient<P>
     where P: ProvideAwsCredentials
 {
     fn drop(&mut self) {
-        self.s3_helper.take().map(|mut s3_helper| {
+        self.s3_helper.take().map(|s3_helper| {
             self.input_bucket.take().map(|bucket| {
                 match s3_helper.delete_bucket(&bucket, self.region) {
                     Ok(_) => { info!("Deleted S3 bucket: {}", bucket) },
@@ -168,7 +168,7 @@ fn create_preset() {
 
     initialize();
 
-    let mut ets = create_ets_client();
+    let ets = create_ets_client();
 
     let name = generate_unique_name("ets-preset-1");
     let request = CreatePresetRequest {
@@ -225,7 +225,7 @@ fn delete_preset() {
 
     initialize();
 
-    let mut ets = create_ets_client();
+    let ets = create_ets_client();
 
     let name = generate_unique_name("ets-preset-1");
     let request = CreatePresetRequest {
@@ -263,7 +263,7 @@ fn list_jobs_by_status() {
 
     initialize();
 
-    let mut ets = create_ets_client();
+    let ets = create_ets_client();
 
     let status = "Submitted".to_owned();
     let request = ListJobsByStatusRequest {
@@ -285,7 +285,7 @@ fn list_pipelines() {
 
     initialize();
 
-    let mut ets = create_ets_client();
+    let ets = create_ets_client();
 
     let request = ListPipelinesRequest::default();
     let response = ets.list_pipelines(&request);
@@ -303,7 +303,7 @@ fn list_presets() {
 
     initialize();
 
-    let mut ets = create_ets_client();
+    let ets = create_ets_client();
 
     let request = ListPresetsRequest::default();
     let response = ets.list_presets(&request);
@@ -338,7 +338,7 @@ fn read_preset() {
 
     initialize();
 
-    let mut ets = create_ets_client();
+    let ets = create_ets_client();
 
     let request = ReadPresetRequest {
         id: AWS_ETS_WEB_PRESET_ID.to_owned(),
