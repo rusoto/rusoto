@@ -11,14 +11,15 @@ use std::io::BufReader;
 use std::io::Read;
 use std::num::ParseIntError;
 use std::str::{FromStr, ParseBoolError};
+use std::iter::repeat;
 use std::str;
-
 use hyper::client::{Client, RedirectPolicy};
-use openssl::crypto::hash::Type::MD5;
-use openssl::crypto::hash::hash;
+use hyper::client::Response;
+use crypto::digest::Digest;
+use crypto::mac::Mac;
+use crypto::md5::Md5;
 use rustc_serialize::base64::{ToBase64, STANDARD};
 use xml::*;
-
 use credential::{ProvideAwsCredentials, AwsCredentials, CredentialsError};
 use param::{Params, ServiceParams};
 use region::Region;
@@ -72,6 +73,13 @@ impl From<XmlParseError> for S3Error {
         let XmlParseError(message) = err;
         S3Error { message: message.to_owned() }
     }
+}
+
+fn hash<D: Digest, S: AsRef<[u8]>>(mut hasher: D, val: S) -> Vec<u8> {
+    hasher.input(val.as_ref());
+    let mut buf: Vec<u8> = repeat(0).take(hasher.output_bytes()).collect();
+    hasher.result(&mut buf);
+    buf
 }
 
 #[derive(Debug, Default)]
@@ -12561,7 +12569,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
         // bucket name, region, object id, payload.
 
         // content_md5 hashing for everyone!
-        let hash = hash(MD5, request.body.unwrap()).to_base64(STANDARD);
+        let hash = hash(Md5::new(), request.body.unwrap()).to_base64(STANDARD);
 
         self.client.put_object(request)
     }
@@ -12674,7 +12682,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
         let mut upload_part_request = UploadPartRequest::default();
         upload_part_request.body = Some(buffer);
 
-        let hash = hash(MD5, upload_part_request.body.unwrap()).to_base64(STANDARD);
+        let hash = hash(Md5::new(), upload_part_request.body.unwrap()).to_base64(STANDARD);
         upload_part_request.content_md5 = Some(hash);
 
         upload_part_request.bucket = bucket_name.to_string();
