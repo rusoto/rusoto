@@ -97,13 +97,17 @@ impl GenerateProtocol for RestJsonGenerator {
         use credential::ProvideAwsCredentials;
         use error::{AwsResult, parse_json_protocol_error};
         use param::{Params, ServiceParams};
-        use region::Region;
+        use region;
         use signature::SignedRequest;
         ".to_owned()
     }
 
     fn generate_struct_attributes(&self) -> String {
         "#[derive(Debug, Default, Deserialize, Serialize)]".to_owned()
+    }
+
+    fn timestamp_type(&self) -> &'static str {
+        "f64"
     }
 }
 

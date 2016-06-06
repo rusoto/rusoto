@@ -1,11 +1,13 @@
 use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape};
+use std::borrow::Cow;
 use super::GenerateProtocol;
+use super::generate_field_name;
 
-pub struct QueryGenerator;
+pub struct Ec2Generator;
 
-impl GenerateProtocol for QueryGenerator {
+impl GenerateProtocol for Ec2Generator {
     fn generate_methods(&self, service: &Service) -> String {
         service.operations.values().map(|operation| {
             format!(
@@ -20,24 +22,32 @@ impl GenerateProtocol for QueryGenerator {
     let mut params = Params::new();
 
     params.put(\"Action\", \"{operation_name}\");
+    params.put(\"Version\", \"{api_version}\");
     {serialize_input}
 
     request.set_params(params);
 
-    let result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
-    let status = result.status.to_u16();
-    let mut reader = EventReader::new(result);
-    let mut stack = XmlResponseFromAws::new(reader.events().peekable());
-    stack.next();
-    stack.next();
+    let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
 
-    match status {{
-        200 => {{
-            {method_return_value}
+    if result.status.is_success() {{
+
+        let mut reader = EventReader::new(result);
+        let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+        stack.next();
+        {method_return_value}
+
+    }} else {{
+
+        use std::io::Read;
+        let mut response_body = String::new();
+        if let Err(_) = result.read_to_string(&mut response_body) {{
+            response_body = String::from(\"(Non UTF-8 response)\");
         }}
-        status_code => Err(AwsError::new(
-            format!(\"HTTP response code for {operation_name}: {{}}\", status_code)
+
+        Err(AwsError::new(
+            format!(\"HTTP response for {operation_name}: {{}}: {{}}\", result.status, response_body)
         ))
+
     }}
 }}
                 ",
@@ -47,15 +57,15 @@ impl GenerateProtocol for QueryGenerator {
                 method_return_value = generate_method_return_value(operation),
                 method_signature = generate_method_signature(operation),
                 operation_name = &operation.name,
+                api_version = service.metadata.api_version,
                 request_uri = &operation.http.request_uri,
                 serialize_input = generate_method_input_serialization(operation),
             )
         }).collect::<Vec<String>>().join("\n")
     }
 
-    fn generate_prelude(&self, _: &Service) -> String {
-        "use std::collections::HashMap;
-        use std::str::{FromStr, from_utf8};
+    fn generate_prelude(&self, _service: &Service) -> String {
+        "use std::str::{FromStr, from_utf8};
 
         use xml::EventReader;
 
@@ -64,8 +74,15 @@ impl GenerateProtocol for QueryGenerator {
         use param::{Params, ServiceParams};
         use region;
         use signature::SignedRequest;
+        use xml::reader::events::XmlEvent;
         use xmlutil::{Next, Peek, XmlParseError, XmlResponseFromAws};
-        use xmlutil::{characters, end_element, peek_at_name, start_element};
+        use xmlutil::{characters, end_element, start_element, skip_tree};
+
+        enum DeserializerNext {
+            Close,
+            Skip,
+            Element(String),
+        }
         ".to_owned()
     }
 
@@ -73,11 +90,12 @@ impl GenerateProtocol for QueryGenerator {
         "#[derive(Debug, Default)]".to_owned()
     }
 
-    fn generate_support_types(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
+    fn generate_support_types(&self, name: &str, shape: &Shape, _service: &Service) -> Option<String> {
         Some(format!(
             "/// Deserializes `{name}` from XML.
             struct {name}Deserializer;
             impl {name}Deserializer {{
+                #[allow(unused_variables)]
                 fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
                 -> Result<{name}, XmlParseError> {{
                     {deserializer_body}
@@ -92,7 +110,7 @@ impl GenerateProtocol for QueryGenerator {
                 }}
             }}
             ",
-            deserializer_body = generate_deserializer_body(name, shape, service),
+            deserializer_body = generate_deserializer_body(name, shape),
             name = name,
             serializer_body = generate_serializer_body(shape),
             serializer_signature = generate_serializer_signature(name, shape),
@@ -106,7 +124,7 @@ impl GenerateProtocol for QueryGenerator {
 
 fn generate_documentation(operation: &Operation) -> String {
     match operation.documentation {
-        Some(ref docs) => format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")),
+        Some(ref docs) => format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"").replace("C:\\", "C:\\\\")),
         None => "".to_owned(),
     }
 }
@@ -122,11 +140,22 @@ fn generate_method_input_serialization(operation: &Operation) -> String {
     }
 }
 
+fn generate_response_tag_name<'a>(member_name: &'a str) -> Cow<'a, str> {
+    if member_name.ends_with("Result") {
+        format!("{}Response", &member_name[..member_name.len()-6]).into()
+    } else {
+        member_name.into()
+    }
+}
+
 fn generate_method_return_value(operation: &Operation) -> String {
     if operation.output.is_some() {
+        let output_type = &operation.output.as_ref().unwrap().shape;
+        let tag_name = generate_response_tag_name(output_type);
         format!(
-            "Ok(try!({output_type}Deserializer::deserialize(\"{output_type}\", &mut stack)))",
-            output_type = &operation.output.as_ref().unwrap().shape,
+            "Ok(try!({output_type}Deserializer::deserialize(\"{tag_name}\", &mut stack)))",
+            output_type = output_type,
+            tag_name = tag_name
         )
     } else {
         "Ok(())".to_owned()
@@ -136,66 +165,64 @@ fn generate_method_return_value(operation: &Operation) -> String {
 fn generate_method_signature(operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "pub fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, AwsError>",
+            "pub fn {operation_name}(&mut self, input: &{input_type}) -> Result<{output_type}, AwsError>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
         )
     } else {
         format!(
-            "pub fn {operation_name}(&self) -> Result<{output_type}, AwsError>",
+            "pub fn {operation_name}(&mut self) -> Result<{output_type}, AwsError>",
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
         )
     }
 }
 
-fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> String {
+fn generate_deserializer_body(name: &str, shape: &Shape) -> String {
     match &shape.shape_type[..] {
         "list" => generate_list_deserializer(shape),
-        "map" => generate_map_deserializer(shape),
-        "structure" => generate_struct_deserializer(name, shape, service),
+        "structure" => generate_struct_deserializer(name, shape),
         _ => generate_primitive_deserializer(shape),
     }
 }
 
 fn generate_list_deserializer(shape: &Shape) -> String {
+
+    let location_name = shape.member.as_ref().and_then(|m| m.location_name.as_ref()).map(|name| &name[..]).unwrap_or(shape.member());
+
     format!(
         "
         let mut obj = vec![];
+        try!(start_element(tag_name, stack));
 
-        while try!(peek_at_name(stack)) == tag_name {{
-            obj.push(try!({member_name}Deserializer::deserialize(tag_name, stack)));
+        loop {{
+            let next_event = match stack.peek() {{
+                Some(&XmlEvent::EndElement {{ .. }}) => DeserializerNext::Close,
+                Some(&XmlEvent::StartElement {{ ref name, .. }}) => DeserializerNext::Element(name.local_name.to_owned()),
+                _ => DeserializerNext::Skip,
+            }};
+
+            match next_event {{
+                DeserializerNext::Element(name) => {{
+                    if name == \"{location_name}\" {{
+                        obj.push(try!({member_name}Deserializer::deserialize(\"{location_name}\", stack)));
+                    }} else {{
+                        skip_tree(stack);
+                    }}
+                }},
+                DeserializerNext::Close => {{
+                    try!(end_element(tag_name, stack));
+                    break;
+                }}
+                DeserializerNext::Skip => {{ stack.next(); }},
+            }}
         }}
 
         Ok(obj)
         ",
+        location_name = location_name,
         member_name = shape.member()
-    )
-}
-
-fn generate_map_deserializer(shape: &Shape) -> String {
-    let key = shape.key.as_ref().unwrap();
-    let value = shape.value.as_ref().unwrap();
-
-    format!(
-        "
-        let mut obj = HashMap::new();
-
-        while try!(peek_at_name(stack)) == tag_name {{
-            try!(start_element(tag_name, stack));
-            let key = try!({key_type_name}Deserializer::deserialize(\"{key_tag_name}\", stack));
-            let value = try!({value_type_name}Deserializer::deserialize(\"{value_tag_name}\", stack));
-            obj.insert(key, value);
-            try!(end_element(tag_name, stack));
-        }}
-
-        Ok(obj)
-        ",
-        key_tag_name = key.tag_name(),
-        key_type_name = key.shape,
-        value_tag_name = value.tag_name(),
-        value_type_name = value.shape,
     )
 }
 
@@ -203,7 +230,9 @@ fn generate_primitive_deserializer(shape: &Shape) -> String {
     let statement =  match &shape.shape_type[..] {
         "string" | "timestamp" => "try!(characters(stack))",
         "integer" => "i32::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        "double" => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        "long" => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        "double" => "f64::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        "float" => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
         "blob" => "try!(characters(stack)).into_bytes()",
         "boolean" => "bool::from_str(try!(characters(stack)).as_ref()).unwrap()",
         shape_type => panic!("Unknown primitive shape type: {}", shape_type),
@@ -220,14 +249,16 @@ fn generate_primitive_deserializer(shape: &Shape) -> String {
     )
 }
 
-fn generate_struct_deserializer(name: &str, shape: &Shape, service: &Service) -> String {
+fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
     if shape.members.as_ref().unwrap().is_empty() {
         return format!(
             "try!(start_element(tag_name, stack));
+            stack.next();
 
             let obj = {name}::default();
 
             try!(end_element(tag_name, stack));
+            stack.next();
 
             Ok(obj)
             ",
@@ -241,9 +272,21 @@ fn generate_struct_deserializer(name: &str, shape: &Shape, service: &Service) ->
         let mut obj = {name}::default();
 
         loop {{
-            match &try!(peek_at_name(stack))[..] {{
-                {struct_field_deserializers}
-                _ => break,
+            let next_event = match stack.peek() {{
+                Some(&XmlEvent::EndElement {{ .. }}) => DeserializerNext::Close,   // TODO verify that we received the expected tag?
+                Some(&XmlEvent::StartElement {{ ref name, .. }}) => DeserializerNext::Element(name.local_name.to_owned()),
+                _ => DeserializerNext::Skip,
+            }};
+
+            match next_event {{
+                DeserializerNext::Element(name) => {{
+                    match &name[..] {{
+                        {struct_field_deserializers}
+                        _ => skip_tree(stack),
+                    }}
+                }},
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {{ stack.next(); }},
             }}
         }}
 
@@ -252,40 +295,21 @@ fn generate_struct_deserializer(name: &str, shape: &Shape, service: &Service) ->
         Ok(obj)
         ",
         name = name,
-        struct_field_deserializers = generate_struct_field_deserializers(shape, service),
+        struct_field_deserializers = generate_struct_field_deserializers(shape),
     )
 }
 
-fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> String {
+fn generate_struct_field_deserializers(shape: &Shape) -> String {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
         // look up member.shape in all_shapes.  use that shape.member.location_name
-        let mut location_name = member_name.to_string();
+        let location_name = member.location_name.as_ref().unwrap_or(member_name);
 
-        let parse_expression_location_name = if let Some(ref child_shape) = service.shape_for_member(member) {
-            if child_shape.flattened.is_some() {
-                if let Some(ref child_member) = child_shape.member {
-                    if let Some(ref loc_name) = child_member.location_name {
-                        location_name = loc_name.to_string();
-                        Some(&location_name)
-                    } else {
-                        None
-                    }
-                } else {
-                    None
-                }
-            } else {
-                None
-            }
-        } else {
-            None
-        };
-        let parse_expression = generate_struct_field_parse_expression(shape, member_name, member, parse_expression_location_name);
+        let parse_expression = generate_struct_field_parse_expression(shape, member_name, member, member.location_name.as_ref());
         format!(
             "\"{location_name}\" => {{
                 obj.{field_name} = {parse_expression};
-                continue;
             }}",
-            field_name = member_name.to_snake_case(),
+            field_name = generate_field_name(member_name),
             parse_expression = parse_expression,
             location_name = location_name,
         )
@@ -385,11 +409,11 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
             format!(
                 "{member_shape_name}Serializer::serialize(
     params,
-    &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
+    &format!(\"{{}}{tag_name}\", prefix),
     &obj.{field_name},
 );
                 ",
-                field_name = member_name.to_snake_case(),
+                field_name = generate_field_name(member_name),
                 member_shape_name = member.shape,
                 tag_name = member_name,
             )
@@ -398,12 +422,12 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
                 "if let Some(ref field_value) = obj.{field_name} {{
     {member_shape_name}Serializer::serialize(
         params,
-        &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
+        &format!(\"{{}}{tag_name}\", prefix),
         field_value,
     );
 }}
                 ",
-                field_name = member_name.to_snake_case(),
+                field_name = generate_field_name(member_name),
                 member_shape_name = member.shape,
                 tag_name = member.tag_name(),
             )
@@ -414,7 +438,7 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
 fn generate_primitive_serializer(shape: &Shape) -> String {
     let expression = match &shape.shape_type[..] {
         "string" | "timestamp" => "obj",
-        "integer" | "double" | "boolean" => "&obj.to_string()",
+        "integer" | "long" | "float" | "double" | "boolean" => "&obj.to_string()",
         "blob" => "from_utf8(obj).unwrap()",
         shape_type => panic!("Unknown primitive shape type: {}", shape_type),
     };
