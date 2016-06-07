@@ -9,14 +9,14 @@ license = "MIT"
 name = "rusoto"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.13.1"
+version = "0.14.0"
 
 [build-dependencies]
 
 [build-dependencies.rusoto_codegen]
 default-features = false
 path = "codegen"
-version = ">= 0.0.1"
+version = ">= 0.2.0"
 
 [dependencies]
 chrono = "0.2.21"
