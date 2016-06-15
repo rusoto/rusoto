@@ -5,7 +5,8 @@
 #![cfg_attr(not(feature = "nightly"), deny(warnings))]
 
 extern crate inflector;
-#[macro_use] extern crate lazy_static;
+#[macro_use]
+extern crate lazy_static;
 extern crate regex;
 extern crate serde;
 extern crate serde_json;
@@ -33,10 +34,12 @@ pub struct Service {
 }
 
 impl Service {
-    pub fn new<S>(name: S, protocol_date: S) -> Self where S: Into<String> {
+    pub fn new<S>(name: S, protocol_date: S) -> Self
+        where S: Into<String>
+    {
         Service {
             name: name.into(),
-            protocol_date: protocol_date.into()
+            protocol_date: protocol_date.into(),
         }
     }
 }
@@ -44,12 +47,13 @@ impl Service {
 pub fn generate(service: Service, output_path: &Path) {
     let botocore_destination_path = output_path.join(format!("{}_botocore.rs", service.name));
     let serde_destination_path = output_path.join(format!("{}.rs", service.name));
-    let botocore_service_data_path = Path::new(BOTOCORE_DIR).join(
-        format!("{}/{}/service-2.json", service.name, service.protocol_date)
-    );
+    let botocore_service_data_path = Path::new(BOTOCORE_DIR)
+        .join(format!("{}/{}/service-2.json", service.name, service.protocol_date));
 
-    botocore_generate(botocore_service_data_path.as_path(), botocore_destination_path.as_path());
-    serde_generate(botocore_destination_path.as_path(), serde_destination_path.as_path());
+    botocore_generate(botocore_service_data_path.as_path(),
+                      botocore_destination_path.as_path());
+    serde_generate(botocore_destination_path.as_path(),
+                   serde_destination_path.as_path());
 }
 
 fn botocore_generate(input_path: &Path, output_path: &Path) {
@@ -85,10 +89,7 @@ fn botocore_generate(input_path: &Path, output_path: &Path) {
 
 #[cfg(not(feature = "serde_macros"))]
 fn serde_generate(source: &Path, destination: &Path) {
-    let mut registry = ::syntex::Registry::new();
-
-    ::serde_codegen::register(&mut registry);
-    registry.expand("", source, destination).expect("Failed to generate code with Serde");
+    ::serde_codegen::expand(&source, &destination).unwrap();
 }
 
 #[cfg(feature = "serde_macros")]

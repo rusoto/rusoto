@@ -19,8 +19,8 @@ version = "0.32.0"
 Inflector = "0.2.0"
 lazy_static = "0.1.16"
 regex = "0.1.65"
-serde = "0.7.6"
-serde_json = "0.7.0"
+serde = "0.7.9"
+serde_json = "0.7.1"
 
 [dependencies.clippy]
 optional = true
@@ -28,11 +28,11 @@ version = "0.0"
 
 [dependencies.serde_codegen]
 optional = true
-version = "0.7.6"
+version = "0.7.9"
 
 [dependencies.serde_macros]
 optional = true
-version = "0.7.5"
+version = "0.7.9"
 
 [dependencies.syntex]
 optional = true
