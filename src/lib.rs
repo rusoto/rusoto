@@ -29,6 +29,8 @@ pub use credential::{
     IamProvider,
     ProfileProvider,
     ProvideAwsCredentials,
+    DefaultCredentialsProvider,
+    DefaultCredentialsProviderSync,
 };
 pub use error::{AwsError, AwsResult};
 pub use region::{ParseRegionError, Region};

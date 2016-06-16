@@ -3,12 +3,13 @@
 extern crate rusoto;
 
 use rusoto::ecs::{EcsClient, ListClustersRequest};
-use rusoto::{AwsError, ChainProvider, Region};
+use rusoto::{AwsError, DefaultCredentialsProvider, Region};
 
 #[test]
 fn main() {
-    let credentials = ChainProvider::new().unwrap();
-    let mut ecs = EcsClient::new(credentials, Region::UsEast1);
+    let credentials = DefaultCredentialsProvider::new().unwrap();
+
+    let ecs = EcsClient::new(credentials, Region::UsEast1);
 
     // http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListClusters.html
     match ecs.list_clusters(&ListClustersRequest::default()) {
@@ -28,7 +29,7 @@ fn main() {
         }) {
         Ok(_) => panic!("this should have been an InvalidParameterException ECSError"),
         Err(err) => {
-            assert_eq!(err,  AwsError::new("InvalidParameterException: Invalid token bogus"))
+            assert_eq!(err, AwsError::new("InvalidParameterException: Invalid token bogus"))
         }
     }
 }

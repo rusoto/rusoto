@@ -37,7 +37,7 @@ impl GenerateProtocol for RestJsonGenerator {
 
             format!("
                 {documentation}
-                pub fn {method_name}(&mut self, input: &{input_type}) -> AwsResult<{output_type}> {{
+                pub fn {method_name}(&self, input: &{input_type}) -> AwsResult<{output_type}> {{
                     {encode_input}
 
                     {request_uri_formatter}

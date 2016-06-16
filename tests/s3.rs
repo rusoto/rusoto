@@ -8,14 +8,14 @@ extern crate time;
 #[macro_use]
 extern crate rusoto;
 
-use rusoto::{AwsError, ChainProvider, Region};
+use rusoto::{AwsError, DefaultCredentialsProvider, Region};
 use rusoto::s3::S3Helper;
 
 #[test]
 fn all_s3_tests() {
     let _ = env_logger::init();
     info!("s3 integration tests starting up.");
-    let mut s3 = S3Helper::new(ChainProvider::new().unwrap(), Region::UsWest2);
+    let mut s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
 
     match s3_list_buckets_tests(&mut s3) {
         Ok(_) => { info!("Everything worked for S3 list buckets."); },
@@ -23,7 +23,7 @@ fn all_s3_tests() {
     }
 }
 
-fn s3_list_buckets_tests(s3: &mut S3Helper<ChainProvider>) -> Result<(), AwsError> {
+fn s3_list_buckets_tests(s3: &mut S3Helper<DefaultCredentialsProvider>) -> Result<(), AwsError> {
     let response = try!(s3.list_buckets());
     info!("Got list of buckets: {:?}", response);
     for q in response.buckets {

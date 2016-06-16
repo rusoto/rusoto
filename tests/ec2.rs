@@ -3,12 +3,12 @@
 extern crate rusoto;
 
 use rusoto::ec2::{Ec2Client, DescribeInstancesRequest};
-use rusoto::{ChainProvider, Region};
+use rusoto::{DefaultCredentialsProvider, Region};
 use std::error::Error;
 
 #[test]
 fn main() {
-    let credentials = ChainProvider::new().unwrap();
+    let credentials = DefaultCredentialsProvider::new().unwrap();
     let mut ec2 = Ec2Client::new(credentials, Region::UsEast1);
 
     let mut req = DescribeInstancesRequest::default();

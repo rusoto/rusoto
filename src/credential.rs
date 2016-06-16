@@ -9,6 +9,8 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::ascii::AsciiExt;
 use std::collections::HashMap;
+use std::sync::Mutex;
+use std::cell::RefCell;
 use hyper::Client;
 use hyper::header::Connection;
 use error::*;
@@ -71,37 +73,19 @@ impl AwsCredentials {
 /// A trait for types that produce `AwsCredentials`.
 pub trait ProvideAwsCredentials {
     /// Produce a new `AwsCredentials`.
-    fn credentials(&mut self) -> Result<&AwsCredentials, AwsError>;
+    fn credentials(&self) -> Result<AwsCredentials, AwsError>;
 }
 
-fn err(message: &str) -> Result<&AwsCredentials, AwsError> {
+fn err(message: &str) -> Result<AwsCredentials, AwsError> {
     Err(AwsError::new(message))
 }
 
 /// Provides AWS credentials from environment variables.
-pub struct EnvironmentProvider {
-    credentials: Option<AwsCredentials>
-}
+pub struct EnvironmentProvider;
 
 impl ProvideAwsCredentials for EnvironmentProvider {
-    fn credentials(&mut self) -> Result<&AwsCredentials, AwsError> {
-        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
-           self.credentials = Some(try!(credentials_from_environment()));
-        }
-        Ok(self.credentials.as_ref().unwrap())
-    }
-}
-
-impl EnvironmentProvider {
-    /// Create a new `EnvironmentProvider`.
-    pub fn new() -> EnvironmentProvider {
-        EnvironmentProvider { credentials: None }
-    }
-}
-
-impl Default for EnvironmentProvider {
-    fn default() -> EnvironmentProvider {
-        EnvironmentProvider::new()
+    fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+		credentials_from_environment()
     }
 }
 
@@ -118,7 +102,6 @@ fn credentials_from_environment() -> Result<AwsCredentials, AwsError> {
     if env_key.is_empty() || env_secret.is_empty() {
         return Err(AwsError::new("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment."));
     }
-
     Ok(AwsCredentials::new(env_key, env_secret, None, in_ten_minutes()))
 }
 
@@ -187,20 +170,10 @@ impl ProfileProvider {
 }
 
 impl ProvideAwsCredentials for ProfileProvider {
-    fn credentials(&mut self) -> Result<&AwsCredentials, AwsError> {
-        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
-            match parse_credentials_file(self.file_path()) {
-                Ok(mut profiles) => {
-                    let default_profile = profiles.remove(self.profile());
-                    if default_profile.is_none() {
-                        return err("profile not found");
-                    }
-                    self.credentials = default_profile;
-                },
-                Err(_) => { return err("Parse error"); }
-            };
-       }
-       Ok(self.credentials.as_ref().unwrap())
+    fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+    	parse_credentials_file(self.file_path()).and_then(|mut profiles| {
+            profiles.remove(self.profile()).ok_or(AwsError::new("profile not found"))
+    	})
    }
 }
 
@@ -284,93 +257,167 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
 }
 
 /// Provides AWS credentials from a resource's IAM role.
-pub struct IamProvider {
-    credentials: Option<AwsCredentials>
-}
-
-impl IamProvider {
-    /// Create a new `IamProvider`.
-    pub fn new() -> IamProvider {
-        IamProvider { credentials: None }
-    }
-}
-
-impl Default for IamProvider {
-    fn default() -> IamProvider {
-        IamProvider::new()
-    }
-}
+pub struct IamProvider;
 
 impl ProvideAwsCredentials for IamProvider {
-    fn credentials(&mut self) -> Result<&AwsCredentials, AwsError> {
-        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
-            // TODO: backoff and retry on failure.
+    fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+	
+		// TODO: backoff and retry on failure.
 
-            // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
-            let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
-            let mut client = Client::new();
-            client.set_read_timeout(Some(StdDuration::from_secs(15)));
-            let mut response;
-            match client.get(&address)
-                .header(Connection::close()).send() {
-                    Err(_) => return err("Couldn't connect to metadata service"), // add Why?
-                    Ok(received_response) => response = received_response
-                };
-
-            let mut body = String::new();
-            if let Err(_) = response.read_to_string(&mut body) {
-                return err("Didn't get a parsable response body from metadata service");
-            }
-
-            address.push_str("/");
-            address.push_str(&body);
-            body = String::new();
-            match client.get(&address)
-                .header(Connection::close()).send() {
-                    Err(_) => return err("Didn't get a parseable response body from instance role details"),
-                    Ok(received_response) => response = received_response
-                };
-
-            if let Err(_) = response.read_to_string(&mut body) {
-                return err("Had issues with reading iam role response: {}");
-            }
-
-            let json_object: Value;
-            match from_str(&body) {
-                Err(_) => return err("Couldn't parse metadata response body."),
-                Ok(val) => json_object = val
+        // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
+        let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
+        let mut client = Client::new();
+        client.set_read_timeout(Some(StdDuration::from_secs(15)));
+        let mut response;
+        match client.get(&address)
+            .header(Connection::close()).send() {
+                Err(_) => return err("Couldn't connect to metadata service"), // add Why?
+                Ok(received_response) => response = received_response
             };
 
-            let access_key;
-            match json_object.find("AccessKeyId") {
-                None => return err("Couldn't find AccessKeyId in response."),
-                Some(val) => access_key = val.as_string().expect("AccessKeyId value was not a string").to_owned().replace("\"", "")
-            };
-
-            let secret_key;
-            match json_object.find("SecretAccessKey") {
-                None => return err("Couldn't find SecretAccessKey in response."),
-                Some(val) => secret_key = val.as_string().expect("SecretAccessKey value was not a string").to_owned().replace("\"", "")
-            };
-
-            let expiration;
-            match json_object.find("Expiration") {
-                None => return err("Couldn't find Expiration in response."),
-                Some(val) => expiration = val.as_string().expect("Expiration value was not a string").to_owned().replace("\"", "")
-            };
-
-            let expiration_time = try!(expiration.parse());
-
-            let token_from_response;
-            match json_object.find("Token") {
-                None => return err("Couldn't find Token in response."),
-                Some(val) => token_from_response = val.as_string().expect("Token value was not a string").to_owned().replace("\"", "")
-            };
-
-            self.credentials = Some(AwsCredentials::new(access_key, secret_key, Some(token_from_response), expiration_time));
+        let mut body = String::new();
+        if let Err(_) = response.read_to_string(&mut body) {
+			return err("Didn't get a parsable response body from metadata service");
         }
 
-        Ok(self.credentials.as_ref().unwrap())
+        address.push_str("/");
+        address.push_str(&body);
+        body = String::new();
+        match client.get(&address)
+            .header(Connection::close()).send() {
+                Err(_) => return err("Didn't get a parseable response body from instance role details"),
+                Ok(received_response) => response = received_response
+            };
+
+        if let Err(_) = response.read_to_string(&mut body) {
+            return err("Had issues with reading iam role response: {}");
+        }
+
+        let json_object: Value;
+        match from_str(&body) {
+            Err(_) => return err("Couldn't parse metadata response body."),
+            Ok(val) => json_object = val
+        };
+
+        let access_key;
+        match json_object.find("AccessKeyId") {
+            None => return err("Couldn't find AccessKeyId in response."),
+            Some(val) => access_key = val.as_string().expect("AccessKeyId value was not a string").to_owned().replace("\"", "")
+        };
+
+        let secret_key;
+        match json_object.find("SecretAccessKey") {
+            None => return err("Couldn't find SecretAccessKey in response."),
+            Some(val) => secret_key = val.as_string().expect("SecretAccessKey value was not a string").to_owned().replace("\"", "")
+        };
+
+        let expiration;
+        match json_object.find("Expiration") {
+            None => return err("Couldn't find Expiration in response."),
+            Some(val) => expiration = val.as_string().expect("Expiration value was not a string").to_owned().replace("\"", "")
+        };
+
+        let expiration_time = try!(expiration.parse());
+
+        let token_from_response;
+        match json_object.find("Token") {
+            None => return err("Couldn't find Token in response."),
+            Some(val) => token_from_response = val.as_string().expect("Token value was not a string").to_owned().replace("\"", "")
+        };
+
+        Ok(AwsCredentials::new(access_key, secret_key, Some(token_from_response), expiration_time))
+
+    }
+}
+
+/// Wrapper for ProvideAwsCredentials that caches the credentials returned by the
+/// wrapped provider.  Each time the credentials are accessed, they are checked to see if
+/// they have expired, in which case they are retrieved from the wrapped provider again.
+pub struct BaseAutoRefreshingProvider<P, T> {
+	credentials_provider: P,
+	cached_credentials: T
+}
+
+/// Threadsafe AutoRefreshingProvider that locks cached credentials with a Mutex
+pub type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>;
+
+impl <P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
+    pub fn with_mutex(provider: P) -> Result<AutoRefreshingProviderSync<P>, AwsError> {
+		let creds = try!(provider.credentials());
+		Ok(BaseAutoRefreshingProvider { 
+			credentials_provider: provider, 
+			cached_credentials: Mutex::new(creds) 
+		})
+	}
+}
+
+impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>> {
+	fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+		let mut creds = self.cached_credentials.lock().unwrap();
+		if creds.credentials_are_expired() {			
+			*creds = try!(self.credentials_provider.credentials());
+		}
+		Ok(creds.clone())
+	}
+}
+
+/// !Sync AutoRefreshingProvider that caches credentials in a RefCell
+pub type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>;
+
+impl <P: ProvideAwsCredentials> AutoRefreshingProvider<P> {
+	pub fn with_refcell(provider: P) -> Result<AutoRefreshingProvider<P>, AwsError> {
+		let creds = try!(provider.credentials());
+		Ok(BaseAutoRefreshingProvider { 
+			credentials_provider: provider, 
+			cached_credentials: RefCell::new(creds) 
+		})
+	}
+}
+
+impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>> {
+	fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+
+		let mut creds = self.cached_credentials.borrow_mut();
+		
+		if creds.credentials_are_expired() {
+			*creds = try!(self.credentials_provider.credentials());
+		}	
+
+		Ok(creds.clone())
+	}
+}
+
+
+/// The credentials provider you probably want to use if you don't require Sync for your AWS services.
+/// Wraps a ChainProvider in an AutoRefreshingProvider that uses a RefCell to cache credentials
+///
+/// The underlying ChainProvider checks multiple sources for credentials, and the AutoRefreshingProvider
+/// refreshes the credentials automatically when they expire.  The RefCell allows this caching to happen
+/// without the overhead of a Mutex, but is !Sync.
+///
+/// For a Sync implementation of the same, see DefaultCredentialsProviderSync
+pub type DefaultCredentialsProvider = AutoRefreshingProvider<ChainProvider>;
+
+impl DefaultCredentialsProvider {
+    pub fn new() -> Result<DefaultCredentialsProvider, AwsError> {
+        Ok(try!(AutoRefreshingProvider::with_refcell(ChainProvider::new())))
+    }
+}
+
+/// The credentials provider you probably want to use if you do require your AWS services.
+/// Wraps a ChainProvider in an AutoRefreshingProvider that uses a Mutex to lock credentials in a
+/// threadsafe manner.
+///
+/// The underlying ChainProvider checks multiple sources for credentials, and the AutoRefreshingProvider
+/// refreshes the credentials automatically when they expire.  The Mutex allows this caching to happen
+/// in a Sync manner, incurring the overhead of a Mutex when credentials expire and need to be refreshed.
+///
+/// For a !Sync implementation of the same, see DefaultCredentialsProvider
+pub type DefaultCredentialsProviderSync = AutoRefreshingProviderSync<ChainProvider>;
+
+impl DefaultCredentialsProviderSync {
+    pub fn new() -> Result<DefaultCredentialsProviderSync, AwsError> {
+        Ok(try!(AutoRefreshingProviderSync::with_mutex(ChainProvider::new())))
     }
 }
 
@@ -385,53 +432,37 @@ impl ProvideAwsCredentials for IamProvider {
 /// If the sources are exhausted without finding credentials, an error is returned.
 #[derive(Debug, Clone)]
 pub struct ChainProvider {
-    credentials: Option<AwsCredentials>,
-    profile_provider: ProfileProvider,
+    profile_provider: Option<ProfileProvider>,
 }
 
 impl ProvideAwsCredentials for ChainProvider {
-    fn credentials(&mut self) -> Result<&AwsCredentials, AwsError> {
-        if self.credentials.is_none() || self.credentials.as_ref().unwrap().credentials_are_expired() {
-            if let Ok(creds) = EnvironmentProvider::new().credentials() {
-                self.credentials = Some(creds.clone());
+    fn credentials(&self) -> Result<AwsCredentials, AwsError> {
 
-                return Ok(self.credentials.as_ref().unwrap());
+	EnvironmentProvider.credentials()
+		.or_else(|_| {
+            match self.profile_provider {
+                Some(ref provider) => provider.credentials(),
+                None => Err(AwsError::new(""))
             }
-
-            if let Ok(creds) =  self.profile_provider.credentials() {
-                self.credentials = Some(creds.clone());
-
-                return Ok(self.credentials.as_ref().unwrap());
-            }
-
-            if let Ok(creds) = IamProvider::new().credentials() {
-                self.credentials = Some(creds.clone());
-
-                return Ok(self.credentials.as_ref().unwrap());
-            }
-
-            return Err(AwsError::new("Couldn't find AWS credentials in environment, credentials file, or IAM role."));
-        }
-
-        Ok(self.credentials.as_ref().unwrap())
+        })
+		.or(IamProvider.credentials())
+		.or(Err(AwsError::new("Couldn't find AWS credentials in environment, credentials file, or IAM role.")))
     }
 }
 
 impl ChainProvider {
     /// Create a new `ChainProvider` using a `ProfileProvider` with the default settings.
-    pub fn new() -> AwsResult<ChainProvider> {
-        Ok(ChainProvider {
-            credentials: None,
-            profile_provider: try!(ProfileProvider::new()),
-        })
+    pub fn new() -> ChainProvider {
+        ChainProvider {
+            profile_provider: ProfileProvider::new().ok(),
+        }
     }
 
     /// Create a new `ChainProvider` using the provided `ProfileProvider`.
     pub fn with_profile_provider(profile_provider: ProfileProvider)
     -> ChainProvider {
         ChainProvider {
-            credentials: None,
-            profile_provider: profile_provider,
+            profile_provider: Some(profile_provider),
         }
     }
 }
@@ -484,7 +515,7 @@ mod tests {
 
     #[test]
     fn profile_provider_happy_path() {
-        let mut provider = ProfileProvider::with_configuration(
+        let provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "foo",
         );
@@ -499,7 +530,7 @@ mod tests {
 
     #[test]
     fn profile_provider_bad_profile() {
-        let mut provider = ProfileProvider::with_configuration(
+        let provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "not_a_profile",
         );
@@ -524,7 +555,7 @@ mod tests {
             "foo",
         );
 
-        let mut chain = ChainProvider::with_profile_provider(profile_provider);
+        let chain = ChainProvider::with_profile_provider(profile_provider);
 
         let credentials = chain.credentials().expect(
             "Failed to get credentials from default provider chain with manual profile",
@@ -552,3 +583,4 @@ mod tests {
         assert_eq!(result.err(), Some(AwsError::new("Couldn't open file.")));
     }
 }
+
