@@ -3,11 +3,11 @@
 extern crate rusoto;
 
 use rusoto::ecs::{EcsClient, ListClustersRequest};
-use rusoto::{AwsError, ChainProvider, Region};
+use rusoto::{AwsError, DefaultCredentialsProvider, Region};
 
 #[test]
 fn main() {
-    let credentials = ChainProvider::new().unwrap();
+    let credentials = DefaultCredentialsProvider::new().unwrap();
 
     let ecs = EcsClient::new(credentials, Region::UsEast1);
 

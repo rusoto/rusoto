@@ -117,7 +117,7 @@ fn initialize() {
 
 fn create_ets_client() -> TestEtsClient<ChainProvider> {
     TestEtsClient::new(
-        ChainProvider::new().unwrap(),
+        ChainProvider::new(),
         AWS_REGION
     )
 }

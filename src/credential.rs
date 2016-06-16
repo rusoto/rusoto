@@ -339,10 +339,10 @@ pub struct BaseAutoRefreshingProvider<P, T> {
 }
 
 /// Threadsafe AutoRefreshingProvider that locks cached credentials with a Mutex
-type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>;
+pub type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>;
 
-impl <P: ProvideAwsCredentials> BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>> {
-	fn new(provider: P) -> Result<BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>, AwsError> {
+impl <P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
+    pub fn with_mutex(provider: P) -> Result<AutoRefreshingProviderSync<P>, AwsError> {
 		let creds = try!(provider.credentials());
 		Ok(BaseAutoRefreshingProvider { 
 			credentials_provider: provider, 
@@ -362,10 +362,10 @@ impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProv
 }
 
 /// !Sync AutoRefreshingProvider that caches credentials in a RefCell
-type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>;
+pub type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>;
 
-impl <P: ProvideAwsCredentials> BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>> {
-	fn new(provider: P) -> Result<BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>, AwsError> {
+impl <P: ProvideAwsCredentials> AutoRefreshingProvider<P> {
+	pub fn with_refcell(provider: P) -> Result<AutoRefreshingProvider<P>, AwsError> {
 		let creds = try!(provider.credentials());
 		Ok(BaseAutoRefreshingProvider { 
 			credentials_provider: provider, 
@@ -388,6 +388,38 @@ impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProv
 }
 
 
+/// The credentials provider you probably want to use if you don't require Sync for your AWS services.
+/// Wraps a ChainProvider in an AutoRefreshingProvider that uses a RefCell to cache credentials
+///
+/// The underlying ChainProvider checks multiple sources for credentials, and the AutoRefreshingProvider
+/// refreshes the credentials automatically when they expire.  The RefCell allows this caching to happen
+/// without the overhead of a Mutex, but is !Sync.
+///
+/// For a Sync implementation of the same, see DefaultCredentialsProviderSync
+pub type DefaultCredentialsProvider = AutoRefreshingProvider<ChainProvider>;
+
+impl DefaultCredentialsProvider {
+    pub fn new() -> Result<DefaultCredentialsProvider, AwsError> {
+        Ok(try!(AutoRefreshingProvider::with_refcell(ChainProvider::new())))
+    }
+}
+
+/// The credentials provider you probably want to use if you do require your AWS services.
+/// Wraps a ChainProvider in an AutoRefreshingProvider that uses a Mutex to lock credentials in a
+/// threadsafe manner.
+///
+/// The underlying ChainProvider checks multiple sources for credentials, and the AutoRefreshingProvider
+/// refreshes the credentials automatically when they expire.  The Mutex allows this caching to happen
+/// in a Sync manner, incurring the overhead of a Mutex when credentials expire and need to be refreshed.
+///
+/// For a !Sync implementation of the same, see DefaultCredentialsProvider
+pub type DefaultCredentialsProviderSync = AutoRefreshingProviderSync<ChainProvider>;
+
+impl DefaultCredentialsProviderSync {
+    pub fn new() -> Result<DefaultCredentialsProviderSync, AwsError> {
+        Ok(try!(AutoRefreshingProviderSync::with_mutex(ChainProvider::new())))
+    }
+}
 
 /// Provides AWS credentials from multiple possible sources using a priority order.
 ///
@@ -400,14 +432,19 @@ impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProv
 /// If the sources are exhausted without finding credentials, an error is returned.
 #[derive(Debug, Clone)]
 pub struct ChainProvider {
-    profile_provider: ProfileProvider,
+    profile_provider: Option<ProfileProvider>,
 }
 
 impl ProvideAwsCredentials for ChainProvider {
     fn credentials(&self) -> Result<AwsCredentials, AwsError> {
 
 	EnvironmentProvider.credentials()
-		.or(self.profile_provider.credentials())
+		.or_else(|_| {
+            match self.profile_provider {
+                Some(ref provider) => provider.credentials(),
+                None => Err(AwsError::new(""))
+            }
+        })
 		.or(IamProvider.credentials())
 		.or(Err(AwsError::new("Couldn't find AWS credentials in environment, credentials file, or IAM role.")))
     }
@@ -415,17 +452,17 @@ impl ProvideAwsCredentials for ChainProvider {
 
 impl ChainProvider {
     /// Create a new `ChainProvider` using a `ProfileProvider` with the default settings.
-    pub fn new() -> AwsResult<ChainProvider> {
-        Ok(ChainProvider {
-            profile_provider: try!(ProfileProvider::new()),
-        })
+    pub fn new() -> ChainProvider {
+        ChainProvider {
+            profile_provider: ProfileProvider::new().ok(),
+        }
     }
 
     /// Create a new `ChainProvider` using the provided `ProfileProvider`.
     pub fn with_profile_provider(profile_provider: ProfileProvider)
     -> ChainProvider {
         ChainProvider {
-            profile_provider: profile_provider,
+            profile_provider: Some(profile_provider),
         }
     }
 }
@@ -546,3 +583,4 @@ mod tests {
         assert_eq!(result.err(), Some(AwsError::new("Couldn't open file.")));
     }
 }
+
