@@ -102,7 +102,21 @@ fn credentials_from_environment() -> Result<AwsCredentials, AwsError> {
     if env_key.is_empty() || env_secret.is_empty() {
         return Err(AwsError::new("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment."));
     }
-    Ok(AwsCredentials::new(env_key, env_secret, None, in_ten_minutes()))
+
+    // Present when using temporary credentials, e.g. on Lambda with IAM roles
+    let token = match var("AWS_SESSION_TOKEN") {
+        Ok(val) => {
+            if val.is_empty() {
+                None
+            } else {
+                Some(val)
+            }
+        }
+        Err(_) => None,
+    };
+
+    Ok(AwsCredentials::new(env_key, env_secret, token, in_ten_minutes()))
+
 }
 
 /// Provides AWS credentials from a profile in a credentials file.
