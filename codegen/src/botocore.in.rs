@@ -94,8 +94,8 @@ impl Service {
     }
 
     pub fn typed_errors(&self) -> bool {
-        match self.service_type_name() {
-            "Kinesis" | "KinesisFirehose" => true,
+        match self.metadata.protocol.as_ref() {
+            "json" => true,
             _ => false
         }
     }
