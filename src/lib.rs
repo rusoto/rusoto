@@ -83,6 +83,8 @@ pub mod ecs;
 pub mod emr;
 #[cfg(feature = "ets")]
 pub mod ets;
+#[cfg(feature = "events")]
+pub mod events;
 #[cfg(feature = "firehose")]
 pub mod firehose;
 #[cfg(feature = "kinesis")]
@@ -97,8 +99,7 @@ pub mod sqs;
 
 
 /*
-#[cfg(feature = "events")]
-pub mod events;
+
 #[cfg(feature = "gamelift")]
 pub mod gamelift;
 #[cfg(feature = "inspector")]

@@ -6,7 +6,6 @@ use std::path::Path;
 use rusoto_codegen::{Service, generate};
 
 /*
-events/2014-02-03/service-2.json:    "protocol":"json"
 events/2015-10-07/service-2.json:    "protocol":"json"
 firehose/2015-08-04/service-2.json:    "protocol":"json"
 gamelift/2015-10-01/service-2.json:    "protocol":"json"
@@ -52,6 +51,7 @@ fn main() {
         Service::new("ecs", "2014-11-13"),
         Service::new("elastictranscoder", "2012-09-25"),
         Service::new("emr", "2009-03-31"),
+        Service::new("events", "2014-02-03"),
         Service::new("sqs", "2012-11-05"),
     ];
 
