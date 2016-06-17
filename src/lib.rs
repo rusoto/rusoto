@@ -79,6 +79,8 @@ pub mod ec2;
 pub mod ecr;
 #[cfg(feature = "ecs")]
 pub mod ecs;
+#[cfg(feature = "emr")]
+pub mod emr;
 #[cfg(feature = "ets")]
 pub mod ets;
 #[cfg(feature = "firehose")]
@@ -95,9 +97,6 @@ pub mod sqs;
 
 
 /*
-
-#[cfg(feature = "emr")]
-pub mod emr;
 #[cfg(feature = "events")]
 pub mod events;
 #[cfg(feature = "gamelift")]
