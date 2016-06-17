@@ -8,9 +8,6 @@ use rusoto_codegen::{Service, generate};
 /*
 gamelift/2015-10-01/service-2.json:    "protocol":"json"
 
-
-machinelearning//service-2.json:    "protocol":"json"
-marketplacecommerceanalytics/2015-07-01/service-2.json:    "protocol":"json",
 opsworks/2013-02-18/service-2.json:    "protocol":"json",
 route53domains/2014-05-15/service-2.json:    "protocol":"json"
 ssm/2014-11-06/service-2.json:    "protocol":"json",
@@ -51,6 +48,7 @@ fn main() {
         Service::new("kms", "2014-11-01"),
         Service::new("logs", "2014-03-28"),
         Service::new("machinelearning", "2014-12-12"),
+        Service::new("marketplacecommerceanalytics", "2015-07-01"),
         Service::new("sqs", "2012-11-05"),
     ];
 
