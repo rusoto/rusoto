@@ -82,6 +82,7 @@ where P: GenerateProtocol {
             &None => {
                 match service.metadata.endpoint_prefix {
                     ref x if x == "elastictranscoder" => "Amazon Elastic Transcoder",
+                    ref x if x == "cognito-identity" => "Amazon Cognito Identity",
                     _ => panic!("Unable to determine service abbreviation"),
                 }
             },
