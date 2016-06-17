@@ -61,6 +61,8 @@ pub mod codepipeline;
 pub mod cognitoidentity;
 #[cfg(feature = "datapipeline")]
 pub mod datapipeline;
+#[cfg(feature = "devicefarm")]
+pub mod devicefarm;
 #[cfg(feature = "dynamodb")]
 pub mod dynamodb;
 #[cfg(feature = "ec2")]
@@ -87,8 +89,6 @@ pub mod sqs;
 #[cfg(feature = "config")]
 pub mod config;
 
-#[cfg(feature = "devicefarm")]
-pub mod devicefarm;
 #[cfg(feature = "directconnect")]
 pub mod directconnect;
 #[cfg(feature = "ds")]
