@@ -49,6 +49,8 @@ mod serialization;
 pub mod acm;
 #[cfg(feature = "cloudhsm")]
 pub mod cloudhsm;
+#[cfg(feature = "cloudtrail")]
+pub mod cloudtrail;
 #[cfg(feature = "dynamodb")]
 pub mod dynamodb;
 #[cfg(feature = "ec2")]
@@ -71,8 +73,7 @@ pub mod sqs;
 
 
 /*
-#[cfg(feature = "cloudtrail")]
-pub mod cloudtrail;
+
 #[cfg(feature = "codecommit")]
 pub mod codecommit;
 #[cfg(feature = "codedeploy")]
