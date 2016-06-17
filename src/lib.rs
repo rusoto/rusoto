@@ -55,6 +55,8 @@ pub mod cloudtrail;
 pub mod codecommit;
 #[cfg(feature = "codedeploy")]
 pub mod codedeploy;
+#[cfg(feature = "codepipeline")]
+pub mod codepipeline;
 #[cfg(feature = "dynamodb")]
 pub mod dynamodb;
 #[cfg(feature = "ec2")]
@@ -77,8 +79,6 @@ pub mod sqs;
 
 
 /*
-#[cfg(feature = "codepipeline")]
-pub mod codepipeline;
 #[cfg(feature = "cognito-identity")]
 pub mod cognito-identity;
 #[cfg(feature = "config")]
