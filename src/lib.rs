@@ -44,6 +44,11 @@ mod xmlutil;
 mod serialization;
 #[macro_use] mod signature;
 
+
+#[cfg(feature = "acm")]
+pub mod acm;
+#[cfg(feature = "cloudhsm")]
+pub mod cloudhsm;
 #[cfg(feature = "dynamodb")]
 pub mod dynamodb;
 #[cfg(feature = "ec2")]
@@ -63,11 +68,9 @@ pub mod s3;
 #[cfg(feature = "sqs")]
 pub mod sqs;
 
-#[cfg(feature = "acm")]
-pub mod acm;
+
+
 /*
-#[cfg(feature = "cloudhsm")]
-pub mod cloudhsm;
 #[cfg(feature = "cloudtrail")]
 pub mod cloudtrail;
 #[cfg(feature = "codecommit")]
