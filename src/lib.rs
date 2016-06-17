@@ -109,7 +109,8 @@ pub mod s3;
 pub mod sqs;
 #[cfg(feature = "ssm")]
 pub mod ssm;
-
+#[cfg(feature = "storagegateway")]
+pub mod storagegateway;
 
 
 /*
@@ -118,8 +119,7 @@ pub mod ssm;
 pub mod gamelift;
 
 
-#[cfg(feature = "storagegateway")]
-pub mod storagegateway;
+
 #[cfg(feature = "support")]
 pub mod support;
 #[cfg(feature = "swf")]

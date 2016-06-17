@@ -8,8 +8,7 @@ use rusoto_codegen::{Service, generate};
 /*
 gamelift/2015-10-01/service-2.json:    "protocol":"json"
 
-ssm//service-2.json:    "protocol":"json",
-storagegateway/2013-06-30/service-2.json:    "protocol":"json",
+storagegateway//service-2.json:    "protocol":"json",
 support/2013-04-15/service-2.json:    "protocol":"json"
 swf/2012-01-25/service-2.json:    "protocol":"json"
 waf/2015-08-24/service-2.json:    "protocol":"json",
@@ -51,6 +50,7 @@ fn main() {
         Service::new("route53domains", "2014-05-15"),
         Service::new("sqs", "2012-11-05"),
         Service::new("ssm", "2014-11-06"),
+        Service::new("storagegateway", "2013-06-30"),
     ];
 
     for service in services {
