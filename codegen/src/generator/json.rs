@@ -252,7 +252,7 @@ fn generate_error_imports(service: &Service) -> &'static str {
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
     operation.documentation.as_ref().map(|docs| {
-        format!("#[doc=\"{}\"]", docs.replace("\"", "\\\""))
+        format!("#[doc=\"{}\"]", docs.replace("\\","\\\\").replace("\"", "\\\""))
     })
 }
 

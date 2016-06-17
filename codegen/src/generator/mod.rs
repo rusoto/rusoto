@@ -132,7 +132,7 @@ where P: GenerateProtocol {
         let mut parts = Vec::with_capacity(3);
 
         if let Some(ref docs) = shape.documentation {
-            parts.push(format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")));
+            parts.push(format!("#[doc=\"{}\"]", docs.replace("\\","\\\\").replace("\"", "\\\"")));
         }
 
         match &shape.shape_type[..] {
@@ -196,7 +196,7 @@ fn generate_struct_fields(service: &Service, shape: &Shape) -> String {
         let name = generate_field_name(member_name);
 
         if let Some(ref docs) = member.documentation {
-            lines.push(format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")));
+            lines.push(format!("#[doc=\"{}\"]", docs.replace("\\","\\\\").replace("\"", "\\\"")));
         }
 
         lines.push("#[allow(unused_attributes)]".to_owned());
