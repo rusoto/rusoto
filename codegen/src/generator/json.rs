@@ -8,6 +8,7 @@ use super::GenerateProtocol;
 pub struct JsonGenerator;
 
 impl GenerateProtocol for JsonGenerator {
+
     fn generate_methods(&self, service: &Service) -> String {
         service.operations.values().map(|operation| {
 
@@ -15,12 +16,12 @@ impl GenerateProtocol for JsonGenerator {
 
             format!("
                 {documentation}
-                pub fn {method_name}(&self, input: &{input_type}) -> {result_type} {{
-                    let encoded = serde_json::to_string(input).unwrap();
+                {method_signature} -> {result_type} {{
+                    {payload}
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, \"{request_uri}\");
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
-                    request.set_payload(Some(encoded.as_bytes()));
+                    request.set_payload(payload);
                     let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
                     let status = result.status.to_u16();
                     let mut body = String::new();
@@ -34,10 +35,10 @@ impl GenerateProtocol for JsonGenerator {
                 }}
                 ",
                 documentation = generate_documentation(operation).unwrap_or("".to_owned()),
+                method_signature = generate_method_signature(operation),
+                payload = generate_payload(operation),
                 endpoint_prefix = service.metadata.endpoint_prefix,
                 http_method = operation.http.method,
-                input_type = operation.input_shape(),
-                method_name = operation.name.to_snake_case(),
                 name = operation.name,
                 ok_response = generate_ok_response(operation, output_type),
                 err_response = generate_err_response(service, operation),
@@ -94,6 +95,30 @@ impl GenerateProtocol for JsonGenerator {
         "f64"
     }
 
+}
+
+fn generate_method_signature(operation: &Operation) -> String {
+    if operation.input.is_some() {
+        format!(
+            "pub fn {method_name}(&self, input: &{input_type}) ",
+            input_type = operation.input_shape(),
+            method_name = operation.name.to_snake_case()
+        )
+    } else {
+        format!(
+            "pub fn {method_name}(&self) ",
+            method_name = operation.name.to_snake_case()
+        )
+    }
+}
+
+fn generate_payload(operation: &Operation) -> String {
+    if operation.input.is_some() {
+        "let encoded = serde_json::to_string(input).unwrap();
+         let payload = Some(encoded.as_bytes());".to_string()
+    } else {
+        "let payload = None;".to_string()
+    }
 }
 
 
