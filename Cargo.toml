@@ -44,7 +44,7 @@ env_logger = "0.3.3"
 rand = "^0.3.14"
 
 [features]
-all = ["acm", "cloudhsm", "cloudtrail", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "firehose", "ec2", "ecr", "ecs", "emr", "ets", "events", "inspector", "kinesis", "kms", "logs", "machinelearning", "marketplacecommerceanalytics", "opsworks", "route53domains", "s3", "sqs"]
+all = ["acm", "cloudhsm", "cloudtrail", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "firehose", "ec2", "ecr", "ecs", "emr", "ets", "events", "inspector", "kinesis", "kms", "logs", "machinelearning", "marketplacecommerceanalytics", "opsworks", "route53domains", "s3", "sqs", "ssm"]
 acm = []
 cloudhsm = []
 cloudtrail = []
@@ -79,4 +79,5 @@ nightly-testing = ["clippy", "nightly"]
 route53domains = []
 s3 = []
 sqs = []
+ssm = []
 with-syntex = ["rusoto_codegen/with-syntex"]

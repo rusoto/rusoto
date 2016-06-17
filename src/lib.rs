@@ -107,6 +107,8 @@ pub mod route53domains;
 pub mod s3;
 #[cfg(feature = "sqs")]
 pub mod sqs;
+#[cfg(feature = "ssm")]
+pub mod ssm;
 
 
 
@@ -115,8 +117,7 @@ pub mod sqs;
 #[cfg(feature = "gamelift")]
 pub mod gamelift;
 
-#[cfg(feature = "ssm")]
-pub mod ssm;
+
 #[cfg(feature = "storagegateway")]
 pub mod storagegateway;
 #[cfg(feature = "support")]
