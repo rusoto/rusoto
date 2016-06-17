@@ -79,13 +79,7 @@ where P: GenerateProtocol {
         methods = protocol_generator.generate_methods(service),
         service_name = match &service.metadata.service_abbreviation {
             &Some(ref service_abbreviation) => service_abbreviation.as_str(),
-            &None => {
-                match service.metadata.endpoint_prefix {
-                    ref x if x == "elastictranscoder" => "Amazon Elastic Transcoder",
-                    ref x if x == "cognito-identity" => "Amazon Cognito Identity",
-                    _ => panic!("Unable to determine service abbreviation"),
-                }
-            },
+            &None => service.metadata.service_full_name.as_ref()
         },
         type_name = service.client_type_name(),
     )
