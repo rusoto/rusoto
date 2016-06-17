@@ -6,8 +6,6 @@ use std::path::Path;
 use rusoto_codegen::{Service, generate};
 
 /*
-dynamodbstreams//service-2.json:    "protocol":"json"
-ecr/2015-09-21/service-2.json:    "protocol":"json",
 ecs/2014-11-13/service-2.json:    "protocol":"json",
 emr/2009-03-31/service-2.json:    "protocol":"json",
 events/2014-02-03/service-2.json:    "protocol":"json"
@@ -35,16 +33,16 @@ fn main() {
 
     let services = vec![
         Service::new("acm", "2015-12-08"),
-        Service::new("cloudhsm","2014-05-30"),
-        Service::new("cloudtrail","2013-11-01"),
+        Service::new("cloudhsm", "2014-05-30"),
+        Service::new("cloudtrail", "2013-11-01"),
         Service::new("codecommit", "2015-04-13"),
         Service::new("codedeploy", "2014-10-06"),
         Service::new("codepipeline", "2015-07-09"),
         Service::new("cognito-identity", "2014-06-30"),
-        Service::new("config","2014-11-12"),
+        Service::new("config", "2014-11-12"),
         Service::new("datapipeline", "2012-10-29"),
         Service::new("devicefarm", "2015-06-23"),
-        Service::new("directconnect","2012-10-25"),
+        Service::new("directconnect", "2012-10-25"),
         Service::new("ds", "2015-04-16"),
         Service::new("dynamodb", "2012-08-10"),
         Service::new("dynamodbstreams", "2012-08-10"),
@@ -52,6 +50,7 @@ fn main() {
         Service::new("kinesis", "2013-12-02"),
         Service::new("kms", "2014-11-01"),
         Service::new("ec2", "2015-10-01"),
+        Service::new("ecr", "2015-09-21"),
         Service::new("ecs", "2014-11-13"),
         Service::new("elastictranscoder", "2012-09-25"),
         Service::new("sqs", "2012-11-05"),

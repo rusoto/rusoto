@@ -75,6 +75,8 @@ pub mod dynamodb;
 pub mod dynamodbstreams;
 #[cfg(feature = "ec2")]
 pub mod ec2;
+#[cfg(feature = "ecr")]
+pub mod ecr;
 #[cfg(feature = "ecs")]
 pub mod ecs;
 #[cfg(feature = "ets")]
@@ -93,8 +95,7 @@ pub mod sqs;
 
 
 /*
-#[cfg(feature = "ecr")]
-pub mod ecr;
+
 #[cfg(feature = "emr")]
 pub mod emr;
 #[cfg(feature = "events")]
