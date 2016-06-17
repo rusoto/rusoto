@@ -44,7 +44,7 @@ env_logger = "0.3.3"
 rand = "^0.3.14"
 
 [features]
-all = ["acm", "cloudhsm", "cloudtrail", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "datapipeline", "devicefarm", "dynamodb", "firehose", "ec2", "ecs", "ets", "kinesis", "kms", "s3", "sqs"]
+all = ["acm", "cloudhsm", "cloudtrail", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "dynamodb", "firehose", "ec2", "ecs", "ets", "kinesis", "kms", "s3", "sqs"]
 acm = []
 cloudhsm = []
 cloudtrail = []
@@ -52,6 +52,7 @@ codecommit = []
 codedeploy = []
 codepipeline = []
 cognito-identity = []
+config = []
 datapipeline = []
 devicefarm = []
 default = ["with-syntex"]

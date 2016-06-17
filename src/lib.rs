@@ -59,6 +59,8 @@ pub mod codedeploy;
 pub mod codepipeline;
 #[cfg(feature = "cognito-identity")]
 pub mod cognitoidentity;
+#[cfg(feature = "config")]
+pub mod config;
 #[cfg(feature = "datapipeline")]
 pub mod datapipeline;
 #[cfg(feature = "devicefarm")]
@@ -85,9 +87,6 @@ pub mod sqs;
 
 
 /*
-
-#[cfg(feature = "config")]
-pub mod config;
 
 #[cfg(feature = "directconnect")]
 pub mod directconnect;
