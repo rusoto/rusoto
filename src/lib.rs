@@ -71,6 +71,8 @@ pub mod directconnect;
 pub mod ds;
 #[cfg(feature = "dynamodb")]
 pub mod dynamodb;
+#[cfg(feature = "dynamodbstreams")]
+pub mod dynamodbstreams;
 #[cfg(feature = "ec2")]
 pub mod ec2;
 #[cfg(feature = "ecs")]
@@ -91,9 +93,6 @@ pub mod sqs;
 
 
 /*
-
-#[cfg(feature = "dynamodbstreams")]
-pub mod dynamodbstreams;
 #[cfg(feature = "ecr")]
 pub mod ecr;
 #[cfg(feature = "emr")]

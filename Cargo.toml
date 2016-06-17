@@ -44,7 +44,7 @@ env_logger = "0.3.3"
 rand = "^0.3.14"
 
 [features]
-all = ["acm", "cloudhsm", "cloudtrail", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "firehose", "ec2", "ecs", "ets", "kinesis", "kms", "s3", "sqs"]
+all = ["acm", "cloudhsm", "cloudtrail", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "firehose", "ec2", "ecs", "ets", "kinesis", "kms", "s3", "sqs"]
 acm = []
 cloudhsm = []
 cloudtrail = []
@@ -59,6 +59,7 @@ directconnect = []
 default = ["with-syntex"]
 ds = []
 dynamodb = []
+dynamodbstreams = []
 ec2 = []
 ecs = []
 ets = []

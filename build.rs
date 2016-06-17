@@ -6,8 +6,7 @@ use std::path::Path;
 use rusoto_codegen::{Service, generate};
 
 /*
-dynamodb/2012-08-10/service-2.json:    "protocol":"json",
-dynamodbstreams/2012-08-10/service-2.json:    "protocol":"json"
+dynamodbstreams//service-2.json:    "protocol":"json"
 ecr/2015-09-21/service-2.json:    "protocol":"json",
 ecs/2014-11-13/service-2.json:    "protocol":"json",
 emr/2009-03-31/service-2.json:    "protocol":"json",
@@ -48,6 +47,7 @@ fn main() {
         Service::new("directconnect","2012-10-25"),
         Service::new("ds", "2015-04-16"),
         Service::new("dynamodb", "2012-08-10"),
+        Service::new("dynamodbstreams", "2012-08-10"),
         Service::new("firehose", "2015-08-04"),
         Service::new("kinesis", "2013-12-02"),
         Service::new("kms", "2014-11-01"),
