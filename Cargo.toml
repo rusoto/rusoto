@@ -44,7 +44,7 @@ env_logger = "0.3.3"
 rand = "^0.3.14"
 
 [features]
-all = ["acm", "cloudhsm", "cloudtrail", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "firehose", "ec2", "ecr", "ecs", "emr", "ets", "events", "inspector", "kinesis", "kms", "logs", "machinelearning", "marketplacecommerceanalytics", "s3", "sqs"]
+all = ["acm", "cloudhsm", "cloudtrail", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "firehose", "ec2", "ecr", "ecs", "emr", "ets", "events", "inspector", "kinesis", "kms", "logs", "machinelearning", "marketplacecommerceanalytics", "opsworks", "s3", "sqs"]
 acm = []
 cloudhsm = []
 cloudtrail = []
@@ -73,6 +73,7 @@ kms = []
 logs = []
 machinelearning = []
 marketplacecommerceanalytics = []
+opsworks = []
 nightly = ["serde_macros", "rusoto_codegen/nightly"]
 nightly-testing = ["clippy", "nightly"]
 s3 = []

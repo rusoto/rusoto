@@ -99,6 +99,8 @@ pub mod logs;
 pub mod machinelearning;
 #[cfg(feature = "marketplacecommerceanalytics")]
 pub mod marketplacecommerceanalytics;
+#[cfg(feature = "opsworks")]
+pub mod opsworks;
 #[cfg(feature = "s3")]
 pub mod s3;
 #[cfg(feature = "sqs")]
@@ -112,8 +114,6 @@ pub mod sqs;
 pub mod gamelift;
 
 
-#[cfg(feature = "opsworks")]
-pub mod opsworks;
 #[cfg(feature = "route53domains")]
 pub mod route53domains;
 #[cfg(feature = "ssm")]
