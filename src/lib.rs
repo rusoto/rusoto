@@ -65,6 +65,8 @@ pub mod config;
 pub mod datapipeline;
 #[cfg(feature = "devicefarm")]
 pub mod devicefarm;
+#[cfg(feature = "directconnect")]
+pub mod directconnect;
 #[cfg(feature = "dynamodb")]
 pub mod dynamodb;
 #[cfg(feature = "ec2")]
@@ -87,9 +89,6 @@ pub mod sqs;
 
 
 /*
-
-#[cfg(feature = "directconnect")]
-pub mod directconnect;
 #[cfg(feature = "ds")]
 pub mod ds;
 #[cfg(feature = "dynamodbstreams")]
