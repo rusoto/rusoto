@@ -51,6 +51,8 @@ pub mod acm;
 pub mod cloudhsm;
 #[cfg(feature = "cloudtrail")]
 pub mod cloudtrail;
+#[cfg(feature = "codecommit")]
+pub mod codecommit;
 #[cfg(feature = "dynamodb")]
 pub mod dynamodb;
 #[cfg(feature = "ec2")]
@@ -73,9 +75,6 @@ pub mod sqs;
 
 
 /*
-
-#[cfg(feature = "codecommit")]
-pub mod codecommit;
 #[cfg(feature = "codedeploy")]
 pub mod codedeploy;
 #[cfg(feature = "codepipeline")]

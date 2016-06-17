@@ -6,8 +6,6 @@ use std::path::Path;
 use rusoto_codegen::{Service, generate};
 
 /*
-cloudtrail//service-2.json:    "protocol":"json",
-codecommit/2015-04-13/service-2.json:    "protocol":"json",
 codedeploy/2014-10-06/service-2.json:    "protocol":"json",
 codepipeline/2015-07-09/service-2.json:    "protocol":"json"
 cognito-identity/2014-06-30/service-2.json:    "protocol":"json"
@@ -48,6 +46,7 @@ fn main() {
         Service::new("acm", "2015-12-08"),
         Service::new("cloudhsm","2014-05-30"),
         Service::new("cloudtrail","2013-11-01"),
+        Service::new("codecommit", "2015-04-13"),
         Service::new("dynamodb", "2012-08-10"),
         Service::new("firehose", "2015-08-04"),
         Service::new("kinesis", "2013-12-02"),
