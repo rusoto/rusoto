@@ -8,9 +8,7 @@ use rusoto_codegen::{Service, generate};
 /*
 gamelift/2015-10-01/service-2.json:    "protocol":"json"
 
-kinesis/2013-12-02/service-2.json:    "protocol":"json"
-kms/2014-11-01/service-2.json:    "protocol":"json"
-logs/2014-03-28/service-2.json:    "protocol":"json",
+logs//service-2.json:    "protocol":"json",
 machinelearning/2014-12-12/service-2.json:    "protocol":"json"
 marketplacecommerceanalytics/2015-07-01/service-2.json:    "protocol":"json",
 opsworks/2013-02-18/service-2.json:    "protocol":"json",
@@ -45,6 +43,7 @@ fn main() {
         Service::new("inspector", "2016-02-16"),
         Service::new("kinesis", "2013-12-02"),
         Service::new("kms", "2014-11-01"),
+        Service::new("logs", "2014-03-28"),
         Service::new("ec2", "2015-10-01"),
         Service::new("ecr", "2015-09-21"),
         Service::new("ecs", "2014-11-13"),
