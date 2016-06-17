@@ -87,6 +87,8 @@ pub mod ets;
 pub mod events;
 #[cfg(feature = "firehose")]
 pub mod firehose;
+#[cfg(feature = "inspector")]
+pub mod inspector;
 #[cfg(feature = "kinesis")]
 pub mod kinesis;
 #[cfg(feature = "kms")]
@@ -102,8 +104,7 @@ pub mod sqs;
 
 #[cfg(feature = "gamelift")]
 pub mod gamelift;
-#[cfg(feature = "inspector")]
-pub mod inspector;
+
 #[cfg(feature = "logs")]
 pub mod logs;
 #[cfg(feature = "machinelearning")]

@@ -44,7 +44,7 @@ env_logger = "0.3.3"
 rand = "^0.3.14"
 
 [features]
-all = ["acm", "cloudhsm", "cloudtrail", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "firehose", "ec2", "ecr", "ecs", "emr", "ets", "events", "kinesis", "kms", "s3", "sqs"]
+all = ["acm", "cloudhsm", "cloudtrail", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "firehose", "ec2", "ecr", "ecs", "emr", "ets", "events", "inspector", "kinesis", "kms", "s3", "sqs"]
 acm = []
 cloudhsm = []
 cloudtrail = []
@@ -67,6 +67,7 @@ emr = []
 ets = []
 events = []
 firehose = []
+inspector = []
 kinesis = []
 kms = []
 nightly = ["serde_macros", "rusoto_codegen/nightly"]
