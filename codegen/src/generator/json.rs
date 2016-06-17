@@ -109,7 +109,7 @@ pub fn generate_error_type(operation: &Operation, error_documentation: &HashMap<
 
         impl {type_name} {{
             pub fn from_body(body: &str) -> {type_name} {{
-                match from_str::<Value>(body) {{
+                match from_str::<SerdeJsonValue>(body) {{
                     Ok(json) => {{
                         let error_type: &str = match json.find(\"__type\") {{
                             Some(error_type) => error_type.as_string().unwrap_or(\"Unknown\"),
@@ -212,7 +212,8 @@ fn generate_error_imports(service: &Service) -> &'static str {
         "use error::AwsError;
         use std::error::Error;
         use std::fmt;
-        use serde_json::{Value, from_str};"
+        use serde_json::Value as SerdeJsonValue;
+        use serde_json::from_str;"
     } else {
         "use error::{AwsResult, parse_json_protocol_error};"
     }
