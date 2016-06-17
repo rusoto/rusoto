@@ -8,8 +8,8 @@ use rusoto_codegen::{Service, generate};
 /*
 gamelift/2015-10-01/service-2.json:    "protocol":"json"
 
-logs//service-2.json:    "protocol":"json",
-machinelearning/2014-12-12/service-2.json:    "protocol":"json"
+
+machinelearning//service-2.json:    "protocol":"json"
 marketplacecommerceanalytics/2015-07-01/service-2.json:    "protocol":"json",
 opsworks/2013-02-18/service-2.json:    "protocol":"json",
 route53domains/2014-05-15/service-2.json:    "protocol":"json"
@@ -39,17 +39,18 @@ fn main() {
         Service::new("ds", "2015-04-16"),
         Service::new("dynamodb", "2012-08-10"),
         Service::new("dynamodbstreams", "2012-08-10"),
-        Service::new("firehose", "2015-08-04"),
-        Service::new("inspector", "2016-02-16"),
-        Service::new("kinesis", "2013-12-02"),
-        Service::new("kms", "2014-11-01"),
-        Service::new("logs", "2014-03-28"),
         Service::new("ec2", "2015-10-01"),
         Service::new("ecr", "2015-09-21"),
         Service::new("ecs", "2014-11-13"),
         Service::new("elastictranscoder", "2012-09-25"),
         Service::new("emr", "2009-03-31"),
-        Service::new("events", "2014-02-03"),
+        Service::new("events", "2014-02-03"),        
+        Service::new("firehose", "2015-08-04"),
+        Service::new("inspector", "2016-02-16"),
+        Service::new("kinesis", "2013-12-02"),
+        Service::new("kms", "2014-11-01"),
+        Service::new("logs", "2014-03-28"),
+        Service::new("machinelearning", "2014-12-12"),
         Service::new("sqs", "2012-11-05"),
     ];
 

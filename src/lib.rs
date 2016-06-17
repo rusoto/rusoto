@@ -95,6 +95,8 @@ pub mod kinesis;
 pub mod kms;
 #[cfg(feature = "logs")]
 pub mod logs;
+#[cfg(feature = "machinelearning")]
+pub mod machinelearning;
 #[cfg(feature = "s3")]
 pub mod s3;
 #[cfg(feature = "sqs")]
@@ -108,8 +110,7 @@ pub mod sqs;
 pub mod gamelift;
 
 
-#[cfg(feature = "machinelearning")]
-pub mod machinelearning;
+
 #[cfg(feature = "marketplacecommerceanalytics")]
 pub mod marketplacecommerceanalytics;
 #[cfg(feature = "opsworks")]
