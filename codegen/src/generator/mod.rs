@@ -1,7 +1,7 @@
 use inflector::Inflector;
 
 use botocore::{Service, Shape, Operation};
-
+use std::ascii::AsciiExt;
 use self::ec2::Ec2Generator;
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
@@ -86,15 +86,15 @@ where P: GenerateProtocol {
 }
 
 fn generate_list(name: &str, shape: &Shape) -> String {
-    format!("pub type {} = Vec<{}>;", name, shape.member())
+    format!("pub type {} = Vec<{}>;", name, capitalize_first(shape.member().to_string()))
 }
 
 fn generate_map(name: &str, shape: &Shape) -> String {
     format!(
         "pub type {} = ::std::collections::HashMap<{}, {}>;",
         name,
-        shape.key(),
-        shape.value(),
+        capitalize_first(shape.key().to_string()),
+        capitalize_first(shape.value().to_string()),
     )
 }
 
@@ -117,13 +117,17 @@ fn generate_primitive_type(name: &str, shape_type: &str, for_timestamps: &str) -
 fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
 where P: GenerateProtocol {
     service.shapes.iter().filter_map(|(name, shape)| {
-        if name == "String" {
-            return protocol_generator.generate_support_types(name, shape, &service);
+        let type_name = &capitalize_first(name.to_string());
+
+        if type_name == "String" {
+            return protocol_generator.generate_support_types(type_name, shape, &service);
         }
 
         if shape.exception() && service.typed_errors() {
             return None;
         }
+
+
 
         let mut parts = Vec::with_capacity(3);
 
@@ -132,13 +136,13 @@ where P: GenerateProtocol {
         }
 
         match &shape.shape_type[..] {
-            "structure" => parts.push(generate_struct(service, name, shape, protocol_generator)),
-            "map" => parts.push(generate_map(name, shape)),
-            "list" => parts.push(generate_list(name, shape)),
-            shape_type => parts.push(generate_primitive_type(name, shape_type, protocol_generator.timestamp_type())),
+            "structure" => parts.push(generate_struct(service, type_name, shape, protocol_generator)),
+            "map" => parts.push(generate_map(type_name, shape)),
+            "list" => parts.push(generate_list(type_name, shape)),
+            shape_type => parts.push(generate_primitive_type(type_name, shape_type, protocol_generator.timestamp_type())),
         }
 
-        if let Some(support_types) = protocol_generator.generate_support_types(name, shape, &service) {
+        if let Some(support_types) = protocol_generator.generate_support_types(type_name, shape, &service) {
             parts.push(support_types);
         }
 
@@ -210,12 +214,14 @@ fn generate_struct_fields(service: &Service, shape: &Shape) -> String {
             }
         }
 
+        let type_name = capitalize_first(member.shape.to_string());
+
         if shape.required(member_name) {
-            lines.push(format!("pub {}: {},",  name, member.shape));
+            lines.push(format!("pub {}: {},",  name, type_name));
         } else if name == "type" {
-            lines.push(format!("pub aws_{}: Option<{}>,",  name, member.shape));
+            lines.push(format!("pub aws_{}: Option<{}>,",  name, type_name));
         } else {
-            lines.push(format!("pub {}: Option<{}>,",  name, member.shape));
+            lines.push(format!("pub {}: Option<{}>,",  name, type_name));
         }
 
         lines.join("\n")
@@ -226,4 +232,13 @@ impl Operation {
     pub fn error_type_name(&self) -> String {
         format!("{}Error", self.name)
     }
+}
+
+fn capitalize_first(word: String) -> String {
+    assert!(word.is_ascii());
+
+    let mut result = word.into_bytes();
+    result[0] = result[0].to_ascii_uppercase();
+
+    String::from_utf8(result).unwrap()
 }
