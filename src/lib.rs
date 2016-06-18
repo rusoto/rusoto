@@ -115,17 +115,13 @@ pub mod storagegateway;
 pub mod swf;
 #[cfg(feature = "waf")]
 pub mod waf;
-/*
-
-#[cfg(feature = "gamelift")]
-pub mod gamelift;
-
-#[cfg(feature = "support")]
-pub mod support;
-
-
-
 #[cfg(feature = "workspaces")]
 pub mod workspaces;
+
+/*
+#[cfg(feature = "gamelift")]
+pub mod gamelift;
+#[cfg(feature = "support")]
+pub mod support;
 */
 
