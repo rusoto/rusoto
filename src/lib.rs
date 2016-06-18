@@ -111,19 +111,18 @@ pub mod sqs;
 pub mod ssm;
 #[cfg(feature = "storagegateway")]
 pub mod storagegateway;
-
+#[cfg(feature = "swf")]
+pub mod swf;
 
 /*
 
 #[cfg(feature = "gamelift")]
 pub mod gamelift;
 
-
-
 #[cfg(feature = "support")]
 pub mod support;
-#[cfg(feature = "swf")]
-pub mod swf;
+
+
 #[cfg(feature = "waf")]
 pub mod waf;
 #[cfg(feature = "workspaces")]
