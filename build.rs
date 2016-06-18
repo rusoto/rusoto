@@ -11,7 +11,7 @@ support/2013-04-15/service-2.json:    "protocol":"json"
 */
 
 // expand to use cfg!() so codegen only gets run for services
-// in the feautres list
+// in the features list
 macro_rules! services {
     ( $( [$name:expr, $date:expr] ),* ) => {
         {
@@ -71,7 +71,6 @@ fn main() {
     for service in services {
         generate(service, out_path);
     }
-
 
     println!("cargo:rerun-if-changed=codegen");
 }
