@@ -9,7 +9,6 @@ use rusoto_codegen::{Service, generate};
 gamelift/2015-10-01/service-2.json:    "protocol":"json"
 support/2013-04-15/service-2.json:    "protocol":"json"
 
-waf/2015-08-24/service-2.json:    "protocol":"json",
 workspaces/2015-04-08/service-2.json:    "protocol":"json"*/
 
 // expand to use cfg!() and prevent the codegen for every service
@@ -65,7 +64,8 @@ fn main() {
         ["sqs", "2012-11-05"],
         ["ssm", "2014-11-06"],
         ["storagegateway", "2013-06-30"],
-        ["swf", "2012-01-25"]
+        ["swf", "2012-01-25"],
+        ["waf", "2015-08-24"]
     };
 
     for service in services {
