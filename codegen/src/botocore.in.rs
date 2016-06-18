@@ -217,7 +217,7 @@ pub struct Shape {
     pub key: Option<Key>,
     #[serde(rename="locationName")]
     pub location_name: Option<String>,
-    pub max: Option<i32>,
+    pub max: Option<u64>,
     pub member: Option<Member>,
     pub members: Option<BTreeMap<String, Member>>,
     pub min: Option<i32>,
