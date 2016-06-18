@@ -81,8 +81,8 @@ pub mod ecr;
 pub mod ecs;
 #[cfg(feature = "emr")]
 pub mod emr;
-#[cfg(feature = "ets")]
-pub mod ets;
+#[cfg(feature = "elastictranscoder")]
+pub mod elastictranscoder;
 #[cfg(feature = "events")]
 pub mod events;
 #[cfg(feature = "firehose")]
