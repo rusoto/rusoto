@@ -19,7 +19,7 @@ use openssl::crypto::hmac::hmac;
 use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
-use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
+use url::percent_encoding::{percent_encode_to, DEFAULT_ENCODE_SET, FORM_URLENCODED_ENCODE_SET};
 use xmlutil::*;
 use xml::reader::*;
 
@@ -80,6 +80,10 @@ impl <'a> SignedRequest <'a> {
 
     pub fn method(&self) -> &str {
         &self.method
+    }
+
+    pub fn path(&self) -> &str {
+        &self.path
     }
 
     pub fn canonical_uri(&self) -> &str {
@@ -308,7 +312,7 @@ fn skipped_headers(header: &str) -> bool {
 fn canonical_uri(path: &str) -> String {
     match path {
         "" => "/".to_string(),
-        _ => path.to_string()
+        _ => encode_uri(path)
     }
 }
 
@@ -328,6 +332,15 @@ fn build_canonical_query_string(params: &Params) -> String {
     }
 
     output
+}
+
+#[inline]
+fn encode_uri(uri: &str) -> String {
+    let mut encoded_uri = String::new();
+    for &byte in uri.as_bytes().iter() {
+        percent_encode_to(&[byte], DEFAULT_ENCODE_SET, &mut encoded_uri);
+    }
+    encoded_uri
 }
 
 #[inline]
