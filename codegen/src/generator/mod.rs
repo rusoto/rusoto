@@ -211,6 +211,8 @@ fn generate_struct_fields(service: &Service, shape: &Shape) -> String {
                         default,
                     )]".to_owned()
                 );
+            } else if shape_type == "boolean" && !shape.required(member_name) {
+                lines.push("#[serde(skip_serializing_if=\"::std::option::Option::is_none\")]".to_owned());
             }
         }
 
