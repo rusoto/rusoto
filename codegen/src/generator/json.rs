@@ -221,7 +221,7 @@ fn generate_error_type_matchers(operation: &Operation) -> Option<String> {
     }
 
     if add_validation {
-        type_matchers.push(format!("\"Validation\" => {error_type}::Validation(String::from(body))", error_type = error_type));
+        type_matchers.push(format!("\"ValidationException\" => {error_type}::Validation(String::from(body))", error_type = error_type));
     }
 
     type_matchers.push(format!("_ => {error_type}::Unknown(String::from(body))",  error_type = error_type));
