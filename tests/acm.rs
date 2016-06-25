@@ -6,7 +6,7 @@ use rusoto::acm::{AcmClient, ListCertificatesRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 
 #[test]
-fn should_list_certificates_successfully() {
+fn should_list_certificates() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = AcmClient::new(credentials, Region::UsEast1);
 
