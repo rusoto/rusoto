@@ -74,6 +74,10 @@ impl <'a> SignedRequest <'a> {
         self.hostname = hostname;
     }
 
+    pub fn set_endpoint_prefix(&mut self, endpoint_prefix: String) {
+        self.hostname = Some(build_hostname(&endpoint_prefix, self.region));
+    }
+
     pub fn set_payload(&mut self, payload: Option<&'a [u8]>) {
         self.payload = payload;
     }

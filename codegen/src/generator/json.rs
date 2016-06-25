@@ -18,7 +18,8 @@ impl GenerateProtocol for JsonGenerator {
                 {documentation}
                 {method_signature} -> {result_type} {{
                     {payload}
-                    let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, \"{request_uri}\");
+                    let mut request = SignedRequest::new(\"{http_method}\", \"{signing_name}\", self.region, \"{request_uri}\");
+                    {modify_endpoint_prefix}
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     request.set_payload(payload);
@@ -37,7 +38,8 @@ impl GenerateProtocol for JsonGenerator {
                 documentation = generate_documentation(operation).unwrap_or("".to_owned()),
                 method_signature = generate_method_signature(operation),
                 payload = generate_payload(operation),
-                endpoint_prefix = service.metadata.endpoint_prefix,
+                signing_name = service.signing_name(),
+                modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or("".to_owned()),
                 http_method = operation.http.method,
                 name = operation.name,
                 ok_response = generate_ok_response(operation, output_type),
@@ -95,6 +97,14 @@ impl GenerateProtocol for JsonGenerator {
         "f64"
     }
 
+}
+
+fn generate_endpoint_modification(service: &Service) -> Option<String> {
+    if service.signing_name() == service.metadata.endpoint_prefix {
+        None
+    } else {
+        Some(format!("request.set_endpoint_prefix(\"{}\".to_string());", service.metadata.endpoint_prefix))
+    }
 }
 
 fn generate_method_signature(operation: &Operation) -> String {
