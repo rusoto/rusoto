@@ -2,8 +2,8 @@
 
 extern crate rusoto;
 
-use rusoto::ecs::{EcsClient, ListClustersRequest};
-use rusoto::{AwsError, DefaultCredentialsProvider, Region};
+use rusoto::ecs::{EcsClient, ListClustersRequest, ListClustersError};
+use rusoto::{DefaultCredentialsProvider, Region};
 
 #[test]
 fn main() {
@@ -27,9 +27,7 @@ fn main() {
         &ListClustersRequest {
             next_token: Some("bogus".to_owned()), ..Default::default()
         }) {
-        Ok(_) => panic!("this should have been an InvalidParameterException ECSError"),
-        Err(err) => {
-            assert_eq!(err, AwsError::new("InvalidParameterException: Invalid token bogus"))
-        }
+        Err(ListClustersError::InvalidParameter(msg)) => assert!(msg.contains("Invalid token bogus")),
+        _ => panic!("this should have been an InvalidParameterException ECSError")
     }
 }
