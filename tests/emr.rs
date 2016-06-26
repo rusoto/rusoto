@@ -9,23 +9,15 @@ use rusoto::{DefaultCredentialsProvider, Region};
 fn should_list_clusters() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = EmrClient::new(credentials, Region::UsEast1);
-
     let request = ListClustersInput::default();
 
-    match client.list_clusters(&request) {
-        Ok(response) => {
-            println!("{:#?}", response); 
-            assert!(true)
-        },
-        Err(err) => panic!("Expected OK response, got {:#?}", err)
-    };
+    client.list_clusters(&request).unwrap();
 }
 
 #[test]
 fn should_handle_deprecation_gracefully() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = EmrClient::new(credentials, Region::UsEast1);
-
     let request = DescribeJobFlowsInput::default();
 
     match client.describe_job_flows(&request) {

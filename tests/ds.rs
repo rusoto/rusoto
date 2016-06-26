@@ -9,30 +9,16 @@ use rusoto::{DefaultCredentialsProvider, Region};
 fn should_describe_trusts() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = DirectoryServiceClient::new(credentials, Region::UsEast1);
-
     let request = DescribeTrustsRequest::default();
 
-    match client.describe_trusts(&request) {
-        Ok(response) => {
-            println!("{:#?}", response); 
-            assert!(true)
-        },
-        Err(err) => panic!("Expected OK response, got {:#?}", err)
-    };
+    client.describe_trusts(&request).unwrap();
 }
 
 #[test]
 fn should_describe_directories() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = DirectoryServiceClient::new(credentials, Region::UsEast1);
-
     let request = DescribeDirectoriesRequest::default();
 
-    match client.describe_directories(&request) {
-        Ok(response) => {
-            println!("{:#?}", response); 
-            assert!(true)
-        },
-        Err(err) => panic!("Expected OK response, got {:#?}", err)
-    };
+    client.describe_directories(&request).unwrap();
 }

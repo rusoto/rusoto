@@ -9,16 +9,9 @@ use rusoto::{DefaultCredentialsProvider, Region};
 fn should_describe_stacks() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = OpsWorksClient::new(credentials, Region::UsEast1);
-
     let request = DescribeStacksRequest::default();
 
-    match client.describe_stacks(&request) {
-        Ok(response) => {
-            println!("{:#?}", response); 
-            assert!(true)            
-        },
-        Err(err) => panic!("Expected OK response, got {:#?}", err)
-    };
+    client.describe_stacks(&request).unwrap();
 }
 
 #[test]
@@ -26,11 +19,5 @@ fn should_describe_my_user_profile() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = OpsWorksClient::new(credentials, Region::UsEast1);
 
-    match client.describe_my_user_profile() {
-        Ok(response) => {
-            println!("{:#?}", response); 
-            assert!(true)            
-        },
-        Err(err) => panic!("Expected OK response, got {:#?}", err)
-    };
+    client.describe_my_user_profile().unwrap();
 }

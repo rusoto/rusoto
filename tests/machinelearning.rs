@@ -9,31 +9,17 @@ use rusoto::{DefaultCredentialsProvider, Region};
 fn should_describe_batch_predictions() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = MachineLearningClient::new(credentials, Region::UsEast1);
-
     let request = DescribeBatchPredictionsInput::default();
 
-    match client.describe_batch_predictions(&request) {
-        Ok(response) => {
-            println!("{:#?}", response); 
-            assert!(true)            
-        },
-        Err(err) => panic!("Expected OK response, got {:#?}", err)
-    };
+    client.describe_batch_predictions(&request).unwrap();
 }
 #[test]
 fn should_describe_data_sources() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = MachineLearningClient::new(credentials, Region::UsEast1);
-
     let request = DescribeDataSourcesInput::default();
 
-    match client.describe_data_sources(&request) {
-        Ok(response) => {
-            println!("{:#?}", response); 
-            assert!(true)            
-        },
-        Err(err) => panic!("Expected OK response, got {:#?}", err)
-    };
+    client.describe_data_sources(&request).unwrap();
 }
 #[test]
 fn should_describe_evaluations() {
@@ -42,11 +28,5 @@ fn should_describe_evaluations() {
 
     let request = DescribeEvaluationsInput::default();
 
-    match client.describe_evaluations(&request) {
-        Ok(response) => {
-            println!("{:#?}", response); 
-            assert!(true)            
-        },
-        Err(err) => panic!("Expected OK response, got {:#?}", err)
-    };
+    client.describe_evaluations(&request).unwrap();
 }

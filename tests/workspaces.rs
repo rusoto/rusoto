@@ -9,14 +9,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 fn should_describe_workspaces() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = WorkspacesClient::new(credentials, Region::UsEast1);
-
     let request = DescribeWorkspacesRequest::default();
 
-    match client.describe_workspaces(&request) {
-        Ok(response) => {
-            println!("{:#?}", response); 
-            assert!(true)            
-        },
-        Err(err) => panic!("Expected OK response, got {:#?}", err)
-    };
+    client.describe_workspaces(&request).unwrap();
 }

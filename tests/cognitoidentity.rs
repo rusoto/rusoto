@@ -13,13 +13,7 @@ fn should_list_identity_pools() {
     let mut request = ListIdentityPoolsInput::default();
     request.max_results = 10;
 
-    match client.list_identity_pools(&request) {
-    	Ok(response) => {
-    		println!("{:#?}", response); 
-    		assert!(true)
-    	},
-    	Err(err) => panic!("Expected OK response, got {:#?}", err)
-    };
+    client.list_identity_pools(&request).unwrap();
 }
 
 #[test]
