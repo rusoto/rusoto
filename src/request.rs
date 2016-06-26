@@ -27,7 +27,7 @@ pub fn send_request(signed_request: &SignedRequest) -> Response {
         hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
     }
 
-    let mut final_uri = format!("https://{}{}", signed_request.hostname(), signed_request.canonical_uri());
+    let mut final_uri = format!("https://{}{}", signed_request.hostname(), signed_request.path());
     if !signed_request.canonical_query_string().is_empty() {
         final_uri = final_uri + &format!("?{}", signed_request.canonical_query_string());
     }

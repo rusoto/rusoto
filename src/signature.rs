@@ -19,7 +19,7 @@ use openssl::crypto::hmac::hmac;
 use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
-use url::percent_encoding::{percent_encode_to, FORM_URLENCODED_ENCODE_SET};
+use url::percent_encoding::{percent_encode_to, DEFAULT_ENCODE_SET, FORM_URLENCODED_ENCODE_SET};
 use xmlutil::*;
 use xml::reader::*;
 
@@ -82,6 +82,10 @@ impl <'a> SignedRequest <'a> {
         &self.method
     }
 
+    pub fn path(&self) -> &str {
+        &self.path
+    }
+
     pub fn canonical_uri(&self) -> &str {
         &self.canonical_uri
     }
@@ -141,6 +145,11 @@ impl <'a> SignedRequest <'a> {
     /// Add the calculated signature to the request headers and execute it
     /// Return the hyper HTTP response
     pub fn sign_and_execute(&mut self, creds: AwsCredentials) -> Response {
+        self.sign(&creds);
+        self.execute(creds)
+    }
+
+    fn sign(&mut self, creds: &AwsCredentials) {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
@@ -220,7 +229,9 @@ impl <'a> SignedRequest <'a> {
                    &creds.aws_access_key_id(), scope, signed_headers, signature);
         self.remove_header("authorization");
         self.add_header("authorization", &auth_header);
+    }
 
+    fn execute(&mut self, creds: AwsCredentials) -> Response {
         let response = send_request(self);
         debug!("Sent request to AWS");
 
@@ -231,7 +242,8 @@ impl <'a> SignedRequest <'a> {
             self.set_hostname(Some(new_hostname.to_string()));
 
             // This does a lot of appending and not clearing/creation, so we'll have to do that ourselves:
-            return self.sign_and_execute(creds);
+            self.sign(&creds);
+            return self.execute(creds);
         }
 
         response
@@ -308,7 +320,7 @@ fn skipped_headers(header: &str) -> bool {
 fn canonical_uri(path: &str) -> String {
     match path {
         "" => "/".to_string(),
-        _ => path.to_string()
+        _ => encode_uri(path)
     }
 }
 
@@ -328,6 +340,15 @@ fn build_canonical_query_string(params: &Params) -> String {
     }
 
     output
+}
+
+#[inline]
+fn encode_uri(uri: &str) -> String {
+    let mut encoded_uri = String::new();
+    for &byte in uri.as_bytes().iter() {
+        percent_encode_to(&[byte], DEFAULT_ENCODE_SET, &mut encoded_uri);
+    }
+    encoded_uri
 }
 
 #[inline]
@@ -424,6 +445,9 @@ mod tests {
     use super::SignedRequest;
     use super::extract_s3_temporary_endpoint_from_xml;
 
+    use super::super::ProfileProvider;
+    use super::super::credential::ProvideAwsCredentials;
+
     #[test]
     fn get_hostname_none_present() {
         let request = SignedRequest::new("POST", "sqs", Region::UsEast1, "/");
@@ -453,5 +477,16 @@ mod tests {
                 assert_eq!(location, "rusoto1441045966.s3-us-west-1.amazonaws.com");
             }
         }
+    }
+
+    #[test]
+    fn path_percent_encoded() {
+        let provider = ProfileProvider::with_configuration(
+            "tests/sample-data/multiple_profile_credentials",
+            "foo",
+        );
+        let mut request = SignedRequest::new("GET", "s3", Region::UsEast1, "/path with spaces");
+        request.sign(provider.credentials().as_ref().unwrap());
+        assert_eq!("/path%20with%20spaces", request.canonical_uri());
     }
 }
