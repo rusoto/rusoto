@@ -144,8 +144,8 @@ impl <'a> SignedRequest <'a> {
     /// Calculate the signature from the credentials provided and the request data
     /// Add the calculated signature to the request headers and execute it
     /// Return the hyper HTTP response
-    pub fn sign_and_execute(&mut self, creds: &AwsCredentials) -> Response {
-        self.sign(creds);
+    pub fn sign_and_execute(&mut self, creds: AwsCredentials) -> Response {
+        self.sign(&creds);
         self.execute(creds)
     }
 
@@ -231,7 +231,7 @@ impl <'a> SignedRequest <'a> {
         self.add_header("authorization", &auth_header);
     }
 
-    fn execute(&mut self, creds: &AwsCredentials) -> Response {
+    fn execute(&mut self, creds: AwsCredentials) -> Response {
         let response = send_request(self);
         debug!("Sent request to AWS");
 
@@ -242,7 +242,8 @@ impl <'a> SignedRequest <'a> {
             self.set_hostname(Some(new_hostname.to_string()));
 
             // This does a lot of appending and not clearing/creation, so we'll have to do that ourselves:
-            return self.sign_and_execute(creds);
+            self.sign(&creds);
+            return self.execute(creds);
         }
 
         response
