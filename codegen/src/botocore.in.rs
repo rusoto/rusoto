@@ -94,9 +94,16 @@ impl Service {
     }
 
     pub fn typed_errors(&self) -> bool {
-        match self.service_type_name() {
-            "Kinesis" | "KinesisFirehose" => true,
+        match self.metadata.protocol.as_ref() {
+            "json" => true,
             _ => false
+        }
+    }
+
+    pub fn signing_name(&self) -> String {
+        match self.metadata.signing_name {
+            Some(ref signing_name) => signing_name.to_string(),
+            None => self.metadata.endpoint_prefix.to_string()
         }
     }
 }
@@ -217,7 +224,7 @@ pub struct Shape {
     pub key: Option<Key>,
     #[serde(rename="locationName")]
     pub location_name: Option<String>,
-    pub max: Option<i32>,
+    pub max: Option<u64>,
     pub member: Option<Member>,
     pub members: Option<BTreeMap<String, Member>>,
     pub min: Option<i32>,
@@ -304,6 +311,8 @@ pub struct Metadata {
     pub service_full_name: String,
     #[serde(rename="signatureVersion")]
     pub signature_version: String,
+    #[serde(rename="signingName")]
+    pub signing_name: Option<String>,
     #[serde(rename="targetPrefix")]
     pub target_prefix: Option<String>,
     #[serde(rename="timestampFormat")]
