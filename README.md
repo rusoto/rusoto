@@ -39,11 +39,11 @@ extern crate rusoto;
 
 use std::default::Default;
 
-use rusoto::{ChainProvider, Region}
+use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::dynamodb::{DynamoDBClient, ListTablesInput};
 
 fn main() {
-  let provider = ChainProvider::new().unwrap();
+  let provider = DefaultCredentialsProvider::new().unwrap();
   let mut client = DynamoDBClient::new(provider, Region::UsEast1);
   let list_tables_input: ListTablesInput = Default::default();
 
