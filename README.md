@@ -8,7 +8,7 @@ IRC: #rusoto on irc.freenode.net.
 
 ## Requirements
 
-Rust 1.7.0 or later is required.
+Rust 1.8.0 or later is required.
 
 ## Installation
 
