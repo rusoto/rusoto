@@ -72,5 +72,10 @@ fn main() {
         generate(service, out_path);
     }
 
-    println!("cargo:rerun-if-changed=codegen");
+    let codegen_dir = Path::new("codegen");
+
+    // avoid unnecessary recompiles when used as a crates.io dependency
+    if codegen_dir.exists() {
+        println!("cargo:rerun-if-changed=codegen");
+    }
 }
