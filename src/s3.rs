@@ -11242,6 +11242,23 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
             request.add_header("Content-MD5", md5);
         }
 
+        if let Some(ref metadata) = input.metadata {
+            for (key, value) in metadata {
+                request.add_header(&format!("x-amz-meta-{}", key), value);
+            }
+        }
+
+        if let Some(ref acl) = input.acl {
+            request.add_header("x-amz-acl", &canned_acl_in_aws_format(acl));
+        }
+
+        match input.content_type {
+            Some(ref content_type) => request.set_content_type(content_type.to_string()),
+
+            // binary/octet-stream is default per the S3 API docs
+            None => request.set_content_type("binary/octet-stream".to_string())
+        };
+
         let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
         request.set_hostname(Some(hostname));
         request.set_payload(input.body);
