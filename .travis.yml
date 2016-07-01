@@ -1,22 +1,80 @@
-language: rust
 sudo: required
 dist: trusty
+# necessary for `travis-cargo coveralls --no-sudo`
+addons:
+  apt:
+    packages:
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
+      - binutils-dev # optional: only required for the --verify flag of coveralls
+language: rust
+# run builds for all the trains (and more)
 rust:
-- stable
-- beta
-- nightly
+  # check that it compiles on the latest stable compiler
+  - stable
+  # and the first stable one (this should be bumped as the minimum Rust version
+  # required changes)
+  - 1.8.0
+  - beta
+  - nightly
+os:
+  - linux
+  - osx
+cache:
+  directories:
+    - $HOME/.cargo
+before_script:
+  # load travis-cargo
+  - |
+      pip install 'travis-cargo<0.2' --user &&
+      if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        export PATH=$HOME/.local/bin/:$PATH
+      else
+        export PATH=$HOME/Library/Python/2.7/bin:$PATH
+      fi
+# the main build
 script:
-- cargo build --verbose --features all
-- cargo test --verbose --lib --features all
+  - |
+      # codegen
+      if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
+        export CARGO_ARGS="--no-default-features"
+      fi &&
+      (cd codegen && \
+        travis-cargo build -- $CARGO_ARGS && \
+        travis-cargo test -- --lib $CARGO_ARGS && \
+        travis-cargo bench -- $CARGO_ARGS) &&
+      # rusoto
+      if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
+        export CARGO_ARGS="--no-default-features --features $RUSOTO_FEATURES"
+      else
+        export CARGO_ARGS="--features $RUSOTO_FEATURES"
+      fi &&
+      travis-cargo build -- $CARGO_ARGS &&
+      travis-cargo test -- --lib $CARGO_ARGS &&
+      travis-cargo bench -- $CARGO_ARGS &&
+      travis-cargo --only stable doc -- $CARGO_ARGS
+after_success:
+  # upload the documentation from the build with stable (automatically only
+  # actually runs from the master branch, not individual PRs)
+  - travis-cargo --only stable doc-upload
+  # measure code coverage and upload to coveralls.io (the verify argument
+  # mitigates kcov crashes due to malformed debuginfo, at the cost of some
+  # speed. <https://github.com/huonw/travis-cargo/issues/12>)
+  - travis-cargo coveralls --no-sudo --verify -- --lib
+env:
+  global:
+    - RUSOTO_FEATURES="all"
+    - RUST_BACKTRACE=1
+    # encrypted Github token for doc upload
+    - secure: rWVjaDybqYUL6pwb9JbKRAQJYJTTWkbIMsh92l1Y9vz+QJiF903HEaxea98Z7e1Qywizm60EoAu8CSj5e+TfOC9hb6ZwN9nQs4FPnywiAUXtiuxUXDpcjacXVXl8YcLG+mOnq/+thOo+J1l2+j7SLsBrP4ybHh4NS7rqj8Os/5fiIfHfwlSVPlbw1gtTmLv5SXyofWB9VHMgkDzzP9Bss5HwwXQyzyj1EF8AQNexSsWj/MPYhj3eQaBpIK49guCqe1JjWdKXoiu4XQFsWMV6LBf7OgrWHR9MNf1H6UHM97i8onTeDAviC3RaWQe8crb2cQwNXk/n/8kde0F/1oBaljbOHTbLScflQNRGxV2jpbiIMVLgxdXUWK8d2JveVrXM5TKx6Wp8IolJ8Cr8egzLn9dRn1OG5pwt7b/Cr6DRaXFH5TRSz0Uln0GMA08NWC2sbDz1xtlkiUkRpHmBPmAGNjjDPaJs+OLPyPFMw5Gqr8g/zzCbGI92t210oMsVoCci5S8MO74HExYhsyAz4/CI0fqSSXDKG1xveguktmKWSxH5idyAmfDg556nSmuP+5w69QM9Vcg8j0szuSzsVoc/YsHMsdbZPdANLagbU9K59M1OpMkL3RSAav/cyL41+pSI3zybHKGim+kHZSwBWlLVKCX7P2FmineEFriLK8UJFxo=
 branches:
   only:
-  - master
+    - master
+    - auto
 notifications:
   email: false
 matrix:
+  fast_finish: true
   allow_failures:
-  - rust: beta
-  - rust: nightly
-env:
-  global:
-    secure: rWVjaDybqYUL6pwb9JbKRAQJYJTTWkbIMsh92l1Y9vz+QJiF903HEaxea98Z7e1Qywizm60EoAu8CSj5e+TfOC9hb6ZwN9nQs4FPnywiAUXtiuxUXDpcjacXVXl8YcLG+mOnq/+thOo+J1l2+j7SLsBrP4ybHh4NS7rqj8Os/5fiIfHfwlSVPlbw1gtTmLv5SXyofWB9VHMgkDzzP9Bss5HwwXQyzyj1EF8AQNexSsWj/MPYhj3eQaBpIK49guCqe1JjWdKXoiu4XQFsWMV6LBf7OgrWHR9MNf1H6UHM97i8onTeDAviC3RaWQe8crb2cQwNXk/n/8kde0F/1oBaljbOHTbLScflQNRGxV2jpbiIMVLgxdXUWK8d2JveVrXM5TKx6Wp8IolJ8Cr8egzLn9dRn1OG5pwt7b/Cr6DRaXFH5TRSz0Uln0GMA08NWC2sbDz1xtlkiUkRpHmBPmAGNjjDPaJs+OLPyPFMw5Gqr8g/zzCbGI92t210oMsVoCci5S8MO74HExYhsyAz4/CI0fqSSXDKG1xveguktmKWSxH5idyAmfDg556nSmuP+5w69QM9Vcg8j0szuSzsVoc/YsHMsdbZPdANLagbU9K59M1OpMkL3RSAav/cyL41+pSI3zybHKGim+kHZSwBWlLVKCX7P2FmineEFriLK8UJFxo=
+    - rust: nightly
