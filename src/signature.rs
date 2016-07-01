@@ -27,7 +27,6 @@ use credential::AwsCredentials;
 use error::AwsError;
 use param::Params;
 use region::Region;
-use request::send_request;
 
 const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 
@@ -148,12 +147,12 @@ impl <'a> SignedRequest <'a> {
     /// Calculate the signature from the credentials provided and the request data
     /// Add the calculated signature to the request headers and execute it
     /// Return the hyper HTTP response
-    pub fn sign_and_execute(&mut self, creds: AwsCredentials) -> Response {
-        self.sign(&creds);
-        self.execute(creds)
-    }
+    //pub fn sign_and_execute(&mut self, creds: AwsCredentials) -> Response {
+    //    self.sign(&creds);
+    //    self.execute(creds)
+    //}
 
-    fn sign(&mut self, creds: &AwsCredentials) {
+    pub fn sign(&mut self, creds: &AwsCredentials) {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
@@ -235,6 +234,7 @@ impl <'a> SignedRequest <'a> {
         self.add_header("authorization", &auth_header);
     }
 
+/*
     fn execute(&mut self, creds: AwsCredentials) -> Response {
         let response = send_request(self);
         debug!("Sent request to AWS");
@@ -252,6 +252,7 @@ impl <'a> SignedRequest <'a> {
 
         response
     }
+    */
 }
 
 fn signature(string_to_sign: &str, signing_key: Vec<u8>) -> String {
