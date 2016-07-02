@@ -459,8 +459,8 @@ impl ProvideAwsCredentials for ChainProvider {
                 None => Err(AwsError::new(""))
             }
         })
-		.or(IamProvider.credentials())
-		.or(Err(AwsError::new("Couldn't find AWS credentials in environment, credentials file, or IAM role.")))
+		.or_else(|_| IamProvider.credentials())
+		.or_else(|_| Err(AwsError::new("Couldn't find AWS credentials in environment, credentials file, or IAM role.")))
     }
 }
 
