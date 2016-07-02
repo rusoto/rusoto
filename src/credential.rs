@@ -1,21 +1,23 @@
 //! Types for loading and managing AWS access credentials for API requests.
 
+use std::fmt;
 use std::env::*;
 use std::env;
+use std::error::Error;
 use std::fs;
 use std::fs::File;
 use std::path::{Path, PathBuf};
 use std::io::prelude::*;
 use std::io::BufReader;
+use std::io::Error as IoError;
 use std::ascii::AsciiExt;
 use std::collections::HashMap;
 use std::sync::Mutex;
 use std::cell::RefCell;
 use hyper::Client;
 use hyper::header::Connection;
-use error::*;
 use regex::Regex;
-use chrono::{Duration, UTC, DateTime};
+use chrono::{Duration, UTC, DateTime, ParseError};
 use serde_json::{Value, from_str};
 use std::time::Duration as StdDuration;
 
@@ -70,37 +72,71 @@ impl AwsCredentials {
     }
 }
 
+#[derive(Debug, PartialEq)]
+pub struct CredentialsError{
+    pub message: String
+}
+
+impl CredentialsError {
+    fn new(message: &str) -> CredentialsError {
+        CredentialsError {
+            message: message.to_string()
+        }
+    }
+}
+
+impl fmt::Display for CredentialsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+
+impl Error for CredentialsError {
+    fn description(&self) -> &str {
+        &self.message
+    }
+}
+
+impl From<ParseError> for CredentialsError {
+    fn from(err: ParseError) -> CredentialsError {
+        CredentialsError::new(err.description())
+    }
+}
+
+impl From<IoError> for CredentialsError {
+    fn from(err: IoError) -> CredentialsError {
+        CredentialsError::new(err.description())
+    }
+}
+
+
 /// A trait for types that produce `AwsCredentials`.
 pub trait ProvideAwsCredentials {
     /// Produce a new `AwsCredentials`.
-    fn credentials(&self) -> Result<AwsCredentials, AwsError>;
-}
-
-fn err(message: &str) -> Result<AwsCredentials, AwsError> {
-    Err(AwsError::new(message))
+    fn credentials(&self) -> Result<AwsCredentials, CredentialsError>;
 }
 
 /// Provides AWS credentials from environment variables.
 pub struct EnvironmentProvider;
 
 impl ProvideAwsCredentials for EnvironmentProvider {
-    fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 		credentials_from_environment()
     }
 }
 
-fn credentials_from_environment() -> Result<AwsCredentials, AwsError> {
+fn credentials_from_environment() -> Result<AwsCredentials, CredentialsError> {
     let env_key = match var("AWS_ACCESS_KEY_ID") {
         Ok(val) => val,
-        Err(_) => return Err(AwsError::new("No AWS_ACCESS_KEY_ID in environment"))
+        Err(_) => return Err(CredentialsError::new("No AWS_ACCESS_KEY_ID in environment"))
     };
     let env_secret = match var("AWS_SECRET_ACCESS_KEY") {
         Ok(val) => val,
-        Err(_) => return Err(AwsError::new("No AWS_SECRET_ACCESS_KEY in environment"))
+        Err(_) => return Err(CredentialsError::new("No AWS_SECRET_ACCESS_KEY in environment"))
     };
 
     if env_key.is_empty() || env_secret.is_empty() {
-        return Err(AwsError::new("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment."));
+        return Err(CredentialsError::new("Couldn't find either AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or both in environment."));
     }
 
     // Present when using temporary credentials, e.g. on Lambda with IAM roles
@@ -129,7 +165,7 @@ pub struct ProfileProvider {
 
 impl ProfileProvider {
     /// Create a new `ProfileProvider` for the default credentials file path and profile name.
-    pub fn new() -> AwsResult<ProfileProvider> {
+    pub fn new() -> Result<ProfileProvider, CredentialsError> {
         // Default credentials file location:
         // ~/.aws/credentials (Linux/Mac)
         // %USERPROFILE%\.aws\credentials  (Windows)
@@ -141,7 +177,7 @@ impl ProfileProvider {
 
                 home_path.join(credentials_path)
             }
-            None => return Err(AwsError::new("The environment variable HOME must be set.")),
+            None => return Err(CredentialsError::new("The environment variable HOME must be set.")),
         };
 
         Ok(ProfileProvider {
@@ -184,19 +220,19 @@ impl ProfileProvider {
 }
 
 impl ProvideAwsCredentials for ProfileProvider {
-    fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
     	parse_credentials_file(self.file_path()).and_then(|mut profiles| {
-            profiles.remove(self.profile()).ok_or(AwsError::new("profile not found"))
+            profiles.remove(self.profile()).ok_or(CredentialsError::new("profile not found"))
     	})
    }
 }
 
-fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredentials>, AwsError> {
+fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredentials>, CredentialsError> {
     match fs::metadata(file_path) {
-        Err(_) => return Err(AwsError::new("Couldn't stat credentials file.")),
+        Err(_) => return Err(CredentialsError::new("Couldn't stat credentials file.")),
         Ok(metadata) => {
             if !metadata.is_file() {
-                return Err(AwsError::new("Couldn't open file."));
+                return Err(CredentialsError::new("Couldn't open file."));
             }
         }
     };
@@ -264,7 +300,7 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
     }
 
     if profiles.is_empty() {
-        return Err(AwsError::new("No credentials found."));
+        return Err(CredentialsError::new("No credentials found."));
     }
 
     Ok(profiles)
@@ -274,24 +310,22 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
 pub struct IamProvider;
 
 impl ProvideAwsCredentials for IamProvider {
-    fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 	
 		// TODO: backoff and retry on failure.
-
-        // for "real" use: http://169.254.169.254/latest/meta-data/iam/security-credentials/
         let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
         let mut client = Client::new();
         client.set_read_timeout(Some(StdDuration::from_secs(15)));
         let mut response;
         match client.get(&address)
             .header(Connection::close()).send() {
-                Err(_) => return err("Couldn't connect to metadata service"), // add Why?
+                Err(_) => return Err(CredentialsError::new("Couldn't connect to metadata service")), // add Why?
                 Ok(received_response) => response = received_response
             };
 
         let mut body = String::new();
         if let Err(_) = response.read_to_string(&mut body) {
-			return err("Didn't get a parsable response body from metadata service");
+			return Err(CredentialsError::new("Didn't get a parsable response body from metadata service"));
         }
 
         address.push_str("/");
@@ -299,35 +333,35 @@ impl ProvideAwsCredentials for IamProvider {
         body = String::new();
         match client.get(&address)
             .header(Connection::close()).send() {
-                Err(_) => return err("Didn't get a parseable response body from instance role details"),
+                Err(_) => return Err(CredentialsError::new("Didn't get a parseable response body from instance role details")),
                 Ok(received_response) => response = received_response
             };
 
         if let Err(_) = response.read_to_string(&mut body) {
-            return err("Had issues with reading iam role response: {}");
+            return Err(CredentialsError::new("Had issues with reading iam role response: {}"));
         }
 
         let json_object: Value;
         match from_str(&body) {
-            Err(_) => return err("Couldn't parse metadata response body."),
+            Err(_) => return Err(CredentialsError::new("Couldn't parse metadata response body.")),
             Ok(val) => json_object = val
         };
 
         let access_key;
         match json_object.find("AccessKeyId") {
-            None => return err("Couldn't find AccessKeyId in response."),
+            None => return Err(CredentialsError::new("Couldn't find AccessKeyId in response.")),
             Some(val) => access_key = val.as_string().expect("AccessKeyId value was not a string").to_owned().replace("\"", "")
         };
 
         let secret_key;
         match json_object.find("SecretAccessKey") {
-            None => return err("Couldn't find SecretAccessKey in response."),
+            None => return Err(CredentialsError::new("Couldn't find SecretAccessKey in response.")),
             Some(val) => secret_key = val.as_string().expect("SecretAccessKey value was not a string").to_owned().replace("\"", "")
         };
 
         let expiration;
         match json_object.find("Expiration") {
-            None => return err("Couldn't find Expiration in response."),
+            None => return Err(CredentialsError::new("Couldn't find Expiration in response.")),
             Some(val) => expiration = val.as_string().expect("Expiration value was not a string").to_owned().replace("\"", "")
         };
 
@@ -335,7 +369,7 @@ impl ProvideAwsCredentials for IamProvider {
 
         let token_from_response;
         match json_object.find("Token") {
-            None => return err("Couldn't find Token in response."),
+            None => return Err(CredentialsError::new("Couldn't find Token in response.")),
             Some(val) => token_from_response = val.as_string().expect("Token value was not a string").to_owned().replace("\"", "")
         };
 
@@ -356,7 +390,7 @@ pub struct BaseAutoRefreshingProvider<P, T> {
 pub type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>;
 
 impl <P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
-    pub fn with_mutex(provider: P) -> Result<AutoRefreshingProviderSync<P>, AwsError> {
+    pub fn with_mutex(provider: P) -> Result<AutoRefreshingProviderSync<P>, CredentialsError> {
 		let creds = try!(provider.credentials());
 		Ok(BaseAutoRefreshingProvider { 
 			credentials_provider: provider, 
@@ -366,7 +400,7 @@ impl <P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
 }
 
 impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>> {
-	fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+	fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 		let mut creds = self.cached_credentials.lock().unwrap();
 		if creds.credentials_are_expired() {			
 			*creds = try!(self.credentials_provider.credentials());
@@ -379,7 +413,7 @@ impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProv
 pub type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>;
 
 impl <P: ProvideAwsCredentials> AutoRefreshingProvider<P> {
-	pub fn with_refcell(provider: P) -> Result<AutoRefreshingProvider<P>, AwsError> {
+	pub fn with_refcell(provider: P) -> Result<AutoRefreshingProvider<P>, CredentialsError> {
 		let creds = try!(provider.credentials());
 		Ok(BaseAutoRefreshingProvider { 
 			credentials_provider: provider, 
@@ -389,7 +423,7 @@ impl <P: ProvideAwsCredentials> AutoRefreshingProvider<P> {
 }
 
 impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>> {
-	fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+	fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 
 		let mut creds = self.cached_credentials.borrow_mut();
 		
@@ -413,7 +447,7 @@ impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProv
 pub type DefaultCredentialsProvider = AutoRefreshingProvider<ChainProvider>;
 
 impl DefaultCredentialsProvider {
-    pub fn new() -> Result<DefaultCredentialsProvider, AwsError> {
+    pub fn new() -> Result<DefaultCredentialsProvider, CredentialsError> {
         Ok(try!(AutoRefreshingProvider::with_refcell(ChainProvider::new())))
     }
 }
@@ -430,7 +464,7 @@ impl DefaultCredentialsProvider {
 pub type DefaultCredentialsProviderSync = AutoRefreshingProviderSync<ChainProvider>;
 
 impl DefaultCredentialsProviderSync {
-    pub fn new() -> Result<DefaultCredentialsProviderSync, AwsError> {
+    pub fn new() -> Result<DefaultCredentialsProviderSync, CredentialsError> {
         Ok(try!(AutoRefreshingProviderSync::with_mutex(ChainProvider::new())))
     }
 }
@@ -450,17 +484,17 @@ pub struct ChainProvider {
 }
 
 impl ProvideAwsCredentials for ChainProvider {
-    fn credentials(&self) -> Result<AwsCredentials, AwsError> {
+    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 
 	EnvironmentProvider.credentials()
 		.or_else(|_| {
             match self.profile_provider {
                 Some(ref provider) => provider.credentials(),
-                None => Err(AwsError::new(""))
+                None => Err(CredentialsError::new(""))
             }
         })
 		.or_else(|_| IamProvider.credentials())
-		.or_else(|_| Err(AwsError::new("Couldn't find AWS credentials in environment, credentials file, or IAM role.")))
+		.or_else(|_| Err(CredentialsError::new("Couldn't find AWS credentials in environment, credentials file, or IAM role.")))
     }
 }
 
@@ -551,7 +585,7 @@ mod tests {
         let result = provider.credentials();
 
         assert!(result.is_err());
-        assert_eq!(result.err(), Some(AwsError::new("profile not found")));
+        assert_eq!(result.err(), Some(CredentialsError::new("profile not found")));
     }
 
     #[test]
@@ -582,19 +616,19 @@ mod tests {
     #[test]
     fn existing_file_no_credentials() {
         let result = super::parse_credentials_file(Path::new("tests/sample-data/no_credentials"));
-        assert_eq!(result.err(), Some(AwsError::new("No credentials found.")))
+        assert_eq!(result.err(), Some(CredentialsError::new("No credentials found.")))
     }
 
     #[test]
     fn parse_credentials_bad_path() {
         let result = super::parse_credentials_file(Path::new("/bad/file/path"));
-        assert_eq!(result.err(), Some(AwsError::new("Couldn't stat credentials file.")));
+        assert_eq!(result.err(), Some(CredentialsError::new("Couldn't stat credentials file.")));
     }
 
     #[test]
     fn parse_credentials_directory_path() {
         let result = super::parse_credentials_file(Path::new("tests/"));
-        assert_eq!(result.err(), Some(AwsError::new("Couldn't open file.")));
+        assert_eq!(result.err(), Some(CredentialsError::new("Couldn't open file.")));
     }
 }
 

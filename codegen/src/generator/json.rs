@@ -175,9 +175,9 @@ pub fn generate_error_type(operation: &Operation, error_documentation: &HashMap<
                 }}
             }}
         }}
-        impl From<AwsError> for {type_name} {{
-            fn from(err: AwsError) -> {type_name} {{
-                {type_name}::Unknown(err.message)
+        impl From<CredentialsError> for {type_name} {{
+            fn from(err: CredentialsError) -> {type_name} {{
+                {type_name}::Credentials(err)
             }}
         }}
         impl From<HttpDispatchError> for {type_name} {{
@@ -227,6 +227,7 @@ fn generate_error_enum_types(operation: &Operation, error_documentation: &HashMa
     }
 
     enum_types.push("/// An error occurred dispatching the HTTP request\nHttpDispatch(HttpDispatchError)".to_string());
+    enum_types.push("/// An error occurred providing credentials for the request\nCredentials(CredentialsError)".to_string());
     enum_types.push("/// An unknown error occurred.  The raw HTTP response is provided.\nUnknown(String)".to_string());
     Some(enum_types.join(","))
 }
@@ -284,6 +285,7 @@ fn generate_error_description_matchers(operation: &Operation) -> Option<String> 
     }
 
     type_matchers.push(format!("{error_type}::HttpDispatch(ref dispatch_error) => dispatch_error.description()", error_type = error_type));
+    type_matchers.push(format!("{error_type}::Credentials(ref credentials_error) => credentials_error.description()", error_type = error_type));
     type_matchers.push(format!("{error_type}::Unknown(ref cause) => cause", error_type = error_type));
     Some(type_matchers.join(","))
 }
@@ -298,8 +300,9 @@ fn generate_result_type<'a>(service: &Service, operation: &Operation, output_typ
 
 fn generate_error_imports(service: &Service) -> &'static str {
     if service.typed_errors() {
-        "use error::AwsError;
+        "
         use request::HttpDispatchError;
+        use credential::CredentialsError;
         use std::error::Error;
         use std::fmt;
         use serde_json::Value as SerdeJsonValue;

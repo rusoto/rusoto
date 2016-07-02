@@ -32,11 +32,9 @@ pub use credential::{
     DefaultCredentialsProvider,
     DefaultCredentialsProviderSync,
 };
-pub use error::{AwsError, AwsResult};
 pub use region::{ParseRegionError, Region};
 
 mod credential;
-mod error;
 mod param;
 mod region;
 mod request;
