@@ -11,7 +11,6 @@ use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
 
-use hyper::client::Response;
 use hyper::status::StatusCode;
 use openssl::crypto::hash::Type::SHA256;
 use openssl::crypto::hash::hash;
@@ -21,7 +20,6 @@ use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{percent_encode_to, DEFAULT_ENCODE_SET, FORM_URLENCODED_ENCODE_SET};
 use xmlutil::*;
-use xml::reader::*;
 
 use credential::AwsCredentials;
 use error::AwsError;
@@ -388,6 +386,7 @@ fn build_hostname(service: &str, region: Region) -> String {
     }
 }
 
+/*
 /// `extract_s3_redirect_location` takes a Hyper `Response` and attempts to pull out the temporary endpoint.
 fn extract_s3_redirect_location(response: Response) -> Result<String, AwsError> {
     // Double checking this feels like belts and suspenders since we're checking the status code
@@ -398,13 +397,17 @@ fn extract_s3_redirect_location(response: Response) -> Result<String, AwsError> 
         return Err(AwsError::new("Trying to find temporary location when status is not 307 temp redirect."))
     }
 
-    let mut reader = EventReader::new(response);
-    let mut stack = XmlResponseFromAws::new(reader.events().peekable());
+    let mut body = String::new();
+    response.read_to_string(&mut body).unwrap();
+
+    let mut reader = EventReader::from_str(&body);
+    let mut stack = XmlResponse::new(reader.events().peekable());
     stack.next(); // xml start tag
 
     // extract and return temporary endpoint location
     extract_s3_temporary_endpoint_from_xml(&mut stack)
 }
+*/
 
 fn field_in_s3_redirect(name: &str) -> bool {
     if name == "Code" || name == "Message" || name == "Bucket" || name == "RequestId" || name == "HostId" {
@@ -441,7 +444,7 @@ fn extract_s3_temporary_endpoint_from_xml<T: Peek + Next>(stack: &mut T) -> Resu
 #[cfg(test)]
 mod tests {
     use std::fs::File;
-    use std::io::BufReader;
+    use std::io::{Read, BufReader};
     use xml::reader::*;
 
     use region::Region;
@@ -469,10 +472,14 @@ mod tests {
     #[test]
     fn get_redirect_location_from_s3() {
         let file = File::open("tests/sample-data/s3_temp_redirect.xml").unwrap();
-        let file = BufReader::new(file);
-        let mut my_parser  = EventReader::new(file);
+        let mut file = BufReader::new(file);
+
+        let mut body = String::new();
+
+        file.read_to_string(&mut body).unwrap();
+        let mut my_parser  = EventReader::from_str(&body);
         let my_stack = my_parser.events().peekable();
-        let mut reader = XmlResponseFromFile::new(my_stack);
+        let mut reader = XmlResponse::new(my_stack);
         reader.next(); // xml start node
         let result = extract_s3_temporary_endpoint_from_xml(&mut reader);
 
