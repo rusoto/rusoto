@@ -12,44 +12,34 @@ impl GenerateProtocol for Ec2Generator {
         service.operations.values().map(|operation| {
             format!(
                 "{documentation}
-{method_signature} {{
-    let mut request = SignedRequest::new(
-        \"{http_method}\",
-        \"{endpoint_prefix}\",
-        self.region,
-        \"{request_uri}\",
-    );
-    let mut params = Params::new();
+                {method_signature} {{
+                    let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, \"{request_uri}\");
+                    let mut params = Params::new();
 
-    params.put(\"Action\", \"{operation_name}\");
-    params.put(\"Version\", \"{api_version}\");
-    {serialize_input}
+                    params.put(\"Action\", \"{operation_name}\");
+                    params.put(\"Version\", \"{api_version}\");
+    
+                    {serialize_input}
 
-    request.set_params(params);
+                    request.set_params(params);
+                    request.sign(&try!(self.credentials_provider.credentials()));
 
-    let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
+                    let dispatch_result = self.dispatcher.dispatch(&request);
+                    if dispatch_result.is_err() {{
+                        return Err(AwsError::new(format!(\"Error dispatching HTTP request\")));
+                    }}
 
-    if result.status.is_success() {{
+                    let result = dispatch_result.unwrap();
 
-        let mut reader = EventReader::new(result);
-        let mut stack = XmlResponseFromAws::new(reader.events().peekable());
-        stack.next();
-        {method_return_value}
-
-    }} else {{
-
-        use std::io::Read;
-        let mut response_body = String::new();
-        if let Err(_) = result.read_to_string(&mut response_body) {{
-            response_body = String::from(\"(Non UTF-8 response)\");
-        }}
-
-        Err(AwsError::new(
-            format!(\"HTTP response for {operation_name}: {{}}: {{}}\", result.status, response_body)
-        ))
-
-    }}
-}}
+                    if result.status == 200 {{
+                        let mut reader = EventReader::from_str(&result.body);
+                        let mut stack = XmlResponse::new(reader.events().peekable());
+                        stack.next();
+                        {method_return_value}
+                    }} else {{
+                        Err(AwsError::new(format!(\"HTTP response for {operation_name}: {{}}: {{}}\", result.status, result.body)))
+                    }}
+                }}
                 ",
                 documentation = generate_documentation(operation),
                 http_method = &operation.http.method,
@@ -72,10 +62,10 @@ impl GenerateProtocol for Ec2Generator {
         use credential::ProvideAwsCredentials;
         use error::AwsError;
         use param::{Params, ServiceParams};
-        use region;
+
         use signature::SignedRequest;
         use xml::reader::events::XmlEvent;
-        use xmlutil::{Next, Peek, XmlParseError, XmlResponseFromAws};
+        use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
         use xmlutil::{characters, end_element, start_element, skip_tree};
 
         enum DeserializerNext {

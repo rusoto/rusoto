@@ -147,6 +147,27 @@ pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result
     }
 }
 
+/// skip a tag and all its children
+pub fn skip_tree<T: Peek + Next>(stack: &mut T) {
+
+    let mut deep: usize = 0;
+
+    loop {
+        match stack.next() {
+            None => break,
+            Some(XmlEvent::StartElement { .. }) => deep += 1,
+            Some(XmlEvent::EndElement { ..}) => {
+                if deep > 1 {
+                    deep -= 1;
+                } else {
+                    break;
+                }
+            },
+            _ => (),
+        }
+    }
+
+}
 #[cfg(test)]
 mod tests {
     use super::*;
