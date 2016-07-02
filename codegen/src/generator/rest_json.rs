@@ -47,10 +47,15 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_payload}
                     {load_params}
 
-                    let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
-                    let status = result.status.to_u16();
-                    let mut body = String::new();
-                    result.read_to_string(&mut body).unwrap();
+                    request.sign(&try!(self.credentials_provider.credentials()));
+
+                    let dispatch_result = self.dispatcher.dispatch(&request);
+                    if dispatch_result.is_err() {{
+                        return Err(AwsError::new(format!(\"Error dispatching HTTP request\")));
+                    }}
+
+                    let result = dispatch_result.unwrap();                
+                    let mut body = result.body;
 
                     // `serde-json` serializes field-less structs as \"null\", but AWS returns
                     // \"{{}}\" for a field-less response, so we must check for this result
@@ -60,9 +65,9 @@ impl GenerateProtocol for RestJsonGenerator {
                     }}
 
                     debug!(\"Response body: {{}}\", body);
-                    debug!(\"Response status: {{}}\", status);
+                    debug!(\"Response status: {{}}\", result.status);
 
-                    match status {{
+                    match result.status {{
                         {status_code} => {{
                             {ok_response}
                         }}
@@ -90,14 +95,12 @@ impl GenerateProtocol for RestJsonGenerator {
     }
 
     fn generate_prelude(&self, _: &Service) -> String {
-        "use std::io::Read;
-
-        use serde_json;
+        "use serde_json;
 
         use credential::ProvideAwsCredentials;
-        use error::{AwsResult, parse_json_protocol_error};
+        use error::{AwsResult, parse_json_protocol_error, AwsError};
         use param::{Params, ServiceParams};
-        use region;
+
         use signature::SignedRequest;
         ".to_owned()
     }
