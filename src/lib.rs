@@ -38,6 +38,7 @@ mod credential;
 mod param;
 mod region;
 mod request;
+mod xmlerror;
 mod xmlutil;
 mod serialization;
 #[macro_use] mod signature;

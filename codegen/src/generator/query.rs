@@ -66,53 +66,7 @@ impl GenerateProtocol for QueryGenerator {
         use signature::SignedRequest;
         use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
         use xmlutil::{characters, end_element, peek_at_name, start_element};
-
-        #[derive(Default, Debug)]
-        pub struct XmlError {
-            error_type: String,
-            code: String,
-            message: String,
-            detail: Option<String>
-        }
-
-        pub struct XmlErrorDeserializer;
-        impl XmlErrorDeserializer {
-            fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<XmlError, XmlParseError> {
-                try!(start_element(tag_name, stack));
-
-                let mut obj = XmlError::default();
-
-                loop {
-                    match &try!(peek_at_name(stack))[..] {
-                        \"Type\" => {
-                            obj.error_type = try!(StringDeserializer::deserialize(\"Type\", stack));
-                            continue;
-                        },
-                        \"Code\" => {
-                            obj.code = try!(StringDeserializer::deserialize(\"Code\", stack));
-                            continue;
-                        },
-                        \"Message\" => {
-                            obj.message = try!(StringDeserializer::deserialize(\"Message\", stack));
-                            continue;
-                        },
-                        \"Detail\" => {
-                            try!(start_element(\"Detail\", stack));
-                            if let Ok(characters) = characters(stack){
-                                obj.detail = Some(characters.to_string());
-                                try!(end_element(\"Detail\", stack));
-                            }
-                            continue;
-                        },
-                        _ => break
-                    }
-                }
-
-                try!(end_element(tag_name, stack));
-
-                Ok(obj)
-            }
-        }
+        use xmlerror::*;
         ".to_owned()
     }
 
