@@ -6,7 +6,9 @@ use self::ec2::Ec2Generator;
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
 use self::rest_json::RestJsonGenerator;
+use self::error_types::{GenerateErrorTypes, JsonErrorTypes, XmlErrorTypes};
 
+mod error_types;
 mod ec2;
 mod json;
 mod query;
@@ -37,15 +39,15 @@ pub trait GenerateProtocol {
 
 pub fn generate_source(service: &Service) -> String {
     match &service.metadata.protocol[..] {
-        "json" => generate(service, JsonGenerator),
-        "ec2" => generate(service, Ec2Generator),
-        "query" => generate(service, QueryGenerator),
-        "rest-json" => generate(service, RestJsonGenerator),
+        "json" => generate(service, JsonGenerator, JsonErrorTypes),
+        "ec2" => generate(service, Ec2Generator, XmlErrorTypes),
+        "query" => generate(service, QueryGenerator, XmlErrorTypes),
+        "rest-json" => generate(service, RestJsonGenerator, JsonErrorTypes),
         protocol => panic!("Unknown protocol {}", protocol),
     }
 }
 
-fn generate<P>(service: &Service, protocol_generator: P) -> String where P: GenerateProtocol {
+fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator: E) -> String where P: GenerateProtocol,  E: GenerateErrorTypes {
     format!(
         "
         use hyper::Client;
@@ -62,7 +64,7 @@ fn generate<P>(service: &Service, protocol_generator: P) -> String where P: Gene
         client = generate_client(service, &protocol_generator),
         prelude = &protocol_generator.generate_prelude(service),
         types = generate_types(service, &protocol_generator),
-        error_types = protocol_generator.generate_error_types(service).unwrap_or("".to_string()),
+        error_types = error_type_generator.generate_error_types(service).unwrap_or("".to_string()),
     )
 }
 
@@ -145,8 +147,6 @@ where P: GenerateProtocol {
         if shape.exception() && service.typed_errors() {
             return None;
         }
-
-
 
         let mut parts = Vec::with_capacity(3);
 

@@ -524,7 +524,6 @@ mod tests {
     use std::path::Path;
 
     use super::*;
-    use error::*;
 
     #[test]
     fn parse_credentials_file_default_profile() {
