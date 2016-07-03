@@ -55,6 +55,11 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
         use request::DispatchSignedRequest;
         use region;
 
+        use std::fmt;
+        use std::error::Error;
+        use credential::{{CredentialsError, ProvideAwsCredentials}};
+        use request::HttpDispatchError;
+
         {prelude}
 
         {types}
@@ -144,7 +149,7 @@ where P: GenerateProtocol {
             return protocol_generator.generate_support_types(&type_name, shape, &service);
         }
 
-        if shape.exception() && service.typed_errors() {
+        if shape.exception() {
             return None;
         }
 

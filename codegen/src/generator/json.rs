@@ -51,12 +51,7 @@ impl GenerateProtocol for JsonGenerator {
 
     fn generate_prelude(&self, _service: &Service) -> String {
         "use serde_json;
-        use credential::ProvideAwsCredentials;
         use signature::SignedRequest;
-        use request::HttpDispatchError;
-        use credential::CredentialsError;
-        use std::error::Error;
-        use std::fmt;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;".to_string()
     }

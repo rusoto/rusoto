@@ -55,13 +55,8 @@ impl GenerateProtocol for QueryGenerator {
     fn generate_prelude(&self, _: &Service) -> String {
         "use std::collections::HashMap;
         use std::str::{FromStr, from_utf8};
-        use std::fmt;
-        use std::error::Error;
-
         use xml::EventReader;
 
-        use credential::{CredentialsError, ProvideAwsCredentials};
-        use request::HttpDispatchError;
         use param::{Params, ServiceParams};
         use signature::SignedRequest;
         use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
