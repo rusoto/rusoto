@@ -9,7 +9,7 @@ version = "0.2.3"
 
 [build-dependencies.serde_codegen]
 optional = true
-version = "=0.7.6"
+version = "=0.7.11" # 0.7.9 works, 0.7.12 overflows, 0.7.11 works
 
 [build-dependencies.syntex]
 optional = true
@@ -28,7 +28,7 @@ version = "0.0"
 
 [dependencies.serde_codegen]
 optional = true
-version = "=0.7.9"
+version = "=0.7.11"
 
 [dependencies.serde_macros]
 optional = true
