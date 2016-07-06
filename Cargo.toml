@@ -16,31 +16,31 @@ version = "0.15.2"
 [build-dependencies.rusoto_codegen]
 default-features = false
 path = "codegen"
-version = ">= 0.2.3"
+version = "= 0.2.3"
 
 [dependencies]
-chrono = "0.2.21"
-hyper = "0.8.1"
-log = "0.3.6"
-openssl = "0.7.9"
-regex = "0.1.65"
-rustc-serialize = "0.3.19"
-serde = "0.7.6"
-serde_json = "0.7.0"
-time = "0.1.35"
-url = "0.5.9"
-xml-rs = "0.1.26"
+chrono = "=0.2.21"
+hyper = "=0.8.1"
+log = "=0.3.6"
+openssl = "=0.7.9"
+regex = "=0.1.65"
+rustc-serialize = "=0.3.19"
+serde = "=0.7.9"
+serde_json = "=0.7.1"
+time = "=0.1.35"
+url = "=0.5.9"
+xml-rs = "=0.1.26"
 
 [dependencies.clippy]
 optional = true
-version = "0.0"
+version = "=0.0"
 
 [dependencies.serde_macros]
 optional = true
-version = "0.7.5"
+version = "=0.7.9"
 
 [dev-dependencies]
-env_logger = "0.3.3"
+env_logger = "=0.3.3"
 rand = "^0.3.14"
 
 [features]
