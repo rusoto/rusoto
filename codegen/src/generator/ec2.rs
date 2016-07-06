@@ -24,20 +24,16 @@ impl GenerateProtocol for Ec2Generator {
                     request.set_params(params);
                     request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let dispatch_result = self.dispatcher.dispatch(&request);
-                    if dispatch_result.is_err() {{
-                        return Err(AwsError::new(format!(\"Error dispatching HTTP request\")));
-                    }}
+                    let result = try!(self.dispatcher.dispatch(&request));
 
-                    let result = dispatch_result.unwrap();
-
-                    if result.status == 200 {{
-                        let mut reader = EventReader::from_str(&result.body);
-                        let mut stack = XmlResponse::new(reader.events().peekable());
-                        stack.next();
-                        {method_return_value}
-                    }} else {{
-                        Err(AwsError::new(format!(\"HTTP response for {operation_name}: {{}}: {{}}\", result.status, result.body)))
+                    match result.status {{
+                        200 => {{
+                            let mut reader = EventReader::from_str(&result.body);
+                            let mut stack = XmlResponse::new(reader.events().peekable());
+                            stack.next();
+                            {method_return_value}
+                        }},
+                        _ => Err({error_type}::from_body(&result.body))
                     }}
                 }}
                 ",
@@ -47,6 +43,7 @@ impl GenerateProtocol for Ec2Generator {
                 method_return_value = generate_method_return_value(operation),
                 method_signature = generate_method_signature(operation),
                 operation_name = &operation.name,
+                error_type = operation.error_type_name(),
                 api_version = service.metadata.api_version,
                 request_uri = &operation.http.request_uri,
                 serialize_input = generate_method_input_serialization(operation),
@@ -59,14 +56,13 @@ impl GenerateProtocol for Ec2Generator {
 
         use xml::EventReader;
 
-        use credential::ProvideAwsCredentials;
-        use error::AwsError;
         use param::{Params, ServiceParams};
 
         use signature::SignedRequest;
         use xml::reader::events::XmlEvent;
         use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
         use xmlutil::{characters, end_element, start_element, skip_tree};
+        use xmlerror::*;
 
         enum DeserializerNext {
             Close,
@@ -155,15 +151,17 @@ fn generate_method_return_value(operation: &Operation) -> String {
 fn generate_method_signature(operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "pub fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, AwsError>",
+            "pub fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
+            error_type = operation.error_type_name(),
         )
     } else {
         format!(
-            "pub fn {operation_name}(&self) -> Result<{output_type}, AwsError>",
+            "pub fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
             operation_name = operation.name.to_snake_case(),
+            error_type = operation.error_type_name(),
             output_type = &operation.output_shape_or("()"),
         )
     }
