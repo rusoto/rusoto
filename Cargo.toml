@@ -19,17 +19,17 @@ path = "codegen"
 version = ">= 0.2.3"
 
 [dependencies]
-chrono = "=0.2.21"
-hyper = "=0.8.1"
-log = "=0.3.6"
-openssl = "=0.7.9"
-regex = "=0.1.65"
-rustc-serialize = "=0.3.19"
+chrono = "0.2.21"
+hyper = "0.8.1"
+log = "0.3.6"
+openssl = "0.7.9"
+regex = "0.1.65"
+rustc-serialize = "0.3.19"
 serde = "=0.7.9"
 serde_json = "=0.7.1"
-time = "=0.1.35"
-url = "=0.5.9"
-xml-rs = "=0.1.26"
+time = "0.1.35"
+url = "0.5.9"
+xml-rs = "0.1.26"
 
 [dependencies.clippy]
 optional = true
@@ -40,8 +40,8 @@ optional = true
 version = "=0.7.9"
 
 [dev-dependencies]
-env_logger = "=0.3.3"
-rand = "^0.3.14"
+env_logger = "0.3.3"
+rand = "0.3.14"
 
 [features]
 all = ["acm", "cloudhsm", "cloudtrail", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "firehose", "ec2", "ecr", "ecs", "emr", "elastictranscoder", "events", "inspector", "kinesis", "kms", "logs", "machinelearning", "marketplacecommerceanalytics", "opsworks", "route53domains", "s3", "sqs", "ssm", "storagegateway", "swf", "waf", "workspaces"]
