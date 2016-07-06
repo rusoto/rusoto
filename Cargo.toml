@@ -16,7 +16,7 @@ version = "0.15.2"
 [build-dependencies.rusoto_codegen]
 default-features = false
 path = "codegen"
-version = "= 0.2.3"
+version = ">= 0.2.3"
 
 [dependencies]
 chrono = "=0.2.21"
@@ -33,7 +33,7 @@ xml-rs = "=0.1.26"
 
 [dependencies.clippy]
 optional = true
-version = "=0.0"
+version = "0.0"
 
 [dependencies.serde_macros]
 optional = true
