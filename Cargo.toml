@@ -25,7 +25,7 @@ log = "0.3.6"
 openssl = "0.7.9"
 regex = "0.1.65"
 rustc-serialize = "0.3.19"
-serde = "=0.7.9"
+serde = "=0.7.11"
 serde_json = "=0.7.1"
 time = "0.1.35"
 url = "0.5.9"
@@ -37,7 +37,7 @@ version = "0.0"
 
 [dependencies.serde_macros]
 optional = true
-version = "=0.7.9"
+version = "=0.7.11"
 
 [dev-dependencies]
 env_logger = "0.3.3"
