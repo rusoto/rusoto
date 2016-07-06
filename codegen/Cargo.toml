@@ -13,7 +13,7 @@ version = "=0.7.11" # 0.7.9 works, 0.7.12 overflows, 0.7.11 works
 
 [build-dependencies.syntex]
 optional = true
-version = "=0.32.0"
+version = "=0.37.0"
 
 [dependencies]
 Inflector = "0.2.0"
