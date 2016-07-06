@@ -20,7 +20,7 @@ Inflector = "0.2.0"
 lazy_static = "0.1.16"
 regex = "0.1.65"
 serde = "=0.7.11"
-serde_json = "=0.7.1"
+serde_json = "=0.7.4"
 
 [dependencies.clippy]
 optional = true
