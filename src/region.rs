@@ -13,6 +13,7 @@ use std::fmt::{Display, Error as FmtError, Formatter};
 pub enum Region {
     ApNortheast1,
     ApNortheast2,
+    ApSouth1,
     ApSoutheast1,
     ApSoutheast2,
     EuCentral1,
@@ -34,6 +35,7 @@ impl Display for Region {
         let region_str = match *self {
             Region::ApNortheast1 => "ap-northeast-1",
             Region::ApNortheast2 => "ap-northeast-2",
+            Region::ApSouth1 => "ap-south-1",
             Region::ApSoutheast1 => "ap-southeast-1",
             Region::ApSoutheast2 => "ap-southeast-2",
             Region::EuCentral1 => "eu-central-1",
@@ -55,6 +57,7 @@ impl FromStr for Region {
         match s {
             "ap-northeast-1" => Ok(Region::ApNortheast1),
             "ap-northeast-2" => Ok(Region::ApNortheast2),
+            "ap-south-1" => Ok(Region::ApSouth1),
             "ap-southeast-1" => Ok(Region::ApSoutheast1),
             "ap-southeast-2" => Ok(Region::ApSoutheast2),
             "eu-central-1" => Ok(Region::EuCentral1),
@@ -101,7 +104,8 @@ mod tests {
             "Not a valid AWS region: foo".to_owned()
         );
         assert_eq!("ap-northeast-1".parse(), Ok(Region::ApNortheast1));
-        assert_eq!("ap-northeast-2".parse(), Ok(Region::ApNortheast2));        
+        assert_eq!("ap-northeast-2".parse(), Ok(Region::ApNortheast2));
+        assert_eq!("ap-south-1".parse(), Ok(Region::ApSouth1));
         assert_eq!("ap-southeast-1".parse(), Ok(Region::ApSoutheast1));
         assert_eq!("ap-southeast-2".parse(), Ok(Region::ApSoutheast2));
         assert_eq!("eu-central-1".parse(), Ok(Region::EuCentral1));
@@ -115,7 +119,8 @@ mod tests {
     #[test]
     fn region_display() {
         assert_eq!(Region::ApNortheast1.to_string(), "ap-northeast-1".to_owned());
-        assert_eq!(Region::ApNortheast2.to_string(), "ap-northeast-2".to_owned());        
+        assert_eq!(Region::ApNortheast2.to_string(), "ap-northeast-2".to_owned());
+        assert_eq!(Region::ApSouth1.to_string(), "ap-south-1".to_owned());
         assert_eq!(Region::ApSoutheast1.to_string(), "ap-southeast-1".to_owned());
         assert_eq!(Region::ApSoutheast2.to_string(), "ap-southeast-2".to_owned());
         assert_eq!(Region::EuCentral1.to_string(), "eu-central-1".to_owned());
