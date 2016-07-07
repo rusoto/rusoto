@@ -11,10 +11,6 @@ version = "0.2.2"
 optional = true
 version = "0.7.6"
 
-[build-dependencies.syntex]
-optional = true
-version = "0.32.0"
-
 [dependencies]
 Inflector = "0.2.0"
 lazy_static = "0.1.16"
