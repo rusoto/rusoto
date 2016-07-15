@@ -165,14 +165,14 @@ fn generate_method_return_value(operation: &Operation) -> String {
 fn generate_method_signature(operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "pub fn {operation_name}(&mut self, input: &{input_type}) -> Result<{output_type}, AwsError>",
+            "pub fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, AwsError>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
         )
     } else {
         format!(
-            "pub fn {operation_name}(&mut self) -> Result<{output_type}, AwsError>",
+            "pub fn {operation_name}(&self) -> Result<{output_type}, AwsError>",
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
         )
