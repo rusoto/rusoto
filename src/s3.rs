@@ -11210,7 +11210,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
             _ => {
                 println!("Error: Status code was {}", status);
                 let mut body = String::new();
-                result.read_to_string(&mut body).unwrap();
+                try!(result.read_to_string(&mut body));
                 println!("Error response body: {}", body);
                 Err(AwsError::new("error: didn't get a 200."))
             }
@@ -11275,7 +11275,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
             _ => {
                 println!("Error: Status code was {}", status);
                 let mut body = String::new();
-                result.read_to_string(&mut body).unwrap();
+                try!(result.read_to_string(&mut body));
                 println!("Error response body: {}", body);
 
                 Err(AwsError::new("error uploading object to S3"))
@@ -11780,7 +11780,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
             }
             _ => {
                 let mut body = String::new();
-                result.read_to_string(&mut body).unwrap();
+                try!(result.read_to_string(&mut body));
                 Err(AwsError::new("error in complete_multipart_upload"))
             }
         }
@@ -11849,7 +11849,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
             }
             _ => {
                 let mut body = String::new();
-                result.read_to_string(&mut body).unwrap();
+                try!(result.read_to_string(&mut body));
                 println!("resposne body: {}", body);
                 Err(AwsError::new(format!("delete bucket error, status was {}", status)))
             }
@@ -11875,7 +11875,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         if delete_marker_string.is_empty() {
             delete_marker = false;
         } else {
-            delete_marker = bool::from_str(&delete_marker_string).unwrap();
+            delete_marker = try!(bool::from_str(&delete_marker_string));
         }
         let accept_ranges = try!(S3Client::<P>::get_value_for_header("accept-ranges".to_string(), response));
         let last_modified = try!(S3Client::<P>::get_value_for_header("Last-Modified".to_string(), response));
@@ -11892,14 +11892,14 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let expires = try!(S3Client::<P>::get_value_for_header("Expires".to_string(), response));
         let cache_control = try!(S3Client::<P>::get_value_for_header("Cache-Control".to_string(), response));
         let content_length_string = try!(S3Client::<P>::get_value_for_header("Content-Length".to_string(), response));
-        let content_length = content_length_string.parse::<i32>().unwrap();
+        let content_length = try!(content_length_string.parse::<i32>());
         let expiration = try!(S3Client::<P>::get_value_for_header("x-amz-expiration".to_string(), response));
         let missing_meta_string = try!(S3Client::<P>::get_value_for_header("x-amz-missing-meta".to_string(), response));
         let missing_meta : i32;
         if missing_meta_string.is_empty() {
             missing_meta = 0;
         } else {
-            missing_meta = missing_meta_string.parse::<i32>().unwrap();
+            missing_meta = try!(missing_meta_string.parse::<i32>());
         }
         let restore = try!(S3Client::<P>::get_value_for_header("x-amz-restore".to_string(), response));
         let sse_customer_algorithm = try!(S3Client::<P>::get_value_for_header("x-amz-server-side-encryption-customer-algorithm".to_string(), response));
@@ -11909,7 +11909,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
         let e_tag = try!(S3Client::<P>::get_value_for_header("ETag".to_string(), response));
         let sse_customer_key_md5 = try!(S3Client::<P>::get_value_for_header("x-amz-server-side-encryption-customer-key-MD5".to_string(), response));
         let mut body : Vec<u8> = Vec::new();
-        response.read_to_end(&mut body).unwrap();
+        try!(response.read_to_end(&mut body));
         // make the object to return
         let s3_object = GetObjectOutput {
             delete_marker: delete_marker,
@@ -11968,7 +11968,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
             _ => {
                 println!("Error: Status code was {}", status);
                 let mut body = String::new();
-                result.read_to_string(&mut body).unwrap();
+                try!(result.read_to_string(&mut body));
                 println!("Error response body: {}", body);
                 Err(AwsError::new("error in get_object"))
             }
@@ -12253,7 +12253,7 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
             }
             _ => {
                 let mut body = String::new();
-                result.read_to_string(&mut body).unwrap();
+                try!(result.read_to_string(&mut body));
                 println!("Error response body: {}", body);
 
                 Err(AwsError::new("error in list_parts"))
