@@ -11238,6 +11238,10 @@ impl<P> S3Client<P> where P: ProvideAwsCredentials {
             }
         }
 
+        if let Some(ref cache_control) = input.cache_control {
+            request.add_header("Cache-Control", cache_control);
+        }
+
         if let Some(ref md5) = input.content_md5 {
             request.add_header("Content-MD5", md5);
         }
