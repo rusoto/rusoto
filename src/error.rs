@@ -3,6 +3,8 @@
 use std::fmt;
 use std::error::Error;
 use std::io::Error as IoError;
+use std::str::ParseBoolError;
+use std::num::ParseIntError;
 
 use chrono::format::ParseError as ChronoParseError;
 use serde_json::{Value, from_str};
@@ -48,6 +50,18 @@ impl AwsError {
 impl Error for AwsError {
     fn description(&self) -> &str {
         &self.message
+    }
+}
+
+impl From<ParseBoolError> for AwsError {
+    fn from(err: ParseBoolError) -> AwsError {
+        AwsError::new(format!("{}", err))
+    }
+}
+
+impl From<ParseIntError> for AwsError {
+    fn from(err: ParseIntError) -> AwsError {
+        AwsError::new(format!("{}", err))
     }
 }
 
