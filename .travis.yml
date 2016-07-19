@@ -16,6 +16,7 @@ rust:
   # and the first stable one (this should be bumped as the minimum Rust version
   # required changes)
   - 1.8.0
+  - 1.9.0
   - beta
   - nightly
 os:
