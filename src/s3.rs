@@ -11223,6 +11223,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             }
             _ => {
                 println!("Error: Status code was {}", status);
+                println!("Error response body: {}", result.body);
                 Err(AwsError::new("error: didn't get a 200."))
             }
         }
@@ -11288,9 +11289,8 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(put_result)
             }
             _ => {
-                let mut body = result.body;
-                println!("Error response body: {}", body);
                 println!("Error: Status code was {}", status);
+                println!("Error response body: {}", result.body);
                 Err(AwsError::new("error uploading object to S3"))
             }
         }
@@ -11790,8 +11790,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(try!(CompleteMultipartUploadOutputParser::parse_xml("CompleteMultipartUploadResult", &mut stack)))
             }
             _ => {
-                let mut body = result.body;
-                println!("Error response body: {}", body);
+                println!("Error response body: {}", result.body);
                 Err(AwsError::new("error in complete_multipart_upload"))
             }
         }
@@ -11859,8 +11858,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(())
             }
             _ => {
-                let mut body = result.body;
-                println!("Error response body: {}", body);
+                println!("Error response body: {}", result.body);
                 Err(AwsError::new(format!("delete bucket error, status was {}", status)))
             }
         }
@@ -11973,9 +11971,8 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(s3_object)
             }
             _ => {
-                let mut body = result.body;
-                println!("Error response body: {}", body);
                 println!("Error: Status code was {}", status);
+                println!("Error response body: {}", result.body);
                 Err(AwsError::new("error in get_object"))
             }
         }
@@ -12258,8 +12255,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(try!(ListPartsOutputParser::parse_xml("ListPartsResult", &mut stack)))
             }
             _ => {
-                let mut body = result.body;
-                println!("Error response body: {}", body);
+                println!("Error response body: {}", result.body);
                 Err(AwsError::new("error in list_parts"))
             }
         }
