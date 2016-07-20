@@ -11223,9 +11223,6 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             }
             _ => {
                 println!("Error: Status code was {}", status);
-                let mut body = String::new();
-                try!(result.read_to_string(&mut body));
-                println!("Error response body: {}", body);
                 Err(AwsError::new("error: didn't get a 200."))
             }
         }
@@ -11292,9 +11289,6 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             }
             _ => {
                 println!("Error: Status code was {}", status);
-                let mut body = String::new();
-                try!(result.read_to_string(&mut body));
-                println!("Error response body: {}", body);
                 Err(AwsError::new("error uploading object to S3"))
             }
         }
@@ -11794,8 +11788,6 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(try!(CompleteMultipartUploadOutputParser::parse_xml("CompleteMultipartUploadResult", &mut stack)))
             }
             _ => {
-                let mut body = String::new();
-                try!(result.read_to_string(&mut body));
                 Err(AwsError::new("error in complete_multipart_upload"))
             }
         }
@@ -11863,9 +11855,6 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(())
             }
             _ => {
-                let mut body = String::new();
-                try!(result.read_to_string(&mut body));
-                println!("response body: {}", body);
                 Err(AwsError::new(format!("delete bucket error, status was {}", status)))
             }
         }
@@ -11922,7 +11911,6 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         let version_id = try!(S3Client::<P,D>::get_value_for_header("x-amz-version-id".to_string(), response));
         let e_tag = try!(S3Client::<P,D>::get_value_for_header("ETag".to_string(), response));
         let sse_customer_key_md5 = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption-customer-key-MD5".to_string(), response));
-        try!(response.read_to_end(&mut body));
         // make the object to return
         let s3_object = GetObjectOutput {
             delete_marker: delete_marker,
@@ -11980,9 +11968,6 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             }
             _ => {
                 println!("Error: Status code was {}", status);
-                let mut body = String::new();
-                try!(result.read_to_string(&mut body));
-                println!("Error response body: {}", body);
                 Err(AwsError::new("error in get_object"))
             }
         }
@@ -12265,9 +12250,6 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(try!(ListPartsOutputParser::parse_xml("ListPartsResult", &mut stack)))
             }
             _ => {
-                let mut body = String::new();
-                try!(result.read_to_string(&mut body));
-                println!("Error response body: {}", body);
                 Err(AwsError::new("error in list_parts"))
             }
         }
