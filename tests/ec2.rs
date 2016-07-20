@@ -9,7 +9,7 @@ use std::error::Error;
 #[test]
 fn main() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let mut ec2 = Ec2Client::new(credentials, Region::UsEast1);
+    let ec2 = Ec2Client::new(credentials, Region::UsEast1);
 
     let mut req = DescribeInstancesRequest::default();
     req.instance_ids = Some(vec!["i-00000000".into(), "i-00000001".into()]);

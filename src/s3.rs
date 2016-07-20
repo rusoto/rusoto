@@ -11028,7 +11028,7 @@ pub struct S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
 
 impl<P> S3Client<P, Client> where P: ProvideAwsCredentials {
     pub fn new(credentials_provider: P, region: region::Region) -> Self {
-        let mut client = Client::new();                
+        let mut client = Client::new();
         client.set_redirect_policy(RedirectPolicy::FollowNone);
         S3Client::with_request_dispatcher(client, credentials_provider, region)
     }
@@ -11223,7 +11223,9 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             }
             _ => {
                 println!("Error: Status code was {}", status);
-                println!("Error response body: {}", result.body);
+                let mut body = String::new();
+                try!(result.read_to_string(&mut body));
+                println!("Error response body: {}", body);
                 Err(AwsError::new("error: didn't get a 200."))
             }
         }
@@ -11248,6 +11250,10 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 }
                 request.add_header("x-amz-server-side-encryption", "aws:kms");
             }
+        }
+
+        if let Some(ref cache_control) = input.cache_control {
+            request.add_header("Cache-Control", cache_control);
         }
 
         if let Some(ref md5) = input.content_md5 {
@@ -11286,8 +11292,9 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             }
             _ => {
                 println!("Error: Status code was {}", status);
-                println!("Error response body: {}", result.body);
-
+                let mut body = String::new();
+                try!(result.read_to_string(&mut body));
+                println!("Error response body: {}", body);
                 Err(AwsError::new("error uploading object to S3"))
             }
         }
@@ -11787,6 +11794,8 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(try!(CompleteMultipartUploadOutputParser::parse_xml("CompleteMultipartUploadResult", &mut stack)))
             }
             _ => {
+                let mut body = String::new();
+                try!(result.read_to_string(&mut body));
                 Err(AwsError::new("error in complete_multipart_upload"))
             }
         }
@@ -11854,7 +11863,9 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(())
             }
             _ => {
-                println!("resposne body: {}", result.body);
+                let mut body = String::new();
+                try!(result.read_to_string(&mut body));
+                println!("response body: {}", body);
                 Err(AwsError::new(format!("delete bucket error, status was {}", status)))
             }
         }
@@ -11878,7 +11889,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         if delete_marker_string.is_empty() {
             delete_marker = false;
         } else {
-            delete_marker = bool::from_str(&delete_marker_string).unwrap();
+            delete_marker = try!(bool::from_str(&delete_marker_string));
         }
         let accept_ranges = try!(S3Client::<P,D>::get_value_for_header("accept-ranges".to_string(), response));
         let last_modified = try!(S3Client::<P,D>::get_value_for_header("Last-Modified".to_string(), response));
@@ -11895,14 +11906,14 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         let expires = try!(S3Client::<P,D>::get_value_for_header("Expires".to_string(), response));
         let cache_control = try!(S3Client::<P,D>::get_value_for_header("Cache-Control".to_string(), response));
         let content_length_string = try!(S3Client::<P,D>::get_value_for_header("Content-Length".to_string(), response));
-        let content_length = content_length_string.parse::<i32>().unwrap();
+        let content_length = try!(content_length_string.parse::<i32>());
         let expiration = try!(S3Client::<P,D>::get_value_for_header("x-amz-expiration".to_string(), response));
         let missing_meta_string = try!(S3Client::<P,D>::get_value_for_header("x-amz-missing-meta".to_string(), response));
         let missing_meta : i32;
         if missing_meta_string.is_empty() {
             missing_meta = 0;
         } else {
-            missing_meta = missing_meta_string.parse::<i32>().unwrap();
+            missing_meta = try!(missing_meta_string.parse::<i32>());
         }
         let restore = try!(S3Client::<P,D>::get_value_for_header("x-amz-restore".to_string(), response));
         let sse_customer_algorithm = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption-customer-algorithm".to_string(), response));
@@ -11911,7 +11922,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         let version_id = try!(S3Client::<P,D>::get_value_for_header("x-amz-version-id".to_string(), response));
         let e_tag = try!(S3Client::<P,D>::get_value_for_header("ETag".to_string(), response));
         let sse_customer_key_md5 = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption-customer-key-MD5".to_string(), response));
-
+        try!(response.read_to_end(&mut body));
         // make the object to return
         let s3_object = GetObjectOutput {
             delete_marker: delete_marker,
@@ -11969,7 +11980,9 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             }
             _ => {
                 println!("Error: Status code was {}", status);
-                println!("Error response body: {}", result.body);
+                let mut body = String::new();
+                try!(result.read_to_string(&mut body));
+                println!("Error response body: {}", body);
                 Err(AwsError::new("error in get_object"))
             }
         }
@@ -12252,8 +12265,9 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(try!(ListPartsOutputParser::parse_xml("ListPartsResult", &mut stack)))
             }
             _ => {
-                println!("Error response body: {}", result.body);
-
+                let mut body = String::new();
+                try!(result.read_to_string(&mut body));
+                println!("Error response body: {}", body);
                 Err(AwsError::new("error in list_parts"))
             }
         }
@@ -12926,7 +12940,7 @@ mod tests {
         let mut file = BufReader::new(file);
         let mut raw = String::new();
         file.read_to_string(&mut raw).unwrap();
-        let mut my_parser  = EventReader::from_str(&raw);        
+        let mut my_parser  = EventReader::from_str(&raw);
         let my_stack = my_parser.events().peekable();
         let mut reader = XmlResponse::new(my_stack);
         reader.next(); // xml start node
@@ -12969,7 +12983,7 @@ mod tests {
         let mut file = BufReader::new(file);
         let mut raw = String::new();
         file.read_to_string(&mut raw).unwrap();
-        let mut my_parser  = EventReader::from_str(&raw);        
+        let mut my_parser  = EventReader::from_str(&raw);
         let my_stack = my_parser.events().peekable();
         let mut reader = XmlResponse::new(my_stack);
         reader.next(); // xml start node
