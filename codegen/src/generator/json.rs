@@ -2,7 +2,7 @@ use inflector::Inflector;
 
 use std::collections::HashMap;
 
-use botocore::{Operation, Service};
+use botocore::{Operation, Service, Shape};
 use super::GenerateProtocol;
 
 pub struct JsonGenerator;
@@ -95,6 +95,14 @@ impl GenerateProtocol for JsonGenerator {
 
     fn timestamp_type(&self) -> &'static str {
         "f64"
+    }
+
+    fn generate_additional_annotations(&self, _service: &Service, _shape: &Shape, type_name: &str) -> Vec<String> {
+        if type_name == "ListAttributeValue" || type_name == "MapAttributeValue" {
+            vec![format!("#[serde(bound=\"\")]")]
+        } else {
+            Vec::<String>::with_capacity(0)
+        }
     }
 
 }
