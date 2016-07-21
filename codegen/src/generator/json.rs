@@ -2,7 +2,7 @@ use inflector::Inflector;
 
 use std::collections::HashMap;
 
-use botocore::{Operation, Service, Shape};
+use botocore::{Operation, Service};
 use super::GenerateProtocol;
 
 pub struct JsonGenerator;
@@ -97,9 +97,15 @@ impl GenerateProtocol for JsonGenerator {
         "f64"
     }
 
-    fn generate_additional_annotations(&self, _service: &Service, _shape: &Shape, type_name: &str) -> Vec<String> {
-        if type_name == "ListAttributeValue" || type_name == "MapAttributeValue" {
-            vec![format!("#[serde(bound=\"\")]")]
+    fn generate_additional_annotations(&self, service: &Service, shape_name: &str, type_name: &str) -> Vec<String> {
+        let service_name = service.service_type_name();
+
+        if (service_name == "DynamoDb" || service_name == "DynamoDbStreams") &&
+           (type_name == "ListAttributeValue" || type_name == "MapAttributeValue") {
+                vec![format!("#[serde(bound=\"\")]")]
+        } else if service.service_type_name() == "Emr" &&
+            shape_name == "Configuration" && type_name == "ConfigurationList" {
+                vec![format!("#[serde(bound=\"\")]")]
         } else {
             Vec::<String>::with_capacity(0)
         }

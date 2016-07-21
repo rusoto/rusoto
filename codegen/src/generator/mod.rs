@@ -28,7 +28,7 @@ pub trait GenerateProtocol {
         None
     }
 
-    fn generate_additional_annotations(&self, _service: &Service, _shape: &Shape, _type_name: &str) -> Vec<String> {
+    fn generate_additional_annotations(&self, _service: &Service, _shape_name: &str, _type_name: &str) -> Vec<String> {
         Vec::<String>::with_capacity(0)
     }
 
@@ -179,7 +179,7 @@ fn generate_struct<P>(
             ",
             attributes = protocol_generator.generate_struct_attributes(),
             name = name,
-            struct_fields = generate_struct_fields(service, shape, protocol_generator),
+            struct_fields = generate_struct_fields(service, shape, name, protocol_generator),
         )
     }
 
@@ -194,7 +194,7 @@ pub fn generate_field_name(member_name: &str) -> String {
     }
 }
 
-fn generate_struct_fields<P>(service: &Service, shape: &Shape, protocol_generator: &P) -> String where P: GenerateProtocol {
+fn generate_struct_fields<P>(service: &Service, shape: &Shape, shape_name: &str, protocol_generator: &P) -> String where P: GenerateProtocol {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
         let mut lines: Vec<String> = Vec::new();
         let name = generate_field_name(member_name);
@@ -208,7 +208,7 @@ fn generate_struct_fields<P>(service: &Service, shape: &Shape, protocol_generato
         lines.push("#[allow(unused_attributes)]".to_owned());
         lines.push(format!("#[serde(rename=\"{}\")]", member_name));
 
-        lines.append(&mut protocol_generator.generate_additional_annotations(service, shape, &type_name));
+        lines.append(&mut protocol_generator.generate_additional_annotations(service, shape_name, &type_name));
 
         if let Some(shape_type) = service.shape_type_for_member(member) {
             if shape_type == "blob" {
