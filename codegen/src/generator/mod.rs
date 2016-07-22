@@ -26,10 +26,6 @@ pub trait GenerateProtocol {
         None
     }
 
-    fn generate_error_types(&self, _service: &Service) -> Option<String> {
-        None
-    }
-
     fn generate_additional_annotations(&self, _service: &Service, _shape_name: &str, _type_name: &str) -> Vec<String> {
         Vec::<String>::with_capacity(0)
     }
