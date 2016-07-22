@@ -98,11 +98,9 @@ impl GenerateProtocol for JsonGenerator {
     }
 
     fn generate_additional_annotations(&self, service: &Service, shape_name: &str, type_name: &str) -> Vec<String> {
-        let service_name = service.service_type_name();
-
         // serde can no longer handle recursively defined types without help
         // annotate them to avoid compiler overflows
-        match service_name {
+        match service.service_type_name() {
             "DynamoDb" | "DynamoDbStreams" => {
                 if type_name == "ListAttributeValue" || type_name == "MapAttributeValue" {
                     return vec![format!("#[serde(bound=\"\")]")];
