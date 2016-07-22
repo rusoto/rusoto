@@ -17,12 +17,11 @@ On OS X and Windows, you may need to install the openssl runtime and headers to 
 Rusoto is available on [crates.io](https://crates.io/crates/rusoto).
 To use Rusoto in your Rust program built with Cargo, add it as a dependency and enable the Cargo features for any AWS service you want to use.
 
-For example:
+For example, to include only S3 and SQS:
 
 ``` toml
-[dependencies.rusoto]
-features = ["dynamodb", "s3"]
-version = "x.y.z"
+[dependencies]
+rusoto = {version = "0.15.2", features = ["s3", "sqs"]}
 ```
 
 You can use the Cargo feature "all" to build Rusoto with support for every available service.
