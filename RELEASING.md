@@ -11,14 +11,21 @@ For pre-1.0.0:
 
 Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 
+### Codegen crate
+
+The `rusoto_codegen`crate is published separately from the main `rusoto` crate, and must be published first since the main crate depends on it.  
+
+The release procedures for the crates are identical as described below, with the caveat that when the `rusoto` crate is published, its dependency on `rusoto_codegen` should be updated to reflect the newly published version.
+
 ### Git tags
 
-To release version 0.4.0 of Rusoto:
+To release version 0.4.0:
 
 1. On master, bump the version in Cargo.toml to the new version.  In this example, we'll set it to 0.4.0.
-2. Commit to master.
-3. Use an annotated tag on the commit with the version bump: `git tag -a v0.4.0 -m "0.4.0 release."`
-4. Push changes, including tags, to Github: `git push --tags origin`.
+2. If publishing the `rusoto` crate, also update Cargo.toml to reflect the new version of the `rusoto_codegen` crate that was just published.
+3. Commit to master.
+4. Use an annotated tag on the commit with the version bump: `git tag -a v0.4.0 -m "0.4.0 release."`
+5. Push changes, including tags, to Github: `git push --tags origin`.
 
 ### Crate publishing
 
