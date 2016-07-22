@@ -97,6 +97,26 @@ impl GenerateProtocol for JsonGenerator {
         "f64"
     }
 
+    fn generate_additional_annotations(&self, service: &Service, shape_name: &str, type_name: &str) -> Vec<String> {
+        // serde can no longer handle recursively defined types without help
+        // annotate them to avoid compiler overflows
+        match service.service_type_name() {
+            "DynamoDb" | "DynamoDbStreams" => {
+                if type_name == "ListAttributeValue" || type_name == "MapAttributeValue" {
+                    return vec![format!("#[serde(bound=\"\")]")];
+                }
+            },
+            "Emr" => {
+                if shape_name == "Configuration" && type_name == "ConfigurationList" {
+                    return vec![format!("#[serde(bound=\"\")]")];
+                }
+            },
+            _ => {}
+        }
+
+        Vec::<String>::with_capacity(0)
+    }
+
 }
 
 fn generate_endpoint_modification(service: &Service) -> Option<String> {

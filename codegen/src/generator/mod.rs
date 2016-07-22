@@ -28,6 +28,10 @@ pub trait GenerateProtocol {
         None
     }
 
+    fn generate_additional_annotations(&self, _service: &Service, _shape_name: &str, _type_name: &str) -> Vec<String> {
+        Vec::<String>::with_capacity(0)
+    }
+
     fn timestamp_type(&self) -> &'static str;
 }
 
@@ -120,7 +124,7 @@ where P: GenerateProtocol {
         let type_name = &capitalize_first(name.to_string());
 
         if type_name == "String" {
-            return protocol_generator.generate_support_types(type_name, shape, &service);
+            return protocol_generator.generate_support_types(&type_name, shape, &service);
         }
 
         if shape.exception() && service.typed_errors() {
@@ -175,7 +179,7 @@ fn generate_struct<P>(
             ",
             attributes = protocol_generator.generate_struct_attributes(),
             name = name,
-            struct_fields = generate_struct_fields(service, shape),
+            struct_fields = generate_struct_fields(service, shape, name, protocol_generator),
         )
     }
 
@@ -190,17 +194,21 @@ pub fn generate_field_name(member_name: &str) -> String {
     }
 }
 
-fn generate_struct_fields(service: &Service, shape: &Shape) -> String {
+fn generate_struct_fields<P>(service: &Service, shape: &Shape, shape_name: &str, protocol_generator: &P) -> String where P: GenerateProtocol {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
-        let mut lines = Vec::with_capacity(4);
+        let mut lines: Vec<String> = Vec::new();
         let name = generate_field_name(member_name);
 
         if let Some(ref docs) = member.documentation {
             lines.push(format!("#[doc=\"{}\"]", docs.replace("\\","\\\\").replace("\"", "\\\"")));
         }
 
+        let type_name = capitalize_first(member.shape.to_string());
+
         lines.push("#[allow(unused_attributes)]".to_owned());
         lines.push(format!("#[serde(rename=\"{}\")]", member_name));
+
+        lines.append(&mut protocol_generator.generate_additional_annotations(service, shape_name, &type_name));
 
         if let Some(shape_type) = service.shape_type_for_member(member) {
             if shape_type == "blob" {
@@ -216,7 +224,6 @@ fn generate_struct_fields(service: &Service, shape: &Shape) -> String {
             }
         }
 
-        let type_name = capitalize_first(member.shape.to_string());
 
         if shape.required(member_name) {
             lines.push(format!("pub {}: {},",  name, type_name));
