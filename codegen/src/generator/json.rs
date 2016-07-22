@@ -100,15 +100,23 @@ impl GenerateProtocol for JsonGenerator {
     fn generate_additional_annotations(&self, service: &Service, shape_name: &str, type_name: &str) -> Vec<String> {
         let service_name = service.service_type_name();
 
-        if (service_name == "DynamoDb" || service_name == "DynamoDbStreams") &&
-           (type_name == "ListAttributeValue" || type_name == "MapAttributeValue") {
-                vec![format!("#[serde(bound=\"\")]")]
-        } else if service.service_type_name() == "Emr" &&
-            shape_name == "Configuration" && type_name == "ConfigurationList" {
-                vec![format!("#[serde(bound=\"\")]")]
-        } else {
-            Vec::<String>::with_capacity(0)
+        // serde can no longer handle recursively defined types without help
+        // annotate them to avoid compiler overflows
+        match service_name {
+            "DynamoDb" | "DynamoDbStreams" => {
+                if type_name == "ListAttributeValue" || type_name == "MapAttributeValue" {
+                    return vec![format!("#[serde(bound=\"\")]")];
+                }
+            },
+            "Emr" => {
+                if shape_name == "Configuration" && type_name == "ConfigurationList" {
+                    return vec![format!("#[serde(bound=\"\")]")];
+                }
+            },
+            _ => {}
         }
+
+        Vec::<String>::with_capacity(0)
     }
 
 }
