@@ -259,7 +259,11 @@ fn generate_struct_fields<P>(service: &Service, shape: &Shape, shape_name: &str,
 
 impl Operation {
     pub fn error_type_name(&self) -> String {
-        format!("{}Error", self.name)
+        match &self.name[..] {
+            // EC2 has a different struct type called CancelSpotFleetRequestsError
+            "CancelSpotFleetRequests" => "CancelSpotFleetRequestsErrorType".to_owned(),
+            _ => format!("{}Error", self.name)
+        }
     }
 }
 
