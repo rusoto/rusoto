@@ -11,11 +11,12 @@ use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
 
+use crypto::digest::Digest;
+use crypto::hmac::Hmac;
+use crypto::mac::Mac;
+use crypto::sha2::Sha256;
 use hyper::client::Response;
 use hyper::status::StatusCode;
-use openssl::crypto::hash::Type::SHA256;
-use openssl::crypto::hash::hash;
-use openssl::crypto::hmac::hmac;
 use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
@@ -191,9 +192,9 @@ impl <'a> SignedRequest <'a> {
                     self.canonical_query_string,
                     canonical_headers,
                     signed_headers,
-                    &to_hexdigest_from_string(""));
+                    &to_hexdigest(""));
                 self.remove_header("x-amz-content-sha256");
-                self.add_header("x-amz-content-sha256", &to_hexdigest_from_string(""));
+                self.add_header("x-amz-content-sha256", &to_hexdigest(""));
             }
             Some(payload) => {
                 // This is hashing the payload twice, booo:
@@ -203,9 +204,9 @@ impl <'a> SignedRequest <'a> {
                     self.canonical_query_string,
                     canonical_headers,
                     signed_headers,
-                    &to_hexdigest_from_bytes(payload));
+                    &to_hexdigest(payload));
                 self.remove_header("x-amz-content-sha256");
-                self.add_header("x-amz-content-sha256", &to_hexdigest_from_bytes(payload));
+                self.add_header("x-amz-content-sha256", &to_hexdigest(payload));
                 self.remove_header("content-length");
                 self.add_header("content-length", &format!("{}", payload.len()));
             }
@@ -220,7 +221,7 @@ impl <'a> SignedRequest <'a> {
         self.add_header("content-type", &ct);
 
         // use the hashed canonical request to build the string to sign
-        let hashed_canonical_request = to_hexdigest_from_string(&canonical_request);
+        let hashed_canonical_request = to_hexdigest(&canonical_request);
         let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), self.region, &self.service);
         let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
 
@@ -254,15 +255,21 @@ impl <'a> SignedRequest <'a> {
     }
 }
 
+fn hmac<D: Digest>(d: D, key: &[u8], data: &[u8]) -> Vec<u8> {
+    let mut hmac = Hmac::new(d, key);
+    hmac.input(data);
+    hmac.result().code().iter().map(|b| *b).collect::<Vec<u8>>()
+}
+
 fn signature(string_to_sign: &str, signing_key: Vec<u8>) -> String {
-    hmac(SHA256, &signing_key, string_to_sign.as_bytes()).to_hex().to_string()
+    hmac(Sha256::new(), &signing_key, string_to_sign.as_bytes()).to_hex().to_string()
 }
 
 fn signing_key(secret: &str, date: Tm, region: &str, service: &str) -> Vec<u8> {
-    let k_date = hmac(SHA256, format!("AWS4{}", secret).as_bytes(), date.strftime("%Y%m%d").unwrap().to_string().as_bytes());
-    let k_region = hmac(SHA256, &k_date, region.as_bytes());
-    let k_service = hmac(SHA256, &k_region, service.as_bytes());
-    hmac(SHA256, &k_service, b"aws4_request")
+    let k_date = hmac(Sha256::new(), format!("AWS4{}", secret).as_bytes(), date.strftime("%Y%m%d").unwrap().to_string().as_bytes());
+    let k_region = hmac(Sha256::new(), &k_date, region.as_bytes());
+    let k_service = hmac(Sha256::new(), &k_region, service.as_bytes());
+    hmac(Sha256::new(), &k_service, b"aws4_request")
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
@@ -362,15 +369,10 @@ fn byte_serialize(input: &str, output: &mut String) {
     }
 }
 
-// TODO: consolidate these functions
-fn to_hexdigest_from_string(val: &str) -> String {
-    let h = hash(SHA256, val.as_bytes());
-    h.to_hex().to_string()
-}
-
-fn to_hexdigest_from_bytes(val: &[u8]) -> String {
-    let h = hash(SHA256, val);
-    h.to_hex().to_string()
+fn to_hexdigest<S: AsRef<[u8]>>(val: S) -> String {
+    let mut hasher = Sha256::new();
+    hasher.input(val.as_ref());
+    hasher.result_str()
 }
 
 fn build_hostname(service: &str, region: Region) -> String {

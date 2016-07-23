@@ -11,9 +11,9 @@
 //! A high level overview is available in `README.md` at https://github.com/rusoto/rusoto.
 
 extern crate chrono;
+extern crate crypto;
 extern crate hyper;
 #[macro_use] extern crate log;
-extern crate openssl;
 extern crate regex;
 extern crate rustc_serialize;
 extern crate serde;
