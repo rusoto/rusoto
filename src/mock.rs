@@ -1,11 +1,9 @@
 //! Mock request dispatcher and credentials for unit testing services
-
-use std::fs::File;
-use std::io::Read;
-
 use super::{DispatchSignedRequest, HttpResponse, HttpDispatchError, SignedRequest};
 use super::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
 use chrono::{Duration, UTC};
+use std::fs::File;
+use std::io::Read;
 
 const ONE_DAY: i64 = 86400;
 
@@ -46,7 +44,6 @@ impl MockRequestDispatcher {
 		self.mock_response.headers.insert(key, value);
 		self
 	}
-
 }
 
 impl DispatchSignedRequest for MockRequestDispatcher {

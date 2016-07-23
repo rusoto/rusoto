@@ -108,7 +108,7 @@ impl DispatchSignedRequest for Client {
                     .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
             });
 
-            debug!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\nHeaders:\n", hyper_method, final_uri, payload);
+            debug!("Full request: \n method: {}\n final_uri: {}\n payload: {}\nHeaders:\n", hyper_method, final_uri, payload.unwrap_or("".to_owned()));
             for h in hyper_headers.iter() {
                 debug!("{}:{}", h.name(), h.value_string());
             }

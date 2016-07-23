@@ -5,6 +5,7 @@ use self::ec2::Ec2Generator;
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
 use self::rest_json::RestJsonGenerator;
+use self::rest_xml::RestXmlGenerator;
 use self::error_types::{GenerateErrorTypes, JsonErrorTypes, XmlErrorTypes};
 
 mod error_types;
@@ -13,6 +14,7 @@ mod json;
 mod query;
 mod rest_json;
 mod tests;
+mod rest_xml;
 
 pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
@@ -43,13 +45,14 @@ pub fn generate_source(service: &Service) -> String {
         "ec2" => generate(service, Ec2Generator, XmlErrorTypes),
         "query" => generate(service, QueryGenerator, XmlErrorTypes),
         "rest-json" => generate(service, RestJsonGenerator, JsonErrorTypes),
+        "rest-xml" => generate(service, RestXmlGenerator, XmlErrorTypes),
         protocol => panic!("Unknown protocol {}", protocol),
     }
 }
 
 fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator: E) -> String where P: GenerateProtocol,  E: GenerateErrorTypes {
     format!(
-        "
+        "#[allow(warnings)]
         use hyper::Client;
         use hyper::client::RedirectPolicy;
         use request::DispatchSignedRequest;
@@ -107,15 +110,15 @@ where P: GenerateProtocol {
         ",
         methods = protocol_generator.generate_methods(service),
         service_name = match &service.metadata.service_abbreviation {
-            &Some(ref service_abbreviation) => service_abbreviation.as_str(),
-            &None => service.metadata.service_full_name.as_ref()
+        &Some(ref service_abbreviation) => service_abbreviation.as_str(),
+        &None => service.metadata.service_full_name.as_ref()
         },
         type_name = service.client_type_name(),
     )
 }
 
 fn generate_list(name: &str, shape: &Shape) -> String {
-    format!("pub type {} = Vec<{}>;", name, capitalize_first(shape.member().to_string()))
+    format!("pub type {} = Vec<{}>;", name, mutate_type_name(shape.member()))
 }
 
 fn generate_map(name: &str, shape: &Shape) -> String {
@@ -143,33 +146,55 @@ fn generate_primitive_type(name: &str, shape_type: ShapeType, for_timestamps: &s
     format!("pub type {} = {};", name, primitive_type)
 }
 
+// do any type name mutation needed to avoid collisions
+fn mutate_type_name(type_name: &str) -> String{
+
+    let capitalized = capitalize_first(type_name.to_owned());
+
+    match &capitalized[..] {
+        // S3 has an 'Error' shape that collides with Rust's Error trait
+        "Error" => "S3Error".to_string(),
+
+        // EC2 has a CancelSpotFleetRequestsError struct, avoid collision with our error enum
+        "CancelSpotFleetRequests" => "EC2CancelSpotFleetRequests".to_owned(),
+
+        // otherwise make sure it's rust-idiomatic and capitalized
+        _ => capitalized
+    }
+
+}
+
 fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
 where P: GenerateProtocol {
     service.shapes.iter().filter_map(|(name, shape)| {
-        let type_name = &capitalize_first(name.to_string());
 
+        let type_name = mutate_type_name(name);
+
+        // Don't generate a new type for String, but do generate serializers and deserializers for it
         if type_name == "String" {
-            return protocol_generator.generate_support_types(type_name, shape, service);
+            return protocol_generator.generate_support_types(&type_name, shape, service);
         }
 
+        // We generate enums for error types, so no need to create model objects for them
         if shape.exception() {
             return None;
         }
 
         let mut parts = Vec::with_capacity(3);
 
+        // If botocore includes documentation, clean it up a bit and use it
         if let Some(ref docs) = shape.documentation {
             parts.push(format!("#[doc=\"{}\"]", docs.replace("\\","\\\\").replace("\"", "\\\"")));
         }
 
         match shape.shape_type {
-            ShapeType::Structure => parts.push(generate_struct(service, type_name, shape, protocol_generator)),
-            ShapeType::Map => parts.push(generate_map(type_name, shape)),
-            ShapeType::List => parts.push(generate_list(type_name, shape)),
-            shape_type => parts.push(generate_primitive_type(type_name, shape_type, protocol_generator.timestamp_type())),
+            ShapeType::Structure => parts.push(generate_struct(service, &type_name, shape, protocol_generator)),
+            ShapeType::Map => parts.push(generate_map(&type_name, shape)),
+            ShapeType::List => parts.push(generate_list(&type_name, shape)),
+            shape_type => parts.push(generate_primitive_type(&type_name, shape_type, protocol_generator.timestamp_type())),
         }
 
-        if let Some(support_types) = protocol_generator.generate_support_types(type_name, shape, service) {
+        if let Some(support_types) = protocol_generator.generate_support_types(&type_name, shape, service) {
             parts.push(support_types);
         }
 
@@ -226,7 +251,7 @@ fn generate_struct_fields<P>(service: &Service, shape: &Shape, shape_name: &str,
             lines.push(format!("#[doc=\"{}\"]", docs.replace("\\","\\\\").replace("\"", "\\\"")));
         }
 
-        let type_name = capitalize_first(member.shape.to_string());
+        let type_name = mutate_type_name(&member.shape);
 
         lines.push("#[allow(unused_attributes)]".to_owned());
         lines.push(format!("#[serde(rename=\"{}\")]", member_name));
@@ -262,11 +287,8 @@ fn generate_struct_fields<P>(service: &Service, shape: &Shape, shape_name: &str,
 
 impl Operation {
     pub fn error_type_name(&self) -> String {
-        match &self.name[..] {
-            // EC2 has a different struct type called CancelSpotFleetRequestsError
-            "CancelSpotFleetRequests" => "CancelSpotFleetRequestsErrorType".to_owned(),
-            _ => format!("{}Error", self.name)
-        }
+        let type_name = mutate_type_name(&self.name);
+        format!("{}Error", type_name)
     }
 }
 

@@ -13,7 +13,7 @@ use hyper::Client;
 use rand::Rng;
 use rusoto::{ChainProvider, ProvideAwsCredentials, Region};
 use rusoto::elastictranscoder::EtsClient;
-use rusoto::s3::{BucketName, S3Helper};
+use rusoto::s3::{BucketName, S3Client, CreateBucketRequest, DeleteBucketRequest};
 
 const AWS_ETS_WEB_PRESET_ID: &'static str = "1351620000001-100070";
 const AWS_ETS_WEB_PRESET_NAME: &'static str = "System preset: Web";
@@ -28,7 +28,7 @@ struct TestEtsClient<P>
 
     client: EtsClient<P, Client>,
 
-    s3_helper: Option<S3Helper<P>>,
+    s3_client: Option<S3Client<P, Client>>,
     input_bucket: Option<BucketName>,
     output_bucket: Option<BucketName>,
 }
@@ -42,14 +42,14 @@ impl<P> TestEtsClient<P>
             credentials_provider: credentials_provider.clone(),
             region: region,
             client: EtsClient::new(credentials_provider, region),
-            s3_helper: None,
+            s3_client: None,
             input_bucket: None,
             output_bucket: None,
         }
     }
 
-    fn create_s3_helper(&mut self) {
-        self.s3_helper = Some(S3Helper::new(
+    fn create_s3_client(&mut self) {
+        self.s3_client = Some(S3Client::new(
             self.credentials_provider.clone(),
             self.region
         ));
@@ -57,13 +57,21 @@ impl<P> TestEtsClient<P>
 
     fn create_bucket(&mut self) -> BucketName {
         let bucket_name = generate_unique_name("ets-bucket-1");
-        let result = self.s3_helper
-            .as_mut()
+
+        let create_bucket_req = CreateBucketRequest {
+            bucket: bucket_name.to_owned(),
+            ..Default::default()
+        };        
+
+        let result = self.s3_client
+            .as_ref()
             .unwrap()
-            .create_bucket_in_region(&bucket_name, AWS_REGION, None);
+            .create_bucket(&create_bucket_req);
+
         let mut location = result
             .unwrap()
-            .location;
+            .location
+            .unwrap();
         // A `Location` is identical to a `BucketName` except that it has a
         // forward slash prepended to it, so we need to remove it.
         location.remove(0);
@@ -93,15 +101,27 @@ impl<P> Drop for TestEtsClient<P>
     where P: ProvideAwsCredentials,
 {
     fn drop(&mut self) {
-        self.s3_helper.take().map(|s3_helper| {
+        self.s3_client.take().map(|s3_client| {
             self.input_bucket.take().map(|bucket| {
-                match s3_helper.delete_bucket(&bucket, self.region) {
+
+                let delete_bucket_req = DeleteBucketRequest {
+                    bucket: bucket.to_owned(),
+                    ..Default::default()
+                };
+
+                match s3_client.delete_bucket(&delete_bucket_req) {
                     Ok(_) => { info!("Deleted S3 bucket: {}", bucket) },
                     Err(e) => { error!("Failed to delete S3 bucket: {}", e) }
                 };
             });
             self.output_bucket.take().map(|bucket| {
-                match s3_helper.delete_bucket(&bucket, self.region) {
+
+                let delete_bucket_req = DeleteBucketRequest {
+                    bucket: bucket.to_owned(),
+                    ..Default::default()
+                };
+
+                match s3_client.delete_bucket(&delete_bucket_req) {
                     Ok(_) => { info!("Deleted S3 bucket: {}", bucket) },
                     Err(e) => { error!("Failed to delete S3 bucket: {}", e) }
                 };
@@ -145,7 +165,7 @@ fn create_pipeline_without_arn() {
     initialize();
 
     let mut client = create_client();
-    client.create_s3_helper();
+    client.create_s3_client();
     client.input_bucket = Some(client.create_bucket());
     client.output_bucket = Some(client.create_bucket());
 
