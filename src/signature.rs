@@ -11,7 +11,6 @@ use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
 
-use hyper::client::Response;
 use hyper::status::StatusCode;
 use openssl::crypto::hash::Type::SHA256;
 use openssl::crypto::hash::hash;
@@ -20,14 +19,10 @@ use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{percent_encode_to, DEFAULT_ENCODE_SET, FORM_URLENCODED_ENCODE_SET};
-use xmlutil::*;
-use xml::reader::*;
 
 use credential::AwsCredentials;
-use error::AwsError;
 use param::Params;
 use region::Region;
-use request::send_request;
 
 const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 
@@ -145,15 +140,7 @@ impl <'a> SignedRequest <'a> {
         self.params = params;
     }
 
-    /// Calculate the signature from the credentials provided and the request data
-    /// Add the calculated signature to the request headers and execute it
-    /// Return the hyper HTTP response
-    pub fn sign_and_execute(&mut self, creds: AwsCredentials) -> Response {
-        self.sign(&creds);
-        self.execute(creds)
-    }
-
-    fn sign(&mut self, creds: &AwsCredentials) {
+    pub fn sign(&mut self, creds: &AwsCredentials) {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
@@ -234,24 +221,7 @@ impl <'a> SignedRequest <'a> {
         self.remove_header("authorization");
         self.add_header("authorization", &auth_header);
     }
-
-    fn execute(&mut self, creds: AwsCredentials) -> Response {
-        let response = send_request(self);
-        debug!("Sent request to AWS");
-
-        if response.status == HTTP_TEMPORARY_REDIRECT {
-            debug!("Got a redirect response, resending request.");
-            // extract location from response, modify request and re-sign and resend.
-            let new_hostname = extract_s3_redirect_location(response).unwrap();
-            self.set_hostname(Some(new_hostname.to_string()));
-
-            // This does a lot of appending and not clearing/creation, so we'll have to do that ourselves:
-            self.sign(&creds);
-            return self.execute(creds);
-        }
-
-        response
-    }
+    
 }
 
 fn signature(string_to_sign: &str, signing_key: Vec<u8>) -> String {
@@ -387,67 +357,12 @@ fn build_hostname(service: &str, region: Region) -> String {
     }
 }
 
-/// `extract_s3_redirect_location` takes a Hyper `Response` and attempts to pull out the temporary endpoint.
-fn extract_s3_redirect_location(response: Response) -> Result<String, AwsError> {
-    // Double checking this feels like belts and suspenders since we're checking the status code
-    // before calling this.  Remove this check?
-
-    // Verify it's a 307 temporary redirect
-    if response.status != HTTP_TEMPORARY_REDIRECT {
-        return Err(AwsError::new("Trying to find temporary location when status is not 307 temp redirect."))
-    }
-
-    let mut reader = EventReader::new(response);
-    let mut stack = XmlResponseFromAws::new(reader.events().peekable());
-    stack.next(); // xml start tag
-
-    // extract and return temporary endpoint location
-    extract_s3_temporary_endpoint_from_xml(&mut stack)
-}
-
-fn field_in_s3_redirect(name: &str) -> bool {
-    if name == "Code" || name == "Message" || name == "Bucket" || name == "RequestId" || name == "HostId" {
-        return true;
-    }
-    false
-}
-
-/// `extract_s3_temporary_endpoint_from_xml` takes in XML and tries to find the value of the Endpoint node.
-fn extract_s3_temporary_endpoint_from_xml<T: Peek + Next>(stack: &mut T) -> Result<String, AwsError> {
-    try!(start_element(&"Error".to_string(), stack));
-
-    // now find Endpoint contents
-    // This may infinite loop if there's no endpoint in the response: how can we prevent that?
-    loop {
-        let current_name = try!(peek_at_name(stack));
-        if current_name == "Endpoint" {
-            let obj = try!(string_field("Endpoint", stack));
-            return Ok(obj);
-        }
-        if field_in_s3_redirect(&current_name){
-            // <foo>bar</foo>:
-            stack.next(); // skip the start tag <foo>
-            stack.next(); // skip contents bar
-            stack.next(); // skip close tag </foo>
-            continue;
-        }
-        break;
-    }
-    Err(AwsError::new("Couldn't find redirect location for S3 bucket"))
-}
-
 
 #[cfg(test)]
 mod tests {
-    use std::fs::File;
-    use std::io::BufReader;
-    use xml::reader::*;
-
     use region::Region;
-    use xmlutil::*;
 
     use super::SignedRequest;
-    use super::extract_s3_temporary_endpoint_from_xml;
 
     use super::super::ProfileProvider;
     use super::super::credential::ProvideAwsCredentials;
@@ -464,25 +379,6 @@ mod tests {
         request.set_hostname(Some("test-hostname".to_string()));
         assert_eq!("test-hostname", request.hostname());
     }
-
-    #[test]
-    fn get_redirect_location_from_s3() {
-        let file = File::open("tests/sample-data/s3_temp_redirect.xml").unwrap();
-        let file = BufReader::new(file);
-        let mut my_parser  = EventReader::new(file);
-        let my_stack = my_parser.events().peekable();
-        let mut reader = XmlResponseFromFile::new(my_stack);
-        reader.next(); // xml start node
-        let result = extract_s3_temporary_endpoint_from_xml(&mut reader);
-
-        match result {
-            Err(_) => panic!("Couldn't parse s3_temp_redirect.xml"),
-            Ok(location) => {
-                assert_eq!(location, "rusoto1441045966.s3-us-west-1.amazonaws.com");
-            }
-        }
-    }
-
     #[test]
     fn path_percent_encoded() {
         let provider = ProfileProvider::with_configuration(

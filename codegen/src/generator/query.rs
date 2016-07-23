@@ -9,37 +9,40 @@ impl GenerateProtocol for QueryGenerator {
     fn generate_methods(&self, service: &Service) -> String {
         service.operations.values().map(|operation| {
             format!(
-                "{documentation}
-{method_signature} {{
-    let mut request = SignedRequest::new(
-        \"{http_method}\",
-        \"{endpoint_prefix}\",
-        self.region,
-        \"{request_uri}\",
-    );
-    let mut params = Params::new();
+                "
+                {documentation}
+                {method_signature} {{
+                    let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, \"{request_uri}\");
+                    let mut params = Params::new();
 
-    params.put(\"Action\", \"{operation_name}\");
-    {serialize_input}
+                    params.put(\"Action\", \"{operation_name}\");
+                    {serialize_input}
+                    request.set_params(params);
 
-    request.set_params(params);
+                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let dispatch_result = self.dispatcher.dispatch(&request);
 
-    let result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
-    let status = result.status.to_u16();
-    let mut reader = EventReader::new(result);
-    let mut stack = XmlResponseFromAws::new(reader.events().peekable());
-    stack.next();
-    stack.next();
+                    if dispatch_result.is_err() {{
+                        return Err(AwsError::new(format!(\"Error dispatching HTTP request\")));
+                    }}
 
-    match status {{
-        200 => {{
-            {method_return_value}
-        }}
-        status_code => Err(AwsError::new(
-            format!(\"HTTP response code for {operation_name}: {{}}\", status_code)
-        ))
-    }}
-}}
+                    let result = dispatch_result.unwrap();
+
+                    let mut reader = EventReader::from_str(&result.body);
+                    let mut stack = XmlResponse::new(reader.events().peekable());
+
+                    let _start_document = stack.next();
+                    let _response_envelope = stack.next();
+
+                    match result.status {{
+                        200 => {{
+                            {method_return_value}
+                        }},
+                        status_code => Err(AwsError::new(
+                            format!(\"HTTP response code for {operation_name}: {{}}\", status_code)
+                        ))
+                    }}
+                }}
                 ",
                 documentation = generate_documentation(operation),
                 http_method = &operation.http.method,
@@ -62,9 +65,8 @@ impl GenerateProtocol for QueryGenerator {
         use credential::ProvideAwsCredentials;
         use error::AwsError;
         use param::{Params, ServiceParams};
-        use region;
         use signature::SignedRequest;
-        use xmlutil::{Next, Peek, XmlParseError, XmlResponseFromAws};
+        use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
         use xmlutil::{characters, end_element, peek_at_name, start_element};
         ".to_owned()
     }

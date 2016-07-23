@@ -23,11 +23,10 @@ impl GenerateProtocol for JsonGenerator {
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     request.set_payload(payload);
-                    let mut result = request.sign_and_execute(try!(self.credentials_provider.credentials()));
-                    let status = result.status.to_u16();
-                    let mut body = String::new();
-                    result.read_to_string(&mut body).unwrap();
-                    match status {{
+                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let response = try!(self.dispatcher.dispatch(&request));
+
+                    match response.status {{
                         200 => {{
                             {ok_response}
                         }}
@@ -54,12 +53,9 @@ impl GenerateProtocol for JsonGenerator {
 
     fn generate_prelude(&self, service: &Service) -> String {
         format!(
-            "use std::io::Read;
-
-            use serde_json;
+            "use serde_json;
 
             use credential::ProvideAwsCredentials;
-            use region;
             use signature::SignedRequest;
 
             {error_imports}",
@@ -184,6 +180,11 @@ pub fn generate_error_type(operation: &Operation, error_documentation: &HashMap<
                 {type_name}::Unknown(err.message)
             }}
         }}
+        impl From<HttpDispatchError> for {type_name} {{
+            fn from(err: HttpDispatchError) -> {type_name} {{
+                {type_name}::HttpDispatch(err)
+            }}
+        }}
         impl fmt::Display for {type_name} {{
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
                 write!(f, \"{{}}\", self.description())
@@ -225,6 +226,7 @@ fn generate_error_enum_types(operation: &Operation, error_documentation: &HashMa
         enum_types.push("/// A validation error occurred.  Details from AWS are provided.\nValidation(String)".to_string());
     }
 
+    enum_types.push("/// An error occurred dispatching the HTTP request\nHttpDispatch(HttpDispatchError)".to_string());
     enum_types.push("/// An unknown error occurred.  The raw HTTP response is provided.\nUnknown(String)".to_string());
     Some(enum_types.join(","))
 }
@@ -281,6 +283,7 @@ fn generate_error_description_matchers(operation: &Operation) -> Option<String> 
         type_matchers.push(format!("{error_type}::Validation(ref cause) => cause", error_type = error_type));
     }
 
+    type_matchers.push(format!("{error_type}::HttpDispatch(ref dispatch_error) => dispatch_error.description()", error_type = error_type));
     type_matchers.push(format!("{error_type}::Unknown(ref cause) => cause", error_type = error_type));
     Some(type_matchers.join(","))
 }
@@ -296,6 +299,7 @@ fn generate_result_type<'a>(service: &Service, operation: &Operation, output_typ
 fn generate_error_imports(service: &Service) -> &'static str {
     if service.typed_errors() {
         "use error::AwsError;
+        use request::HttpDispatchError;
         use std::error::Error;
         use std::fmt;
         use serde_json::Value as SerdeJsonValue;
@@ -313,7 +317,7 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("Ok(serde_json::from_str::<{}>(&body).unwrap())", output_type)
+        format!("Ok(serde_json::from_str::<{}>(&response.body).unwrap())", output_type)
     } else {
         "Ok(())".to_owned()
     }
@@ -321,8 +325,8 @@ fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
 
 fn generate_err_response(service: &Service, operation: &Operation) -> String {
     if service.typed_errors() {
-        format!("Err({}::from_body(&body))", operation.error_type_name())
+        format!("Err({}::from_body(&response.body))", operation.error_type_name())
     } else {
-        String::from("Err(parse_json_protocol_error(&body))") 
+        String::from("Err(parse_json_protocol_error(&response.body))") 
     }
 }

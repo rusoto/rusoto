@@ -5,11 +5,8 @@
 
 use std::iter::Peekable;
 use std::num::ParseIntError;
-use hyper::client::response::*;
 use std::collections::HashMap;
 use xml::reader::*;
-use std::io::BufReader;
-use std::fs::File;
 use xml::reader::events::*;
 
 /// generic Error for XML parsing
@@ -23,7 +20,7 @@ impl XmlParseError {
 }
 
 /// syntactic sugar for the XML event stack we pass around
-pub type XmlStack<'a> = Peekable<Events<'a, Response>>;
+pub type XmlStack<'a> = Peekable<Events<'a, &'a[u8]>>;
 
 /// Peek at next items in the XML stack
 pub trait Peek {
@@ -36,27 +33,42 @@ pub trait Next {
 }
 
 /// Wraps the Hyper Response type
-pub struct XmlResponseFromAws<'b> {
-    xml_stack: Peekable<Events<'b, Response>> // refactor to use XmlStack type?
+pub struct XmlResponse<'b> {
+    xml_stack: Peekable<Events<'b, &'b [u8]>> // refactor to use XmlStack type?
 }
 
-impl <'b>XmlResponseFromAws<'b> {
-    pub fn new(stack: Peekable<Events<'b, Response>>) -> XmlResponseFromAws {
-        XmlResponseFromAws {
+impl <'b>XmlResponse<'b> {
+    pub fn new(stack: Peekable<Events<'b, &'b [u8]>>) -> XmlResponse {
+        XmlResponse {
             xml_stack: stack,
         }
     }
 }
 
-impl <'b>Peek for XmlResponseFromAws<'b> {
+impl <'b>Peek for XmlResponse<'b> {
     fn peek(&mut self) -> Option<&XmlEvent> {
+        loop {
+            match self.xml_stack.peek() {
+                Some(&XmlEvent::Whitespace(_)) => {  },
+                _ => break
+            }
+            self.xml_stack.next();
+        }
         self.xml_stack.peek()
     }
 }
 
-impl <'b> Next for XmlResponseFromAws<'b> {
+impl <'b> Next for XmlResponse<'b> {
     fn next(&mut self) -> Option<XmlEvent> {
-        self.xml_stack.next()
+        let mut maybe_event;
+        loop {
+            maybe_event = self.xml_stack.next();
+            match maybe_event {
+                Some(XmlEvent::Whitespace(_)) => {},
+                _ => break
+            }
+        }
+        maybe_event
     }
 }
 
@@ -64,30 +76,6 @@ impl From<ParseIntError> for XmlParseError{
     fn from(_e:ParseIntError) -> XmlParseError { XmlParseError::new("ParseIntError") }
 }
 
-/// Testing helper, reads from file
-pub struct XmlResponseFromFile<'a> {
-    xml_stack: Peekable<Events<'a, BufReader<File>>>,
-}
-
-impl <'a>XmlResponseFromFile<'a> {
-    pub fn new(my_stack: Peekable<Events<'a, BufReader<File>>>) -> XmlResponseFromFile {
-        XmlResponseFromFile { xml_stack: my_stack }
-    }
-}
-
-// Need peek and next implemented.
-impl <'b> Peek for XmlResponseFromFile <'b> {
-    fn peek(&mut self) -> Option<&XmlEvent> {
-        self.xml_stack.peek()
-    }
-}
-
-impl <'b> Next for XmlResponseFromFile <'b> {
-    fn next(&mut self) -> Option<XmlEvent> {
-        self.xml_stack.next()
-    }
-}
-// /testing helper
 
 /// parse Some(String) if the next tag has the right name, otherwise None
 pub fn optional_string_field<T: Peek + Next>(field_name: &str, stack: &mut T) -> Result<Option<String>, XmlParseError> {
@@ -109,18 +97,11 @@ pub fn string_field<T: Peek + Next>(name: &str, stack: &mut T) -> Result<String,
 
 /// return some XML Characters
 pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError> {
-
-    // AWS can send an empty tag (like <reason/>) when content is empty
-    if let Some(&XmlEvent::EndElement { .. }) = stack.peek() {
-        return Ok(String::new());
-    }
-
     if let Some(XmlEvent::Characters(data)) = stack.next() {
         Ok(data.to_string())
-    } else {
-        Err(XmlParseError::new("Expected characters"))
+    } else { 
+         Err(XmlParseError::new("Expected characters"))
     }
-
 }
 
 /// get the name of the current element in the stack.  throw a parse error if it's not a `StartElement`
@@ -133,24 +114,22 @@ pub fn peek_at_name<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseErr
     }
 }
 
-/// consume a `StartElement` with a specific name or throw an `XmlParseError`. Skip Whitespace events
+/// consume a `StartElement` with a specific name or throw an `XmlParseError`
 pub fn start_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result<HashMap<String, String>, XmlParseError> {
-    loop {
-        match stack.next() {
-            Some(XmlEvent::Whitespace(_)) => continue,
-            Some(XmlEvent::StartElement { name, attributes, .. }) => {
-                if name.local_name == element_name {
-                    let mut attr_map = HashMap::new();
-                    for attr in attributes {
-                        attr_map.insert(attr.name.local_name, attr.value);
-                    }
-                    return Ok(attr_map);
-                } else {
-                    return Err(XmlParseError::new(&format!("Expected {} got {}", element_name, name.local_name)));
-                }
-            },
-            other => return Err(XmlParseError::new(&format!("Expected StartElement {}, got {:?}", element_name, other))),
+    let next = stack.next();
+
+    if let Some(XmlEvent::StartElement { name, attributes, .. }) = next {
+        if name.local_name == element_name {
+            let mut attr_map = HashMap::new();
+            for attr in attributes {
+                attr_map.insert(attr.name.local_name, attr.value);
+            }
+            Ok(attr_map)
+        } else {
+            Err(XmlParseError::new(&format!("START Expected {} got {}", element_name, name.local_name)))
         }
+    } else {
+        Err(XmlParseError::new(&format!("Expected StartElement {}", element_name)))
     }
 }
 
@@ -161,7 +140,7 @@ pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result
         if name.local_name == element_name {
             Ok(())
         } else {
-            Err(XmlParseError::new(&format!("Expected {} got {}", element_name, name.local_name)))
+            Err(XmlParseError::new(&format!("END Expected {} got {}", element_name, name.local_name)))
         }
     }else {
         Err(XmlParseError::new(&format!("Expected EndElement {} got {:?}", element_name, next)))
@@ -189,27 +168,26 @@ pub fn skip_tree<T: Peek + Next>(stack: &mut T) {
     }
 
 }
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use xml::reader::*;
-    use std::io::BufReader;
+    use std::io::Read;
     use std::fs::File;
 
     #[test]
     fn peek_at_name_happy_path() {
-        let file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
-        let file = BufReader::new(file);
-        let mut my_parser  = EventReader::new(file);
+        let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
+        let mut body = String::new();
+        let _size = file.read_to_string(&mut body);
+        let mut my_parser  = EventReader::new(body.as_bytes());
         let my_stack = my_parser.events().peekable();
-        let mut reader = XmlResponseFromFile::new(my_stack);
+        let mut reader = XmlResponse::new(my_stack);
 
         loop {
             reader.next();
             match peek_at_name(&mut reader) {
                 Ok(data) => {
-                    // println!("Got {}", data);
                     if data == "QueueUrl" {
                         return;
                     }
@@ -221,11 +199,12 @@ mod tests {
 
     #[test]
     fn start_element_happy_path() {
-        let file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
-        let file = BufReader::new(file);
-        let mut my_parser  = EventReader::new(file);
+        let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
+        let mut body = String::new();
+        let _size = file.read_to_string(&mut body);
+        let mut my_parser  = EventReader::new(body.as_bytes());
         let my_stack = my_parser.events().peekable();
-        let mut reader = XmlResponseFromFile::new(my_stack);
+        let mut reader = XmlResponse::new(my_stack);
 
         // skip two leading fields since we ignore them (xml declaration, return type declaration)
         reader.next();
@@ -239,11 +218,12 @@ mod tests {
 
     #[test]
     fn string_field_happy_path() {
-        let file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
-        let file = BufReader::new(file);
-        let mut my_parser  = EventReader::new(file);
+        let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
+        let mut body = String::new();
+        let _size = file.read_to_string(&mut body);
+        let mut my_parser  = EventReader::new(body.as_bytes());
         let my_stack = my_parser.events().peekable();
-        let mut reader = XmlResponseFromFile::new(my_stack);
+        let mut reader = XmlResponse::new(my_stack);
 
         // skip two leading fields since we ignore them (xml declaration, return type declaration)
         reader.next();
@@ -258,11 +238,12 @@ mod tests {
 
     #[test]
     fn end_element_happy_path() {
-        let file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
-        let file = BufReader::new(file);
-        let mut my_parser  = EventReader::new(file);
+        let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
+        let mut body = String::new();
+        let _size = file.read_to_string(&mut body);
+        let mut my_parser  = EventReader::new(body.as_bytes());
         let my_stack = my_parser.events().peekable();
-        let mut reader = XmlResponseFromFile::new(my_stack);
+        let mut reader = XmlResponse::new(my_stack);
 
         // skip two leading fields since we ignore them (xml declaration, return type declaration)
         reader.next();
@@ -280,25 +261,6 @@ mod tests {
             Ok(_) => (),
             Err(_) => panic!("Couldn't find end element")
         }
-    }
-
-    #[test]
-    fn skip_tree_with_subtree() {
-        let file = File::open("tests/sample-data/skip_tree.xml").unwrap();
-        let file = BufReader::new(file);
-        let mut my_parser  = EventReader::new(file);
-        let my_stack = my_parser.events().peekable();
-        let mut reader = XmlResponseFromFile::new(my_stack);
-
-        // skip two leading fields since we ignore them (xml declaration, return type declaration)
-        reader.next();
-        reader.next();
-
-        // skip tag a
-        skip_tree(&mut reader);
-
-        // expect tag f
-        start_element("f", &mut reader).expect("Missing tag f");
     }
 
 }
