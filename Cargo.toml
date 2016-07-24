@@ -20,7 +20,7 @@ version = ">= 0.2.4"
 
 [dependencies]
 chrono = "0.2.21"
-hyper = "0.8.1"
+hyper = "0.9.10"
 log = "0.3.6"
 openssl = "0.7.9"
 regex = "0.1.65"
