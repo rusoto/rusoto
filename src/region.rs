@@ -9,6 +9,7 @@ use std::str::FromStr;
 use std::fmt::{Display, Error as FmtError, Formatter};
 
 /// An AWS region.
+/// CnNorth1 is currently untested due to Rusoto maintainers not having access to AWS China.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Region {
     ApNortheast1,

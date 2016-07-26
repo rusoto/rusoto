@@ -11275,9 +11275,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             None => request.set_content_type("binary/octet-stream".to_string())
         };
 
-        // s3.cn-north-1.amazonaws.com.cn for cn-north-1
-        let hostname = (&input.bucket).to_string() + ".s3.amazonaws.com";
-        //let hostname = self.hostname(Some(&input.bucket));
+        let hostname = self.hostname(Some(&input.bucket));
         request.set_hostname(Some(hostname));
         request.set_payload(input.body);
 
