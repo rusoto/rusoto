@@ -7,7 +7,7 @@ repository = "https://github.com/rusoto/rusoto_helpers"
 version = "0.1.0"
 
 [dependencies]
-serde = "0.7.6"
+serde = "0.8.0"
 
 [dependencies.rusoto]
 path = ".."

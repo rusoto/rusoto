@@ -163,7 +163,7 @@ pub fn generate_error_type(operation: &Operation, error_documentation: &HashMap<
                 match from_str::<SerdeJsonValue>(body) {{
                     Ok(json) => {{
                         let error_type: &str = match json.find(\"__type\") {{
-                            Some(error_type) => error_type.as_string().unwrap_or(\"Unknown\"),
+                            Some(error_type) => error_type.as_str().unwrap_or(\"Unknown\"),
                             None => \"Unknown\",
                         }};
 

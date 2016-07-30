@@ -21,12 +21,12 @@ pub fn parse_json_protocol_error(body: &str) -> AwsError {
     match from_str::<Value>(body) {
         Ok(json) => {
             let error_type: &str = match json.find("__type") {
-                Some(error_type) => error_type.as_string().unwrap_or("Unknown error"),
+                Some(error_type) => error_type.as_str().unwrap_or("Unknown error"),
                 None => "Unknown error",
             };
 
             let error_message: &str = match json.find("message") {
-                Some(error_message) => error_message.as_string().unwrap_or(body),
+                Some(error_message) => error_message.as_str().unwrap_or(body),
                 None => body,
             };
 

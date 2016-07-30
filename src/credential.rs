@@ -316,19 +316,19 @@ impl ProvideAwsCredentials for IamProvider {
         let access_key;
         match json_object.find("AccessKeyId") {
             None => return err("Couldn't find AccessKeyId in response."),
-            Some(val) => access_key = val.as_string().expect("AccessKeyId value was not a string").to_owned().replace("\"", "")
+            Some(val) => access_key = val.as_str().expect("AccessKeyId value was not a string").to_owned().replace("\"", "")
         };
 
         let secret_key;
         match json_object.find("SecretAccessKey") {
             None => return err("Couldn't find SecretAccessKey in response."),
-            Some(val) => secret_key = val.as_string().expect("SecretAccessKey value was not a string").to_owned().replace("\"", "")
+            Some(val) => secret_key = val.as_str().expect("SecretAccessKey value was not a string").to_owned().replace("\"", "")
         };
 
         let expiration;
         match json_object.find("Expiration") {
             None => return err("Couldn't find Expiration in response."),
-            Some(val) => expiration = val.as_string().expect("Expiration value was not a string").to_owned().replace("\"", "")
+            Some(val) => expiration = val.as_str().expect("Expiration value was not a string").to_owned().replace("\"", "")
         };
 
         let expiration_time = try!(expiration.parse());
@@ -336,7 +336,7 @@ impl ProvideAwsCredentials for IamProvider {
         let token_from_response;
         match json_object.find("Token") {
             None => return err("Couldn't find Token in response."),
-            Some(val) => token_from_response = val.as_string().expect("Token value was not a string").to_owned().replace("\"", "")
+            Some(val) => token_from_response = val.as_str().expect("Token value was not a string").to_owned().replace("\"", "")
         };
 
         Ok(AwsCredentials::new(access_key, secret_key, Some(token_from_response), expiration_time))
