@@ -24,7 +24,7 @@ For example, to include only S3 and SQS:
 rusoto = {version = "0.15.2", features = ["s3", "sqs"]}
 ```
 
-You can use the Cargo feature "all" to build Rusoto with support for every available service.
+You can use the Cargo feature "all" to build Rusoto with support for every available service. Warning: building with "all" can require upwards of 5 GB of memory. Most people do not need all 40+ services so use individual features to enable the services you use.
 
 ## Usage
 
