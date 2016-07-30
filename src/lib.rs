@@ -34,6 +34,7 @@ pub use credential::{
 };
 pub use error::{AwsError, AwsResult};
 pub use region::{ParseRegionError, Region};
+pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError};
 
 mod credential;
 mod error;
