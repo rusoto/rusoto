@@ -20,13 +20,13 @@ version = ">= 0.2.4"
 
 [dependencies]
 chrono = "0.2.21"
-hyper = "0.8.1"
+hyper = "0.9.10"
 log = "0.3.6"
 openssl = "0.7.9"
 regex = "0.1.65"
 rustc-serialize = "0.3.19"
-serde = "0.7.6"
-serde_json = "0.7.0"
+serde = "0.8.0"
+serde_json = "0.8.0"
 time = "0.1.35"
 url = "0.5.9"
 xml-rs = "0.1.26"
@@ -37,7 +37,7 @@ version = "0.0"
 
 [dependencies.serde_macros]
 optional = true
-version = "0.7.5"
+version = "0.8.0"
 
 [dev-dependencies]
 env_logger = "0.3.3"

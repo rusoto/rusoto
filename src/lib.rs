@@ -33,6 +33,7 @@ pub use credential::{
     DefaultCredentialsProviderSync,
 };
 pub use region::{ParseRegionError, Region};
+pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError};
 
 mod credential;
 mod param;

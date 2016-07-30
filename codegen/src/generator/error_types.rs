@@ -180,8 +180,8 @@ impl GenerateErrorTypes for JsonErrorTypes {
                 pub fn from_body(body: &str) -> {type_name} {{
                     match from_str::<SerdeJsonValue>(body) {{
                         Ok(json) => {{
-                            let error_type = json.find(\"__type\").and_then(|e| e.as_string()).unwrap_or(\"Unknown\");
-                            let error_message = json.find(\"message\").and_then(|m| m.as_string()).unwrap_or(body);
+                            let error_type = json.find(\"__type\").and_then(|e| e.as_str()).unwrap_or(\"Unknown\");
+                            let error_message = json.find(\"message\").and_then(|m| m.as_str()).unwrap_or(body);
 
                             match error_type {{
                                 {type_matchers}
