@@ -82,9 +82,9 @@ impl DispatchSignedRequest for Client {
             let payload = request.payload().map(|mut payload_bytes| {
                 let mut payload_string = String::new();
 
-                payload_bytes.read_to_string(&mut payload_string).expect("Failed to read payload to string");
-
-                payload_string
+                payload_bytes.read_to_string(&mut payload_string)
+                    .map(|_| payload_string)
+                    .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
             });
 
             debug!("Full request: \n method: {}\n final_uri: {}\n payload: {:?}\nHeaders:\n", hyper_method, final_uri, payload);
