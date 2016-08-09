@@ -18,7 +18,7 @@ use openssl::crypto::hmac::hmac;
 use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
-use url::percent_encoding::{utf8_percent_encode, DEFAULT_ENCODE_SET};
+use url::percent_encoding::{utf8_percent_encode, DEFAULT_ENCODE_SET, QUERY_ENCODE_SET};
 
 use credential::AwsCredentials;
 use param::Params;
@@ -308,7 +308,7 @@ fn build_canonical_query_string(params: &Params) -> String {
         if !output.is_empty() {
             output.push_str("&");
         }
-        output = byte_serialize(item.0);
+        output.push_str(&byte_serialize(item.0));
         output.push_str("=");
         output.push_str(&byte_serialize(item.1));
     }
@@ -318,7 +318,7 @@ fn build_canonical_query_string(params: &Params) -> String {
 
 #[inline]
 fn encode_uri(uri: &str) -> String {
-    utf8_percent_encode(uri, DEFAULT_ENCODE_SET).collect::<String>()
+    utf8_percent_encode(uri, QUERY_ENCODE_SET).collect::<String>()
 }
 
 #[inline]
