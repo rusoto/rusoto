@@ -32,15 +32,14 @@ pub use credential::{
     DefaultCredentialsProvider,
     DefaultCredentialsProviderSync,
 };
-pub use error::{AwsError, AwsResult};
 pub use region::{ParseRegionError, Region};
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError};
 
 mod credential;
-mod error;
 mod param;
 mod region;
 mod request;
+mod xmlerror;
 mod xmlutil;
 mod serialization;
 #[macro_use] mod signature;

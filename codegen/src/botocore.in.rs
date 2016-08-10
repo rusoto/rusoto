@@ -93,13 +93,6 @@ impl Service {
         self.shapes.get(&member.shape).map(|ref shape| &shape.shape_type[..])
     }
 
-    pub fn typed_errors(&self) -> bool {
-        match self.metadata.protocol.as_ref() {
-            "json" => true,
-            _ => false
-        }
-    }
-
     pub fn signing_name(&self) -> String {
         match self.metadata.signing_name {
             Some(ref signing_name) => signing_name.to_string(),

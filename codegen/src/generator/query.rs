@@ -20,13 +20,7 @@ impl GenerateProtocol for QueryGenerator {
                     request.set_params(params);
 
                     request.sign(&try!(self.credentials_provider.credentials()));
-                    let dispatch_result = self.dispatcher.dispatch(&request);
-
-                    if dispatch_result.is_err() {{
-                        return Err(AwsError::new(format!(\"Error dispatching HTTP request\")));
-                    }}
-
-                    let result = dispatch_result.unwrap();
+                    let result = try!(self.dispatcher.dispatch(&request));
 
                     let mut reader = EventReader::from_str(&result.body);
                     let mut stack = XmlResponse::new(reader.events().peekable());
@@ -37,14 +31,16 @@ impl GenerateProtocol for QueryGenerator {
                     match result.status {{
                         200 => {{
                             {method_return_value}
-                        }},
-                        status_code => Err(AwsError::new(
-                            format!(\"HTTP response code for {operation_name}: {{}}\", status_code)
-                        ))
+                        }}
+                        _ => {{
+                            Err({error_type}::from_body(&result.body))
+                        }}
                     }}
+
                 }}
                 ",
                 documentation = generate_documentation(operation),
+                error_type = operation.error_type_name(),
                 http_method = &operation.http.method,
                 endpoint_prefix = &service.metadata.endpoint_prefix,
                 method_return_value = generate_method_return_value(operation),
@@ -59,15 +55,13 @@ impl GenerateProtocol for QueryGenerator {
     fn generate_prelude(&self, _: &Service) -> String {
         "use std::collections::HashMap;
         use std::str::{FromStr, from_utf8};
-
         use xml::EventReader;
 
-        use credential::ProvideAwsCredentials;
-        use error::AwsError;
         use param::{Params, ServiceParams};
         use signature::SignedRequest;
         use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
         use xmlutil::{characters, end_element, peek_at_name, start_element};
+        use xmlerror::*;
         ".to_owned()
     }
 
@@ -138,16 +132,18 @@ fn generate_method_return_value(operation: &Operation) -> String {
 fn generate_method_signature(operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "pub fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, AwsError>",
+            "pub fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
+            error_type = operation.error_type_name(),
         )
     } else {
         format!(
-            "pub fn {operation_name}(&self) -> Result<{output_type}, AwsError>",
+            "pub fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
+            error_type = operation.error_type_name(),
         )
     }
 }
