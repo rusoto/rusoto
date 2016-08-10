@@ -18,7 +18,7 @@ use openssl::crypto::hmac::hmac;
 use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
-use url::percent_encoding::{percent_encode_to, DEFAULT_ENCODE_SET, FORM_URLENCODED_ENCODE_SET};
+use url::percent_encoding::{utf8_percent_encode, DEFAULT_ENCODE_SET, QUERY_ENCODE_SET};
 
 use credential::AwsCredentials;
 use param::Params;
@@ -221,7 +221,7 @@ impl <'a> SignedRequest <'a> {
         self.remove_header("authorization");
         self.add_header("authorization", &auth_header);
     }
-    
+
 }
 
 fn signature(string_to_sign: &str, signing_key: Vec<u8>) -> String {
@@ -308,9 +308,9 @@ fn build_canonical_query_string(params: &Params) -> String {
         if !output.is_empty() {
             output.push_str("&");
         }
-        byte_serialize(item.0, &mut output);
+        output.push_str(&byte_serialize(item.0));
         output.push_str("=");
-        byte_serialize(item.1, &mut output);
+        output.push_str(&byte_serialize(item.1));
     }
 
     output
@@ -318,18 +318,12 @@ fn build_canonical_query_string(params: &Params) -> String {
 
 #[inline]
 fn encode_uri(uri: &str) -> String {
-    let mut encoded_uri = String::new();
-    for &byte in uri.as_bytes().iter() {
-        percent_encode_to(&[byte], DEFAULT_ENCODE_SET, &mut encoded_uri);
-    }
-    encoded_uri
+    utf8_percent_encode(uri, QUERY_ENCODE_SET).collect::<String>()
 }
 
 #[inline]
-fn byte_serialize(input: &str, output: &mut String) {
-    for &byte in input.as_bytes().iter() {
-        percent_encode_to(&[byte], FORM_URLENCODED_ENCODE_SET, output)
-    }
+fn byte_serialize(input: &str) -> String {
+    utf8_percent_encode(input, DEFAULT_ENCODE_SET).collect::<String>()
 }
 
 // TODO: consolidate these functions

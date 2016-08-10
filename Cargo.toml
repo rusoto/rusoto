@@ -28,7 +28,7 @@ rustc-serialize = "0.3.19"
 serde = "0.8.0"
 serde_json = "0.8.0"
 time = "0.1.35"
-url = "0.5.9"
+url = "1.2.0"
 xml-rs = "0.1.26"
 
 [dependencies.clippy]
