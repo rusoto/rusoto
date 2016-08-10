@@ -51,8 +51,8 @@ script:
         export CARGO_ARGS="--features $RUSOTO_FEATURES"
       fi &&
       travis_wait travis-cargo build -- $CARGO_ARGS &&
-      travis-cargo test -- --lib $CARGO_ARGS &&
-      travis-cargo bench -- $CARGO_ARGS &&
+      travis_wait travis-cargo test -- --lib $CARGO_ARGS &&
+      travis_wait travis-cargo bench -- $CARGO_ARGS &&
       travis-cargo --only stable doc -- $CARGO_ARGS
 after_success:
   # upload the documentation from the build with stable (automatically only
