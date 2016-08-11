@@ -335,7 +335,8 @@ fn generate_serializer_signature(name: &str, shape: &Shape) -> String {
 fn generate_list_serializer(shape: &Shape) -> String {
     format!(
         "for (index, element) in obj.iter().enumerate() {{
-    let key = format!(\"{{}}.{{}}\", name, index);
+    // Lists are one-based, see example here: http://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html
+    let key = format!(\"{{}}.{{}}\", name, index+1);
     {name}Serializer::serialize(params, &key, element);
 }}
         ",
