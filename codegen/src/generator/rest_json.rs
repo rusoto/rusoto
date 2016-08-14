@@ -100,7 +100,7 @@ impl GenerateProtocol for RestJsonGenerator {
     }
 
     fn generate_struct_attributes(&self) -> String {
-        "#[derive(Debug, Default, Deserialize, Serialize)]".to_owned()
+        "#[derive(Debug, Default, Deserialize, Serialize, Clone)]".to_owned()
     }
 
     fn timestamp_type(&self) -> &'static str {
