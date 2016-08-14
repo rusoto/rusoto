@@ -89,8 +89,8 @@ impl Service {
         self.shapes.get(&member.shape).map(|shape| shape)
     }
 
-    pub fn shape_type_for_member<'a>(&'a self, member: &Member) -> Option<&'a str> {
-        self.shapes.get(&member.shape).map(|ref shape| &shape.shape_type[..])
+    pub fn shape_type_for_member<'a>(&'a self, member: &Member) -> Option<ShapeType> {
+        self.shapes.get(&member.shape).map(|ref shape| shape.shape_type)
     }
 
     pub fn signing_name(&self) -> String {
@@ -227,7 +227,7 @@ pub struct Shape {
     #[serde(rename="enum")]
     pub shape_enum: Option<Vec<String>>,
     #[serde(rename="type")]
-    pub shape_type: String,
+    pub shape_type: ShapeType,
     pub sensitive: Option<bool>,
     #[serde(rename="timestampFormat")]
     pub timestamp_format: Option<String>,
@@ -256,6 +256,33 @@ impl<'a> Shape {
     pub fn exception(&self) -> bool {
         self.exception.unwrap_or(false)
     }
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub enum ShapeType {
+    #[serde(rename="blob")]
+    Blob,
+    #[serde(rename="boolean")]
+    Boolean,
+    #[serde(rename="double")]
+    Double,
+    #[serde(rename="float")]
+    Float,
+    #[serde(rename="integer")]
+    Integer,
+    #[serde(rename="list")]
+    List,
+    #[serde(rename="long")]
+    Long,
+    #[serde(rename="map")]
+    Map,
+    #[serde(rename="string")]
+    String,
+    #[serde(rename="structure")]
+    Structure,
+    #[serde(rename="timestamp")]
+    Timestamp,
 }
 
 #[derive(Debug, Deserialize)]

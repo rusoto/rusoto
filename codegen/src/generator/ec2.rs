@@ -1,6 +1,6 @@
 use inflector::Inflector;
 
-use botocore::{Member, Operation, Service, Shape};
+use botocore::{Member, Operation, Service, Shape, ShapeType};
 use std::borrow::Cow;
 use super::GenerateProtocol;
 use super::generate_field_name;
@@ -168,9 +168,9 @@ fn generate_method_signature(operation: &Operation) -> String {
 }
 
 fn generate_deserializer_body(name: &str, shape: &Shape) -> String {
-    match &shape.shape_type[..] {
-        "list" => generate_list_deserializer(shape),
-        "structure" => generate_struct_deserializer(name, shape),
+    match shape.shape_type {
+        ShapeType::List => generate_list_deserializer(shape),
+        ShapeType::Structure => generate_struct_deserializer(name, shape),
         _ => generate_primitive_deserializer(shape),
     }
 }
@@ -215,15 +215,15 @@ fn generate_list_deserializer(shape: &Shape) -> String {
 }
 
 fn generate_primitive_deserializer(shape: &Shape) -> String {
-    let statement =  match &shape.shape_type[..] {
-        "string" | "timestamp" => "try!(characters(stack))",
-        "integer" => "i32::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        "long" => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        "double" => "f64::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        "float" => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        "blob" => "try!(characters(stack)).into_bytes()",
-        "boolean" => "bool::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        shape_type => panic!("Unknown primitive shape type: {}", shape_type),
+    let statement =  match shape.shape_type {
+        ShapeType::String | ShapeType::Timestamp => "try!(characters(stack))",
+        ShapeType::Integer => "i32::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::Long => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::Double => "f64::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::Float => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::Blob => "try!(characters(stack)).into_bytes()",
+        ShapeType::Boolean => "bool::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        shape_type => panic!("Unknown primitive shape type: {:?}", shape_type),
     };
 
     format!(
@@ -330,16 +330,16 @@ fn generate_struct_field_parse_expression(
 }
 
 fn generate_serializer_body(shape: &Shape) -> String {
-    match &shape.shape_type[..] {
-        "list" => generate_list_serializer(shape),
-        "map" => generate_map_serializer(shape),
-        "structure" => generate_struct_serializer(shape),
+    match shape.shape_type {
+        ShapeType::List => generate_list_serializer(shape),
+        ShapeType::Map => generate_map_serializer(shape),
+        ShapeType::Structure => generate_struct_serializer(shape),
         _ => generate_primitive_serializer(shape),
     }
 }
 
 fn generate_serializer_signature(name: &str, shape: &Shape) -> String {
-    if &shape.shape_type[..] == "structure" && shape.members.as_ref().unwrap().is_empty() {
+    if shape.shape_type == ShapeType::Structure && shape.members.as_ref().unwrap().is_empty() {
         format!("fn serialize(_params: &mut Params, name: &str, _obj: &{})", name)
     } else {
         format!("fn serialize(params: &mut Params, name: &str, obj: &{})", name)
@@ -424,11 +424,11 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
 }
 
 fn generate_primitive_serializer(shape: &Shape) -> String {
-    let expression = match &shape.shape_type[..] {
-        "string" | "timestamp" => "obj",
-        "integer" | "long" | "float" | "double" | "boolean" => "&obj.to_string()",
-        "blob" => "from_utf8(obj).unwrap()",
-        shape_type => panic!("Unknown primitive shape type: {}", shape_type),
+    let expression = match shape.shape_type {
+        ShapeType::String | ShapeType::Timestamp => "obj",
+        ShapeType::Integer | ShapeType::Long | ShapeType::Float | ShapeType::Double | ShapeType::Boolean => "&obj.to_string()",
+        ShapeType::Blob => "from_utf8(obj).unwrap()",
+        shape_type => panic!("Unknown primitive shape type: {:?}", shape_type),
     };
 
     format!("params.put(name, {});", expression)

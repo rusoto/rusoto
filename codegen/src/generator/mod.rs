@@ -1,6 +1,6 @@
 use inflector::Inflector;
 
-use botocore::{Service, Shape, Operation};
+use botocore::{Service, Shape, ShapeType, Operation};
 use std::ascii::AsciiExt;
 use self::ec2::Ec2Generator;
 use self::json::JsonGenerator;
@@ -120,17 +120,17 @@ fn generate_map(name: &str, shape: &Shape) -> String {
     )
 }
 
-fn generate_primitive_type(name: &str, shape_type: &str, for_timestamps: &str) -> String {
+fn generate_primitive_type(name: &str, shape_type: ShapeType, for_timestamps: &str) -> String {
     let primitive_type = match shape_type {
-        "blob" => "Vec<u8>",
-        "boolean" => "bool",
-        "double" => "f64",
-        "float" => "f32",
-        "integer" => "i32",
-        "long" => "i64",
-        "string" => "String",
-        "timestamp" => for_timestamps,
-        primitive_type => panic!("Unknown primitive type: {}", primitive_type),
+        ShapeType::Blob => "Vec<u8>",
+        ShapeType::Boolean => "bool",
+        ShapeType::Double => "f64",
+        ShapeType::Float => "f32",
+        ShapeType::Integer => "i32",
+        ShapeType::Long => "i64",
+        ShapeType::String => "String",
+        ShapeType::Timestamp => for_timestamps,
+        primitive_type => panic!("Unknown primitive type: {:?}", primitive_type),
     };
 
     format!("pub type {} = {};", name, primitive_type)
@@ -155,10 +155,10 @@ where P: GenerateProtocol {
             parts.push(format!("#[doc=\"{}\"]", docs.replace("\\","\\\\").replace("\"", "\\\"")));
         }
 
-        match &shape.shape_type[..] {
-            "structure" => parts.push(generate_struct(service, type_name, shape, protocol_generator)),
-            "map" => parts.push(generate_map(type_name, shape)),
-            "list" => parts.push(generate_list(type_name, shape)),
+        match shape.shape_type {
+            ShapeType::Structure => parts.push(generate_struct(service, type_name, shape, protocol_generator)),
+            ShapeType::Map => parts.push(generate_map(type_name, shape)),
+            ShapeType::List => parts.push(generate_list(type_name, shape)),
             shape_type => parts.push(generate_primitive_type(type_name, shape_type, protocol_generator.timestamp_type())),
         }
 
@@ -227,7 +227,7 @@ fn generate_struct_fields<P>(service: &Service, shape: &Shape, shape_name: &str,
         lines.append(&mut protocol_generator.generate_additional_annotations(service, shape_name, &type_name));
 
         if let Some(shape_type) = service.shape_type_for_member(member) {
-            if shape_type == "blob" {
+            if shape_type == ShapeType::Blob {
                 lines.push(
                     "#[serde(
                         deserialize_with=\"::serialization::SerdeBlob::deserialize_blob\",
@@ -235,7 +235,7 @@ fn generate_struct_fields<P>(service: &Service, shape: &Shape, shape_name: &str,
                         default,
                     )]".to_owned()
                 );
-            } else if shape_type == "boolean" && !shape.required(member_name) {
+            } else if shape_type == ShapeType::Boolean && !shape.required(member_name) {
                 lines.push("#[serde(skip_serializing_if=\"::std::option::Option::is_none\")]".to_owned());
             }
         }
