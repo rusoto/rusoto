@@ -378,7 +378,7 @@ impl ProvideAwsCredentials for IamProvider {
     }
 }
 
-/// Wrapper for ProvideAwsCredentials that caches the credentials returned by the
+/// Wrapper for `ProvideAwsCredentials` that caches the credentials returned by the
 /// wrapped provider.  Each time the credentials are accessed, they are checked to see if
 /// they have expired, in which case they are retrieved from the wrapped provider again.
 pub struct BaseAutoRefreshingProvider<P, T> {
@@ -386,7 +386,7 @@ pub struct BaseAutoRefreshingProvider<P, T> {
 	cached_credentials: T
 }
 
-/// Threadsafe AutoRefreshingProvider that locks cached credentials with a Mutex
+/// Threadsafe `AutoRefreshingProvider` that locks cached credentials with a `Mutex`
 pub type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>>;
 
 impl <P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
@@ -409,7 +409,7 @@ impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProv
 	}
 }
 
-/// !Sync AutoRefreshingProvider that caches credentials in a RefCell
+/// `!Sync` `AutoRefreshingProvider` that caches credentials in a `RefCell`
 pub type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>;
 
 impl <P: ProvideAwsCredentials> AutoRefreshingProvider<P> {
@@ -437,13 +437,13 @@ impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProv
 
 
 /// The credentials provider you probably want to use if you don't require Sync for your AWS services.
-/// Wraps a ChainProvider in an AutoRefreshingProvider that uses a RefCell to cache credentials
+/// Wraps a `ChainProvider` in an `AutoRefreshingProvider` that uses a `RefCell` to cache credentials
 ///
-/// The underlying ChainProvider checks multiple sources for credentials, and the AutoRefreshingProvider
-/// refreshes the credentials automatically when they expire.  The RefCell allows this caching to happen
-/// without the overhead of a Mutex, but is !Sync.
+/// The underlying `ChainProvider` checks multiple sources for credentials, and the `AutoRefreshingProvider`
+/// refreshes the credentials automatically when they expire.  The `RefCell` allows this caching to happen
+/// without the overhead of a `Mutex`, but is `!Sync`.
 ///
-/// For a Sync implementation of the same, see DefaultCredentialsProviderSync
+/// For a `Sync` implementation of the same, see `DefaultCredentialsProviderSync`
 pub type DefaultCredentialsProvider = AutoRefreshingProvider<ChainProvider>;
 
 impl DefaultCredentialsProvider {
@@ -453,14 +453,14 @@ impl DefaultCredentialsProvider {
 }
 
 /// The credentials provider you probably want to use if you do require your AWS services.
-/// Wraps a ChainProvider in an AutoRefreshingProvider that uses a Mutex to lock credentials in a
+/// Wraps a `ChainProvider` in an `AutoRefreshingProvider` that uses a `Mutex` to lock credentials in a
 /// threadsafe manner.
 ///
-/// The underlying ChainProvider checks multiple sources for credentials, and the AutoRefreshingProvider
-/// refreshes the credentials automatically when they expire.  The Mutex allows this caching to happen
+/// The underlying `ChainProvider` checks multiple sources for credentials, and the `AutoRefreshingProvider`
+/// refreshes the credentials automatically when they expire.  The `Mutex` allows this caching to happen
 /// in a Sync manner, incurring the overhead of a Mutex when credentials expire and need to be refreshed.
 ///
-/// For a !Sync implementation of the same, see DefaultCredentialsProvider
+/// For a `!Sync` implementation of the same, see `DefaultCredentialsProvider`
 pub type DefaultCredentialsProviderSync = AutoRefreshingProviderSync<ChainProvider>;
 
 impl DefaultCredentialsProviderSync {
