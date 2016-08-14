@@ -15,7 +15,6 @@ use crypto::digest::Digest;
 use crypto::hmac::Hmac;
 use crypto::mac::Mac;
 use crypto::sha2::Sha256;
-use hyper::client::Response;
 use hyper::status::StatusCode;
 use rustc_serialize::hex::ToHex;
 use time::Tm;
