@@ -66,7 +66,7 @@ impl GenerateProtocol for QueryGenerator {
     }
 
     fn generate_struct_attributes(&self) -> String {
-        "#[derive(Debug, Default)]".to_owned()
+        "#[derive(Debug, Default, Clone)]".to_owned()
     }
 
     fn generate_support_types(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
