@@ -18,7 +18,7 @@ impl GenerateProtocol for Ec2Generator {
 
                     params.put(\"Action\", \"{operation_name}\");
                     params.put(\"Version\", \"{api_version}\");
-    
+
                     {serialize_input}
 
                     request.set_params(params);
@@ -417,7 +417,7 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
                 ",
                 field_name = generate_field_name(member_name),
                 member_shape_name = member.shape,
-                tag_name = member.tag_name(),
+                tag_name = member.location_name.clone().unwrap_or(member_name.clone()),
             )
         }
     }).collect::<Vec<String>>().join("\n")
