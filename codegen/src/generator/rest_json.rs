@@ -37,13 +37,14 @@ impl GenerateProtocol for RestJsonGenerator {
 
             format!("
                 {documentation}
-                pub fn {method_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}> {{
+                {method_signature} -> Result<{output_type}, {error_type}> {{
                     {encode_input}
 
                     {request_uri_formatter}
 
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, &request_uri);
                     request.set_content_type(\"application/x-amz-json-1.1\".to_owned());
+                    {modify_endpoint_prefix}
                     {load_payload}
                     {load_params}
 
@@ -71,11 +72,11 @@ impl GenerateProtocol for RestJsonGenerator {
                 }}
                 ",
                 documentation = generate_documentation(operation).unwrap_or("".to_owned()),
-                endpoint_prefix = service.metadata.endpoint_prefix,
+                method_signature = generate_method_signature(operation, input_shape),
+                endpoint_prefix = service.signing_name(),
+                modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or("".to_owned()),
                 http_method = operation.http.method,
-                input_type = input_type,
                 error_type = operation.error_type_name(),
-                method_name = operation.name.to_snake_case(),
                 status_code = operation.http.response_code.unwrap_or(200),
                 ok_response = generate_ok_response(operation, output_type),
                 output_type = output_type,
@@ -105,6 +106,27 @@ impl GenerateProtocol for RestJsonGenerator {
 
     fn timestamp_type(&self) -> &'static str {
         "f64"
+    }
+}
+
+// IoT has an endpoint_prefix and a signing_name that differ
+fn generate_endpoint_modification(service: &Service) -> Option<String> {
+    if service.signing_name() == service.metadata.endpoint_prefix {
+        None
+    } else {
+        Some(format!("request.set_endpoint_prefix(\"{}\".to_string());", service.metadata.endpoint_prefix))
+    }
+}
+
+// IoT defines a lot of empty (and therefore unnecessary) request shapes
+// don't clutter method signatures with them
+fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
+    if shape.members.is_some() && shape.members.as_ref().unwrap().len() > 0 {
+        format!("pub fn {method_name}(&self, input: &{input_type})",
+            method_name = operation.name.to_snake_case(),
+            input_type = operation.input_shape())
+    } else {
+        format!("pub fn {method_name}(&self)", method_name = operation.name.to_snake_case())
     }
 }
 
@@ -150,21 +172,27 @@ fn generate_params_loading_string(param_strings: &[String]) -> String {
 
 fn generate_shape_member_param_strings(shape: &Shape) -> Vec<String> {
     shape.members.as_ref().unwrap().iter()
-        .filter_map(|(member_name, member)| generate_param_load_string(&member_name, member))
+        .filter_map(|(member_name, member)| generate_param_load_string(&member_name, member, shape))
         .collect::<Vec<String>>()
 }
 
-fn generate_param_load_string(member_name: &str, member: &Member) -> Option<String> {
+fn generate_param_load_string(member_name: &str, member: &Member, shape: &Shape) -> Option<String> {
     match member.location {
         Some(ref x) if x == "querystring" => {
-            Some(format!(
-                "match input.{field_name} {{
-                    Some(ref x) => params.put(\"{member_name}\", x),
-                    None => {{}},
-                }}",
-                member_name = member_name,
-                field_name = member_name.to_snake_case(),
-            ))
+            if shape.required(member_name) {
+                Some(format!("params.put(\"{member_name}\", &input.{field_name}.to_string());",
+                    member_name = member_name,
+                    field_name = member_name.to_snake_case()))
+            } else {
+                Some(format!(
+                    "match input.{field_name} {{
+                        Some(ref x) => params.put(\"{member_name}\", &x.to_string()),
+                        None => {{}},
+                    }}",
+                    member_name = member_name,
+                    field_name = member_name.to_snake_case(),
+                ))
+            }
         },
         Some(_) => None,
         None => None,
