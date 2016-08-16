@@ -14,8 +14,7 @@ use std::str::{FromStr, ParseBoolError};
 use std::str;
 
 use hyper::client::{Client, RedirectPolicy};
-use openssl::crypto::hash::Type::MD5;
-use openssl::crypto::hash::hash;
+use md5;
 use rustc_serialize::base64::{ToBase64, STANDARD};
 use xml::*;
 
@@ -12561,7 +12560,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
         // bucket name, region, object id, payload.
 
         // content_md5 hashing for everyone!
-        let hash = hash(MD5, request.body.unwrap()).to_base64(STANDARD);
+        let hash = md5::compute(request.body.unwrap()).to_base64(STANDARD);
 
         self.client.put_object(request)
     }
@@ -12674,7 +12673,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
         let mut upload_part_request = UploadPartRequest::default();
         upload_part_request.body = Some(buffer);
 
-        let hash = hash(MD5, upload_part_request.body.unwrap()).to_base64(STANDARD);
+        let hash = md5::compute(upload_part_request.body.unwrap()).to_base64(STANDARD);
         upload_part_request.content_md5 = Some(hash);
 
         upload_part_request.bucket = bucket_name.to_string();

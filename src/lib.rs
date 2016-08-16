@@ -13,8 +13,9 @@
 extern crate chrono;
 extern crate hyper;
 #[macro_use] extern crate log;
-extern crate openssl;
+extern crate md5;
 extern crate regex;
+extern crate ring;
 extern crate rustc_serialize;
 extern crate serde;
 extern crate serde_json;
