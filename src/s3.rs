@@ -12498,10 +12498,12 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     }
 
     fn is_valid_subdomain(&self, bucket: &BucketName) -> bool {
-        let subdomain_re: Regex = Regex::new(r"^[a-z0-9][a-z0-9.-]+[a-z0-9]$").unwrap();
-        let ipv4_re: Regex = Regex::new(r"(\d+\.){3}\d+").unwrap();
-        let invalid_re: Regex = Regex::new(r"[.-]{2}").unwrap();
-        bucket.len() < 64 && subdomain_re.is_match(&bucket) && !ipv4_re.is_match(&bucket) && !invalid_re.is_match(&bucket)
+        lazy_static! {
+            static ref SUBDOMAIN_RE: Regex = Regex::new(r"^[a-z0-9][a-z0-9.-]+[a-z0-9]$").unwrap();
+            static ref IPV4_RE: Regex = Regex::new(r"(\d+\.){3}\d+").unwrap();
+            static ref INVALID_RE: Regex = Regex::new(r"[.-]{2}").unwrap();
+        }
+        bucket.len() < 64 && SUBDOMAIN_RE.is_match(&bucket) && !IPV4_RE.is_match(&bucket) && !INVALID_RE.is_match(&bucket)
     }
 }
 
