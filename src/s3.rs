@@ -11243,7 +11243,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     /// **Note:** After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.
     pub fn upload_part(&self, input: &UploadPartRequest) -> Result<String, S3Error> {
         let mut path = String::from("/");
-        if !self.is_dns_compatible(&input.bucket) {
+        if !is_dns_compatible(&input.bucket) {
             path = path + &input.bucket + "/";
         }
         path = path + &input.key;
@@ -11251,7 +11251,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
 
         request.set_payload(input.body);
 
-        if self.is_dns_compatible(&input.bucket) {
+        if is_dns_compatible(&input.bucket) {
             let hostname = self.hostname(Some(&input.bucket));
             request.set_hostname(Some(hostname));
         }
@@ -11287,7 +11287,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     /// Adds an object to a bucket.
     pub fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, S3Error> {
         let mut uri = String::from("/");
-        if !self.is_dns_compatible(&input.bucket) {
+        if !is_dns_compatible(&input.bucket) {
             uri = uri + &input.bucket + "/";
         }
         uri = uri + &input.key;
@@ -11334,7 +11334,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             None => request.set_content_type("binary/octet-stream".to_string())
         };
 
-        if self.is_dns_compatible(&input.bucket) {
+        if is_dns_compatible(&input.bucket) {
             let hostname = self.hostname(Some(&input.bucket));
             request.set_hostname(Some(hostname));
         }
@@ -11797,11 +11797,11 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         let region = Region::UsEast1;
         let mut create_config : Vec<u8>;
         let mut path = String::from("/");
-        if !self.is_dns_compatible(&input.bucket) {
+        if !is_dns_compatible(&input.bucket) {
             path = path + &input.bucket;
         }
         let mut request = SignedRequest::new("PUT", "s3", region, &path);
-        if self.is_dns_compatible(&input.bucket) {
+        if is_dns_compatible(&input.bucket) {
             let hostname = self.hostname(Some(&input.bucket));
             request.set_hostname(Some(hostname));
         }
@@ -11834,7 +11834,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     /// Completes a multipart upload by assembling previously uploaded parts.
     pub fn complete_multipart_upload(&self, input: &CompleteMultipartUploadRequest) -> Result<CompleteMultipartUploadOutput, S3Error> {
         let mut path = String::from("/");
-        if !self.is_dns_compatible(&input.bucket) {
+        if !is_dns_compatible(&input.bucket) {
             path = path + &input.bucket + "/";
         }
         path = path + &input.key;
@@ -11845,7 +11845,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("uploadId", &input.upload_id.to_string());
         request.set_params(params);
 
-        if self.is_dns_compatible(&input.bucket) {
+        if is_dns_compatible(&input.bucket) {
             let hostname = self.hostname(Some(&input.bucket));
             request.set_hostname(Some(hostname));
         }
@@ -11894,7 +11894,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     pub fn create_multipart_upload(&self, input: &CreateMultipartUploadRequest) -> Result<CreateMultipartUploadOutput, S3Error> {
 
         let mut path = String::from("/");
-        if !self.is_dns_compatible(&input.bucket) {
+        if !is_dns_compatible(&input.bucket) {
             path = path + &input.bucket + "/";
         }
         path = path + &input.key;
@@ -11904,7 +11904,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("uploads", "");
         request.set_params(params);
 
-        if self.is_dns_compatible(&input.bucket) {
+        if is_dns_compatible(&input.bucket) {
             let hostname = self.hostname(Some(&input.bucket));
             request.set_hostname(Some(hostname));
         }
@@ -11927,12 +11927,12 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     /// deleted.
     pub fn delete_bucket(&self, input: &DeleteBucketRequest, region: Region) -> Result<(), S3Error> {
         let mut path = String::from("/");
-        if !self.is_dns_compatible(&input.bucket) {
+        if !is_dns_compatible(&input.bucket) {
             path = path + &input.bucket + "/";
         }
         let mut request = SignedRequest::new("DELETE", "s3", region, &path);
 
-        if self.is_dns_compatible(&input.bucket) {
+        if is_dns_compatible(&input.bucket) {
             let hostname = self.hostname(Some(&input.bucket));
             request.set_hostname(Some(hostname));
         }
@@ -12036,14 +12036,14 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     /// Retrieves objects from Amazon S3.
     pub fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, S3Error> {
         let mut path = String::from("/");
-        if !self.is_dns_compatible(&input.bucket) {
+        if !is_dns_compatible(&input.bucket) {
             path = path + &input.bucket + "/";
         }
         path = path + &input.key;
         let mut request = SignedRequest::new("GET", "s3", self.region, &path);
         let mut params = Params::new();
 
-        if self.is_dns_compatible(&input.bucket) {
+        if is_dns_compatible(&input.bucket) {
             let hostname = self.hostname(Some(&input.bucket));
             request.set_hostname(Some(hostname));
         }
@@ -12112,7 +12112,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     /// This operation lists in-progress multipart uploads.
     pub fn list_multipart_uploads(&self, input: &ListMultipartUploadsRequest) -> Result<ListMultipartUploadsOutput, S3Error> {
         let mut path = String::from("/");
-        if !self.is_dns_compatible(&input.bucket) {
+        if !is_dns_compatible(&input.bucket) {
             path = path + &input.bucket + "/";
         }
         let mut request = SignedRequest::new("GET", "s3", self.region, &path);
@@ -12121,7 +12121,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("uploads", "");
         request.set_params(params);
 
-        if self.is_dns_compatible(&input.bucket) {
+        if is_dns_compatible(&input.bucket) {
             let hostname = self.hostname(Some(&input.bucket));
             request.set_hostname(Some(hostname));
         }
@@ -12207,7 +12207,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     /// list is empty.
     pub fn abort_multipart_upload(&self, input: &AbortMultipartUploadRequest) -> Result<AbortMultipartUploadOutput, S3Error> {
         let mut path = String::from("/");
-        if !self.is_dns_compatible(&input.bucket) {
+        if !is_dns_compatible(&input.bucket) {
             path = path + &input.bucket + "/";
         }
         path = path + &input.key;
@@ -12217,7 +12217,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("uploadId", &input.upload_id.to_string());
         request.set_params(params);
 
-        if self.is_dns_compatible(&input.bucket) {
+        if is_dns_compatible(&input.bucket) {
             let hostname = self.hostname(Some(&input.bucket));
             request.set_hostname(Some(hostname));
         }
@@ -12339,7 +12339,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     /// Lists the parts that have been uploaded for a specific multipart upload.
     pub fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, S3Error> {
         let mut path = String::from("/");
-        if !self.is_dns_compatible(&input.bucket) {
+        if !is_dns_compatible(&input.bucket) {
             path = path + &input.bucket + "/";
         }
         path = path + &input.key;
@@ -12349,7 +12349,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("uploadId", &input.upload_id.to_string());
         request.set_params(params);
 
-        if self.is_dns_compatible(&input.bucket) {
+        if is_dns_compatible(&input.bucket) {
             let hostname = self.hostname(Some(&input.bucket));
             request.set_hostname(Some(hostname));
         }
@@ -12414,14 +12414,14 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     /// version, Amazon S3 does not remove any objects.
     pub fn delete_object(&self, input: &DeleteObjectRequest) -> Result<DeleteObjectOutput, S3Error> {
         let mut path = String::from("/");
-        if !self.is_dns_compatible(&input.bucket) {
+        if !is_dns_compatible(&input.bucket) {
             path = path + &input.bucket + "/";
         }
         path = path +  &input.key;
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &path);
         let mut params = Params::new();
 
-        if self.is_dns_compatible(&input.bucket) {
+        if is_dns_compatible(&input.bucket) {
             let hostname = self.hostname(Some(&input.bucket));
             request.set_hostname(Some(hostname));
         }
@@ -12491,19 +12491,6 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             Some(b) => format!("{}.s3.amazonaws.com", b),
             None => host,
         }
-    }
-
-    fn is_dns_compatible(&self, bucket: &BucketName) -> bool {
-        self.is_valid_subdomain(&bucket) && !bucket.contains(".")
-    }
-
-    fn is_valid_subdomain(&self, bucket: &BucketName) -> bool {
-        lazy_static! {
-            static ref SUBDOMAIN_RE: Regex = Regex::new(r"^[a-z0-9][a-z0-9.-]+[a-z0-9]$").unwrap();
-            static ref IPV4_RE: Regex = Regex::new(r"(\d+\.){3}\d+").unwrap();
-            static ref INVALID_RE: Regex = Regex::new(r"[.-]{2}").unwrap();
-        }
-        bucket.len() < 64 && SUBDOMAIN_RE.is_match(&bucket) && !IPV4_RE.is_match(&bucket) && !INVALID_RE.is_match(&bucket)
     }
 }
 
@@ -12927,6 +12914,19 @@ fn sign_and_execute<D>(dispatcher: &D, request: &mut SignedRequest, creds: AwsCr
     response
 }
 
+fn is_valid_subdomain(bucket: &BucketName) -> bool {
+    lazy_static! {
+        static ref SUBDOMAIN_RE: Regex = Regex::new(r"^[a-z0-9][a-z0-9.-]+[a-z0-9]$").unwrap();
+        static ref IPV4_RE: Regex = Regex::new(r"(\d+\.){3}\d+").unwrap();
+        static ref INVALID_RE: Regex = Regex::new(r"[.-]{2}").unwrap();
+    }
+    bucket.len() < 64 && SUBDOMAIN_RE.is_match(&bucket) && !IPV4_RE.is_match(&bucket) && !INVALID_RE.is_match(&bucket)
+}
+
+fn is_dns_compatible(bucket: &BucketName) -> bool {
+    is_valid_subdomain(&bucket) && !bucket.contains(".")
+}
+
 #[cfg(test)]
 mod tests {
     use std::io::{Read, BufReader};
@@ -13179,4 +13179,29 @@ mod tests {
         }
     }
 
+    #[test]
+    fn valid_subdomain() {
+        assert!(super::is_valid_subdomain(&"foo-bar".to_string()));
+        assert!(super::is_valid_subdomain(&"foo.bar".to_string()));
+    }
+
+    #[test]
+    fn invalid_subdomain() {
+        assert!(!super::is_valid_subdomain(&"foo--bar".to_string()));
+    }
+
+    #[test]
+    fn dns_compatible_bucket() {
+        assert!(super::is_dns_compatible(&"foo-bar".to_string()));
+    }
+
+    #[test]
+    fn bucket_with_invalid_subdomain_is_dns_incompatible() {
+        assert!(!super::is_dns_compatible(&"foo--bar".to_string()));
+    }
+
+    #[test]
+    fn bucket_with_dot_is_dns_incompatible() {
+        assert!(!super::is_dns_compatible(&"foo.bar".to_string()));
+    }
 }
