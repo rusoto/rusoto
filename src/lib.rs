@@ -89,6 +89,8 @@ pub mod events;
 pub mod firehose;
 #[cfg(feature = "inspector")]
 pub mod inspector;
+#[cfg(feature = "iot")]
+pub mod iot;
 #[cfg(feature = "kinesis")]
 pub mod kinesis;
 #[cfg(feature = "kms")]
