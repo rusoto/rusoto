@@ -178,9 +178,9 @@ impl <'a> SignedRequest <'a> {
                     self.canonical_query_string,
                     canonical_headers,
                     signed_headers,
-                    &to_hexdigest_from_string(""));
+                    &to_hexdigest(""));
                 self.remove_header("x-amz-content-sha256");
-                self.add_header("x-amz-content-sha256", &to_hexdigest_from_string(""));
+                self.add_header("x-amz-content-sha256", &to_hexdigest(""));
             }
             Some(payload) => {
                 // This is hashing the payload twice, booo:
@@ -190,9 +190,9 @@ impl <'a> SignedRequest <'a> {
                     self.canonical_query_string,
                     canonical_headers,
                     signed_headers,
-                    &to_hexdigest_from_bytes(payload));
+                    &to_hexdigest(payload));
                 self.remove_header("x-amz-content-sha256");
-                self.add_header("x-amz-content-sha256", &to_hexdigest_from_bytes(payload));
+                self.add_header("x-amz-content-sha256", &to_hexdigest(payload));
                 self.remove_header("content-length");
                 self.add_header("content-length", &format!("{}", payload.len()));
             }
@@ -207,7 +207,7 @@ impl <'a> SignedRequest <'a> {
         self.add_header("content-type", &ct);
 
         // use the hashed canonical request to build the string to sign
-        let hashed_canonical_request = to_hexdigest_from_string(&canonical_request);
+        let hashed_canonical_request = to_hexdigest(&canonical_request);
         let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), self.region, &self.service);
         let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
 
@@ -326,14 +326,8 @@ fn byte_serialize(input: &str) -> String {
     utf8_percent_encode(input, DEFAULT_ENCODE_SET).collect::<String>()
 }
 
-// TODO: consolidate these functions
-fn to_hexdigest_from_string(val: &str) -> String {
-    let h = hash(SHA256, val.as_bytes());
-    h.to_hex().to_string()
-}
-
-fn to_hexdigest_from_bytes(val: &[u8]) -> String {
-    let h = hash(SHA256, val);
+fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
+    let h = hash(SHA256, t.as_ref());
     h.to_hex().to_string()
 }
 
