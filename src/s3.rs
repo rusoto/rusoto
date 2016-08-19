@@ -4948,8 +4948,8 @@ impl ListObjectsOutputParser {
                 obj.is_truncated = try!(IsTruncatedParser::parse_xml("IsTruncated", stack));
                 continue;
             }
-            if current_name == "Object" {
-                obj.contents = try!(ObjectListParser::parse_xml("Object", stack));
+            if current_name == "Contents" {
+                obj.contents = try!(ObjectListParser::parse_xml("Contents", stack));
                 continue;
             }
             if current_name == "CommonPrefix" {
@@ -5501,8 +5501,8 @@ struct ObjectListParser;
 impl ObjectListParser {
     fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ObjectList, XmlParseError> {
         let mut obj = Vec::new();
-        while try!(peek_at_name(stack)) == "Object" {
-            obj.push(try!(ObjectParser::parse_xml("Object", stack)));
+        while try!(peek_at_name(stack)) == "Contents" {
+            obj.push(try!(ObjectParser::parse_xml("Contents", stack)));
         }
         Ok(obj)
     }
@@ -7954,9 +7954,15 @@ struct PrefixParser;
 impl PrefixParser {
     fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Prefix, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
-        Ok(obj)
+        // this could be an empty, self-closing tag:
+        match end_element(tag_name, stack) {
+            Ok(()) => Ok("".to_string()),
+            Err(_) => {
+                let obj = try!(characters(stack));
+                try!(end_element(tag_name, stack));
+                Ok(obj)
+            }
+        }
     }
 }
 /// Write `Prefix` contents to a `SignedRequest`
@@ -8474,9 +8480,14 @@ struct MarkerParser;
 impl MarkerParser {
     fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Marker, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
-        Ok(obj)
+        match end_element(tag_name, stack) {
+            Ok(()) => Ok("".to_string()),
+            Err(_) => {
+                let obj = try!(characters(stack));
+                try!(end_element(tag_name, stack));
+                Ok(obj)
+            }
+        }
     }
 }
 /// Write `Marker` contents to a `SignedRequest`
@@ -11137,9 +11148,11 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     /// request parameters as selection criteria to return a subset of the objects in
     /// a bucket.
     pub fn list_objects(&self, input: &ListObjectsRequest) -> Result<ListObjectsOutput, S3Error> {
-        let mut request = SignedRequest::new("GET", "s3", self.region, "/{Bucket}");
+        let uri = format!("/{}", &input.bucket);
+        let mut request = SignedRequest::new("GET", "s3", self.region, &uri);
+
         let mut params = Params::new();
-        params.put("Action", "ListObjects");
+
         ListObjectsRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
         let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
@@ -11147,12 +11160,11 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
         stack.next(); // xml start tag
-        stack.next();
         match status {
             200 => {
-                Ok(try!(ListObjectsOutputParser::parse_xml("ListObjectsOutput", &mut stack)))
+                Ok(try!(ListObjectsOutputParser::parse_xml("ListBucketResult", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("error, status was {:?}", status))) }
         }
     }
     /// Set the website configuration for a bucket.
