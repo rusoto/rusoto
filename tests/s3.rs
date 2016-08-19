@@ -11,7 +11,7 @@ extern crate rusoto;
 use std::io::Read;
 use std::fs::File;
 use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::s3::S3Helper;
+use rusoto::s3::{S3Helper, S3Client, ListObjectsRequest};
 
 #[test]
 fn list_buckets_tests() {
@@ -35,6 +35,16 @@ fn put_object_test() {
             s3.put_object("rusototester", "no_credentials", &contents).unwrap();
         }
     }
+}
+
+#[test]
+fn list_objects_test() {
+    let _ = env_logger::init();
+    let bare_s3 = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
+    let mut list_request = ListObjectsRequest::default(); // need to set bucket
+    list_request.bucket = "rusototester".to_string();
+    let result = bare_s3.list_objects(&list_request).unwrap();
+    println!("result is {:?}", result);
 }
 
 // Dependent on the file being there or it'll break.
