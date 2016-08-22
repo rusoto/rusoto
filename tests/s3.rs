@@ -8,27 +8,54 @@ extern crate time;
 #[macro_use]
 extern crate rusoto;
 
+use std::io::Read;
+use std::fs::File;
 use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::s3::{S3Error, S3Helper};
+use rusoto::s3::{S3Helper, S3Client, ListObjectsRequest};
 
 #[test]
-fn all_s3_tests() {
+fn list_buckets_tests() {
     let _ = env_logger::init();
-    info!("s3 integration tests starting up.");
-    let mut s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
-
-    match s3_list_buckets_tests(&mut s3) {
-        Ok(_) => { info!("Everything worked for S3 list buckets."); },
-        Err(err) => { info!("Got error in s3 list buckets: {}", err); }
-    }
-}
-
-fn s3_list_buckets_tests(s3: &mut S3Helper<DefaultCredentialsProvider>) -> Result<(), S3Error> {
-    let response = try!(s3.list_buckets());
+    let s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
+    let response = s3.list_buckets().unwrap();
     info!("Got list of buckets: {:?}", response);
     for q in response.buckets {
         info!("Existing bucket: {:?}", q.name);
     }
+}
 
-    Ok(())
+#[test]
+fn put_object_test() {
+    let s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
+    let mut f = File::open("tests/sample-data/no_credentials").unwrap();
+    let mut contents : Vec<u8> = Vec::new();
+    match f.read_to_end(&mut contents) {
+        Err(why) => panic!("Error opening file to send to S3: {}", why),
+        Ok(_) => {
+            s3.put_object("rusototester", "no_credentials", &contents).unwrap();
+        }
+    }
+}
+
+#[test]
+fn list_objects_test() {
+    let _ = env_logger::init();
+    let bare_s3 = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
+    let mut list_request = ListObjectsRequest::default(); // need to set bucket
+    list_request.bucket = "rusototester".to_string();
+    let result = bare_s3.list_objects(&list_request).unwrap();
+    println!("result is {:?}", result);
+}
+
+// Dependent on the file being there or it'll break.
+#[test]
+fn get_object_test() {
+    let s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
+    s3.get_object("rusototester", "no_credentials2").unwrap();
+}
+
+#[test]
+fn delete_object_test() {
+    let s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
+    s3.delete_object("rusototester", "no_credentials").unwrap();
 }
