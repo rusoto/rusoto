@@ -45,12 +45,12 @@ use rusoto::dynamodb::{DynamoDBClient, ListTablesInput};
 
 fn main() {
   let provider = DefaultCredentialsProvider::new().unwrap();
-  let mut client = DynamoDBClient::new(provider, Region::UsEast1);
+  let client = DynamoDBClient::new(provider, Region::UsEast1);
   let list_tables_input: ListTablesInput = Default::default();
 
   match client.list_tables(&list_tables_input) {
     Ok(output) => {
-      match output.TableNames {
+      match output.table_names {
         Some(table_name_list) => {
           println!("Tables in database:");
 
