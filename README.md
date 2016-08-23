@@ -41,11 +41,11 @@ extern crate rusoto;
 use std::default::Default;
 
 use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::dynamodb::{DynamoDBClient, ListTablesInput};
+use rusoto::dynamodb::{DynamoDbClient, ListTablesInput};
 
 fn main() {
   let provider = DefaultCredentialsProvider::new().unwrap();
-  let client = DynamoDBClient::new(provider, Region::UsEast1);
+  let client = DynamoDbClient::new(provider, Region::UsEast1);
   let list_tables_input: ListTablesInput = Default::default();
 
   match client.list_tables(&list_tables_input) {
@@ -113,7 +113,7 @@ All supported services | all
 [Direct Connect](https://aws.amazon.com/directconnect/) | directconnect
 [Directory Service](https://aws.amazon.com/directoryservice/) | ds
 [DynamoDB](https://aws.amazon.com/dynamodb/) | dynamodb
-[DynamoDB Streams](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html)) | dynamodbstreams
+[DynamoDB Streams](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html) | dynamodbstreams
 [EC2](https://aws.amazon.com/ec2/) | ec2
 [EC2 Container Registry](https://aws.amazon.com/ecr/) | ecr
 [ECS](https://aws.amazon.com/ecs/) | ecs
