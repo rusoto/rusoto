@@ -15,7 +15,10 @@
 //! The following code shows a simple example of using Rusoto's DynamoDB API to
 //! list the names of all tables in a database.
 //!
-//! ```
+//! ```rust
+//! # #![feature(stmt_expr_attributes)]
+//! # #[cfg(feature = "dynamodb")]
+//! # {
 //! use std::default::Default;
 //!
 //! use rusoto::{DefaultCredentialsProvider, Region};
@@ -42,6 +45,7 @@
 //!         println!("Error: {:?}", error);
 //!     },
 //! }
+//! # }
 
 extern crate chrono;
 extern crate hyper;
