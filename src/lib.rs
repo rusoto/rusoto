@@ -15,7 +15,7 @@
 //! The following code shows a simple example of using Rusoto's DynamoDB API to
 //! list the names of all tables in a database.
 //!
-//! ```
+//! ```rust,ignore
 //! use std::default::Default;
 //!
 //! use rusoto::{DefaultCredentialsProvider, Region};
@@ -159,4 +159,3 @@ pub mod gamelift;
 #[cfg(feature = "support")]
 pub mod support;
 */
-
