@@ -12,9 +12,7 @@ use std::collections::btree_map::Entry;
 use std::str;
 
 use hyper::status::StatusCode;
-use openssl::crypto::hash::Type::SHA256;
-use openssl::crypto::hash::hash;
-use openssl::crypto::hmac::hmac;
+use ring::{digest, hmac};
 use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
@@ -224,15 +222,24 @@ impl <'a> SignedRequest <'a> {
 
 }
 
-fn signature(string_to_sign: &str, signing_key: Vec<u8>) -> String {
-    hmac(SHA256, &signing_key, string_to_sign.as_bytes()).to_hex().to_string()
+fn signature(string_to_sign: &str, signing_key: hmac::SigningKey) -> String {
+    hmac::sign(&signing_key, string_to_sign.as_bytes()).as_ref().to_hex().to_string()
 }
 
-fn signing_key(secret: &str, date: Tm, region: &str, service: &str) -> Vec<u8> {
-    let k_date = hmac(SHA256, format!("AWS4{}", secret).as_bytes(), date.strftime("%Y%m%d").unwrap().to_string().as_bytes());
-    let k_region = hmac(SHA256, &k_date, region.as_bytes());
-    let k_service = hmac(SHA256, &k_region, service.as_bytes());
-    hmac(SHA256, &k_service, b"aws4_request")
+fn signing_key(secret: &str, date: Tm, region: &str, service: &str) -> hmac::SigningKey {
+    let date_key = hmac::SigningKey::new(&digest::SHA256, format!("AWS4{}", secret).as_bytes());
+    let date_hmac = hmac::sign(&date_key, date.strftime("%Y%m%d").unwrap().to_string().as_bytes());
+
+    let region_key = hmac::SigningKey::new(&digest::SHA256, date_hmac.as_ref());
+    let region_hmac = hmac::sign(&region_key, region.as_bytes());
+
+    let service_key = hmac::SigningKey::new(&digest::SHA256, region_hmac.as_ref());
+    let service_hmac = hmac::sign(&service_key, service.as_bytes());
+
+    let signing_key = hmac::SigningKey::new(&digest::SHA256, service_hmac.as_ref());
+    let signing_hmac = hmac::sign(&signing_key, b"aws4_request");
+
+    hmac::SigningKey::new(&digest::SHA256, signing_hmac.as_ref())
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
@@ -327,8 +334,8 @@ fn byte_serialize(input: &str) -> String {
 }
 
 fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
-    let h = hash(SHA256, t.as_ref());
-    h.to_hex().to_string()
+    let h = digest::digest(&digest::SHA256, t.as_ref());
+    h.as_ref().to_hex().to_string()
 }
 
 fn build_hostname(service: &str, region: Region) -> String {
