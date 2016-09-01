@@ -9,6 +9,8 @@ pub struct QueryGenerator;
 impl GenerateProtocol for QueryGenerator {
     fn generate_methods(&self, service: &Service) -> String {
         service.operations.values().map(|operation| {
+            let xml_tag = &operation.output_shape_or_wrapper_or("()");
+
             format!(
                 "
                 {documentation}
@@ -44,9 +46,9 @@ impl GenerateProtocol for QueryGenerator {
                 method_return_value = generate_method_return_value(operation),
                 method_signature = generate_method_signature(operation),
                 operation_name = &operation.name,
-                xml_stack_loader = generate_xml_stack_loader(&operation.output_shape_or("()")),
+                xml_stack_loader = generate_xml_stack_loader(xml_tag),
                 request_uri = &operation.http.request_uri,
-                serialize_input = generate_method_input_serialization(operation),
+                serialize_input = generate_method_input_serialization(operation)
             )
         }).collect::<Vec<String>>().join("\n")
     }
@@ -141,9 +143,14 @@ fn generate_method_input_serialization(operation: &Operation) -> String {
 
 fn generate_method_return_value(operation: &Operation) -> String {
     if operation.output.is_some() {
+
+        let output_type = &operation.output.as_ref().unwrap().shape;
+        let tag_name = operation.wrapper().unwrap_or(output_type);
+
         format!(
-            "Ok(try!({output_type}Deserializer::deserialize(\"{output_type}\", &mut stack)))",
-            output_type = &operation.output.as_ref().unwrap().shape,
+            "Ok(try!({output_type}Deserializer::deserialize(\"{tag_name}\", &mut stack)))",
+            tag_name = tag_name,
+            output_type = output_type
         )
     } else {
         "Ok(())".to_owned()
