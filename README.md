@@ -83,6 +83,10 @@ To see output of logging from integration tests, run:
 
 `RUST_LOG=info cargo test --features all`
 
+To get logging output as well as `println!()` statements, run:
+
+`RUST_LOG=debug cargo test --features all -- --nocapture`
+
 ## Semantic versioning
 
 Rusoto complies with [semantic versioning 2.0.0](http://semver.org/).
