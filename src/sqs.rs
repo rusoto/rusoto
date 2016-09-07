@@ -6,9 +6,6 @@ include!(concat!(env!("OUT_DIR"), "/sqs.rs"));
 
 #[cfg(test)]
 mod test {
-	use std::fs::File;
-	use std::io::Read;
-
 	use sqs::{SqsClient, CreateQueueRequest};
     use super::super::{Region, SignedRequest};
     use super::super::mock::*;
@@ -18,17 +15,8 @@ mod test {
     #[test]
     // sample response from the SQS documentation
     fn should_parse_example_create_queue_response() {
-		let sample_creation_response_location = "./codegen/botocore/tests/unit/response_parsing/xml/responses/sqs-create-queue.xml";
-		let mut input_file = File::open(sample_creation_response_location)
-			.expect("couldn't find file");
-
-	    let mut mock_response = String::new();
-
-	    input_file.read_to_string(&mut mock_response).expect(&format!(
-	        "Failed to read {:?}",
-	        sample_creation_response_location,
-	    ));
-
+        let mock_response =  MockResponseReader::read_response("sqs-create-queue.xml");
+		
         let mock = MockRequestDispatcher::with_status(200)
             .with_body(&mock_response)
             .with_request_checker(|request: &SignedRequest| {

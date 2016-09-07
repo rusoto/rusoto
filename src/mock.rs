@@ -1,4 +1,8 @@
 //! Mock request dispatcher and credentials for unit testing services
+
+use std::fs::File;
+use std::io::Read;
+
 use super::{DispatchSignedRequest, HttpResponse, HttpDispatchError, SignedRequest};
 use super::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
 use chrono::{Duration, UTC};
@@ -52,4 +56,28 @@ impl DispatchSignedRequest for MockRequestDispatcher {
 		}
 		Ok(self.mock_response.clone())
 	}
+}
+
+pub trait ReadMockResponse {
+	fn read_response(file_name: &str) -> String;
+}
+
+pub struct MockResponseReader;
+
+impl ReadMockResponse for MockResponseReader {
+	fn read_response(response_name: &str) -> String {
+		let file_name = format!("./codegen/botocore/tests/unit/response_parsing/xml/responses/{}", response_name);
+
+		let mut input_file = File::open(&file_name)
+			.expect("couldn't find file");
+
+	    let mut mock_response = String::new();
+
+	    input_file.read_to_string(&mut mock_response).expect(&format!(
+	        "Failed to read {:?}",
+	        file_name,
+	    ));
+
+        mock_response
+	} 
 }
