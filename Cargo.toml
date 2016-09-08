@@ -21,6 +21,7 @@ version = ">= 0.2.5"
 [dependencies]
 chrono = "0.2.21"
 hyper = "0.9.10"
+lazy_static = "0.1.16"
 log = "0.3.6"
 md5 = "0.2"
 regex = "0.1.65"
