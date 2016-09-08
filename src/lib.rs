@@ -59,6 +59,7 @@ extern crate xml;
 pub use credential::{
     AwsCredentials,
     ChainProvider,
+    CredentialsError,
     EnvironmentProvider,
     IamProvider,
     ProfileProvider,
@@ -68,6 +69,7 @@ pub use credential::{
 };
 pub use region::{ParseRegionError, Region};
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError};
+pub use signature::SignedRequest;
 
 mod credential;
 mod param;
@@ -78,6 +80,8 @@ mod xmlutil;
 mod serialization;
 #[macro_use] mod signature;
 
+#[cfg(test)]
+mod mock;
 
 #[cfg(feature = "acm")]
 pub mod acm;

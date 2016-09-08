@@ -28,17 +28,17 @@ const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 /// the Amazon Signature Version 4 signing process
 #[derive(Debug)]
 pub struct SignedRequest<'a> {
-    method: String,
-    service: String,
-    region: Region,
-    path: String,
-    headers: BTreeMap<String, Vec<Vec<u8>>>,
-    params: Params,
-    hostname: Option<String>,
-    payload: Option<&'a [u8]>,
-    content_type: Option<String>,
-    canonical_query_string: String,
-    canonical_uri: String,
+    pub method: String,
+    pub service: String,
+    pub region: Region,
+    pub path: String,
+    pub headers: BTreeMap<String, Vec<Vec<u8>>>,
+    pub params: Params,
+    pub hostname: Option<String>,
+    pub payload: Option<&'a [u8]>,
+    pub content_type: Option<String>,
+    pub canonical_query_string: String,
+    pub canonical_uri: String,
 }
 
 impl <'a> SignedRequest <'a> {
