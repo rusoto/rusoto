@@ -137,7 +137,12 @@ fn generate_response_tag_name<'a>(member_name: &'a str) -> Cow<'a, str> {
 fn generate_method_return_value(operation: &Operation) -> String {
     if operation.output.is_some() {
         let output_type = &operation.output.as_ref().unwrap().shape;
-        let tag_name = generate_response_tag_name(output_type);
+        let standard_tag_name = generate_response_tag_name(output_type).into_owned();
+        let tag_name = match standard_tag_name.as_ref() {
+            "Snapshot" => "CreateSnapshotResponse",
+            _ => &standard_tag_name
+        };
+
         format!(
             "Ok(try!({output_type}Deserializer::deserialize(\"{tag_name}\", &mut stack)))",
             output_type = output_type,
