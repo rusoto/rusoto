@@ -11150,7 +11150,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     pub fn list_objects(&self, input: &ListObjectsRequest) -> Result<ListObjectsOutput, S3Error> {
         let mut path = String::from("/");
         if !is_dns_compatible(&input.bucket) {
-            path = path + &input.bucket + "/";
+            path = format!("{}{}/", path, &input.bucket);
         }
         let mut request = SignedRequest::new("GET", "s3", self.region, &path);
 
@@ -11306,9 +11306,9 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     pub fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, S3Error> {
         let mut uri = String::from("/");
         if !is_dns_compatible(&input.bucket) {
-            uri = uri + &input.bucket + "/";
+            uri = format!("{}{}/", uri, &input.bucket);
         }
-        uri = uri + &input.key;
+        uri = format!("{}{}", uri, &input.key);
         let mut request = SignedRequest::new("PUT", "s3", self.region, &uri);
 
         if let Some(ref class) = input.storage_class {
@@ -11816,7 +11816,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         let mut create_config : Vec<u8>;
         let mut path = String::from("/");
         if !is_dns_compatible(&input.bucket) {
-            path = path + &input.bucket;
+            path = format!("{}{}/", path, &input.bucket);
         }
         let mut request = SignedRequest::new("PUT", "s3", region, &path);
         if is_dns_compatible(&input.bucket) {
@@ -12435,7 +12435,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         if !is_dns_compatible(&input.bucket) {
             path = format!("{}{}/", path, &input.bucket);
         }
-        path = path +  &input.key;
+        path = format!("{}{}/", path, &input.key);
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &path);
         let mut params = Params::new();
 
