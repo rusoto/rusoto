@@ -1,7 +1,7 @@
 use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape, ShapeType};
-use std::borrow::Cow;
+// use std::borrow::Cow;
 use super::GenerateProtocol;
 use super::generate_field_name;
 use super::tests::{Response, find_responses};
@@ -200,25 +200,29 @@ fn generate_method_input_serialization(operation: &Operation) -> String {
     }
 }
 
-fn generate_response_tag_name<'a>(member_name: &'a str) -> Cow<'a, str> {
-    if member_name.ends_with("Result") {
-        format!("{}Response", &member_name[..member_name.len()-6]).into()
-    } else {
-        member_name.into()
-    }
-}
+// fn generate_response_tag_name<'a>(member_name: &'a str) -> Cow<'a, str> {
+//     if member_name.ends_with("Result") {
+//         format!("{}Response", &member_name[..member_name.len()-6]).into()
+//     } else {
+//         member_name.into()
+//     }
+// }
 
 fn generate_method_return_value(operation: &Operation) -> String {
     if operation.output.is_some() {
+        println!("\noperation is {:?}", operation.name);
         let output_type = &operation.output.as_ref().unwrap().shape;
-        let standard_tag_name = generate_response_tag_name(output_type).into_owned();
+        // let standard_tag_name = generate_response_tag_name(output_type).into_owned();
         // We should get these from the service definition instead of band-aiding here:
-        let tag_name = match standard_tag_name.as_ref() {
-            "Snapshot" => "CreateSnapshotResponse",
-            "VolumeAttachment" => "AttachVolumeResponse",
-            "KeyPair" => "CreateKeyPairResponse" ,
-            _ => &standard_tag_name
-        };
+        // let tag_name = match standard_tag_name.as_ref() {
+        //     "Snapshot" => "CreateSnapshotResponse".to_string(),
+        //     "VolumeAttachment" => "AttachVolumeResponse".to_string(),
+        //     "KeyPair" => "CreateKeyPairResponse".to_string(),
+        //     "Volume" => format!("{}Response", operation.name),
+        //     _ => standard_tag_name.to_string()
+        // };
+        let tag_name = format!("{}Response", operation.name);
+        println!("tag name set to {}", tag_name);
 
         format!(
             "Ok(try!({output_type}Deserializer::deserialize(\"{tag_name}\", &mut stack)))",
@@ -308,15 +312,31 @@ fn generate_primitive_deserializer(shape: &Shape) -> String {
         shape_type => panic!("Unknown primitive shape type: {:?}", shape_type),
     };
 
-    format!(
-        "try!(start_element(tag_name, stack));
-        let obj = {statement};
-        try!(end_element(tag_name, stack));
+    // let not_in_response =
 
-        Ok(obj)
+    // This needs massaging to support empty tags
+    format!("
+        try!(start_element(tag_name, stack));
+        match end_element(tag_name, stack) {{
+                Ok(()) => Err(XmlParseError::new(&\"Self closing tag, empty value\")),
+                Err(_) => {{
+                    let obj = {statement};
+                    try!(end_element(tag_name, stack));
+                    Ok(obj)
+                }}
+            }}
         ",
-        statement = statement,
+        statement = statement
     )
+    // format!(
+    //     "try!(start_element(tag_name, stack));
+    //     let obj = {statement};
+    //     try!(end_element(tag_name, stack));
+    //
+    //     Ok(obj)
+    //     ",
+    //     statement = statement,
+    // )
 }
 
 fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
@@ -350,7 +370,7 @@ fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
 
             match next_event {{
                 DeserializerNext::Element(name) => {{
-                    match &name[..] {{
+                    match &name[..] {{ // put result matcher here?
                         {struct_field_deserializers}
                         _ => skip_tree(stack),
                     }}
@@ -376,7 +396,7 @@ fn generate_struct_field_deserializers(shape: &Shape) -> String {
 
         let parse_expression = generate_struct_field_parse_expression(shape, member_name, member, member.location_name.as_ref());
         format!(
-            "\"{location_name}\" => {{
+            "\"{location_name}\" => {{ // maybe set obj here
                 obj.{field_name} = {parse_expression};
             }}",
             field_name = generate_field_name(member_name),
@@ -399,15 +419,24 @@ fn generate_struct_field_parse_expression(
         None => member_name.to_string(),
     };
     let expression = format!(
-        "try!({name}Deserializer::deserialize(\"{location}\", stack))",
+        "{name}Deserializer::deserialize(\"{location}\", stack)",
         name = member.shape,
         location = location_to_use,
     );
 
+
     if shape.required(member_name) {
-        expression
+        format!("try!({})",
+            expression
+        )
     } else {
-        format!("Some({})", expression)
+        format!("
+            match {} {{
+                Ok(foo) => Some(foo),
+                Err(_) => None,
+            }}
+            ",
+        expression)
     }
 }
 
