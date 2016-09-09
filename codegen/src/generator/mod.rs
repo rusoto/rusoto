@@ -13,6 +13,7 @@ mod ec2;
 mod json;
 mod query;
 mod rest_json;
+mod tests;
 
 pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
@@ -28,6 +29,10 @@ pub trait GenerateProtocol {
 
     fn generate_additional_annotations(&self, _service: &Service, _shape_name: &str, _type_name: &str) -> Vec<String> {
         Vec::<String>::with_capacity(0)
+    }
+
+    fn generate_tests(&self, _service: &Service) -> Option<String> {
+        None
     }
 
     fn timestamp_type(&self) -> &'static str;
@@ -61,11 +66,14 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
         {types}
         {error_types}
 
-        {client}",
+        {client}
+        
+        {tests}",
         client = generate_client(service, &protocol_generator),
         prelude = &protocol_generator.generate_prelude(service),
         types = generate_types(service, &protocol_generator),
         error_types = error_type_generator.generate_error_types(service).unwrap_or("".to_string()),
+        tests = &protocol_generator.generate_tests(service).unwrap_or("".to_string()),
     )
 }
 

@@ -2,6 +2,7 @@ use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::GenerateProtocol;
+use super::tests::{Response, find_responses};
 
 pub struct QueryGenerator;
 
@@ -92,6 +93,18 @@ impl GenerateProtocol for QueryGenerator {
             name = name,
             serializer_body = generate_serializer_body(shape),
             serializer_signature = generate_serializer_signature(name, shape),
+        ))
+    }
+
+    fn generate_tests(&self, service: &Service) -> Option<String> {
+        Some(format!(
+            "
+            #[cfg(test)]
+            mod protocol_tests {{
+                {tests_body}
+            }}
+            ",
+            tests_body = generate_tests_body(service)
         ))
     }
 
@@ -419,4 +432,65 @@ fn generate_primitive_serializer(shape: &Shape) -> String {
     };
 
     format!("params.put(name, {});", expression)
+}
+
+fn generate_response_parse_test(service: &Service, response: Response) -> Option<String> {
+    let maybe_operation = service.operations.get(&response.action);
+
+    if maybe_operation.is_none() {
+        return None;
+    }
+
+    let operation = maybe_operation.unwrap();
+    let input_shape = operation.input_shape();
+
+    Some(format!("
+    #[test]
+    fn test_parse_{service_name}_{action}() {{
+        let mock_response =  MockResponseReader::read_response(\"{response_file_name}\");
+		
+        let mock = MockRequestDispatcher::with_status(200)
+            .with_body(&mock_response);
+
+        let client = {client_type}::with_request_dispatcher(mock, MockCredentialsProvider, Region::UsEast1);
+
+        let request = {request_type}::default();
+
+        let result = client.{action_method}(&request);
+
+        assert!(result.is_ok());
+    }}
+    ",
+    service_name=response.service.to_snake_case(),
+    action=response.action.to_snake_case(),
+    response_file_name=response.file_name,
+    client_type=service.client_type_name(),
+    request_type=input_shape,
+    action_method=operation.name.to_snake_case()))
+}
+
+fn generate_tests_body(service: &Service) -> String {
+    let responses: Vec<Response> = find_responses();
+
+    let our_responses: Vec<Response> = responses
+        .into_iter()
+        .filter(|r| r.service == service.service_type_name())
+        .collect();
+    
+    let test_bodies: Vec<String> = our_responses
+        .into_iter()
+        .flat_map(|response| generate_response_parse_test(service, response))
+        .collect();
+    
+    let tests_str = test_bodies
+        .join("\n\n");
+
+    format!("
+        use mock::*;
+        use super::*;
+        use super::super::Region;
+
+        {test_bodies}
+    ",
+    test_bodies=tests_str)
 }
