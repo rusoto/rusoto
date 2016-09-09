@@ -162,6 +162,7 @@ fn generate_method_signature(operation: &Operation) -> String {
 }
 
 fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> String {
+    println!("looking at shape named {:?} that has type {:?}", name, shape.shape_type);
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape),
         ShapeType::Map => generate_map_deserializer(shape),
@@ -189,8 +190,11 @@ fn generate_map_deserializer(shape: &Shape) -> String {
     let key = shape.key.as_ref().unwrap();
     let value = shape.value.as_ref().unwrap();
 
+    println!("\n\nGenerating map deserializer for shape {:?}", shape);
+    // use shape location below if specified?
+
     format!(
-        "
+        " // hey is this attributemap?
         let mut obj = HashMap::new();
 
         while try!(peek_at_name(stack)) == tag_name {{
@@ -251,7 +255,7 @@ fn generate_struct_deserializer(name: &str, shape: &Shape, service: &Service) ->
 
         let mut obj = {name}::default();
 
-        loop {{
+        loop {{ // struct deserializer, use locationname here?  Would probably be attribute
             match &try!(peek_at_name(stack))[..] {{
                 {struct_field_deserializers}
                 _ => break,
@@ -268,38 +272,68 @@ fn generate_struct_deserializer(name: &str, shape: &Shape, service: &Service) ->
 }
 
 fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> String {
+
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
         // look up member.shape in all_shapes.  use that shape.member.location_name
+        // let mut top_location_name = member_name.to_string();
         let mut location_name = member_name.to_string();
+        let mut member_loc_name = "".to_string();
+        if member.location_name.is_some() {
+            member_loc_name = member.location_name.clone().unwrap().to_string();
+        }
 
+        // println!("\nlooking for shape of member called {}\n", member_name);
         let parse_expression_location_name = if let Some(ref child_shape) = service.shape_for_member(member) {
+            if member_name == "Attributes" {
+                println!("child shape present for {:?}", child_shape);
+            }
             if child_shape.flattened.is_some() {
                 if let Some(ref child_member) = child_shape.member {
                     if let Some(ref loc_name) = child_member.location_name {
+                        println!("\n\n\nsetting location_name to {:?}\n\n", loc_name);
                         location_name = loc_name.to_string();
                         Some(&location_name)
                     } else {
+                        // println!("didn't find child_member.location_name");
                         None
                     }
                 } else {
-                    None
+                    println!("\tNo child_shape.member, setting peln to {:?}", member_loc_name);
+                    Some(&member_loc_name)
+                    // None
                 }
             } else {
+                // println!("not flattened");
                 None
             }
         } else {
             None
         };
+
+        println!("parse_expression_location_name is {:?}", parse_expression_location_name);
         let parse_expression = generate_struct_field_parse_expression(shape, member_name, member, parse_expression_location_name);
-        format!(
-            "\"{location_name}\" => {{
-                obj.{field_name} = {parse_expression};
-                continue;
-            }}",
-            field_name = member_name.to_snake_case(),
-            parse_expression = parse_expression,
-            location_name = location_name,
-        )
+        if parse_expression_location_name.is_some() {
+            format!(
+                "\"{location_name}\" => {{
+                    obj.{field_name} = {parse_expression}; // = parse expression
+                    continue;
+                }}",
+                field_name = member_name.to_snake_case(),
+                parse_expression = parse_expression,
+                location_name = parse_expression_location_name.unwrap(),
+            )
+        } else {
+            format!(
+                "\"{location_name}\" => {{
+                    obj.{field_name} = {parse_expression}; // = parse expression
+                    continue;
+                }}",
+                field_name = member_name.to_snake_case(),
+                parse_expression = parse_expression,
+                location_name = location_name,
+            )
+        }
+
 
     }).collect::<Vec<String>>().join("\n")
 }
@@ -448,7 +482,7 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
     #[test]
     fn test_parse_{service_name}_{action}() {{
         let mock_response =  MockResponseReader::read_response(\"{response_file_name}\");
-		
+
         let mock = MockRequestDispatcher::with_status(200)
             .with_body(&mock_response);
 
@@ -476,12 +510,12 @@ fn generate_tests_body(service: &Service) -> String {
         .into_iter()
         .filter(|r| r.service == service.service_type_name())
         .collect();
-    
+
     let test_bodies: Vec<String> = our_responses
         .into_iter()
         .flat_map(|response| generate_response_parse_test(service, response))
         .collect();
-    
+
     let tests_str = test_bodies
         .join("\n\n");
 
