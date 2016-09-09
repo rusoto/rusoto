@@ -268,7 +268,6 @@ fn generate_struct_deserializer(name: &str, shape: &Shape, service: &Service) ->
 }
 
 fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> String {
-
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
         // look up member.shape in all_shapes.  use that shape.member.location_name
         let mut location_name = member_name.to_string();
