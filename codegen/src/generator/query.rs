@@ -275,18 +275,13 @@ fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> Stri
 
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
         // look up member.shape in all_shapes.  use that shape.member.location_name
-        // let mut top_location_name = member_name.to_string();
         let mut location_name = member_name.to_string();
         let mut member_loc_name = "".to_string();
         if member.location_name.is_some() {
             member_loc_name = member.location_name.clone().unwrap().to_string();
         }
 
-        // println!("\nlooking for shape of member called {}\n", member_name);
         let parse_expression_location_name = if let Some(ref child_shape) = service.shape_for_member(member) {
-            if member_name == "Attributes" {
-                println!("child shape present for {:?}", child_shape);
-            }
             if child_shape.flattened.is_some() {
                 if let Some(ref child_member) = child_shape.member {
                     if let Some(ref loc_name) = child_member.location_name {
@@ -294,46 +289,30 @@ fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> Stri
                         location_name = loc_name.to_string();
                         Some(&location_name)
                     } else {
-                        // println!("didn't find child_member.location_name");
                         None
                     }
                 } else {
-                    println!("\tNo child_shape.member, setting peln to {:?}", member_loc_name);
+                    // assumes we'll only hit this case if a location_name is provided
                     Some(&member_loc_name)
-                    // None
                 }
             } else {
-                // println!("not flattened");
                 None
             }
         } else {
             None
         };
 
-        println!("parse_expression_location_name is {:?}", parse_expression_location_name);
+        // println!("parse_expression_location_name is {:?}", parse_expression_location_name);
         let parse_expression = generate_struct_field_parse_expression(shape, member_name, member, parse_expression_location_name);
-        if parse_expression_location_name.is_some() {
-            format!(
-                "\"{location_name}\" => {{
-                    obj.{field_name} = {parse_expression}; // = parse expression
-                    continue;
-                }}",
-                field_name = member_name.to_snake_case(),
-                parse_expression = parse_expression,
-                location_name = parse_expression_location_name.unwrap(),
-            )
-        } else {
-            format!(
-                "\"{location_name}\" => {{
-                    obj.{field_name} = {parse_expression}; // = parse expression
-                    continue;
-                }}",
-                field_name = member_name.to_snake_case(),
-                parse_expression = parse_expression,
-                location_name = location_name,
-            )
-        }
-
+        format!(
+            "\"{location_name}\" => {{
+                obj.{field_name} = {parse_expression}; // = parse expression
+                continue;
+            }}",
+            field_name = member_name.to_snake_case(),
+            parse_expression = parse_expression,
+            location_name = parse_expression_location_name.unwrap_or(&location_name),
+        )
 
     }).collect::<Vec<String>>().join("\n")
 }
