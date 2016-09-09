@@ -162,7 +162,6 @@ fn generate_method_signature(operation: &Operation) -> String {
 }
 
 fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> String {
-    println!("looking at shape named {:?} that has type {:?}", name, shape.shape_type);
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape),
         ShapeType::Map => generate_map_deserializer(shape),
@@ -190,11 +189,8 @@ fn generate_map_deserializer(shape: &Shape) -> String {
     let key = shape.key.as_ref().unwrap();
     let value = shape.value.as_ref().unwrap();
 
-    println!("\n\nGenerating map deserializer for shape {:?}", shape);
-    // use shape location below if specified?
-
     format!(
-        " // hey is this attributemap?
+        "
         let mut obj = HashMap::new();
 
         while try!(peek_at_name(stack)) == tag_name {{
@@ -255,7 +251,7 @@ fn generate_struct_deserializer(name: &str, shape: &Shape, service: &Service) ->
 
         let mut obj = {name}::default();
 
-        loop {{ // struct deserializer, use locationname here?  Would probably be attribute
+        loop {{
             match &try!(peek_at_name(stack))[..] {{
                 {struct_field_deserializers}
                 _ => break,
@@ -285,7 +281,6 @@ fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> Stri
             if child_shape.flattened.is_some() {
                 if let Some(ref child_member) = child_shape.member {
                     if let Some(ref loc_name) = child_member.location_name {
-                        println!("\n\n\nsetting location_name to {:?}\n\n", loc_name);
                         location_name = loc_name.to_string();
                         Some(&location_name)
                     } else {
@@ -302,11 +297,10 @@ fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> Stri
             None
         };
 
-        // println!("parse_expression_location_name is {:?}", parse_expression_location_name);
         let parse_expression = generate_struct_field_parse_expression(shape, member_name, member, parse_expression_location_name);
         format!(
             "\"{location_name}\" => {{
-                obj.{field_name} = {parse_expression}; // = parse expression
+                obj.{field_name} = {parse_expression};
                 continue;
             }}",
             field_name = member_name.to_snake_case(),
