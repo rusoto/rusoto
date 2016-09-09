@@ -212,8 +212,11 @@ fn generate_method_return_value(operation: &Operation) -> String {
     if operation.output.is_some() {
         let output_type = &operation.output.as_ref().unwrap().shape;
         let standard_tag_name = generate_response_tag_name(output_type).into_owned();
+        // We should get these from the service definition instead of band-aiding here:
         let tag_name = match standard_tag_name.as_ref() {
             "Snapshot" => "CreateSnapshotResponse",
+            "VolumeAttachment" => "AttachVolumeResponse",
+            "KeyPair" => "CreateKeyPairResponse" ,
             _ => &standard_tag_name
         };
 
