@@ -31,7 +31,12 @@ impl GenerateProtocol for Ec2Generator {
                         200 => {{
                             let mut reader = EventReader::from_str(&result.body);
                             let mut stack = XmlResponse::new(reader.events().peekable());
-                            stack.next();
+                            // println!(\"top level peekin': {{:?}}\", stack.peek());
+                            match stack.peek() {{
+                                Some(&XmlEvent::StartDocument {{ .. }}) => {{stack.next();}},
+                                _ => (),
+                            }}
+                            println!(\"top level peekin round two': {{:?}}\", stack.peek());
                             {method_return_value}
                         }},
                         _ => Err({error_type}::from_body(&result.body))
@@ -144,7 +149,9 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
         let request = {request_type}::default();
 
         let result = client.{action_method}(&request);
-
+        if result.is_err() {{
+            println!(\"result: {{:?}}\", result);
+        }}
         assert!(result.is_ok());
     }}
     ",
@@ -210,7 +217,6 @@ fn generate_method_input_serialization(operation: &Operation) -> String {
 
 fn generate_method_return_value(operation: &Operation) -> String {
     if operation.output.is_some() {
-        println!("\noperation is {:?}", operation.name);
         let output_type = &operation.output.as_ref().unwrap().shape;
         // let standard_tag_name = generate_response_tag_name(output_type).into_owned();
         // We should get these from the service definition instead of band-aiding here:
@@ -222,7 +228,6 @@ fn generate_method_return_value(operation: &Operation) -> String {
         //     _ => standard_tag_name.to_string()
         // };
         let tag_name = format!("{}Response", operation.name);
-        println!("tag name set to {}", tag_name);
 
         format!(
             "Ok(try!({output_type}Deserializer::deserialize(\"{tag_name}\", &mut stack)))",
@@ -273,7 +278,9 @@ fn generate_list_deserializer(shape: &Shape) -> String {
         loop {{
             let next_event = match stack.peek() {{
                 Some(&XmlEvent::EndElement {{ .. }}) => DeserializerNext::Close,
-                Some(&XmlEvent::StartElement {{ ref name, .. }}) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&XmlEvent::StartElement {{ ref name, .. }}) => {{
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }},
                 _ => DeserializerNext::Skip,
             }};
 
@@ -368,9 +375,11 @@ fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
                 _ => DeserializerNext::Skip,
             }};
 
+            println!(\"peekin', expecting {{:?}}: {{:?}}\", tag_name, stack.peek());
+
             match next_event {{
                 DeserializerNext::Element(name) => {{
-                    match &name[..] {{ // put result matcher here?
+                    match &name[..] {{
                         {struct_field_deserializers}
                         _ => skip_tree(stack),
                     }}
@@ -396,7 +405,7 @@ fn generate_struct_field_deserializers(shape: &Shape) -> String {
 
         let parse_expression = generate_struct_field_parse_expression(shape, member_name, member, member.location_name.as_ref());
         format!(
-            "\"{location_name}\" => {{ // maybe set obj here
+            "\"{location_name}\" => {{
                 obj.{field_name} = {parse_expression};
             }}",
             field_name = generate_field_name(member_name),
