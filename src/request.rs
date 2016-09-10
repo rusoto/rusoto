@@ -17,6 +17,7 @@ use log::LogLevel::Debug;
 
 use signature::SignedRequest;
 
+#[derive(Clone, Default)]
 pub struct HttpResponse {
     pub status: u16,
     pub body: String,
