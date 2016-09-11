@@ -312,27 +312,40 @@ fn generate_struct_deserializer(name: &str, shape: &Shape, service: &Service) ->
 fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> String {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
         // look up member.shape in all_shapes.  use that shape.member.location_name
+        let maybe_child_shape = service.shape_for_member(member);
         let mut location_name = member_name.to_string();
         let mut member_loc_name = "".to_string();
         if member.location_name.is_some() {
             member_loc_name = member.location_name.clone().unwrap().to_string();
         }
+        let mut enter_wrapper_expression = String::new();
+        let mut leave_wrapper_expression = String::new();
+        let mut wrapper_location_name: Option<&str> = None;
 
-        let parse_expression_location_name = if let Some(ref child_shape) = service.shape_for_member(member) {
+        let parse_expression_location_name = if let Some(ref child_shape) = maybe_child_shape {
             if child_shape.flattened.is_some() {
                 if let Some(ref child_member) = child_shape.member {
                     if let Some(ref loc_name) = child_member.location_name {
                         location_name = loc_name.to_string();
-                        Some(&location_name)
+                        Some(&location_name[..])
                     } else {
                         None
                     }
                 } else {
                     // assumes we'll only hit this case if a location_name is provided
-                    Some(&member_loc_name)
+                    Some(&member_loc_name[..])
                 }
             } else {
-                None
+                if child_shape.shape_type == ShapeType::List {
+                    wrapper_location_name = Some(member_name);
+
+                    enter_wrapper_expression = format!("try!(start_element(\"{}\", stack))", member_name);
+                    leave_wrapper_expression = format!("try!(end_element(\"{}\", stack))", member_name);
+
+                    child_shape.location_name.as_ref().map(|s| &s[..]).or_else(|| Some("member"))
+                } else {
+                    None
+                }
             }
         } else {
             None
@@ -340,13 +353,17 @@ fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> Stri
 
         let parse_expression = generate_struct_field_parse_expression(shape, member_name, member, parse_expression_location_name);
         format!(
-            "\"{location_name}\" => {{
+            "\"{wrapper_location_name}\" => {{
+                {enter_wrapper_expression};
                 obj.{field_name} = {parse_expression};
+                {leave_wrapper_expression};
                 continue;
             }}",
             field_name = member_name.to_snake_case(),
             parse_expression = parse_expression,
-            location_name = parse_expression_location_name.unwrap_or(&location_name),
+            wrapper_location_name = wrapper_location_name.or_else(|| parse_expression_location_name).unwrap_or(&location_name),
+            enter_wrapper_expression = enter_wrapper_expression,
+            leave_wrapper_expression = leave_wrapper_expression,
         )
 
     }).collect::<Vec<String>>().join("\n")
@@ -356,7 +373,7 @@ fn generate_struct_field_parse_expression(
     shape: &Shape,
     member_name: &str,
     member: &Member,
-    location_name: Option<&String>,
+    location_name: Option<&str>,
 ) -> String {
 
     let location_to_use = match location_name {
@@ -520,7 +537,7 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
 
         let result = client.{action_method}({request_params});
 
-        assert!(result.is_ok());
+        assert!(result.is_ok(), \"parse error: {{:?}}\", result);
     }}
     ",
     service_name=response.service.to_snake_case(),
