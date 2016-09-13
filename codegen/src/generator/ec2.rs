@@ -83,30 +83,46 @@ impl GenerateProtocol for Ec2Generator {
     }
 
     fn generate_support_types(&self, name: &str, shape: &Shape, _service: &Service) -> Option<String> {
-        Some(format!(
-            "/// Deserializes `{name}` from XML.
-            struct {name}Deserializer;
-            impl {name}Deserializer {{
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<{name}, XmlParseError> {{
-                    {deserializer_body}
-                }}
-            }}
+        let serializer = generate_serializer_body(name, shape);
+        let deserializer = generate_deserializer_body(name, shape);
+        let serializer_signature = generate_serializer_signature(name, shape);
 
-            /// Serialize `{name}` contents to a `SignedRequest`.
-            struct {name}Serializer;
-            impl {name}Serializer {{
-                {serializer_signature} {{
-                    {serializer_body}
+        let mut collector = String::new();
+
+        if serializer.len() > 0 {
+            collector.push_str(&format!(
+                "/// Serialize `{name}` contents to a `SignedRequest`.
+                struct {name}Serializer;
+                impl {name}Serializer {{
+                    {serializer_signature} {{
+                        {serializer_body}
+                    }}
                 }}
-            }}
-            ",
-            deserializer_body = generate_deserializer_body(name, shape),
-            name = name,
-            serializer_body = generate_serializer_body(shape),
-            serializer_signature = generate_serializer_signature(name, shape),
-        ))
+                ",
+                name = name,
+                serializer_signature = serializer_signature,
+                serializer_body = serializer
+            ));
+        }
+
+        if deserializer.len() > 0 {
+            collector.push_str(&format!(
+                "/// Deserializes `{name}` from XML.
+                struct {name}Deserializer;
+                impl {name}Deserializer {{
+                    #[allow(unused_variables)]
+                    fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
+                    -> Result<{name}, XmlParseError> {{
+                        {deserializer_body}
+                    }}
+                }}
+                ",
+                name = name,
+                deserializer_body = deserializer
+            ));
+        }
+
+        Some(collector)
     }
 
     fn timestamp_type(&self) -> &'static str {
@@ -207,14 +223,6 @@ fn generate_method_input_serialization(operation: &Operation) -> String {
     }
 }
 
-// fn generate_response_tag_name<'a>(member_name: &'a str) -> Cow<'a, str> {
-//     if member_name.ends_with("Result") {
-//         format!("{}Response", &member_name[..member_name.len()-6]).into()
-//     } else {
-//         member_name.into()
-//     }
-// }
-
 fn generate_method_return_value(operation: &Operation) -> String {
     if operation.output.is_some() {
         let output_type = &operation.output.as_ref().unwrap().shape;
@@ -259,6 +267,18 @@ fn generate_method_signature(operation: &Operation) -> String {
 }
 
 fn generate_deserializer_body(name: &str, shape: &Shape) -> String {
+    // Requests don't get deserialized, except the ones that do.
+    if name.ends_with("Request") {
+        match name {
+            "CancelledSpotInstanceRequest" => (),
+            "PurchaseRequest" => (),
+            "SpotInstanceRequest" => (),
+            _ => {
+                println!("\nskipping deserializer {} as it ends with 'request'.", name);
+                return String::new()    
+            }
+        }
+    }
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape),
         ShapeType::Structure => generate_struct_deserializer(name, shape),
@@ -449,7 +469,17 @@ fn generate_struct_field_parse_expression(
     }
 }
 
-fn generate_serializer_body(shape: &Shape) -> String {
+fn generate_serializer_body(name: &str, shape: &Shape) -> String {
+    // Responses don't get deserialized, except the ones that do.
+    if name.ends_with("Response") {
+        match name {
+            "foo" => (),
+            _ => {
+                println!("\nskipping serializer for {} as it ends with 'Response'.", name);
+                return String::new()    
+            }
+        }
+    }
     match shape.shape_type {
         ShapeType::List => generate_list_serializer(shape),
         ShapeType::Map => generate_map_serializer(shape),
