@@ -3,3 +3,4 @@ Cargo.lock
 .project
 testfile.zip
 *.pyc
+venv

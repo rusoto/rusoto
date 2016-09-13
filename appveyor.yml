@@ -1,0 +1,42 @@
+# from https://github.com/japaric/rust-everywhere
+
+os: Visual Studio 2015
+
+environment:
+  global:
+    # This will be used as part of the zipfile name
+    PROJECT_NAME: rusoto
+  matrix:
+    # Stable channel
+    - TARGET: x86_64-pc-windows-msvc
+      CHANNEL: stable
+
+# Install Rust and Cargo
+# (Based on from https://github.com/rust-lang/libc/blob/master/appveyor.yml)
+install:
+  - curl -sSf -o rustup-init.exe https://win.rustup.rs
+  - rustup-init.exe --default-host %TARGET% --default-toolchain %CHANNEL% -y
+  - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin;c:\cygwin\bin
+  - rustc -Vv
+  - cargo -V
+  - git submodule update --init --recursive
+
+# 'cargo test' takes care of building for us, so disable Appveyor's build stage. This prevents
+# the "directory does not contain a project or solution file" error.
+# source: https://github.com/starkat99/appveyor-rust/blob/master/appveyor.yml#L113
+build: false
+
+# Equivalent to Travis' `script` phase
+test_script:
+  # https://github.com/sfackler/rust-openssl/issues/293
+  - set DEP_OPENSSL_INCLUDE=C:\OpenSSL-Win64\include
+  - set OPENSSL_INCLUDE_DIR=C:\OpenSSL-Win64\include
+  - set OPENSSL_LIBS=ssleay32MT:libeay32MT
+  - set OPENSSL_LIB_DIR=C:\OpenSSL-Win64\lib\VC
+  - path C:\OpenSSL-Win64\bin;%PATH%
+  - cargo build --verbose --features all
+  - cargo test --lib --features all
+
+branches:
+  only:
+    - master
