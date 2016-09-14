@@ -24,7 +24,7 @@ use param::{Params, ServiceParams};
 use region::Region;
 use signature::SignedRequest;
 use xmlutil::*;
-use request::{DispatchSignedRequest, HttpResponse};
+use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError};
 use region;
 
 #[derive(Debug, Default)]
@@ -46,6 +46,12 @@ impl fmt::Display for S3Error {
 impl Error for S3Error {
     fn description(&self) -> &str {
         &self.message
+    }
+}
+
+impl From<HttpDispatchError> for S3Error {
+    fn from(err: HttpDispatchError) -> S3Error {
+        S3Error { message: err.description().to_owned() }
     }
 }
 
@@ -11110,7 +11116,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "ListObjectVersions");
         ListObjectVersionsRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11131,7 +11137,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutBucketPolicy");
         PutBucketPolicyRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11162,7 +11168,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
 
         ListObjectsRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11181,7 +11187,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutBucketWebsite");
         PutBucketWebsiteRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11201,7 +11207,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutBucketNotification");
         PutBucketNotificationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11223,7 +11229,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutBucketLogging");
         PutBucketLoggingRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11244,7 +11250,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutBucketReplication");
         PutBucketReplicationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11285,7 +11291,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("uploadId", upload_id);
         request.set_params(params);
 
-        let mut result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let mut result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
 
         match status {
@@ -11358,7 +11364,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         }
         request.set_payload(input.body);
 
-        let mut result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let mut result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
 
         match status {
@@ -11381,7 +11387,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "DeleteBucketCors");
         DeleteBucketCorsRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11402,7 +11408,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutBucketVersioning");
         PutBucketVersioningRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11422,7 +11428,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketCors");
         GetBucketCorsRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11443,7 +11449,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutBucketLifecycle");
         PutBucketLifecycleRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11463,7 +11469,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketAcl");
         GetBucketAclRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11484,7 +11490,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketLogging");
         GetBucketLoggingRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11505,7 +11511,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "HeadBucket");
         HeadBucketRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11524,7 +11530,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         let mut params = Params::new();
         params.put("Action", "PutBucketAcl");
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11544,7 +11550,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "DeleteBucketWebsite");
         DeleteBucketWebsiteRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11564,7 +11570,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "DeleteBucketPolicy");
         DeleteBucketPolicyRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11584,7 +11590,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketNotificationConfiguration");
         GetBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11611,7 +11617,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         // params.put("Action", "DeleteObjects");
         // DeleteObjectsRequestWriter::write_params(&mut params, "", input);
         // request.set_params(params);
-        // let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        // let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         // let status = result.status;
         // match status {
         //  200 => {
@@ -11627,7 +11633,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "DeleteBucketReplication");
         DeleteBucketReplicationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11647,7 +11653,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "CopyObject");
         CopyObjectRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11667,7 +11673,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         let mut params = Params::new();
         params.put("Action", "ListBuckets");
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11694,7 +11700,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutBucketRequestPayment");
         PutBucketRequestPaymentRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11714,7 +11720,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutBucketNotificationConfiguration");
         PutBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11731,22 +11737,32 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     /// object itself. This operation is useful if you're only interested in an
     /// object's metadata. To use HEAD, you must have READ access to the object.
     pub fn head_object(&self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, S3Error> {
-        let mut request = SignedRequest::new("HEAD", "s3", self.region, "/{Bucket}/{Key+}");
+        let mut path = String::from("/");
+        if !is_dns_compatible(&input.bucket) {
+            path = format!("{}{}/", path, &input.bucket);
+        }
+        path = format!("{}{}", path, &input.key);
+        let mut request = SignedRequest::new("HEAD", "s3", self.region, &path);
         let mut params = Params::new();
+
+        if is_dns_compatible(&input.bucket) {
+            let hostname = self.hostname(Some(&input.bucket));
+            request.set_hostname(Some(hostname));
+        }
+
         params.put("Action", "HeadObject");
+
         HeadObjectRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let mut result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
-        let mut reader = EventReader::from_str(&result.body);
-        let mut stack = XmlResponse::new(reader.events().peekable());
-        stack.next(); // xml start tag
-        stack.next();
         match status {
             200 => {
-                Ok(try!(HeadObjectOutputParser::parse_xml("HeadObjectOutput", &mut stack)))
+                let head_object = try!(S3Client::<P,D>::head_object_from_response(&mut result));
+
+                Ok(head_object)
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("error: status code {:?}", status))) }
         }
     }
     /// Deletes the tags from the bucket.
@@ -11756,7 +11772,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "DeleteBucketTagging");
         DeleteBucketTaggingRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11776,7 +11792,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetObjectTorrent");
         GetObjectTorrentRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11796,7 +11812,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketLifecycle");
         GetBucketLifecycleRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11834,7 +11850,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             Some(ref canned_acl) => request.add_header("x-amz-acl", &canned_acl_in_aws_format(canned_acl)),
         }
 
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
 
         match status {
@@ -11870,7 +11886,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
 
         request.set_payload(input.multipart_upload);
 
-        let mut result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let mut result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
 
         match status {
@@ -11894,7 +11910,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketWebsite");
         GetBucketWebsiteRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -11927,7 +11943,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             request.set_hostname(Some(hostname));
         }
 
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
 
         let mut reader = EventReader::from_str(&result.body);
@@ -11955,7 +11971,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             request.set_hostname(Some(hostname));
         }
 
-        let mut result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let mut result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         match status {
             204 => {
@@ -11969,12 +11985,81 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
     }
 
     pub fn get_value_for_header(header_name: String, response: &HttpResponse) -> Result<String, S3Error> {
-
         match response.headers.get(&header_name) {
             Some(ref value) => Ok(value.to_string()),
             _ => Ok(String::new())
         }
-        // Err(S3Error::new(format!("Couldn't find field {} in headers", header_name)))
+    }
+
+    pub fn head_object_from_response(response: &mut HttpResponse) -> Result<HeadObjectOutput, S3Error> {
+        // get all the goodies for HeadObjectOutput
+        let delete_marker_string = try!(S3Client::<P,D>::get_value_for_header("x-amz-delete-marker".to_string(), &response));
+        let delete_marker : bool;
+        if delete_marker_string.is_empty() {
+            delete_marker = false;
+        } else {
+            delete_marker = try!(bool::from_str(&delete_marker_string));
+        }
+        let accept_ranges = try!(S3Client::<P,D>::get_value_for_header("accept-ranges".to_string(), response));
+        let last_modified = try!(S3Client::<P,D>::get_value_for_header("Last-Modified".to_string(), response));
+        let request_charged = try!(S3Client::<P,D>::get_value_for_header("x-amz-request-charged".to_string(), response));
+        let content_encoding = try!(S3Client::<P,D>::get_value_for_header("Content-Encoding".to_string(), response));
+        let replication_status = try!(S3Client::<P,D>::get_value_for_header("x-amz-replication-status".to_string(), response));
+        let storage_class = try!(S3Client::<P,D>::get_value_for_header("x-amz-storage-class".to_string(), response));
+        let server_side_encryption = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption".to_string(), response));
+        let ssekms_key_id = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption-aws-kms-key-id".to_string(), response));
+        let content_disposition = try!(S3Client::<P,D>::get_value_for_header("Content-Disposition".to_string(), response));
+        let metadata = try!(S3Client::<P,D>::get_value_for_header("x-amz-meta-".to_string(), response));
+        let website_redirect_location = try!(S3Client::<P,D>::get_value_for_header("x-amz-website-redirect-location".to_string(), response));
+        let expires = try!(S3Client::<P,D>::get_value_for_header("Expires".to_string(), response));
+        let cache_control = try!(S3Client::<P,D>::get_value_for_header("Cache-Control".to_string(), response));
+
+        let content_length_string = try!(S3Client::<P,D>::get_value_for_header("Content-Length".to_string(), response));
+        let content_length = try!(content_length_string.parse::<i32>());
+
+        let expiration = try!(S3Client::<P,D>::get_value_for_header("x-amz-expiration".to_string(), response));
+        let missing_meta_string = try!(S3Client::<P,D>::get_value_for_header("x-amz-missing-meta".to_string(), response));
+        let missing_meta : i32;
+        if missing_meta_string.is_empty() {
+            missing_meta = 0;
+        } else {
+            missing_meta = try!(missing_meta_string.parse::<i32>());
+        }
+        let restore = try!(S3Client::<P,D>::get_value_for_header("x-amz-restore".to_string(), response));
+        let sse_customer_algorithm = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption-customer-algorithm".to_string(), response));
+        let content_type = try!(S3Client::<P,D>::get_value_for_header("Content-Type".to_string(), response));
+        let content_language = try!(S3Client::<P,D>::get_value_for_header("Content-Language".to_string(), response));
+        let version_id = try!(S3Client::<P,D>::get_value_for_header("x-amz-version-id".to_string(), response));
+        let e_tag = try!(S3Client::<P,D>::get_value_for_header("ETag".to_string(), response));
+        let sse_customer_key_md5 = try!(S3Client::<P,D>::get_value_for_header("x-amz-server-side-encryption-customer-key-MD5".to_string(), response));
+        // make the object to return
+        let head_object = HeadObjectOutput {
+            delete_marker: delete_marker,
+            accept_ranges: accept_ranges,
+            last_modified: last_modified,
+            request_charged: request_charged,
+            content_encoding: content_encoding,
+            replication_status: replication_status,
+            storage_class: storage_class,
+            server_side_encryption: server_side_encryption,
+            ssekms_key_id: ssekms_key_id,
+            content_disposition: content_disposition,
+            metadata: HashMap::new(),
+            website_redirect_location: website_redirect_location,
+            expires: expires,
+            cache_control: cache_control,
+            content_length: content_length,
+            expiration: expiration,
+            missing_meta: missing_meta,
+            restore: restore,
+            sse_customer_algorithm: sse_customer_algorithm,
+            content_type: content_type,
+            content_language: content_language,
+            version_id: version_id,
+            e_tag: e_tag,
+            sse_customer_key_md5: sse_customer_key_md5,
+        };
+        Ok(head_object)
     }
 
     /// Use the Hyper resposne to populate the GetObjectOutput
@@ -12070,7 +12155,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         GetObjectRequestWriter::write_params(&mut params, "", input);
 
         request.set_params(params);
-        let mut result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let mut result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
 
         match status {
@@ -12094,7 +12179,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketPolicy");
         GetBucketPolicyRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12114,7 +12199,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketVersioning");
         GetBucketVersioningRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12144,7 +12229,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             request.set_hostname(Some(hostname));
         }
 
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12166,7 +12251,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketRequestPayment");
         GetBucketRequestPaymentRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12186,7 +12271,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutBucketTagging");
         PutBucketTaggingRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12206,7 +12291,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketTagging");
         GetBucketTaggingRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12240,7 +12325,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             request.set_hostname(Some(hostname));
         }
 
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12261,7 +12346,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutObjectAcl");
         PutObjectAclRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12281,7 +12366,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketLocation");
         GetBucketLocationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12301,7 +12386,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "PutBucketCors");
         PutBucketCorsRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12321,7 +12406,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "DeleteBucketLifecycle");
         DeleteBucketLifecycleRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12341,7 +12426,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketNotification");
         GetBucketNotificationConfigurationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12372,7 +12457,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             request.set_hostname(Some(hostname));
         }
 
-        let mut result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let mut result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
 
         match status {
@@ -12396,7 +12481,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetObjectAcl");
         GetObjectAclRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12447,7 +12532,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "DeleteObject");
         DeleteObjectRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
 
         match status {
@@ -12465,7 +12550,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "RestoreObject");
         RestoreObjectRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12484,7 +12569,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         params.put("Action", "GetBucketReplication");
         GetBucketReplicationRequestWriter::write_params(&mut params, "", input);
         request.set_params(params);
-        let result = sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials()));
+        let result = try!(sign_and_execute(&self.dispatcher, &mut request, try!(self.credentials_provider.credentials())));
         let status = result.status;
         let mut reader = EventReader::from_str(&result.body);
         let mut stack = XmlResponse::new(reader.events().peekable());
@@ -12913,9 +12998,9 @@ fn extract_s3_temporary_endpoint_from_xml<T: Peek + Next>(stack: &mut T) -> Resu
     Err(S3Error::new("Couldn't find redirect location for S3 bucket"))
 }
 
-fn sign_and_execute<D>(dispatcher: &D, request: &mut SignedRequest, creds: AwsCredentials) -> HttpResponse where D: DispatchSignedRequest{
+fn sign_and_execute<D>(dispatcher: &D, request: &mut SignedRequest, creds: AwsCredentials) -> Result<HttpResponse, S3Error> where D: DispatchSignedRequest{
     request.sign(&creds);
-    let response = dispatcher.dispatch(request).expect("Error dispatching request");
+    let response = try!(dispatcher.dispatch(request));
     debug!("Sent request to AWS");
 
     if response.status == 307 {
@@ -12926,10 +13011,10 @@ fn sign_and_execute<D>(dispatcher: &D, request: &mut SignedRequest, creds: AwsCr
 
         // This does a lot of appending and not clearing/creation, so we'll have to do that ourselves:
         request.sign(&creds);
-        return dispatcher.dispatch(request).unwrap();
+        return Ok(try!(dispatcher.dispatch(request)));
     }
 
-    response
+    Ok(response)
 }
 
 fn is_valid_subdomain(bucket: &BucketName) -> bool {
