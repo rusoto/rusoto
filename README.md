@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/rusoto/rusoto.svg?branch=master)](https://travis-ci.org/rusoto/rusoto)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/o83ruaeu7xft0ru5/branch/master?svg=true)](https://ci.appveyor.com/project/matthewkmayer/rusoto/branch/master)
+
 AWS SDK for Rust. [Documentation](https://rusoto.github.io/rusoto/rusoto/index.html).
 
 IRC: #rusoto on irc.freenode.net.
