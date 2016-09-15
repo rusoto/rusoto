@@ -51,7 +51,7 @@ fn list_objects_test() {
 #[test]
 fn get_object_test() {
     let s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
-    s3.get_object("rusototester", "no_credentials2").unwrap();
+    s3.get_object("rusototester", "no_credentials2:foo").unwrap();
 }
 
 #[test]
