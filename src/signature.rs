@@ -16,7 +16,7 @@ use ring::{digest, hmac};
 use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
-use url::percent_encoding::{utf8_percent_encode, DEFAULT_ENCODE_SET, QUERY_ENCODE_SET};
+use url::percent_encoding::{utf8_percent_encode, EncodeSet};
 
 use credential::AwsCredentials;
 use param::Params;
@@ -301,7 +301,7 @@ fn skipped_headers(header: &str) -> bool {
 fn canonical_uri(path: &str) -> String {
     match path {
         "" => "/".to_string(),
-        _ => encode_uri(path)
+        _ => encode_uri_path(path)
     }
 }
 
@@ -315,22 +315,59 @@ fn build_canonical_query_string(params: &Params) -> String {
         if !output.is_empty() {
             output.push_str("&");
         }
-        output.push_str(&byte_serialize(item.0));
+        output.push_str(&encode_uri_strict(item.0));
         output.push_str("=");
-        output.push_str(&byte_serialize(item.1));
+        output.push_str(&encode_uri_strict(item.1));
     }
 
     output
 }
 
-#[inline]
-fn encode_uri(uri: &str) -> String {
-    utf8_percent_encode(uri, QUERY_ENCODE_SET).collect::<String>()
+// http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html 
+//
+// Do not URI-encode any of the unreserved characters that RFC 3986 defines: 
+// A-Z, a-z, 0-9, hyphen ( - ), underscore ( _ ), period ( . ), and tilde ( ~ ).
+//
+// Percent-encode all other characters with %XY, where X and Y are hexadecimal 
+// characters (0-9 and uppercase A-F). For example, the space character must be 
+// encoded as %20 (not using '+', as some encoding schemes do) and extended UTF-8 
+// characters must be in the form %XY%ZA%BC
+#[derive(Clone)]
+pub struct StrictEncodeSet;
+
+impl EncodeSet for StrictEncodeSet {
+    #[inline]
+    fn contains(&self, byte: u8) -> bool {
+        let upper = byte >= 0x41 && byte <= 0x5a;
+        let lower = byte >= 0x61 && byte <= 0x7a;
+        let numeric = byte >= 0x30 && byte <= 0x39;
+        let hyphen = byte == 0x2d;
+        let underscore = byte == 0x5f;
+        let tilde = byte == 0x7e;
+        let period = byte == 0x2e;
+        !(upper || lower || numeric || hyphen || underscore || tilde || period)
+    }
+}
+
+#[derive(Clone)]
+pub struct StrictPathEncodeSet;
+
+impl EncodeSet for StrictPathEncodeSet {
+    #[inline]
+    fn contains(&self, byte: u8) -> bool {
+        let slash = byte == '/' as u8;
+        !slash && StrictEncodeSet.contains(byte)
+    }
 }
 
 #[inline]
-fn byte_serialize(input: &str) -> String {
-    utf8_percent_encode(input, DEFAULT_ENCODE_SET).collect::<String>()
+fn encode_uri_path(uri: &str) -> String {
+    utf8_percent_encode(uri, StrictPathEncodeSet).collect::<String>()
+}
+
+#[inline]
+fn encode_uri_strict(uri: &str) -> String {
+    utf8_percent_encode(uri, StrictEncodeSet).collect::<String>()
 }
 
 fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
@@ -369,9 +406,11 @@ mod tests {
     use region::Region;
 
     use super::SignedRequest;
+    use param::Params;
 
     use super::super::ProfileProvider;
     use super::super::credential::ProvideAwsCredentials;
+    use super::build_canonical_query_string;
 
     #[test]
     fn get_hostname_none_present() {
@@ -391,8 +430,36 @@ mod tests {
             "tests/sample-data/multiple_profile_credentials",
             "foo",
         );
-        let mut request = SignedRequest::new("GET", "s3", Region::UsEast1, "/path with spaces");
+        let mut request = SignedRequest::new("GET", "s3", Region::UsEast1, "/path with spaces: the sequel");
         request.sign(provider.credentials().as_ref().unwrap());
-        assert_eq!("/path%20with%20spaces", request.canonical_uri());
+        assert_eq!("/path%20with%20spaces%3A%20the%20sequel", request.canonical_uri());
+    }
+    #[test]
+    fn query_encoding_escaped_chars() {
+        query_encoding_escaped_chars_range(0u8, 45u8); // \0 to '-'
+        query_encoding_escaped_chars_range(47u8, 48u8); // '/' to '0'
+        query_encoding_escaped_chars_range(58u8, 65u8); // '0' to 'A'
+        query_encoding_escaped_chars_range(91u8, 95u8); // '[' to '_'
+        query_encoding_escaped_chars_range(96u8, 97u8); // '`' to 'a'
+        query_encoding_escaped_chars_range(123u8, 126u8); // '{' to '~'
+        query_encoding_escaped_chars_range(127u8, 128u8); // DEL
+    }
+    fn query_encoding_escaped_chars_range(start: u8, end: u8) {
+        let mut params = Params::new();
+        for code in start..end {
+            params.insert("k".to_owned(), (code as char).to_string());
+            let enc = build_canonical_query_string(&params);
+            let expected = format!("k=%{:02X}", code);
+            assert_eq!(expected, enc);
+        }
+    }
+    #[test]
+    fn query_percent_encoded() {
+        let mut request = SignedRequest::new("GET", "s3", Region::UsEast1, "/path with spaces: the sequel");
+        request.add_param("key:with@funny&characters", "value with/funny%characters/Рускии");
+        let canonical_query_string = super::build_canonical_query_string(&request.params);
+        assert_eq!("key%3Awith%40funny%26characters=value%20with%2Ffunny%25characters%2F%D0%A0%D1%83%D1%81%D0%BA%D0%B8%D0%B8", canonical_query_string);
+        let canonical_uri_string = super::canonical_uri(&request.path);
+        assert_eq!("/path%20with%20spaces%3A%20the%20sequel", canonical_uri_string);
     }
 }
