@@ -323,6 +323,15 @@ fn build_canonical_query_string(params: &Params) -> String {
     output
 }
 
+// http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html 
+//
+// Do not URI-encode any of the unreserved characters that RFC 3986 defines: 
+// A-Z, a-z, 0-9, hyphen ( - ), underscore ( _ ), period ( . ), and tilde ( ~ ).
+//
+// Percent-encode all other characters with %XY, where X and Y are hexadecimal 
+// characters (0-9 and uppercase A-F). For example, the space character must be 
+// encoded as %20 (not using '+', as some encoding schemes do) and extended UTF-8 
+// characters must be in the form %XY%ZA%BC
 #[derive(Clone)]
 pub struct StrictEncodeSet;
 
