@@ -456,9 +456,9 @@ mod tests {
     #[test]
     fn query_percent_encoded() {
         let mut request = SignedRequest::new("GET", "s3", Region::UsEast1, "/path with spaces: the sequel");
-        request.add_param("key:with@funny&characters", "value with/funny%characters");
+        request.add_param("key:with@funny&characters", "value with/funny%characters/Рускии");
         let canonical_query_string = super::build_canonical_query_string(&request.params);
-        assert_eq!("key%3Awith%40funny%26characters=value%20with%2Ffunny%25characters", canonical_query_string);
+        assert_eq!("key%3Awith%40funny%26characters=value%20with%2Ffunny%25characters%2F%D0%A0%D1%83%D1%81%D0%BA%D0%B8%D0%B8", canonical_query_string);
         let canonical_uri_string = super::canonical_uri(&request.path);
         assert_eq!("/path%20with%20spaces%3A%20the%20sequel", canonical_uri_string);
     }
