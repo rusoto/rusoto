@@ -51,7 +51,6 @@ pub fn generate_source(service: &Service) -> String {
 fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator: E) -> String where P: GenerateProtocol,  E: GenerateErrorTypes {
     format!(
         "
-        #[deny(missing_docs)]
         use hyper::Client;
         use hyper::client::RedirectPolicy;
         use request::DispatchSignedRequest;
@@ -68,7 +67,7 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
         {error_types}
 
         {client}
-        
+
         {tests}",
         client = generate_client(service, &protocol_generator),
         prelude = &protocol_generator.generate_prelude(service),
@@ -90,7 +89,7 @@ where P: GenerateProtocol {
 
         impl<P> {type_name}<P, Client> where P: ProvideAwsCredentials {{
             pub fn new(credentials_provider: P, region: region::Region) -> Self {{
-                let mut client = Client::new();                
+                let mut client = Client::new();
                 client.set_redirect_policy(RedirectPolicy::FollowNone);
                {type_name}::with_request_dispatcher(client, credentials_provider, region)
             }}
