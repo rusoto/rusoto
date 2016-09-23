@@ -59,14 +59,14 @@ impl DispatchSignedRequest for MockRequestDispatcher {
 }
 
 pub trait ReadMockResponse {
-	fn read_response(file_name: &str) -> String;
+	fn read_response(dir_name: &str, file_name: &str) -> String;
 }
 
 pub struct MockResponseReader;
 
 impl ReadMockResponse for MockResponseReader {
-	fn read_response(response_name: &str) -> String {
-		let file_name = format!("./codegen/botocore/tests/unit/response_parsing/xml/responses/{}", response_name);
+	fn read_response(dir_name: &str, response_name: &str) -> String {
+		let file_name = format!("{}/{}", dir_name, response_name);
 
 		let mut input_file = File::open(&file_name)
 			.expect("couldn't find file");

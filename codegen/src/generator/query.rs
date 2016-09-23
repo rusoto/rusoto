@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape, ShapeType};
@@ -526,7 +527,7 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
     Some(format!("
     #[test]
     fn test_parse_{service_name}_{action}() {{
-        let mock_response =  MockResponseReader::read_response(\"{response_file_name}\");
+        let mock_response =  MockResponseReader::read_response(\"{response_dir_name}\", \"{response_file_name}\");
 
         let mock = MockRequestDispatcher::with_status(200)
             .with_body(&mock_response);
@@ -542,6 +543,7 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
     ",
     service_name=response.service.to_snake_case(),
     action=response.action.to_snake_case(),
+    response_dir_name=response.dir_name,
     response_file_name=response.file_name,
     client_type=service.client_type_name(),
     request_constructor=request_constructor,
@@ -550,11 +552,12 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
 }
 
 fn generate_tests_body(service: &Service) -> String {
-    let responses: Vec<Response> = find_responses();
+    let responses: HashMap<String, Response> = find_responses();
 
-    let our_responses: Vec<Response> = responses
+    let our_responses: Vec<Response> = responses.values()
         .into_iter()
         .filter(|r| r.service == service.service_type_name())
+        .map(|r| r.to_owned())
         .collect();
 
     let test_bodies: Vec<String> = our_responses
