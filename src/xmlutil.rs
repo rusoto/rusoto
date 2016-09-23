@@ -97,10 +97,18 @@ pub fn string_field<T: Peek + Next>(name: &str, stack: &mut T) -> Result<String,
 
 /// return some XML Characters
 pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError> {
+    { // Lexical lifetime
+        // Check to see if the next element is an end tag.
+        // If it is, return an empty string.
+        let current = stack.peek();
+        if let Some(&XmlEvent::EndElement{ .. } ) = current {
+            return Ok("".to_string())
+        }
+    }
     if let Some(XmlEvent::Characters(data)) = stack.next() {
         Ok(data.to_string())
-    } else { 
-         Err(XmlParseError::new("Expected characters"))
+    } else {
+        Err(XmlParseError::new("Expected characters"))
     }
 }
 
