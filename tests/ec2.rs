@@ -2,7 +2,8 @@
 
 extern crate rusoto;
 
-use rusoto::ec2::{Ec2Client, DescribeInstancesRequest};
+use rusoto::ec2::{Ec2Client, CreateSnapshotRequest, DescribeInstancesRequest};
+use rusoto::ec2::{CreateTagsRequest, Tag};
 use rusoto::{DefaultCredentialsProvider, Region};
 use std::error::Error;
 
@@ -22,4 +23,48 @@ fn main() {
         }
     }
 
+}
+
+#[test]
+// Test for issue 383
+fn dry_run() {
+    let credentials = DefaultCredentialsProvider::new().unwrap();
+    let ec2 = Ec2Client::new(credentials, Region::UsEast1);
+    let req = CreateSnapshotRequest {
+                     volume_id: "v-00000001".into(),
+                     description: None,
+                     dry_run: Some(true)
+                 };
+    match ec2.create_snapshot(&req) {
+        Ok(_) => {
+            panic!("create_snapshot should fail");
+        },
+        Err(error) => {
+            assert!(error.description().contains("<Message>Request would have succeeded, but DryRun flag is set.</Message>"), "Missing error message");
+        }
+    }
+}
+
+#[test]
+// Test for issue 387
+fn query_serialization_name() {
+    let credentials = DefaultCredentialsProvider::new().unwrap();
+    let ec2 = Ec2Client::new(credentials, Region::UsEast1);
+    let req = CreateTagsRequest {
+                    dry_run: None,
+                    resources: vec!["v-00000001".into()],
+                    tags: vec![Tag { 
+                                key: Some("key".into()),
+                                value: Some("val".into())
+                               }]
+                };
+    match ec2.create_tags(&req) {
+        Ok(_) => {
+            panic!("create_tags should fail");
+        },
+        Err(error) => {
+            println!("{}", error.description());
+            assert!(error.description().contains("<Message>The ID 'v-00000001' is not valid</Message>"), "Missing error message");
+        }
+    }
 }
