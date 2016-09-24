@@ -2,6 +2,9 @@
 //!
 //! Wraps the Hyper library to send PUT, POST, DELETE and GET requests.
 
+extern crate lazy_static;
+
+use std::env;
 use std::io::Read;
 use std::io::Error as IoError;
 use std::error::Error;
@@ -11,11 +14,22 @@ use std::collections::HashMap;
 use hyper::Client;
 use hyper::Error as HyperError;
 use hyper::header::Headers;
+use hyper::header::UserAgent;
 use hyper::method::Method;
 
 use log::LogLevel::Debug;
 
 use signature::SignedRequest;
+
+// Pulls in the statically generated rustc version.
+include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
+
+// Use a lazy static to cache the default User-Agent header
+// because it never changes once it's been computed.
+lazy_static! {
+    static ref DEFAULT_USER_AGENT: Vec<Vec<u8>> = vec![format!("rusoto/{} rust/{} {}",
+            env!("CARGO_PKG_VERSION"), RUST_VERSION, env::consts::OS).as_bytes().to_vec()];
+}
 
 #[derive(Clone, Default)]
 pub struct HttpResponse {
@@ -75,6 +89,11 @@ impl DispatchSignedRequest for Client {
             hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
         }
 
+        // Add a default user-agent header if one is not already present.
+        if !hyper_headers.has::<UserAgent>() {
+            hyper_headers.set_raw("user-agent".to_owned(), DEFAULT_USER_AGENT.clone());
+        }
+
         let mut final_uri = format!("https://{}{}", request.hostname(), request.path());
         if !request.canonical_query_string().is_empty() {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
@@ -118,6 +137,6 @@ impl DispatchSignedRequest for Client {
             body: body,
             headers: headers
         })
-        
+
     }
 }
