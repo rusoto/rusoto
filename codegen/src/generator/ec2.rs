@@ -1,9 +1,10 @@
 use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape, ShapeType};
-use std::borrow::Cow;
+// use std::borrow::Cow;
 use super::GenerateProtocol;
 use super::generate_field_name;
+use super::tests::{Response, find_responses};
 
 pub struct Ec2Generator;
 
@@ -30,7 +31,12 @@ impl GenerateProtocol for Ec2Generator {
                         200 => {{
                             let mut reader = EventReader::from_str(&result.body);
                             let mut stack = XmlResponse::new(reader.events().peekable());
-                            stack.next();
+                            // println!(\"top level peekin': {{:?}}\", stack.peek());
+                            match stack.peek() {{
+                                Some(&XmlEvent::StartDocument {{ .. }}) => {{stack.next();}},
+                                _ => (),
+                            }}
+                            println!(\"top level peekin round two': {{:?}}\", stack.peek());
                             {method_return_value}
                         }},
                         _ => Err({error_type}::from_body(&result.body))
@@ -77,35 +83,126 @@ impl GenerateProtocol for Ec2Generator {
     }
 
     fn generate_support_types(&self, name: &str, shape: &Shape, _service: &Service) -> Option<String> {
-        Some(format!(
-            "/// Deserializes `{name}` from XML.
-            struct {name}Deserializer;
-            impl {name}Deserializer {{
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<{name}, XmlParseError> {{
-                    {deserializer_body}
-                }}
-            }}
+        let serializer = generate_serializer_body(name, shape);
+        let deserializer = generate_deserializer_body(name, shape);
+        let serializer_signature = generate_serializer_signature(name, shape);
 
-            /// Serialize `{name}` contents to a `SignedRequest`.
-            struct {name}Serializer;
-            impl {name}Serializer {{
-                {serializer_signature} {{
-                    {serializer_body}
+        let mut collector = String::new();
+
+        if serializer.len() > 0 {
+            collector.push_str(&format!(
+                "/// Serialize `{name}` contents to a `SignedRequest`.
+                struct {name}Serializer;
+                impl {name}Serializer {{
+                    {serializer_signature} {{
+                        {serializer_body}
+                    }}
                 }}
-            }}
-            ",
-            deserializer_body = generate_deserializer_body(name, shape),
-            name = name,
-            serializer_body = generate_serializer_body(shape),
-            serializer_signature = generate_serializer_signature(name, shape),
-        ))
+                ",
+                name = name,
+                serializer_signature = serializer_signature,
+                serializer_body = serializer
+            ));
+        }
+
+        if deserializer.len() > 0 {
+            collector.push_str(&format!(
+                "/// Deserializes `{name}` from XML.
+                struct {name}Deserializer;
+                impl {name}Deserializer {{
+                    #[allow(unused_variables)]
+                    fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
+                    -> Result<{name}, XmlParseError> {{
+                        {deserializer_body}
+                    }}
+                }}
+                ",
+                name = name,
+                deserializer_body = deserializer
+            ));
+        }
+
+        Some(collector)
     }
 
     fn timestamp_type(&self) -> &'static str {
         "String"
     }
+
+    fn generate_tests(&self, service: &Service) -> Option<String> {
+        Some(format!(
+            "
+            #[cfg(test)]
+            mod protocol_tests {{
+                {tests_body}
+            }}
+            ",
+            tests_body = generate_tests_body(service)
+        ))
+    }
+}
+
+fn generate_response_parse_test(service: &Service, response: Response) -> Option<String> {
+    let maybe_operation = service.operations.get(&response.action);
+
+    if maybe_operation.is_none() {
+        return None;
+    }
+
+    let operation = maybe_operation.unwrap();
+    let input_shape = operation.input_shape();
+
+    Some(format!("
+    #[test]
+    fn test_parse_{service_name}_{action}() {{
+        let mock_response =  MockResponseReader::read_response(\"{response_file_name}\");
+
+        let mock = MockRequestDispatcher::with_status(200)
+            .with_body(&mock_response);
+
+        let client = {client_type}::with_request_dispatcher(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+
+        let request = {request_type}::default();
+
+        let result = client.{action_method}(&request);
+        if result.is_err() {{
+            println!(\"result: {{:?}}\", result);
+        }}
+        assert!(result.is_ok());
+    }}
+    ",
+    service_name=response.service.to_snake_case(),
+    action=response.action.to_snake_case(),
+    response_file_name=response.file_name,
+    client_type=service.client_type_name(),
+    request_type=input_shape,
+    action_method=operation.name.to_snake_case()))
+}
+
+fn generate_tests_body(service: &Service) -> String {
+    let responses: Vec<Response> = find_responses();
+
+    let our_responses: Vec<Response> = responses
+        .into_iter()
+        .filter(|r| r.service == service.service_type_name())
+        .collect();
+
+    let test_bodies: Vec<String> = our_responses
+        .into_iter()
+        .flat_map(|response| generate_response_parse_test(service, response))
+        .collect();
+
+    let tests_str = test_bodies
+        .join("\n\n");
+
+    format!("
+        use mock::*;
+        use super::*;
+        use super::super::Region as rusoto_region;
+
+        {test_bodies}
+    ",
+    test_bodies=tests_str)
 }
 
 fn generate_documentation(operation: &Operation) -> String {
@@ -126,22 +223,19 @@ fn generate_method_input_serialization(operation: &Operation) -> String {
     }
 }
 
-fn generate_response_tag_name<'a>(member_name: &'a str) -> Cow<'a, str> {
-    if member_name.ends_with("Result") {
-        format!("{}Response", &member_name[..member_name.len()-6]).into()
-    } else {
-        member_name.into()
-    }
-}
-
 fn generate_method_return_value(operation: &Operation) -> String {
     if operation.output.is_some() {
         let output_type = &operation.output.as_ref().unwrap().shape;
-        let standard_tag_name = generate_response_tag_name(output_type).into_owned();
-        let tag_name = match standard_tag_name.as_ref() {
-            "Snapshot" => "CreateSnapshotResponse",
-            _ => &standard_tag_name
-        };
+        // let standard_tag_name = generate_response_tag_name(output_type).into_owned();
+        // We should get these from the service definition instead of band-aiding here:
+        // let tag_name = match standard_tag_name.as_ref() {
+        //     "Snapshot" => "CreateSnapshotResponse".to_string(),
+        //     "VolumeAttachment" => "AttachVolumeResponse".to_string(),
+        //     "KeyPair" => "CreateKeyPairResponse".to_string(),
+        //     "Volume" => format!("{}Response", operation.name),
+        //     _ => standard_tag_name.to_string()
+        // };
+        let tag_name = format!("{}Response", operation.name);
 
         format!(
             "Ok(try!({output_type}Deserializer::deserialize(\"{tag_name}\", &mut stack)))",
@@ -173,6 +267,18 @@ fn generate_method_signature(operation: &Operation) -> String {
 }
 
 fn generate_deserializer_body(name: &str, shape: &Shape) -> String {
+    // Requests don't get deserialized, except the ones that do.
+    if name.ends_with("Request") {
+        match name {
+            "CancelledSpotInstanceRequest" => (),
+            "PurchaseRequest" => (),
+            "SpotInstanceRequest" => (),
+            _ => {
+                println!("\nskipping deserializer {} as it ends with 'request'.", name);
+                return String::new()    
+            }
+        }
+    }
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape),
         ShapeType::Structure => generate_struct_deserializer(name, shape),
@@ -192,7 +298,9 @@ fn generate_list_deserializer(shape: &Shape) -> String {
         loop {{
             let next_event = match stack.peek() {{
                 Some(&XmlEvent::EndElement {{ .. }}) => DeserializerNext::Close,
-                Some(&XmlEvent::StartElement {{ ref name, .. }}) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&XmlEvent::StartElement {{ ref name, .. }}) => {{
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }},
                 _ => DeserializerNext::Skip,
             }};
 
@@ -231,15 +339,31 @@ fn generate_primitive_deserializer(shape: &Shape) -> String {
         shape_type => panic!("Unknown primitive shape type: {:?}", shape_type),
     };
 
-    format!(
-        "try!(start_element(tag_name, stack));
-        let obj = {statement};
-        try!(end_element(tag_name, stack));
+    // let not_in_response =
 
-        Ok(obj)
+    // This needs massaging to support empty tags
+    format!("
+        try!(start_element(tag_name, stack));
+        match end_element(tag_name, stack) {{
+                Ok(()) => Err(XmlParseError::new(&\"Self closing tag, empty value\")),
+                Err(_) => {{
+                    let obj = {statement};
+                    try!(end_element(tag_name, stack));
+                    Ok(obj)
+                }}
+            }}
         ",
-        statement = statement,
+        statement = statement
     )
+    // format!(
+    //     "try!(start_element(tag_name, stack));
+    //     let obj = {statement};
+    //     try!(end_element(tag_name, stack));
+    //
+    //     Ok(obj)
+    //     ",
+    //     statement = statement,
+    // )
 }
 
 fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
@@ -270,6 +394,8 @@ fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
                 Some(&XmlEvent::StartElement {{ ref name, .. }}) => DeserializerNext::Element(name.local_name.to_owned()),
                 _ => DeserializerNext::Skip,
             }};
+
+            println!(\"peekin', expecting {{:?}}: {{:?}}\", tag_name, stack.peek());
 
             match next_event {{
                 DeserializerNext::Element(name) => {{
@@ -322,19 +448,38 @@ fn generate_struct_field_parse_expression(
         None => member_name.to_string(),
     };
     let expression = format!(
-        "try!({name}Deserializer::deserialize(\"{location}\", stack))",
+        "{name}Deserializer::deserialize(\"{location}\", stack)",
         name = member.shape,
         location = location_to_use,
     );
 
+
     if shape.required(member_name) {
-        expression
+        format!("try!({})",
+            expression
+        )
     } else {
-        format!("Some({})", expression)
+        format!("
+            match {} {{
+                Ok(foo) => Some(foo),
+                Err(_) => None,
+            }}
+            ",
+        expression)
     }
 }
 
-fn generate_serializer_body(shape: &Shape) -> String {
+fn generate_serializer_body(name: &str, shape: &Shape) -> String {
+    // Responses don't get deserialized, except the ones that do.
+    if name.ends_with("Response") {
+        match name {
+            "foo" => (),
+            _ => {
+                println!("\nskipping serializer for {} as it ends with 'Response'.", name);
+                return String::new()    
+            }
+        }
+    }
     match shape.shape_type {
         ShapeType::List => generate_list_serializer(shape),
         ShapeType::Map => generate_map_serializer(shape),
