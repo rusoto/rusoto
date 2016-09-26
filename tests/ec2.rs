@@ -25,46 +25,33 @@ fn main() {
 
 }
 
+// Issue 383
 #[test]
-// Test for issue 383
+#[should_panic(expected="<Message>Request would have succeeded, but DryRun flag is set.</Message>")]
 fn dry_run() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let ec2 = Ec2Client::new(credentials, Region::UsEast1);
     let req = CreateSnapshotRequest {
-                     volume_id: "v-00000001".into(),
-                     description: None,
-                     dry_run: Some(true)
-                 };
-    match ec2.create_snapshot(&req) {
-        Ok(_) => {
-            panic!("create_snapshot should fail");
-        },
-        Err(error) => {
-            assert!(error.description().contains("<Message>Request would have succeeded, but DryRun flag is set.</Message>"), "Missing error message");
-        }
-    }
+        volume_id: "v-00000001".into(),
+        description: None,
+        dry_run: Some(true)
+    };
+    let _ = ec2.create_snapshot(&req) .unwrap();
 }
 
+// Issue 387
 #[test]
-// Test for issue 387
+#[should_panic(expected="<Code>InvalidID</Code>")]
 fn query_serialization_name() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let ec2 = Ec2Client::new(credentials, Region::UsEast1);
     let req = CreateTagsRequest {
-                    dry_run: None,
-                    resources: vec!["v-00000001".into()],
-                    tags: vec![Tag { 
-                                key: Some("key".into()),
-                                value: Some("val".into())
-                               }]
-                };
-    match ec2.create_tags(&req) {
-        Ok(_) => {
-            panic!("create_tags should fail");
-        },
-        Err(error) => {
-            println!("{}", error.description());
-            assert!(error.description().contains("<Message>The ID 'v-00000001' is not valid</Message>"), "Missing error message");
-        }
-    }
+        dry_run: None,
+        resources: vec!["v-00000001".into()],
+        tags: vec![Tag {
+            key: Some("key".into()),
+            value: Some("val".into())
+        }]
+    };
+    let _ = ec2.create_tags(&req) .unwrap();
 }
