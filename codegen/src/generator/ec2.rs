@@ -77,7 +77,26 @@ impl GenerateProtocol for Ec2Generator {
     }
 
     fn generate_support_types(&self, name: &str, shape: &Shape, _service: &Service) -> Option<String> {
-        Some(format!(
+        let mut struct_collector = String::new();
+        let serializer = generate_serializer_body(name, shape);
+
+        if serializer.is_some() {
+            struct_collector.push_str(&format!("
+            /// Serialize `{name}` contents to a `SignedRequest`.
+            struct {name}Serializer;
+            impl {name}Serializer {{
+                {serializer_signature} {{
+                    {serializer_body}
+                }}
+            }}",
+            name = name,
+            serializer_signature = generate_serializer_signature(name, shape),
+            serializer_body = serializer.unwrap())
+            );
+        }
+        let deserializer = generate_deserializer_body(name, shape);
+        if deserializer.is_some() {
+            struct_collector.push_str(&format!(
             "/// Deserializes `{name}` from XML.
             struct {name}Deserializer;
             impl {name}Deserializer {{
@@ -86,21 +105,12 @@ impl GenerateProtocol for Ec2Generator {
                 -> Result<{name}, XmlParseError> {{
                     {deserializer_body}
                 }}
-            }}
-
-            /// Serialize `{name}` contents to a `SignedRequest`.
-            struct {name}Serializer;
-            impl {name}Serializer {{
-                {serializer_signature} {{
-                    {serializer_body}
-                }}
-            }}
-            ",
-            deserializer_body = generate_deserializer_body(name, shape),
+            }}",
             name = name,
-            serializer_body = generate_serializer_body(shape),
-            serializer_signature = generate_serializer_signature(name, shape),
-        ))
+            deserializer_body = deserializer.unwrap())
+            );
+        }
+        Some(struct_collector)
     }
 
     fn timestamp_type(&self) -> &'static str {
@@ -172,11 +182,20 @@ fn generate_method_signature(operation: &Operation) -> String {
     }
 }
 
-fn generate_deserializer_body(name: &str, shape: &Shape) -> String {
+fn generate_deserializer_body(name: &str, shape: &Shape) -> Option<String> {
+    // Requests don't get deserialized, except the ones that do.
+    if name.ends_with("Request") {
+        match name {
+            "CancelledSpotInstanceRequest" => (),
+            "PurchaseRequest" => (),
+            "SpotInstanceRequest" => (),
+            _ => return None,
+        }
+    }
     match shape.shape_type {
-        ShapeType::List => generate_list_deserializer(shape),
-        ShapeType::Structure => generate_struct_deserializer(name, shape),
-        _ => generate_primitive_deserializer(shape),
+        ShapeType::List => Some(generate_list_deserializer(shape)),
+        ShapeType::Structure => Some(generate_struct_deserializer(name, shape)),
+        _ => Some(generate_primitive_deserializer(shape)),
     }
 }
 
@@ -334,12 +353,16 @@ fn generate_struct_field_parse_expression(
     }
 }
 
-fn generate_serializer_body(shape: &Shape) -> String {
+fn generate_serializer_body(name: &str, shape: &Shape) -> Option<String> {
+    // Don't need to send "Response" objects, don't make the code for their serializers
+    if name.ends_with("Response") {
+        return None;
+    }
     match shape.shape_type {
-        ShapeType::List => generate_list_serializer(shape),
-        ShapeType::Map => generate_map_serializer(shape),
-        ShapeType::Structure => generate_struct_serializer(shape),
-        _ => generate_primitive_serializer(shape),
+        ShapeType::List => Some(generate_list_serializer(shape)),
+        ShapeType::Map => Some(generate_map_serializer(shape)),
+        ShapeType::Structure => Some(generate_struct_serializer(shape)),
+        _ => Some(generate_primitive_serializer(shape)),
     }
 }
 
