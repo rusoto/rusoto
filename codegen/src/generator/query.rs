@@ -71,16 +71,11 @@ impl GenerateProtocol for QueryGenerator {
     }
 
     fn generate_support_types(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
-        Some(format!(
-            "/// Deserializes `{name}` from XML.
-            struct {name}Deserializer;
-            impl {name}Deserializer {{
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<{name}, XmlParseError> {{
-                    {deserializer_body}
-                }}
-            }}
+        let mut struct_collector = String::new();
+        let serializer = generate_serializer_body(name, shape);
 
+        if serializer.is_some() {
+            struct_collector.push_str(&format!("
             /// Serialize `{name}` contents to a `SignedRequest`.
             struct {name}Serializer;
             impl {name}Serializer {{
@@ -89,11 +84,25 @@ impl GenerateProtocol for QueryGenerator {
                 }}
             }}
             ",
+            name = name,
+            serializer_signature = generate_serializer_signature(name, shape),
+            serializer_body = serializer.unwrap())
+            );
+        }
+        struct_collector.push_str(&format!(
+            "/// Deserializes `{name}` from XML.
+            struct {name}Deserializer;
+            impl {name}Deserializer {{
+                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
+                -> Result<{name}, XmlParseError> {{
+                    {deserializer_body}
+                }}
+            }}
+            ",
             deserializer_body = generate_deserializer_body(name, shape, service),
             name = name,
-            serializer_body = generate_serializer_body(shape),
-            serializer_signature = generate_serializer_signature(name, shape),
-        ))
+        ));
+        Some(struct_collector)
     }
 
     fn generate_tests(&self, service: &Service) -> Option<String> {
@@ -334,12 +343,16 @@ fn generate_struct_field_parse_expression(
     }
 }
 
-fn generate_serializer_body(shape: &Shape) -> String {
+fn generate_serializer_body(name: &str,shape: &Shape) -> Option<String> {
+    // Don't need to send "Response" objects, don't make the code for their serializers
+    if name.ends_with("Response") {
+        return None;
+    }
     match shape.shape_type {
-        ShapeType::List => generate_list_serializer(shape),
-        ShapeType::Map => generate_map_serializer(shape),
-        ShapeType::Structure => generate_struct_serializer(shape),
-        _ => generate_primitive_serializer(shape),
+        ShapeType::List => Some(generate_list_serializer(shape)),
+        ShapeType::Map => Some(generate_map_serializer(shape)),
+        ShapeType::Structure => Some(generate_struct_serializer(shape)),
+        _ => Some(generate_primitive_serializer(shape)),
     }
 }
 
