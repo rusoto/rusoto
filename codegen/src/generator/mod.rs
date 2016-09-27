@@ -14,7 +14,6 @@ mod json;
 mod query;
 mod rest_json;
 mod tests;
-mod utils;
 
 pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
