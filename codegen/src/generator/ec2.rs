@@ -1,6 +1,7 @@
 use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape, ShapeType};
+use generator::capitalize_first;
 use std::borrow::Cow;
 use super::GenerateProtocol;
 use super::generate_field_name;
@@ -398,6 +399,7 @@ if prefix != \"\" {{
 
 fn generate_struct_field_serializers(shape: &Shape) -> String {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
+        let tag_name = capitalize_first(member.location_name.as_ref().unwrap_or(member_name).to_owned());
         if shape.required(member_name) {
             format!(
                 "{member_shape_name}Serializer::serialize(
@@ -408,7 +410,7 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
                 ",
                 field_name = generate_field_name(member_name),
                 member_shape_name = member.shape,
-                tag_name = member_name,
+                tag_name = tag_name,
             )
         } else {
             format!(
@@ -422,7 +424,7 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
                 ",
                 field_name = generate_field_name(member_name),
                 member_shape_name = member.shape,
-                tag_name = member.location_name.as_ref().unwrap_or(member_name),
+                tag_name = tag_name,
             )
         }
     }).collect::<Vec<String>>().join("\n")
