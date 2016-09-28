@@ -66,7 +66,7 @@ impl GenerateProtocol for QueryGenerator {
         ".to_owned()
     }
 
-    fn generate_struct_attributes(&self) -> String {
+    fn generate_struct_attributes(&self, _struct_name: &str) -> String {
         "#[derive(Debug, Default, Clone)]".to_owned()
     }
 

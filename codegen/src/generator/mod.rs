@@ -20,7 +20,7 @@ pub trait GenerateProtocol {
 
     fn generate_prelude(&self, service: &Service) -> String;
 
-    fn generate_struct_attributes(&self) -> String;
+    fn generate_struct_attributes(&self, struct_name: &str) -> String;
 
     fn generate_support_types(&self, _name: &str, _shape: &Shape, _service: &Service)
         -> Option<String> {
@@ -191,7 +191,7 @@ fn generate_struct<P>(
             "{attributes}
             pub struct {name};
             ",
-            attributes = protocol_generator.generate_struct_attributes(),
+            attributes = protocol_generator.generate_struct_attributes(name),
             name = name,
         )
     } else {
@@ -201,7 +201,7 @@ fn generate_struct<P>(
                 {struct_fields}
             }}
             ",
-            attributes = protocol_generator.generate_struct_attributes(),
+            attributes = protocol_generator.generate_struct_attributes(name),
             name = name,
             struct_fields = generate_struct_fields(service, shape, name, protocol_generator),
         )

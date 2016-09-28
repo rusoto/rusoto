@@ -100,13 +100,33 @@ impl GenerateProtocol for RestJsonGenerator {
         ".to_owned()
     }
 
-    fn generate_struct_attributes(&self) -> String {
-        "#[derive(Debug, Default, Deserialize, Serialize, Clone)]".to_owned()
+    fn generate_struct_attributes(&self, struct_name: &str) -> String {
+        if can_skip_deserializer(struct_name) {
+            return "#[derive(Default, Serialize)]".to_owned();
+        }
+        if can_skip_serializer(struct_name) {
+            return "#[derive(Default, Debug, Deserialize, Clone)]".to_owned();
+        }
+        "#[derive(Default, Debug, Deserialize, Serialize, Clone)]".to_owned()
     }
 
     fn timestamp_type(&self) -> &'static str {
         "f64"
     }
+}
+
+fn can_skip_serializer(struct_name: &str) -> bool {
+    if struct_name.ends_with("Response") {
+        return true;
+    }
+    false
+}
+
+fn can_skip_deserializer(struct_name: &str) -> bool {
+    if struct_name.ends_with("Request"){
+        return true;
+    }
+    false
 }
 
 // IoT has an endpoint_prefix and a signing_name that differ
