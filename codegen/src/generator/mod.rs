@@ -1,7 +1,6 @@
 use inflector::Inflector;
 
 use botocore::{Service, Shape, ShapeType, Operation};
-use std::ascii::AsciiExt;
 use self::ec2::Ec2Generator;
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
@@ -271,11 +270,19 @@ impl Operation {
     }
 }
 
-fn capitalize_first(word: String) -> String {
-    assert!(word.is_ascii());
+/// Takes a string and returns it with the first letter capitalized.
+/// If the input string is empty an empty string is returned.
+fn capitalize_first<S>(word: S) -> String where S: Into<String> {
+    let s = word.into();
+    let mut chars = s.chars();
+    match chars.next() {
+        Some(c) => c.to_uppercase().collect::<String>() + chars.as_str(),
+        None => String::new(),
+    }
+}
 
-    let mut result = word.into_bytes();
-    result[0] = result[0].to_ascii_uppercase();
-
-    String::from_utf8(result).unwrap()
+#[test]
+fn capitalize_first_test() {
+    assert_eq!(capitalize_first("a &str test"), "A &str test".to_owned());
+    assert_eq!(capitalize_first("a String test".to_owned()), "A String test".to_owned());
 }

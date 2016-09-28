@@ -1,12 +1,6 @@
 use std::fs;
 
-fn capitalise(s: &str) -> String {
-    let mut c = s.chars();
-    match c.next() {
-        None => String::new(),
-        Some(f) => f.to_uppercase().chain(c).collect(),
-    }
-}
+use super::capitalize_first;
 
 #[derive(Debug, Clone	)]
 pub struct Response {
@@ -27,9 +21,9 @@ impl Response {
         if let Some(file_name) = maybe_file_name_and_extension.get(0) {
             let file_name_parts: Vec<&str> = file_name.split("-").collect();
 
-            service_name = file_name_parts.get(0).map(|s| capitalise(s));
+            service_name = file_name_parts.get(0).map(|s| capitalize_first(*s));
 
-            action = Some(file_name_parts.into_iter().skip(1).map(|w| capitalise(w)).collect());
+            action = Some(file_name_parts.into_iter().skip(1).map(|w| capitalize_first(w)).collect());
         }
 
         service_name
