@@ -5,7 +5,7 @@ description = "Code generation library for Rusoto."
 license = "MIT"
 name = "rusoto_codegen"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.2.5"
+version = "0.2.6"
 
 [build-dependencies.serde_codegen]
 optional = true
