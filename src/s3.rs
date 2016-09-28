@@ -566,15 +566,7 @@ impl GetBucketTaggingOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketTaggingOutput` contents to a `SignedRequest`
-struct GetBucketTaggingOutputWriter;
-impl GetBucketTaggingOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketTaggingOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        TagSetWriter::write_params(params, &(prefix.to_string() + "Tag"), &obj.tag_set);
-    }
-}
+
 pub type Metadata = HashMap<MetadataKey,MetadataValue>;
 /// Parse `Metadata` from XML
 struct MetadataParser;
@@ -694,22 +686,7 @@ impl PutObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `PutObjectOutput` contents to a `SignedRequest`
-struct PutObjectOutputWriter;
-impl PutObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &PutObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct PutObjectAclOutput {
     pub request_charged: RequestCharged,
@@ -733,15 +710,7 @@ impl PutObjectAclOutputParser {
         Ok(obj)
     }
 }
-/// Write `PutObjectAclOutput` contents to a `SignedRequest`
-struct PutObjectAclOutputWriter;
-impl PutObjectAclOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &PutObjectAclOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
-}
+
 /// Container for replication rules. You can add as many as 1,000 rules. Total
 /// replication configuration size can be up to 2 MB.
 #[derive(Debug, Default)]
@@ -878,15 +847,7 @@ impl CreateBucketOutputParser {
         Ok(obj)
     }
 }
-/// Write `CreateBucketOutput` contents to a `SignedRequest`
-struct CreateBucketOutputWriter;
-impl CreateBucketOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &CreateBucketOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        LocationWriter::write_params(params, &(prefix.to_string() + "Location"), &obj.location);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct DeleteMarkerEntry {
     pub owner: Owner,
@@ -1512,16 +1473,7 @@ impl GetBucketAclOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketAclOutput` contents to a `SignedRequest`
-struct GetBucketAclOutputWriter;
-impl GetBucketAclOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketAclOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
-        GrantsWriter::write_params(params, &(prefix.to_string() + "Grant"), &obj.grants);
-    }
-}
+
 pub type Days = i32;
 /// Parse `Days` from XML
 struct DaysParser;
@@ -1688,16 +1640,6 @@ impl DeleteMarkersWriter {
 #[derive(Debug, Default)]
 pub struct AbortMultipartUploadOutput {
     pub request_charged: RequestCharged,
-}
-
-/// Write `AbortMultipartUploadOutput` contents to a `SignedRequest`
-struct AbortMultipartUploadOutputWriter;
-impl AbortMultipartUploadOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &AbortMultipartUploadOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
 }
 
 /// Put bucket policy request
@@ -2085,21 +2027,7 @@ impl UploadPartCopyOutputParser {
         Ok(obj)
     }
 }
-/// Write `UploadPartCopyOutput` contents to a `SignedRequest`
-struct UploadPartCopyOutputWriter;
-impl UploadPartCopyOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &UploadPartCopyOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        CopySourceVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-copy-source-version-id"), &obj.copy_source_version_id);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-        CopyPartResultWriter::write_params(params, &(prefix.to_string() + "CopyPartResult"), &obj.copy_part_result);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct Redirect {
     /// The specific object key to use in the redirect request. For example, redirect
@@ -2342,17 +2270,7 @@ impl DeleteObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `DeleteObjectOutput` contents to a `SignedRequest`
-struct DeleteObjectOutputWriter;
-impl DeleteObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &DeleteObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        DeleteMarkerWriter::write_params(params, &(prefix.to_string() + "x-amz-delete-marker"), &obj.delete_marker);
-    }
-}
+
 pub type VersionIdMarker = String;
 /// Parse `VersionIdMarker` from XML
 struct VersionIdMarkerParser;
@@ -2972,38 +2890,7 @@ impl HeadObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `HeadObjectOutput` contents to a `SignedRequest`
-struct HeadObjectOutputWriter;
-impl HeadObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &HeadObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        LastModifiedWriter::write_params(params, &(prefix.to_string() + "Last-Modified"), &obj.last_modified);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        ContentEncodingWriter::write_params(params, &(prefix.to_string() + "Content-Encoding"), &obj.content_encoding);
-        ReplicationStatusWriter::write_params(params, &(prefix.to_string() + "x-amz-replication-status"), &obj.replication_status);
-        StorageClassWriter::write_params(params, &(prefix.to_string() + "x-amz-storage-class"), &obj.storage_class);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-        ContentDispositionWriter::write_params(params, &(prefix.to_string() + "Content-Disposition"), &obj.content_disposition);
-        MetadataWriter::write_params(params, &(prefix.to_string() + "x-amz-meta-"), &obj.metadata);
-        AcceptRangesWriter::write_params(params, &(prefix.to_string() + "accept-ranges"), &obj.accept_ranges);
-        WebsiteRedirectLocationWriter::write_params(params, &(prefix.to_string() + "x-amz-website-redirect-location"), &obj.website_redirect_location);
-        ExpiresWriter::write_params(params, &(prefix.to_string() + "Expires"), &obj.expires);
-        DeleteMarkerWriter::write_params(params, &(prefix.to_string() + "x-amz-delete-marker"), &obj.delete_marker);
-        CacheControlWriter::write_params(params, &(prefix.to_string() + "Cache-Control"), &obj.cache_control);
-        ContentLengthWriter::write_params(params, &(prefix.to_string() + "Content-Length"), &obj.content_length);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
-        MissingMetaWriter::write_params(params, &(prefix.to_string() + "x-amz-missing-meta"), &obj.missing_meta);
-        RestoreWriter::write_params(params, &(prefix.to_string() + "x-amz-restore"), &obj.restore);
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        ContentTypeWriter::write_params(params, &(prefix.to_string() + "Content-Type"), &obj.content_type);
-        ContentLanguageWriter::write_params(params, &(prefix.to_string() + "Content-Language"), &obj.content_language);
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct DeleteBucketReplicationRequest {
     pub bucket: BucketName,
@@ -3083,15 +2970,7 @@ impl GetBucketLoggingOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketLoggingOutput` contents to a `SignedRequest`
-struct GetBucketLoggingOutputWriter;
-impl GetBucketLoggingOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketLoggingOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        LoggingEnabledWriter::write_params(params, &(prefix.to_string() + "LoggingEnabled"), &obj.logging_enabled);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct ListObjectsRequest {
     pub bucket: BucketName,
@@ -3154,15 +3033,7 @@ impl GetBucketReplicationOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketReplicationOutput` contents to a `SignedRequest`
-struct GetBucketReplicationOutputWriter;
-impl GetBucketReplicationOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketReplicationOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        ReplicationConfigurationWriter::write_params(params, &(prefix.to_string() + "ReplicationConfiguration"), &obj.replication_configuration);
-    }
-}
+
 pub type Policy = String;
 /// Parse `Policy` from XML
 struct PolicyParser;
@@ -3279,26 +3150,7 @@ impl ListMultipartUploadsOutputParser {
         Ok(obj)
     }
 }
-/// Write `ListMultipartUploadsOutput` contents to a `SignedRequest`
-struct ListMultipartUploadsOutputWriter;
-impl ListMultipartUploadsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &ListMultipartUploadsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        UploadIdMarkerWriter::write_params(params, &(prefix.to_string() + "UploadIdMarker"), &obj.upload_id_marker);
-        CommonPrefixListWriter::write_params(params, &(prefix.to_string() + "CommonPrefix"), &obj.common_prefixes);
-        NextKeyMarkerWriter::write_params(params, &(prefix.to_string() + "NextKeyMarker"), &obj.next_key_marker);
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-        DelimiterWriter::write_params(params, &(prefix.to_string() + "Delimiter"), &obj.delimiter);
-        NextUploadIdMarkerWriter::write_params(params, &(prefix.to_string() + "NextUploadIdMarker"), &obj.next_upload_id_marker);
-        PrefixWriter::write_params(params, &(prefix.to_string() + "Prefix"), &obj.prefix);
-        MultipartUploadListWriter::write_params(params, &(prefix.to_string() + "MultipartUpload"), &obj.uploads);
-        KeyMarkerWriter::write_params(params, &(prefix.to_string() + "KeyMarker"), &obj.key_marker);
-        MaxUploadsWriter::write_params(params, &(prefix.to_string() + "MaxUploads"), &obj.max_uploads);
-        EncodingTypeWriter::write_params(params, &(prefix.to_string() + "EncodingType"), &obj.encoding_type);
-        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
-    }
-}
+
 pub type IfUnmodifiedSince = String;
 /// Parse `IfUnmodifiedSince` from XML
 struct IfUnmodifiedSinceParser;
@@ -3523,22 +3375,7 @@ impl CreateMultipartUploadOutputParser {
         Ok(obj)
     }
 }
-/// Write `CreateMultipartUploadOutput` contents to a `SignedRequest`
-struct CreateMultipartUploadOutputWriter;
-impl CreateMultipartUploadOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &CreateMultipartUploadOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-        MultipartUploadIdWriter::write_params(params, &(prefix.to_string() + "UploadId"), &obj.upload_id);
-        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct PutBucketWebsiteRequest {
     pub content_md5: Option<ContentMD5>,
@@ -4137,24 +3974,7 @@ impl ListObjectsOutputParser {
         Ok(obj)
     }
 }
-/// Write `ListObjectsOutput` contents to a `SignedRequest`
-struct ListObjectsOutputWriter;
-impl ListObjectsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &ListObjectsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Name"), &obj.name);
-        NextMarkerWriter::write_params(params, &(prefix.to_string() + "NextMarker"), &obj.next_marker);
-        DelimiterWriter::write_params(params, &(prefix.to_string() + "Delimiter"), &obj.delimiter);
-        MaxKeysWriter::write_params(params, &(prefix.to_string() + "MaxKeys"), &obj.max_keys);
-        PrefixWriter::write_params(params, &(prefix.to_string() + "Prefix"), &obj.prefix);
-        MarkerWriter::write_params(params, &(prefix.to_string() + "Marker"), &obj.marker);
-        EncodingTypeWriter::write_params(params, &(prefix.to_string() + "EncodingType"), &obj.encoding_type);
-        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
-        ObjectListWriter::write_params(params, &(prefix.to_string() + "Object"), &obj.contents);
-        CommonPrefixListWriter::write_params(params, &(prefix.to_string() + "CommonPrefix"), &obj.common_prefixes);
-    }
-}
+
 pub type GrantWriteACP = String;
 /// Parse `GrantWriteACP` from XML
 struct GrantWriteACPParser;
@@ -4247,16 +4067,7 @@ impl ListBucketsOutputParser {
         Ok(obj)
     }
 }
-/// Write `ListBucketsOutput` contents to a `SignedRequest`
-struct ListBucketsOutputWriter;
-impl ListBucketsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &ListBucketsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
-        BucketsWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.buckets);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct DeleteObjectRequest {
     /// The concatenation of the authentication device's serial number, a space, and
@@ -4683,15 +4494,7 @@ impl GetBucketLifecycleOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketLifecycleOutput` contents to a `SignedRequest`
-struct GetBucketLifecycleOutputWriter;
-impl GetBucketLifecycleOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketLifecycleOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RulesWriter::write_params(params, &(prefix.to_string() + "Rule"), &obj.rules);
-    }
-}
+
 /// Bucket event for which to send notifications.
 pub type Event = String;
 /// Parse `Event` from XML
@@ -5055,23 +4858,7 @@ impl CompleteMultipartUploadOutputParser {
         Ok(obj)
     }
 }
-/// Write `CompleteMultipartUploadOutput` contents to a `SignedRequest`
-struct CompleteMultipartUploadOutputWriter;
-impl CompleteMultipartUploadOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &CompleteMultipartUploadOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        LocationWriter::write_params(params, &(prefix.to_string() + "Location"), &obj.location);
-        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
-    }
-}
+
 pub type ExposeHeader = String;
 /// Parse `ExposeHeader` from XML
 struct ExposeHeaderParser;
@@ -5256,22 +5043,7 @@ impl CopyObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `CopyObjectOutput` contents to a `SignedRequest`
-struct CopyObjectOutputWriter;
-impl CopyObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &CopyObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        CopySourceVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-copy-source-version-id"), &obj.copy_source_version_id);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-        CopyObjectResultWriter::write_params(params, &(prefix.to_string() + "CopyObjectResult"), &obj.copy_object_result);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-    }
-}
+
 pub type AcceptRanges = String;
 /// Parse `AcceptRanges` from XML
 struct AcceptRangesParser;
@@ -5441,20 +5213,7 @@ impl UploadPartOutputParser {
         Ok(obj)
     }
 }
-/// Write `UploadPartOutput` contents to a `SignedRequest`
-struct UploadPartOutputWriter;
-impl UploadPartOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &UploadPartOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-    }
-}
+
 pub type CopySource = String;
 /// Parse `CopySource` from XML
 struct CopySourceParser;
@@ -5876,17 +5635,7 @@ impl DeleteObjectsOutputParser {
         Ok(obj)
     }
 }
-/// Write `DeleteObjectsOutput` contents to a `SignedRequest`
-struct DeleteObjectsOutputWriter;
-impl DeleteObjectsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &DeleteObjectsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        DeletedObjectsWriter::write_params(params, &(prefix.to_string() + "DeletedObject"), &obj.deleted);
-        ErrorsWriter::write_params(params, &(prefix.to_string() + "Error"), &obj.errors);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct ErrorDocument {
     /// The object key name to use when a 4XX class error occurs.
@@ -5988,16 +5737,7 @@ impl GetObjectTorrentOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetObjectTorrentOutput` contents to a `SignedRequest`
-struct GetObjectTorrentOutputWriter;
-impl GetObjectTorrentOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetObjectTorrentOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BodyWriter::write_params(params, &(prefix.to_string() + "Body"), &obj.body);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
-}
+
 pub type ContentLength = i32;
 /// Parse `ContentLength` from XML
 struct ContentLengthParser;
@@ -6304,40 +6044,7 @@ impl GetObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetObjectOutput` contents to a `SignedRequest`
-struct GetObjectOutputWriter;
-impl GetObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        LastModifiedWriter::write_params(params, &(prefix.to_string() + "Last-Modified"), &obj.last_modified);
-        ContentRangeWriter::write_params(params, &(prefix.to_string() + "Content-Range"), &obj.content_range);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        ContentEncodingWriter::write_params(params, &(prefix.to_string() + "Content-Encoding"), &obj.content_encoding);
-        ReplicationStatusWriter::write_params(params, &(prefix.to_string() + "x-amz-replication-status"), &obj.replication_status);
-        StorageClassWriter::write_params(params, &(prefix.to_string() + "x-amz-storage-class"), &obj.storage_class);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-        ContentDispositionWriter::write_params(params, &(prefix.to_string() + "Content-Disposition"), &obj.content_disposition);
-        MetadataWriter::write_params(params, &(prefix.to_string() + "x-amz-meta-"), &obj.metadata);
-        BodyWriter::write_params(params, &(prefix.to_string() + "Body"), &obj.body);
-        AcceptRangesWriter::write_params(params, &(prefix.to_string() + "accept-ranges"), &obj.accept_ranges);
-        WebsiteRedirectLocationWriter::write_params(params, &(prefix.to_string() + "x-amz-website-redirect-location"), &obj.website_redirect_location);
-        ExpiresWriter::write_params(params, &(prefix.to_string() + "Expires"), &obj.expires);
-        DeleteMarkerWriter::write_params(params, &(prefix.to_string() + "x-amz-delete-marker"), &obj.delete_marker);
-        CacheControlWriter::write_params(params, &(prefix.to_string() + "Cache-Control"), &obj.cache_control);
-        ContentLengthWriter::write_params(params, &(prefix.to_string() + "Content-Length"), &obj.content_length);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
-        MissingMetaWriter::write_params(params, &(prefix.to_string() + "x-amz-missing-meta"), &obj.missing_meta);
-        RestoreWriter::write_params(params, &(prefix.to_string() + "x-amz-restore"), &obj.restore);
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        ContentTypeWriter::write_params(params, &(prefix.to_string() + "Content-Type"), &obj.content_type);
-        ContentLanguageWriter::write_params(params, &(prefix.to_string() + "Content-Language"), &obj.content_language);
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct GetBucketLifecycleRequest {
     pub bucket: BucketName,
@@ -6968,27 +6675,7 @@ impl ListObjectVersionsOutputParser {
         Ok(obj)
     }
 }
-/// Write `ListObjectVersionsOutput` contents to a `SignedRequest`
-struct ListObjectVersionsOutputWriter;
-impl ListObjectVersionsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &ListObjectVersionsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Name"), &obj.name);
-        ObjectVersionListWriter::write_params(params, &(prefix.to_string() + "ObjectVersion"), &obj.versions);
-        DeleteMarkersWriter::write_params(params, &(prefix.to_string() + "DeleteMarkerEntry"), &obj.delete_markers);
-        NextKeyMarkerWriter::write_params(params, &(prefix.to_string() + "NextKeyMarker"), &obj.next_key_marker);
-        DelimiterWriter::write_params(params, &(prefix.to_string() + "Delimiter"), &obj.delimiter);
-        MaxKeysWriter::write_params(params, &(prefix.to_string() + "MaxKeys"), &obj.max_keys);
-        PrefixWriter::write_params(params, &(prefix.to_string() + "Prefix"), &obj.prefix);
-        KeyMarkerWriter::write_params(params, &(prefix.to_string() + "KeyMarker"), &obj.key_marker);
-        NextVersionIdMarkerWriter::write_params(params, &(prefix.to_string() + "NextVersionIdMarker"), &obj.next_version_id_marker);
-        EncodingTypeWriter::write_params(params, &(prefix.to_string() + "EncodingType"), &obj.encoding_type);
-        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
-        VersionIdMarkerWriter::write_params(params, &(prefix.to_string() + "VersionIdMarker"), &obj.version_id_marker);
-        CommonPrefixListWriter::write_params(params, &(prefix.to_string() + "CommonPrefix"), &obj.common_prefixes);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct PutBucketNotificationConfigurationRequest {
     pub notification_configuration: NotificationConfiguration,
@@ -7347,26 +7034,7 @@ impl ListPartsOutputParser {
         Ok(obj)
     }
 }
-/// Write `ListPartsOutput` contents to a `SignedRequest`
-struct ListPartsOutputWriter;
-impl ListPartsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &ListPartsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        InitiatorWriter::write_params(params, &(prefix.to_string() + "Initiator"), &obj.initiator);
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-        NextPartNumberMarkerWriter::write_params(params, &(prefix.to_string() + "NextPartNumberMarker"), &obj.next_part_number_marker);
-        PartsWriter::write_params(params, &(prefix.to_string() + "Part"), &obj.parts);
-        MultipartUploadIdWriter::write_params(params, &(prefix.to_string() + "UploadId"), &obj.upload_id);
-        StorageClassWriter::write_params(params, &(prefix.to_string() + "StorageClass"), &obj.storage_class);
-        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
-        MaxPartsWriter::write_params(params, &(prefix.to_string() + "MaxParts"), &obj.max_parts);
-        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
-        PartNumberMarkerWriter::write_params(params, &(prefix.to_string() + "PartNumberMarker"), &obj.part_number_marker);
-    }
-}
+
 pub type Marker = String;
 /// Parse `Marker` from XML
 struct MarkerParser;
@@ -8036,16 +7704,7 @@ impl GetBucketVersioningOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketVersioningOutput` contents to a `SignedRequest`
-struct GetBucketVersioningOutputWriter;
-impl GetBucketVersioningOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketVersioningOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BucketVersioningStatusWriter::write_params(params, &(prefix.to_string() + "Status"), &obj.status);
-        MFADeleteStatusWriter::write_params(params, &(prefix.to_string() + "MfaDelete"), &obj.mfa_delete);
-    }
-}
+
 /// Specifies when noncurrent object versions expire. Upon expiration, Amazon S3
 /// permanently deletes the noncurrent object versions. You set this lifecycle
 /// configuration action on a bucket that has versioning enabled (or suspended) to
@@ -8112,15 +7771,7 @@ impl GetBucketRequestPaymentOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketRequestPaymentOutput` contents to a `SignedRequest`
-struct GetBucketRequestPaymentOutputWriter;
-impl GetBucketRequestPaymentOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketRequestPaymentOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        PayerWriter::write_params(params, &(prefix.to_string() + "Payer"), &obj.payer);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct GetObjectRequest {
     /// Sets the Content-Encoding header of the response.
@@ -8403,15 +8054,7 @@ impl RestoreObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `RestoreObjectOutput` contents to a `SignedRequest`
-struct RestoreObjectOutputWriter;
-impl RestoreObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &RestoreObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct RestoreObjectRequest {
     pub version_id: Option<ObjectVersionId>,
@@ -8463,15 +8106,7 @@ impl GetBucketLocationOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketLocationOutput` contents to a `SignedRequest`
-struct GetBucketLocationOutputWriter;
-impl GetBucketLocationOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketLocationOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BucketLocationConstraintWriter::write_params(params, &(prefix.to_string() + "LocationConstraint"), &obj.location_constraint);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct GetObjectAclOutput {
     pub owner: Owner,
@@ -8506,17 +8141,7 @@ impl GetObjectAclOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetObjectAclOutput` contents to a `SignedRequest`
-struct GetObjectAclOutputWriter;
-impl GetObjectAclOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetObjectAclOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
-        GrantsWriter::write_params(params, &(prefix.to_string() + "Grant"), &obj.grants);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
-}
+
 pub type ReplaceKeyWith = String;
 /// Parse `ReplaceKeyWith` from XML
 struct ReplaceKeyWithParser;
@@ -8591,15 +8216,7 @@ impl GetBucketPolicyOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketPolicyOutput` contents to a `SignedRequest`
-struct GetBucketPolicyOutputWriter;
-impl GetBucketPolicyOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketPolicyOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        PolicyWriter::write_params(params, &(prefix.to_string() + "Policy"), &obj.policy);
-    }
-}
+
 pub type MaxAgeSeconds = i32;
 /// Parse `MaxAgeSeconds` from XML
 struct MaxAgeSecondsParser;
@@ -9256,18 +8873,7 @@ impl GetBucketWebsiteOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketWebsiteOutput` contents to a `SignedRequest`
-struct GetBucketWebsiteOutputWriter;
-impl GetBucketWebsiteOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketWebsiteOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RedirectAllRequestsToWriter::write_params(params, &(prefix.to_string() + "RedirectAllRequestsTo"), &obj.redirect_all_requests_to);
-        IndexDocumentWriter::write_params(params, &(prefix.to_string() + "IndexDocument"), &obj.index_document);
-        ErrorDocumentWriter::write_params(params, &(prefix.to_string() + "ErrorDocument"), &obj.error_document);
-        RoutingRulesWriter::write_params(params, &(prefix.to_string() + "RoutingRule"), &obj.routing_rules);
-    }
-}
+
 pub type CopySourceIfMatch = String;
 /// Parse `CopySourceIfMatch` from XML
 struct CopySourceIfMatchParser;
@@ -9509,15 +9115,7 @@ impl GetBucketCorsOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketCorsOutput` contents to a `SignedRequest`
-struct GetBucketCorsOutputWriter;
-impl GetBucketCorsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketCorsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        CORSRulesWriter::write_params(params, &(prefix.to_string() + "CORSRule"), &obj.cors_rules);
-    }
-}
+
 pub type CreationDate = String;
 /// Parse `CreationDate` from XML
 struct CreationDateParser;
