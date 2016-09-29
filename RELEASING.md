@@ -13,19 +13,23 @@ Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 
 ### Codegen crate
 
-The `rusoto_codegen`crate is published separately from the main `rusoto` crate, and must be published first since the main crate depends on it.  
+The `rusoto_codegen` crate is published separately from the main `rusoto` crate and must be published first since the main crate depends on it.  
 
-The release procedures for the crates are identical as described below, with the caveat that when the `rusoto` crate is published, its dependency on `rusoto_codegen` should be updated to reflect the newly published version.
+The release procedures for the codegen crate is the same as described below except:
+
+* Tags are only applied for the root `rusoto` crate.
+* Before the `rusoto` crate is published, its dependency on `rusoto_codegen` should be updated to reflect the newly published version.
 
 ### Git tags
 
 To release version 0.4.0:
 
-1. On master, bump the version in Cargo.toml to the new version.  In this example, we'll set it to 0.4.0.
-2. If publishing the `rusoto` crate, also update Cargo.toml to reflect the new version of the `rusoto_codegen` crate that was just published.
-3. Commit to master.
-4. Use an annotated tag on the commit with the version bump: `git tag -a v0.4.0 -m "0.4.0 release."`
-5. Push changes, including tags, to Github: `git push --tags origin`.
+1. Ensure `cargo package` completes as expected.  It's a good idea to inspect the related output.
+2. On master, bump the version in Cargo.toml to the new version.  In this example, we'll set it to 0.4.0.
+3. Update Cargo.toml to reflect the new version of the `rusoto_codegen` crate that was just published.
+4. Commit to master.
+5. Use an annotated tag on the commit with the version bump: `git tag -a v0.4.0 -m "0.4.0 release."`
+6. Push changes, including tags, to Github: `git push --tags origin`.
 
 ### Crate publishing
 
@@ -42,8 +46,4 @@ Add a list of user-facing changes to a new release for the tagged version on Git
 
 Docs are on Github Pages at [https://rusoto.github.io/rusoto](https://rusoto.github.io/rusoto).
 
-A helper script is included to make this less painful until our CI system handles it.  Run `docgen.sh` to
-use [github pages import](https://github.com/davisp/ghp-import) to upload them to the gh-pages branch.  Install
-ghp-import if you don't have it:
-
-`pip install ghp-import`
+TravisCI builds and publishes the `gh-pages` branch automatically when changes are merged into master.
