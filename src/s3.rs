@@ -131,34 +131,6 @@ pub struct PutBucketNotificationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `PutBucketNotificationRequest` from XML
-struct PutBucketNotificationRequestParser;
-impl PutBucketNotificationRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketNotificationRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutBucketNotificationRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            match current_name.as_ref() {
-                "NotificationConfiguration" => {
-                    obj.notification_configuration = try!(NotificationConfigurationDeprecatedParser::parse_xml("NotificationConfiguration", stack));
-                    continue;
-                },
-                "Content-MD5" => {
-                    obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-                    continue;
-                },
-                "Bucket" => {
-                    obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                    continue;
-                },
-                _ => break,
-            }
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutBucketNotificationRequest` contents to a `SignedRequest`
 struct PutBucketNotificationRequestWriter;
 impl PutBucketNotificationRequestWriter {
@@ -220,36 +192,6 @@ pub struct PutBucketVersioningRequest {
     pub versioning_configuration: VersioningConfiguration,
 }
 
-/// Parse `PutBucketVersioningRequest` from XML
-struct PutBucketVersioningRequestParser;
-impl PutBucketVersioningRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketVersioningRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutBucketVersioningRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "x-amz-mfa" {
-                obj.mfa = Some(try!(MFAParser::parse_xml("x-amz-mfa", stack)));
-                continue;
-            }
-            if current_name == "Content-MD5" {
-                obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "VersioningConfiguration" {
-                obj.versioning_configuration = try!(VersioningConfigurationParser::parse_xml("VersioningConfiguration", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutBucketVersioningRequest` contents to a `SignedRequest`
 struct PutBucketVersioningRequestWriter;
 impl PutBucketVersioningRequestWriter {
@@ -505,32 +447,6 @@ pub struct PutBucketReplicationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `PutBucketReplicationRequest` from XML
-struct PutBucketReplicationRequestParser;
-impl PutBucketReplicationRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketReplicationRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutBucketReplicationRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "ReplicationConfiguration" {
-                obj.replication_configuration = try!(ReplicationConfigurationParser::parse_xml("ReplicationConfiguration", stack));
-                continue;
-            }
-            if current_name == "Content-MD5" {
-                obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutBucketReplicationRequest` contents to a `SignedRequest`
 struct PutBucketReplicationRequestWriter;
 impl PutBucketReplicationRequestWriter {
@@ -551,32 +467,6 @@ pub struct GetObjectTorrentRequest {
     pub key: ObjectKey,
 }
 
-/// Parse `GetObjectTorrentRequest` from XML
-struct GetObjectTorrentRequestParser;
-impl GetObjectTorrentRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectTorrentRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetObjectTorrentRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetObjectTorrentRequest` contents to a `SignedRequest`
 struct GetObjectTorrentRequestWriter;
 impl GetObjectTorrentRequestWriter {
@@ -595,24 +485,6 @@ pub struct GetBucketReplicationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketReplicationRequest` from XML
-struct GetBucketReplicationRequestParser;
-impl GetBucketReplicationRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketReplicationRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketReplicationRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketReplicationRequest` contents to a `SignedRequest`
 struct GetBucketReplicationRequestWriter;
 impl GetBucketReplicationRequestWriter {
@@ -694,15 +566,7 @@ impl GetBucketTaggingOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketTaggingOutput` contents to a `SignedRequest`
-struct GetBucketTaggingOutputWriter;
-impl GetBucketTaggingOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketTaggingOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        TagSetWriter::write_params(params, &(prefix.to_string() + "Tag"), &obj.tag_set);
-    }
-}
+
 pub type Metadata = HashMap<MetadataKey,MetadataValue>;
 /// Parse `Metadata` from XML
 struct MetadataParser;
@@ -822,22 +686,7 @@ impl PutObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `PutObjectOutput` contents to a `SignedRequest`
-struct PutObjectOutputWriter;
-impl PutObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &PutObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct PutObjectAclOutput {
     pub request_charged: RequestCharged,
@@ -861,15 +710,7 @@ impl PutObjectAclOutputParser {
         Ok(obj)
     }
 }
-/// Write `PutObjectAclOutput` contents to a `SignedRequest`
-struct PutObjectAclOutputWriter;
-impl PutObjectAclOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &PutObjectAclOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
-}
+
 /// Container for replication rules. You can add as many as 1,000 rules. Total
 /// replication configuration size can be up to 2 MB.
 #[derive(Debug, Default)]
@@ -941,24 +782,6 @@ pub struct GetBucketWebsiteRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketWebsiteRequest` from XML
-struct GetBucketWebsiteRequestParser;
-impl GetBucketWebsiteRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketWebsiteRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketWebsiteRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketWebsiteRequest` contents to a `SignedRequest`
 struct GetBucketWebsiteRequestWriter;
 impl GetBucketWebsiteRequestWriter {
@@ -1024,15 +847,7 @@ impl CreateBucketOutputParser {
         Ok(obj)
     }
 }
-/// Write `CreateBucketOutput` contents to a `SignedRequest`
-struct CreateBucketOutputWriter;
-impl CreateBucketOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &CreateBucketOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        LocationWriter::write_params(params, &(prefix.to_string() + "Location"), &obj.location);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct DeleteMarkerEntry {
     pub owner: Owner,
@@ -1249,48 +1064,6 @@ pub struct ListMultipartUploadsRequest {
     pub encoding_type: Option<EncodingType>,
 }
 
-/// Parse `ListMultipartUploadsRequest` from XML
-struct ListMultipartUploadsRequestParser;
-impl ListMultipartUploadsRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListMultipartUploadsRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = ListMultipartUploadsRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "upload-id-marker" {
-                obj.upload_id_marker = Some(try!(UploadIdMarkerParser::parse_xml("upload-id-marker", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "delimiter" {
-                obj.delimiter = Some(try!(DelimiterParser::parse_xml("delimiter", stack)));
-                continue;
-            }
-            if current_name == "prefix" {
-                obj.prefix = Some(try!(PrefixParser::parse_xml("prefix", stack)));
-                continue;
-            }
-            if current_name == "key-marker" {
-                obj.key_marker = Some(try!(KeyMarkerParser::parse_xml("key-marker", stack)));
-                continue;
-            }
-            if current_name == "max-uploads" {
-                obj.max_uploads = Some(try!(MaxUploadsParser::parse_xml("max-uploads", stack)));
-                continue;
-            }
-            if current_name == "encoding-type" {
-                obj.encoding_type = Some(try!(EncodingTypeParser::parse_xml("encoding-type", stack)));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `ListMultipartUploadsRequest` contents to a `SignedRequest`
 struct ListMultipartUploadsRequestWriter;
 impl ListMultipartUploadsRequestWriter {
@@ -1323,24 +1096,6 @@ pub struct GetBucketPolicyRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketPolicyRequest` from XML
-struct GetBucketPolicyRequestParser;
-impl GetBucketPolicyRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketPolicyRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketPolicyRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketPolicyRequest` contents to a `SignedRequest`
 struct GetBucketPolicyRequestWriter;
 impl GetBucketPolicyRequestWriter {
@@ -1373,24 +1128,6 @@ pub struct DeleteBucketWebsiteRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `DeleteBucketWebsiteRequest` from XML
-struct DeleteBucketWebsiteRequestParser;
-impl DeleteBucketWebsiteRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketWebsiteRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = DeleteBucketWebsiteRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `DeleteBucketWebsiteRequest` contents to a `SignedRequest`
 struct DeleteBucketWebsiteRequestWriter;
 impl DeleteBucketWebsiteRequestWriter {
@@ -1448,24 +1185,6 @@ pub struct GetBucketCorsRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketCorsRequest` from XML
-struct GetBucketCorsRequestParser;
-impl GetBucketCorsRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketCorsRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketCorsRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketCorsRequest` contents to a `SignedRequest`
 struct GetBucketCorsRequestWriter;
 impl GetBucketCorsRequestWriter {
@@ -1615,108 +1334,6 @@ pub struct CreateMultipartUploadRequest {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
 }
 
-/// Parse `CreateMultipartUploadRequest` from XML
-struct CreateMultipartUploadRequestParser;
-impl CreateMultipartUploadRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CreateMultipartUploadRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = CreateMultipartUploadRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "Content-Encoding" {
-                obj.content_encoding = Some(try!(ContentEncodingParser::parse_xml("Content-Encoding", stack)));
-                continue;
-            }
-            if current_name == "x-amz-storage-class" {
-                obj.storage_class = Some(try!(StorageClassParser::parse_xml("x-amz-storage-class", stack)));
-                continue;
-            }
-            if current_name == "x-amz-grant-read-acp" {
-                obj.grant_read_acp = Some(try!(GrantReadACPParser::parse_xml("x-amz-grant-read-acp", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption" {
-                obj.server_side_encryption = Some(try!(ServerSideEncryptionParser::parse_xml("x-amz-server-side-encryption", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-aws-kms-key-id" {
-                obj.ssekms_key_id = Some(try!(SSEKMSKeyIdParser::parse_xml("x-amz-server-side-encryption-aws-kms-key-id", stack)));
-                continue;
-            }
-            if current_name == "Content-Disposition" {
-                obj.content_disposition = Some(try!(ContentDispositionParser::parse_xml("Content-Disposition", stack)));
-                continue;
-            }
-            if current_name == "x-amz-meta-" {
-                obj.metadata = Some(try!(MetadataParser::parse_xml("x-amz-meta-", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-key" {
-                obj.sse_customer_key = Some(try!(SSECustomerKeyParser::parse_xml("x-amz-server-side-encryption-customer-key", stack)));
-                continue;
-            }
-            if current_name == "x-amz-website-redirect-location" {
-                obj.website_redirect_location = Some(try!(WebsiteRedirectLocationParser::parse_xml("x-amz-website-redirect-location", stack)));
-                continue;
-            }
-            if current_name == "Expires" {
-                obj.expires = Some(try!(ExpiresParser::parse_xml("Expires", stack)));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            if current_name == "Cache-Control" {
-                obj.cache_control = Some(try!(CacheControlParser::parse_xml("Cache-Control", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "x-amz-grant-read" {
-                obj.grant_read = Some(try!(GrantReadParser::parse_xml("x-amz-grant-read", stack)));
-                continue;
-            }
-            if current_name == "x-amz-grant-write-acp" {
-                obj.grant_write_acp = Some(try!(GrantWriteACPParser::parse_xml("x-amz-grant-write-acp", stack)));
-                continue;
-            }
-            if current_name == "x-amz-acl" {
-                obj.acl = Some(try!(ObjectCannedACLParser::parse_xml("x-amz-acl", stack)));
-                continue;
-            }
-            if current_name == "x-amz-grant-full-control" {
-                obj.grant_full_control = Some(try!(GrantFullControlParser::parse_xml("x-amz-grant-full-control", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-algorithm" {
-                obj.sse_customer_algorithm = Some(try!(SSECustomerAlgorithmParser::parse_xml("x-amz-server-side-encryption-customer-algorithm", stack)));
-                continue;
-            }
-            if current_name == "Content-Type" {
-                obj.content_type = Some(try!(ContentTypeParser::parse_xml("Content-Type", stack)));
-                continue;
-            }
-            if current_name == "Content-Language" {
-                obj.content_language = Some(try!(ContentLanguageParser::parse_xml("Content-Language", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-key-MD5" {
-                obj.sse_customer_key_md5 = Some(try!(SSECustomerKeyMD5Parser::parse_xml("x-amz-server-side-encryption-customer-key-MD5", stack)));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `CreateMultipartUploadRequest` contents to a `SignedRequest`
 struct CreateMultipartUploadRequestWriter;
 impl CreateMultipartUploadRequestWriter {
@@ -1794,32 +1411,6 @@ pub struct PutBucketCorsRequest {
     pub cors_configuration: Option<CORSConfiguration>,
 }
 
-/// Parse `PutBucketCorsRequest` from XML
-struct PutBucketCorsRequestParser;
-impl PutBucketCorsRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketCorsRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutBucketCorsRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Content-MD5" {
-                obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "CORSConfiguration" {
-                obj.cors_configuration = Some(try!(CORSConfigurationParser::parse_xml("CORSConfiguration", stack)));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutBucketCorsRequest` contents to a `SignedRequest`
 struct PutBucketCorsRequestWriter;
 impl PutBucketCorsRequestWriter {
@@ -1882,16 +1473,7 @@ impl GetBucketAclOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketAclOutput` contents to a `SignedRequest`
-struct GetBucketAclOutputWriter;
-impl GetBucketAclOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketAclOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
-        GrantsWriter::write_params(params, &(prefix.to_string() + "Grant"), &obj.grants);
-    }
-}
+
 pub type Days = i32;
 /// Parse `Days` from XML
 struct DaysParser;
@@ -1957,24 +1539,6 @@ pub struct DeleteBucketLifecycleRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `DeleteBucketLifecycleRequest` from XML
-struct DeleteBucketLifecycleRequestParser;
-impl DeleteBucketLifecycleRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketLifecycleRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = DeleteBucketLifecycleRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `DeleteBucketLifecycleRequest` contents to a `SignedRequest`
 struct DeleteBucketLifecycleRequestWriter;
 impl DeleteBucketLifecycleRequestWriter {
@@ -2078,16 +1642,6 @@ pub struct AbortMultipartUploadOutput {
     pub request_charged: RequestCharged,
 }
 
-/// Write `AbortMultipartUploadOutput` contents to a `SignedRequest`
-struct AbortMultipartUploadOutputWriter;
-impl AbortMultipartUploadOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &AbortMultipartUploadOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
-}
-
 /// Put bucket policy request
 #[derive(Debug, Default)]
 pub struct PutBucketPolicyRequest {
@@ -2097,32 +1651,6 @@ pub struct PutBucketPolicyRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `PutBucketPolicyRequest` from XML
-struct PutBucketPolicyRequestParser;
-impl PutBucketPolicyRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketPolicyRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutBucketPolicyRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Policy" {
-                obj.policy = try!(PolicyParser::parse_xml("Policy", stack));
-                continue;
-            }
-            if current_name == "Content-MD5" {
-                obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutBucketPolicyRequest` contents to a `SignedRequest`
 struct PutBucketPolicyRequestWriter;
 impl PutBucketPolicyRequestWriter {
@@ -2181,36 +1709,6 @@ pub struct GetObjectAclRequest {
     pub key: ObjectKey,
 }
 
-/// Parse `GetObjectAclRequest` from XML
-struct GetObjectAclRequestParser;
-impl GetObjectAclRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectAclRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetObjectAclRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "versionId" {
-                obj.version_id = Some(try!(ObjectVersionIdParser::parse_xml("versionId", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetObjectAclRequest` contents to a `SignedRequest`
 struct GetObjectAclRequestWriter;
 impl GetObjectAclRequestWriter {
@@ -2415,24 +1913,6 @@ pub struct HeadBucketRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `HeadBucketRequest` from XML
-struct HeadBucketRequestParser;
-impl HeadBucketRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HeadBucketRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = HeadBucketRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `HeadBucketRequest` contents to a `SignedRequest`
 struct HeadBucketRequestWriter;
 impl HeadBucketRequestWriter {
@@ -2450,36 +1930,6 @@ pub struct AbortMultipartUploadRequest {
     pub key: ObjectKey,
 }
 
-/// Parse `AbortMultipartUploadRequest` from XML
-struct AbortMultipartUploadRequestParser;
-impl AbortMultipartUploadRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<AbortMultipartUploadRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = AbortMultipartUploadRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "uploadId" {
-                obj.upload_id = try!(MultipartUploadIdParser::parse_xml("uploadId", stack));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `AbortMultipartUploadRequest` contents to a `SignedRequest`
 struct AbortMultipartUploadRequestWriter;
 impl AbortMultipartUploadRequestWriter {
@@ -2577,21 +2027,7 @@ impl UploadPartCopyOutputParser {
         Ok(obj)
     }
 }
-/// Write `UploadPartCopyOutput` contents to a `SignedRequest`
-struct UploadPartCopyOutputWriter;
-impl UploadPartCopyOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &UploadPartCopyOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        CopySourceVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-copy-source-version-id"), &obj.copy_source_version_id);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-        CopyPartResultWriter::write_params(params, &(prefix.to_string() + "CopyPartResult"), &obj.copy_part_result);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct Redirect {
     /// The specific object key to use in the redirect request. For example, redirect
@@ -2685,24 +2121,6 @@ pub struct DeleteBucketCorsRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `DeleteBucketCorsRequest` from XML
-struct DeleteBucketCorsRequestParser;
-impl DeleteBucketCorsRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketCorsRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = DeleteBucketCorsRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `DeleteBucketCorsRequest` contents to a `SignedRequest`
 struct DeleteBucketCorsRequestWriter;
 impl DeleteBucketCorsRequestWriter {
@@ -2759,24 +2177,6 @@ pub struct GetBucketNotificationConfigurationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketNotificationConfigurationRequest` from XML
-struct GetBucketNotificationConfigurationRequestParser;
-impl GetBucketNotificationConfigurationRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketNotificationConfigurationRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketNotificationConfigurationRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketNotificationConfigurationRequest` contents to a `SignedRequest`
 struct GetBucketNotificationConfigurationRequestWriter;
 impl GetBucketNotificationConfigurationRequestWriter {
@@ -2870,17 +2270,7 @@ impl DeleteObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `DeleteObjectOutput` contents to a `SignedRequest`
-struct DeleteObjectOutputWriter;
-impl DeleteObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &DeleteObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        DeleteMarkerWriter::write_params(params, &(prefix.to_string() + "x-amz-delete-marker"), &obj.delete_marker);
-    }
-}
+
 pub type VersionIdMarker = String;
 /// Parse `VersionIdMarker` from XML
 struct VersionIdMarkerParser;
@@ -2979,68 +2369,6 @@ pub struct HeadObjectRequest {
     pub if_modified_since: Option<IfModifiedSince>,
 }
 
-/// Parse `HeadObjectRequest` from XML
-struct HeadObjectRequestParser;
-impl HeadObjectRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<HeadObjectRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = HeadObjectRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "x-amz-server-side-encryption-customer-algorithm" {
-                obj.sse_customer_algorithm = Some(try!(SSECustomerAlgorithmParser::parse_xml("x-amz-server-side-encryption-customer-algorithm", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-key" {
-                obj.sse_customer_key = Some(try!(SSECustomerKeyParser::parse_xml("x-amz-server-side-encryption-customer-key", stack)));
-                continue;
-            }
-            if current_name == "If-Unmodified-Since" {
-                obj.if_unmodified_since = Some(try!(IfUnmodifiedSinceParser::parse_xml("If-Unmodified-Since", stack)));
-                continue;
-            }
-            if current_name == "versionId" {
-                obj.version_id = Some(try!(ObjectVersionIdParser::parse_xml("versionId", stack)));
-                continue;
-            }
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "If-None-Match" {
-                obj.if_none_match = Some(try!(IfNoneMatchParser::parse_xml("If-None-Match", stack)));
-                continue;
-            }
-            if current_name == "Range" {
-                obj.range = Some(try!(RangeParser::parse_xml("Range", stack)));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            if current_name == "If-Match" {
-                obj.if_match = Some(try!(IfMatchParser::parse_xml("If-Match", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-key-MD5" {
-                obj.sse_customer_key_md5 = Some(try!(SSECustomerKeyMD5Parser::parse_xml("x-amz-server-side-encryption-customer-key-MD5", stack)));
-                continue;
-            }
-            if current_name == "If-Modified-Since" {
-                obj.if_modified_since = Some(try!(IfModifiedSinceParser::parse_xml("If-Modified-Since", stack)));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `HeadObjectRequest` contents to a `SignedRequest`
 struct HeadObjectRequestWriter;
 impl HeadObjectRequestWriter {
@@ -3303,48 +2631,6 @@ pub struct ListObjectVersionsRequest {
     pub version_id_marker: Option<VersionIdMarker>,
 }
 
-/// Parse `ListObjectVersionsRequest` from XML
-struct ListObjectVersionsRequestParser;
-impl ListObjectVersionsRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectVersionsRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = ListObjectVersionsRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "prefix" {
-                obj.prefix = Some(try!(PrefixParser::parse_xml("prefix", stack)));
-                continue;
-            }
-            if current_name == "max-keys" {
-                obj.max_keys = Some(try!(MaxKeysParser::parse_xml("max-keys", stack)));
-                continue;
-            }
-            if current_name == "delimiter" {
-                obj.delimiter = Some(try!(DelimiterParser::parse_xml("delimiter", stack)));
-                continue;
-            }
-            if current_name == "key-marker" {
-                obj.key_marker = Some(try!(KeyMarkerParser::parse_xml("key-marker", stack)));
-                continue;
-            }
-            if current_name == "encoding-type" {
-                obj.encoding_type = Some(try!(EncodingTypeParser::parse_xml("encoding-type", stack)));
-                continue;
-            }
-            if current_name == "version-id-marker" {
-                obj.version_id_marker = Some(try!(VersionIdMarkerParser::parse_xml("version-id-marker", stack)));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `ListObjectVersionsRequest` contents to a `SignedRequest`
 struct ListObjectVersionsRequestWriter;
 impl ListObjectVersionsRequestWriter {
@@ -3377,25 +2663,6 @@ pub struct DeleteBucketRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `DeleteBucketRequest` from XML
-struct DeleteBucketRequestParser;
-impl DeleteBucketRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = DeleteBucketRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
-
 pub type TargetPrefix = String;
 /// Parse `TargetPrefix` from XML
 struct TargetPrefixParser;
@@ -3419,24 +2686,6 @@ pub struct DeleteBucketPolicyRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `DeleteBucketPolicyRequest` from XML
-struct DeleteBucketPolicyRequestParser;
-impl DeleteBucketPolicyRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketPolicyRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = DeleteBucketPolicyRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `DeleteBucketPolicyRequest` contents to a `SignedRequest`
 struct DeleteBucketPolicyRequestWriter;
 impl DeleteBucketPolicyRequestWriter {
@@ -3641,61 +2890,12 @@ impl HeadObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `HeadObjectOutput` contents to a `SignedRequest`
-struct HeadObjectOutputWriter;
-impl HeadObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &HeadObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        LastModifiedWriter::write_params(params, &(prefix.to_string() + "Last-Modified"), &obj.last_modified);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        ContentEncodingWriter::write_params(params, &(prefix.to_string() + "Content-Encoding"), &obj.content_encoding);
-        ReplicationStatusWriter::write_params(params, &(prefix.to_string() + "x-amz-replication-status"), &obj.replication_status);
-        StorageClassWriter::write_params(params, &(prefix.to_string() + "x-amz-storage-class"), &obj.storage_class);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-        ContentDispositionWriter::write_params(params, &(prefix.to_string() + "Content-Disposition"), &obj.content_disposition);
-        MetadataWriter::write_params(params, &(prefix.to_string() + "x-amz-meta-"), &obj.metadata);
-        AcceptRangesWriter::write_params(params, &(prefix.to_string() + "accept-ranges"), &obj.accept_ranges);
-        WebsiteRedirectLocationWriter::write_params(params, &(prefix.to_string() + "x-amz-website-redirect-location"), &obj.website_redirect_location);
-        ExpiresWriter::write_params(params, &(prefix.to_string() + "Expires"), &obj.expires);
-        DeleteMarkerWriter::write_params(params, &(prefix.to_string() + "x-amz-delete-marker"), &obj.delete_marker);
-        CacheControlWriter::write_params(params, &(prefix.to_string() + "Cache-Control"), &obj.cache_control);
-        ContentLengthWriter::write_params(params, &(prefix.to_string() + "Content-Length"), &obj.content_length);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
-        MissingMetaWriter::write_params(params, &(prefix.to_string() + "x-amz-missing-meta"), &obj.missing_meta);
-        RestoreWriter::write_params(params, &(prefix.to_string() + "x-amz-restore"), &obj.restore);
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        ContentTypeWriter::write_params(params, &(prefix.to_string() + "Content-Type"), &obj.content_type);
-        ContentLanguageWriter::write_params(params, &(prefix.to_string() + "Content-Language"), &obj.content_language);
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct DeleteBucketReplicationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `DeleteBucketReplicationRequest` from XML
-struct DeleteBucketReplicationRequestParser;
-impl DeleteBucketReplicationRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketReplicationRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = DeleteBucketReplicationRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `DeleteBucketReplicationRequest` contents to a `SignedRequest`
 struct DeleteBucketReplicationRequestWriter;
 impl DeleteBucketReplicationRequestWriter {
@@ -3770,15 +2970,7 @@ impl GetBucketLoggingOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketLoggingOutput` contents to a `SignedRequest`
-struct GetBucketLoggingOutputWriter;
-impl GetBucketLoggingOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketLoggingOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        LoggingEnabledWriter::write_params(params, &(prefix.to_string() + "LoggingEnabled"), &obj.logging_enabled);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct ListObjectsRequest {
     pub bucket: BucketName,
@@ -3794,44 +2986,6 @@ pub struct ListObjectsRequest {
     pub encoding_type: Option<EncodingType>,
 }
 
-/// Parse `ListObjectsRequest` from XML
-struct ListObjectsRequestParser;
-impl ListObjectsRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListObjectsRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = ListObjectsRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "prefix" {
-                obj.prefix = Some(try!(PrefixParser::parse_xml("prefix", stack)));
-                continue;
-            }
-            if current_name == "max-keys" {
-                obj.max_keys = Some(try!(MaxKeysParser::parse_xml("max-keys", stack)));
-                continue;
-            }
-            if current_name == "delimiter" {
-                obj.delimiter = Some(try!(DelimiterParser::parse_xml("delimiter", stack)));
-                continue;
-            }
-            if current_name == "marker" {
-                obj.marker = Some(try!(MarkerParser::parse_xml("marker", stack)));
-                continue;
-            }
-            if current_name == "encoding-type" {
-                obj.encoding_type = Some(try!(EncodingTypeParser::parse_xml("encoding-type", stack)));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `ListObjectsRequest` contents to a `SignedRequest`
 struct ListObjectsRequestWriter;
 impl ListObjectsRequestWriter {
@@ -3879,15 +3033,7 @@ impl GetBucketReplicationOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketReplicationOutput` contents to a `SignedRequest`
-struct GetBucketReplicationOutputWriter;
-impl GetBucketReplicationOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketReplicationOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        ReplicationConfigurationWriter::write_params(params, &(prefix.to_string() + "ReplicationConfiguration"), &obj.replication_configuration);
-    }
-}
+
 pub type Policy = String;
 /// Parse `Policy` from XML
 struct PolicyParser;
@@ -4004,26 +3150,7 @@ impl ListMultipartUploadsOutputParser {
         Ok(obj)
     }
 }
-/// Write `ListMultipartUploadsOutput` contents to a `SignedRequest`
-struct ListMultipartUploadsOutputWriter;
-impl ListMultipartUploadsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &ListMultipartUploadsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        UploadIdMarkerWriter::write_params(params, &(prefix.to_string() + "UploadIdMarker"), &obj.upload_id_marker);
-        CommonPrefixListWriter::write_params(params, &(prefix.to_string() + "CommonPrefix"), &obj.common_prefixes);
-        NextKeyMarkerWriter::write_params(params, &(prefix.to_string() + "NextKeyMarker"), &obj.next_key_marker);
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-        DelimiterWriter::write_params(params, &(prefix.to_string() + "Delimiter"), &obj.delimiter);
-        NextUploadIdMarkerWriter::write_params(params, &(prefix.to_string() + "NextUploadIdMarker"), &obj.next_upload_id_marker);
-        PrefixWriter::write_params(params, &(prefix.to_string() + "Prefix"), &obj.prefix);
-        MultipartUploadListWriter::write_params(params, &(prefix.to_string() + "MultipartUpload"), &obj.uploads);
-        KeyMarkerWriter::write_params(params, &(prefix.to_string() + "KeyMarker"), &obj.key_marker);
-        MaxUploadsWriter::write_params(params, &(prefix.to_string() + "MaxUploads"), &obj.max_uploads);
-        EncodingTypeWriter::write_params(params, &(prefix.to_string() + "EncodingType"), &obj.encoding_type);
-        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
-    }
-}
+
 pub type IfUnmodifiedSince = String;
 /// Parse `IfUnmodifiedSince` from XML
 struct IfUnmodifiedSinceParser;
@@ -4248,22 +3375,7 @@ impl CreateMultipartUploadOutputParser {
         Ok(obj)
     }
 }
-/// Write `CreateMultipartUploadOutput` contents to a `SignedRequest`
-struct CreateMultipartUploadOutputWriter;
-impl CreateMultipartUploadOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &CreateMultipartUploadOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-        MultipartUploadIdWriter::write_params(params, &(prefix.to_string() + "UploadId"), &obj.upload_id);
-        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct PutBucketWebsiteRequest {
     pub content_md5: Option<ContentMD5>,
@@ -4271,32 +3383,6 @@ pub struct PutBucketWebsiteRequest {
     pub website_configuration: WebsiteConfiguration,
 }
 
-/// Parse `PutBucketWebsiteRequest` from XML
-struct PutBucketWebsiteRequestParser;
-impl PutBucketWebsiteRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketWebsiteRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutBucketWebsiteRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Content-MD5" {
-                obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "WebsiteConfiguration" {
-                obj.website_configuration = try!(WebsiteConfigurationParser::parse_xml("WebsiteConfiguration", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutBucketWebsiteRequest` contents to a `SignedRequest`
 struct PutBucketWebsiteRequestWriter;
 impl PutBucketWebsiteRequestWriter {
@@ -4436,32 +3522,6 @@ pub struct PutBucketRequestPaymentRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `PutBucketRequestPaymentRequest` from XML
-struct PutBucketRequestPaymentRequestParser;
-impl PutBucketRequestPaymentRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketRequestPaymentRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutBucketRequestPaymentRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "RequestPaymentConfiguration" {
-                obj.request_payment_configuration = try!(RequestPaymentConfigurationParser::parse_xml("RequestPaymentConfiguration", stack));
-                continue;
-            }
-            if current_name == "Content-MD5" {
-                obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutBucketRequestPaymentRequest` contents to a `SignedRequest`
 struct PutBucketRequestPaymentRequestWriter;
 impl PutBucketRequestPaymentRequestWriter {
@@ -4497,60 +3557,6 @@ pub struct PutObjectAclRequest {
     pub grant_read_acp: Option<GrantReadACP>,
 }
 
-/// Parse `PutObjectAclRequest` from XML
-struct PutObjectAclRequestParser;
-impl PutObjectAclRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutObjectAclRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutObjectAclRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "x-amz-grant-full-control" {
-                obj.grant_full_control = Some(try!(GrantFullControlParser::parse_xml("x-amz-grant-full-control", stack)));
-                continue;
-            }
-            if current_name == "x-amz-grant-write-acp" {
-                obj.grant_write_acp = Some(try!(GrantWriteACPParser::parse_xml("x-amz-grant-write-acp", stack)));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "Content-MD5" {
-                obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "AccessControlPolicy" {
-                obj.access_control_policy = Some(try!(AccessControlPolicyParser::parse_xml("AccessControlPolicy", stack)));
-                continue;
-            }
-            if current_name == "x-amz-grant-write" {
-                obj.grant_write = Some(try!(GrantWriteParser::parse_xml("x-amz-grant-write", stack)));
-                continue;
-            }
-            if current_name == "x-amz-grant-read" {
-                obj.grant_read = Some(try!(GrantReadParser::parse_xml("x-amz-grant-read", stack)));
-                continue;
-            }
-            if current_name == "x-amz-grant-read-acp" {
-                obj.grant_read_acp = Some(try!(GrantReadACPParser::parse_xml("x-amz-grant-read-acp", stack)));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutObjectAclRequest` contents to a `SignedRequest`
 struct PutObjectAclRequestWriter;
 impl PutObjectAclRequestWriter {
@@ -4968,24 +3974,7 @@ impl ListObjectsOutputParser {
         Ok(obj)
     }
 }
-/// Write `ListObjectsOutput` contents to a `SignedRequest`
-struct ListObjectsOutputWriter;
-impl ListObjectsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &ListObjectsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Name"), &obj.name);
-        NextMarkerWriter::write_params(params, &(prefix.to_string() + "NextMarker"), &obj.next_marker);
-        DelimiterWriter::write_params(params, &(prefix.to_string() + "Delimiter"), &obj.delimiter);
-        MaxKeysWriter::write_params(params, &(prefix.to_string() + "MaxKeys"), &obj.max_keys);
-        PrefixWriter::write_params(params, &(prefix.to_string() + "Prefix"), &obj.prefix);
-        MarkerWriter::write_params(params, &(prefix.to_string() + "Marker"), &obj.marker);
-        EncodingTypeWriter::write_params(params, &(prefix.to_string() + "EncodingType"), &obj.encoding_type);
-        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
-        ObjectListWriter::write_params(params, &(prefix.to_string() + "Object"), &obj.contents);
-        CommonPrefixListWriter::write_params(params, &(prefix.to_string() + "CommonPrefix"), &obj.common_prefixes);
-    }
-}
+
 pub type GrantWriteACP = String;
 /// Parse `GrantWriteACP` from XML
 struct GrantWriteACPParser;
@@ -5078,16 +4067,7 @@ impl ListBucketsOutputParser {
         Ok(obj)
     }
 }
-/// Write `ListBucketsOutput` contents to a `SignedRequest`
-struct ListBucketsOutputWriter;
-impl ListBucketsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &ListBucketsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
-        BucketsWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.buckets);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct DeleteObjectRequest {
     /// The concatenation of the authentication device's serial number, a space, and
@@ -5100,40 +4080,6 @@ pub struct DeleteObjectRequest {
     pub key: ObjectKey,
 }
 
-/// Parse `DeleteObjectRequest` from XML
-struct DeleteObjectRequestParser;
-impl DeleteObjectRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteObjectRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = DeleteObjectRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "x-amz-mfa" {
-                obj.mfa = Some(try!(MFAParser::parse_xml("x-amz-mfa", stack)));
-                continue;
-            }
-            if current_name == "versionId" {
-                obj.version_id = Some(try!(ObjectVersionIdParser::parse_xml("versionId", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `DeleteObjectRequest` contents to a `SignedRequest`
 struct DeleteObjectRequestWriter;
 impl DeleteObjectRequestWriter {
@@ -5548,15 +4494,7 @@ impl GetBucketLifecycleOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketLifecycleOutput` contents to a `SignedRequest`
-struct GetBucketLifecycleOutputWriter;
-impl GetBucketLifecycleOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketLifecycleOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RulesWriter::write_params(params, &(prefix.to_string() + "Rule"), &obj.rules);
-    }
-}
+
 /// Bucket event for which to send notifications.
 pub type Event = String;
 /// Parse `Event` from XML
@@ -5920,23 +4858,7 @@ impl CompleteMultipartUploadOutputParser {
         Ok(obj)
     }
 }
-/// Write `CompleteMultipartUploadOutput` contents to a `SignedRequest`
-struct CompleteMultipartUploadOutputWriter;
-impl CompleteMultipartUploadOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &CompleteMultipartUploadOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        LocationWriter::write_params(params, &(prefix.to_string() + "Location"), &obj.location);
-        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
-    }
-}
+
 pub type ExposeHeader = String;
 /// Parse `ExposeHeader` from XML
 struct ExposeHeaderParser;
@@ -6000,24 +4922,6 @@ pub struct GetBucketAclRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketAclRequest` from XML
-struct GetBucketAclRequestParser;
-impl GetBucketAclRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketAclRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketAclRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketAclRequest` contents to a `SignedRequest`
 struct GetBucketAclRequestWriter;
 impl GetBucketAclRequestWriter {
@@ -6139,22 +5043,7 @@ impl CopyObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `CopyObjectOutput` contents to a `SignedRequest`
-struct CopyObjectOutputWriter;
-impl CopyObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &CopyObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        CopySourceVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-copy-source-version-id"), &obj.copy_source_version_id);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-        CopyObjectResultWriter::write_params(params, &(prefix.to_string() + "CopyObjectResult"), &obj.copy_object_result);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-    }
-}
+
 pub type AcceptRanges = String;
 /// Parse `AcceptRanges` from XML
 struct AcceptRangesParser;
@@ -6324,20 +5213,7 @@ impl UploadPartOutputParser {
         Ok(obj)
     }
 }
-/// Write `UploadPartOutput` contents to a `SignedRequest`
-struct UploadPartOutputWriter;
-impl UploadPartOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &UploadPartOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-    }
-}
+
 pub type CopySource = String;
 /// Parse `CopySource` from XML
 struct CopySourceParser;
@@ -6759,17 +5635,7 @@ impl DeleteObjectsOutputParser {
         Ok(obj)
     }
 }
-/// Write `DeleteObjectsOutput` contents to a `SignedRequest`
-struct DeleteObjectsOutputWriter;
-impl DeleteObjectsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &DeleteObjectsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        DeletedObjectsWriter::write_params(params, &(prefix.to_string() + "DeletedObject"), &obj.deleted);
-        ErrorsWriter::write_params(params, &(prefix.to_string() + "Error"), &obj.errors);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct ErrorDocument {
     /// The object key name to use when a 4XX class error occurs.
@@ -6828,32 +5694,6 @@ pub struct PutBucketLifecycleRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `PutBucketLifecycleRequest` from XML
-struct PutBucketLifecycleRequestParser;
-impl PutBucketLifecycleRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketLifecycleRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutBucketLifecycleRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "LifecycleConfiguration" {
-                obj.lifecycle_configuration = Some(try!(LifecycleConfigurationParser::parse_xml("LifecycleConfiguration", stack)));
-                continue;
-            }
-            if current_name == "Content-MD5" {
-                obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutBucketLifecycleRequest` contents to a `SignedRequest`
 struct PutBucketLifecycleRequestWriter;
 impl PutBucketLifecycleRequestWriter {
@@ -6897,16 +5737,7 @@ impl GetObjectTorrentOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetObjectTorrentOutput` contents to a `SignedRequest`
-struct GetObjectTorrentOutputWriter;
-impl GetObjectTorrentOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetObjectTorrentOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BodyWriter::write_params(params, &(prefix.to_string() + "Body"), &obj.body);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
-}
+
 pub type ContentLength = i32;
 /// Parse `ContentLength` from XML
 struct ContentLengthParser;
@@ -7213,63 +6044,12 @@ impl GetObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetObjectOutput` contents to a `SignedRequest`
-struct GetObjectOutputWriter;
-impl GetObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        LastModifiedWriter::write_params(params, &(prefix.to_string() + "Last-Modified"), &obj.last_modified);
-        ContentRangeWriter::write_params(params, &(prefix.to_string() + "Content-Range"), &obj.content_range);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        ContentEncodingWriter::write_params(params, &(prefix.to_string() + "Content-Encoding"), &obj.content_encoding);
-        ReplicationStatusWriter::write_params(params, &(prefix.to_string() + "x-amz-replication-status"), &obj.replication_status);
-        StorageClassWriter::write_params(params, &(prefix.to_string() + "x-amz-storage-class"), &obj.storage_class);
-        ServerSideEncryptionWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption"), &obj.server_side_encryption);
-        SSEKMSKeyIdWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-aws-kms-key-id"), &obj.ssekms_key_id);
-        ContentDispositionWriter::write_params(params, &(prefix.to_string() + "Content-Disposition"), &obj.content_disposition);
-        MetadataWriter::write_params(params, &(prefix.to_string() + "x-amz-meta-"), &obj.metadata);
-        BodyWriter::write_params(params, &(prefix.to_string() + "Body"), &obj.body);
-        AcceptRangesWriter::write_params(params, &(prefix.to_string() + "accept-ranges"), &obj.accept_ranges);
-        WebsiteRedirectLocationWriter::write_params(params, &(prefix.to_string() + "x-amz-website-redirect-location"), &obj.website_redirect_location);
-        ExpiresWriter::write_params(params, &(prefix.to_string() + "Expires"), &obj.expires);
-        DeleteMarkerWriter::write_params(params, &(prefix.to_string() + "x-amz-delete-marker"), &obj.delete_marker);
-        CacheControlWriter::write_params(params, &(prefix.to_string() + "Cache-Control"), &obj.cache_control);
-        ContentLengthWriter::write_params(params, &(prefix.to_string() + "Content-Length"), &obj.content_length);
-        ExpirationWriter::write_params(params, &(prefix.to_string() + "x-amz-expiration"), &obj.expiration);
-        MissingMetaWriter::write_params(params, &(prefix.to_string() + "x-amz-missing-meta"), &obj.missing_meta);
-        RestoreWriter::write_params(params, &(prefix.to_string() + "x-amz-restore"), &obj.restore);
-        SSECustomerAlgorithmWriter::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-algorithm"), &obj.sse_customer_algorithm);
-        ContentTypeWriter::write_params(params, &(prefix.to_string() + "Content-Type"), &obj.content_type);
-        ContentLanguageWriter::write_params(params, &(prefix.to_string() + "Content-Language"), &obj.content_language);
-        ObjectVersionIdWriter::write_params(params, &(prefix.to_string() + "x-amz-version-id"), &obj.version_id);
-        ETagWriter::write_params(params, &(prefix.to_string() + "ETag"), &obj.e_tag);
-        SSECustomerKeyMD5Writer::write_params(params, &(prefix.to_string() + "x-amz-server-side-encryption-customer-key-MD5"), &obj.sse_customer_key_md5);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct GetBucketLifecycleRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketLifecycleRequest` from XML
-struct GetBucketLifecycleRequestParser;
-impl GetBucketLifecycleRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLifecycleRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketLifecycleRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketLifecycleRequest` contents to a `SignedRequest`
 struct GetBucketLifecycleRequestWriter;
 impl GetBucketLifecycleRequestWriter {
@@ -7895,55 +6675,13 @@ impl ListObjectVersionsOutputParser {
         Ok(obj)
     }
 }
-/// Write `ListObjectVersionsOutput` contents to a `SignedRequest`
-struct ListObjectVersionsOutputWriter;
-impl ListObjectVersionsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &ListObjectVersionsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Name"), &obj.name);
-        ObjectVersionListWriter::write_params(params, &(prefix.to_string() + "ObjectVersion"), &obj.versions);
-        DeleteMarkersWriter::write_params(params, &(prefix.to_string() + "DeleteMarkerEntry"), &obj.delete_markers);
-        NextKeyMarkerWriter::write_params(params, &(prefix.to_string() + "NextKeyMarker"), &obj.next_key_marker);
-        DelimiterWriter::write_params(params, &(prefix.to_string() + "Delimiter"), &obj.delimiter);
-        MaxKeysWriter::write_params(params, &(prefix.to_string() + "MaxKeys"), &obj.max_keys);
-        PrefixWriter::write_params(params, &(prefix.to_string() + "Prefix"), &obj.prefix);
-        KeyMarkerWriter::write_params(params, &(prefix.to_string() + "KeyMarker"), &obj.key_marker);
-        NextVersionIdMarkerWriter::write_params(params, &(prefix.to_string() + "NextVersionIdMarker"), &obj.next_version_id_marker);
-        EncodingTypeWriter::write_params(params, &(prefix.to_string() + "EncodingType"), &obj.encoding_type);
-        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
-        VersionIdMarkerWriter::write_params(params, &(prefix.to_string() + "VersionIdMarker"), &obj.version_id_marker);
-        CommonPrefixListWriter::write_params(params, &(prefix.to_string() + "CommonPrefix"), &obj.common_prefixes);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct PutBucketNotificationConfigurationRequest {
     pub notification_configuration: NotificationConfiguration,
     pub bucket: BucketName,
 }
 
-/// Parse `PutBucketNotificationConfigurationRequest` from XML
-struct PutBucketNotificationConfigurationRequestParser;
-impl PutBucketNotificationConfigurationRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketNotificationConfigurationRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutBucketNotificationConfigurationRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "NotificationConfiguration" {
-                obj.notification_configuration = try!(NotificationConfigurationParser::parse_xml("NotificationConfiguration", stack));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutBucketNotificationConfigurationRequest` contents to a `SignedRequest`
 struct PutBucketNotificationConfigurationRequestWriter;
 impl PutBucketNotificationConfigurationRequestWriter {
@@ -8089,140 +6827,6 @@ pub struct CopyObjectRequest {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
 }
 
-/// Parse `CopyObjectRequest` from XML
-struct CopyObjectRequestParser;
-impl CopyObjectRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CopyObjectRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = CopyObjectRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-if-modified-since" {
-                obj.copy_source_if_modified_since = Some(try!(CopySourceIfModifiedSinceParser::parse_xml("x-amz-copy-source-if-modified-since", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-if-unmodified-since" {
-                obj.copy_source_if_unmodified_since = Some(try!(CopySourceIfUnmodifiedSinceParser::parse_xml("x-amz-copy-source-if-unmodified-since", stack)));
-                continue;
-            }
-            if current_name == "Content-Encoding" {
-                obj.content_encoding = Some(try!(ContentEncodingParser::parse_xml("Content-Encoding", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-server-side-encryption-customer-key" {
-                obj.copy_source_sse_customer_key = Some(try!(CopySourceSSECustomerKeyParser::parse_xml("x-amz-copy-source-server-side-encryption-customer-key", stack)));
-                continue;
-            }
-            if current_name == "x-amz-storage-class" {
-                obj.storage_class = Some(try!(StorageClassParser::parse_xml("x-amz-storage-class", stack)));
-                continue;
-            }
-            if current_name == "x-amz-grant-read-acp" {
-                obj.grant_read_acp = Some(try!(GrantReadACPParser::parse_xml("x-amz-grant-read-acp", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption" {
-                obj.server_side_encryption = Some(try!(ServerSideEncryptionParser::parse_xml("x-amz-server-side-encryption", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-aws-kms-key-id" {
-                obj.ssekms_key_id = Some(try!(SSEKMSKeyIdParser::parse_xml("x-amz-server-side-encryption-aws-kms-key-id", stack)));
-                continue;
-            }
-            if current_name == "Content-Disposition" {
-                obj.content_disposition = Some(try!(ContentDispositionParser::parse_xml("Content-Disposition", stack)));
-                continue;
-            }
-            if current_name == "x-amz-meta-" {
-                obj.metadata = Some(try!(MetadataParser::parse_xml("x-amz-meta-", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-key" {
-                obj.sse_customer_key = Some(try!(SSECustomerKeyParser::parse_xml("x-amz-server-side-encryption-customer-key", stack)));
-                continue;
-            }
-            if current_name == "x-amz-website-redirect-location" {
-                obj.website_redirect_location = Some(try!(WebsiteRedirectLocationParser::parse_xml("x-amz-website-redirect-location", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source" {
-                obj.copy_source = try!(CopySourceParser::parse_xml("x-amz-copy-source", stack));
-                continue;
-            }
-            if current_name == "Expires" {
-                obj.expires = Some(try!(ExpiresParser::parse_xml("Expires", stack)));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            if current_name == "Cache-Control" {
-                obj.cache_control = Some(try!(CacheControlParser::parse_xml("Cache-Control", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-server-side-encryption-customer-algorithm" {
-                obj.copy_source_sse_customer_algorithm = Some(try!(CopySourceSSECustomerAlgorithmParser::parse_xml("x-amz-copy-source-server-side-encryption-customer-algorithm", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "x-amz-grant-read" {
-                obj.grant_read = Some(try!(GrantReadParser::parse_xml("x-amz-grant-read", stack)));
-                continue;
-            }
-            if current_name == "x-amz-grant-write-acp" {
-                obj.grant_write_acp = Some(try!(GrantWriteACPParser::parse_xml("x-amz-grant-write-acp", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-server-side-encryption-customer-key-MD5" {
-                obj.copy_source_sse_customer_key_md5 = Some(try!(CopySourceSSECustomerKeyMD5Parser::parse_xml("x-amz-copy-source-server-side-encryption-customer-key-MD5", stack)));
-                continue;
-            }
-            if current_name == "x-amz-grant-full-control" {
-                obj.grant_full_control = Some(try!(GrantFullControlParser::parse_xml("x-amz-grant-full-control", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-if-match" {
-                obj.copy_source_if_match = Some(try!(CopySourceIfMatchParser::parse_xml("x-amz-copy-source-if-match", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-algorithm" {
-                obj.sse_customer_algorithm = Some(try!(SSECustomerAlgorithmParser::parse_xml("x-amz-server-side-encryption-customer-algorithm", stack)));
-                continue;
-            }
-            if current_name == "Content-Type" {
-                obj.content_type = Some(try!(ContentTypeParser::parse_xml("Content-Type", stack)));
-                continue;
-            }
-            if current_name == "Content-Language" {
-                obj.content_language = Some(try!(ContentLanguageParser::parse_xml("Content-Language", stack)));
-                continue;
-            }
-            if current_name == "x-amz-metadata-directive" {
-                obj.metadata_directive = Some(try!(MetadataDirectiveParser::parse_xml("x-amz-metadata-directive", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-if-none-match" {
-                obj.copy_source_if_none_match = Some(try!(CopySourceIfNoneMatchParser::parse_xml("x-amz-copy-source-if-none-match", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-key-MD5" {
-                obj.sse_customer_key_md5 = Some(try!(SSECustomerKeyMD5Parser::parse_xml("x-amz-server-side-encryption-customer-key-MD5", stack)));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `CopyObjectRequest` contents to a `SignedRequest`
 struct CopyObjectRequestWriter;
 impl CopyObjectRequestWriter {
@@ -8325,36 +6929,6 @@ pub struct DeleteObjectsRequest {
     pub delete: Delete,
 }
 
-/// Parse `DeleteObjectsRequest` from XML
-struct DeleteObjectsRequestParser;
-impl DeleteObjectsRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteObjectsRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = DeleteObjectsRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "x-amz-mfa" {
-                obj.mfa = Some(try!(MFAParser::parse_xml("x-amz-mfa", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "Delete" {
-                obj.delete = try!(DeleteParser::parse_xml("Delete", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `DeleteObjectsRequest` contents to a `SignedRequest`
 struct DeleteObjectsRequestWriter;
 impl DeleteObjectsRequestWriter {
@@ -8460,26 +7034,7 @@ impl ListPartsOutputParser {
         Ok(obj)
     }
 }
-/// Write `ListPartsOutput` contents to a `SignedRequest`
-struct ListPartsOutputWriter;
-impl ListPartsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &ListPartsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        InitiatorWriter::write_params(params, &(prefix.to_string() + "Initiator"), &obj.initiator);
-        BucketNameWriter::write_params(params, &(prefix.to_string() + "Bucket"), &obj.bucket);
-        NextPartNumberMarkerWriter::write_params(params, &(prefix.to_string() + "NextPartNumberMarker"), &obj.next_part_number_marker);
-        PartsWriter::write_params(params, &(prefix.to_string() + "Part"), &obj.parts);
-        MultipartUploadIdWriter::write_params(params, &(prefix.to_string() + "UploadId"), &obj.upload_id);
-        StorageClassWriter::write_params(params, &(prefix.to_string() + "StorageClass"), &obj.storage_class);
-        ObjectKeyWriter::write_params(params, &(prefix.to_string() + "Key"), &obj.key);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
-        MaxPartsWriter::write_params(params, &(prefix.to_string() + "MaxParts"), &obj.max_parts);
-        IsTruncatedWriter::write_params(params, &(prefix.to_string() + "IsTruncated"), &obj.is_truncated);
-        PartNumberMarkerWriter::write_params(params, &(prefix.to_string() + "PartNumberMarker"), &obj.part_number_marker);
-    }
-}
+
 pub type Marker = String;
 /// Parse `Marker` from XML
 struct MarkerParser;
@@ -8527,24 +7082,6 @@ pub struct RestoreRequest {
     pub days: Days,
 }
 
-/// Parse `RestoreRequest` from XML
-struct RestoreRequestParser;
-impl RestoreRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RestoreRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = RestoreRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Days" {
-                obj.days = try!(DaysParser::parse_xml("Days", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `RestoreRequest` contents to a `SignedRequest`
 struct RestoreRequestWriter;
 impl RestoreRequestWriter {
@@ -8747,88 +7284,6 @@ pub struct UploadPartCopyRequest {
     pub part_number: PartNumber,
 }
 
-/// Parse `UploadPartCopyRequest` from XML
-struct UploadPartCopyRequestParser;
-impl UploadPartCopyRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<UploadPartCopyRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = UploadPartCopyRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "x-amz-copy-source-if-match" {
-                obj.copy_source_if_match = Some(try!(CopySourceIfMatchParser::parse_xml("x-amz-copy-source-if-match", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-algorithm" {
-                obj.sse_customer_algorithm = Some(try!(SSECustomerAlgorithmParser::parse_xml("x-amz-server-side-encryption-customer-algorithm", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-server-side-encryption-customer-key-MD5" {
-                obj.copy_source_sse_customer_key_md5 = Some(try!(CopySourceSSECustomerKeyMD5Parser::parse_xml("x-amz-copy-source-server-side-encryption-customer-key-MD5", stack)));
-                continue;
-            }
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-server-side-encryption-customer-key" {
-                obj.copy_source_sse_customer_key = Some(try!(CopySourceSSECustomerKeyParser::parse_xml("x-amz-copy-source-server-side-encryption-customer-key", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-server-side-encryption-customer-algorithm" {
-                obj.copy_source_sse_customer_algorithm = Some(try!(CopySourceSSECustomerAlgorithmParser::parse_xml("x-amz-copy-source-server-side-encryption-customer-algorithm", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source" {
-                obj.copy_source = try!(CopySourceParser::parse_xml("x-amz-copy-source", stack));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-if-modified-since" {
-                obj.copy_source_if_modified_since = Some(try!(CopySourceIfModifiedSinceParser::parse_xml("x-amz-copy-source-if-modified-since", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-key" {
-                obj.sse_customer_key = Some(try!(SSECustomerKeyParser::parse_xml("x-amz-server-side-encryption-customer-key", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-if-unmodified-since" {
-                obj.copy_source_if_unmodified_since = Some(try!(CopySourceIfUnmodifiedSinceParser::parse_xml("x-amz-copy-source-if-unmodified-since", stack)));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-if-none-match" {
-                obj.copy_source_if_none_match = Some(try!(CopySourceIfNoneMatchParser::parse_xml("x-amz-copy-source-if-none-match", stack)));
-                continue;
-            }
-            if current_name == "uploadId" {
-                obj.upload_id = try!(MultipartUploadIdParser::parse_xml("uploadId", stack));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            if current_name == "x-amz-copy-source-range" {
-                obj.copy_source_range = Some(try!(CopySourceRangeParser::parse_xml("x-amz-copy-source-range", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-key-MD5" {
-                obj.sse_customer_key_md5 = Some(try!(SSECustomerKeyMD5Parser::parse_xml("x-amz-server-side-encryption-customer-key-MD5", stack)));
-                continue;
-            }
-            if current_name == "partNumber" {
-                obj.part_number = try!(PartNumberParser::parse_xml("partNumber", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `UploadPartCopyRequest` contents to a `SignedRequest`
 struct UploadPartCopyRequestWriter;
 impl UploadPartCopyRequestWriter {
@@ -9056,24 +7511,6 @@ pub struct GetBucketVersioningRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketVersioningRequest` from XML
-struct GetBucketVersioningRequestParser;
-impl GetBucketVersioningRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketVersioningRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketVersioningRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketVersioningRequest` contents to a `SignedRequest`
 struct GetBucketVersioningRequestWriter;
 impl GetBucketVersioningRequestWriter {
@@ -9267,16 +7704,7 @@ impl GetBucketVersioningOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketVersioningOutput` contents to a `SignedRequest`
-struct GetBucketVersioningOutputWriter;
-impl GetBucketVersioningOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketVersioningOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BucketVersioningStatusWriter::write_params(params, &(prefix.to_string() + "Status"), &obj.status);
-        MFADeleteStatusWriter::write_params(params, &(prefix.to_string() + "MfaDelete"), &obj.mfa_delete);
-    }
-}
+
 /// Specifies when noncurrent object versions expire. Upon expiration, Amazon S3
 /// permanently deletes the noncurrent object versions. You set this lifecycle
 /// configuration action on a bucket that has versioning enabled (or suspended) to
@@ -9343,15 +7771,7 @@ impl GetBucketRequestPaymentOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketRequestPaymentOutput` contents to a `SignedRequest`
-struct GetBucketRequestPaymentOutputWriter;
-impl GetBucketRequestPaymentOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketRequestPaymentOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        PayerWriter::write_params(params, &(prefix.to_string() + "Payer"), &obj.payer);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct GetObjectRequest {
     /// Sets the Content-Encoding header of the response.
@@ -9401,92 +7821,6 @@ pub struct GetObjectRequest {
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
 }
 
-/// Parse `GetObjectRequest` from XML
-struct GetObjectRequestParser;
-impl GetObjectRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetObjectRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetObjectRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "response-content-encoding" {
-                obj.response_content_encoding = Some(try!(ResponseContentEncodingParser::parse_xml("response-content-encoding", stack)));
-                continue;
-            }
-            if current_name == "response-content-language" {
-                obj.response_content_language = Some(try!(ResponseContentLanguageParser::parse_xml("response-content-language", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-algorithm" {
-                obj.sse_customer_algorithm = Some(try!(SSECustomerAlgorithmParser::parse_xml("x-amz-server-side-encryption-customer-algorithm", stack)));
-                continue;
-            }
-            if current_name == "response-content-type" {
-                obj.response_content_type = Some(try!(ResponseContentTypeParser::parse_xml("response-content-type", stack)));
-                continue;
-            }
-            if current_name == "If-Unmodified-Since" {
-                obj.if_unmodified_since = Some(try!(IfUnmodifiedSinceParser::parse_xml("If-Unmodified-Since", stack)));
-                continue;
-            }
-            if current_name == "versionId" {
-                obj.version_id = Some(try!(ObjectVersionIdParser::parse_xml("versionId", stack)));
-                continue;
-            }
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "response-cache-control" {
-                obj.response_cache_control = Some(try!(ResponseCacheControlParser::parse_xml("response-cache-control", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-key" {
-                obj.sse_customer_key = Some(try!(SSECustomerKeyParser::parse_xml("x-amz-server-side-encryption-customer-key", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "If-None-Match" {
-                obj.if_none_match = Some(try!(IfNoneMatchParser::parse_xml("If-None-Match", stack)));
-                continue;
-            }
-            if current_name == "response-content-disposition" {
-                obj.response_content_disposition = Some(try!(ResponseContentDispositionParser::parse_xml("response-content-disposition", stack)));
-                continue;
-            }
-            if current_name == "Range" {
-                obj.range = Some(try!(RangeParser::parse_xml("Range", stack)));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            if current_name == "If-Match" {
-                obj.if_match = Some(try!(IfMatchParser::parse_xml("If-Match", stack)));
-                continue;
-            }
-            if current_name == "response-expires" {
-                obj.response_expires = Some(try!(ResponseExpiresParser::parse_xml("response-expires", stack)));
-                continue;
-            }
-            if current_name == "If-Modified-Since" {
-                obj.if_modified_since = Some(try!(IfModifiedSinceParser::parse_xml("If-Modified-Since", stack)));
-                continue;
-            }
-            if current_name == "x-amz-server-side-encryption-customer-key-MD5" {
-                obj.sse_customer_key_md5 = Some(try!(SSECustomerKeyMD5Parser::parse_xml("x-amz-server-side-encryption-customer-key-MD5", stack)));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetObjectRequest` contents to a `SignedRequest`
 struct GetObjectRequestWriter;
 impl GetObjectRequestWriter {
@@ -9604,24 +7938,6 @@ pub struct GetBucketLoggingRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketLoggingRequest` from XML
-struct GetBucketLoggingRequestParser;
-impl GetBucketLoggingRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLoggingRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketLoggingRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketLoggingRequest` contents to a `SignedRequest`
 struct GetBucketLoggingRequestWriter;
 impl GetBucketLoggingRequestWriter {
@@ -9738,15 +8054,7 @@ impl RestoreObjectOutputParser {
         Ok(obj)
     }
 }
-/// Write `RestoreObjectOutput` contents to a `SignedRequest`
-struct RestoreObjectOutputWriter;
-impl RestoreObjectOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &RestoreObjectOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct RestoreObjectRequest {
     pub version_id: Option<ObjectVersionId>,
@@ -9756,40 +8064,6 @@ pub struct RestoreObjectRequest {
     pub key: ObjectKey,
 }
 
-/// Parse `RestoreObjectRequest` from XML
-struct RestoreObjectRequestParser;
-impl RestoreObjectRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<RestoreObjectRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = RestoreObjectRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "versionId" {
-                obj.version_id = Some(try!(ObjectVersionIdParser::parse_xml("versionId", stack)));
-                continue;
-            }
-            if current_name == "RestoreRequest" {
-                obj.restore_request = Some(try!(RestoreRequestParser::parse_xml("RestoreRequest", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `RestoreObjectRequest` contents to a `SignedRequest`
 struct RestoreObjectRequestWriter;
 impl RestoreObjectRequestWriter {
@@ -9832,15 +8106,7 @@ impl GetBucketLocationOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketLocationOutput` contents to a `SignedRequest`
-struct GetBucketLocationOutputWriter;
-impl GetBucketLocationOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketLocationOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        BucketLocationConstraintWriter::write_params(params, &(prefix.to_string() + "LocationConstraint"), &obj.location_constraint);
-    }
-}
+
 #[derive(Debug, Default)]
 pub struct GetObjectAclOutput {
     pub owner: Owner,
@@ -9875,17 +8141,7 @@ impl GetObjectAclOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetObjectAclOutput` contents to a `SignedRequest`
-struct GetObjectAclOutputWriter;
-impl GetObjectAclOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetObjectAclOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        OwnerWriter::write_params(params, &(prefix.to_string() + "Owner"), &obj.owner);
-        GrantsWriter::write_params(params, &(prefix.to_string() + "Grant"), &obj.grants);
-        RequestChargedWriter::write_params(params, &(prefix.to_string() + "x-amz-request-charged"), &obj.request_charged);
-    }
-}
+
 pub type ReplaceKeyWith = String;
 /// Parse `ReplaceKeyWith` from XML
 struct ReplaceKeyWithParser;
@@ -9927,24 +8183,6 @@ pub struct GetBucketTaggingRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketTaggingRequest` from XML
-struct GetBucketTaggingRequestParser;
-impl GetBucketTaggingRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketTaggingRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketTaggingRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketTaggingRequest` contents to a `SignedRequest`
 struct GetBucketTaggingRequestWriter;
 impl GetBucketTaggingRequestWriter {
@@ -9978,15 +8216,7 @@ impl GetBucketPolicyOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketPolicyOutput` contents to a `SignedRequest`
-struct GetBucketPolicyOutputWriter;
-impl GetBucketPolicyOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketPolicyOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        PolicyWriter::write_params(params, &(prefix.to_string() + "Policy"), &obj.policy);
-    }
-}
+
 pub type MaxAgeSeconds = i32;
 /// Parse `MaxAgeSeconds` from XML
 struct MaxAgeSecondsParser;
@@ -10048,32 +8278,6 @@ pub struct PutBucketTaggingRequest {
     pub tagging: Tagging,
 }
 
-/// Parse `PutBucketTaggingRequest` from XML
-struct PutBucketTaggingRequestParser;
-impl PutBucketTaggingRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketTaggingRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutBucketTaggingRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Content-MD5" {
-                obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "Tagging" {
-                obj.tagging = try!(TaggingParser::parse_xml("Tagging", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutBucketTaggingRequest` contents to a `SignedRequest`
 struct PutBucketTaggingRequestWriter;
 impl PutBucketTaggingRequestWriter {
@@ -10092,24 +8296,6 @@ pub struct GetBucketRequestPaymentRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketRequestPaymentRequest` from XML
-struct GetBucketRequestPaymentRequestParser;
-impl GetBucketRequestPaymentRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketRequestPaymentRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketRequestPaymentRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketRequestPaymentRequest` contents to a `SignedRequest`
 struct GetBucketRequestPaymentRequestWriter;
 impl GetBucketRequestPaymentRequestWriter {
@@ -10373,32 +8559,6 @@ pub struct PutBucketLoggingRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `PutBucketLoggingRequest` from XML
-struct PutBucketLoggingRequestParser;
-impl PutBucketLoggingRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PutBucketLoggingRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = PutBucketLoggingRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "BucketLoggingStatus" {
-                obj.bucket_logging_status = try!(BucketLoggingStatusParser::parse_xml("BucketLoggingStatus", stack));
-                continue;
-            }
-            if current_name == "Content-MD5" {
-                obj.content_md5 = Some(try!(ContentMD5Parser::parse_xml("Content-MD5", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `PutBucketLoggingRequest` contents to a `SignedRequest`
 struct PutBucketLoggingRequestWriter;
 impl PutBucketLoggingRequestWriter {
@@ -10539,24 +8699,6 @@ pub struct DeleteBucketTaggingRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `DeleteBucketTaggingRequest` from XML
-struct DeleteBucketTaggingRequestParser;
-impl DeleteBucketTaggingRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<DeleteBucketTaggingRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = DeleteBucketTaggingRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `DeleteBucketTaggingRequest` contents to a `SignedRequest`
 struct DeleteBucketTaggingRequestWriter;
 impl DeleteBucketTaggingRequestWriter {
@@ -10731,18 +8873,7 @@ impl GetBucketWebsiteOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketWebsiteOutput` contents to a `SignedRequest`
-struct GetBucketWebsiteOutputWriter;
-impl GetBucketWebsiteOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketWebsiteOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        RedirectAllRequestsToWriter::write_params(params, &(prefix.to_string() + "RedirectAllRequestsTo"), &obj.redirect_all_requests_to);
-        IndexDocumentWriter::write_params(params, &(prefix.to_string() + "IndexDocument"), &obj.index_document);
-        ErrorDocumentWriter::write_params(params, &(prefix.to_string() + "ErrorDocument"), &obj.error_document);
-        RoutingRulesWriter::write_params(params, &(prefix.to_string() + "RoutingRule"), &obj.routing_rules);
-    }
-}
+
 pub type CopySourceIfMatch = String;
 /// Parse `CopySourceIfMatch` from XML
 struct CopySourceIfMatchParser;
@@ -10802,24 +8933,6 @@ pub struct GetBucketLocationRequest {
     pub bucket: BucketName,
 }
 
-/// Parse `GetBucketLocationRequest` from XML
-struct GetBucketLocationRequestParser;
-impl GetBucketLocationRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<GetBucketLocationRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = GetBucketLocationRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `GetBucketLocationRequest` contents to a `SignedRequest`
 struct GetBucketLocationRequestWriter;
 impl GetBucketLocationRequestWriter {
@@ -10861,44 +8974,6 @@ pub struct ListPartsRequest {
     pub part_number_marker: Option<PartNumberMarker>,
 }
 
-/// Parse `ListPartsRequest` from XML
-struct ListPartsRequestParser;
-impl ListPartsRequestParser {
-    fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ListPartsRequest, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let mut obj = ListPartsRequest::default();
-        loop {
-            let current_name = try!(peek_at_name(stack));
-            if current_name == "x-amz-request-payer" {
-                obj.request_payer = Some(try!(RequestPayerParser::parse_xml("x-amz-request-payer", stack)));
-                continue;
-            }
-            if current_name == "Bucket" {
-                obj.bucket = try!(BucketNameParser::parse_xml("Bucket", stack));
-                continue;
-            }
-            if current_name == "uploadId" {
-                obj.upload_id = try!(MultipartUploadIdParser::parse_xml("uploadId", stack));
-                continue;
-            }
-            if current_name == "Key" {
-                obj.key = try!(ObjectKeyParser::parse_xml("Key", stack));
-                continue;
-            }
-            if current_name == "max-parts" {
-                obj.max_parts = Some(try!(MaxPartsParser::parse_xml("max-parts", stack)));
-                continue;
-            }
-            if current_name == "part-number-marker" {
-                obj.part_number_marker = Some(try!(PartNumberMarkerParser::parse_xml("part-number-marker", stack)));
-                continue;
-            }
-            break;
-        }
-        try!(end_element(tag_name, stack));
-        Ok(obj)
-    }
-}
 /// Write `ListPartsRequest` contents to a `SignedRequest`
 struct ListPartsRequestWriter;
 impl ListPartsRequestWriter {
@@ -11040,15 +9115,7 @@ impl GetBucketCorsOutputParser {
         Ok(obj)
     }
 }
-/// Write `GetBucketCorsOutput` contents to a `SignedRequest`
-struct GetBucketCorsOutputWriter;
-impl GetBucketCorsOutputWriter {
-    fn write_params(params: &mut Params, name: &str, obj: &GetBucketCorsOutput) {
-        let mut prefix = name.to_string();
-        if prefix != "" { prefix.push_str("."); }
-        CORSRulesWriter::write_params(params, &(prefix.to_string() + "CORSRule"), &obj.cors_rules);
-    }
-}
+
 pub type CreationDate = String;
 /// Parse `CreationDate` from XML
 struct CreationDateParser;
