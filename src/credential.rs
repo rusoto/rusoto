@@ -221,10 +221,10 @@ impl ProfileProvider {
 
 impl ProvideAwsCredentials for ProfileProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-       parse_credentials_file(self.file_path()).and_then(|mut profiles| {
+        parse_credentials_file(self.file_path()).and_then(|mut profiles| {
             profiles.remove(self.profile()).ok_or_else(|| CredentialsError::new("profile not found"))
-       })
-   }
+        })
+    }
 }
 
 fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredentials>, CredentialsError> {
