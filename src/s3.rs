@@ -9193,7 +9193,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(ListObjectVersionsOutputParser::parse_xml("ListObjectVersionsOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Replaces a policy on a bucket. If the bucket already has a policy, the one in
@@ -9214,7 +9214,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Returns some or all (up to 1000) of the objects in a bucket. You can use the
@@ -9244,7 +9244,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(ListObjectsOutputParser::parse_xml("ListBucketResult", &mut stack)))
             }
-            _ => { Err(S3Error::new(format!("error, status was {:?}", status))) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Set the website configuration for a bucket.
@@ -9264,7 +9264,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Deprecated, see the PutBucketNotificationConfiguraiton operation.
@@ -9284,7 +9284,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Set the logging parameters for a bucket and to specify permissions for who can
@@ -9306,7 +9306,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Creates a new replication configuration (or replaces an existing one, if
@@ -9327,7 +9327,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Uploads a part in a multipart upload.
@@ -9464,7 +9464,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Sets the versioning state of an existing bucket. To set the versioning state,
@@ -9485,7 +9485,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Returns the cors configuration for the bucket.
@@ -9505,7 +9505,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetBucketCorsOutputParser::parse_xml("GetBucketCorsOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Sets lifecycle configuration for your bucket. If a lifecycle configuration
@@ -9526,7 +9526,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Gets the access control policy for the bucket.
@@ -9546,7 +9546,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetBucketAclOutputParser::parse_xml("GetBucketAclOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Returns the logging status of a bucket and the permissions users have to view
@@ -9567,7 +9567,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetBucketLoggingOutputParser::parse_xml("GetBucketLoggingOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// This operation is useful to determine if a bucket exists and you have
@@ -9588,7 +9588,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Sets the permissions on a bucket using access control lists (ACL).
@@ -9607,7 +9607,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// This operation removes the website configuration from the bucket.
@@ -9627,7 +9627,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Deletes the policy from the bucket.
@@ -9647,7 +9647,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Returns the notification configuration of a bucket.
@@ -9667,7 +9667,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(NotificationConfigurationParser::parse_xml("NotificationConfiguration", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// This operation enables you to delete multiple objects from a bucket using a
@@ -9710,7 +9710,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Creates a copy of an object that is already stored in Amazon S3.
@@ -9730,7 +9730,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(CopyObjectOutputParser::parse_xml("CopyObjectOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Returns a list of all buckets owned by the authenticated sender of the
@@ -9752,7 +9752,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 // was "ListBucketsOutput"
                 Ok(try!(ListBucketsOutputParser::parse_xml("ListAllMyBucketsResult", &mut stack)))
             }
-            _ => { Err(S3Error::new("error in list_buckets")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Sets the request payment configuration for a bucket. By default, the bucket
@@ -9777,7 +9777,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Enables notifications of specified events for a bucket.
@@ -9797,7 +9797,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// The HEAD operation retrieves metadata from an object without returning the
@@ -9829,7 +9829,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
 
                 Ok(head_object)
             }
-            _ => { Err(S3Error::new(format!("error: status code {:?}", status))) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Deletes the tags from the bucket.
@@ -9849,7 +9849,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Return torrent files from a bucket.
@@ -9869,7 +9869,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetObjectTorrentOutputParser::parse_xml("GetObjectTorrentOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Returns the lifecycle configuration information set on the bucket.
@@ -9889,7 +9889,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetBucketLifecycleOutputParser::parse_xml("GetBucketLifecycleOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Creates a new bucket.
@@ -9927,9 +9927,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                     None => Err(S3Error::new("Something went wrong when creating a bucket."))
                 }
             }
-            _ => {
-                Err(S3Error::new("error in create_bucket"))
-            }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Completes a multipart upload by assembling previously uploaded parts.
@@ -9966,7 +9964,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             }
             _ => {
                 println!("Error response body: {}", result.body);
-                Err(S3Error::new("error in complete_multipart_upload"))
+                Err(S3Error::new(format!("Unexpected HTTP status code {}", status)))
             }
         }
     }
@@ -9987,7 +9985,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetBucketWebsiteOutputParser::parse_xml("GetBucketWebsiteOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Initiates a multipart upload and returns an upload ID.
@@ -10020,7 +10018,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(CreateMultipartUploadOutputParser::parse_xml("InitiateMultipartUploadResult", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Deletes the bucket. All objects (including all object versions and Delete
@@ -10256,7 +10254,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetBucketPolicyOutputParser::parse_xml("GetBucketPolicyOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Returns the versioning state of a bucket.
@@ -10276,7 +10274,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetBucketVersioningOutputParser::parse_xml("GetBucketVersioningOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// This operation lists in-progress multipart uploads.
@@ -10306,9 +10304,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(ListMultipartUploadsOutputParser::parse_xml("ListMultipartUploadsResult", &mut stack)))
             }
-            _ => {
-                Err(S3Error::new("error"))
-            }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Returns the request payment configuration of a bucket.
@@ -10328,7 +10324,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetBucketRequestPaymentOutputParser::parse_xml("GetBucketRequestPaymentOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Sets the tags for a bucket.
@@ -10348,7 +10344,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Returns the tag set associated with the bucket.
@@ -10368,7 +10364,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetBucketTaggingOutputParser::parse_xml("GetBucketTaggingOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Aborts a multipart upload.
@@ -10423,7 +10419,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(PutObjectAclOutputParser::parse_xml("PutObjectAclOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Returns the region the bucket resides in.
@@ -10443,7 +10439,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetBucketLocationOutputParser::parse_xml("GetBucketLocationOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Sets the cors configuration for a bucket.
@@ -10463,7 +10459,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Deletes the lifecycle configuration from the bucket.
@@ -10483,7 +10479,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(())
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Deprecated, see the GetBucketNotificationConfiguration operation.
@@ -10503,7 +10499,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(NotificationConfigurationDeprecatedParser::parse_xml("NotificationConfigurationDeprecated", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Lists the parts that have been uploaded for a specific multipart upload.
@@ -10537,7 +10533,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             }
             _ => {
                 println!("Error response body: {}", result.body);
-                Err(S3Error::new("error in list_parts"))
+                Err(S3Error::new(format!("Unexpected HTTP status code {}", status)))
             }
         }
     }
@@ -10558,7 +10554,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetObjectAclOutputParser::parse_xml("GetObjectAclOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Uploads a part by copying data from an existing object as data source.
@@ -10607,7 +10603,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
                 Ok(DeleteObjectOutput::default())
                 // Ok(try!(DeleteObjectOutputParser::parse_xml("DeleteObjectOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("delete object error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     /// Restores an archived copy of an object back into Amazon S3
@@ -10627,7 +10623,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(RestoreObjectOutputParser::parse_xml("RestoreObjectOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
     pub fn get_bucket_replication(&self, input: &GetBucketReplicationRequest) -> Result<GetBucketReplicationOutput, S3Error> {
@@ -10646,7 +10642,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
             200 => {
                 Ok(try!(GetBucketReplicationOutputParser::parse_xml("GetBucketReplicationOutput", &mut stack)))
             }
-            _ => { Err(S3Error::new("error")) }
+            _ => { Err(S3Error::new(format!("Unexpected HTTP status code {}", status))) }
         }
     }
 
