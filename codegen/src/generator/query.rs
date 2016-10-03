@@ -494,7 +494,17 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
     }
 
     let operation = maybe_operation.unwrap();
-    let input_shape = operation.input_shape();
+    let request_params;
+    let request_constructor;
+    if operation.input.is_some() {
+        request_constructor = format!(
+            "let request = {request_type}::default();",
+            request_type=operation.input_shape());
+        request_params = "&request".to_string();
+    } else {
+        request_constructor = "".to_string();
+        request_params = "".to_string();
+    }
 
     Some(format!("
     #[test]
@@ -506,9 +516,9 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
 
         let client = {client_type}::with_request_dispatcher(mock, MockCredentialsProvider, Region::UsEast1);
 
-        let request = {request_type}::default();
+        {request_constructor}
 
-        let result = client.{action_method}(&request);
+        let result = client.{action_method}({request_params});
 
         assert!(result.is_ok());
     }}
@@ -517,8 +527,9 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
     action=response.action.to_snake_case(),
     response_file_name=response.file_name,
     client_type=service.client_type_name(),
-    request_type=input_shape,
-    action_method=operation.name.to_snake_case()))
+    request_constructor=request_constructor,
+    action_method=operation.name.to_snake_case(),
+    request_params=request_params))
 }
 
 fn generate_tests_body(service: &Service) -> String {
