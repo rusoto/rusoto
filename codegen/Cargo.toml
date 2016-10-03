@@ -12,7 +12,7 @@ optional = true
 version = "0.8.0"
 
 [dependencies]
-Inflector = "0.2.0"
+Inflector = "0.4.0"
 lazy_static = "0.1.16"
 regex = "0.1.65"
 serde = "0.8.0"
