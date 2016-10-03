@@ -355,7 +355,7 @@ pub struct StrictPathEncodeSet;
 impl EncodeSet for StrictPathEncodeSet {
     #[inline]
     fn contains(&self, byte: u8) -> bool {
-        let slash = byte == '/' as u8;
+        let slash = byte == b'/';
         !slash && StrictEncodeSet.contains(byte)
     }
 }

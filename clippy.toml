@@ -1,1 +1,1 @@
-doc-valid-idents = ["DynamoDB"]
+doc-valid-idents = ["CloudTrail", "DynamoDB"]

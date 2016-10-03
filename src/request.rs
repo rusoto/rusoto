@@ -79,7 +79,7 @@ impl DispatchSignedRequest for Client {
             "DELETE" => Method::Delete,
             "GET" => Method::Get,
             "HEAD" => Method::Head,
-            v @ _ => return Err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) })
+            v => return Err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) })
 
         };
 

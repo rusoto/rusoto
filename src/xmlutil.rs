@@ -47,11 +47,7 @@ impl <'b>XmlResponse<'b> {
 
 impl <'b>Peek for XmlResponse<'b> {
     fn peek(&mut self) -> Option<&XmlEvent> {
-        loop {
-            match self.xml_stack.peek() {
-                Some(&XmlEvent::Whitespace(_)) => {  },
-                _ => break
-            }
+        while let Some(&XmlEvent::Whitespace(_)) = self.xml_stack.peek() {
             self.xml_stack.next();
         }
         self.xml_stack.peek()

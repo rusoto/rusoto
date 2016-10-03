@@ -221,9 +221,9 @@ impl ProfileProvider {
 
 impl ProvideAwsCredentials for ProfileProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-    	parse_credentials_file(self.file_path()).and_then(|mut profiles| {
-            profiles.remove(self.profile()).ok_or(CredentialsError::new("profile not found"))
-    	})
+       parse_credentials_file(self.file_path()).and_then(|mut profiles| {
+            profiles.remove(self.profile()).ok_or_else(|| CredentialsError::new("profile not found"))
+       })
    }
 }
 
@@ -478,7 +478,7 @@ impl DefaultCredentialsProviderSync {
 /// 3. IAM instance profile. Will only work if running on an EC2 instance with an instance profile/role.
 ///
 /// If the sources are exhausted without finding credentials, an error is returned.
-#[derive(Debug, Clone)]
+#[derive(Debug, Default, Clone)]
 pub struct ChainProvider {
     profile_provider: Option<ProfileProvider>,
 }
