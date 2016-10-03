@@ -192,12 +192,6 @@ pub struct Key {
     pub shape: String,
 }
 
-impl Key {
-    pub fn tag_name(&self) -> String {
-        self.location_name.clone().unwrap_or(self.shape.clone())
-    }
-}
-
 #[derive(Debug, Deserialize)]
 pub struct Value {
     pub documentation: Option<String>,
@@ -205,12 +199,6 @@ pub struct Value {
     pub location_name: Option<String>,
     #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
-}
-
-impl Value {
-    pub fn tag_name(&self) -> String {
-        self.location_name.clone().unwrap_or(self.shape.clone())
-    }
 }
 
 #[derive(Debug, Deserialize)]

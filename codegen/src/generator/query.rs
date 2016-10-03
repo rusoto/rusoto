@@ -232,23 +232,41 @@ fn generate_map_deserializer(shape: &Shape) -> String {
     let key = shape.key.as_ref().unwrap();
     let value = shape.value.as_ref().unwrap();
 
+    let element_tag_name;
+    let entry_start_element;
+    let entry_end_element;
+    if let Some(true) = shape.flattened {
+        element_tag_name = "tag_name";
+        entry_start_element = "";
+        entry_end_element = "";
+    } else {
+        element_tag_name = "\"entry\"";
+        entry_start_element = "try!(start_element(tag_name, stack));";
+        entry_end_element = "try!(end_element(tag_name, stack));";
+    };
+
     format!(
         "
         let mut obj = HashMap::new();
 
-        while try!(peek_at_name(stack)) == tag_name {{
-            try!(start_element(tag_name, stack));
+        {entry_start_element}
+        while try!(peek_at_name(stack)) == {element_tag_name} {{
+            try!(start_element({element_tag_name}, stack));
             let key = try!({key_type_name}Deserializer::deserialize(\"{key_tag_name}\", stack));
             let value = try!({value_type_name}Deserializer::deserialize(\"{value_tag_name}\", stack));
             obj.insert(key, value);
-            try!(end_element(tag_name, stack));
+            try!(end_element({element_tag_name}, stack));
         }}
+        {entry_end_element}
 
         Ok(obj)
         ",
-        key_tag_name = key.tag_name(),
+        element_tag_name = element_tag_name,
+        entry_start_element = entry_start_element,
+        entry_end_element = entry_end_element,
+        key_tag_name = key.location_name.clone().unwrap_or("key".to_string()),
         key_type_name = key.shape,
-        value_tag_name = value.tag_name(),
+        value_tag_name = value.location_name.clone().unwrap_or("value".to_string()),
         value_type_name = value.shape,
     )
 }
