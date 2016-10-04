@@ -9,6 +9,8 @@ addons:
       - libdw-dev
       - binutils-dev # optional: only required for the --verify flag of coveralls
 language: rust
+# cache dependencies: https://docs.travis-ci.com/user/caching/#Rust-Cargo-cache
+cache: cargo
 # run builds for all the trains (and more)
 rust:
   # check that it compiles on the latest stable compiler
