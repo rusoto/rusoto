@@ -8,6 +8,7 @@ use std::borrow::Cow;
 use super::GenerateProtocol;
 use super::generate_field_name;
 use super::tests::{Response, find_responses};
+use util::case_insensitive_btreemap_get;
 
 pub struct Ec2Generator;
 
@@ -135,7 +136,7 @@ impl GenerateProtocol for Ec2Generator {
 }
 
 fn generate_response_parse_test(service: &Service, response: Response) -> Option<String> {
-    let maybe_operation = service.operations.get(&response.action);
+    let maybe_operation = case_insensitive_btreemap_get(&service.operations, &response.action);
 
     if maybe_operation.is_none() {
         return None;

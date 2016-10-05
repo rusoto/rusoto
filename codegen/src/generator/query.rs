@@ -4,6 +4,7 @@ use inflector::Inflector;
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::GenerateProtocol;
 use super::tests::{Response, find_responses};
+use util::case_insensitive_btreemap_get;
 
 pub struct QueryGenerator;
 
@@ -523,7 +524,7 @@ fn generate_primitive_serializer(shape: &Shape) -> String {
 }
 
 fn generate_response_parse_test(service: &Service, response: Response) -> Option<String> {
-    let maybe_operation = service.operations.get(&response.action);
+    let maybe_operation = case_insensitive_btreemap_get(&service.operations, &response.action);
 
     if maybe_operation.is_none() {
         return None;
