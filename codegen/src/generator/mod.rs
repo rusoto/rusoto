@@ -272,7 +272,7 @@ impl Operation {
 
 /// Takes a string and returns it with the first letter capitalized.
 /// If the input string is empty an empty string is returned.
-fn capitalize_first<S>(word: S) -> String where S: Into<String> {
+pub fn capitalize_first<S>(word: S) -> String where S: Into<String> {
     let s = word.into();
     let mut chars = s.chars();
     match chars.next() {

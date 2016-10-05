@@ -1,11 +1,14 @@
 use std::collections::BTreeMap;
 
+use serialization::{ShapesMap, ShapeName};
+
 #[derive(Debug, Deserialize)]
 pub struct Service {
     pub documentation: Option<String>,
     pub examples: Option<BTreeMap<String, String>>,
     pub metadata: Metadata,
     pub operations: BTreeMap<String, Operation>,
+    #[serde(deserialize_with="ShapesMap::deserialize_shapes_map")]
     pub shapes: BTreeMap<String, Shape>,
     pub version: String,
 }
@@ -113,6 +116,7 @@ pub struct HttpRequest {
 #[derive(Debug, Deserialize)]
 pub struct Input {
     pub documentation: Option<String>,
+    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
 }
 
@@ -121,6 +125,7 @@ pub struct Output {
     pub documentation: Option<String>,
     #[serde(rename="resultWrapper")]
     pub result_wrapper: Option<String>,
+    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
 }
 
@@ -156,6 +161,7 @@ pub struct Member {
     pub location: Option<String>,
     #[serde(rename="locationName")]
     pub location_name: Option<String>,
+    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
     pub streaming: Option<bool>,
     #[serde(rename="xmlAttribute")]
@@ -182,13 +188,8 @@ pub struct Key {
     #[serde(rename="locationName")]
     pub location_name: Option<String>,
     pub required: Option<bool>,
+    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
-}
-
-impl Key {
-    pub fn tag_name(&self) -> String {
-        self.location_name.clone().unwrap_or(self.shape.clone())
-    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -196,13 +197,8 @@ pub struct Value {
     pub documentation: Option<String>,
     #[serde(rename="locationName")]
     pub location_name: Option<String>,
+    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
-}
-
-impl Value {
-    pub fn tag_name(&self) -> String {
-        self.location_name.clone().unwrap_or(self.shape.clone())
-    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -307,6 +303,22 @@ impl<'a> Operation {
     pub fn output_shape_or(&'a self, default: &'a str) -> &'a str {
         match self.output.as_ref() {
             Some(output) => &output.shape,
+            None => default
+        }
+    }
+
+    pub fn wrapper(&'a self) -> Option<&'a str> {
+        self.output.as_ref().and_then(|o| o.result_wrapper.as_ref().map(|s| &s[..]))
+    }
+
+    pub fn output_shape_or_wrapper_or(&'a self, default: &'a str) -> &'a str {
+        match self.output.as_ref() {
+            Some(output) => {
+                match output.result_wrapper.as_ref() {
+                    Some(wrapper) => wrapper,
+                    None => default
+                }
+            },
             None => default
         }
     }
