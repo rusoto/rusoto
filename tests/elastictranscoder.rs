@@ -1,6 +1,7 @@
-#![cfg(all(feature = "ets", feature = "s3"))]
+#![cfg(all(feature = "elastictranscoder", feature = "s3"))]
 
 extern crate env_logger;
+extern crate hyper;
 #[macro_use] extern crate log;
 extern crate rand;
 extern crate rusoto;
@@ -8,9 +9,10 @@ extern crate rusoto;
 use std::clone::Clone;
 use std::ops::{Deref, DerefMut};
 
+use hyper::Client;
 use rand::Rng;
 use rusoto::{ChainProvider, ProvideAwsCredentials, Region};
-use rusoto::ets::EtsClient;
+use rusoto::elastictranscoder::EtsClient;
 use rusoto::s3::{BucketName, S3Helper};
 
 const AWS_ETS_WEB_PRESET_ID: &'static str = "1351620000001-100070";
@@ -19,12 +21,12 @@ const AWS_REGION: Region = Region::UsEast1;
 const AWS_SERVICE_RANDOM_SUFFIX_LENGTH: usize = 20;
 
 struct TestEtsClient<P>
-    where P: ProvideAwsCredentials
+    where P: ProvideAwsCredentials,
 {
     credentials_provider: P,
     region: Region,
 
-    client: EtsClient<P>,
+    client: EtsClient<P, Client>,
 
     s3_helper: Option<S3Helper<P>>,
     input_bucket: Option<BucketName>,
@@ -32,10 +34,10 @@ struct TestEtsClient<P>
 }
 
 impl<P> TestEtsClient<P>
-    where P: ProvideAwsCredentials + Clone
+    where P: ProvideAwsCredentials + Clone,
 {
     /// Creates a new `EtsClient` for a test.
-    fn new(credentials_provider: P, region: Region) -> Self {
+    fn new(credentials_provider: P, region: Region) -> TestEtsClient<P> {
         TestEtsClient {
             credentials_provider: credentials_provider.clone(),
             region: region,
@@ -71,24 +73,24 @@ impl<P> TestEtsClient<P>
 }
 
 impl<P> Deref for TestEtsClient<P>
-    where P: ProvideAwsCredentials
+    where P: ProvideAwsCredentials,
 {
-    type Target = EtsClient<P>;
+    type Target = EtsClient<P, Client>;
     fn deref(&self) -> &Self::Target {
         &self.client
     }
 }
 
 impl<P> DerefMut for TestEtsClient<P>
-    where P: ProvideAwsCredentials
+    where P: ProvideAwsCredentials,
 {
-    fn deref_mut<'a>(&'a mut self) -> &'a mut EtsClient<P> {
+    fn deref_mut<'a>(&'a mut self) -> &'a mut EtsClient<P, Client> {
         &mut self.client
     }
 }
 
 impl<P> Drop for TestEtsClient<P>
-    where P: ProvideAwsCredentials
+    where P: ProvideAwsCredentials,
 {
     fn drop(&mut self) {
         self.s3_helper.take().map(|s3_helper| {
@@ -115,7 +117,7 @@ fn initialize() {
     let _ = env_logger::init();
 }
 
-fn create_ets_client() -> TestEtsClient<ChainProvider> {
+fn create_client() -> TestEtsClient<ChainProvider> {
     TestEtsClient::new(
         ChainProvider::new(),
         AWS_REGION
@@ -138,28 +140,28 @@ fn generate_unique_name(prefix: &str) -> String {
 #[test]
 #[should_panic(expected = "arn cannot be null")]
 fn create_pipeline_without_arn() {
-    use rusoto::ets::CreatePipelineRequest;
+    use rusoto::elastictranscoder::CreatePipelineRequest;
 
     initialize();
 
-    let mut ets = create_ets_client();
-    ets.create_s3_helper();
-    ets.input_bucket = Some(ets.create_bucket());
-    ets.output_bucket = Some(ets.create_bucket());
+    let mut client = create_client();
+    client.create_s3_helper();
+    client.input_bucket = Some(client.create_bucket());
+    client.output_bucket = Some(client.create_bucket());
 
     let request = CreatePipelineRequest {
-        input_bucket: ets.input_bucket.as_ref().cloned().unwrap(),
-        output_bucket: ets.output_bucket.as_ref().cloned(),
+        input_bucket: client.input_bucket.as_ref().cloned().unwrap(),
+        output_bucket: client.output_bucket.as_ref().cloned(),
         ..CreatePipelineRequest::default()
     };
-    let response = ets.create_pipeline(&request);
+    let response = client.create_pipeline(&request);
 
     response.unwrap();
 }
 
 #[test]
 fn create_preset() {
-    use rusoto::ets::{
+    use rusoto::elastictranscoder::{
         AudioCodecOptions,
         AudioParameters,
         CreatePresetRequest,
@@ -168,7 +170,7 @@ fn create_preset() {
 
     initialize();
 
-    let ets = create_ets_client();
+    let client = create_client();
 
     let name = generate_unique_name("ets-preset-1");
     let request = CreatePresetRequest {
@@ -187,7 +189,7 @@ fn create_preset() {
         name: name.clone(),
         ..CreatePresetRequest::default()
     };
-    let response = ets.create_preset(&request);
+    let response = client.create_preset(&request);
 
     assert!(response.is_ok());
 
@@ -211,12 +213,12 @@ fn create_preset() {
     let request = DeletePresetRequest {
         id: id,
     };
-    ets.delete_preset(&request).ok();
+    client.delete_preset(&request).ok();
 }
 
 #[test]
 fn delete_preset() {
-    use rusoto::ets::{
+    use rusoto::elastictranscoder::{
         AudioCodecOptions,
         AudioParameters,
         CreatePresetRequest,
@@ -225,7 +227,7 @@ fn delete_preset() {
 
     initialize();
 
-    let ets = create_ets_client();
+    let client = create_client();
 
     let name = generate_unique_name("ets-preset-1");
     let request = CreatePresetRequest {
@@ -244,14 +246,14 @@ fn delete_preset() {
         name: name.clone(),
         ..CreatePresetRequest::default()
     };
-    let response = ets.create_preset(&request).unwrap();
+    let response = client.create_preset(&request).unwrap();
     let preset = response.preset.unwrap();
     let id = preset.id.unwrap();
 
     let request = DeletePresetRequest {
         id: id.clone(),
     };
-    let response = ets.delete_preset(&request);
+    let response = client.delete_preset(&request);
 
     assert!(response.is_ok());
     info!("Deleted preset with id: {:?}", &id);
@@ -259,18 +261,18 @@ fn delete_preset() {
 
 #[test]
 fn list_jobs_by_status() {
-    use rusoto::ets::ListJobsByStatusRequest;
+    use rusoto::elastictranscoder::ListJobsByStatusRequest;
 
     initialize();
 
-    let ets = create_ets_client();
+    let client = create_client();
 
     let status = "Submitted".to_owned();
     let request = ListJobsByStatusRequest {
         status: status.clone(),
         ..ListJobsByStatusRequest::default()
     };
-    let response = ets.list_jobs_by_status(&request);
+    let response = client.list_jobs_by_status(&request);
 
     assert!(response.is_ok());
 
@@ -281,14 +283,14 @@ fn list_jobs_by_status() {
 
 #[test]
 fn list_pipelines() {
-    use rusoto::ets::ListPipelinesRequest;
+    use rusoto::elastictranscoder::ListPipelinesRequest;
 
     initialize();
 
-    let ets = create_ets_client();
+    let client = create_client();
 
     let request = ListPipelinesRequest::default();
-    let response = ets.list_pipelines(&request);
+    let response = client.list_pipelines(&request);
 
     assert!(response.is_ok());
 
@@ -299,14 +301,14 @@ fn list_pipelines() {
 
 #[test]
 fn list_presets() {
-    use rusoto::ets::ListPresetsRequest;
+    use rusoto::elastictranscoder::ListPresetsRequest;
 
     initialize();
 
-    let ets = create_ets_client();
+    let client = create_client();
 
     let request = ListPresetsRequest::default();
-    let response = ets.list_presets(&request);
+    let response = client.list_presets(&request);
 
     assert!(response.is_ok());
 
@@ -334,16 +336,16 @@ fn list_presets() {
 
 #[test]
 fn read_preset() {
-    use rusoto::ets::ReadPresetRequest;
+    use rusoto::elastictranscoder::ReadPresetRequest;
 
     initialize();
 
-    let ets = create_ets_client();
+    let client = create_client();
 
     let request = ReadPresetRequest {
         id: AWS_ETS_WEB_PRESET_ID.to_owned(),
     };
-    let response = ets.read_preset(&request);
+    let response = client.read_preset(&request);
 
     assert!(response.is_ok());
 
