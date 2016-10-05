@@ -1,3 +1,11 @@
+// This file provides a custom deserializer for `String` and
+// `BTreeMap<String, V>`, which function identically to the built-in serde
+// deserializers, except for the fact that `String`s deserialized with these
+// deserializers get their first letter capitalized.
+//
+// This is necessary for proper deserialization of `Shape` names from their
+// botocore definitions in certain edge cases. Particularly, IAM shape names use
+// "camelCase" instead of "CamelCase".
 use std::collections::BTreeMap;
 use std::marker::PhantomData;
 
