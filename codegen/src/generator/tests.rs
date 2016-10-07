@@ -1,9 +1,13 @@
 use std::fs;
 use std::collections::HashMap;
+use std::path::Path;
 
 use super::capitalize_first;
 
-#[derive(Debug, Clone	)]
+const BOTOCORE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/tests/unit/response_parsing/xml/responses/");
+const OUR_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/unit/responses/");
+
+#[derive(Debug, Clone)]
 pub struct Response {
     pub service: String,
     pub action: String,
@@ -13,7 +17,7 @@ pub struct Response {
 }
 
 impl Response {
-    pub fn from_response_file_name(d: &str, f: &str) -> Option<Response> {
+    pub fn from_response_file_name(directory: &Path, f: &str) -> Option<Response> {
         let maybe_file_name_and_extension: Vec<&str> = f.split(".").collect();
 
         let mut service_name = None;
@@ -35,7 +39,7 @@ impl Response {
                         Some(Response { 
                             service: s, 
                             action: a, 
-                            dir_name: d.to_owned(),
+                            dir_name: directory.to_str().unwrap().to_owned(),
                             file_name: f.to_owned(),
                             extension: e.to_string(),
                         })
@@ -45,13 +49,13 @@ impl Response {
     }
 }
 
-pub fn find_responses_in_dir(dir_name: &str) -> Vec<Response> {
-    let dir = fs::read_dir(dir_name)
+pub fn find_responses_in_dir(dir_path: &Path) -> Vec<Response> {
+    let dir = fs::read_dir(dir_path)
         .expect("read_dir");
 
     dir
         .map(|d| d.expect("direntry").file_name().into_string().expect("osstr"))
-        .flat_map(|f| Response::from_response_file_name(dir_name, &f))
+        .flat_map(|f| Response::from_response_file_name(dir_path, &f))
         .filter(|r| r.extension == "xml")
         .collect()
 }
@@ -59,11 +63,11 @@ pub fn find_responses_in_dir(dir_name: &str) -> Vec<Response> {
 pub fn find_responses() -> HashMap<String, Response> {
     let mut responses = HashMap::new();
 
-    for r in find_responses_in_dir("./codegen/botocore/tests/unit/response_parsing/xml/responses").into_iter() {
+    for r in find_responses_in_dir(Path::new(BOTOCORE_TESTS_DIR)).into_iter() {
         responses.insert(r.file_name.clone(), r);
     }
 
-    for r in find_responses_in_dir("./codegen/tests/unit/responses").into_iter() {
+    for r in find_responses_in_dir(Path::new(OUR_TESTS_DIR)).into_iter() {
         responses.insert(r.file_name.clone(), r);
     }
 
