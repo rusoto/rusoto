@@ -158,7 +158,7 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
     Some(format!("
     #[test]
     fn test_parse_{service_name}_{action}() {{
-        let mock_response =  MockResponseReader::read_response(\"{response_dir_name}\", \"{response_file_name}\");
+        let mock_response =  MockResponseReader::read_response(r#\"{response_dir_name}\"#, \"{response_file_name}\");
         let mock = MockRequestDispatcher::with_status(200)
             .with_body(&mock_response);
         let client = {client_type}::with_request_dispatcher(mock, MockCredentialsProvider, rusoto_region::UsEast1);
