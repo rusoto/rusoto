@@ -245,11 +245,22 @@ fn generate_shape_member_uri_strings(shape: &Shape) -> Vec<String> {
 fn generate_member_format_string(member_name: &str, member: &Member) -> Option<String> {
     match member.location {
         Some(ref x) if x == "uri" => {
-            Some(format!(
-                "{member_name} = input.{field_name}",
-                field_name = member_name,
-                member_name = member_name,
-            ))
+            match member.location_name {
+                Some(ref loc_name) => {
+                    Some(format!(
+                        "{member_name} = input.{field_name}",
+                        field_name = member_name,
+                        member_name = loc_name.to_snake_case(),
+                    ))
+                }
+                None => {
+                    Some(format!(
+                        "{member_name} = input.{field_name}",
+                        field_name = member_name,
+                        member_name = member_name,
+                    ))
+                }
+            }
         },
         Some(_) => None,
         None => None,
