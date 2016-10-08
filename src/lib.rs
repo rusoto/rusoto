@@ -65,6 +65,7 @@ extern crate serde_derive;
 
 pub use region::{ParseRegionError, Region};
 pub use rusoto_credential::{
+    claims,
     AwsCredentials,
     ChainProvider,
     ContainerProvider,
@@ -77,6 +78,8 @@ pub use rusoto_credential::{
     DefaultCredentialsProviderSync,
 };
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError};
+#[cfg(feature = "sts")]
+pub use sts::{StsSessionCredentialsProvider};
 pub use signature::SignedRequest;
 pub use request::default_tls_client;
 
@@ -194,6 +197,8 @@ pub mod sqs;
 pub mod ssm;
 #[cfg(feature = "storagegateway")]
 pub mod storagegateway;
+#[cfg(feature = "sts")]
+pub mod sts;
 #[cfg(feature = "swf")]
 pub mod swf;
 #[cfg(feature = "waf")]

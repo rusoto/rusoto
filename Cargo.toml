@@ -35,8 +35,8 @@ md5 = "0.3.2"
 regex = "0.2.1"
 ring = "0.6"
 rustc-serialize = "0.3.19"
-serde = "0.8.0"
-serde_json = "0.8.0"
+serde = "0.8.19"
+serde_json = "0.8.3"
 time = "0.1.35"
 url = "1.2.0"
 xml-rs = "0.3"
@@ -51,7 +51,7 @@ version = "0.4.0"
 
 [dependencies.serde_codegen]
 optional = true
-version = "0.8.0"
+version = "0.8.19"
 
 [dependencies.serde_derive]
 optional = true
@@ -114,6 +114,7 @@ all = [
 	   	"sqs",
 	   	"ssm",
 	   	"storagegateway",
+                "sts",
 	   	"swf",
 	   	"waf",
 	   	"workspaces"
@@ -171,6 +172,7 @@ sns = []
 sqs = []
 ssm = []
 storagegateway = []
+sts = []
 swf = []
 unstable = ["rusoto_codegen/unstable", "rusoto_credential/unstable", "serde_derive"]
 waf = []
