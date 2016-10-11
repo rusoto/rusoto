@@ -10579,7 +10579,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         if !is_dns_compatible(&input.bucket) {
             path = format!("{}{}/", path, &input.bucket);
         }
-        path = format!("{}{}/", path, &input.key);
+        path = format!("{}{}", path, &input.key);
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &path);
         let mut params = Params::new();
 
