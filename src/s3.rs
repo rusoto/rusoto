@@ -1749,8 +1749,8 @@ struct CommonPrefixListParser;
 impl CommonPrefixListParser {
     fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<CommonPrefixList, XmlParseError> {
         let mut obj = Vec::new();
-        while try!(peek_at_name(stack)) == "CommonPrefix" {
-            obj.push(try!(CommonPrefixParser::parse_xml("CommonPrefix", stack)));
+        while try!(peek_at_name(stack)) == "CommonPrefixes" {
+            obj.push(try!(CommonPrefixParser::parse_xml("CommonPrefixes", stack)));
         }
         Ok(obj)
     }
@@ -3964,8 +3964,8 @@ impl ListObjectsOutputParser {
                 obj.contents = try!(ObjectListParser::parse_xml("Contents", stack));
                 continue;
             }
-            if current_name == "CommonPrefix" {
-                obj.common_prefixes = try!(CommonPrefixListParser::parse_xml("CommonPrefix", stack));
+            if current_name == "CommonPrefixes" {
+                obj.common_prefixes = try!(CommonPrefixListParser::parse_xml("CommonPrefixes", stack));
                 continue;
             }
             break;
@@ -6699,14 +6699,10 @@ impl PrefixParser {
     fn parse_xml<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Prefix, XmlParseError> {
         try!(start_element(tag_name, stack));
         // this could be an empty, self-closing tag:
-        match end_element(tag_name, stack) {
-            Ok(()) => Ok("".to_string()),
-            Err(_) => {
-                let obj = try!(characters(stack));
-                try!(end_element(tag_name, stack));
-                Ok(obj)
-            }
-        }
+        // If it is, characters() returns an empty string already, so why bother ?
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+        Ok(obj)
     }
 }
 /// Write `Prefix` contents to a `SignedRequest`
@@ -10583,7 +10579,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         if !is_dns_compatible(&input.bucket) {
             path = format!("{}{}/", path, &input.bucket);
         }
-        path = format!("{}{}/", path, &input.key);
+        path = format!("{}{}", path, &input.key);
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &path);
         let mut params = Params::new();
 
