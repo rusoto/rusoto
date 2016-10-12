@@ -10795,7 +10795,7 @@ impl<P> S3Helper<P> where P: ProvideAwsCredentials {
 
         // content_md5 hashing for everyone!
         let hash = md5::compute(request.body.unwrap()).to_base64(STANDARD);
-
+        request.content_md5 = Some(hash);
         self.client.put_object(request)
     }
 
