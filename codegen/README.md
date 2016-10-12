@@ -4,7 +4,7 @@ Code generation crate for [Rusoto](https://github.com/rusoto/rusoto).
 
 ## Parts
 
-* [botocore](botocore) - AWS' low level SDK [https://github.com/boto/botocore](https://github.com/boto/botocore)
+* botocore - AWS' low level SDK [https://github.com/boto/botocore](https://github.com/boto/botocore)
 * [build.rs](build.rs) - Codegen build script
 * [src](src) - Bulk of the project: containers code generators to read in botocore service definitions and emit Rust
 
@@ -21,3 +21,7 @@ git submodule update
 ```
 
 Or: `git clone --recursive git@github.com:rusoto/rusoto.git`
+
+### Using codegen
+
+Codegen is called by the parent [Rusoto](https://github.com/rusoto/rusoto) crate.  Refer to Rusoto documentation on building the project.
