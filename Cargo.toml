@@ -9,7 +9,7 @@ license = "MIT"
 name = "rusoto"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.18.0"
+version = "0.18.1"
 
 [build-dependencies]
 rustc_version = "0.1.7"
@@ -17,7 +17,7 @@ rustc_version = "0.1.7"
 [build-dependencies.rusoto_codegen]
 default-features = false
 path = "codegen"
-version = ">= 0.2.7"
+version = ">= 0.2.8"
 
 [dependencies]
 chrono = "0.2.21"
