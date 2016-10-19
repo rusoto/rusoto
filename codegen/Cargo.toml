@@ -24,7 +24,7 @@ version = "0.0"
 
 [dependencies.serde_codegen]
 optional = true
-version = "0.8.0"
+version = "0.8.14"
 
 [dependencies.serde_macros]
 optional = true
