@@ -115,45 +115,45 @@ Information on release schedules and procedures are in [RELEASING](RELEASING.md)
 
 ## Supported AWS services
 
-Service | Cargo feature
---------|--------------
-All supported services | all
-[Certificate Manager](https://aws.amazon.com/certificate-manager/) | acm
-[CloudHSM](https://aws.amazon.com/cloudhsm/) | cloudhsm
-[CloudTrail](https://aws.amazon.com/cloudtrail/) | cloudtrail
-[CloudWatch Events](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatchEvents.html) | events
-[CloudWatch Logs](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CWL_GettingStarted.html) | logs
-[CodeCommit](https://aws.amazon.com/codecommit/) | codecommit
-[CodeDeploy](https://aws.amazon.com/codedeploy/) | codedeploy
-[CodePipeline](https://aws.amazon.com/codepipeline/) | codepipeline
-[Cognito Identity](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-identity.html) | cognito-identity
-[Config](https://aws.amazon.com/config/) | config
-[Data Pipeline](https://aws.amazon.com/datapipeline/) | datapipeline
-[Device Farm](https://aws.amazon.com/device-farm/) | devicefarm
-[Direct Connect](https://aws.amazon.com/directconnect/) | directconnect
-[Directory Service](https://aws.amazon.com/directoryservice/) | ds
-[DynamoDB](https://aws.amazon.com/dynamodb/) | dynamodb
-[DynamoDB Streams](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html) | dynamodbstreams
-[EC2](https://aws.amazon.com/ec2/) | ec2
-[EC2 Container Registry](https://aws.amazon.com/ecr/) | ecr
-[ECS](https://aws.amazon.com/ecs/) | ecs
-[Elastic MapReduce](https://aws.amazon.com/elasticmapreduce/) | emr
-[Elastic Transcoder](https://aws.amazon.com/elastictranscoder/) | ets
-[IAM](https://aws.amazon.com/iam/) | iam
-[Inspector](https://aws.amazon.com/inspector/) | inspector
-[Key Management Service](https://aws.amazon.com/kms/) | kms
-[Kinesis](https://aws.amazon.com/kinesis/) | kinesis
-[Kinesis Firehose](https://aws.amazon.com/kinesis/firehose/) | firehose
-[Machine Learning](https://aws.amazon.com/machine-learning/) | machinelearning
-[OpsWorks](https://aws.amazon.com/opsworks/) | opsworks
-[Route53 Domains](http://docs.aws.amazon.com/Route53/latest/APIReference/actions-on-domain-registrations.html) | route53domains
-[S3](https://aws.amazon.com/s3/) | s3
-[Simple Systems Manager](http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html) | ssm
-[Simple Workflow Service](https://aws.amazon.com/swf/) | swf
-[SQS](https://aws.amazon.com/sqs/) | sqs
-[Storage Gateway](https://aws.amazon.com/storagegateway/) | storagegateway
-[Web Application Firewall](https://aws.amazon.com/waf/) | waf
-[WorkSpaces](https://aws.amazon.com/workspaces/) | workspaces
+Service | Cargo feature | Stability
+--------|---------------|----------
+All supported services | all | Under development
+[Certificate Manager](https://aws.amazon.com/certificate-manager/) | acm | Under development
+[CloudHSM](https://aws.amazon.com/cloudhsm/) | cloudhsm | Under development
+[CloudTrail](https://aws.amazon.com/cloudtrail/) | cloudtrail | Under development
+[CloudWatch Events](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatchEvents.html) | events | Under development
+[CloudWatch Logs](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CWL_GettingStarted.html) | logs | Under development
+[CodeCommit](https://aws.amazon.com/codecommit/) | codecommit | Under development
+[CodeDeploy](https://aws.amazon.com/codedeploy/) | codedeploy | Under development
+[CodePipeline](https://aws.amazon.com/codepipeline/) | codepipeline | Under development
+[Cognito Identity](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-identity.html) | cognito-identity | Under development
+[Config](https://aws.amazon.com/config/) | config | Under development
+[Data Pipeline](https://aws.amazon.com/datapipeline/) | datapipeline | Under development
+[Device Farm](https://aws.amazon.com/device-farm/) | devicefarm | Under development
+[Direct Connect](https://aws.amazon.com/directconnect/) | directconnect | Under development
+[Directory Service](https://aws.amazon.com/directoryservice/) | ds | Under development
+[DynamoDB](https://aws.amazon.com/dynamodb/) | dynamodb | Stable
+[DynamoDB Streams](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html) | dynamodbstreams | Under development
+[EC2](https://aws.amazon.com/ec2/) | ec2 | Stable
+[EC2 Container Registry](https://aws.amazon.com/ecr/) | ecr | Under development
+[ECS](https://aws.amazon.com/ecs/) | ecs | Stable
+[Elastic MapReduce](https://aws.amazon.com/elasticmapreduce/) | emr | Under development
+[Elastic Transcoder](https://aws.amazon.com/elastictranscoder/) | ets | Stable
+[IAM](https://aws.amazon.com/iam/) | iam | Under development
+[Inspector](https://aws.amazon.com/inspector/) | inspector | Under development
+[Key Management Service](https://aws.amazon.com/kms/) | kms | Stable
+[Kinesis](https://aws.amazon.com/kinesis/) | kinesis | Under development
+[Kinesis Firehose](https://aws.amazon.com/kinesis/firehose/) | firehose | Under development
+[Machine Learning](https://aws.amazon.com/machine-learning/) | machinelearning | Under development
+[OpsWorks](https://aws.amazon.com/opsworks/) | opsworks | Under development
+[Route53 Domains](http://docs.aws.amazon.com/Route53/latest/APIReference/actions-on-domain-registrations.html) | route53domains | Under development
+[S3](https://aws.amazon.com/s3/) | s3 | Stable
+[Simple Systems Manager](http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html) | ssm | Under development
+[Simple Workflow Service](https://aws.amazon.com/swf/) | swf | Under development
+[SQS](https://aws.amazon.com/sqs/) | sqs | Stable
+[Storage Gateway](https://aws.amazon.com/storagegateway/) | storagegateway | Under development
+[Web Application Firewall](https://aws.amazon.com/waf/) | waf | Under development
+[WorkSpaces](https://aws.amazon.com/workspaces/) | workspaces | Under development
 
 ## Contributing
 
