@@ -12,8 +12,8 @@ optional = true
 version = "0.8.0"
 
 [dependencies]
-Inflector = "0.4.0"
-lazy_static = "0.1.16"
+Inflector = "0.6.0"
+lazy_static = "0.2.1"
 regex = "0.1.65"
 serde = "0.8.0"
 serde_json = "0.8.0"
@@ -32,7 +32,7 @@ version = "0.8.0"
 
 [dependencies.syntex]
 optional = true
-version = "0.39.0"
+version = "0.45.1"
 
 [features]
 default = ["with-syntex"]
