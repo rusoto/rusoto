@@ -1,8 +1,22 @@
 # Rusoto
 
-[![Build Status](https://travis-ci.org/rusoto/rusoto.svg?branch=master)](https://travis-ci.org/rusoto/rusoto)
-
-[![Build status](https://ci.appveyor.com/api/projects/status/o83ruaeu7xft0ru5/branch/master?svg=true)](https://ci.appveyor.com/project/matthewkmayer/rusoto/branch/master)
+<table>
+    <tr>
+        <td><strong>Linux / OS X</strong></td>
+        <td><a href="https://travis-ci.org/rusoto/rusoto" title="Travis Build Status"><img src="https://travis-ci.org/rusoto/rusoto.svg?branch=master" alt="travis-badge"></img></a></td>
+    </tr>
+    <tr>
+        <td><strong>Windows</strong></td>
+        <td><a href="https://ci.appveyor.com/project/matthewkmayer/rusoto/branch/master" title="Appveyor Build Status"><img src="https://ci.appveyor.com/api/projects/status/o83ruaeu7xft0ru5/branch/master?svg=true" alt="appveyor-badge"></img></a></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <a href="https://rusoto.github.io/rusoto/rusoto/" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
+            <a href="https://crates.io/crates/rusoto" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto.svg" alt="crates-io"></img></a>
+            <a href="#license" title="License: MIT"><img src="https://img.shields.io/crates/l/rusoto.svg" alt="license-badge"></img></a>
+        </td>
+    </tr>
+</table>
 
 AWS SDK for Rust. [Documentation](https://rusoto.github.io/rusoto/rusoto/index.html).
 
@@ -158,3 +172,11 @@ All supported services | all
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md).
+
+## License
+
+Rusoto is distributed under the terms of the MIT license.
+
+See [LICENSE][license] for details.
+
+[license]: https://github.com/rusoto/rusoto/blob/master/LICENSE "MIT License"
