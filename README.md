@@ -98,32 +98,6 @@ It may be convenient to use higher level types, which can be found in the [rusot
 
 For more information on Rusoto's use of AWS credentials such as priority and refreshing, see [AWS Credentials](AWS-CREDENTIALS.md).
 
-### Debugging
-
-Rusoto uses the [log](https://crates.io/crates/log/) logging facade.
-For tests it uses [env_logger](https://crates.io/crates/env_logger/).  In order to see the output,
-`env_logger` needs to be initialized.  For example:
-
-```rust
-#[test]
-fn list_objects_test() {
-    let _ = env_logger::init();
-    let bare_s3 = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
-    let mut list_request = ListObjectsRequest::default();
-    list_request.bucket = "rusototester".to_string();
-    let result = bare_s3.list_objects(&list_request).unwrap();
-    println!("result is {:?}", result);
-}
-```
-
-To see output of logging from integration tests, run:
-
-`RUST_LOG=info cargo test --features all`
-
-To get logging output as well as `println!()` statements, run:
-
-`RUST_LOG=debug cargo test --features all -- --nocapture`
-
 ## Semantic versioning
 
 Rusoto complies with [semantic versioning 2.0.0](http://semver.org/).
