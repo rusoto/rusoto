@@ -20,8 +20,6 @@
 
 **Rusoto is an AWS SDK for Rust**
 
-IRC: #rusoto on irc.freenode.net.
-
 ---
 
 You may be looking for:
@@ -29,6 +27,7 @@ You may be looking for:
 * [An overview of Rusoto][rusoto-overview]
 * [AWS services supported by Rusoto][supported-aws-services]
 * [API documentation][api-documentation]
+* [Getting help with Rusoto][rusoto-help]
 
 ## Requirements
 
@@ -147,5 +146,6 @@ See [LICENSE][license] for details.
 
 [api-documentation]: https://rusoto.github.io/rusoto/rusoto/ "API documentation"
 [license]: https://github.com/rusoto/rusoto/blob/master/LICENSE "MIT License"
+[rusoto-help]: https://rusoto.github.io/help.html "Getting help with Rusoto"
 [rusoto-overview]: https://rusoto.github.io/ "Rusoto overview"
 [supported-aws-services]: https://rusoto.github.io/supported-aws-services.html "List of AWS services supported by Rusoto"
