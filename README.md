@@ -1,12 +1,33 @@
 # Rusoto
 
-[![Build Status](https://travis-ci.org/rusoto/rusoto.svg?branch=master)](https://travis-ci.org/rusoto/rusoto)
+<table>
+    <tr>
+        <td><strong>Linux / OS X</strong></td>
+        <td><a href="https://travis-ci.org/rusoto/rusoto" title="Travis Build Status"><img src="https://travis-ci.org/rusoto/rusoto.svg?branch=master" alt="travis-badge"></img></a></td>
+    </tr>
+    <tr>
+        <td><strong>Windows</strong></td>
+        <td><a href="https://ci.appveyor.com/project/matthewkmayer/rusoto/branch/master" title="Appveyor Build Status"><img src="https://ci.appveyor.com/api/projects/status/o83ruaeu7xft0ru5/branch/master?svg=true" alt="appveyor-badge"></img></a></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <a href="https://rusoto.github.io/rusoto/rusoto/" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
+            <a href="https://crates.io/crates/rusoto" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto.svg" alt="crates-io"></img></a>
+            <a href="#license" title="License: MIT"><img src="https://img.shields.io/crates/l/rusoto.svg" alt="license-badge"></img></a>
+        </td>
+    </tr>
+</table>
 
-[![Build status](https://ci.appveyor.com/api/projects/status/o83ruaeu7xft0ru5/branch/master?svg=true)](https://ci.appveyor.com/project/matthewkmayer/rusoto/branch/master)
+**Rusoto is an AWS SDK for Rust**
 
-AWS SDK for Rust. [Documentation](https://rusoto.github.io/rusoto/rusoto/index.html).
+---
 
-IRC: #rusoto on irc.freenode.net.
+You may be looking for:
+
+* [An overview of Rusoto][rusoto-overview]
+* [AWS services supported by Rusoto][supported-aws-services]
+* [API documentation][api-documentation]
+* [Getting help with Rusoto][rusoto-help]
 
 ## Requirements
 
@@ -31,7 +52,7 @@ You can use the Cargo feature "all" to build Rusoto with support for every avail
 ## Usage
 
 Rusoto includes a public module for each AWS service it is compiled for containing Rust types for that service's API.
-A full list of these services and their Cargo feature names are included at the end of this document.
+A full list of these services and their Cargo feature names can be found [here][supported-aws-services].
 All other public types are reexported to the crate root.
 Consult the rustdoc documentation for full details by running `cargo doc` or visiting the online [documentation](https://rusoto.github.io/rusoto/rusoto/index.html) for the latest crates.io release.
 
@@ -77,32 +98,6 @@ It may be convenient to use higher level types, which can be found in the [rusot
 
 For more information on Rusoto's use of AWS credentials such as priority and refreshing, see [AWS Credentials](AWS-CREDENTIALS.md).
 
-### Debugging
-
-Rusoto uses the [log](https://crates.io/crates/log/) logging facade.
-For tests it uses [env_logger](https://crates.io/crates/env_logger/).  In order to see the output,
-`env_logger` needs to be initialized.  For example:
-
-```rust
-#[test]
-fn list_objects_test() {
-    let _ = env_logger::init();
-    let bare_s3 = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
-    let mut list_request = ListObjectsRequest::default();
-    list_request.bucket = "rusototester".to_string();
-    let result = bare_s3.list_objects(&list_request).unwrap();
-    println!("result is {:?}", result);
-}
-```
-
-To see output of logging from integration tests, run:
-
-`RUST_LOG=info cargo test --features all`
-
-To get logging output as well as `println!()` statements, run:
-
-`RUST_LOG=debug cargo test --features all -- --nocapture`
-
 ## Semantic versioning
 
 Rusoto complies with [semantic versioning 2.0.0](http://semver.org/).
@@ -113,48 +108,18 @@ See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/r
 
 Information on release schedules and procedures are in [RELEASING](RELEASING.md).
 
-## Supported AWS services
-
-Service | Cargo feature
---------|--------------
-All supported services | all
-[Certificate Manager](https://aws.amazon.com/certificate-manager/) | acm
-[CloudHSM](https://aws.amazon.com/cloudhsm/) | cloudhsm
-[CloudTrail](https://aws.amazon.com/cloudtrail/) | cloudtrail
-[CloudWatch Events](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatchEvents.html) | events
-[CloudWatch Logs](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CWL_GettingStarted.html) | logs
-[CodeCommit](https://aws.amazon.com/codecommit/) | codecommit
-[CodeDeploy](https://aws.amazon.com/codedeploy/) | codedeploy
-[CodePipeline](https://aws.amazon.com/codepipeline/) | codepipeline
-[Cognito Identity](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-identity.html) | cognito-identity
-[Config](https://aws.amazon.com/config/) | config
-[Data Pipeline](https://aws.amazon.com/datapipeline/) | datapipeline
-[Device Farm](https://aws.amazon.com/device-farm/) | devicefarm
-[Direct Connect](https://aws.amazon.com/directconnect/) | directconnect
-[Directory Service](https://aws.amazon.com/directoryservice/) | ds
-[DynamoDB](https://aws.amazon.com/dynamodb/) | dynamodb
-[DynamoDB Streams](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html) | dynamodbstreams
-[EC2](https://aws.amazon.com/ec2/) | ec2
-[EC2 Container Registry](https://aws.amazon.com/ecr/) | ecr
-[ECS](https://aws.amazon.com/ecs/) | ecs
-[Elastic MapReduce](https://aws.amazon.com/elasticmapreduce/) | emr
-[Elastic Transcoder](https://aws.amazon.com/elastictranscoder/) | ets
-[IAM](https://aws.amazon.com/iam/) | iam
-[Inspector](https://aws.amazon.com/inspector/) | inspector
-[Key Management Service](https://aws.amazon.com/kms/) | kms
-[Kinesis](https://aws.amazon.com/kinesis/) | kinesis
-[Kinesis Firehose](https://aws.amazon.com/kinesis/firehose/) | firehose
-[Machine Learning](https://aws.amazon.com/machine-learning/) | machinelearning
-[OpsWorks](https://aws.amazon.com/opsworks/) | opsworks
-[Route53 Domains](http://docs.aws.amazon.com/Route53/latest/APIReference/actions-on-domain-registrations.html) | route53domains
-[S3](https://aws.amazon.com/s3/) | s3
-[Simple Systems Manager](http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html) | ssm
-[Simple Workflow Service](https://aws.amazon.com/swf/) | swf
-[SQS](https://aws.amazon.com/sqs/) | sqs
-[Storage Gateway](https://aws.amazon.com/storagegateway/) | storagegateway
-[Web Application Firewall](https://aws.amazon.com/waf/) | waf
-[WorkSpaces](https://aws.amazon.com/workspaces/) | workspaces
-
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md).
+
+## License
+
+Rusoto is distributed under the terms of the MIT license.
+
+See [LICENSE][license] for details.
+
+[api-documentation]: https://rusoto.github.io/rusoto/rusoto/ "API documentation"
+[license]: https://github.com/rusoto/rusoto/blob/master/LICENSE "MIT License"
+[rusoto-help]: https://rusoto.github.io/help.html "Getting help with Rusoto"
+[rusoto-overview]: https://rusoto.github.io/ "Rusoto overview"
+[supported-aws-services]: https://rusoto.github.io/supported-aws-services.html "List of AWS services supported by Rusoto"
