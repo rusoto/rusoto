@@ -1,4 +1,4 @@
-#![cfg_attr(feature = "unstable", feature(const_fn, core_intrinsics, drop_types_in_const))]
+#![cfg_attr(feature = "unstable", feature(const_fn, drop_types_in_const))]
 #![cfg_attr(feature = "serde_macros", feature(custom_derive, plugin))]
 #![cfg_attr(feature = "serde_macros", plugin(serde_macros))]
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]

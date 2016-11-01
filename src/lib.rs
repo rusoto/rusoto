@@ -3,7 +3,7 @@
 #![cfg_attr(feature = "unstable", feature(custom_derive, plugin))]
 #![cfg_attr(feature = "unstable", plugin(serde_macros))]
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]
-#![cfg_attr(feature = "nightly-testing", allow(used_underscore_binding, ptr_arg))]
+#![cfg_attr(feature = "nightly-testing", allow(cyclomatic_complexity, used_underscore_binding, ptr_arg, suspicious_else_formatting))]
 #![allow(dead_code)]
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
 

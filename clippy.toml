@@ -1,1 +1,13 @@
-doc-valid-idents = ["DynamoDB"]
+doc-valid-idents = [
+    "CloudHSM",
+    "CloudTrail",
+    "CloudWatch",
+    "CodeCommit",
+    "CodeDeploy",
+    "CodePipeline",
+    "DynamoDB",
+    "IoT",
+    "MapReduce",
+    "OpsWorks",
+    "WorkSpaces"
+]

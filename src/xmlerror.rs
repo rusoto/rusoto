@@ -11,7 +11,7 @@ pub struct XmlError {
 
 pub struct XmlErrorDeserializer;
 impl XmlErrorDeserializer {
-	pub fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<XmlError, XmlParseError> {
+	pub fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<XmlError, XmlParseError> {
 		try!(start_element(tag_name, stack));
 
 		let mut obj = XmlError::default();
