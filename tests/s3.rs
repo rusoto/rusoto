@@ -38,6 +38,21 @@ fn put_object_test() {
 }
 
 #[test]
+fn put_and_fetch_timestamp_named_object_test() {
+    let s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
+    let mut f = File::open("tests/sample-data/no_credentials").unwrap();
+    let mut contents : Vec<u8> = Vec::new();
+    match f.read_to_end(&mut contents) {
+        Err(why) => panic!("Error opening file to send to S3: {}", why),
+        Ok(_) => {
+            s3.put_object("rusototester", "2016-10-07T23:30:38Z", &contents).unwrap();
+        }
+    }
+    let get_response = s3.get_object("rusototester", "2016-10-07T23:30:38Z").unwrap();
+    println!("Got object back: {:?}", get_response);
+}
+
+#[test]
 fn list_objects_test() {
     let _ = env_logger::init();
     let bare_s3 = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsWest2);
