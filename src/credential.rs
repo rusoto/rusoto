@@ -243,6 +243,7 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
     let mut profiles: HashMap<String, AwsCredentials> = HashMap::new();
     let mut access_key: Option<String> = None;
     let mut secret_key: Option<String> = None;
+    let mut token: Option<String> = None;
     let mut profile_name: Option<String> = None;
 
     let file_lines = BufReader::new(&file);
@@ -259,12 +260,13 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
         if profile_regex.is_match(&unwrapped_line) {
 
             if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
-                let creds = AwsCredentials::new(access_key.unwrap(), secret_key.unwrap(), None, in_ten_minutes());
+                let creds = AwsCredentials::new(access_key.unwrap(), secret_key.unwrap(), token, in_ten_minutes());
                 profiles.insert(profile_name.unwrap(), creds);
             }
 
             access_key = None;
             secret_key = None;
+            token = None;
 
             let caps = profile_regex.captures(&unwrapped_line).unwrap();
             profile_name = Some(caps.at(1).unwrap().to_string());
@@ -288,6 +290,13 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
             if !v.is_empty() {
                 secret_key = Some(v[1].trim_matches(' ').to_string());
             }
+        } else if lower_case_line.contains("aws_session_token") &&
+            token.is_none()
+        {
+            let v: Vec<&str> = unwrapped_line.split('=').collect();
+            if !v.is_empty() {
+                token = Some(v[1].trim_matches(' ').to_string());
+            }
         }
 
         // we could potentially explode here to indicate that the file is invalid
@@ -295,7 +304,7 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
     }
 
     if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
-        let creds = AwsCredentials::new(access_key.unwrap(), secret_key.unwrap(), None, in_ten_minutes());
+        let creds = AwsCredentials::new(access_key.unwrap(), secret_key.unwrap(), token, in_ten_minutes());
         profiles.insert(profile_name.unwrap(), creds);
     }
 
@@ -311,7 +320,7 @@ pub struct IamProvider;
 
 impl ProvideAwsCredentials for IamProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-	
+
 		// TODO: backoff and retry on failure.
         let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
         let mut client = Client::new();
@@ -392,9 +401,9 @@ pub type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<Aws
 impl <P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
     pub fn with_mutex(provider: P) -> Result<AutoRefreshingProviderSync<P>, CredentialsError> {
 		let creds = try!(provider.credentials());
-		Ok(BaseAutoRefreshingProvider { 
-			credentials_provider: provider, 
-			cached_credentials: Mutex::new(creds) 
+		Ok(BaseAutoRefreshingProvider {
+			credentials_provider: provider,
+			cached_credentials: Mutex::new(creds)
 		})
 	}
 }
@@ -402,7 +411,7 @@ impl <P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
 impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>> {
 	fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 		let mut creds = self.cached_credentials.lock().unwrap();
-		if creds.credentials_are_expired() {			
+		if creds.credentials_are_expired() {
 			*creds = try!(self.credentials_provider.credentials());
 		}
 		Ok(creds.clone())
@@ -415,9 +424,9 @@ pub type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCr
 impl <P: ProvideAwsCredentials> AutoRefreshingProvider<P> {
 	pub fn with_refcell(provider: P) -> Result<AutoRefreshingProvider<P>, CredentialsError> {
 		let creds = try!(provider.credentials());
-		Ok(BaseAutoRefreshingProvider { 
-			credentials_provider: provider, 
-			cached_credentials: RefCell::new(creds) 
+		Ok(BaseAutoRefreshingProvider {
+			credentials_provider: provider,
+			cached_credentials: RefCell::new(creds)
 		})
 	}
 }
@@ -426,10 +435,10 @@ impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProv
 	fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 
 		let mut creds = self.cached_credentials.borrow_mut();
-		
+
 		if creds.credentials_are_expired() {
 			*creds = try!(self.credentials_provider.credentials());
-		}	
+		}
 
 		Ok(creds.clone())
 	}
@@ -630,4 +639,3 @@ mod tests {
         assert_eq!(result.err(), Some(CredentialsError::new("Couldn't open file.")));
     }
 }
-
