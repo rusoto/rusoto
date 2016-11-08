@@ -35,41 +35,62 @@ before_script:
       else
         export PATH=$HOME/Library/Python/2.7/bin:$PATH
       fi
+  - |
+      if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+        brew install openssl && \
+        export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include && \
+        export OPENSSL_LIB_DIR=`brew --prefix openssl`/lib && \
+        echo "Installed openssl for osx."
+      fi
+      
 # the main build
 script:
   - |
-      # codegen
+      echo "Compiling Rusoto codegen" &&
       if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
         export CARGO_ARGS="--no-default-features"
       fi &&
       (cd codegen && \
         travis-cargo build -- $CARGO_ARGS && \
         travis-cargo test -- --lib $CARGO_ARGS && \
-        travis-cargo bench -- $CARGO_ARGS) &&
-      # rusoto
+        travis-cargo bench -- $CARGO_ARGS)
+  - |
+      echo "Compiling Rusoto" &&
       if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
         export CARGO_ARGS="--no-default-features --features $RUSOTO_FEATURES"
       else
         export CARGO_ARGS="--features $RUSOTO_FEATURES"
-      fi &&
-      travis_wait 30 travis-cargo build -- $CARGO_ARGS &&
-      travis_wait travis-cargo test -- --lib $CARGO_ARGS &&
-      travis_wait travis-cargo bench -- $CARGO_ARGS &&
-      travis_wait travis-cargo --only stable doc -- --no-deps $CARGO_ARGS
+      fi
+  - echo "Compiling all of Rusoto" && travis_wait 30 travis-cargo build -- $CARGO_ARGS
+  - echo "Running Rusoto tests" && travis_wait travis-cargo test -- --lib $CARGO_ARGS
+  - echo "Running Rusoto benchmarks" && travis_wait travis-cargo bench -- $CARGO_ARGS
+  - |
+      echo "Running cargo docs on stable Rust on Linux" &&
+      if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        travis_wait travis-cargo --only stable doc -- --no-deps $CARGO_ARGS
+      fi
 after_success:
   # upload the documentation from the build with stable (automatically only
-  # actually runs from the master branch, not individual PRs)
-  - travis-cargo --only stable doc-upload
+  # actually runs from the master branch, not individual PRs), not on OSX.
+  - |
+      if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        travis-cargo --only stable doc-upload
+      fi 
   # measure code coverage and upload to coveralls.io (the verify argument
   # mitigates kcov crashes due to malformed debuginfo, at the cost of some
   # speed. <https://github.com/huonw/travis-cargo/issues/12>)
-  - travis-cargo coveralls --no-sudo --verify -- --lib
+  # Don't run on OSX.
+  - |
+      if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        travis-cargo coveralls --no-sudo --verify -- --lib
+      fi
 env:
   global:
     - RUSOTO_FEATURES="all"
     - RUST_BACKTRACE=1
     # encrypted Github token for doc upload
     - secure: rWVjaDybqYUL6pwb9JbKRAQJYJTTWkbIMsh92l1Y9vz+QJiF903HEaxea98Z7e1Qywizm60EoAu8CSj5e+TfOC9hb6ZwN9nQs4FPnywiAUXtiuxUXDpcjacXVXl8YcLG+mOnq/+thOo+J1l2+j7SLsBrP4ybHh4NS7rqj8Os/5fiIfHfwlSVPlbw1gtTmLv5SXyofWB9VHMgkDzzP9Bss5HwwXQyzyj1EF8AQNexSsWj/MPYhj3eQaBpIK49guCqe1JjWdKXoiu4XQFsWMV6LBf7OgrWHR9MNf1H6UHM97i8onTeDAviC3RaWQe8crb2cQwNXk/n/8kde0F/1oBaljbOHTbLScflQNRGxV2jpbiIMVLgxdXUWK8d2JveVrXM5TKx6Wp8IolJ8Cr8egzLn9dRn1OG5pwt7b/Cr6DRaXFH5TRSz0Uln0GMA08NWC2sbDz1xtlkiUkRpHmBPmAGNjjDPaJs+OLPyPFMw5Gqr8g/zzCbGI92t210oMsVoCci5S8MO74HExYhsyAz4/CI0fqSSXDKG1xveguktmKWSxH5idyAmfDg556nSmuP+5w69QM9Vcg8j0szuSzsVoc/YsHMsdbZPdANLagbU9K59M1OpMkL3RSAav/cyL41+pSI3zybHKGim+kHZSwBWlLVKCX7P2FmineEFriLK8UJFxo=
+
 branches:
   only:
     - master
