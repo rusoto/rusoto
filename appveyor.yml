@@ -7,10 +7,10 @@ environment:
     # This will be used as part of the zipfile name
     PROJECT_NAME: rusoto
   matrix:
-    # Stable channel
     - TARGET: x86_64-pc-windows-msvc
       CHANNEL: 1.13.0
-
+cache:
+  - 'C:\Users\appveyor\.cargo'
 # Install Rust and Cargo
 # (Based on from https://github.com/rust-lang/libc/blob/master/appveyor.yml)
 install:
