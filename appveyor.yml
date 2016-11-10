@@ -9,7 +9,7 @@ environment:
   matrix:
     # Stable channel
     - TARGET: x86_64-pc-windows-msvc
-      CHANNEL: 1.11.0
+      CHANNEL: 1.13.0
 
 # Install Rust and Cargo
 # (Based on from https://github.com/rust-lang/libc/blob/master/appveyor.yml)
