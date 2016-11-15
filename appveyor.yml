@@ -21,13 +21,8 @@ install:
   - cargo -V
   - git submodule update --init --recursive
 
-# 'cargo test' takes care of building for us, so disable Appveyor's build stage. This prevents
-# the "directory does not contain a project or solution file" error.
-# source: https://github.com/starkat99/appveyor-rust/blob/master/appveyor.yml#L113
-build: false
-
 # Equivalent to Travis' `script` phase
-test_script:
+build_script:
   # https://github.com/sfackler/rust-openssl/issues/293
   - set DEP_OPENSSL_INCLUDE=C:\OpenSSL-Win64\include
   - set OPENSSL_INCLUDE_DIR=C:\OpenSSL-Win64\include
@@ -35,6 +30,7 @@ test_script:
   - set OPENSSL_LIB_DIR=C:\OpenSSL-Win64\lib\VC
   - path C:\OpenSSL-Win64\bin;%PATH%
   - cargo build --verbose --features all
+test_script:
   - cargo test --lib --features all
 
 branches:
