@@ -166,18 +166,14 @@ pub struct ProfileProvider {
 impl ProfileProvider {
     /// Create a new `ProfileProvider` for the default credentials file path and profile name.
     pub fn new() -> Result<ProfileProvider, CredentialsError> {
-        // Default credentials file location:
-        // ~/.aws/credentials (Linux/Mac)
-        // %USERPROFILE%\.aws\credentials  (Windows)
-        let profile_location = match env::home_dir() {
-            Some(home_path) => {
-                let mut credentials_path = PathBuf::from(".aws");
-
-                credentials_path.push("credentials");
-
-                home_path.join(credentials_path)
+        let profile_location = match var("AWS_SHARED_CREDENTIALS_FILE") {
+            Ok(path) => PathBuf::from(path),
+            Err(_) => {
+                match ProfileProvider::default_profile_location() {
+                    Ok(path) => path,
+                    Err(err) => return Err(err),
+                }
             }
-            None => return Err(CredentialsError::new("The environment variable HOME must be set.")),
         };
 
         Ok(ProfileProvider {
@@ -185,6 +181,22 @@ impl ProfileProvider {
             file_path: profile_location,
             profile: "default".to_owned(),
         })
+    }
+
+    /// Default credentials file location:
+    /// `~/.aws/credentials` (Linux/Mac)
+    /// `%USERPROFILE%\.aws\credentials` (Windows)
+    fn default_profile_location() -> Result<PathBuf, CredentialsError> {
+        match env::home_dir() {
+            Some(home_path) => {
+                let mut credentials_path = PathBuf::from(".aws");
+
+                credentials_path.push("credentials");
+
+                Ok(home_path.join(credentials_path))
+            }
+            None => Err(CredentialsError::new("The environment variable HOME must be set.")),
+        }
     }
 
     /// Create a new `ProfileProvider` for the credentials file at the given path, using
@@ -530,6 +542,7 @@ fn in_ten_minutes() -> DateTime<UTC> {
 
 #[cfg(test)]
 mod tests {
+    use std::env;
     use std::path::Path;
 
     use super::*;
@@ -582,7 +595,18 @@ mod tests {
         let creds = result.ok().unwrap();
         assert_eq!(creds.aws_access_key_id(), "foo_access_key");
         assert_eq!(creds.aws_secret_access_key(), "foo_secret_key");
-     }
+    }
+
+    #[test]
+    fn profile_provider_via_environment_variable() {
+        let credentials_path = "tests/sample-data/default_profile_credentials";
+        env::set_var("AWS_SHARED_CREDENTIALS_FILE", credentials_path);
+        let result = ProfileProvider::new();
+        assert!(result.is_ok());
+        let provider = result.unwrap();
+        assert_eq!(provider.file_path().to_str().unwrap(), credentials_path);
+        env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
+    }
 
     #[test]
     fn profile_provider_bad_profile() {
