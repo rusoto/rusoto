@@ -42,7 +42,7 @@ before_script:
         export OPENSSL_LIB_DIR=`brew --prefix openssl`/lib && \
         echo "Installed openssl for osx."
       fi
-      
+
 # the main build
 script:
   - |
@@ -55,7 +55,7 @@ script:
         travis-cargo test -- --lib $CARGO_ARGS && \
         travis-cargo bench -- $CARGO_ARGS)
   - |
-      echo "Compiling Rusoto" &&
+      echo "Setting Rusoto compilation arguments" &&
       if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
         export CARGO_ARGS="--no-default-features --features $RUSOTO_FEATURES"
       else
@@ -64,6 +64,7 @@ script:
   - echo "Compiling all of Rusoto" && travis_wait 30 travis-cargo build -- $CARGO_ARGS
   - echo "Running Rusoto tests" && travis_wait travis-cargo test -- --lib $CARGO_ARGS
   - echo "Running Rusoto benchmarks" && travis_wait travis-cargo bench -- $CARGO_ARGS
+  - echo "Running rusoto_credential tests" && (cd credential && travis_wait travis-cargo test)
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
@@ -75,7 +76,7 @@ after_success:
   - |
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         travis-cargo --only stable doc-upload
-      fi 
+      fi
   # measure code coverage and upload to coveralls.io (the verify argument
   # mitigates kcov crashes due to malformed debuginfo, at the cost of some
   # speed. <https://github.com/huonw/travis-cargo/issues/12>)
