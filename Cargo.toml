@@ -38,6 +38,10 @@ xml-rs = "0.1.26"
 optional = true
 version = "0.0"
 
+[dependencies.rusoto_credential]
+path = "credential"
+version = "0.1.0"
+
 [dependencies.serde_macros]
 optional = true
 version = "0.8.0"

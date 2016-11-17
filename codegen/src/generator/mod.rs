@@ -57,8 +57,8 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
 
         use std::fmt;
         use std::error::Error;
-        use credential::{{CredentialsError, ProvideAwsCredentials}};
         use request::HttpDispatchError;
+        use rusoto_credential::{{CredentialsError, ProvideAwsCredentials}};
 
         {prelude}
 

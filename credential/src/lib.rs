@@ -1,5 +1,10 @@
 //! Types for loading and managing AWS access credentials for API requests.
 
+extern crate chrono;
+extern crate hyper;
+extern crate regex;
+extern crate serde_json;
+
 use std::fmt;
 use std::env::*;
 use std::env;
