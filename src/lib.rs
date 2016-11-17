@@ -62,9 +62,10 @@ pub use region::{ParseRegionError, Region};
 pub use rusoto_credential::{
     AwsCredentials,
     ChainProvider,
+    ContainerProvider,
     CredentialsError,
     EnvironmentProvider,
-    IamProvider,
+    InstanceMetadataProvider,
     ProfileProvider,
     ProvideAwsCredentials,
     DefaultCredentialsProvider,
