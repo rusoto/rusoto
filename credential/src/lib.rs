@@ -126,7 +126,7 @@ pub struct EnvironmentProvider;
 
 impl ProvideAwsCredentials for EnvironmentProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-		credentials_from_environment()
+        credentials_from_environment()
     }
 }
 
@@ -338,7 +338,7 @@ pub struct IamProvider;
 impl ProvideAwsCredentials for IamProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 
-		// TODO: backoff and retry on failure.
+        // TODO: backoff and retry on failure.
         let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
         let mut client = Client::new();
         client.set_read_timeout(Some(StdDuration::from_secs(15)));
@@ -351,7 +351,7 @@ impl ProvideAwsCredentials for IamProvider {
 
         let mut body = String::new();
         if let Err(_) = response.read_to_string(&mut body) {
-			return Err(CredentialsError::new("Didn't get a parsable response body from metadata service"));
+            return Err(CredentialsError::new("Didn't get a parsable response body from metadata service"));
         }
 
         address.push_str("/");
@@ -408,8 +408,8 @@ impl ProvideAwsCredentials for IamProvider {
 /// wrapped provider.  Each time the credentials are accessed, they are checked to see if
 /// they have expired, in which case they are retrieved from the wrapped provider again.
 pub struct BaseAutoRefreshingProvider<P, T> {
-	credentials_provider: P,
-	cached_credentials: T
+    credentials_provider: P,
+    cached_credentials: T
 }
 
 /// Threadsafe `AutoRefreshingProvider` that locks cached credentials with a `Mutex`
@@ -417,48 +417,48 @@ pub type AutoRefreshingProviderSync<P> = BaseAutoRefreshingProvider<P, Mutex<Aws
 
 impl <P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
     pub fn with_mutex(provider: P) -> Result<AutoRefreshingProviderSync<P>, CredentialsError> {
-		let creds = try!(provider.credentials());
-		Ok(BaseAutoRefreshingProvider {
-			credentials_provider: provider,
-			cached_credentials: Mutex::new(creds)
-		})
-	}
+        let creds = try!(provider.credentials());
+        Ok(BaseAutoRefreshingProvider {
+            credentials_provider: provider,
+            cached_credentials: Mutex::new(creds)
+        })
+    }
 }
 
 impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>> {
-	fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-		let mut creds = self.cached_credentials.lock().unwrap();
-		if creds.credentials_are_expired() {
-			*creds = try!(self.credentials_provider.credentials());
-		}
-		Ok(creds.clone())
-	}
+    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        let mut creds = self.cached_credentials.lock().unwrap();
+        if creds.credentials_are_expired() {
+            *creds = try!(self.credentials_provider.credentials());
+        }
+        Ok(creds.clone())
+    }
 }
 
 /// `!Sync` `AutoRefreshingProvider` that caches credentials in a `RefCell`
 pub type AutoRefreshingProvider<P> = BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>>;
 
 impl <P: ProvideAwsCredentials> AutoRefreshingProvider<P> {
-	pub fn with_refcell(provider: P) -> Result<AutoRefreshingProvider<P>, CredentialsError> {
-		let creds = try!(provider.credentials());
-		Ok(BaseAutoRefreshingProvider {
-			credentials_provider: provider,
-			cached_credentials: RefCell::new(creds)
-		})
-	}
+    pub fn with_refcell(provider: P) -> Result<AutoRefreshingProvider<P>, CredentialsError> {
+        let creds = try!(provider.credentials());
+        Ok(BaseAutoRefreshingProvider {
+            credentials_provider: provider,
+            cached_credentials: RefCell::new(creds)
+        })
+    }
 }
 
 impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, RefCell<AwsCredentials>> {
-	fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 
-		let mut creds = self.cached_credentials.borrow_mut();
+        let mut creds = self.cached_credentials.borrow_mut();
 
-		if creds.credentials_are_expired() {
-			*creds = try!(self.credentials_provider.credentials());
-		}
+        if creds.credentials_are_expired() {
+            *creds = try!(self.credentials_provider.credentials());
+        }
 
-		Ok(creds.clone())
-	}
+        Ok(creds.clone())
+    }
 }
 
 
@@ -512,15 +512,15 @@ pub struct ChainProvider {
 impl ProvideAwsCredentials for ChainProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 
-	EnvironmentProvider.credentials()
-		.or_else(|_| {
+    EnvironmentProvider.credentials()
+        .or_else(|_| {
             match self.profile_provider {
                 Some(ref provider) => provider.credentials(),
                 None => Err(CredentialsError::new(""))
             }
         })
-		.or_else(|_| IamProvider.credentials())
-		.or_else(|_| Err(CredentialsError::new("Couldn't find AWS credentials in environment, credentials file, or IAM role.")))
+        .or_else(|_| IamProvider.credentials())
+        .or_else(|_| Err(CredentialsError::new("Couldn't find AWS credentials in environment, credentials file, or IAM role.")))
     }
 }
 
