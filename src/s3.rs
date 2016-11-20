@@ -15,11 +15,15 @@ use std::str;
 
 use hyper::client::{Client, RedirectPolicy};
 use md5;
+use rusoto_credential::{
+    ProvideAwsCredentials,
+    AwsCredentials,
+    CredentialsError,
+};
 use rustc_serialize::base64::{ToBase64, STANDARD};
 use xml::*;
 use regex::Regex;
 
-use credential::{ProvideAwsCredentials, AwsCredentials, CredentialsError};
 use param::{Params, ServiceParams};
 use region::Region;
 use signature::SignedRequest;

@@ -50,6 +50,7 @@ extern crate hyper;
 extern crate md5;
 extern crate regex;
 extern crate ring;
+extern crate rusoto_credential;
 extern crate rustc_serialize;
 extern crate serde;
 extern crate serde_json;
@@ -57,7 +58,8 @@ extern crate time;
 extern crate url;
 extern crate xml;
 
-pub use credential::{
+pub use region::{ParseRegionError, Region};
+pub use rusoto_credential::{
     AwsCredentials,
     ChainProvider,
     CredentialsError,
@@ -68,11 +70,9 @@ pub use credential::{
     DefaultCredentialsProvider,
     DefaultCredentialsProviderSync,
 };
-pub use region::{ParseRegionError, Region};
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError};
 pub use signature::SignedRequest;
 
-mod credential;
 mod param;
 mod region;
 mod request;

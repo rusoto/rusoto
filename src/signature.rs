@@ -13,12 +13,12 @@ use std::str;
 
 use hyper::status::StatusCode;
 use ring::{digest, hmac};
+use rusoto_credential::AwsCredentials;
 use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{utf8_percent_encode, EncodeSet};
 
-use credential::AwsCredentials;
 use param::Params;
 use region::Region;
 
@@ -407,13 +407,14 @@ fn build_hostname(service: &str, region: Region) -> String {
 
 #[cfg(test)]
 mod tests {
+    use rusoto_credential::ProvideAwsCredentials;
+
     use region::Region;
 
     use super::SignedRequest;
     use param::Params;
 
     use super::super::ProfileProvider;
-    use super::super::credential::ProvideAwsCredentials;
     use super::build_canonical_query_string;
 
     #[test]
