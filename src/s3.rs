@@ -10126,7 +10126,7 @@ impl<P, D> S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
         Ok(head_object)
     }
 
-    /// Use the Hyper resposne to populate the GetObjectOutput
+    /// Use the Hyper response to populate the GetObjectOutput
     // This would be a great candidate for some codegen magicks.
     pub fn get_object_from_response(response: &mut HttpResponse) -> Result<GetObjectOutput, S3Error> {
         // get all the goodies for GetObjectOutput
