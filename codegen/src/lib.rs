@@ -1,6 +1,6 @@
 #![cfg_attr(feature = "unstable", feature(const_fn, drop_types_in_const))]
-#![cfg_attr(feature = "serde_macros", feature(custom_derive, plugin))]
-#![cfg_attr(feature = "serde_macros", plugin(serde_macros))]
+#![cfg_attr(feature = "serde_derive", feature(proc_macro))]
+#![cfg_attr(feature = "nightly-testing", feature(plugin))]
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
 
@@ -11,10 +11,11 @@ extern crate regex;
 extern crate serde;
 extern crate serde_json;
 
-#[cfg(not(feature = "serde_macros"))]
+#[cfg(feature = "serde_derive")]
+#[macro_use]
+extern crate serde_derive;
+#[cfg(not(feature = "serde_derive"))]
 extern crate serde_codegen;
-#[cfg(not(feature = "serde_macros"))]
-extern crate syntex;
 
 use std::fs::File;
 use std::io::{Read, Write};
@@ -89,12 +90,12 @@ fn botocore_generate(input_path: &Path, output_path: &Path) {
     ));
 }
 
-#[cfg(not(feature = "serde_macros"))]
+#[cfg(not(feature = "serde_derive"))]
 fn serde_generate(source: &Path, destination: &Path) {
     ::serde_codegen::expand(&source, &destination).unwrap();
 }
 
-#[cfg(feature = "serde_macros")]
+#[cfg(feature = "serde_derive")]
 fn serde_generate(source: &Path, destination: &Path) {
     ::std::fs::copy(source, destination).expect(&format!(
         "Failed to copy {:?} to {:?}",

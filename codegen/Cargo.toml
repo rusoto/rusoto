@@ -31,16 +31,11 @@ version = "0.0"
 optional = true
 version = "0.8.14"
 
-[dependencies.serde_macros]
+[dependencies.serde_derive]
 optional = true
-version = "0.8.0"
-
-[dependencies.syntex]
-optional = true
-version = "0.45.1"
+version = "0.8.19"
 
 [features]
-default = ["with-syntex"]
+default = ["serde_codegen"]
 nightly-testing = ["clippy", "unstable"]
-unstable = ["serde_macros"]
-with-syntex = ["serde_codegen", "syntex"]
+unstable = ["serde_derive"]
