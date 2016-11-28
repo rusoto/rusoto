@@ -478,7 +478,7 @@ impl DefaultCredentialsProvider {
     }
 }
 
-/// The credentials provider you probably want to use if you do require your AWS services.
+/// The credentials provider you probably want to use if you do require Sync for your AWS services.
 /// Wraps a `ChainProvider` in an `AutoRefreshingProvider` that uses a `Mutex` to lock credentials in a
 /// threadsafe manner.
 ///
