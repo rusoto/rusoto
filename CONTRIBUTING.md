@@ -2,7 +2,7 @@
 
 ### Setting up build environment (only needed once)
 
-Install Rust **1.9.0** or later - http://www.rust-lang.org/
+See minimum version of Rust required in [README](README.md).
 
 Check out code from github.
 
