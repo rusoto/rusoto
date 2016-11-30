@@ -36,7 +36,6 @@ pub struct SignedRequest<'a> {
     pub params: Params,
     pub hostname: Option<String>,
     pub payload: Option<&'a [u8]>,
-    pub content_type: Option<String>,
     pub canonical_query_string: String,
     pub canonical_uri: String,
 }
@@ -53,14 +52,12 @@ impl <'a> SignedRequest <'a> {
             params: Params::new(),
             hostname: None,
             payload: None,
-            content_type: None,
             canonical_query_string: String::new(),
             canonical_uri: String::new(),
          }
     }
-
     pub fn set_content_type(&mut self, content_type: String) {
-        self.content_type = Some(content_type);
+        self.add_header("content-type", &content_type);
     }
 
     pub fn set_hostname(&mut self, hostname: Option<String>) {
@@ -165,6 +162,13 @@ impl <'a> SignedRequest <'a> {
         self.remove_header("x-amz-date");
         self.add_header("x-amz-date", &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
 
+        // if there's no content-type header set, set it to the default value
+        if let Entry::Vacant(entry) = self.headers.entry("content-type".to_owned()) {
+            let mut values = Vec::new();
+            values.push("application/octet-stream".as_bytes().to_vec());
+            entry.insert(values);
+        }
+
         // build the canonical request
         let signed_headers = signed_headers(&self.headers);
         self.canonical_uri = canonical_uri(&self.path);
@@ -185,28 +189,20 @@ impl <'a> SignedRequest <'a> {
                 self.add_header("x-amz-content-sha256", &to_hexdigest(""));
             }
             Some(payload) => {
-                // This is hashing the payload twice, booo:
+                let digest = to_hexdigest(payload);
                 canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
                     &self.method,
                     self.canonical_uri,
                     self.canonical_query_string,
                     canonical_headers,
                     signed_headers,
-                    &to_hexdigest(payload));
+                    &digest);
                 self.remove_header("x-amz-content-sha256");
-                self.add_header("x-amz-content-sha256", &to_hexdigest(payload));
+                self.add_header("x-amz-content-sha256", &digest);
                 self.remove_header("content-length");
                 self.add_header("content-length", &format!("{}", payload.len()));
             }
         }
-
-        self.remove_header("content-type");
-        let ct = match self.content_type {
-            Some(ref h) => h.to_string(),
-            None => String::from("application/octet-stream")
-        };
-
-        self.add_header("content-type", &ct);
 
         // use the hashed canonical request to build the string to sign
         let hashed_canonical_request = to_hexdigest(&canonical_request);
