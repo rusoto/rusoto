@@ -163,13 +163,10 @@ impl <'a> SignedRequest <'a> {
         self.add_header("x-amz-date", &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
 
         // if there's no content-type header set, set it to the default value
-        match self.headers.entry("content-type".to_owned()) {
-            Entry::Vacant(entry) => {
-                let mut values = Vec::new();
-                values.push("application/octet-stream".as_bytes().to_vec());
-                entry.insert(values);
-            },
-            _ => {}
+        if let Entry::Vacant(entry) = self.headers.entry("content-type".to_owned()) {
+            let mut values = Vec::new();
+            values.push("application/octet-stream".as_bytes().to_vec());
+            entry.insert(values);
         }
 
         // build the canonical request
