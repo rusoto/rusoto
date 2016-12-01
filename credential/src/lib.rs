@@ -6,11 +6,13 @@ extern crate regex;
 extern crate serde_json;
 
 pub use environment::EnvironmentProvider;
-pub use iam::IamProvider;
+pub use container::ContainerProvider;
+pub use instance_metadata::InstanceMetadataProvider;
 pub use profile::ProfileProvider;
 
+mod container;
 mod environment;
-mod iam;
+mod instance_metadata;
 mod profile;
 
 use std::fmt;
@@ -18,7 +20,9 @@ use std::error::Error;
 use std::io::Error as IoError;
 use std::sync::Mutex;
 use std::cell::RefCell;
+
 use chrono::{Duration, UTC, DateTime, ParseError};
+use serde_json::Value;
 
 /// AWS API access credentials, including access key, secret key, token (for IAM profiles), and
 /// expiration timestamp.
@@ -228,7 +232,8 @@ impl ProvideAwsCredentials for ChainProvider {
                 None => Err(CredentialsError::new(""))
             }
         })
-        .or_else(|_| IamProvider.credentials())
+        .or_else(|_| ContainerProvider.credentials())
+        .or_else(|_| InstanceMetadataProvider.credentials())
         .or_else(|_| Err(CredentialsError::new("Couldn't find AWS credentials in environment, credentials file, or IAM role.")))
     }
 }
@@ -252,6 +257,13 @@ impl ChainProvider {
 
 fn in_ten_minutes() -> DateTime<UTC> {
     UTC::now() + Duration::seconds(600)
+}
+
+fn extract_string_value_from_json(json_object: &Value, key: &str) -> Result<String, CredentialsError> {
+    match json_object.find(key) {
+        Some(v) => Ok(v.as_str().expect(&format!("{} value was not a string", key)).to_owned()),
+        None => Err(CredentialsError::new(&format!("Couldn't find {} in response.", key))),
+    }
 }
 
 #[cfg(test)]

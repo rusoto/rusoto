@@ -4,7 +4,8 @@ Rusoto has the ability to source AWS access credentials in a few different ways:
 
 1. Environment variables via `rusoto::EnvironmentProvider` (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`)
 2. AWS credentials file via `rusoto::ProfileProvider`
-3. IAM instance profile via `rusoto::IamProvider`
+3. IAM ECS container profile via `rusoto::ContainerProvider`
+4. IAM EC2 instance profile via `rusoto::InstanceMetadataProvider`
 
 There is also `rusoto::ChainProvider`, which is a convenience for attempting to source access credentials using the methods above in order.
 If credentials cannot be obtained through one method, it falls back to the next.
@@ -27,7 +28,7 @@ IAM credentials expiration time comes from the IAM metadata response.
 
 #### Local integration testing of IAM credentials
 
-Edit the `address` location in [src/credential.rs](src/credential.rs).
+Edit the relevant `address`/IP locations in [credential/src/container.rs](credential/src/container.rs) and [credential/src/instance_metadata.rs](credential/src/instance_metadata.rs).
 For local testing, you can use [moe](https://github.com/matthewkmayer/moe) and set the string to this:
 
 ```rust

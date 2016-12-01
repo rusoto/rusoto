@@ -8,9 +8,9 @@ use serde_json::{Value, from_str};
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 /// Provides AWS credentials from a resource's IAM role.
-pub struct IamProvider;
+pub struct InstanceMetadataProvider;
 
-impl ProvideAwsCredentials for IamProvider {
+impl ProvideAwsCredentials for InstanceMetadataProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
 
         // TODO: backoff and retry on failure.
