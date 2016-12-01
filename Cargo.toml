@@ -47,9 +47,13 @@ version = "0.0"
 path = "credential"
 version = "0.1.0"
 
-[dependencies.serde_macros]
+[dependencies.serde_codegen]
 optional = true
 version = "0.8.0"
+
+[dependencies.serde_derive]
+optional = true
+version = "0.8.19"
 
 [dev-dependencies]
 env_logger = "0.3.3"
@@ -66,9 +70,9 @@ codepipeline = []
 cognito-identity = []
 config = []
 datapipeline = []
+default = ["rusoto_codegen/serde_codegen", "serde_codegen"]
 devicefarm = []
 directconnect = []
-default = ["with-syntex"]
 ds = []
 dynamodb = []
 dynamodbstreams = []
@@ -95,7 +99,6 @@ sqs = []
 ssm = []
 storagegateway = []
 swf = []
-unstable = ["serde_macros", "rusoto_codegen/unstable"]
+unstable = ["rusoto_codegen/unstable", "serde_derive"]
 waf = []
-with-syntex = ["rusoto_codegen/with-syntex"]
 workspaces = []

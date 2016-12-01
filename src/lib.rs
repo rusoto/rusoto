@@ -1,7 +1,7 @@
 #![crate_name = "rusoto"]
 #![crate_type = "lib"]
-#![cfg_attr(feature = "unstable", feature(custom_derive, plugin))]
-#![cfg_attr(feature = "unstable", plugin(serde_macros))]
+#![cfg_attr(feature = "unstable", feature(proc_macro))]
+#![cfg_attr(feature = "nightly-testing", feature(plugin))]
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 #![cfg_attr(feature = "nightly-testing", allow(cyclomatic_complexity, used_underscore_binding, ptr_arg, suspicious_else_formatting))]
 #![allow(dead_code)]
@@ -57,6 +57,10 @@ extern crate serde_json;
 extern crate time;
 extern crate url;
 extern crate xml;
+
+#[cfg(feature = "serde_derive")]
+#[macro_use]
+extern crate serde_derive;
 
 pub use region::{ParseRegionError, Region};
 pub use rusoto_credential::{
