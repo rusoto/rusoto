@@ -18,7 +18,7 @@ the main Rusoto crate.
 
 ### Publishing walkthrough:
 
-1. Bump version numbers and versions required in cargo.toml files for: `rusoto_credentials` (if needed), `rusoto_codegen` (if needed) and main `rusoto` crate.
+1. Bump version numbers and versions required in cargo.toml files for: `rusoto_credential` (if needed), `rusoto_codegen` (if needed) and main `rusoto` crate.
 2. For credential and codegen crates, run `cargo publish --dry-run --allow-dirty` to simulate a publish. This will catch errors such as malformed Cargo.toml or missing required fields.
 3. If no errors, commit to master.
 4. Publish the credential and/or codegen crates with `cargo publish` in their directories.
