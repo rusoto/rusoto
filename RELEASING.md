@@ -11,32 +11,27 @@ For pre-1.0.0:
 
 Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 
-### Codegen crate
+### Rusoto dependencies
 
-The `rusoto_codegen` crate is published separately from the main `rusoto` crate and must be published first since the main crate depends on it.  
+Rusoto depends on crates such as `rusoto_credential` and `rusoto_codegen`.  These are usually published before publishing
+the main Rusoto crate.
 
-The release procedures for the codegen crate is the same as described below except:
+### Publishing walkthrough:
 
-* Tags are only applied for the root `rusoto` crate.
-* Before the `rusoto` crate is published, its dependency on `rusoto_codegen` should be updated to reflect the newly published version.
+1. Bump version numbers and versions required in cargo.toml files for: `rusoto_credentials` (if needed), `rusoto_codegen` (if needed) and main `rusoto` crate.
+2. For credential and codegen crates, run `cargo publish --dry-run --allow-dirty` to simulate a publish. This will catch errors such as malformed Cargo.toml or missing required fields.
+3. If no errors, commit to master.
+4. Publish the credential and/or codegen crates with `cargo publish` in their directories.
+5. Last check for main crate, run from the root of the Rusoto project: `cargo publish --dry-run`
+6. If good, publish new version of Rusoto: `cargo publish`.
+7. Tag master, push tags to github.
 
 ### Git tags
 
 To release version 0.4.0:
 
-1. Ensure `cargo package` completes as expected.  It's a good idea to inspect the related output.
-2. On master, bump the version in Cargo.toml to the new version.  In this example, we'll set it to 0.4.0.
-3. Update Cargo.toml to reflect the new version of the `rusoto_codegen` crate that was just published.
-4. Commit to master.
-5. Use an annotated tag on the commit with the version bump: `git tag -a v0.4.0 -m "0.4.0 release."`
-6. Push changes, including tags, to Github: `git push --tags origin`.
-
-### Crate publishing
-
-To publish on crates.io:
-
-1. `cargo package`
-2. `cargo publish`
+1. Use an annotated tag on the commit with the version bump: `git tag -a v0.4.0 -m "0.4.0 release."`
+2. Push changes, including tags, to Github: `git push --tags origin`.
 
 ### Release notes
 
