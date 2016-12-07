@@ -50,8 +50,8 @@ impl GenerateProtocol for JsonGenerator {
     }
 
     fn generate_prelude(&self, _service: &Service) -> String {
-        "use serde_json;
-        use signature::SignedRequest;
+        "use rusoto_signature::SignedRequest;
+        use serde_json;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;".to_string()
     }

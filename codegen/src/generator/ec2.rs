@@ -59,12 +59,11 @@ impl GenerateProtocol for Ec2Generator {
     fn generate_prelude(&self, _service: &Service) -> String {
         "use std::str::{FromStr, from_utf8};
 
+        use rusoto_signature::SignedRequest;
+        use rusoto_signature::param::{Params, ServiceParams};
         use xml::EventReader;
-
-        use param::{Params, ServiceParams};
-
-        use signature::SignedRequest;
         use xml::reader::events::XmlEvent;
+
         use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
         use xmlutil::{characters, end_element, start_element, skip_tree};
         use xmlerror::*;

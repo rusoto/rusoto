@@ -49,15 +49,15 @@ pub fn generate_source(service: &Service) -> String {
 fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator: E) -> String where P: GenerateProtocol,  E: GenerateErrorTypes {
     format!(
         "#[allow(warnings)]
-        use hyper::Client;
-        use hyper::client::RedirectPolicy;
-        use request::DispatchSignedRequest;
-        use region;
-
         use std::fmt;
         use std::error::Error;
-        use request::HttpDispatchError;
+
+        use hyper::Client;
+        use hyper::client::RedirectPolicy;
         use rusoto_credential::{{CredentialsError, ProvideAwsCredentials}};
+        use rusoto_signature::region;
+
+        use request::{{DispatchSignedRequest, HttpDispatchError}};
 
         {prelude}
 

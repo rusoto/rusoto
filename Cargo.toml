@@ -36,8 +36,6 @@ ring = "0.6"
 rustc-serialize = "0.3.19"
 serde = "0.8.0"
 serde_json = "0.8.0"
-time = "0.1.35"
-url = "1.2.0"
 xml-rs = "0.1.26"
 
 
@@ -48,6 +46,10 @@ version = "0.0"
 [dependencies.rusoto_credential]
 path = "credential"
 version = "0.2.0"
+
+[dependencies.rusoto_signature]
+path = "signature"
+version = "0.1.0"
 
 [dependencies.serde_codegen]
 optional = true
@@ -60,6 +62,7 @@ version = "0.8.19"
 [dev-dependencies]
 env_logger = "0.3.3"
 rand = "^0.3.14"
+time = "0.1.35"
 
 [features]
 all = ["acm", "cloudformation", "cloudhsm", "cloudtrail", "cloudwatch", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "ec2", "ecr", "ecs", "elastictranscoder", "emr", "events", "firehose", "iam", "inspector", "iot", "kinesis", "kms", "logs", "machinelearning", "marketplacecommerceanalytics", "opsworks", "route53domains", "s3", "sqs", "ssm", "storagegateway", "swf", "waf", "workspaces"]

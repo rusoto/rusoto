@@ -65,6 +65,7 @@ script:
   - echo "Running Rusoto tests" && travis_wait travis-cargo test -- --lib $CARGO_ARGS
   - echo "Running Rusoto benchmarks" && travis_wait travis-cargo bench -- $CARGO_ARGS
   - echo "Running rusoto_credential tests" && (cd credential && travis_wait travis-cargo test)
+  - echo "Running rusoto_signature tests" && (cd signature && travis_wait travis-cargo test)
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then

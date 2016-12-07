@@ -57,12 +57,14 @@ impl GenerateProtocol for QueryGenerator {
     }
 
     fn generate_prelude(&self, _: &Service) -> String {
-        "use std::str::FromStr;
+        "use std::collections::HashMap;
+        use std::str::{FromStr, from_utf8};
+
+        use rusoto_signature::SignedRequest;
+        use rusoto_signature::param::{Params, ServiceParams};
         use xml::EventReader;
         use xml::reader::ParserConfig;
 
-        use param::{Params, ServiceParams};
-        use signature::SignedRequest;
         use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
         use xmlutil::{characters, end_element, peek_at_name, start_element};
         use xmlerror::*;

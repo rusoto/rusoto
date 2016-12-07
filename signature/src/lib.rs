@@ -1,17 +1,28 @@
 //! AWS API request signatures.
 //!
-//! Follows [AWS Signature 4](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)
+//! Follows
+//! [AWS Signature 4](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)
 //! algorithm.
 //!
-//! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
-//! newly created S3 buckets not in us-standard/us-east-1.
+//! If needed, the request will be re-issued to a temporary redirect endpoint.
+//! This can happen with newly created S3 buckets not in us-standard/us-east-1.
+
+#[macro_use]
+extern crate log;
+extern crate ring;
+extern crate rusoto_credential;
+extern crate rustc_serialize;
+extern crate time;
+extern crate url;
+
+pub mod param;
+pub mod region;
 
 use std::ascii::AsciiExt;
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
 
-use hyper::status::StatusCode;
 use ring::{digest, hmac};
 use rusoto_credential::AwsCredentials;
 use rustc_serialize::hex::ToHex;
@@ -22,10 +33,8 @@ use url::percent_encoding::{utf8_percent_encode, EncodeSet};
 use param::Params;
 use region::Region;
 
-const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
-
-/// A data structure for all the elements of an HTTP request that are involved in
-/// the Amazon Signature Version 4 signing process
+/// A data structure for all the elements of an HTTP request that are involved
+/// in the Amazon Signature Version 4 signing process
 #[derive(Debug)]
 pub struct SignedRequest<'a> {
     pub method: String,
@@ -56,6 +65,7 @@ impl <'a> SignedRequest <'a> {
             canonical_uri: String::new(),
          }
     }
+
     pub fn set_content_type(&mut self, content_type: String) {
         self.add_header("content-type", &content_type);
     }
@@ -135,7 +145,7 @@ impl <'a> SignedRequest <'a> {
         self.params.insert(key.into(), Some(value.into()));
     }
 
-    pub fn set_params(&mut self, params: Params){
+    pub fn set_params(&mut self, params: Params) {
         self.params = params;
     }
 
@@ -146,8 +156,9 @@ impl <'a> SignedRequest <'a> {
             None => build_hostname(&self.service, self.region)
         };
 
-        // Gotta remove and re-add headers since by default they append the value.  If we're following
-        // a 307 redirect we end up with Three Stooges in the headers with duplicate values.
+        // Gotta remove and re-add headers since by default they append the
+        // value. If we're following a 307 redirect we end up with Three Stooges
+        // in the headers with duplicate values.
         self.remove_header("host");
         self.add_header("host", &hostname);
 
@@ -174,7 +185,7 @@ impl <'a> SignedRequest <'a> {
         self.canonical_uri = canonical_uri(&self.path);
         let canonical_headers = canonical_headers(&self.headers);
 
-        let canonical_request : String;
+        let canonical_request: String;
 
         match self.payload {
             None => {
@@ -327,15 +338,15 @@ fn build_canonical_query_string(params: &Params) -> String {
     output
 }
 
-// http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html 
+// http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
 //
-// Do not URI-encode any of the unreserved characters that RFC 3986 defines: 
+// Do not URI-encode any of the unreserved characters that RFC 3986 defines:
 // A-Z, a-z, 0-9, hyphen ( - ), underscore ( _ ), period ( . ), and tilde ( ~ ).
 //
-// Percent-encode all other characters with %XY, where X and Y are hexadecimal 
-// characters (0-9 and uppercase A-F). For example, the space character must be 
-// encoded as %20 (not using '+', as some encoding schemes do) and extended UTF-8 
-// characters must be in the form %XY%ZA%BC
+// Percent-encode all other characters with %XY, where X and Y are hexadecimal
+// characters (0-9 and uppercase A-F). For example, the space character must be
+// encoded as %20 (not using '+', as some encoding schemes do) and extended
+// UTF-8 characters must be in the form %XY%ZA%BC
 #[derive(Clone)]
 pub struct StrictEncodeSet;
 
@@ -382,40 +393,30 @@ fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
 fn build_hostname(service: &str, region: Region) -> String {
     //iam has only 1 endpoint, other services have region-based endpoints
     match service {
-        "iam" => {
-                match region {
-                    Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
-                    _ => format!("{}.amazonaws.com", service),
-                }
-            }
-        "s3" => {
-                match region {
-                    Region::UsEast1 => "s3.amazonaws.com".to_string(),
-                    Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region),
-                    _ => format!("s3-{}.amazonaws.com", region),
-                }
-            }
-        _ => {
-                match region {
-                    Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
-                    _ => format!("{}.{}.amazonaws.com", service, region),
-                }
-            }
+        "iam" => match region {
+            Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
+            _ => format!("{}.amazonaws.com", service),
+        },
+        "s3" => match region {
+            Region::UsEast1 => "s3.amazonaws.com".to_string(),
+            Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region),
+            _ => format!("s3-{}.amazonaws.com", region),
+        },
+        _ => match region {
+            Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
+            _ => format!("{}.{}.amazonaws.com", service, region),
+        },
     }
 }
 
-
 #[cfg(test)]
 mod tests {
-    use rusoto_credential::ProvideAwsCredentials;
+    use rusoto_credential::{ProfileProvider, ProvideAwsCredentials};
 
+    use param::Params;
     use region::Region;
 
-    use super::SignedRequest;
-    use param::Params;
-
-    use super::super::ProfileProvider;
-    use super::build_canonical_query_string;
+    use super::{SignedRequest, build_canonical_query_string};
 
     #[test]
     fn get_hostname_none_present() {
@@ -429,6 +430,7 @@ mod tests {
         request.set_hostname(Some("test-hostname".to_string()));
         assert_eq!("test-hostname", request.hostname());
     }
+
     #[test]
     fn path_percent_encoded() {
         let provider = ProfileProvider::with_configuration(
@@ -439,6 +441,7 @@ mod tests {
         request.sign(provider.credentials().as_ref().unwrap());
         assert_eq!("/path%20with%20spaces%3A%20the%20sequel", request.canonical_uri());
     }
+
     #[test]
     fn query_encoding_escaped_chars() {
         query_encoding_escaped_chars_range(0u8, 45u8); // \0 to '-'
@@ -449,6 +452,7 @@ mod tests {
         query_encoding_escaped_chars_range(123u8, 126u8); // '{' to '~'
         query_encoding_escaped_chars_range(127u8, 128u8); // DEL
     }
+
     fn query_encoding_escaped_chars_range(start: u8, end: u8) {
         let mut params = Params::new();
         for code in start..end {
@@ -458,6 +462,7 @@ mod tests {
             assert_eq!(expected, enc);
         }
     }
+
     #[test]
     fn query_percent_encoded() {
         let mut request = SignedRequest::new("GET", "s3", Region::UsEast1, "/path with spaces: the sequel++");

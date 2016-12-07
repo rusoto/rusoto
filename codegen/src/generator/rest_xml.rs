@@ -79,12 +79,14 @@ impl GenerateProtocol for RestXmlGenerator {
     fn generate_prelude(&self, _service: &Service) -> String {
         "use std::str::{FromStr};
         use std::collections::HashMap;
+
         use data_encoding::base64;
         use md5;
-        use param::{Params, ServiceParams};
-        use signature::SignedRequest;
+        use rusoto_signature::SignedRequest;
+        use rusoto_signature::param::{Params, ServiceParams};
         use xml::EventReader;
         use xml::reader::events::XmlEvent;
+
         use xmlerror::*;
         use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
         use xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
