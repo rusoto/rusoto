@@ -13,7 +13,7 @@ use std::num::ParseIntError;
 use std::str::{FromStr, ParseBoolError};
 use std::str;
 
-use hyper::client::{Client, RedirectPolicy};
+use reqwest::Client;
 use md5;
 use rusoto_credential::{
     ProvideAwsCredentials,
@@ -9160,8 +9160,8 @@ pub struct S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
 
 impl<P> S3Client<P, Client> where P: ProvideAwsCredentials {
     pub fn new(credentials_provider: P, region: region::Region) -> Self {
-        let mut client = Client::new();
-        client.set_redirect_policy(RedirectPolicy::FollowNone);
+        let mut client = Client::new().unwrap();
+        client.redirect(reqwest::RedirectPolicy::none());
         S3Client::with_request_dispatcher(client, credentials_provider, region)
     }
 }
