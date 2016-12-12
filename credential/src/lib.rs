@@ -145,7 +145,7 @@ impl <P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
 
 impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>> {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        let mut creds = self.cached_credentials.lock().unwrap();
+        let mut creds = self.cached_credentials.lock().expect("Failed to lock the cached credentials Mutex");
         if creds.credentials_are_expired() {
             *creds = try!(self.credentials_provider.credentials());
         }

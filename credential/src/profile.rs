@@ -106,7 +106,7 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
 
     let file = try!(File::open(file_path));
 
-    let profile_regex = Regex::new(r"^\[([^\]]+)\]$").unwrap();
+    let profile_regex = Regex::new(r"^\[([^\]]+)\]$").expect("Failed to compile regex");
     let mut profiles: HashMap<String, AwsCredentials> = HashMap::new();
     let mut access_key: Option<String> = None;
     let mut secret_key: Option<String> = None;
@@ -115,8 +115,7 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
 
     let file_lines = BufReader::new(&file);
     for line in file_lines.lines() {
-
-        let unwrapped_line : String = line.unwrap();
+        let unwrapped_line: String = line.expect("Failed to read credentials file");
 
         // skip comments
         if unwrapped_line.starts_with('#') {
