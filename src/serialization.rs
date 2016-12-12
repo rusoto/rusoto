@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use rustc_serialize::base64::{FromBase64, STANDARD, ToBase64};
+use base64;
 use serde::{Deserializer, Error as SerdeError, Serializer};
 use serde::de::Visitor;
 
@@ -16,7 +16,7 @@ impl Visitor for BlobVisitor {
     type Value = Vec<u8>;
 
     fn visit_str<E>(&mut self, v: &str) -> Result<Self::Value, E> where E: SerdeError {
-        v.from_base64().map_err(|err| SerdeError::custom(err.description()))
+        base64::decode(v).map_err(|err| SerdeError::custom(err.description()))
     }
 }
 
@@ -27,7 +27,7 @@ impl SerdeBlob for Vec<u8> {
     }
 
     fn serialize_blob<S>(&self, serializer: &mut S) -> Result<(), S::Error> where S: Serializer {
-        serializer.serialize_str(&self.as_slice().to_base64(STANDARD))
+        serializer.serialize_str(base64::encode(self.as_slice()).as_str())
     }
 }
 
