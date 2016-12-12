@@ -68,7 +68,9 @@ script:
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        travis_wait travis-cargo --only stable doc -- --no-deps $CARGO_ARGS
+        # Don't generate docs for `rusoto_codegen`, as it is intended entirely
+        # for internal use.
+        travis_wait travis-cargo --only stable doc -- --no-deps -p rusoto -p rusoto_credential $CARGO_ARGS
       fi
 after_success:
   # upload the documentation from the build with stable (automatically only
