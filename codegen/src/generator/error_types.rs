@@ -10,7 +10,7 @@ pub trait GenerateErrorTypes {
         // botocore presents errors as structs.  we filter those out in generate_types.
         let mut error_documentation = HashMap::new();
 
-        for (name, shape) in service.shapes.iter() {
+        for (name, shape) in &service.shapes {
             if shape.exception() && shape.documentation.is_some() {
                 error_documentation.insert(name, shape.documentation.as_ref().unwrap());
             }
