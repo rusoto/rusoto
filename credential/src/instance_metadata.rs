@@ -8,6 +8,7 @@ use serde_json::{Value, from_str};
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 /// Provides AWS credentials from a resource's IAM role.
+#[derive(Debug)]
 pub struct InstanceMetadataProvider;
 
 impl ProvideAwsCredentials for InstanceMetadataProvider {

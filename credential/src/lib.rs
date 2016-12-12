@@ -125,6 +125,7 @@ pub trait ProvideAwsCredentials {
 /// Wrapper for `ProvideAwsCredentials` that caches the credentials returned by the
 /// wrapped provider.  Each time the credentials are accessed, they are checked to see if
 /// they have expired, in which case they are retrieved from the wrapped provider again.
+#[derive(Debug)]
 pub struct BaseAutoRefreshingProvider<P, T> {
     credentials_provider: P,
     cached_credentials: T

@@ -16,6 +16,7 @@ use {
 const AWS_CREDENTIALS_PROVIDER_IP: &'static str = "169.254.170.2";
 
 /// Provides AWS credentials from a task's IAM role.
+#[derive(Debug)]
 pub struct ContainerProvider;
 
 impl ProvideAwsCredentials for ContainerProvider {
