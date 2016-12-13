@@ -17,6 +17,7 @@ pub enum Region {
     ApSouth1,
     ApSoutheast1,
     ApSoutheast2,
+    CaCentral1,
     EuCentral1,
     EuWest1,
     SaEast1,
@@ -40,6 +41,7 @@ impl Display for Region {
             Region::ApSouth1 => "ap-south-1",
             Region::ApSoutheast1 => "ap-southeast-1",
             Region::ApSoutheast2 => "ap-southeast-2",
+            Region::CaCentral1 => "ca-central-1",
             Region::EuCentral1 => "eu-central-1",
             Region::EuWest1 => "eu-west-1",
             Region::SaEast1 => "sa-east-1",
@@ -63,6 +65,7 @@ impl FromStr for Region {
             "ap-south-1" => Ok(Region::ApSouth1),
             "ap-southeast-1" => Ok(Region::ApSoutheast1),
             "ap-southeast-2" => Ok(Region::ApSoutheast2),
+            "ca-central-1" => Ok(Region::CaCentral1),
             "eu-central-1" => Ok(Region::EuCentral1),
             "eu-west-1" => Ok(Region::EuWest1),
             "sa-east-1" => Ok(Region::SaEast1),
@@ -112,6 +115,7 @@ mod tests {
         assert_eq!("ap-south-1".parse(), Ok(Region::ApSouth1));
         assert_eq!("ap-southeast-1".parse(), Ok(Region::ApSoutheast1));
         assert_eq!("ap-southeast-2".parse(), Ok(Region::ApSoutheast2));
+        assert_eq!("ca-central-1".parse(), Ok(Region::CaCentral1));
         assert_eq!("eu-central-1".parse(), Ok(Region::EuCentral1));
         assert_eq!("eu-west-1".parse(), Ok(Region::EuWest1));
         assert_eq!("sa-east-1".parse(), Ok(Region::SaEast1));
@@ -128,6 +132,7 @@ mod tests {
         assert_eq!(Region::ApSouth1.to_string(), "ap-south-1".to_owned());
         assert_eq!(Region::ApSoutheast1.to_string(), "ap-southeast-1".to_owned());
         assert_eq!(Region::ApSoutheast2.to_string(), "ap-southeast-2".to_owned());
+        assert_eq!(Region::CaCentral1.to_string(), "ca-central-1".to_owned());
         assert_eq!(Region::EuCentral1.to_string(), "eu-central-1".to_owned());
         assert_eq!(Region::EuWest1.to_string(), "eu-west-1".to_owned());
         assert_eq!(Region::SaEast1.to_string(), "sa-east-1".to_owned());
