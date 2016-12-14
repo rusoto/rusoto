@@ -587,10 +587,6 @@ fn generate_tests_body(service: &Service) -> String {
         .join("\n\n");
 
     format!("
-        use mock::*;
-        use super::*;
-        use super::super::Region;
-
         {test_bodies}
     ",
     test_bodies=tests_str)
