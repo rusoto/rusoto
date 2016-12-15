@@ -14,7 +14,7 @@ license = "MIT"
 name = "rusoto"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.20.0"
+version = "0.30.0"
 
 [build-dependencies]
 rustc_version = "0.1.7"
