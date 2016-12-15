@@ -57,8 +57,7 @@ impl GenerateProtocol for QueryGenerator {
     }
 
     fn generate_prelude(&self, _: &Service) -> String {
-        "use std::collections::HashMap;
-        use std::str::{FromStr, from_utf8};
+        "use std::str::FromStr;
         use xml::EventReader;
         use xml::reader::ParserConfig;
 
@@ -76,7 +75,7 @@ impl GenerateProtocol for QueryGenerator {
 
     fn generate_support_types(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
         let mut struct_collector = String::new();
-        let serializer = generate_serializer_body(name, shape);
+        let serializer = generate_serializer_body(name, shape, service);
 
         if serializer.is_some() {
             struct_collector.push_str(&format!("
@@ -249,7 +248,7 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 
     format!(
         "
-        let mut obj = HashMap::new();
+        let mut obj = ::std::collections::HashMap::new();
 
         {entry_start_element}
         while try!(peek_at_name(stack)) == {element_tag_name} {{
@@ -277,7 +276,7 @@ fn generate_primitive_deserializer(shape: &Shape) -> String {
     let statement =  match shape.shape_type {
         ShapeType::String | ShapeType::Timestamp => "try!(characters(stack))",
         ShapeType::Integer => "i32::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        ShapeType::Double => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::Double => "f64::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Blob => "try!(characters(stack)).into_bytes()",
         ShapeType::Boolean => "bool::from_str(try!(characters(stack)).as_ref()).unwrap()",
         shape_type => panic!("Unknown primitive shape type: {:?}", shape_type),
@@ -413,15 +412,15 @@ fn generate_struct_field_parse_expression(
     }
 }
 
-fn generate_serializer_body(name: &str,shape: &Shape) -> Option<String> {
+fn generate_serializer_body(name: &str,shape: &Shape, service: &Service) -> Option<String> {
     // Don't need to send "Response" objects, don't make the code for their serializers
     if name.ends_with("Response") {
         return None;
     }
     match shape.shape_type {
-        ShapeType::List => Some(generate_list_serializer(shape)),
+        ShapeType::List => Some(generate_list_serializer(shape, service)),
         ShapeType::Map => Some(generate_map_serializer(shape)),
-        ShapeType::Structure => Some(generate_struct_serializer(shape)),
+        ShapeType::Structure => Some(generate_struct_serializer(shape, service)),
         _ => Some(generate_primitive_serializer(shape)),
     }
 }
@@ -434,7 +433,25 @@ fn generate_serializer_signature(name: &str, shape: &Shape) -> String {
     }
 }
 
-fn generate_list_serializer(shape: &Shape) -> String {
+fn generate_list_serializer(shape: &Shape, service: &Service) -> String {
+    match service.metadata.service_abbreviation {
+	Some(ref abbr) => match &abbr[..] {
+            "CloudWatch" => format!(
+        "for (index, element) in obj.iter().enumerate() {{
+    // List format is different for CloudWatch: http://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutMetricData.html
+    let key = format!(\"{{}}.member.{{}}\", name, index+1);
+    {name}Serializer::serialize(params, &key, element);
+}}
+        ",
+                    name = shape.member(),
+            ),
+            _ => generate_list_serializer_general(shape),
+        },
+	_ => generate_list_serializer_general(shape),
+    }
+}
+
+fn generate_list_serializer_general(shape: &Shape) -> String {
     format!(
         "for (index, element) in obj.iter().enumerate() {{
     // Lists are one-based, see example here: http://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html
@@ -467,7 +484,7 @@ fn generate_map_serializer(shape: &Shape) -> String {
     )
 }
 
-fn generate_struct_serializer(shape: &Shape) -> String {
+fn generate_struct_serializer(shape: &Shape, service: &Service) -> String {
     format!(
         "let mut prefix = name.to_string();
 if prefix != \"\" {{
@@ -476,11 +493,11 @@ if prefix != \"\" {{
 
 {struct_field_serializers}
         ",
-        struct_field_serializers = generate_struct_field_serializers(shape),
+        struct_field_serializers = generate_struct_field_serializers(shape, service),
     )
 }
 
-fn generate_struct_field_serializers(shape: &Shape) -> String {
+fn generate_struct_field_serializers(shape: &Shape, service: &Service) -> String {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
         if shape.required(member_name) {
             format!(
@@ -495,6 +512,13 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
                 tag_name = member_name,
             )
         } else {
+            let use_member_name = match service.metadata.service_abbreviation {
+	        Some(ref abbr) => match &abbr[..] {
+                    "CloudWatch" => true,
+                    _ => false,
+                },
+                _ => false,
+            };
             format!(
                 "if let Some(ref field_value) = obj.{field_name} {{
     {member_shape_name}Serializer::serialize(
@@ -506,7 +530,7 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
                 ",
                 field_name = generate_field_name(member_name),
                 member_shape_name = member.shape,
-                tag_name = member.tag_name(),
+                tag_name = if use_member_name { member_name.clone() } else { member.tag_name() },
             )
         }
     }).collect::<Vec<String>>().join("\n")
@@ -516,7 +540,7 @@ fn generate_primitive_serializer(shape: &Shape) -> String {
     let expression = match shape.shape_type {
         ShapeType::String | ShapeType::Timestamp => "obj",
         ShapeType::Integer | ShapeType::Double | ShapeType::Boolean => "&obj.to_string()",
-        ShapeType::Blob => "from_utf8(obj).unwrap()",
+        ShapeType::Blob => "::std::str::from_utf8(obj).unwrap()",
         shape_type => panic!("Unknown primitive shape type: {:?}", shape_type),
     };
 
@@ -584,15 +608,19 @@ fn generate_tests_body(service: &Service) -> String {
         .flat_map(|response| generate_response_parse_test(service, response))
         .collect();
 
-    let tests_str = test_bodies
-        .join("\n\n");
+    if test_bodies.len() > 0 {
+        let tests_str = test_bodies
+            .join("\n\n");
 
-    format!("
+        format!("
         use mock::*;
         use super::*;
         use super::super::Region;
 
         {test_bodies}
     ",
-    test_bodies=tests_str)
+                test_bodies=tests_str)
+    } else {
+        "".to_string()
+    }
 }

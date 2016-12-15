@@ -4,7 +4,6 @@ use botocore::{Service, Shape, ShapeType, Operation};
 use self::ec2::Ec2Generator;
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
-use self::cwquery::CwQueryGenerator;
 use self::rest_json::RestJsonGenerator;
 use self::error_types::{GenerateErrorTypes, JsonErrorTypes, XmlErrorTypes};
 
@@ -12,7 +11,6 @@ mod error_types;
 mod ec2;
 mod json;
 mod query;
-mod cwquery;
 mod rest_json;
 mod tests;
 
@@ -43,13 +41,7 @@ pub fn generate_source(service: &Service) -> String {
     match &service.metadata.protocol[..] {
         "json" => generate(service, JsonGenerator, JsonErrorTypes),
         "ec2" => generate(service, Ec2Generator, XmlErrorTypes),
-        "query" => match service.metadata.service_abbreviation {
-            Some(ref abbr) => match &abbr[..] {
-                "CloudWatch" => generate(service, CwQueryGenerator, XmlErrorTypes),
-                _ => generate(service, QueryGenerator, XmlErrorTypes),
-            },
-            _ => generate(service, QueryGenerator, XmlErrorTypes),
-        },
+        "query" => generate(service, QueryGenerator, XmlErrorTypes),
         "rest-json" => generate(service, RestJsonGenerator, JsonErrorTypes),
         protocol => panic!("Unknown protocol {}", protocol),
     }
