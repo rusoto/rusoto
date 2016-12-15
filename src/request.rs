@@ -3,7 +3,6 @@
 //! Wraps the Hyper library to send PUT, POST, DELETE and GET requests.
 
 extern crate lazy_static;
-extern crate reqwest;
 
 use std::env;
 use std::io::Read;
@@ -12,7 +11,7 @@ use std::error::Error;
 use std::fmt;
 use std::collections::HashMap;
 
-use self::reqwest::{Client, Error as ReqwestError};
+use reqwest::{Client, Error as ReqwestError};
 use hyper::Error as HyperError;
 use hyper::header::Headers;
 use hyper::header::UserAgent;
