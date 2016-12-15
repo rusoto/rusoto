@@ -3,6 +3,8 @@
 #![cfg_attr(feature = "nightly-testing", allow(cyclomatic_complexity))]
 #![allow(unused_variables, unused_mut)]
 
+extern crate reqwest;
+
 use std::fmt;
 use std::ascii::AsciiExt;
 use std::collections::HashMap;
@@ -13,7 +15,7 @@ use std::num::ParseIntError;
 use std::str::{FromStr, ParseBoolError};
 use std::str;
 
-use reqwest::Client;
+use self::reqwest::Client;
 use md5;
 use rusoto_credential::{
     ProvideAwsCredentials,
