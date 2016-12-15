@@ -13,7 +13,7 @@ impl GenerateProtocol for RestJsonGenerator {
             let output_type = operation.output_shape_or("()");
 
             // Retrieve the `Shape` for the input for this operation.
-            let input_shape = service.shapes.get(input_type).unwrap();
+            let input_shape = &service.shapes[input_type];
 
             // Construct a list of format strings which will be used to format
             // the request URI, mapping the input struct to the URI arguments.
@@ -141,7 +141,7 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
 // IoT defines a lot of empty (and therefore unnecessary) request shapes
 // don't clutter method signatures with them
 fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
-    if shape.members.is_some() && shape.members.as_ref().unwrap().len() > 0 {
+    if shape.members.is_some() && !shape.members.as_ref().unwrap().is_empty() {
         format!("pub fn {method_name}(&self, input: &{input_type})",
             method_name = operation.name.to_snake_case(),
             input_type = operation.input_shape())
@@ -192,7 +192,7 @@ fn generate_params_loading_string(param_strings: &[String]) -> String {
 
 fn generate_shape_member_param_strings(shape: &Shape) -> Vec<String> {
     shape.members.as_ref().unwrap().iter()
-        .filter_map(|(member_name, member)| generate_param_load_string(&member_name, member, shape))
+        .filter_map(|(member_name, member)| generate_param_load_string(member_name, member, shape))
         .collect::<Vec<String>>()
 }
 
@@ -214,8 +214,7 @@ fn generate_param_load_string(member_name: &str, member: &Member, shape: &Shape)
                 ))
             }
         },
-        Some(_) => None,
-        None => None,
+        Some(_) | None => None,
     }
 }
 
@@ -262,8 +261,7 @@ fn generate_member_format_string(member_name: &str, member: &Member) -> Option<S
                 }
             }
         },
-        Some(_) => None,
-        None => None,
+        Some(_) | None => None,
     }
 }
 

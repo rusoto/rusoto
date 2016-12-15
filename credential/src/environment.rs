@@ -3,6 +3,7 @@ use std::env;
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials, in_ten_minutes};
 
 /// Provides AWS credentials from environment variables.
+#[derive(Debug)]
 pub struct EnvironmentProvider;
 
 impl ProvideAwsCredentials for EnvironmentProvider {

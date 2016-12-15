@@ -334,15 +334,16 @@ fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> Stri
         // look up member.shape in all_shapes.  use that shape.member.location_name
         let maybe_child_shape = service.shape_for_member(member);
         let mut location_name = member_name.to_string();
-        let mut member_loc_name = "".to_string();
-        if member.location_name.is_some() {
-            member_loc_name = member.location_name.clone().unwrap().to_string();
-        }
+        let member_loc_name = if member.location_name.is_some() {
+            member.location_name.clone().unwrap().to_string()
+        } else {
+            "".to_string()
+        };
         let mut enter_wrapper_expression = String::new();
         let mut leave_wrapper_expression = String::new();
         let mut wrapper_location_name: Option<&str> = None;
 
-        let parse_expression_location_name = if let Some(ref child_shape) = maybe_child_shape {
+        let parse_expression_location_name = if let Some(child_shape) = maybe_child_shape {
             if child_shape.flattened.is_some() {
                 if let Some(ref child_member) = child_shape.member {
                     if let Some(ref loc_name) = child_member.location_name {
@@ -355,17 +356,15 @@ fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> Stri
                     // assumes we'll only hit this case if a location_name is provided
                     Some(&member_loc_name[..])
                 }
+            } else if child_shape.shape_type == ShapeType::List {
+                wrapper_location_name = Some(member_name);
+
+                enter_wrapper_expression = format!("try!(start_element(\"{}\", stack))", member_name);
+                leave_wrapper_expression = format!("try!(end_element(\"{}\", stack))", member_name);
+
+                child_shape.location_name.as_ref().map(|s| &s[..]).or_else(|| Some("member"))
             } else {
-                if child_shape.shape_type == ShapeType::List {
-                    wrapper_location_name = Some(member_name);
-
-                    enter_wrapper_expression = format!("try!(start_element(\"{}\", stack))", member_name);
-                    leave_wrapper_expression = format!("try!(end_element(\"{}\", stack))", member_name);
-
-                    child_shape.location_name.as_ref().map(|s| &s[..]).or_else(|| Some("member"))
-                } else {
-                    None
-                }
+                None
             }
         } else {
             None

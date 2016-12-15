@@ -224,9 +224,9 @@ fn generate_method_input_serialization(operation: &Operation) -> String {
     }
 }
 
-fn generate_response_tag_name<'a>(member_name: &'a str) -> Cow<'a, str> {
+fn generate_response_tag_name(member_name: &str) -> Cow<str> {
     if member_name.ends_with("Result") {
-        format!("{}Response", &member_name[..member_name.len()-6]).into()
+        format!("{}Response", &member_name[..member_name.len() - 6]).into()
     } else {
         member_name.into()
     }
@@ -287,9 +287,9 @@ fn generate_deserializer_body(name: &str, shape: &Shape) -> Option<String> {
     // Requests don't get deserialized, except the ones that do.
     if name.ends_with("Request") {
         match name {
-            "CancelledSpotInstanceRequest" => (),
-            "PurchaseRequest" => (),
-            "SpotInstanceRequest" => (),
+            "CancelledSpotInstanceRequest" |
+                "PurchaseRequest" |
+                "SpotInstanceRequest" => (),
             _ => return None,
         }
     }

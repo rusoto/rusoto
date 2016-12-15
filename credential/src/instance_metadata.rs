@@ -8,6 +8,7 @@ use serde_json::{Value, from_str};
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 /// Provides AWS credentials from a resource's IAM role.
+#[derive(Debug)]
 pub struct InstanceMetadataProvider;
 
 impl ProvideAwsCredentials for InstanceMetadataProvider {
@@ -25,7 +26,7 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
             };
 
         let mut body = String::new();
-        if let Err(_) = response.read_to_string(&mut body) {
+        if response.read_to_string(&mut body).is_err() {
             return Err(CredentialsError::new("Didn't get a parsable response body from metadata service"));
         }
 
@@ -38,7 +39,7 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
                 Ok(received_response) => response = received_response
             };
 
-        if let Err(_) = response.read_to_string(&mut body) {
+        if response.read_to_string(&mut body).is_err() {
             return Err(CredentialsError::new("Had issues with reading iam role response: {}"));
         }
 

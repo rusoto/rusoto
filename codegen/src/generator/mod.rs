@@ -149,7 +149,7 @@ where P: GenerateProtocol {
         let type_name = &capitalize_first(name.to_string());
 
         if type_name == "String" {
-            return protocol_generator.generate_support_types(&type_name, shape, &service);
+            return protocol_generator.generate_support_types(type_name, shape, service);
         }
 
         if shape.exception() {
@@ -169,7 +169,7 @@ where P: GenerateProtocol {
             shape_type => parts.push(generate_primitive_type(type_name, shape_type, protocol_generator.timestamp_type())),
         }
 
-        if let Some(support_types) = protocol_generator.generate_support_types(type_name, shape, &service) {
+        if let Some(support_types) = protocol_generator.generate_support_types(type_name, shape, service) {
             parts.push(support_types);
         }
 

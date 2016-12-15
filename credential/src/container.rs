@@ -16,6 +16,7 @@ use {
 const AWS_CREDENTIALS_PROVIDER_IP: &'static str = "169.254.170.2";
 
 /// Provides AWS credentials from a task's IAM role.
+#[derive(Debug)]
 pub struct ContainerProvider;
 
 impl ProvideAwsCredentials for ContainerProvider {
@@ -38,7 +39,7 @@ impl ProvideAwsCredentials for ContainerProvider {
         };
 
         let mut body = String::new();
-        if let Err(_) = response.read_to_string(&mut body) {
+        if response.read_to_string(&mut body).is_err() {
             return Err(CredentialsError::new("Didn't get a parsable response body from the credentials provider"));
         }
 
@@ -49,7 +50,7 @@ impl ProvideAwsCredentials for ContainerProvider {
 }
 
 fn parse_credentials_response(response: &str) -> Result<AwsCredentials, CredentialsError> {
-    let json_object: Value = match serde_json::from_str(&response) {
+    let json_object: Value = match serde_json::from_str(response) {
         Ok(v) => v,
         Err(_) => return Err(CredentialsError::new("Couldn't parse credentials response body.")),
     };

@@ -1,3 +1,7 @@
+#![cfg_attr(feature = "nightly-testing", feature(plugin))]
+#![cfg_attr(feature = "nightly-testing", plugin(clippy))]
+#![cfg_attr(not(feature = "unstable"), deny(warnings))]
+
 //! Types for loading and managing AWS access credentials for API requests.
 
 extern crate chrono;
@@ -121,6 +125,7 @@ pub trait ProvideAwsCredentials {
 /// Wrapper for `ProvideAwsCredentials` that caches the credentials returned by the
 /// wrapped provider.  Each time the credentials are accessed, they are checked to see if
 /// they have expired, in which case they are retrieved from the wrapped provider again.
+#[derive(Debug)]
 pub struct BaseAutoRefreshingProvider<P, T> {
     credentials_provider: P,
     cached_credentials: T
@@ -141,7 +146,7 @@ impl <P: ProvideAwsCredentials> AutoRefreshingProviderSync<P> {
 
 impl <P: ProvideAwsCredentials> ProvideAwsCredentials for BaseAutoRefreshingProvider<P, Mutex<AwsCredentials>> {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        let mut creds = self.cached_credentials.lock().unwrap();
+        let mut creds = self.cached_credentials.lock().expect("Failed to lock the cached credentials Mutex");
         if creds.credentials_are_expired() {
             *creds = try!(self.credentials_provider.credentials());
         }
