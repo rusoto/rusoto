@@ -91,6 +91,9 @@ mod mock;
 
 #[cfg(feature = "acm")]
 pub mod acm;
+#[allow(unused_imports)]
+#[cfg(feature = "cloudformation")]
+pub mod cloudformation;
 #[cfg(feature = "cloudhsm")]
 pub mod cloudhsm;
 #[cfg(feature = "cloudtrail")]

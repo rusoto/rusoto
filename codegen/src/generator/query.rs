@@ -3,6 +3,7 @@ use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::GenerateProtocol;
+use super::generate_field_name;
 use super::tests::{Response, find_responses};
 use util::case_insensitive_btreemap_get;
 
@@ -378,7 +379,7 @@ fn generate_struct_field_deserializers(shape: &Shape, service: &Service) -> Stri
                 {leave_wrapper_expression};
                 continue;
             }}",
-            field_name = member_name.to_snake_case(),
+            field_name = generate_field_name(member_name),
             parse_expression = parse_expression,
             wrapper_location_name = wrapper_location_name.or_else(|| parse_expression_location_name).unwrap_or(&location_name),
             enter_wrapper_expression = enter_wrapper_expression,
@@ -489,7 +490,7 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
     &obj.{field_name},
 );
                 ",
-                field_name = member_name.to_snake_case(),
+                field_name = generate_field_name(member_name),
                 member_shape_name = member.shape,
                 tag_name = member_name,
             )
@@ -503,7 +504,7 @@ fn generate_struct_field_serializers(shape: &Shape) -> String {
     );
 }}
                 ",
-                field_name = member_name.to_snake_case(),
+                field_name = generate_field_name(member_name),
                 member_shape_name = member.shape,
                 tag_name = member.tag_name(),
             )
