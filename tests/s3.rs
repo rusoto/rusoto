@@ -12,7 +12,7 @@ use std::io::Read;
 use std::fs::File;
 use std::env::var;
 use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::s3::{S3Helper, S3Client, ListObjectsRequest, HeadObjectRequest};
+use rusoto::s3::{S3Helper, S3Client, ListObjectsRequest, HeadObjectRequest, CreateBucketRequest};
 
 fn test_bucket() -> String {
     match var("S3_TEST_BUCKET") {
@@ -43,6 +43,7 @@ fn list_buckets_tests() {
 fn object_lifecycle_test() {
     // PUT an object
     let s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), test_bucket_region());
+
     let mut f = File::open("tests/sample-data/no_credentials").unwrap();
     let mut contents : Vec<u8> = Vec::new();
     match f.read_to_end(&mut contents) {
@@ -70,6 +71,29 @@ fn object_lifecycle_test() {
 }
 
 #[test]
+fn create_bucket_in_useast1_and_use_immediately() {
+    let mut f = File::open("tests/sample-data/no_credentials").unwrap();
+    let mut contents : Vec<u8> = Vec::new();
+    match f.read_to_end(&mut contents) {
+        Err(why) => panic!("Error opening file to send to S3: {}", why),
+        Ok(_) => (),
+    }
+
+    let bucket_name = format!("rusototestbucket");
+    let s3_helper = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
+    let s3 = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
+    let create_bucket_request = CreateBucketRequest{
+        bucket: bucket_name.clone(),
+        ..Default::default()
+    };
+    let bucket_creation_result = s3.create_bucket(&create_bucket_request).unwrap();
+    println!("bucket created: {:?}", bucket_creation_result);
+    
+    let put_response = s3_helper.put_object(&bucket_name, "no_credentials", &contents).unwrap();
+    println!("put_response is {:?}", put_response);
+}
+
+#[test]
 fn put_and_fetch_timestamp_named_object_test() {
     let s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), test_bucket_region());
     let mut f = File::open("tests/sample-data/no_credentials").unwrap();
@@ -93,4 +117,3 @@ fn list_objects_test() {
     let result = bare_s3.list_objects(&list_request).unwrap();
     println!("result is {:?}", result);
 }
-
