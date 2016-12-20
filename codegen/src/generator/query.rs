@@ -599,7 +599,7 @@ fn generate_tests_body(service: &Service) -> String {
 
     let our_responses: Vec<Response> = responses.values()
         .into_iter()
-        .filter(|r| r.service == service.service_type_name())
+        .filter(|r| r.service.to_lowercase() == service.service_type_name().to_lowercase())
         .map(|r| r.to_owned())
         .collect();
 
