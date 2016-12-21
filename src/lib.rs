@@ -43,7 +43,9 @@
 //!     },
 //! }
 
+extern crate base64;
 extern crate chrono;
+extern crate hex;
 extern crate hyper;
 #[macro_use] extern crate lazy_static;
 #[macro_use] extern crate log;
@@ -51,7 +53,6 @@ extern crate md5;
 extern crate regex;
 extern crate ring;
 extern crate rusoto_credential;
-extern crate rustc_serialize;
 extern crate serde;
 extern crate serde_json;
 extern crate time;
