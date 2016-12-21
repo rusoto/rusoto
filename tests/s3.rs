@@ -13,7 +13,7 @@ use time::get_time;
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::s3::{S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
-                 CORSRule, CreateBucketRequest, DeleteBucketRequest, ListObjectsRequest };
+                 CORSRule, CreateBucketRequest, DeleteBucketRequest };
 
 type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 
@@ -75,8 +75,6 @@ fn test_delete_bucket(client: &TestClient, bucket: &str) {
     client.delete_bucket(&delete_bucket_req).unwrap();
 }
 
-
-#[test]
 fn test_put_object(client: &TestClient, bucket: &str, filename: &str) {
     let mut f = File::open("tests/sample-data/no_credentials").unwrap();
     let mut contents: Vec<u8> = Vec::new();
@@ -94,7 +92,6 @@ fn test_put_object(client: &TestClient, bucket: &str, filename: &str) {
     }
 }
 
-#[test]
 fn test_head_object(client: &TestClient, bucket: &str, filename: &str) {
     let head_req = HeadObjectRequest {
         bucket: bucket.to_owned(),
@@ -105,7 +102,6 @@ fn test_head_object(client: &TestClient, bucket: &str, filename: &str) {
     client.head_object(&head_req).unwrap();    
 }
 
-#[test]
 fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
     let get_req = GetObjectRequest {
         bucket: bucket.to_owned(),

@@ -255,11 +255,8 @@ fn generate_parameters(service: &Service, operation: &Operation) -> Option<Strin
     let shape = service.shapes.get(&operation.input.as_ref().unwrap().shape).unwrap();
 
     Some(shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
-        if member.location.is_none() {
-            return None;
-        }
-        match &member.location.as_ref().unwrap()[..] {
-            "querystring" => {
+        match member.location.as_ref().to_owned() {
+            Some(location) if location == "querystring" => {
                 if shape.required(&member_name) {
                     Some(format!("params.put(\"{location_name}\", &input.{field_name}.to_string());",
                         location_name = member.location_name.as_ref().unwrap(),
@@ -504,16 +501,15 @@ fn generate_deserializer_body(name: &str, shape: &Shape, _service: &Service) -> 
 fn generate_list_deserializer(shape: &Shape) -> String {
 
     // flattened lists are just the list elements repeated without
-    // an enclusing <FooList></FooList> tag
+    // an enclosing <FooList></FooList> tag
     if let Some(true) = shape.flattened {
         return generate_flat_list_deserializer(shape);
     }
 
     let location_name = shape.member
         .as_ref()
-        .and_then(|m| m.location_name.as_ref())
-        .map(|name| &name[..])
-        .unwrap_or(shape.member());
+        .and_then(|m| m.location_name.to_owned())
+        .unwrap_or(shape.member().to_owned());
 
     format!("
         let mut obj = vec![];

@@ -110,8 +110,8 @@ where P: GenerateProtocol {
         ",
         methods = protocol_generator.generate_methods(service),
         service_name = match &service.metadata.service_abbreviation {
-        &Some(ref service_abbreviation) => service_abbreviation.as_str(),
-        &None => service.metadata.service_full_name.as_ref()
+            &Some(ref service_abbreviation) => service_abbreviation.as_str(),
+            &None => service.metadata.service_full_name.as_ref()
         },
         type_name = service.client_type_name(),
     )
@@ -161,7 +161,6 @@ fn mutate_type_name(type_name: &str) -> String{
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => capitalized
     }
-
 }
 
 fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
