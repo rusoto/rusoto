@@ -50,6 +50,7 @@ fn main() {
         ["cloudformation", "2010-05-15"],
         ["cloudhsm", "2014-05-30"],
         ["cloudtrail", "2013-11-01"],
+        ["cloudwatch", "2010-08-01"],
         ["codecommit", "2015-04-13"],
         ["codedeploy", "2014-10-06"],
         ["codepipeline", "2015-07-09"],
