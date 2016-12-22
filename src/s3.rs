@@ -11098,7 +11098,8 @@ mod tests {
     use std::fs::File;
     use std::str;
 
-    use xml::reader::*;
+    use xml::EventReader;
+    use xmlutil::{XmlResponse, Next};
 
     use region::Region;
     use super::*;
@@ -11108,7 +11109,6 @@ mod tests {
     use super::ListMultipartUploadsOutputParser;
     use super::ListPartsOutputParser;
     use super::extract_s3_temporary_endpoint_from_xml;
-    use xmlutil::*;
 
     #[test]
     fn list_buckets_happy_path() {

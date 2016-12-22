@@ -175,7 +175,7 @@ pub fn skip_tree<T: Peek + Next>(stack: &mut T) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use xml::reader::*;
+    use xml::reader::EventReader;
     use std::io::Read;
     use std::fs::File;
 
