@@ -11098,6 +11098,9 @@ mod tests {
     use std::fs::File;
     use std::str;
 
+    use xml::EventReader;
+    use xmlutil::{XmlResponse, Next};
+
     use region::Region;
     use super::*;
     use super::CompleteMultipartUploadOutputParser;
