@@ -9,8 +9,8 @@ mod test {
     use s3::{S3Client, HeadObjectRequest, GetObjectRequest, ListMultipartUploadsRequest};
     use s3::{CreateMultipartUploadOutputDeserializer, CompleteMultipartUploadOutputDeserializer};
     use s3::{ListMultipartUploadsOutputDeserializer, ListPartsRequest, Initiator, Owner};
-    use xmlutil::*;
-    use xml::reader::*;
+    use xmlutil::{XmlResponse, Next};
+    use xml::EventReader;
 
     use super::super::{Region, SignedRequest};
     use super::super::mock::*;

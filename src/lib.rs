@@ -99,6 +99,8 @@ pub mod cloudformation;
 pub mod cloudhsm;
 #[cfg(feature = "cloudtrail")]
 pub mod cloudtrail;
+#[cfg(feature = "cloudwatch")]
+pub mod cloudwatch;
 #[cfg(feature = "codecommit")]
 pub mod codecommit;
 #[cfg(feature = "codedeploy")]
