@@ -69,27 +69,6 @@ impl GenerateProtocol for JsonGenerator {
     fn timestamp_type(&self) -> &'static str {
         "f64"
     }
-
-    fn generate_additional_annotations(&self, service: &Service, shape_name: &str, type_name: &str) -> Vec<String> {
-        // serde can no longer handle recursively defined types without help
-        // annotate them to avoid compiler overflows
-        match service.service_type_name() {
-            "DynamoDb" | "DynamoDbStreams" => {
-                if type_name == "ListAttributeValue" || type_name == "MapAttributeValue" {
-                    return vec!["#[serde(bound=\"\")]".to_owned()];
-                }
-            },
-            "Emr" => {
-                if shape_name == "Configuration" && type_name == "ConfigurationList" {
-                    return vec!["#[serde(bound=\"\")]".to_owned()];
-                }
-            },
-            _ => {}
-        }
-
-        Vec::<String>::with_capacity(0)
-    }
-
 }
 
 fn can_skip_serializer(struct_name: &str) -> bool {

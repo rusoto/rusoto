@@ -26,10 +26,6 @@ pub trait GenerateProtocol {
         None
     }
 
-    fn generate_additional_annotations(&self, _service: &Service, _shape_name: &str, _type_name: &str) -> Vec<String> {
-        Vec::<String>::with_capacity(0)
-    }
-
     fn generate_tests(&self, _service: &Service) -> Option<String> {
         None
     }
@@ -194,15 +190,18 @@ fn generate_struct<P>(
             name = name,
         )
     } else {
+        let struct_attributes = protocol_generator.generate_struct_attributes(name);
+        // Serde attributes are only needed if deriving the Serialize or Deserialize trait
+        let need_serde_attrs = struct_attributes.contains("erialize");
         format!(
             "{attributes}
             pub struct {name} {{
                 {struct_fields}
             }}
             ",
-            attributes = protocol_generator.generate_struct_attributes(name),
+            attributes = struct_attributes,
             name = name,
-            struct_fields = generate_struct_fields(service, shape, name, protocol_generator),
+            struct_fields = generate_struct_fields(service, shape, need_serde_attrs),
         )
     }
 
@@ -217,7 +216,7 @@ pub fn generate_field_name(member_name: &str) -> String {
     }
 }
 
-fn generate_struct_fields<P>(service: &Service, shape: &Shape, shape_name: &str, protocol_generator: &P) -> String where P: GenerateProtocol {
+fn generate_struct_fields(service: &Service, shape: &Shape, serde_attrs: bool) -> String {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
         let mut lines: Vec<String> = Vec::new();
         let name = generate_field_name(member_name);
@@ -228,25 +227,23 @@ fn generate_struct_fields<P>(service: &Service, shape: &Shape, shape_name: &str,
 
         let type_name = capitalize_first(member.shape.to_string());
 
-        lines.push("#[allow(unused_attributes)]".to_owned());
-        lines.push(format!("#[serde(rename=\"{}\")]", member_name));
+        if serde_attrs {
+            lines.push(format!("#[serde(rename=\"{}\")]", member_name));
 
-        lines.append(&mut protocol_generator.generate_additional_annotations(service, shape_name, &type_name));
-
-        if let Some(shape_type) = service.shape_type_for_member(member) {
-            if shape_type == ShapeType::Blob {
-                lines.push(
-                    "#[serde(
-                        deserialize_with=\"::serialization::SerdeBlob::deserialize_blob\",
-                        serialize_with=\"::serialization::SerdeBlob::serialize_blob\",
-                        default,
-                    )]".to_owned()
-                );
-            } else if shape_type == ShapeType::Boolean && !shape.required(member_name) {
-                lines.push("#[serde(skip_serializing_if=\"::std::option::Option::is_none\")]".to_owned());
+            if let Some(shape_type) = service.shape_type_for_member(member) {
+                if shape_type == ShapeType::Blob {
+                    lines.push(
+                        "#[serde(
+                            deserialize_with=\"::serialization::SerdeBlob::deserialize_blob\",
+                            serialize_with=\"::serialization::SerdeBlob::serialize_blob\",
+                            default,
+                        )]".to_owned()
+                    );
+                } else if shape_type == ShapeType::Boolean && !shape.required(member_name) {
+                    lines.push("#[serde(skip_serializing_if=\"::std::option::Option::is_none\")]".to_owned());
+                }
             }
         }
-
 
         if shape.required(member_name) {
             lines.push(format!("pub {}: {},",  name, type_name));
