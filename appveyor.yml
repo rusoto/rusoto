@@ -8,7 +8,7 @@ environment:
     PROJECT_NAME: rusoto
   matrix:
     - TARGET: x86_64-pc-windows-msvc
-      CHANNEL: 1.13.0
+      CHANNEL: stable
 cache:
   - 'C:\Users\appveyor\.cargo'
 # Install Rust and Cargo
