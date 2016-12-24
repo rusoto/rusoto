@@ -11,7 +11,7 @@ use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
 
-use hyper::status::StatusCode;
+use reqwest::StatusCode;
 use ring::{digest, hmac};
 use rusoto_credential::AwsCredentials;
 use rustc_serialize::hex::ToHex;

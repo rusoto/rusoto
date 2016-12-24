@@ -9,7 +9,7 @@ extern crate rusoto;
 use std::clone::Clone;
 use std::ops::{Deref, DerefMut};
 
-use hyper::Client;
+use reqwest::Client;
 use rand::Rng;
 use rusoto::{ChainProvider, ProvideAwsCredentials, Region};
 use rusoto::elastictranscoder::EtsClient;

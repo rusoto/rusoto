@@ -54,9 +54,11 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
     let mut service_code = String::with_capacity(969984);
     service_code.push_str(
         "#[allow(warnings)]
-        use hyper::Client;
-        use hyper::client::RedirectPolicy;
+        use reqwest::Client;
+        use reqwest::RedirectPolicy;
         use request::DispatchSignedRequest;
+        use reqwest::StatusCode;
+        use reqwest::Error as ReqwestError;
         use region;
 
         use std::fmt;
@@ -84,10 +86,10 @@ fn generate_client<P>(service: &Service, protocol_generator: &P) -> String
         }}
 
         impl<P> {type_name}<P, Client> where P: ProvideAwsCredentials {{
-            pub fn new(credentials_provider: P, region: region::Region) -> Self {{
-                let mut client = Client::new();
-                client.set_redirect_policy(RedirectPolicy::FollowNone);
-               {type_name}::with_request_dispatcher(client, credentials_provider, region)
+            pub fn new(credentials_provider: P, region: region::Region) -> Result<Self, ReqwestError> {{
+                let mut client = try!(Client::new());
+                client.redirect(RedirectPolicy::none());
+                return Ok({type_name}::with_request_dispatcher(client, credentials_provider, region));
             }}
         }}
 

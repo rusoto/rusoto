@@ -26,7 +26,7 @@ impl GenerateProtocol for JsonGenerator {
                     let response = try!(self.dispatcher.dispatch(&request));
 
                     match response.status {{
-                        200 => {{
+                        StatusCode::Ok => {{
                             {ok_response}
                         }}
                         _ => Err({error_type}::from_body(&response.body)),

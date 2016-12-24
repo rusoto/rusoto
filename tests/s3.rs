@@ -5,7 +5,7 @@ extern crate hyper;
 extern crate env_logger;
 extern crate log;
 
-use hyper::Client;
+use reqwest::Client;
 use std::fs::File;
 use std::io::Read;
 use time::get_time;

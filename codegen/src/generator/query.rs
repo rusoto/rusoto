@@ -30,7 +30,7 @@ impl GenerateProtocol for QueryGenerator {
                     {xml_stack_loader}
 
                     match result.status {{
-                        200 => {{
+                        StatusCode::Ok => {{
                             {method_return_value}
                         }}
                         _ => {{
