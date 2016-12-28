@@ -57,6 +57,7 @@ extern crate serde_json;
 extern crate time;
 extern crate url;
 extern crate xml;
+extern crate reqwest;
 
 #[cfg(feature = "serde_derive")]
 #[macro_use]

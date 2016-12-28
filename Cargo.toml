@@ -14,7 +14,7 @@ license = "MIT"
 name = "rusoto"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.20.0"
+version = "0.30.0"
 
 [build-dependencies]
 rustc_version = "0.1.7"
@@ -26,7 +26,7 @@ version = ">= 0.4.0"
 
 [dependencies]
 chrono = "0.2.21"
-hyper = "0.9.10"
+hyper = { version = "0.9" , default-features = false, features = [] }
 lazy_static = "0.2.1"
 log = "0.3.6"
 md5 = "0.2"
@@ -38,6 +38,7 @@ serde_json = "0.8.0"
 time = "0.1.35"
 url = "1.2.0"
 xml-rs = "0.1.26"
+reqwest = "0.1.0"
 
 [dependencies.clippy]
 optional = true

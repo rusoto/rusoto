@@ -11,7 +11,7 @@ use std::error::Error;
 use std::fmt;
 use std::collections::HashMap;
 
-use hyper::Client;
+use reqwest::{Client, Error as ReqwestError};
 use hyper::Error as HyperError;
 use hyper::header::Headers;
 use hyper::header::UserAgent;
@@ -57,6 +57,12 @@ impl fmt::Display for HttpDispatchError {
 
 impl From<HyperError> for HttpDispatchError {
     fn from(err: HyperError) -> HttpDispatchError {
+        HttpDispatchError { message: err.description().to_string() }
+    }
+}
+
+impl From<ReqwestError> for HttpDispatchError {
+    fn from(err: ReqwestError) -> HttpDispatchError {
         HttpDispatchError { message: err.description().to_string() }
     }
 }
@@ -128,12 +134,12 @@ impl DispatchSignedRequest for Client {
 
         let mut headers: HashMap<String, String> = HashMap::new();
 
-        for header in hyper_response.headers.iter() {
+        for header in hyper_response.headers().iter() {
             headers.insert(header.name().to_string(), header.value_string());
         }
 
         Ok(HttpResponse {
-            status: hyper_response.status.to_u16(),
+            status: hyper_response.status().to_u16(),
             body: body,
             headers: headers
         })

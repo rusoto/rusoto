@@ -3,6 +3,8 @@
 #![cfg_attr(feature = "nightly-testing", allow(cyclomatic_complexity))]
 #![allow(unused_variables, unused_mut)]
 
+extern crate reqwest;
+
 use std::fmt;
 use std::ascii::AsciiExt;
 use std::collections::HashMap;
@@ -13,7 +15,7 @@ use std::num::ParseIntError;
 use std::str::{FromStr, ParseBoolError};
 use std::str;
 
-use hyper::client::{Client, RedirectPolicy};
+use self::reqwest::{Client, RedirectPolicy};
 use md5;
 use rusoto_credential::{
     ProvideAwsCredentials,
@@ -9160,8 +9162,8 @@ pub struct S3Client<P, D> where P: ProvideAwsCredentials, D: DispatchSignedReque
 
 impl<P> S3Client<P, Client> where P: ProvideAwsCredentials {
     pub fn new(credentials_provider: P, region: region::Region) -> Self {
-        let mut client = Client::new();
-        client.set_redirect_policy(RedirectPolicy::FollowNone);
+        let mut client = Client::new().unwrap();
+        client.redirect(RedirectPolicy::none());
         S3Client::with_request_dispatcher(client, credentials_provider, region)
     }
 }
