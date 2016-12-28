@@ -20,8 +20,10 @@ pub enum Region {
     CaCentral1,
     EuCentral1,
     EuWest1,
+    EuWest2,
     SaEast1,
     UsEast1,
+    UsEast2,
     UsWest1,
     UsWest2,
     CnNorth1,
@@ -44,8 +46,10 @@ impl Display for Region {
             Region::CaCentral1 => "ca-central-1",
             Region::EuCentral1 => "eu-central-1",
             Region::EuWest1 => "eu-west-1",
+            Region::EuWest2 => "eu-west-2",
             Region::SaEast1 => "sa-east-1",
             Region::UsEast1 => "us-east-1",
+            Region::UsEast2 => "us-east-2",
             Region::UsWest1 => "us-west-1",
             Region::UsWest2 => "us-west-2",
             Region::CnNorth1 => "cn-north-1",
@@ -68,8 +72,10 @@ impl FromStr for Region {
             "ca-central-1" => Ok(Region::CaCentral1),
             "eu-central-1" => Ok(Region::EuCentral1),
             "eu-west-1" => Ok(Region::EuWest1),
+            "eu-west-2" => Ok(Region::EuWest2),
             "sa-east-1" => Ok(Region::SaEast1),
             "us-east-1" => Ok(Region::UsEast1),
+            "us-east-2" => Ok(Region::UsEast2),
             "us-west-1" => Ok(Region::UsWest1),
             "us-west-2" => Ok(Region::UsWest2),
             "cn-north-1" => Ok(Region::CnNorth1),
@@ -118,8 +124,10 @@ mod tests {
         assert_eq!("ca-central-1".parse(), Ok(Region::CaCentral1));
         assert_eq!("eu-central-1".parse(), Ok(Region::EuCentral1));
         assert_eq!("eu-west-1".parse(), Ok(Region::EuWest1));
+        assert_eq!("eu-west-2".parse(), Ok(Region::EuWest2));
         assert_eq!("sa-east-1".parse(), Ok(Region::SaEast1));
         assert_eq!("us-east-1".parse(), Ok(Region::UsEast1));
+        assert_eq!("us-east-2".parse(), Ok(Region::UsEast2));
         assert_eq!("us-west-1".parse(), Ok(Region::UsWest1));
         assert_eq!("us-west-2".parse(), Ok(Region::UsWest2));
         assert_eq!("cn-north-1".parse(), Ok(Region::CnNorth1));
@@ -135,8 +143,10 @@ mod tests {
         assert_eq!(Region::CaCentral1.to_string(), "ca-central-1".to_owned());
         assert_eq!(Region::EuCentral1.to_string(), "eu-central-1".to_owned());
         assert_eq!(Region::EuWest1.to_string(), "eu-west-1".to_owned());
+        assert_eq!(Region::EuWest2.to_string(), "eu-west-2".to_owned());
         assert_eq!(Region::SaEast1.to_string(), "sa-east-1".to_owned());
         assert_eq!(Region::UsEast1.to_string(), "us-east-1".to_owned());
+        assert_eq!(Region::UsEast2.to_string(), "us-east-2".to_owned());
         assert_eq!(Region::UsWest1.to_string(), "us-west-1".to_owned());
         assert_eq!(Region::UsWest2.to_string(), "us-west-2".to_owned());
         assert_eq!(Region::CnNorth1.to_string(), "cn-north-1".to_owned());
