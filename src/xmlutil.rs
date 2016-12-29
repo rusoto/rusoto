@@ -133,7 +133,7 @@ pub fn start_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Resu
             Err(XmlParseError::new(&format!("START Expected {} got {}", element_name, name.local_name)))
         }
     } else {
-        Err(XmlParseError::new(&format!("Expected StartElement {}", element_name)))
+        Err(XmlParseError::new(&format!("Expected StartElement {} got {:#?}", element_name, next)))
     }
 }
 

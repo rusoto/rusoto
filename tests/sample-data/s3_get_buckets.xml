@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>a84c6b0c308085829b6562b586f6664fc00faab6cfd441e90ad418ea916eed83</ID><DisplayName>matthew</DisplayName></Owner><Buckets><Bucket><Name>aelk-dualsparkutilitybucket-9kcby8xr5khm</Name><CreationDate>2015-07-20T00:36:58.000Z</CreationDate></Bucket><Bucket><Name>anotherelks-dualsparkutilitybucket-cxbbvz8s2syy</Name><CreationDate>2015-07-19T23:04:37.000Z</CreationDate></Bucket></Buckets></ListAllMyBucketsResult>

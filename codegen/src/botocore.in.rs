@@ -174,6 +174,14 @@ impl Member {
     pub fn tag_name(&self) -> String {
         self.location_name.clone().unwrap_or(self.shape.clone())
     }
+
+    pub fn deprecated(&self) -> bool {
+        self.deprecated.unwrap_or(false)
+    }
+
+    pub fn streaming(&self) -> bool {
+        self.streaming.unwrap_or(false)
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -192,6 +200,12 @@ pub struct Key {
     pub shape: String,
 }
 
+impl Key {
+    pub fn tag_name(&self) -> String {
+        self.location_name.clone().unwrap_or(self.shape.clone())
+    }
+}
+
 #[derive(Debug, Deserialize)]
 pub struct Value {
     pub documentation: Option<String>,
@@ -199,6 +213,12 @@ pub struct Value {
     pub location_name: Option<String>,
     #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
     pub shape: String,
+}
+
+impl Value {
+    pub fn tag_name(&self) -> String {
+        self.location_name.clone().unwrap_or(self.shape.clone())
+    }    
 }
 
 #[derive(Debug, Deserialize)]
@@ -252,6 +272,7 @@ impl<'a> Shape {
     pub fn exception(&self) -> bool {
         self.exception.unwrap_or(false)
     }
+
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq)]

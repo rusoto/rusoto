@@ -1,119 +1,164 @@
 #![cfg(feature = "s3")]
-
-extern crate env_logger;
-#[macro_use]
-extern crate log;
-extern crate time;
-
-#[macro_use]
 extern crate rusoto;
+extern crate time;
+extern crate hyper;
+extern crate env_logger;
+extern crate log;
 
-use std::io::Read;
+use hyper::Client;
 use std::fs::File;
-use std::env::var;
+use std::io::Read;
+use time::get_time;
+
 use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::s3::{S3Helper, S3Client, ListObjectsRequest, HeadObjectRequest, CreateBucketRequest};
+use rusoto::s3::{S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest,
+                 PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
+                 CORSRule, CreateBucketRequest, DeleteBucketRequest };
 
-fn test_bucket() -> String {
-    match var("S3_TEST_BUCKET") {
-        Ok(val) => val.to_owned(),
-        Err(_) => "rusototester".to_owned()
-    }
-}
+type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 
-fn test_bucket_region() -> Region {
-    match var("S3_TEST_BUCKET_REGION") {
-        Ok(val) => val.parse().unwrap(),
-        Err(_) => "us-west-2".parse().unwrap()
-    }
-}
-
+// Rust is in bad need of an integration test harness
+// This creates the S3 resources needed for a suite of tests,
+// executes those tests, and then destroys the resources
 #[test]
-fn list_buckets_tests() {
-    let _ = env_logger::init();
-    let s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), test_bucket_region());
-    let response = s3.list_buckets().unwrap();
-    info!("Got list of buckets: {:?}", response);
-    for q in response.buckets {
-        info!("Existing bucket: {:?}", q.name);
-    }
-}
+fn test_all_the_things() {
+    let client = S3Client::new(DefaultCredentialsProvider::new().unwrap(),
+                               Region::UsEast1);
 
-#[test]
-fn object_lifecycle_test() {
-    // PUT an object
-    let s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), test_bucket_region());
+    // a random number should probably be appended here too
+    let test_bucket = format!("rusoto_test_bucket_{}", get_time().sec);
+    let filename = format!("test_file_{}", get_time().sec);
 
-    let mut f = File::open("tests/sample-data/no_credentials").unwrap();
-    let mut contents : Vec<u8> = Vec::new();
-    match f.read_to_end(&mut contents) {
-        Err(why) => panic!("Error opening file to send to S3: {}", why),
-        Ok(_) => {
-            s3.put_object(&test_bucket(), "no_credentials", &contents).unwrap();
-        }
-    }
+    // get a list of list_buckets
+    test_list_buckets(&client);
 
-    let client = S3Client::new(DefaultCredentialsProvider::new().unwrap(), test_bucket_region());
+    // create a bucket for these tests
+    test_create_bucket(&client, &test_bucket);
+
+    // modify the bucket's CORS properties
+    test_put_bucket_cors(&client, &test_bucket);
+
+    // PUT an object (no_credentials is an arbitrary choice)
+    test_put_object(&client, &test_bucket, &filename);
+
     // HEAD the object that was PUT
-    let size_req = HeadObjectRequest{
-      bucket: test_bucket(),
-      key: "no_credentials".to_string(),
-      ..Default::default()
-    };
-
-    println!("{:?}", client.head_object(&size_req).unwrap());
+    test_head_object(&client, &test_bucket, &filename);
 
     // GET the object
-    s3.get_object(&test_bucket(), "no_credentials").unwrap();
+    test_get_object(&client, &test_bucket, &filename);
+
+    // copy the object to change its settings
+    test_copy_object(&client, &test_bucket, &filename);
 
     // DELETE the object
-    s3.delete_object(&test_bucket(), "no_credentials").unwrap();    
+    test_delete_object(&client, &test_bucket, &filename);
+
+    // delete the test bucket
+    test_delete_bucket(&client, &test_bucket);    
 }
 
-#[test]
-fn create_bucket_in_useast1_and_use_immediately() {
-    let mut f = File::open("tests/sample-data/no_credentials").unwrap();
-    let mut contents : Vec<u8> = Vec::new();
-    match f.read_to_end(&mut contents) {
-        Err(why) => panic!("Error opening file to send to S3: {}", why),
-        Ok(_) => (),
-    }
-
-    let bucket_name = format!("rusototestbucket");
-    let s3_helper = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
-    let s3 = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
-    let create_bucket_request = CreateBucketRequest{
-        bucket: bucket_name.clone(),
+fn test_create_bucket(client: &TestClient, bucket: &str) {
+    let create_bucket_req = CreateBucketRequest {
+        bucket: bucket.to_owned(),
         ..Default::default()
     };
-    let bucket_creation_result = s3.create_bucket(&create_bucket_request).unwrap();
-    println!("bucket created: {:?}", bucket_creation_result);
-    
-    let put_response = s3_helper.put_object(&bucket_name, "no_credentials", &contents).unwrap();
-    println!("put_response is {:?}", put_response);
+
+    client.create_bucket(&create_bucket_req).unwrap();
 }
 
-#[test]
-fn put_and_fetch_timestamp_named_object_test() {
-    let s3 = S3Helper::new(DefaultCredentialsProvider::new().unwrap(), test_bucket_region());
+fn test_delete_bucket(client: &TestClient, bucket: &str) {
+    let delete_bucket_req = DeleteBucketRequest {
+        bucket: bucket.to_owned(),
+        ..Default::default()
+    };
+
+    client.delete_bucket(&delete_bucket_req).unwrap();
+}
+
+fn test_put_object(client: &TestClient, bucket: &str, filename: &str) {
     let mut f = File::open("tests/sample-data/no_credentials").unwrap();
-    let mut contents : Vec<u8> = Vec::new();
+    let mut contents: Vec<u8> = Vec::new();
     match f.read_to_end(&mut contents) {
         Err(why) => panic!("Error opening file to send to S3: {}", why),
         Ok(_) => {
-            s3.put_object(&test_bucket(), "2016-10-07T23:30:38Z", &contents).unwrap();
+            let req = PutObjectRequest {
+                bucket: bucket.to_owned(),
+                key: filename.to_owned(),
+                body: Some(contents),
+                ..Default::default()
+            };
+            let _ = client.put_object(&req);
         }
     }
-    let get_response = s3.get_object(&test_bucket(), "2016-10-07T23:30:38Z").unwrap();
-    println!("Got object back: {:?}", get_response);
 }
 
-#[test]
-fn list_objects_test() {
-    let _ = env_logger::init();
-    let bare_s3 = S3Client::new(DefaultCredentialsProvider::new().unwrap(), test_bucket_region());
-    let mut list_request = ListObjectsRequest::default(); // need to set bucket
-    list_request.bucket = test_bucket();
-    let result = bare_s3.list_objects(&list_request).unwrap();
-    println!("result is {:?}", result);
+fn test_head_object(client: &TestClient, bucket: &str, filename: &str) {
+    let head_req = HeadObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+
+    client.head_object(&head_req).unwrap();    
+}
+
+fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
+    let get_req = GetObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+
+    client.get_object(&get_req).unwrap();
+}
+
+fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
+    let req = CopyObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        copy_source: format!("{}/{}", bucket, filename),
+        cache_control: Some("max-age=123".to_owned()),
+        content_type: Some("application/json".to_owned()),
+        metadata_directive: Some("REPLACE".to_owned()),
+        ..Default::default()
+    };
+
+    client.copy_object(&req).unwrap();
+}
+
+fn test_delete_object(client: &TestClient, bucket: &str, filename: &str) {
+    let del_req = DeleteObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+
+    client.delete_object(&del_req).unwrap();    
+}
+
+fn test_list_buckets(client: &TestClient) {
+    client.list_buckets().unwrap();
+}
+
+fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
+    let cors_rules =
+        vec![CORSRule {
+                 allowed_methods: vec!["PUT".to_owned(), "POST".to_owned(), "DELETE".to_owned()],
+                 allowed_origins: vec!["http://www.example.com".to_owned()],
+                 allowed_headers: Some(vec!["*".to_owned()]),
+                 max_age_seconds: Some(3000),
+                 expose_headers: Some(vec!["x-amz-server-side-encryption".to_owned()]),
+                 ..Default::default()
+             }];
+
+    let cors_configuration = CORSConfiguration { cors_rules: cors_rules };
+
+    let req = PutBucketCorsRequest {
+        bucket: bucket.to_owned(),
+        cors_configuration: cors_configuration,
+        ..Default::default()
+    };
+
+    client.put_bucket_cors(&req).unwrap();
+
 }

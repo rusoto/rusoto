@@ -132,7 +132,7 @@ impl <'a> SignedRequest <'a> {
     }
 
     pub fn add_param<S>(&mut self, key: S, value: S)  where S: Into<String> {
-        self.params.insert(key.into(), value.into());
+        self.params.insert(key.into(), Some(value.into()));
     }
 
     pub fn set_params(&mut self, params: Params){
@@ -311,13 +311,17 @@ fn build_canonical_query_string(params: &Params) -> String {
     }
 
     let mut output = String::new();
-    for item in params.iter() {
+    for (key, val) in params.iter() {
         if !output.is_empty() {
             output.push_str("&");
         }
-        output.push_str(&encode_uri_strict(item.0));
-        output.push_str("=");
-        output.push_str(&encode_uri_strict(item.1));
+
+        output.push_str(&encode_uri_strict(key));
+        output.push_str("=");        
+
+        if val.is_some() {
+            output.push_str(&encode_uri_strict(val.as_ref().unwrap()));
+        }
     }
 
     output
@@ -448,7 +452,7 @@ mod tests {
     fn query_encoding_escaped_chars_range(start: u8, end: u8) {
         let mut params = Params::new();
         for code in start..end {
-            params.insert("k".to_owned(), (code as char).to_string());
+            params.insert("k".to_owned(), Some((code as char).to_string()));
             let enc = build_canonical_query_string(&params);
             let expected = format!("k=%{:02X}", code);
             assert_eq!(expected, enc);
