@@ -63,7 +63,8 @@ fn test_create_bucket(client: &TestClient, bucket: &str) {
         ..Default::default()
     };
 
-    client.create_bucket(&create_bucket_req).unwrap();
+    let result = client.create_bucket(&create_bucket_req).unwrap();
+    println!("{:#?}", result);
 }
 
 fn test_delete_bucket(client: &TestClient, bucket: &str) {
@@ -72,7 +73,8 @@ fn test_delete_bucket(client: &TestClient, bucket: &str) {
         ..Default::default()
     };
 
-    client.delete_bucket(&delete_bucket_req).unwrap();
+    let result = client.delete_bucket(&delete_bucket_req).unwrap();
+    println!("{:#?}", result);    
 }
 
 fn test_put_object(client: &TestClient, bucket: &str, filename: &str) {
@@ -87,7 +89,8 @@ fn test_put_object(client: &TestClient, bucket: &str, filename: &str) {
                 body: Some(contents),
                 ..Default::default()
             };
-            let _ = client.put_object(&req);
+            let result = client.put_object(&req);
+            println!("{:#?}", result);            
         }
     }
 }
@@ -99,7 +102,8 @@ fn test_head_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    client.head_object(&head_req).unwrap();    
+    let result = client.head_object(&head_req).unwrap();    
+    println!("{:#?}", result);    
 }
 
 fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
@@ -109,7 +113,8 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    client.get_object(&get_req).unwrap();
+    let result = client.get_object(&get_req).unwrap();
+    println!("{:#?}", result);    
 }
 
 fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
@@ -123,7 +128,8 @@ fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    client.copy_object(&req).unwrap();
+    let result = client.copy_object(&req).unwrap(); 
+    println!("{:#?}", result);   
 }
 
 fn test_delete_object(client: &TestClient, bucket: &str, filename: &str) {
@@ -133,11 +139,13 @@ fn test_delete_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    client.delete_object(&del_req).unwrap();    
+    let result = client.delete_object(&del_req).unwrap();
+    println!("{:#?}", result);    
 }
 
 fn test_list_buckets(client: &TestClient) {
-    client.list_buckets().unwrap();
+    let result = client.list_buckets().unwrap();
+    println!("{:#?}", result);    
 }
 
 fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
@@ -159,6 +167,6 @@ fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
         ..Default::default()
     };
 
-    client.put_bucket_cors(&req).unwrap();
-
+    let result = client.put_bucket_cors(&req).unwrap();
+    println!("{:#?}", result);    
 }
