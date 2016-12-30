@@ -13,7 +13,7 @@ use time::get_time;
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::s3::{S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
-                 CORSRule, CreateBucketRequest, DeleteBucketRequest };
+                 CORSRule, CreateBucketRequest, DeleteBucketRequest};
 
 type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 
@@ -22,8 +22,7 @@ type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 // executes those tests, and then destroys the resources
 #[test]
 fn test_all_the_things() {
-    let client = S3Client::new(DefaultCredentialsProvider::new().unwrap(),
-                               Region::UsEast1);
+    let client = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
 
     // a random number should probably be appended here too
     let test_bucket = format!("rusoto_test_bucket_{}", get_time().sec);
@@ -54,27 +53,21 @@ fn test_all_the_things() {
     test_delete_object(&client, &test_bucket, &filename);
 
     // delete the test bucket
-    test_delete_bucket(&client, &test_bucket);    
+    test_delete_bucket(&client, &test_bucket);
 }
 
 fn test_create_bucket(client: &TestClient, bucket: &str) {
-    let create_bucket_req = CreateBucketRequest {
-        bucket: bucket.to_owned(),
-        ..Default::default()
-    };
+    let create_bucket_req = CreateBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
     let result = client.create_bucket(&create_bucket_req).unwrap();
     println!("{:#?}", result);
 }
 
 fn test_delete_bucket(client: &TestClient, bucket: &str) {
-    let delete_bucket_req = DeleteBucketRequest {
-        bucket: bucket.to_owned(),
-        ..Default::default()
-    };
+    let delete_bucket_req = DeleteBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
     let result = client.delete_bucket(&delete_bucket_req).unwrap();
-    println!("{:#?}", result);    
+    println!("{:#?}", result);
 }
 
 fn test_put_object(client: &TestClient, bucket: &str, filename: &str) {
@@ -90,7 +83,7 @@ fn test_put_object(client: &TestClient, bucket: &str, filename: &str) {
                 ..Default::default()
             };
             let result = client.put_object(&req);
-            println!("{:#?}", result);            
+            println!("{:#?}", result);
         }
     }
 }
@@ -102,8 +95,8 @@ fn test_head_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.head_object(&head_req).unwrap();    
-    println!("{:#?}", result);    
+    let result = client.head_object(&head_req).unwrap();
+    println!("{:#?}", result);
 }
 
 fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
@@ -114,7 +107,7 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
     };
 
     let result = client.get_object(&get_req).unwrap();
-    println!("{:#?}", result);    
+    println!("{:#?}", result);
 }
 
 fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
@@ -128,8 +121,8 @@ fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.copy_object(&req).unwrap(); 
-    println!("{:#?}", result);   
+    let result = client.copy_object(&req).unwrap();
+    println!("{:#?}", result);
 }
 
 fn test_delete_object(client: &TestClient, bucket: &str, filename: &str) {
@@ -140,12 +133,12 @@ fn test_delete_object(client: &TestClient, bucket: &str, filename: &str) {
     };
 
     let result = client.delete_object(&del_req).unwrap();
-    println!("{:#?}", result);    
+    println!("{:#?}", result);
 }
 
 fn test_list_buckets(client: &TestClient) {
     let result = client.list_buckets().unwrap();
-    println!("{:#?}", result);    
+    println!("{:#?}", result);
 }
 
 fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
@@ -168,5 +161,5 @@ fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
     };
 
     let result = client.put_bucket_cors(&req).unwrap();
-    println!("{:#?}", result);    
+    println!("{:#?}", result);
 }
