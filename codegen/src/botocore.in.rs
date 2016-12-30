@@ -99,7 +99,7 @@ impl Service {
     pub fn signing_name(&self) -> String {
         match self.metadata.signing_name {
             Some(ref signing_name) => signing_name.to_string(),
-            None => self.metadata.endpoint_prefix.to_string()
+            None => self.metadata.endpoint_prefix.to_string(),
         }
     }
 }
@@ -140,7 +140,7 @@ pub struct Error {
 
 impl Error {
     pub fn idiomatic_error_name(&self) -> String {
-        self.shape.replace("Exception","")
+        self.shape.replace("Exception", "")
     }
 }
 
@@ -218,7 +218,7 @@ pub struct Value {
 impl Value {
     pub fn tag_name(&self) -> String {
         self.location_name.clone().unwrap_or(self.shape.clone())
-    }    
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -272,7 +272,6 @@ impl<'a> Shape {
     pub fn exception(&self) -> bool {
         self.exception.unwrap_or(false)
     }
-
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq)]
@@ -324,7 +323,7 @@ impl<'a> Operation {
     pub fn output_shape_or(&'a self, default: &'a str) -> &'a str {
         match self.output.as_ref() {
             Some(output) => &output.shape,
-            None => default
+            None => default,
         }
     }
 
@@ -337,10 +336,10 @@ impl<'a> Operation {
             Some(output) => {
                 match output.result_wrapper.as_ref() {
                     Some(wrapper) => wrapper,
-                    None => default
+                    None => default,
                 }
-            },
-            None => default
+            }
+            None => default,
         }
     }
 }
@@ -371,5 +370,5 @@ pub struct Metadata {
     #[serde(rename="timestampFormat")]
     pub timestamp_format: Option<String>,
     #[serde(rename="xmlNamespace")]
-    pub xml_namespace: Option<String>
+    pub xml_namespace: Option<String>,
 }

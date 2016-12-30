@@ -107,7 +107,6 @@ impl GenerateProtocol for RestXmlGenerator {
                               shape: &Shape,
                               service: &Service)
                               -> Option<String> {
-
         // (most) requests never need XML serialization or deserialization, so don't generate the type
         if name != "RestoreRequest" && name.ends_with("Request") {
             return None;
@@ -144,7 +143,6 @@ impl GenerateProtocol for RestXmlGenerator {
         }
 
         Some(parts.join("\n"))
-
     }
 
     fn timestamp_type(&self) -> &'static str {
@@ -163,7 +161,6 @@ fn generate_documentation(operation: &Operation) -> String {
 }
 
 fn generate_method_input_serialization(service: &Service, operation: &Operation) -> Option<String> {
-
     // nothing to do if there's no input type
     if operation.input.is_none() {
         return None;
@@ -183,7 +180,6 @@ fn generate_method_input_serialization(service: &Service, operation: &Operation)
 
 
 fn generate_uri_modification(service: &Service, operation: &Operation) -> Option<String> {
-
     // nothing to do if there's no input type
     if operation.input.is_none() {
         return None;
@@ -213,7 +209,6 @@ fn generate_uri_modification(service: &Service, operation: &Operation) -> Option
 }
 
 fn generate_headers(service: &Service, operation: &Operation) -> Option<String> {
-
     // nothing to do if there's no input type
     if operation.input.is_none() {
         return None;
@@ -246,7 +241,6 @@ fn generate_headers(service: &Service, operation: &Operation) -> Option<String> 
 }
 
 fn generate_parameters(service: &Service, operation: &Operation) -> Option<String> {
-
     // nothing to do if there's no input type
     if operation.input.is_none() {
         return None;
@@ -276,7 +270,6 @@ fn generate_parameters(service: &Service, operation: &Operation) -> Option<Strin
 }
 
 fn generate_service_specific_code(service: &Service, operation: &Operation) -> Option<String> {
-
     // S3 needs some special handholding.  Others may later.
     // See `handlers.py` in botocore for more details
     match service.service_type_name() {
@@ -297,15 +290,12 @@ fn generate_service_specific_code(service: &Service, operation: &Operation) -> O
         }
         _ => None,
     }
-
 }
 
 fn parse_query_string(uri: &str) -> (String, Option<String>) {
-
     // botocore query strings for S3 are variations on "/{Bucket}/{Key+}?foobar"
     // the query string needs to be split out and put in the params hash,
     // and the + isn't useful information for us
-
     let base_uri = uri.replace("+", "");
     let parts: Vec<&str> = base_uri.split('?').collect();
 
@@ -344,7 +334,6 @@ fn generate_payload_serialization(shape: &Shape) -> String {
 
 
 fn generate_response_parser(service: &Service, operation: &Operation) -> String {
-
     if operation.output.is_none() {
         return "Ok(())".to_string();
     }
@@ -391,10 +380,7 @@ fn xml_body_parser(output_shape: &str) -> String {
             let _start_document = stack.next();         
             let actual_tag_name = try!(peek_at_name(&mut stack));
             result = try!({output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack));
-        }}
-
-
-        ",
+        }}",
             output_shape = output_shape)
 }
 
@@ -448,7 +434,6 @@ fn generate_response_headers_parser(service: &Service, operation: &Operation) ->
                              primitive_parser = generate_header_primitive_parser(&member_shape)))
             }
 
-
         })
         .collect::<Vec<String>>()
         .join("\n"))
@@ -467,7 +452,6 @@ fn generate_header_primitive_parser(shape: &Shape) -> String {
     };
 
     statement.to_string()
-
 }
 
 fn generate_method_signature(operation: &Operation) -> String {
@@ -499,7 +483,6 @@ fn generate_deserializer_body(name: &str, shape: &Shape, _service: &Service) -> 
 }
 
 fn generate_list_deserializer(shape: &Shape) -> String {
-
     // flattened lists are just the list elements repeated without
     // an enclosing <FooList></FooList> tag
     if let Some(true) = shape.flattened {
@@ -624,7 +607,6 @@ fn generate_primitive_deserializer(shape: &Shape) -> String {
 }
 
 fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
-
     let mut needs_xml_deserializer = false;
 
     // don't generate an xml deserializer if we don't need to
@@ -721,7 +703,6 @@ fn generate_struct_field_parse_expression(shape: &Shape,
                                           member: &Member,
                                           location_name: Option<&String>)
                                           -> String {
-
     let location_to_use = match location_name {
         Some(loc) => loc.to_string(),
         None => member_name.to_string(),
@@ -764,11 +745,9 @@ fn generate_primitive_serializer(shape: &Shape) -> String {
                 name = name, 
                 value = {value_str})",
             value_str = value_str)
-
 }
 
 fn generate_list_serializer(shape: &Shape) -> String {
-
     // flattened lists don't have enclosing <FooList> tags
     // around the list elements
     let flattened = match shape.flattened {
@@ -801,10 +780,8 @@ fn generate_list_serializer(shape: &Shape) -> String {
         serializer += &format!("parts.push(format!(\"</{{}}>\", name));");
     }
 
-
     serializer += "parts.join(\"\")";
     serializer
-
 }
 
 fn generate_map_serializer(_shape: &Shape) -> String {
