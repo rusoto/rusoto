@@ -79,9 +79,10 @@ impl GenerateProtocol for RestXmlGenerator {
     fn generate_prelude(&self, _service: &Service) -> String {
         "use std::str::{FromStr};
         use std::collections::HashMap;
-        use data_encoding::base64;
+
         use md5;
         use param::{Params, ServiceParams};
+        use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};
         use signature::SignedRequest;
         use xml::EventReader;
         use xml::reader::events::XmlEvent;
@@ -282,7 +283,13 @@ fn generate_service_specific_code(service: &Service, operation: &Operation) -> O
                 "DeleteObjects" |
                 "PutBucketReplication" => {
                     Some("let digest = md5::compute(payload.as_ref().unwrap());
-                          request.add_header(\"Content-MD5\", &base64::encode(&digest));"
+                          request.add_header(\"Content-MD5\", &digest.to_base64(Config {
+                                                                                    char_set: CharacterSet::Standard,
+                                                                                    newline: Newline::LF,
+                                                                                    pad: true,
+                                                                                    line_length: None
+                                                                                })
+                          );"
                         .to_owned())
                 }
                 _ => None,
