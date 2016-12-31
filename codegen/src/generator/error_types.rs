@@ -23,8 +23,8 @@ pub trait GenerateErrorTypes {
     }
 
     fn generate_error_type(&self, operation: &Operation, error_documentation: &HashMap<&String, &String>) -> String {
-
         format!("
+            /// Errors returned by {operation}
             #[derive(Debug, PartialEq)]
             pub enum {type_name} {{
                 {error_types}
@@ -55,6 +55,7 @@ pub trait GenerateErrorTypes {
              }}
          }}
          ",
+         operation = operation.name,
          type_name = operation.error_type_name(),
          error_from_body_impl = self.generate_error_from_body_impl(operation),
          error_from_type_impl = self.generate_error_from_type_impl(operation),
