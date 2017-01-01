@@ -10,34 +10,18 @@ use inflector::Inflector;
 const BOTOCORE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/tests/unit/response_parsing/xml/responses/");
 const OUR_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/unit/responses/");
 
-pub trait GenerateTests {
-    fn generate_tests(&self, _service: &Service) -> Option<String>;
+
+pub fn generate_tests(service: &Service) -> Option<String> {
+    Some(format!(
+        "
+        #[cfg(test)]
+        mod protocol_tests {{
+            {tests_body}
+        }}
+        ",
+        tests_body = generate_tests_body(service).unwrap_or("".to_string())
+    ))
 }
-
-pub struct DefaultTestGenerator;
-
-impl GenerateTests for DefaultTestGenerator {
-    fn generate_tests(&self, service: &Service) -> Option<String> {
-        Some(format!(
-            "
-            #[cfg(test)]
-            mod protocol_tests {{
-                {tests_body}
-            }}
-            ",
-            tests_body = generate_tests_body(service).unwrap_or("".to_string())
-        ))
-    }
-}
-
-pub struct NoTestsGenerator;
-
-impl GenerateTests for NoTestsGenerator {
-    fn generate_tests(&self, _service: &Service) -> Option<String> {
-        None
-    }
-}
-
 
 fn generate_tests_body(service: &Service) -> Option<String> {
     let responses: HashMap<String, Response> = find_responses();
