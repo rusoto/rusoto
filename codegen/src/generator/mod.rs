@@ -36,7 +36,6 @@ pub trait GenerateProtocol {
 }
 
 pub fn generate_source(service: &Service) -> String {
-
     match &service.metadata.protocol[..] {
         "json" => generate(service, JsonGenerator, JsonErrorTypes),
         "ec2" => generate(service, Ec2Generator, XmlErrorTypes),

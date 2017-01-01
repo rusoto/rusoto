@@ -19,7 +19,6 @@ use rusoto::s3::{S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectReques
 
 type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 
-
 // Rust is in bad need of an integration test harness
 // This creates the S3 resources needed for a suite of tests,
 // executes those tests, and then destroys the resources
