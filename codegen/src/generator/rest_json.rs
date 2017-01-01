@@ -92,8 +92,8 @@ impl GenerateProtocol for RestJsonGenerator {
     }
 
     fn generate_prelude(&self, _: &Service) -> String {
-        "use param::{Params, ServiceParams};
-        use signature::SignedRequest;
+        "use rusoto_signature::SignedRequest;
+        use rusoto_signature::param::{Params, ServiceParams};
         use serde_json;
         use serde_json::from_str;
         use serde_json::Value as SerdeJsonValue;

@@ -16,10 +16,9 @@ use hyper::Error as HyperError;
 use hyper::header::Headers;
 use hyper::header::UserAgent;
 use hyper::method::Method;
+use rusoto_signature::SignedRequest;
 
 use log::LogLevel::Debug;
-
-use signature::SignedRequest;
 
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));

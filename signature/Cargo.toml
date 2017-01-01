@@ -1,0 +1,24 @@
+[package]
+authors = [
+    "Anthony DiMarco <ocramida@gmail.com>",
+    "Jimmy Cuadra <jimmy@jimmycuadra.com>",
+    "Matthew Mayer <matthewkmayer@gmail.com>",
+    "Nikita Pekin <contact@nikitapek.in>"
+]
+license = "MIT"
+description = "AWS signature generation tooling"
+name = "rusoto_signature"
+readme = "README.md"
+repository = "https://github.com/rusoto/rusoto"
+version = "0.1.0"
+
+[dependencies]
+log = "0.3.6"
+ring = "0.5.3"
+rustc-serialize = "0.3.21"
+time = "0.1.35"
+url = "1.2.3"
+
+[dependencies.rusoto_credential]
+path = "../credential"
+version = "0.2.0"
