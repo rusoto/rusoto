@@ -345,34 +345,52 @@ fn generate_response_parser(service: &Service, operation: &Operation) -> String 
         return "Ok(())".to_string();
     }
 
-    let output_shape = &operation.output.as_ref().unwrap().shape;
+    let shape_name = &operation.output.as_ref().unwrap().shape;
+    let output_shape = service.shapes.get(shape_name).unwrap();
 
-    // first - determine if any of the members have the 'streaming' flag set_parameters
-    let body_parser = match streaming_shape_member(service, operation) {
-        None => xml_body_parser(&output_shape),
-        Some(ref streaming_member) => streaming_body_parser(&output_shape, streaming_member),
+    // if the 'payload' field on the output shape is a blob or string, it indicates that
+    // the entire payload is set as one of the struct members, and not parsed
+    let body_parser = match output_shape.payload {
+        None => xml_body_parser(&shape_name),
+        Some(ref payload_member) => {
+            let payload_shape = service.shapes.get(payload_member).unwrap();
+            match payload_shape.shape_type {
+                payload_type if payload_type == ShapeType::Blob ||
+                                payload_type == ShapeType::String => {
+                    payload_body_parser(payload_type, &shape_name, payload_member)
+                }
+                _ => xml_body_parser(&shape_name),
+            }
+
+        }
     };
 
     format!("
         {body_parser}
-
-        {parse_response_headers}
-
-        Ok(result)
-
-        ",
+        {response_headers_parser}
+        Ok(result)",
             body_parser = body_parser,
-            parse_response_headers = generate_response_headers_parser(service, operation)
+            response_headers_parser = generate_response_headers_parser(service, operation)
                 .unwrap_or("".to_string()))
 }
 
-fn streaming_body_parser(output_shape: &str, streaming_member: &str) -> String {
+fn payload_body_parser(payload_type: ShapeType,
+                       output_shape: &str,
+                       payload_member: &str)
+                       -> String {
+    let response_body = match payload_type {
+        ShapeType::Blob => "Some(response.body.as_bytes().to_vec())",
+        _ => "Some(response.body.to_owned())",
+    };
+
     format!("
         let mut result = {output_shape}::default();
-        result.{streaming_member} = Some(response.body.as_bytes().to_vec());
+        result.{payload_member} = {response_body};
         ",
             output_shape = output_shape,
-            streaming_member = streaming_member)
+            payload_member = payload_member.to_snake_case(),
+            response_body = response_body)
+
 }
 
 fn xml_body_parser(output_shape: &str) -> String {
@@ -391,16 +409,6 @@ fn xml_body_parser(output_shape: &str) -> String {
             output_shape = output_shape)
 }
 
-fn streaming_shape_member(service: &Service, operation: &Operation) -> Option<String> {
-    let shape = service.shapes.get(&operation.output.as_ref().unwrap().shape).unwrap();
-
-    for (member_name, member) in shape.members.as_ref().unwrap().iter() {
-        if Some(true) == member.streaming {
-            return Some(member_name.to_snake_case());
-        }
-    }
-    None
-}
 
 fn generate_response_headers_parser(service: &Service, operation: &Operation) -> Option<String> {
 
@@ -762,13 +770,7 @@ fn generate_list_serializer(shape: &Shape) -> String {
         _ => false,
     };
 
-    let member = shape.member.as_ref().unwrap();
     let element_type = &generate_member_name(&shape.member()[..]);
-    let location_name = match member.location_name {
-        Some(ref name) => name,
-        None => element_type,
-    };
-
     let mut serializer = format!("let mut parts: Vec<String> = Vec::new();");
 
     if !flattened {
@@ -777,11 +779,9 @@ fn generate_list_serializer(shape: &Shape) -> String {
 
     serializer += &format!("
         for element in obj {{
-            parts.push({element_type}Serializer::serialize(\"{location_name}\", element));
-        }}
-        ",
-                           element_type = element_type,
-                           location_name = location_name);
+            parts.push({element_type}Serializer::serialize(name, element));
+        }}",
+                           element_type = element_type);
 
     if !flattened {
         serializer += &format!("parts.push(format!(\"</{{}}>\", name));");
