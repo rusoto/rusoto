@@ -7,6 +7,7 @@ use self::query::QueryGenerator;
 use self::rest_json::RestJsonGenerator;
 use self::rest_xml::RestXmlGenerator;
 use self::error_types::{GenerateErrorTypes, JsonErrorTypes, XmlErrorTypes};
+use self::tests::{GenerateTests, DefaultTestGenerator, NoTestsGenerator};
 
 mod error_types;
 mod ec2;
@@ -31,27 +32,25 @@ pub trait GenerateProtocol {
         None
     }
 
-    fn generate_tests(&self, _service: &Service) -> Option<String> {
-        None
-    }
-
     fn timestamp_type(&self) -> &'static str;
 }
 
 pub fn generate_source(service: &Service) -> String {
+
     match &service.metadata.protocol[..] {
-        "json" => generate(service, JsonGenerator, JsonErrorTypes),
-        "ec2" => generate(service, Ec2Generator, XmlErrorTypes),
-        "query" => generate(service, QueryGenerator, XmlErrorTypes),
-        "rest-json" => generate(service, RestJsonGenerator, JsonErrorTypes),
-        "rest-xml" => generate(service, RestXmlGenerator, XmlErrorTypes),
+        "json" => generate(service, JsonGenerator, JsonErrorTypes, NoTestsGenerator),
+        "ec2" => generate(service, Ec2Generator, XmlErrorTypes, DefaultTestGenerator),
+        "query" => generate(service, QueryGenerator, XmlErrorTypes, DefaultTestGenerator),
+        "rest-json" => generate(service, RestJsonGenerator, JsonErrorTypes, NoTestsGenerator),
+        "rest-xml" => generate(service, RestXmlGenerator, XmlErrorTypes, NoTestsGenerator),
         protocol => panic!("Unknown protocol {}", protocol),
     }
 }
 
-fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator: E) -> String
+fn generate<P, E, T>(service: &Service, protocol_generator: P, error_type_generator: E, tests_generator: T) -> String
     where P: GenerateProtocol,
-          E: GenerateErrorTypes {
+          E: GenerateErrorTypes,
+          T: GenerateTests {
     format!(
         "#[allow(warnings)]
         use hyper::Client;
@@ -76,7 +75,7 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
         prelude = &protocol_generator.generate_prelude(service),
         types = generate_types(service, &protocol_generator),
         error_types = error_type_generator.generate_error_types(service).unwrap_or("".to_string()),
-        tests = &protocol_generator.generate_tests(service).unwrap_or("".to_string()),
+        tests = &tests_generator.generate_tests(service).unwrap_or("".to_string()),
     )
 }
 

@@ -3,9 +3,117 @@ use std::collections::HashMap;
 use std::path::Path;
 
 use super::capitalize_first;
+use botocore::Service;
+use util::case_insensitive_btreemap_get;
+use inflector::Inflector;
 
 const BOTOCORE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/tests/unit/response_parsing/xml/responses/");
 const OUR_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/unit/responses/");
+
+pub trait GenerateTests {
+    fn generate_tests(&self, _service: &Service) -> Option<String>;
+}
+
+pub struct DefaultTestGenerator;
+
+impl GenerateTests for DefaultTestGenerator {
+    fn generate_tests(&self, service: &Service) -> Option<String> {
+        Some(format!(
+            "
+            #[cfg(test)]
+            mod protocol_tests {{
+                {tests_body}
+            }}
+            ",
+            tests_body = generate_tests_body(service).unwrap_or("".to_string())
+        ))
+    }
+}
+
+pub struct NoTestsGenerator;
+
+impl GenerateTests for NoTestsGenerator {
+    fn generate_tests(&self, _service: &Service) -> Option<String> {
+        None
+    }
+}
+
+
+fn generate_tests_body(service: &Service) -> Option<String> {
+    let responses: HashMap<String, Response> = find_responses();
+
+    let our_responses: Vec<Response> = responses.values()
+        .into_iter()
+        .filter(|r| r.service.to_lowercase() == service.service_type_name().to_lowercase())
+        .map(|r| r.to_owned())
+        .collect();
+
+    let test_bodies: Vec<String> = our_responses
+        .into_iter()
+        .flat_map(|response| generate_response_parse_test(service, response))
+        .collect();
+
+    if test_bodies.len() > 0 {
+        let tests_str = test_bodies
+            .join("\n\n");
+
+        Some(
+            format!("
+                use mock::*;
+                use super::*;
+                use super::super::Region as rusoto_region;
+
+                {test_bodies}",
+                test_bodies=tests_str
+            )
+        )
+    } else {
+        None
+    }
+}
+
+
+fn generate_response_parse_test(service: &Service, response: Response) -> Option<String> {
+    let maybe_operation = case_insensitive_btreemap_get(&service.operations, &response.action);
+
+    if maybe_operation.is_none() {
+        return None;
+    }
+
+    let operation = maybe_operation.unwrap();
+    let request_params;
+    let request_constructor;
+    if operation.input.is_some() {
+        request_constructor = format!(
+            "let request = {request_type}::default();",
+            request_type=operation.input_shape());
+        request_params = "&request".to_string();
+    } else {
+        request_constructor = "".to_string();
+        request_params = "".to_string();
+    }
+
+    Some(format!("
+        #[test]
+        fn test_parse_{service_name}_{action}() {{
+            let mock_response =  MockResponseReader::read_response(r#\"{response_dir_name}\"#, \"{response_file_name}\");
+            let mock = MockRequestDispatcher::with_status(200)
+                .with_body(&mock_response);
+            let client = {client_type}::with_request_dispatcher(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+            {request_constructor}
+            let result = client.{action_method}({request_params});
+            assert!(result.is_ok(), \"parse error: {{:?}}\", result);
+        }}
+    ",
+    service_name=response.service.to_snake_case(),
+    action=response.action.to_snake_case(),
+    response_dir_name=response.dir_name,
+    response_file_name=response.file_name,
+    client_type=service.client_type_name(),
+    request_constructor=request_constructor,
+    action_method=operation.name.to_snake_case(),
+    request_params=request_params))
+}
 
 #[derive(Debug, Clone)]
 pub struct Response {
