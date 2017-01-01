@@ -5,6 +5,7 @@ use std::env;
 use std::path::Path;
 use std::io::Write;
 use std::fs::File;
+use std::thread;
 
 use rusoto_codegen::{Service, generate};
 
@@ -43,7 +44,7 @@ macro_rules! services {
 
 fn main() {
     let out_dir = env::var_os("OUT_DIR").expect("OUT_DIR not specified");
-    let out_path = Path::new(&out_dir);
+    let out_path = Path::new(&out_dir).to_owned();
 
     let services = services! {
         ["acm", "2015-12-08"],
@@ -88,11 +89,19 @@ fn main() {
         ["workspaces", "2015-04-08"]
     };
 
+    let mut generate_threads = vec![];
     for service in services {
-        generate(service, out_path);
+        let thread_outpath = out_path.clone();
+        generate_threads.push(thread::spawn(move || {
+            generate(service, &thread_outpath);
+        }));
     }
 
-    generate_user_agent_vars(out_path);
+    for child_thread in generate_threads {
+        let _ = child_thread.join();
+    }
+
+    generate_user_agent_vars(&out_path);
 
     let codegen_dir = Path::new("codegen");
 
