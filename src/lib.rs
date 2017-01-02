@@ -102,6 +102,8 @@ pub mod cloudformation;
 pub mod cloudfront;
 #[cfg(feature = "cloudhsm")]
 pub mod cloudhsm;
+#[cfg(feature = "cloudsearch")]
+pub mod cloudsearch;
 #[cfg(feature = "cloudtrail")]
 pub mod cloudtrail;
 #[cfg(feature = "cloudwatch")]

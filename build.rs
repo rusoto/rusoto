@@ -53,6 +53,7 @@ fn main() {
         ["cloudformation", "2010-05-15"],
         ["cloudfront", "2016-11-25"],
         ["cloudhsm", "2014-05-30"],
+        ["cloudsearch", "2013-01-01"],        
         ["cloudtrail", "2013-11-01"],
         ["cloudwatch", "2010-08-01"],
         ["codecommit", "2015-04-13"],
