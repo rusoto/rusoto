@@ -1,6 +1,6 @@
 use inflector::Inflector;
 
-use botocore::{Service, Shape, ShapeType, Operation};
+use botocore::{Service, Shape, ShapeType};
 use self::ec2::Ec2Generator;
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
@@ -146,7 +146,10 @@ fn generate_primitive_type(name: &str, shape_type: ShapeType, for_timestamps: &s
 fn mutate_type_name(type_name: &str) -> String {
     let capitalized = capitalize_first(type_name.to_owned());
 
-    match &capitalized[..] {
+    // some cloudfront types have underscoare that anger the lint checker
+    let without_underscores = capitalized.replace("_","");
+
+    match &without_underscores[..] {
         // S3 has an 'Error' shape that collides with Rust's Error trait
         "Error" => "S3Error".to_string(),
 
@@ -154,7 +157,7 @@ fn mutate_type_name(type_name: &str) -> String {
         "CancelSpotFleetRequests" => "EC2CancelSpotFleetRequests".to_owned(),
 
         // otherwise make sure it's rust-idiomatic and capitalized
-        _ => capitalized,
+        _ => without_underscores,
     }
 }
 
@@ -280,11 +283,9 @@ fn generate_struct_fields(service: &Service, shape: &Shape, serde_attrs: bool) -
     }).collect::<Vec<String>>().join("\n")
 }
 
-impl Operation {
-    pub fn error_type_name(&self) -> String {
-        let type_name = mutate_type_name(&self.name);
-        format!("{}Error", type_name)
-    }
+fn error_type_name(name: &str) -> String {
+    let type_name = mutate_type_name(name);
+    format!("{}Error", type_name)
 }
 
 /// Takes a string and returns it with the first letter capitalized.

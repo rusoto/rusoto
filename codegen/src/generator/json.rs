@@ -2,13 +2,14 @@ use inflector::Inflector;
 
 use botocore::{Operation, Service};
 use super::GenerateProtocol;
+use super::error_type_name;
 
 pub struct JsonGenerator;
 
 impl GenerateProtocol for JsonGenerator {
 
     fn generate_methods(&self, service: &Service) -> String {
-        service.operations.values().map(|operation| {
+        service.operations.iter().map(|(operation_name, operation)| {
 
             let output_type = operation.output_shape_or("()");
 
@@ -43,7 +44,7 @@ impl GenerateProtocol for JsonGenerator {
                 request_uri = operation.http.request_uri,
                 target_prefix = service.metadata.target_prefix.as_ref().unwrap(),
                 json_version = service.metadata.json_version.as_ref().unwrap(),
-                error_type = operation.error_type_name(),
+                error_type = error_type_name(operation_name),
                 output_type = output_type
             )
         }).collect::<Vec<String>>().join("\n")

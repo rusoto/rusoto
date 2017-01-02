@@ -60,9 +60,10 @@ env_logger = "0.3.3"
 rand = "^0.3.14"
 
 [features]
-all = ["acm", "cloudformation", "cloudhsm", "cloudtrail", "cloudwatch", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "ec2", "ecr", "ecs", "elastictranscoder", "emr", "events", "firehose", "iam", "inspector", "iot", "kinesis", "kms", "logs", "machinelearning", "marketplacecommerceanalytics", "opsworks", "route53domains", "s3", "sqs", "ssm", "storagegateway", "swf", "waf", "workspaces"]
+all = ["acm", "cloudformation", "cloudfront", "cloudhsm", "cloudtrail", "cloudwatch", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "ec2", "ecr", "ecs", "elastictranscoder", "emr", "events", "firehose", "iam", "inspector", "iot", "kinesis", "kms", "logs", "machinelearning", "marketplacecommerceanalytics", "opsworks", "route53domains", "s3", "sqs", "ssm", "storagegateway", "swf", "waf", "workspaces"]
 acm = []
 cloudformation = []
+cloudfront = []
 cloudhsm = []
 cloudtrail = []
 cloudwatch = []

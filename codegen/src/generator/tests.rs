@@ -56,7 +56,6 @@ fn generate_tests_body(service: &Service) -> Option<String> {
     }
 }
 
-
 fn generate_response_parse_test(service: &Service, response: Response) -> Option<String> {
     let maybe_operation = case_insensitive_btreemap_get(&service.operations, &response.action);
 
@@ -85,7 +84,7 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
                 .with_body(&mock_response);
             let client = {client_type}::with_request_dispatcher(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             {request_constructor}
-            let result = client.{action_method}({request_params});
+            let result = client.{action}({request_params});
             assert!(result.is_ok(), \"parse error: {{:?}}\", result);
         }}
     ",
@@ -95,7 +94,6 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
     response_file_name=response.file_name,
     client_type=service.client_type_name(),
     request_constructor=request_constructor,
-    action_method=operation.name.to_snake_case(),
     request_params=request_params))
 }
 

@@ -3,12 +3,13 @@ use regex::{Captures, Regex};
 
 use botocore::{Member, Operation, Service, Shape};
 use super::GenerateProtocol;
+use super::error_type_name;
 
 pub struct RestJsonGenerator;
 
 impl GenerateProtocol for RestJsonGenerator {
     fn generate_methods(&self, service: &Service) -> String {
-        service.operations.values().map(|operation| {
+        service.operations.iter().map(|(operation_name, operation)| {
             let input_type = operation.input_shape();
             let output_type = operation.output_shape_or("()");
 
@@ -76,7 +77,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 endpoint_prefix = service.signing_name(),
                 modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or("".to_owned()),
                 http_method = operation.http.method,
-                error_type = operation.error_type_name(),
+                error_type = error_type_name(operation_name),
                 status_code = operation.http.response_code.unwrap_or(200),
                 ok_response = generate_ok_response(operation, output_type),
                 output_type = output_type,
