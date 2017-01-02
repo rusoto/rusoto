@@ -100,7 +100,7 @@ impl GenerateProtocol for RestXmlGenerator {
                 use md5;
                 use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};";
         }
-        
+
         imports
     }
 
@@ -160,7 +160,7 @@ fn generate_documentation(operation: &Operation) -> String {
     match operation.documentation {
         Some(ref docs) => {
             format!("#[doc=\"{}\"]",
-                    docs.replace("\"", "\\\"").replace("C:\\", "C:\\\\"))
+                    docs.replace("\\", "\\\\").replace("\"", "\\\""))
         }
         None => "".to_owned(),
     }
@@ -200,13 +200,13 @@ fn generate_uri_modification(service: &Service, operation: &Operation) -> Option
         match &member.location.as_ref().unwrap()[..] {
             "uri" => {
                 if shape.required(&member_name) {
-                    Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name});",
+                    Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name}.to_string());",
                         location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
+                        field_name = generate_field_name(member_name)))
                 } else {
-                    Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name}.unwrap());",
+                    Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name}.unwrap().to_string());",
                         location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
+                        field_name = generate_field_name(member_name)))
                 }
             },
             _ => None
@@ -260,14 +260,14 @@ fn generate_parameters(service: &Service, operation: &Operation) -> Option<Strin
                 if shape.required(&member_name) {
                     Some(format!("params.put(\"{location_name}\", &input.{field_name}.to_string());",
                         location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
+                        field_name = generate_field_name(member_name)))
                 } else {
                     Some(format!("
                         if let Some(ref {field_name}) = input.{field_name} {{
                             params.put(\"{location_name}\", &{field_name}.to_string());
                         }}",
                         location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
+                        field_name = generate_field_name(member_name)))
                 }
             },
             _ => None

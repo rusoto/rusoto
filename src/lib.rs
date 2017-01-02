@@ -156,6 +156,8 @@ pub mod machinelearning;
 pub mod marketplacecommerceanalytics;
 #[cfg(feature = "opsworks")]
 pub mod opsworks;
+#[cfg(feature = "route53")]
+pub mod route53;
 #[cfg(feature = "route53domains")]
 pub mod route53domains;
 #[cfg(feature = "s3")]
