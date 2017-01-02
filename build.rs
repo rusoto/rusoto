@@ -80,6 +80,7 @@ fn main() {
         ["iot", "2015-05-28"],
         ["kinesis", "2013-12-02"],
         ["kms", "2014-11-01"],
+        ["lambda", "2015-03-31"],        
         ["logs", "2014-03-28"],
         ["machinelearning", "2014-12-12"],
         ["marketplacecommerceanalytics", "2015-07-01"],
