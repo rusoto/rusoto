@@ -3,13 +3,9 @@ use std::io::Read;
 
 use reqwest;
 use serde_json::{self, Value};
+use retry;
 
-use {
-    AwsCredentials,
-    CredentialsError,
-    ProvideAwsCredentials,
-    extract_string_value_from_json,
-};
+use {AwsCredentials, CredentialsError, ProvideAwsCredentials, extract_string_value_from_json};
 
 const AWS_CREDENTIALS_PROVIDER_IP: &'static str = "169.254.170.2";
 
@@ -18,7 +14,6 @@ const AWS_CREDENTIALS_PROVIDER_IP: &'static str = "169.254.170.2";
 pub struct ContainerProvider;
 
 impl ProvideAwsCredentials for ContainerProvider {
-    // TODO: backoff and retry on failure.
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         let aws_container_credentials_relative_uri = match env::var("AWS_CONTAINER_CREDENTIALS_RELATIVE_URI") {
             Ok(v) => v,
@@ -27,10 +22,22 @@ impl ProvideAwsCredentials for ContainerProvider {
 
         let address: String = format!("http://{}{}", AWS_CREDENTIALS_PROVIDER_IP, aws_container_credentials_relative_uri);
 
-        let mut response = match reqwest::get(&address)
+        let mut response =
+            match retry::retry_exponentially(5, 0_f64, || { reqwest::get(&address) },
+            |response_attempt| {
+                match response_attempt.as_ref() {
+                    Ok(response_returned) => response_returned.status().is_success(),
+                    Err(_) => false,
+                }
+            })
         {
-            Ok(response) => response,
-            Err(_) => return Err(CredentialsError::new("Couldn't connect to credentials provider")), // add why?
+            Ok(response_from_try) => {
+                match response_from_try {
+                    Ok(resp) => resp,
+                    Err(err) => return Err(CredentialsError::new(&format!("Couldn't connect to credentials provider: {}", err))),
+                }
+            }
+            Err(error) => return Err(CredentialsError::new(&format!("Couldn't connect to credentials provider: {}", error))),
         };
 
         let mut body = String::new();
@@ -57,12 +64,7 @@ fn parse_credentials_response(response: &str) -> Result<AwsCredentials, Credenti
 
     let expiration = try!(expiration.parse());
 
-    Ok(AwsCredentials::new(
-        access_key_id,
-        secret_access_key,
-        Some(token),
-        expiration,
-    ))
+    Ok(AwsCredentials::new(access_key_id, secret_access_key, Some(token), expiration))
 }
 
 #[cfg(test)]
@@ -77,9 +79,11 @@ mod tests {
     fn parse_iam_task_credentials_sample_response() {
         fn read_file_to_string(file_path: &Path) -> String {
             match fs::metadata(file_path) {
-                Ok(metadata) => if !metadata.is_file() {
-                    panic!("Couldn't open file");
-                },
+                Ok(metadata) => {
+                    if !metadata.is_file() {
+                        panic!("Couldn't open file");
+                    }
+                }
                 Err(_) => panic!("Couldn't stat file"),
             };
 
@@ -90,9 +94,7 @@ mod tests {
             result
         }
 
-        let response = read_file_to_string(
-            Path::new("tests/sample-data/iam_task_credentials_sample_response")
-        );
+        let response = read_file_to_string(Path::new("tests/sample-data/iam_task_credentials_sample_response"));
 
         let credentials = parse_credentials_response(&response);
 
