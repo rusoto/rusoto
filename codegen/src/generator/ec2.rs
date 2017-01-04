@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape, ShapeType};
@@ -7,8 +5,6 @@ use generator::capitalize_first;
 use std::borrow::Cow;
 use super::GenerateProtocol;
 use super::generate_field_name;
-use super::tests::{Response, find_responses};
-use util::case_insensitive_btreemap_get;
 
 pub struct Ec2Generator;
 
@@ -122,89 +118,8 @@ impl GenerateProtocol for Ec2Generator {
         "String"
     }
 
-    fn generate_tests(&self, service: &Service) -> Option<String> {
-        Some(format!(
-            "
-            #[cfg(test)]
-            mod protocol_tests {{
-                {tests_body}
-            }}
-            ",
-            tests_body = generate_tests_body(service)
-        ))
-    }
 }
 
-fn generate_response_parse_test(service: &Service, response: Response) -> Option<String> {
-    let maybe_operation = case_insensitive_btreemap_get(&service.operations, &response.action);
-
-    if maybe_operation.is_none() {
-        return None;
-    }
-
-    let operation = maybe_operation.unwrap();
-    let request_params;
-    let request_constructor;
-    if operation.input.is_some() {
-        request_constructor = format!(
-            "let request = {request_type}::default();",
-            request_type=operation.input_shape());
-        request_params = "&request".to_string();
-    } else {
-        request_constructor = "".to_string();
-        request_params = "".to_string();
-    }
-
-    Some(format!("
-    #[test]
-    fn test_parse_{service_name}_{action}() {{
-        let mock_response =  MockResponseReader::read_response(r#\"{response_dir_name}\"#, \"{response_file_name}\");
-        let mock = MockRequestDispatcher::with_status(200)
-            .with_body(&mock_response);
-        let client = {client_type}::with_request_dispatcher(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        {request_constructor}
-        let result = client.{action_method}({request_params});
-        if result.is_err() {{
-            println!(\"result: {{:?}}\", result);
-        }}
-        assert!(result.is_ok());
-    }}
-    ",
-    service_name=response.service.to_snake_case(),
-    action=response.action.to_snake_case(),
-    response_dir_name=response.dir_name,
-    response_file_name=response.file_name,
-    client_type=service.client_type_name(),
-    request_constructor=request_constructor,
-    action_method=operation.name.to_snake_case(),
-    request_params=request_params))
-}
-
-fn generate_tests_body(service: &Service) -> String {
-    let responses: HashMap<String, Response> = find_responses();
-
-    let our_responses: Vec<Response> = responses.values()
-        .into_iter()
-        .filter(|r| r.service == service.service_type_name())
-        .map(|r| r.to_owned())
-        .collect();
-
-    let test_bodies: Vec<String> = our_responses
-        .into_iter()
-        .flat_map(|response| generate_response_parse_test(service, response))
-        .collect();
-
-    let tests_str = test_bodies
-        .join("\n\n");
-
-    format!("
-        use mock::*;
-        use super::*;
-        use super::super::Region as rusoto_region;
-        {test_bodies}
-    ",
-    test_bodies=tests_str)
-}
 
 fn generate_documentation(operation: &Operation) -> String {
     match operation.documentation {
