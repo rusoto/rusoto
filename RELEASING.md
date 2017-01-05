@@ -28,9 +28,17 @@ the main Rusoto crate.
 
 ### Git tags
 
-To release version 0.4.0:
+Due to multiple crates being in the repo, releases for each crate will be in the format `crate-vmajor.minor.patch`.
 
-1. Use an annotated tag on the commit with the version bump: `git tag -a v0.4.0 -m "0.4.0 release."`
+Examples:
+
+* `rusoto-v0.21.0`
+* `credentials-v0.3.0`
+* `codegen-v0.5.0`
+
+To release the main `rusoto` crate, version 0.4.0:
+
+1. Use an annotated tag on the commit with the version bump: `git tag -a rusoto-v0.21.0 -m "Rusoto 0.21.0 release."`
 2. Push changes, including tags, to Github: `git push --tags origin`.
 
 ### Release notes
