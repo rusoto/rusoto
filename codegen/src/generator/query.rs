@@ -72,7 +72,7 @@ impl GenerateProtocol for QueryGenerator {
 
     fn generate_support_types(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
         let mut struct_collector = String::new();
-        let serializer = generate_serializer_body(name, shape, service);
+        let serializer = generate_serializer_body(name, shape);
 
         if serializer.is_some() {
             struct_collector.push_str(&format!("
@@ -210,7 +210,7 @@ fn generate_list_deserializer(shape: &Shape) -> String {
 
         Ok(obj)
         ",
-        member_name = shape.member()
+        member_name = shape.member_type()
     )
 }
 
@@ -397,15 +397,15 @@ fn generate_struct_field_parse_expression(
     }
 }
 
-fn generate_serializer_body(name: &str,shape: &Shape, service: &Service) -> Option<String> {
+fn generate_serializer_body(name: &str,shape: &Shape) -> Option<String> {
     // Don't need to send "Response" objects, don't make the code for their serializers
     if name.ends_with("Response") {
         return None;
     }
     match shape.shape_type {
-        ShapeType::List => Some(generate_list_serializer(shape, service)),
+        ShapeType::List => Some(generate_list_serializer(shape)),
         ShapeType::Map => Some(generate_map_serializer(shape)),
-        ShapeType::Structure => Some(generate_struct_serializer(shape, service)),
+        ShapeType::Structure => Some(generate_struct_serializer(shape)),
         _ => Some(generate_primitive_serializer(shape)),
     }
 }
@@ -418,58 +418,40 @@ fn generate_serializer_signature(name: &str, shape: &Shape) -> String {
     }
 }
 
-fn generate_list_serializer(shape: &Shape, service: &Service) -> String {
-    match service.metadata.service_abbreviation {
-	Some(ref abbr) => match &abbr[..] {
-            "CloudWatch" => format!(
-        "for (index, element) in obj.iter().enumerate() {{
+fn generate_list_serializer(shape: &Shape) -> String {
     // List format is different for CloudWatch: http://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutMetricData.html
-    let key = format!(\"{{}}.member.{{}}\", name, index+1);
-    {name}Serializer::serialize(params, &key, element);
-}}
-        ",
-                    name = shape.member(),
-            ),
-            _ => generate_list_serializer_general(shape),
-        },
-	_ => generate_list_serializer_general(shape),
-    }
-}
-
-fn generate_list_serializer_general(shape: &Shape) -> String {
-    format!(
-        "for (index, element) in obj.iter().enumerate() {{
-    // Lists are one-based, see example here: http://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_SendMessage.html
-    let key = format!(\"{{}}.{{}}\", name, index+1);
-    {name}Serializer::serialize(params, &key, element);
-}}
-        ",
-        name = shape.member(),
+    format!("for (index, element) in obj.iter().enumerate() {{
+                let key = format!(\"{{}}.member.{{}}\", name, index+1);
+                {name}Serializer::serialize(params, &key, element);
+            }}",
+            name = shape.member_type(),
     )
 }
 
 fn generate_map_serializer(shape: &Shape) -> String {
     format!(
         "for (index, (key, value)) in obj.iter().enumerate() {{
-    let prefix = format!(\"{{}}.{{}}\", name, index);
-    {key_name}Serializer::serialize(
-        params,
-        &format!(\"{{}}.{{}}\", prefix, \"{key_name}\"),
-        key,
-    );
-    {value_name}Serializer::serialize(
-        params,
-        &format!(\"{{}}.{{}}\", prefix, \"{value_name}\"),
-        value,
-    );
-}}
+            let prefix = format!(\"{{}}.{{}}\", name, index+1);
+            {key_type}Serializer::serialize(
+                params,
+                &format!(\"{{}}.{{}}\", prefix, \"{key_name}\"),
+                key,
+            );
+            {value_type}Serializer::serialize(
+                params,
+                &format!(\"{{}}.{{}}\", prefix, \"{value_name}\"),
+                value,
+            );
+        }}
         ",
-        key_name = shape.key(),
-        value_name = shape.value(),
+        key_type = shape.key_type(),
+        value_type = shape.value_type(),
+        key_name = shape.key_name(),
+        value_name = shape.value_name()
     )
 }
 
-fn generate_struct_serializer(shape: &Shape, service: &Service) -> String {
+fn generate_struct_serializer(shape: &Shape) -> String {
     format!(
         "let mut prefix = name.to_string();
 if prefix != \"\" {{
@@ -478,44 +460,36 @@ if prefix != \"\" {{
 
 {struct_field_serializers}
         ",
-        struct_field_serializers = generate_struct_field_serializers(shape, service),
+        struct_field_serializers = generate_struct_field_serializers(shape),
     )
 }
 
-fn generate_struct_field_serializers(shape: &Shape, service: &Service) -> String {
+fn generate_struct_field_serializers(shape: &Shape) -> String {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
         if shape.required(member_name) {
             format!(
                 "{member_shape_name}Serializer::serialize(
-    params,
-    &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
-    &obj.{field_name},
-);
+                    params,
+                    &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
+                    &obj.{field_name},
+                );
                 ",
                 field_name = generate_field_name(member_name),
                 member_shape_name = member.shape,
                 tag_name = member_name,
             )
         } else {
-            let use_member_name = match service.metadata.service_abbreviation {
-	        Some(ref abbr) => match &abbr[..] {
-                    "CloudWatch" => true,
-                    _ => false,
-                },
-                _ => false,
-            };
             format!(
                 "if let Some(ref field_value) = obj.{field_name} {{
-    {member_shape_name}Serializer::serialize(
-        params,
-        &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
-        field_value,
-    );
-}}
-                ",
+                    {member_shape_name}Serializer::serialize(
+                        params,
+                        &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
+                        field_value,
+                    );
+                }}",
                 field_name = generate_field_name(member_name),
                 member_shape_name = member.shape,
-                tag_name = if use_member_name { member_name.clone() } else { member.tag_name() },
+                tag_name = member.location_name.clone().unwrap_or(member_name.to_owned())
             )
         }
     }).collect::<Vec<String>>().join("\n")
