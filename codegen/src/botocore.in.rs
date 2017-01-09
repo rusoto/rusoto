@@ -78,7 +78,7 @@ impl Service {
             "Amazon Simple Notification Service" => "Sns",
             "Amazon Simple Queue Service" => "Sqs",
             "Amazon Simple Storage Service" => "S3",
-            "Amazon Simple Systems Management Service" => "Ssm",
+            "Amazon Simple Systems Manager (SSM)" => "Ssm",
             "Amazon Simple Workflow Service" => "Swf",
             "Amazon SimpleDB" => "SimpleDb",
             "Amazon WorkSpaces" => "Workspaces",
