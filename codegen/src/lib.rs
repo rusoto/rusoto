@@ -18,7 +18,7 @@ extern crate serde_derive;
 extern crate serde_codegen;
 
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::{Write, BufReader, BufWriter};
 use std::path::Path;
 
 use botocore::Service as BotocoreService;
@@ -60,31 +60,28 @@ pub fn generate(service: Service, output_path: &Path) {
 }
 
 fn botocore_generate(input_path: &Path, output_path: &Path) {
-    let mut input_file = File::open(input_path).expect(&format!(
+    let input_file = File::open(input_path).expect(&format!(
         "{:?} not found",
         input_path,
     ));
 
-    let mut service_data = String::new();
+    let service_data_as_reader = BufReader::new(input_file);
 
-    input_file.read_to_string(&mut service_data).expect(&format!(
-        "Failed to read {:?}",
-        input_path,
-    ));
-
-    let service: BotocoreService = serde_json::from_str(&service_data).expect(&format!(
+    let service: BotocoreService = serde_json::from_reader(service_data_as_reader).expect(&format!(
         "Could not convert JSON in {:?} to Service",
         input_path,
     ));
 
     let source_code = generate_source(&service);
 
-    let mut output_file = File::create(output_path).expect(&format!(
+    let output_file = File::create(output_path).expect(&format!(
         "Couldn't open file for writing: {:?}",
         output_path,
     ));
 
-    output_file.write_all(source_code.as_bytes()).expect(&format!(
+    let mut output_bufwriter = BufWriter::new(output_file);
+
+    output_bufwriter.write_all(source_code.as_bytes()).expect(&format!(
         "Failed to write generated source code to {:?}",
         output_path,
     ));
