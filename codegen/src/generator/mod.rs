@@ -39,7 +39,7 @@ pub fn generate_source(service: &Service) -> String {
     match &service.metadata.protocol[..] {
         "json" => generate(service, JsonGenerator, JsonErrorTypes),
         "ec2" => generate(service, Ec2Generator, XmlErrorTypes),
-        "query" => generate(service, QueryGenerator, XmlErrorTypes),
+        "query" => generate(service, QueryGenerator::new(service), XmlErrorTypes),
         "rest-json" => generate(service, RestJsonGenerator, JsonErrorTypes),
         "rest-xml" => generate(service, RestXmlGenerator, XmlErrorTypes),
         protocol => panic!("Unknown protocol {}", protocol),

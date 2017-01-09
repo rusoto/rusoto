@@ -1,11 +1,62 @@
 use inflector::Inflector;
-
 use botocore::{Member, Operation, Service, Shape, ShapeType};
+use std::collections::HashSet;
+
+
 use super::GenerateProtocol;
 use super::generate_field_name;
 use super::error_type_name;
 
-pub struct QueryGenerator;
+pub struct QueryGenerator {
+    deserialized_types: HashSet<String>,
+    serialized_types: HashSet<String>
+}
+
+impl QueryGenerator {
+    pub fn new(service: &Service) -> QueryGenerator {
+        let mut deserialized_types:HashSet<String> = HashSet::new();
+        let mut serialized_types:HashSet<String> = HashSet::new();
+        for operation in service.operations.values() {
+            if let Some(ref output) = operation.output {
+                recurse_find_shapes(service, &mut deserialized_types, &output.shape);
+            }
+            if let Some(ref input) = operation.input {
+                recurse_find_shapes(service, &mut serialized_types, &input.shape);
+            }
+        }
+
+        println!("{:#?}", deserialized_types);
+        println!("{:#?}", serialized_types);
+
+        QueryGenerator {
+            deserialized_types: deserialized_types,
+            serialized_types: serialized_types
+        }
+    }
+}
+
+fn recurse_find_shapes(service: &Service, types: &mut HashSet<String>, shape_name: &str) {
+    types.insert(shape_name.to_owned());
+    let shape = service.shapes.get(shape_name).expect("Shape type missing from service definition");
+    match shape.shape_type {
+        ShapeType::Structure => {
+            if let Some(ref members) = shape.members {
+                for (_, member) in members {
+                    //let member_shape = service.shapes.get(member.shape).expect("Shape type missing from service definition");
+                    recurse_find_shapes(service, types, &member.shape);
+                }
+            }
+        },
+        ShapeType::Map => {
+            recurse_find_shapes(service, types, shape.key());
+            recurse_find_shapes(service, types, shape.value());
+        },
+        ShapeType::List => {
+            recurse_find_shapes(service, types, shape.member());
+        }
+        _ => {}
+    }
+}
 
 impl GenerateProtocol for QueryGenerator {
     fn generate_methods(&self, service: &Service) -> String {
@@ -73,9 +124,8 @@ impl GenerateProtocol for QueryGenerator {
 
     fn generate_support_types(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
         let mut struct_collector = String::new();
-        let serializer = generate_serializer_body(name, shape);
 
-        if serializer.is_some() {
+        if self.serialized_types.contains(name) {
             struct_collector.push_str(&format!("
             /// Serialize `{name}` contents to a `SignedRequest`.
             struct {name}Serializer;
@@ -87,22 +137,25 @@ impl GenerateProtocol for QueryGenerator {
             ",
             name = name,
             serializer_signature = generate_serializer_signature(name, shape),
-            serializer_body = serializer.unwrap())
+            serializer_body = generate_serializer_body(shape, service))
             );
         }
-        struct_collector.push_str(&format!(
-            "/// Deserializes `{name}` from XML.
-            struct {name}Deserializer;
-            impl {name}Deserializer {{
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<{name}, XmlParseError> {{
-                    {deserializer_body}
+
+        if self.deserialized_types.contains(name) {
+            struct_collector.push_str(&format!(
+                "/// Deserializes `{name}` from XML.
+                struct {name}Deserializer;
+                impl {name}Deserializer {{
+                    fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
+                    -> Result<{name}, XmlParseError> {{
+                        {deserializer_body}
+                    }}
                 }}
-            }}
-            ",
-            deserializer_body = generate_deserializer_body(name, shape, service),
-            name = name,
-        ));
+                ",
+                deserializer_body = generate_deserializer_body(name, shape, service),
+                name = name,
+            ));
+        }
         Some(struct_collector)
     }
 
@@ -398,16 +451,12 @@ fn generate_struct_field_parse_expression(
     }
 }
 
-fn generate_serializer_body(name: &str,shape: &Shape) -> Option<String> {
-    // Don't need to send "Response" objects, don't make the code for their serializers
-    if name.ends_with("Response") {
-        return None;
-    }
+fn generate_serializer_body(shape: &Shape, service: &Service) -> String {
     match shape.shape_type {
-        ShapeType::List => Some(generate_list_serializer(shape)),
-        ShapeType::Map => Some(generate_map_serializer(shape)),
-        ShapeType::Structure => Some(generate_struct_serializer(shape)),
-        _ => Some(generate_primitive_serializer(shape)),
+        ShapeType::List => generate_list_serializer(shape, service),
+        ShapeType::Map => generate_map_serializer(shape),
+        ShapeType::Structure => generate_struct_serializer(shape, service),
+        _ => generate_primitive_serializer(shape),
     }
 }
 
