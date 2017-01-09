@@ -248,6 +248,7 @@ pub struct Shape {
     pub xml_namespace: Option<XmlNamespace>,
 }
 
+
 impl<'a> Shape {
     pub fn key_type(&'a self) -> &'a str {
         &self.key.as_ref().expect("Key shape undefined").shape
@@ -257,19 +258,23 @@ impl<'a> Shape {
         &self.value.as_ref().expect("Value shape undefined").shape
     }
 
-    pub fn key_name(&'a self) -> &'a str {
-        &self.key.as_ref()
-        .expect("Key undefined").location_name
-        .as_ref()
-        .unwrap()        
+    // note: the key_type and value_type fallbacks here are incorrect
+    // they also never happen in executed code.
+    // the need for them will go away once we trim serializers down to
+    // only the types that need serialization
+    pub fn key_name(&'a self) -> String {
+        match self.key.as_ref().expect("Key undefined").location_name {
+            Some(ref location) => location.to_owned(),
+            _ => self.key_type().to_owned()
+        }
     }
 
-    pub fn value_name(&'a self) -> &'a str {
-        &self.value.as_ref()
-        .expect("Value undefined").location_name
-        .as_ref()
-        .unwrap()
-    }    
+    pub fn value_name(&'a self) -> String {
+        match self.value.as_ref().expect("Value undefined").location_name {
+            Some(ref location) => location.to_owned(),
+            _ => self.value_type().to_owned()
+        }
+    }
 
     pub fn member_type(&'a self) -> &'a str {
         &self.member.as_ref().expect("Member shape undefined").shape
