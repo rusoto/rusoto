@@ -49,7 +49,10 @@ pub fn generate_source(service: &Service) -> String {
 fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator: E) -> String
     where P: GenerateProtocol,
           E: GenerateErrorTypes {
-    format!(
+
+    // Initial capacity is a bit of a guess from looking at the end size:
+    let mut service_code = String::with_capacity(969984);
+    service_code.push_str(
         "#[allow(warnings)]
         use hyper::Client;
         use hyper::client::RedirectPolicy;
@@ -59,22 +62,15 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
         use std::fmt;
         use std::error::Error;
         use request::HttpDispatchError;
-        use rusoto_credential::{{CredentialsError, ProvideAwsCredentials}};
+        use rusoto_credential::{CredentialsError, ProvideAwsCredentials};
+    ");
+    service_code.push_str(&protocol_generator.generate_prelude(service));
+    service_code.push_str(&generate_types(service, &protocol_generator));
+    service_code.push_str(&error_type_generator.generate_error_types(service).unwrap_or("".to_string()));
+    service_code.push_str(&generate_client(service, &protocol_generator));
+    service_code.push_str(&generate_tests(service).unwrap_or("".to_string()));
 
-        {prelude}
-
-        {types}
-        {error_types}
-
-        {client}
-
-        {tests}",
-        client = generate_client(service, &protocol_generator),
-        prelude = &protocol_generator.generate_prelude(service),
-        types = generate_types(service, &protocol_generator),
-        error_types = error_type_generator.generate_error_types(service).unwrap_or("".to_string()),
-        tests = &generate_tests(service).unwrap_or("".to_string()),
-    )
+    service_code
 }
 
 fn generate_client<P>(service: &Service, protocol_generator: &P) -> String
