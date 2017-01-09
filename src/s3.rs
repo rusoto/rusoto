@@ -284,6 +284,7 @@ mod test {
             if_none_match: sstr("if_none_match"),
             if_unmodified_since: sstr("if_unmodified_since"),
             key: "key".to_string(),
+            part_number: Some(1),
             range: sstr("range"),
             request_payer: sstr("request_payer"),
             response_cache_control: sstr("response_cache_control"),
