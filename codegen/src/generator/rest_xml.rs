@@ -507,7 +507,7 @@ fn generate_list_deserializer(shape: &Shape) -> String {
     let location_name = shape.member
         .as_ref()
         .and_then(|m| m.location_name.to_owned())
-        .unwrap_or(shape.member().to_owned());
+        .unwrap_or(shape.member_type().to_owned());
 
     format!("
         let mut obj = vec![];
@@ -539,7 +539,7 @@ fn generate_list_deserializer(shape: &Shape) -> String {
         Ok(obj)
         ",
             location_name = location_name,
-            member_name = generate_member_name(&shape.member()[..]))
+            member_name = generate_member_name(&shape.member_type()[..]))
 }
 
 fn generate_flat_list_deserializer(shape: &Shape) -> String {
@@ -563,7 +563,7 @@ fn generate_flat_list_deserializer(shape: &Shape) -> String {
 
         Ok(obj)
         ",
-            member_name = generate_member_name(shape.member()))
+            member_name = generate_member_name(shape.member_type()))
 }
 
 fn generate_member_name(name: &str) -> String {
@@ -770,7 +770,7 @@ fn generate_list_serializer(shape: &Shape) -> String {
         _ => false,
     };
 
-    let element_type = &generate_member_name(&shape.member()[..]);
+    let element_type = &generate_member_name(&shape.member_type()[..]);
     let mut serializer = format!("let mut parts: Vec<String> = Vec::new();");
 
     if !flattened {

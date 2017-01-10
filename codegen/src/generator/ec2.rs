@@ -217,7 +217,7 @@ fn generate_deserializer_body(name: &str, shape: &Shape) -> Option<String> {
 
 fn generate_list_deserializer(shape: &Shape) -> String {
 
-    let location_name = shape.member.as_ref().and_then(|m| m.location_name.as_ref()).map(|name| &name[..]).unwrap_or(shape.member());
+    let location_name = shape.member.as_ref().and_then(|m| m.location_name.as_ref()).map(|name| &name[..]).unwrap_or(shape.member_type());
 
     format!(
         "
@@ -250,7 +250,7 @@ fn generate_list_deserializer(shape: &Shape) -> String {
         Ok(obj)
         ",
         location_name = location_name,
-        member_name = shape.member()
+        member_name = shape.member_type()
     )
 }
 
@@ -397,28 +397,30 @@ fn generate_list_serializer(shape: &Shape) -> String {
     {name}Serializer::serialize(params, &key, element);
 }}
         ",
-        name = shape.member(),
+        name = shape.member_type(),
     )
 }
 
 fn generate_map_serializer(shape: &Shape) -> String {
     format!(
         "for (index, (key, value)) in obj.iter().enumerate() {{
-    let prefix = format!(\"{{}}.{{}}\", name, index);
-    {key_name}Serializer::serialize(
-        params,
-        &format!(\"{{}}.{{}}\", prefix, \"{key_name}\"),
-        key,
-    );
-    {value_name}Serializer::serialize(
-        params,
-        &format!(\"{{}}.{{}}\", prefix, \"{value_name}\"),
-        value,
-    );
-}}
+            let prefix = format!(\"{{}}.{{}}\", name, index);
+                {key_type}Serializer::serialize(
+                    params,
+                    &format!(\"{{}}.{{}}\", prefix, \"{key_name}\"),
+                    key,
+                );
+                {value_type}Serializer::serialize(
+                    params,
+                    &format!(\"{{}}.{{}}\", prefix, \"{value_name}\"),
+                    value,
+                );
+            }}
         ",
-        key_name = shape.key(),
-        value_name = shape.value(),
+        key_type = shape.key_type(),
+        value_type = shape.value_type(),
+        key_name = shape.key_name(),
+        value_name = shape.value_name()
     )
 }
 

@@ -114,15 +114,15 @@ fn generate_client<P>(service: &Service, protocol_generator: &P) -> String
 fn generate_list(name: &str, shape: &Shape) -> String {
     format!("pub type {} = Vec<{}>;",
             name,
-            mutate_type_name(shape.member()))
+            mutate_type_name(shape.member_type()))
 }
 
 fn generate_map(name: &str, shape: &Shape) -> String {
     format!(
         "pub type {} = ::std::collections::HashMap<{}, {}>;",
         name,
-        capitalize_first(shape.key().to_string()),
-        capitalize_first(shape.value().to_string()),
+        capitalize_first(shape.key_type().to_string()),
+        capitalize_first(shape.value_type().to_string()),
     )
 }
 
