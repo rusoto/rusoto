@@ -3,13 +3,14 @@ use inflector::Inflector;
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::GenerateProtocol;
 use super::generate_field_name;
+use super::error_type_name;
 
 pub struct RestXmlGenerator;
 
 impl GenerateProtocol for RestXmlGenerator {
     fn generate_methods(&self, service: &Service) -> String {
 
-        service.operations.values().map(|operation| {
+        service.operations.iter().map(|(operation_name, operation)| {
 
             // botocore includes + for greedy parameters and we don't care about it
             let (request_uri, maybe_params) = parse_query_string(&operation.http.request_uri);
@@ -62,8 +63,8 @@ impl GenerateProtocol for RestXmlGenerator {
                 documentation = generate_documentation(operation),
                 http_method = &operation.http.method,
                 endpoint_prefix = &service.metadata.endpoint_prefix,
-                method_signature = generate_method_signature(operation),
-                error_type = operation.error_type_name(),
+                method_signature = generate_method_signature(&operation_name, operation),
+                error_type = error_type_name(&operation_name),
                 request_uri = request_uri,
                 add_uri_parameters = add_uri_parameters,
                 serialize_input = generate_method_input_serialization(service, operation).unwrap_or("".to_string()),
@@ -76,27 +77,31 @@ impl GenerateProtocol for RestXmlGenerator {
         }).collect::<Vec<String>>().join("\n")
     }
 
-    fn generate_prelude(&self, _service: &Service) -> String {
-        "use std::str::{FromStr};
-        use std::collections::HashMap;
+    fn generate_prelude(&self, service: &Service) -> String {
+        let mut imports = "
+            use std::str::{FromStr};
+            use param::{Params, ServiceParams};
+            use signature::SignedRequest;
+            use xml::EventReader;
+            use xml::reader::events::XmlEvent;
+            use xmlerror::*;
+            use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+            use xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
 
-        use md5;
-        use param::{Params, ServiceParams};
-        use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};
-        use signature::SignedRequest;
-        use xml::EventReader;
-        use xml::reader::events::XmlEvent;
-        use xmlerror::*;
-        use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-        use xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
+            enum DeserializerNext {
+                Close,
+                Skip,
+                Element(String),
+            }".to_owned();
 
-        enum DeserializerNext {
-            Close,
-            Skip,
-            Element(String),
+        if service.service_type_name() == "S3" {
+            imports += "
+                use std::collections::HashMap;
+                use md5;
+                use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};";
         }
-        "
-            .to_owned()
+
+        imports
     }
 
     fn generate_struct_attributes(&self, _struct_name: &str) -> String {
@@ -155,7 +160,7 @@ fn generate_documentation(operation: &Operation) -> String {
     match operation.documentation {
         Some(ref docs) => {
             format!("#[doc=\"{}\"]",
-                    docs.replace("\"", "\\\"").replace("C:\\", "C:\\\\"))
+                    docs.replace("\\", "\\\\").replace("\"", "\\\""))
         }
         None => "".to_owned(),
     }
@@ -195,13 +200,13 @@ fn generate_uri_modification(service: &Service, operation: &Operation) -> Option
         match &member.location.as_ref().unwrap()[..] {
             "uri" => {
                 if shape.required(&member_name) {
-                    Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name});",
+                    Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name}.to_string());",
                         location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
+                        field_name = generate_field_name(member_name)))
                 } else {
-                    Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name}.unwrap());",
+                    Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name}.unwrap().to_string());",
                         location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
+                        field_name = generate_field_name(member_name)))
                 }
             },
             _ => None
@@ -255,14 +260,14 @@ fn generate_parameters(service: &Service, operation: &Operation) -> Option<Strin
                 if shape.required(&member_name) {
                     Some(format!("params.put(\"{location_name}\", &input.{field_name}.to_string());",
                         location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
+                        field_name = generate_field_name(member_name)))
                 } else {
                     Some(format!("
                         if let Some(ref {field_name}) = input.{field_name} {{
                             params.put(\"{location_name}\", &{field_name}.to_string());
                         }}",
                         location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
+                        field_name = generate_field_name(member_name)))
                 }
             },
             _ => None
@@ -469,20 +474,20 @@ fn generate_header_primitive_parser(shape: &Shape) -> String {
     statement.to_string()
 }
 
-fn generate_method_signature(operation: &Operation) -> String {
+fn generate_method_signature(operation_name: &str, operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
             "pub fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
-            operation_name = operation.name.to_snake_case(),
+            operation_name = operation_name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
-            error_type = operation.error_type_name(),
+            error_type = error_type_name(operation_name),
         )
     } else {
         format!(
             "pub fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
             operation_name = operation.name.to_snake_case(),
-            error_type = operation.error_type_name(),
+            error_type = error_type_name(operation_name),
             output_type = &operation.output_shape_or("()"),
         )
     }

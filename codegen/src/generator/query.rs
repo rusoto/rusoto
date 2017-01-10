@@ -3,12 +3,13 @@ use inflector::Inflector;
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::GenerateProtocol;
 use super::generate_field_name;
+use super::error_type_name;
 
 pub struct QueryGenerator;
 
 impl GenerateProtocol for QueryGenerator {
     fn generate_methods(&self, service: &Service) -> String {
-        service.operations.values().map(|operation| {
+        service.operations.iter().map(|(operation_name, operation)| {
             let xml_tag = &operation.output_shape_or_wrapper_or("()");
 
             format!(
@@ -40,11 +41,11 @@ impl GenerateProtocol for QueryGenerator {
                 ",
                 api_version = &service.metadata.api_version,
                 documentation = generate_documentation(operation),
-                error_type = operation.error_type_name(),
+                error_type = error_type_name(operation_name),
                 http_method = &operation.http.method,
                 endpoint_prefix = &service.metadata.endpoint_prefix,
                 method_return_value = generate_method_return_value(operation),
-                method_signature = generate_method_signature(operation),
+                method_signature = generate_method_signature(operation_name, operation),
                 operation_name = &operation.name,
                 xml_stack_loader = generate_xml_stack_loader(xml_tag),
                 request_uri = &operation.http.request_uri,
@@ -144,21 +145,21 @@ fn generate_method_return_value(operation: &Operation) -> String {
     }
 }
 
-fn generate_method_signature(operation: &Operation) -> String {
+fn generate_method_signature(operation_name: &str, operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
             "pub fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
-            error_type = operation.error_type_name(),
+            error_type = error_type_name(operation_name),
         )
     } else {
         format!(
             "pub fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
-            error_type = operation.error_type_name(),
+            error_type = error_type_name(operation_name),
         )
     }
 }

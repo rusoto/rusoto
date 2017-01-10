@@ -49,6 +49,7 @@ fn main() {
     let services = services! {
         ["acm", "2015-12-08"],
         ["cloudformation", "2010-05-15"],
+        ["cloudfront", "2016-09-07"],
         ["cloudhsm", "2014-05-30"],
         ["cloudtrail", "2013-11-01"],
         ["cloudwatch", "2010-08-01"],
@@ -79,6 +80,7 @@ fn main() {
         ["machinelearning", "2014-12-12"],
         ["marketplacecommerceanalytics", "2015-07-01"],
         ["opsworks", "2013-02-18"],
+        ["route53", "2013-04-01"],
         ["route53domains", "2014-05-15"],
         ["s3", "2006-03-01"],
         ["sqs", "2012-11-05"],

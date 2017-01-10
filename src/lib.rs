@@ -94,6 +94,8 @@ pub mod acm;
 #[allow(unused_imports)]
 #[cfg(feature = "cloudformation")]
 pub mod cloudformation;
+#[cfg(feature = "cloudfront")]
+pub mod cloudfront;
 #[cfg(feature = "cloudhsm")]
 pub mod cloudhsm;
 #[cfg(feature = "cloudtrail")]
@@ -154,6 +156,8 @@ pub mod machinelearning;
 pub mod marketplacecommerceanalytics;
 #[cfg(feature = "opsworks")]
 pub mod opsworks;
+#[cfg(feature = "route53")]
+pub mod route53;
 #[cfg(feature = "route53domains")]
 pub mod route53domains;
 #[cfg(feature = "s3")]
