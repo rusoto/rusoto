@@ -8,7 +8,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 #[test]
 fn should_list_documents() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = SsmClient::new(credentials, Region::UsEast1);
+    let client = SsmClient::new(credentials, Region::UsEast1).unwrap();
     let request = ListDocumentsRequest::default();
 
     client.list_documents(&request).unwrap();
@@ -17,7 +17,7 @@ fn should_list_documents() {
 #[test]
 fn should_list_commands() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = SsmClient::new(credentials, Region::UsEast1);
+    let client = SsmClient::new(credentials, Region::UsEast1).unwrap();
     let request = ListCommandsRequest::default();
 
     client.list_commands(&request).unwrap();
@@ -26,7 +26,7 @@ fn should_list_commands() {
 #[test]
 fn should_list_command_invocations() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = SsmClient::new(credentials, Region::UsEast1);
+    let client = SsmClient::new(credentials, Region::UsEast1).unwrap();
     let request = ListCommandInvocationsRequest::default();
 
     client.list_command_invocations(&request).unwrap();

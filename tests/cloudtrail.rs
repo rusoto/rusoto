@@ -8,7 +8,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 #[test]
 fn should_describe_trails() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = CloudTrailClient::new(credentials, Region::UsEast1);
+    let client = CloudTrailClient::new(credentials, Region::UsEast1).unwrap();
     let request = DescribeTrailsRequest::default();
 
     client.describe_trails(&request).unwrap();

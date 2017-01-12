@@ -8,7 +8,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 #[test]
 fn should_list_keys() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = KmsClient::new(credentials, Region::UsEast1);
+    let client = KmsClient::new(credentials, Region::UsEast1).unwrap();
     let request = ListKeysRequest::default();
 
     client.list_keys(&request).unwrap();

@@ -8,7 +8,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 #[test]
 fn should_list_clusters() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = EmrClient::new(credentials, Region::UsEast1);
+    let client = EmrClient::new(credentials, Region::UsEast1).unwrap();
     let request = ListClustersInput::default();
 
     client.list_clusters(&request).unwrap();
@@ -17,7 +17,7 @@ fn should_list_clusters() {
 #[test]
 fn should_handle_deprecation_gracefully() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = EmrClient::new(credentials, Region::UsEast1);
+    let client = EmrClient::new(credentials, Region::UsEast1).unwrap();
     let request = DescribeJobFlowsInput::default();
 
     match client.describe_job_flows(&request) {

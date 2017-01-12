@@ -9,7 +9,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 fn main() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
 
-    let ecs = EcsClient::new(credentials, Region::UsEast1);
+    let ecs = EcsClient::new(credentials, Region::UsEast1).unwrap();
 
     // http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListClusters.html
     match ecs.list_clusters(&ListClustersRequest::default()) {

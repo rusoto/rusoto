@@ -8,7 +8,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 #[test]
 fn should_list_delivery_streams() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = KinesisFirehoseClient::new(credentials, Region::UsEast1);
+    let client = KinesisFirehoseClient::new(credentials, Region::UsEast1).unwrap();
     let request = ListDeliveryStreamsInput::default();
 
     client.list_delivery_streams(&request).unwrap();

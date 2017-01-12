@@ -8,7 +8,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 #[test]
 fn should_list_pipelines() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = DataPipelineClient::new(credentials, Region::UsEast1);
+    let client = DataPipelineClient::new(credentials, Region::UsEast1).unwrap();
     let request = ListPipelinesInput::default();
 
     client.list_pipelines(&request).unwrap();

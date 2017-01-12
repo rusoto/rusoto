@@ -10,7 +10,7 @@ use std::error::Error;
 #[test]
 fn main() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let ec2 = Ec2Client::new(credentials, Region::UsEast1);
+    let ec2 = Ec2Client::new(credentials, Region::UsEast1).unwrap();
 
     let mut req = DescribeInstancesRequest::default();
     req.instance_ids = Some(vec!["i-00000000".into(), "i-00000001".into()]);
@@ -30,7 +30,7 @@ fn main() {
 #[should_panic(expected="<Message>Request would have succeeded, but DryRun flag is set.</Message>")]
 fn dry_run() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let ec2 = Ec2Client::new(credentials, Region::UsEast1);
+    let ec2 = Ec2Client::new(credentials, Region::UsEast1).unwrap();
     let req = CreateSnapshotRequest {
         volume_id: "v-00000001".into(),
         description: None,
@@ -44,7 +44,7 @@ fn dry_run() {
 #[should_panic(expected="<Code>InvalidID</Code>")]
 fn query_serialization_name() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let ec2 = Ec2Client::new(credentials, Region::UsEast1);
+    let ec2 = Ec2Client::new(credentials, Region::UsEast1).unwrap();
     let req = CreateTagsRequest {
         dry_run: None,
         resources: vec!["v-00000001".into()],
