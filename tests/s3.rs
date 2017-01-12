@@ -1,7 +1,7 @@
 #![cfg(feature = "s3")]
 extern crate rusoto;
 extern crate time;
-extern crate hyper;
+extern crate reqwest;
 extern crate env_logger;
 extern crate log;
 
@@ -26,7 +26,7 @@ type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 fn test_all_the_things() {
     let _ = env_logger::init();
 
-    let client = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
+    let client = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1).unwrap();
 
     // a random number should probably be appended here too
     let test_bucket = format!("rusoto_test_bucket_{}", get_time().sec);

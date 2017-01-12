@@ -1,7 +1,7 @@
 #![cfg(all(feature = "elastictranscoder", feature = "s3"))]
 
 extern crate env_logger;
-extern crate hyper;
+extern crate reqwest;
 #[macro_use] extern crate log;
 extern crate rand;
 extern crate rusoto;
@@ -38,10 +38,11 @@ impl<P> TestEtsClient<P>
 {
     /// Creates a new `EtsClient` for a test.
     fn new(credentials_provider: P, region: Region) -> TestEtsClient<P> {
+        println!("making testets client");
         TestEtsClient {
             credentials_provider: credentials_provider.clone(),
             region: region,
-            client: EtsClient::new(credentials_provider, region),
+            client: EtsClient::new(credentials_provider, region).unwrap(),
             s3_client: None,
             input_bucket: None,
             output_bucket: None,
@@ -49,25 +50,29 @@ impl<P> TestEtsClient<P>
     }
 
     fn create_s3_client(&mut self) {
+        println!("making s3 client");
         self.s3_client = Some(S3Client::new(
             self.credentials_provider.clone(),
             self.region
-        ));
+        ).unwrap());
+        println!("done making s3 client");
     }
 
     fn create_bucket(&mut self) -> BucketName {
+        println!("cb1");
         let bucket_name = generate_unique_name("ets-bucket-1");
-
+        println!("cb2");
         let create_bucket_req = CreateBucketRequest {
             bucket: bucket_name.to_owned(),
             ..Default::default()
-        };        
+        };
+        println!("cb3");
 
         let result = self.s3_client
             .as_ref()
             .unwrap()
             .create_bucket(&create_bucket_req);
-
+        println!("cb4, result is {:?}", result);
         let mut location = result
             .unwrap()
             .location
@@ -75,6 +80,7 @@ impl<P> TestEtsClient<P>
         // A `Location` is identical to a `BucketName` except that it has a
         // forward slash prepended to it, so we need to remove it.
         location.remove(0);
+        println!("cb5");
         info!("Created S3 bucket: {}", location);
         location
     }
@@ -161,21 +167,26 @@ fn generate_unique_name(prefix: &str) -> String {
 #[should_panic(expected = "arn cannot be null")]
 fn create_pipeline_without_arn() {
     use rusoto::elastictranscoder::CreatePipelineRequest;
-
+    println!("1");
     initialize();
-
+    println!("2");
     let mut client = create_client();
+    println!("3");
     client.create_s3_client();
+    println!("4");
     client.input_bucket = Some(client.create_bucket());
+    println!("5");
     client.output_bucket = Some(client.create_bucket());
+    println!("6");
 
     let request = CreatePipelineRequest {
         input_bucket: client.input_bucket.as_ref().cloned().unwrap(),
         output_bucket: client.output_bucket.as_ref().cloned(),
         ..CreatePipelineRequest::default()
     };
+    println!("7");
     let response = client.create_pipeline(&request);
-
+    println!("8, panic after okay");
     response.unwrap();
 }
 
