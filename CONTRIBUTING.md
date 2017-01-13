@@ -22,6 +22,14 @@ Set up AWS credentials: environment variables (export AWS_ACCESS_KEY_ID and
 AWS_SECRET_ACCESS_KEY), populate the ~/.aws/credentials file, or use an
 IAM instance profile on an EC2 instance.
 
+Rusoto codegen depends on botocore.  Update the git submodule via:
+
+``` bash
+cd rusoto
+git submodule init
+git submodule update
+```
+
 You are now ready to build the project with `cargo build`.
 Remember to include the appropriate feature flags for the AWS services you want to use.
 See [README](README.md) for a table of available services and their Cargo feature names.
