@@ -8,7 +8,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 #[test]
 fn should_describe_config_rules() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = ConfigServiceClient::new(credentials, Region::UsEast1);
+    let client = ConfigServiceClient::new(credentials, Region::UsEast1).unwrap();
 
     let request = DescribeConfigRulesRequest::default();
 
@@ -24,7 +24,7 @@ fn should_describe_config_rules() {
 #[test]
 fn should_describe_delivery_channels() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = ConfigServiceClient::new(credentials, Region::UsEast1);
+    let client = ConfigServiceClient::new(credentials, Region::UsEast1).unwrap();
 
     let request = DescribeDeliveryChannelsRequest::default();
 

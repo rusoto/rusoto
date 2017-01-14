@@ -8,7 +8,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 #[test]
 fn should_list_identity_pools() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = CognitoIdentityClient::new(credentials, Region::UsEast1);
+    let client = CognitoIdentityClient::new(credentials, Region::UsEast1).unwrap();
 
     let mut request = ListIdentityPoolsInput::default();
     request.max_results = 10;
@@ -19,7 +19,7 @@ fn should_list_identity_pools() {
 #[test]
 fn should_handle_validation_errors_gracefully() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = CognitoIdentityClient::new(credentials, Region::UsEast1);
+    let client = CognitoIdentityClient::new(credentials, Region::UsEast1).unwrap();
 
     let mut request = ListIdentitiesInput::default();
     request.max_results = 10;

@@ -1,5 +1,6 @@
 use inflector::Inflector;
 use regex::{Captures, Regex};
+use reqwest::StatusCode;
 
 use botocore::{Member, Operation, Service, Shape};
 use super::GenerateProtocol;
@@ -78,7 +79,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or("".to_owned()),
                 http_method = operation.http.method,
                 error_type = error_type_name(operation_name),
-                status_code = operation.http.response_code.unwrap_or(200),
+                status_code = http_code_to_status_code(operation.http.response_code),
                 ok_response = generate_ok_response(operation, output_type),
                 output_type = output_type,
                 request_uri_formatter = generate_uri_formatter(
@@ -113,6 +114,30 @@ impl GenerateProtocol for RestJsonGenerator {
 
     fn timestamp_type(&self) -> &'static str {
         "f64"
+    }
+}
+
+// Used to print the enum value rather than the status code and the canonical reason.
+// For codegen purposes, leaving existing StatusCode Display trait implementation intact.
+// StatusCode::Ok.to_string() prints "200 OK"
+// StatusCode::Ok.enum_as_string() prints "StatusCode::Ok"
+trait CodegenString {
+    fn enum_as_string(&self) -> String;
+}
+impl CodegenString for StatusCode {
+    fn enum_as_string(&self) -> String {
+        format!("StatusCode::{:?}", self)
+    }
+}
+
+fn http_code_to_status_code(code: Option<i32>) -> String {
+    match code {
+        Some(actual_code) => {
+            StatusCode::from_u16(actual_code as u16).enum_as_string()
+        }
+        // Some service definitions such as elastictranscoder don't specify
+        // the response code, we'll assume this:
+        None => "StatusCode::Ok".to_string(),
     }
 }
 

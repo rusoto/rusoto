@@ -68,7 +68,7 @@ use rusoto::dynamodb::{DynamoDbClient, ListTablesInput};
 
 fn main() {
   let provider = DefaultCredentialsProvider::new().unwrap();
-  let client = DynamoDbClient::new(provider, Region::UsEast1);
+  let client = DynamoDbClient::new(provider, Region::UsEast1).unwrap();
   let list_tables_input: ListTablesInput = Default::default();
 
   match client.list_tables(&list_tables_input) {

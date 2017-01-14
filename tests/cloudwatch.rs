@@ -7,7 +7,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 
 #[test]
 fn should_put_metric_data() {
-    let client = CloudWatchClient::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
+	let client = CloudWatchClient::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1).unwrap();
 
 	let metric_data = vec![
 		MetricDatum {

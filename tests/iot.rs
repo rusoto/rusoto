@@ -11,7 +11,7 @@ use rusoto::{DefaultCredentialsProvider, Region};
 fn should_list_things() {
     let _ = env_logger::init();
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = IotClient::new(credentials, Region::UsEast1);
+    let client = IotClient::new(credentials, Region::UsEast1).unwrap();
     let request = ListThingsRequest::default();
 
     client.list_things(&request).unwrap();

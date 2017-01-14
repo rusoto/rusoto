@@ -10,6 +10,7 @@ extern crate lazy_static;
 extern crate regex;
 extern crate serde;
 extern crate serde_json;
+extern crate reqwest;
 
 #[cfg(feature = "serde_derive")]
 #[macro_use]
