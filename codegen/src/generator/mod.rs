@@ -55,7 +55,6 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
     service_code.push_str(
         "#[allow(warnings)]
         use hyper::Client;
-        use hyper::client::RedirectPolicy;
         use hyper::status::StatusCode;
         use request::DispatchSignedRequest;
         use region;
@@ -84,16 +83,8 @@ fn generate_client<P>(service: &Service, protocol_generator: &P) -> String
             dispatcher: D,
         }}
 
-        impl<P> {type_name}<P, Client> where P: ProvideAwsCredentials {{
-            pub fn new(credentials_provider: P, region: region::Region) -> Self {{
-                let mut client = Client::new();
-                client.set_redirect_policy(RedirectPolicy::FollowNone);
-               {type_name}::with_request_dispatcher(client, credentials_provider, region)
-            }}
-        }}
-
         impl<P, D> {type_name}<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {{
-            pub fn with_request_dispatcher(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {{
+            pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {{
                   {type_name} {{
                     credentials_provider: credentials_provider,
                     region: region,

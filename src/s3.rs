@@ -149,7 +149,7 @@ mod test {
         req.bucket = "rusoto1440826511".to_owned();
         req.key = "testfile.zip".to_owned();
 
-        let client = S3Client::with_request_dispatcher(mock, MockCredentialsProvider, Region::UsEast1);
+        let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
         let result = client.list_parts(&req).unwrap();
         assert_eq!(result.bucket, sstr("rusoto1440826511"));
         assert_eq!(result.upload_id, sstr("PeePB_uORK5f2AURP_SWcQ4NO1P1oqnGNNNFK3nhFfzMeksdvG7x7nFfH1qk7a3HSossNYB7t8QhcN1Fg6ax7AXbwvAKIZ9DilB4tUcpM7qyUEgkszN4iDmMvSaImGFK"));
@@ -203,7 +203,7 @@ mod test {
         let mut req = ListMultipartUploadsRequest::default();
         req.bucket = "test-bucket".to_owned();
        
-        let client = S3Client::with_request_dispatcher(mock, MockCredentialsProvider, Region::UsEast1);
+        let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
         let result = client.list_multipart_uploads(&req).unwrap();
 
         assert_eq!(result.bucket, sstr("rusoto1440826568"));
@@ -241,7 +241,7 @@ mod test {
                 assert_eq!(request.payload, None);
             });
 
-        let client = S3Client::with_request_dispatcher(mock, MockCredentialsProvider, Region::UsEast1);
+        let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
         let result = client.list_buckets().unwrap();
 
         let owner = result.owner.unwrap();
@@ -265,7 +265,7 @@ mod test {
             .with_header("x-amz-expiration".to_string(), "foo".to_string())
             .with_header("x-amz-restore".to_string(), "bar".to_string());
 
-        let client = S3Client::with_request_dispatcher(mock, MockCredentialsProvider, Region::UsEast1);
+        let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
         let request = HeadObjectRequest::default();
         let result = client.head_object(&request).unwrap();
 
@@ -309,7 +309,7 @@ mod test {
                 assert_eq!(request.payload, None);
             });
 
-        let client = S3Client::with_request_dispatcher(mock, MockCredentialsProvider, Region::UsEast1);
+        let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
         let _ = client.get_object(&request).unwrap();
     }
 

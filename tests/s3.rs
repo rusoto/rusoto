@@ -16,6 +16,7 @@ use rusoto::s3::{S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectReques
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
                  CompletedPart, CompletedPartList};
+use rusoto::default_tls_client;
 
 type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 
@@ -26,7 +27,8 @@ type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 fn test_all_the_things() {
     let _ = env_logger::init();
 
-    let client = S3Client::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
+    let client = S3Client::new(default_tls_client().unwrap(),
+        DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
 
     // a random number should probably be appended here too
     let test_bucket = format!("rusoto_test_bucket_{}", get_time().sec);

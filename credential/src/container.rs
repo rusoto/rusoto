@@ -1,9 +1,7 @@
 use std::env;
 use std::io::Read;
-use std::time::Duration as StdDuration;
 
-use hyper::Client;
-use hyper::header::Connection;
+use reqwest;
 use serde_json::{self, Value};
 
 use {
@@ -29,10 +27,7 @@ impl ProvideAwsCredentials for ContainerProvider {
 
         let address: String = format!("http://{}{}", AWS_CREDENTIALS_PROVIDER_IP, aws_container_credentials_relative_uri);
 
-        let mut client = Client::new();
-        client.set_read_timeout(Some(StdDuration::from_secs(15)));
-        let mut response = match client.get(&address)
-            .header(Connection::close()).send()
+        let mut response = match reqwest::get(&address)
         {
             Ok(response) => response,
             Err(_) => return Err(CredentialsError::new("Couldn't connect to credentials provider")), // add why?

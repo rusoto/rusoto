@@ -4,11 +4,12 @@ extern crate rusoto;
 
 use rusoto::cognitoidentity::{CognitoIdentityClient, ListIdentitiesInput, ListIdentitiesError, ListIdentityPoolsInput};
 use rusoto::{DefaultCredentialsProvider, Region};
+use rusoto::default_tls_client;
 
 #[test]
 fn should_list_identity_pools() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = CognitoIdentityClient::new(credentials, Region::UsEast1);
+    let client = CognitoIdentityClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
     let mut request = ListIdentityPoolsInput::default();
     request.max_results = 10;
@@ -19,7 +20,7 @@ fn should_list_identity_pools() {
 #[test]
 fn should_handle_validation_errors_gracefully() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = CognitoIdentityClient::new(credentials, Region::UsEast1);
+    let client = CognitoIdentityClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
     let mut request = ListIdentitiesInput::default();
     request.max_results = 10;
