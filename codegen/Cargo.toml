@@ -22,6 +22,7 @@ lazy_static = "0.2.1"
 regex = "0.1.65"
 serde = "0.8.0"
 serde_json = "0.8.0"
+hyper = "0.9.14"
 
 [dependencies.clippy]
 optional = true

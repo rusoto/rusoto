@@ -13,8 +13,8 @@ use std::collections::HashMap;
 
 use hyper::Client;
 use hyper::Error as HyperError;
-use hyper::header::Headers;
-use hyper::header::UserAgent;
+use hyper::header::{Headers, UserAgent};
+use hyper::status::StatusCode;
 use hyper::method::Method;
 
 use log::LogLevel::Debug;
@@ -31,9 +31,9 @@ lazy_static! {
             env!("CARGO_PKG_VERSION"), RUST_VERSION, env::consts::OS).as_bytes().to_vec()];
 }
 
-#[derive(Clone, Default)]
+#[derive(Clone)]
 pub struct HttpResponse {
-    pub status: u16,
+    pub status: StatusCode,
     pub body: String,
     pub headers: HashMap<String, String>
 }
@@ -133,7 +133,7 @@ impl DispatchSignedRequest for Client {
         }
 
         Ok(HttpResponse {
-            status: hyper_response.status.to_u16(),
+            status: hyper_response.status.clone(),
             body: body,
             headers: headers
         })
