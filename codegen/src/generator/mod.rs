@@ -56,6 +56,7 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
         "#[allow(warnings)]
         use hyper::Client;
         use hyper::client::RedirectPolicy;
+        use hyper::status::StatusCode;
         use request::DispatchSignedRequest;
         use region;
 

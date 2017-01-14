@@ -29,7 +29,7 @@ impl GenerateProtocol for Ec2Generator {
                     let result = try!(self.dispatcher.dispatch(&request));
 
                     match result.status {{
-                        200 => {{
+                        StatusCode::Ok => {{
                             let mut reader = EventReader::from_str(&result.body);
                             let mut stack = XmlResponse::new(reader.events().peekable());
                             stack.next();
