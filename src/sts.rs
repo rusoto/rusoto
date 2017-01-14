@@ -4,7 +4,12 @@
 
 include!(concat!(env!("OUT_DIR"), "/sts.rs"));
 
-pub use self::credential::{StsSessionCredentialsProvider};
+pub use self::credential::{
+    StsSessionCredentialsProvider,
+    StsAssumeRoleSessionCredentialsProvider,
+    StsWebIdentityFederationSessionCredentialsProvider,
+    NewAwsCredsForStsCreds,
+    };
 
 mod credential {
     use std::error::Error;
