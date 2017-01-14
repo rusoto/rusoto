@@ -120,6 +120,6 @@ See [LICENSE][license] for details.
 
 [api-documentation]: https://rusoto.github.io/rusoto/rusoto/ "API documentation"
 [license]: https://github.com/rusoto/rusoto/blob/master/LICENSE "MIT License"
-[rusoto-help]: https://rusoto.github.io/help.html "Getting help with Rusoto"
-[rusoto-overview]: https://rusoto.github.io/ "Rusoto overview"
-[supported-aws-services]: https://rusoto.github.io/supported-aws-services.html "List of AWS services supported by Rusoto"
+[rusoto-help]: https://www.rusoto.org/help.html "Getting help with Rusoto"
+[rusoto-overview]: https://www.rusoto.org/ "Rusoto overview"
+[supported-aws-services]: https://www.rusoto.org/supported-aws-services.html "List of AWS services supported by Rusoto"

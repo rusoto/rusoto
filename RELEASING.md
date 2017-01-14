@@ -45,8 +45,12 @@ To release the main `rusoto` crate, version 0.4.0:
 
 Add a list of user-facing changes to a new release for the tagged version on GitHub: https://github.com/rusoto/rusoto/releases
 
-### Documentation
+#### API docs
 
-Docs are on Github Pages at [https://rusoto.github.io/rusoto](https://rusoto.github.io/rusoto).
+API docs are on Github Pages at [https://rusoto.github.io/rusoto](https://rusoto.github.io/rusoto).
 
 TravisCI builds and publishes the `gh-pages` branch automatically when changes are merged into master.
+
+#### Gitbook docs
+
+See [the Rusoto gitbook project](https://github.com/rusoto/rusoto.github.io).
