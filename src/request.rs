@@ -31,6 +31,9 @@ lazy_static! {
     static ref DEFAULT_USER_AGENT: Vec<Vec<u8>> = vec![format!("rusoto/{} rust/{} {}",
             env!("CARGO_PKG_VERSION"), RUST_VERSION, env::consts::OS).as_bytes().to_vec()];
 }
+lazy_static! {
+    static ref BINARY_RESPONSE_CONTENTS: ContentType = ContentType(Mime(TopLevel::Application, SubLevel::OctetStream, Vec::new()));
+}
 
 #[derive(Clone)]
 pub struct HttpResponse {
@@ -120,9 +123,8 @@ impl DispatchSignedRequest for Client {
         };
         let mut body = String::new();
         let mut body_as_bytes : Vec<u8> = Vec::new();
-        // TODO: don't create new content type every request:
         let response_is_binary = match hyper_response.headers.get::<ContentType>() {
-            Some(content_type) => content_type.eq(&ContentType(Mime(TopLevel::Application, SubLevel::OctetStream, Vec::new()))),
+            Some(content_type) => content_type.eq(&BINARY_RESPONSE_CONTENTS),
             None => false,
         };
         match response_is_binary {
