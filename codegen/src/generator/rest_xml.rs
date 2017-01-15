@@ -53,7 +53,7 @@ impl GenerateProtocol for RestXmlGenerator {
                     let response = try!(self.dispatcher.dispatch(&request));
 
                     match response.status {{
-                        StatusCode::Ok|StatusCode::NoContent => {{
+                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {{
                             {parse_response}
                         }},
                         _ => Err({error_type}::from_body(&response.body))
