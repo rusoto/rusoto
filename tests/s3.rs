@@ -31,6 +31,7 @@ fn test_all_the_things() {
     // a random number should probably be appended here too
     let test_bucket = format!("rusoto_test_bucket_{}", get_time().sec);
     let filename = format!("test_file_{}", get_time().sec);
+    let binary_filename = format!("test_file_b{}", get_time().sec);
     let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
 
     // get a list of list_buckets
@@ -46,7 +47,7 @@ fn test_all_the_things() {
     test_put_bucket_cors(&client, &test_bucket);
 
     // PUT an object (no_credentials is an arbitrary choice)
-    test_put_object(&client, &test_bucket, &filename);
+    test_put_object_with_filename(&client, &test_bucket, &filename, &"tests/sample-data/no_credentials");
 
     // HEAD the object that was PUT
     test_head_object(&client, &test_bucket, &filename);
@@ -59,6 +60,11 @@ fn test_all_the_things() {
 
     // DELETE the object
     test_delete_object(&client, &test_bucket, &filename);
+
+    // Binary objects:
+    test_put_object_with_filename(&client, &test_bucket, &binary_filename, &"tests/sample-data/binary-file");
+    test_get_object(&client, &test_bucket, &binary_filename);
+    test_delete_object(&client, &test_bucket, &binary_filename);
 
     // delete the test bucket
     test_delete_bucket(&client, &test_bucket);
@@ -135,15 +141,15 @@ fn test_delete_bucket(client: &TestClient, bucket: &str) {
     println!("{:#?}", result);
 }
 
-fn test_put_object(client: &TestClient, bucket: &str, filename: &str) {
-    let mut f = File::open("tests/sample-data/no_credentials").unwrap();
+fn test_put_object_with_filename(client: &TestClient, bucket: &str, dest_filename: &str, local_filename: &str) {
+    let mut f = File::open(local_filename).unwrap();
     let mut contents: Vec<u8> = Vec::new();
     match f.read_to_end(&mut contents) {
         Err(why) => panic!("Error opening file to send to S3: {}", why),
         Ok(_) => {
             let req = PutObjectRequest {
                 bucket: bucket.to_owned(),
-                key: filename.to_owned(),
+                key: dest_filename.to_owned(),
                 body: Some(contents),
                 ..Default::default()
             };
@@ -172,7 +178,7 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
     };
 
     let result = client.get_object(&get_req).unwrap();
-    println!("{:#?}", result);
+    println!("get object result: {:#?}", result);
 }
 
 fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
