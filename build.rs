@@ -100,7 +100,10 @@ fn main() {
     }
 
     for child_thread in generate_threads {
-        let _ = child_thread.join();
+        match child_thread.join() {
+            Ok(_) => {},
+            Err(err) => panic!(err)
+        }
     }
 
     generate_user_agent_vars(&out_path);
