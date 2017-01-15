@@ -102,7 +102,6 @@ mod test {
             .with_request_checker(|request: &SignedRequest| {
                 assert_eq!("POST", request.method);
                 assert_eq!("/", request.path);
-                // assert_eq!(None, request.payload);
                 assert_eq!(request.params.get("Action"), Some(&Some("ReceiveMessage".to_owned())));
                 assert_eq!(request.params.get("MaxNumberOfMessages"), Some(&Some("1".to_owned())));
                 assert_eq!(request.params.get("VisibilityTimeout"), Some(&Some("2".to_owned())));
