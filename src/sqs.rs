@@ -117,7 +117,7 @@ mod test {
             ..Default::default()
         };
 
-        let client = SqsClient::with_request_dispatcher(mock, MockCredentialsProvider, Region::UsEast1);
+        let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
         let _result = client.receive_message(&request).unwrap();
     }
 }
