@@ -88,13 +88,17 @@ fn generate_client<P>(service: &Service, protocol_generator: &P) -> String
             pub fn new(credentials_provider: P, region: region::Region) -> Self {{
                 let mut client = Client::new();
                 client.set_redirect_policy(RedirectPolicy::FollowNone);
-               {type_name}::with_request_dispatcher(client, credentials_provider, region)
+                {type_name}::with_request_dispatcher(client, credentials_provider, region)
+            }}
+
+            pub fn with_default_region(credentials_provider: P) -> Self {{
+                Self::new(credentials_provider, region::default_region())
             }}
         }}
 
         impl<P, D> {type_name}<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {{
             pub fn with_request_dispatcher(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {{
-                  {type_name} {{
+                {type_name} {{
                     credentials_provider: credentials_provider,
                     region: region,
                     dispatcher: request_dispatcher
