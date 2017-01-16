@@ -123,11 +123,8 @@ impl DispatchSignedRequest for Client {
         };
         let mut body = String::new();
         let mut body_as_bytes : Vec<u8> = Vec::new();
-        let response_is_binary = match hyper_response.headers.get::<ContentType>() {
-            Some(content_type) => content_type.eq(&BINARY_RESPONSE_CONTENTS),
-            None => false,
-        };
-        match response_is_binary {
+
+        match is_binary(&hyper_response.headers) {
             true => try!(hyper_response.read_to_end(&mut body_as_bytes)),
             false => try!(hyper_response.read_to_string(&mut body)),
         };
@@ -150,5 +147,12 @@ impl DispatchSignedRequest for Client {
             headers: headers
         })
 
+    }
+}
+
+fn is_binary(headers: &Headers) -> bool {
+    match headers.get::<ContentType>() {
+        Some(content_type) => content_type.eq(&BINARY_RESPONSE_CONTENTS),
+        None => false,
     }
 }
