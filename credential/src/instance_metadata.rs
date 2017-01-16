@@ -1,8 +1,6 @@
 use std::io::Read;
-use std::time::Duration as StdDuration;
 
-use hyper::Client;
-use hyper::header::Connection;
+use reqwest;
 use serde_json::{Value, from_str};
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials};
@@ -16,11 +14,8 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
 
         // TODO: backoff and retry on failure.
         let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
-        let mut client = Client::new();
-        client.set_read_timeout(Some(StdDuration::from_secs(15)));
         let mut response;
-        match client.get(&address)
-            .header(Connection::close()).send() {
+        match reqwest::get(&address) {
                 Err(_) => return Err(CredentialsError::new("Couldn't connect to metadata service")), // add Why?
                 Ok(received_response) => response = received_response
             };
@@ -33,8 +28,7 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
         address.push_str("/");
         address.push_str(&body);
         body = String::new();
-        match client.get(&address)
-            .header(Connection::close()).send() {
+        match reqwest::get(&address) {
                 Err(_) => return Err(CredentialsError::new("Didn't get a parseable response body from instance role details")),
                 Ok(received_response) => response = received_response
             };

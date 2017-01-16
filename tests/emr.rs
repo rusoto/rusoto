@@ -4,11 +4,12 @@ extern crate rusoto;
 
 use rusoto::emr::{EmrClient, ListClustersInput, DescribeJobFlowsInput, DescribeJobFlowsError};
 use rusoto::{DefaultCredentialsProvider, Region};
+use rusoto::default_tls_client;
 
 #[test]
 fn should_list_clusters() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = EmrClient::new(credentials, Region::UsEast1);
+    let client = EmrClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListClustersInput::default();
 
     client.list_clusters(&request).unwrap();
@@ -17,7 +18,7 @@ fn should_list_clusters() {
 #[test]
 fn should_handle_deprecation_gracefully() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = EmrClient::new(credentials, Region::UsEast1);
+    let client = EmrClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeJobFlowsInput::default();
 
     match client.describe_job_flows(&request) {

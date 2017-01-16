@@ -16,6 +16,9 @@ use hyper::Error as HyperError;
 use hyper::header::{Headers, UserAgent};
 use hyper::status::StatusCode;
 use hyper::method::Method;
+use hyper::client::RedirectPolicy;
+use hyper::net::HttpsConnector;
+use hyper_native_tls::NativeTlsClient;
 
 use log::LogLevel::Debug;
 
@@ -139,4 +142,34 @@ impl DispatchSignedRequest for Client {
         })
 
     }
+}
+
+#[derive(Debug, PartialEq)]
+pub struct TlsError {
+    message: String
+}
+
+impl Error for TlsError {
+    fn description(&self) -> &str {
+        &self.message
+    }
+}
+
+impl fmt::Display for TlsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.message)
+    }
+}
+
+/// Helper method for creating an http client with tls.
+/// Makes a `hyper` client with NativeTls for HTTPS support.
+pub fn default_tls_client() -> Result<Client, TlsError> {
+    let ssl = match NativeTlsClient::new() {
+        Ok(ssl) => ssl,
+        Err(tls_error) => return Err(TlsError {message: format!("Couldn't create NativeTlsClient: {}", tls_error)}),
+    };
+    let connector = HttpsConnector::new(ssl);
+    let mut client = Client::with_connector(connector);
+    client.set_redirect_policy(RedirectPolicy::FollowNone);
+    Ok(client)
 }

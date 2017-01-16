@@ -14,6 +14,7 @@ use rand::Rng;
 use rusoto::{ChainProvider, ProvideAwsCredentials, Region};
 use rusoto::elastictranscoder::EtsClient;
 use rusoto::s3::{BucketName, S3Client, CreateBucketRequest, DeleteBucketRequest};
+use rusoto::default_tls_client;
 
 const AWS_ETS_WEB_PRESET_ID: &'static str = "1351620000001-100070";
 const AWS_ETS_WEB_PRESET_NAME: &'static str = "System preset: Web";
@@ -41,7 +42,7 @@ impl<P> TestEtsClient<P>
         TestEtsClient {
             credentials_provider: credentials_provider.clone(),
             region: region,
-            client: EtsClient::new(credentials_provider, region),
+            client: EtsClient::new(default_tls_client().unwrap(), credentials_provider, region),
             s3_client: None,
             input_bucket: None,
             output_bucket: None,
@@ -49,7 +50,7 @@ impl<P> TestEtsClient<P>
     }
 
     fn create_s3_client(&mut self) {
-        self.s3_client = Some(S3Client::new(
+        self.s3_client = Some(S3Client::new(default_tls_client().unwrap(),
             self.credentials_provider.clone(),
             self.region
         ));

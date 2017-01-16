@@ -5,7 +5,7 @@
 //! Types for loading and managing AWS access credentials for API requests.
 
 extern crate chrono;
-extern crate hyper;
+extern crate reqwest;
 extern crate regex;
 extern crate serde_json;
 
