@@ -4,10 +4,11 @@ extern crate rusoto;
 
 use rusoto::cloudwatch::{CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
 use rusoto::{DefaultCredentialsProvider, Region};
+use rusoto::default_tls_client;
 
 #[test]
 fn should_put_metric_data() {
-    let client = CloudWatchClient::new(DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
+    let client = CloudWatchClient::new(default_tls_client().unwrap(), DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
 
 	let metric_data = vec![
 		MetricDatum {

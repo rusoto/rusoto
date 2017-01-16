@@ -42,7 +42,7 @@ mod test {
 	        metric_data: metric_data,
 	    };
 
-        let client = CloudWatchClient::with_request_dispatcher(mock, MockCredentialsProvider, Region::UsEast1);
+        let client = CloudWatchClient::new(mock, MockCredentialsProvider, Region::UsEast1);
 		let response = client.put_metric_data(&request).unwrap();
 		println!("{:#?}", response);
 	}

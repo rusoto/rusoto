@@ -45,6 +45,7 @@
 
 extern crate chrono;
 extern crate hyper;
+extern crate hyper_native_tls;
 #[macro_use] extern crate lazy_static;
 #[macro_use] extern crate log;
 extern crate md5;
@@ -77,6 +78,7 @@ pub use rusoto_credential::{
 };
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError};
 pub use signature::SignedRequest;
+pub use request::default_tls_client;
 
 mod param;
 mod region;
