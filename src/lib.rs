@@ -76,7 +76,7 @@ pub use rusoto_credential::{
     DefaultCredentialsProvider,
     DefaultCredentialsProviderSync,
 };
-pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError};
+pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError};
 pub use signature::SignedRequest;
 pub use request::default_tls_client;
 
