@@ -16,6 +16,7 @@ mod query;
 mod rest_json;
 mod tests;
 mod rest_xml;
+mod xml_response_parser;
 
 pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
@@ -160,6 +161,7 @@ fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
         let type_name = mutate_type_name(name);
 
         // Don't generate a new type for String, but do generate serializers and deserializers for it
+        // TODO: refactor this to death
         if type_name == "String" {
             return protocol_generator.generate_support_types(&type_name, shape, service);
         }
