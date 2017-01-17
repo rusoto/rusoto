@@ -33,7 +33,7 @@ mod util;
 const BOTOCORE_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/botocore/data/");
 
 pub struct Service {
-    name: String,
+    pub name: String,
     protocol_date: String,
 }
 
