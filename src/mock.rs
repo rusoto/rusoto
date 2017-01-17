@@ -28,6 +28,7 @@ impl MockRequestDispatcher {
 		let response = HttpResponse {
 			status: StatusCode::from_u16(status),
 			body: "".to_string(),
+			raw_body: Vec::new(),
 			headers: HashMap::new(),
 		};
 
@@ -39,6 +40,11 @@ impl MockRequestDispatcher {
 
 	pub fn with_body(mut self, body: &str) -> MockRequestDispatcher {
 		self.mock_response.body = body.to_owned();
+		self
+	}
+
+	pub fn with_raw_body(mut self, raw_body: Vec<u8>) -> MockRequestDispatcher {
+		self.mock_response.raw_body = raw_body.to_owned();
 		self
 	}
 

@@ -13,7 +13,8 @@ use std::collections::HashMap;
 
 use hyper::Client;
 use hyper::Error as HyperError;
-use hyper::header::{Headers, UserAgent};
+use hyper::header::{Headers, UserAgent, ContentType};
+use hyper::mime::{Mime, TopLevel, SubLevel};
 use hyper::status::StatusCode;
 use hyper::method::Method;
 use hyper::client::RedirectPolicy;
@@ -33,11 +34,15 @@ lazy_static! {
     static ref DEFAULT_USER_AGENT: Vec<Vec<u8>> = vec![format!("rusoto/{} rust/{} {}",
             env!("CARGO_PKG_VERSION"), RUST_VERSION, env::consts::OS).as_bytes().to_vec()];
 }
+lazy_static! {
+    static ref BINARY_RESPONSE_CONTENTS: ContentType = ContentType(Mime(TopLevel::Application, SubLevel::OctetStream, Vec::new()));
+}
 
 #[derive(Clone)]
 pub struct HttpResponse {
     pub status: StatusCode,
     pub body: String,
+    pub raw_body: Vec<u8>,
     pub headers: HashMap<String, String>
 }
 
@@ -83,7 +88,6 @@ impl DispatchSignedRequest for Client {
             "GET" => Method::Get,
             "HEAD" => Method::Head,
             v => return Err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) })
-
         };
 
         // translate the headers map to a format Hyper likes
@@ -116,17 +120,21 @@ impl DispatchSignedRequest for Client {
                 debug!("{}:{}", h.name(), h.value_string());
             }
         }
-
         let mut hyper_response = match request.payload() {
             None => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send()),
             Some(payload_contents) => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body(payload_contents).send()),
         };
-
         let mut body = String::new();
-        try!(hyper_response.read_to_string(&mut body));
+        let mut body_as_bytes : Vec<u8> = Vec::new();
+
+        match is_binary(&hyper_response.headers) {
+            true => try!(hyper_response.read_to_end(&mut body_as_bytes)),
+            false => try!(hyper_response.read_to_string(&mut body)),
+        };
 
         if log_enabled!(Debug) {
             debug!("Response body:\n{}", body);
+            debug!("Response raw_body:\n{:?}", body_as_bytes);
         }
 
         let mut headers: HashMap<String, String> = HashMap::new();
@@ -138,9 +146,17 @@ impl DispatchSignedRequest for Client {
         Ok(HttpResponse {
             status: hyper_response.status.clone(),
             body: body,
+            raw_body: body_as_bytes,
             headers: headers
         })
 
+    }
+}
+
+fn is_binary(headers: &Headers) -> bool {
+    match headers.get::<ContentType>() {
+        Some(content_type) => content_type.eq(&BINARY_RESPONSE_CONTENTS),
+        None => false,
     }
 }
 
