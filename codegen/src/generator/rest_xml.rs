@@ -1,7 +1,7 @@
 use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape, ShapeType};
-use super::xml_response_parser::{generate_response_parser, generate_deserializer};
+use super::{xml_response_parser, mutate_type_name};
 use super::{GenerateProtocol, generate_field_name, error_type_name};
 
 pub struct RestXmlGenerator;
@@ -70,7 +70,7 @@ impl GenerateProtocol for RestXmlGenerator {
                 modify_uri = generate_uri_modification(service, operation).unwrap_or("".to_string()),
                 set_headers = generate_headers(service, operation).unwrap_or("".to_string()),
                 set_parameters = generate_parameters(service, operation).unwrap_or("".to_string()),
-                parse_response = generate_response_parser(service, operation),
+                parse_response = xml_response_parser::generate_response_parser(service, operation),
                 service_specifics = generate_service_specific_code(service, operation).unwrap_or("".to_string())
             )
         }).collect::<Vec<String>>().join("\n")
@@ -103,27 +103,22 @@ impl GenerateProtocol for RestXmlGenerator {
         imports
     }
    
-    fn generate_struct_attributes(&self, _struct_name: &str) -> String {
-        "#[derive(Debug, Default)]".to_owned()
-    }
+    fn generate_struct_attributes(&self, _struct_name: &str, _serialized: bool, deserialized: bool) -> String {
+        let mut derived = vec!["Default"];
 
-    fn generate_support_types(&self,
-                              name: &str,
-                              shape: &Shape,
-                              service: &Service)
-                              -> Option<String> {
-        // (most) requests never need XML serialization or deserialization, so don't generate the type
-        if name != "RestoreRequest" && name.ends_with("Request") {
-            return None;
+        if deserialized {
+            derived.push("Debug")
         }
 
-        let mut parts: Vec<String> = Vec::with_capacity(2);
+        format!("#[derive({})]", derived.join(","))
+    }   
 
-        parts.push(generate_deserializer(name, shape, service));
+    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
+        if name != "RestoreRequest" && name.ends_with("Request") {
+            return "".to_string()
+        }
 
-        // Output types never need to be serialized
-        if !name.ends_with("Output") {
-            parts.push(format!("
+        format!("
                 pub struct {name}Serializer;
                 impl {name}Serializer {{
                     {serializer_signature} {{
@@ -134,11 +129,12 @@ impl GenerateProtocol for RestXmlGenerator {
                 name = name,
                 serializer_body = generate_serializer_body(shape, service),
                 serializer_signature = generate_serializer_signature(name),
-            ))
-        }
-
-        Some(parts.join("\n"))
+            )
     }
+
+    fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
+        xml_response_parser::generate_deserializer(name, shape, service)
+    }    
 
     fn timestamp_type(&self) -> &'static str {
         "String"
@@ -154,17 +150,6 @@ fn generate_documentation(operation: &Operation) -> String {
         None => "".to_owned(),
     }
 }
-
-/*
-fn generate_documentation(operation: &Operation) -> String {
-    match operation.documentation {
-        Some(ref docs) => {
-            format!("#[doc=\"{}\"]",
-                    docs.replace("\"", "\\\"").replace("C:\\", "C:\\\\"))
-        }
-        None => "".to_owned(),
-    }
-}*/
 
 fn generate_method_input_serialization(service: &Service, operation: &Operation) -> Option<String> {
     // nothing to do if there's no input type
@@ -639,13 +624,6 @@ fn generate_primitive_serializer(shape: &Shape) -> String {
             value_str = value_str)
 }
 
-fn generate_member_name(name: &str) -> String {
-    match name {
-        "Error" => "S3Error".to_owned(),
-        _ => name.to_owned(),
-    }
-}
-
 fn generate_list_serializer(shape: &Shape) -> String {
     // flattened lists don't have enclosing <FooList> tags
     // around the list elements
@@ -654,7 +632,7 @@ fn generate_list_serializer(shape: &Shape) -> String {
         _ => false,
     };
 
-    let element_type = &generate_member_name(&shape.member_type()[..]);
+    let element_type = &mutate_type_name(&shape.member_type()[..]);
     let mut serializer = format!("let mut parts: Vec<String> = Vec::new();");
 
     if !flattened {

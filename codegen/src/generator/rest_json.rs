@@ -101,14 +101,18 @@ impl GenerateProtocol for RestJsonGenerator {
         ".to_owned()
     }
 
-    fn generate_struct_attributes(&self, struct_name: &str) -> String {
-        if can_skip_deserializer(struct_name) {
-            return "#[derive(Default, Serialize)]".to_owned();
+    fn generate_struct_attributes(&self, _struct_name: &str, serialized: bool, deserialized: bool) -> String {
+        let mut derived = vec!["Default"];
+
+        if serialized {
+            derived.push("Serialize");
         }
-        if can_skip_serializer(struct_name) {
-            return "#[derive(Default, Debug, Deserialize)]".to_owned();
+
+        if deserialized {
+            derived.push("Deserialize, Debug, Clone")
         }
-        "#[derive(Default, Debug, Deserialize, Serialize)]".to_owned()
+
+        format!("#[derive({})]", derived.join(","))
     }
 
     fn timestamp_type(&self) -> &'static str {
@@ -138,20 +142,6 @@ fn http_code_to_status_code(code: Option<i32>) -> String {
         // the response code, we'll assume this:
         None => "StatusCode::Ok".to_string(),
     }
-}
-
-fn can_skip_serializer(struct_name: &str) -> bool {
-    if struct_name.ends_with("Response") {
-        return true;
-    }
-    false
-}
-
-fn can_skip_deserializer(struct_name: &str) -> bool {
-    if struct_name.ends_with("Request"){
-        return true;
-    }
-    false
 }
 
 // IoT has an endpoint_prefix and a signing_name that differ

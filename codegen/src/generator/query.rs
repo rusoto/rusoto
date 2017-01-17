@@ -1,60 +1,10 @@
 use inflector::Inflector;
 use botocore::{Operation, Service, Shape, ShapeType};
-use std::collections::HashSet;
 
-use super::xml_response_parser::{generate_response_parser, generate_deserializer};
+use super::xml_response_parser;
 use super::{GenerateProtocol, error_type_name, generate_field_name};
 
-pub struct QueryGenerator {
-    deserialized_types: HashSet<String>,
-    serialized_types: HashSet<String>
-}
-
-impl QueryGenerator {
-    pub fn new(service: &Service) -> QueryGenerator {
-        let mut deserialized_types:HashSet<String> = HashSet::new();
-        let mut serialized_types:HashSet<String> = HashSet::new();
-        for operation in service.operations.values() {
-            if let Some(ref output) = operation.output {
-                recurse_find_shapes(service, &mut deserialized_types, &output.shape);
-            }
-            if let Some(ref input) = operation.input {
-                recurse_find_shapes(service, &mut serialized_types, &input.shape);
-            }
-        }
-
-        println!("{:#?}", deserialized_types);
-        println!("{:#?}", serialized_types);
-
-        QueryGenerator {
-            deserialized_types: deserialized_types,
-            serialized_types: serialized_types
-        }
-    }
-}
-
-fn recurse_find_shapes(service: &Service, types: &mut HashSet<String>, shape_name: &str) {
-    types.insert(shape_name.to_owned());
-    let shape = service.shapes.get(shape_name).expect("Shape type missing from service definition");
-    match shape.shape_type {
-        ShapeType::Structure => {
-            if let Some(ref members) = shape.members {
-                for (_, member) in members {
-                    //let member_shape = service.shapes.get(member.shape).expect("Shape type missing from service definition");
-                    recurse_find_shapes(service, types, &member.shape);
-                }
-            }
-        },
-        ShapeType::Map => {
-            recurse_find_shapes(service, types, shape.key_type());
-            recurse_find_shapes(service, types, shape.value_type());
-        },
-        ShapeType::List => {
-            recurse_find_shapes(service, types, shape.member_type());
-        }
-        _ => {}
-    }
-}
+pub struct QueryGenerator;
 
 impl GenerateProtocol for QueryGenerator {
     fn generate_methods(&self, service: &Service) -> String {
@@ -89,7 +39,7 @@ impl GenerateProtocol for QueryGenerator {
                 error_type = error_type_name(operation_name),
                 http_method = &operation.http.method,
                 endpoint_prefix = &service.metadata.endpoint_prefix,
-                parse_response = generate_response_parser(service, operation),
+                parse_response = xml_response_parser::generate_response_parser(service, operation),
                 method_signature = generate_method_signature(operation_name, operation),
                 operation_name = &operation.name,
                 request_uri = &operation.http.request_uri,
@@ -118,15 +68,18 @@ impl GenerateProtocol for QueryGenerator {
         ".to_owned()
     }
 
-    fn generate_struct_attributes(&self, _struct_name: &str) -> String {
-        "#[derive(Debug, Default)]".to_owned()
+    fn generate_struct_attributes(&self, _struct_name: &str, _serialized: bool, deserialized: bool) -> String {
+        let mut derived = vec!["Default"];
+
+        if deserialized {
+            derived.push("Debug, Clone")
+        }
+
+        format!("#[derive({})]", derived.join(","))
     }
 
-    fn generate_support_types(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
-        let mut struct_collector = String::new();
-
-        if self.serialized_types.contains(name) {
-            struct_collector.push_str(&format!("
+    fn generate_serializer(&self, name: &str, shape: &Shape, _service: &Service) -> String {
+        format!("
             /// Serialize `{name}` contents to a `SignedRequest`.
             struct {name}Serializer;
             impl {name}Serializer {{
@@ -138,14 +91,11 @@ impl GenerateProtocol for QueryGenerator {
             name = name,
             serializer_signature = generate_serializer_signature(name, shape),
             serializer_body = generate_serializer_body(shape))
-            );
-        }
-
-        if self.deserialized_types.contains(name) {
-            struct_collector.push_str(&generate_deserializer(name, shape, service));
-        }
-        Some(struct_collector)
     }
+
+    fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
+        xml_response_parser::generate_deserializer(name, shape, service)
+    }    
 
     fn timestamp_type(&self) -> &'static str {
         "String"

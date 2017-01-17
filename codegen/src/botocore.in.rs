@@ -341,25 +341,6 @@ impl<'a> Operation {
             None => default,
         }
     }
-
-    /*
-    pub fn wrapper(&'a self) -> Option<&'a str> {
-        self.output.as_ref().and_then(|o| o.result_wrapper.as_ref().map(|s| &s[..]))
-    }
-
-
-    pub fn output_shape_or_wrapper_or(&'a self, default: &'a str) -> &'a str {
-        match self.output.as_ref() {
-            Some(output) => {
-                match output.result_wrapper.as_ref() {
-                    Some(wrapper) => wrapper,
-                    None => default,
-                }
-            }
-            None => default,
-        }
-    }
-        */
 }
 
 #[derive(Debug, Deserialize)]

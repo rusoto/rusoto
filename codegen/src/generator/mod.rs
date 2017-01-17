@@ -8,6 +8,7 @@ use self::rest_json::RestJsonGenerator;
 use self::rest_xml::RestXmlGenerator;
 use self::error_types::{GenerateErrorTypes, JsonErrorTypes, XmlErrorTypes};
 use self::tests::generate_tests;
+use self::type_filter::filter_types;
 
 mod error_types;
 mod ec2;
@@ -17,30 +18,31 @@ mod rest_json;
 mod tests;
 mod rest_xml;
 mod xml_response_parser;
+mod type_filter;
 
 pub trait GenerateProtocol {
     fn generate_methods(&self, service: &Service) -> String;
 
     fn generate_prelude(&self, service: &Service) -> String;
 
-    fn generate_struct_attributes(&self, struct_name: &str) -> String;
-
-    fn generate_support_types(&self,
-                              _name: &str,
-                              _shape: &Shape,
-                              _service: &Service)
-                              -> Option<String> {
-        None
-    }
+    fn generate_struct_attributes(&self, struct_name: &str, serialized: bool, deserialized: bool) -> String;
 
     fn timestamp_type(&self) -> &'static str;
+
+    fn generate_serializer(&self, _name: &str, _shape: &Shape, _service: &Service) -> String {
+        "".to_owned()
+    }
+
+    fn generate_deserializer(&self, _name: &str, _shape: &Shape, _service: &Service) -> String {
+        "".to_owned()
+    }
 }
 
 pub fn generate_source(service: &Service) -> String {
     match &service.metadata.protocol[..] {
         "json" => generate(service, JsonGenerator, JsonErrorTypes),
-        "ec2" => generate(service, Ec2Generator::new(service), XmlErrorTypes),
-        "query" => generate(service, QueryGenerator::new(service), XmlErrorTypes),
+        "ec2" => generate(service, Ec2Generator, XmlErrorTypes),
+        "query" => generate(service, QueryGenerator, XmlErrorTypes),
         "rest-json" => generate(service, RestJsonGenerator, JsonErrorTypes),
         "rest-xml" => generate(service, RestXmlGenerator, XmlErrorTypes),
         protocol => panic!("Unknown protocol {}", protocol),
@@ -156,38 +158,45 @@ fn mutate_type_name(type_name: &str) -> String {
 
 fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
     where P: GenerateProtocol {
+
+    let (serialized_types, deserialized_types) = filter_types(service);
+
     service.shapes.iter().filter_map(|(name, shape)| {
 
         let type_name = mutate_type_name(name);
-
-        // Don't generate a new type for String, but do generate serializers and deserializers for it
-        // TODO: refactor this to death
-        if type_name == "String" {
-            return protocol_generator.generate_support_types(&type_name, shape, service);
-        }
 
         // We generate enums for error types, so no need to create model objects for them
         if shape.exception() {
             return None;
         }
 
-        let mut parts = Vec::with_capacity(3);
+        let mut parts = Vec::with_capacity(4);
 
         // If botocore includes documentation, clean it up a bit and use it
         if let Some(ref docs) = shape.documentation {
             parts.push(format!("#[doc=\"{}\"]", docs.replace("\\","\\\\").replace("\"", "\\\"")));
         }
 
-        match shape.shape_type {
-            ShapeType::Structure => parts.push(generate_struct(service, &type_name, shape, protocol_generator)),
-            ShapeType::Map => parts.push(generate_map(&type_name, shape)),
-            ShapeType::List => parts.push(generate_list(&type_name, shape)),
-            shape_type => parts.push(generate_primitive_type(&type_name, shape_type, protocol_generator.timestamp_type())),
+        let deserialized = deserialized_types.contains(&type_name);
+        let serialized = serialized_types.contains(&type_name);
+
+        // generate a rust type for the shape
+        if type_name != "String" {
+            match shape.shape_type {
+                ShapeType::Structure => parts.push(generate_struct(service, &type_name, shape, serialized, deserialized, protocol_generator)),
+                ShapeType::Map => parts.push(generate_map(&type_name, shape)),
+                ShapeType::List => parts.push(generate_list(&type_name, shape)),
+                shape_type => parts.push(generate_primitive_type(&type_name, shape_type, protocol_generator.timestamp_type())),
+            }
         }
 
-        if let Some(support_types) = protocol_generator.generate_support_types(&type_name, shape, service) {
-            parts.push(support_types);
+        if deserialized {
+            parts.push(protocol_generator.generate_deserializer(&type_name, shape, service));
         }
+
+        if serialized {
+            parts.push(protocol_generator.generate_serializer(&type_name, shape, service));
+        }        
 
         Some(parts.join("\n"))
     }).collect::<Vec<String>>().join("\n")
@@ -198,6 +207,8 @@ fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
 fn generate_struct<P>(service: &Service,
                       name: &str,
                       shape: &Shape,
+                      serialized: bool,
+                      deserialized: bool,
                       protocol_generator: &P)
                       -> String
     where P: GenerateProtocol {
@@ -206,11 +217,11 @@ fn generate_struct<P>(service: &Service,
             "{attributes}
             pub struct {name};
             ",
-            attributes = protocol_generator.generate_struct_attributes(name),
+            attributes = protocol_generator.generate_struct_attributes(name, serialized, deserialized),
             name = name,
         )
     } else {
-        let struct_attributes = protocol_generator.generate_struct_attributes(name);
+        let struct_attributes = protocol_generator.generate_struct_attributes(name, serialized, deserialized);
         // Serde attributes are only needed if deriving the Serialize or Deserialize trait
         let need_serde_attrs = struct_attributes.contains("erialize");
         format!(

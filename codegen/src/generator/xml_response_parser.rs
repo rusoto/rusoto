@@ -1,7 +1,7 @@
 use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape, ShapeType};
-use super::generate_field_name;
+use super::{generate_field_name, mutate_type_name};
 
 pub fn generate_deserializer(name: &str, shape: &Shape, service: &Service) -> String {
 	format!("
@@ -219,7 +219,7 @@ fn generate_list_deserializer(shape: &Shape) -> String {
         Ok(obj)
         ",
             location_name = location_name,
-            member_name = generate_member_name(&shape.member_type()[..]))
+            member_name = mutate_type_name(&shape.member_type()[..]))
 }
 
 fn generate_flat_list_deserializer(shape: &Shape) -> String {
@@ -243,14 +243,7 @@ fn generate_flat_list_deserializer(shape: &Shape) -> String {
 
         Ok(obj)
         ",
-            member_name = generate_member_name(shape.member_type()))
-}
-
-fn generate_member_name(name: &str) -> String {
-    match name {
-        "Error" => "S3Error".to_owned(),
-        _ => name.to_owned(),
-    }
+        member_name = mutate_type_name(shape.member_type()))
 }
 
 fn generate_map_deserializer(shape: &Shape) -> String {

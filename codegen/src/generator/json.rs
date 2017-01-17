@@ -57,41 +57,23 @@ impl GenerateProtocol for JsonGenerator {
         use serde_json::from_str;".to_string()
     }
 
-    fn generate_struct_attributes(&self, struct_name: &str) -> String {
-        if can_skip_deserializer(struct_name) {
-            return "#[derive(Default, Serialize)]".to_owned();
+    fn generate_struct_attributes(&self, _struct_name: &str, serialized: bool, deserialized: bool) -> String {
+        let mut derived = vec!["Default"];
+
+        if serialized {
+            derived.push("Serialize");
         }
-        if can_skip_serializer(struct_name) {
-            return "#[derive(Default, Debug, Deserialize)]".to_owned();
+
+        if deserialized {
+            derived.push("Deserialize, Debug, Clone")
         }
-        "#[derive(Default, Debug, Deserialize, Serialize)]".to_owned()
+
+        format!("#[derive({})]", derived.join(","))
     }
 
     fn timestamp_type(&self) -> &'static str {
         "f64"
     }
-}
-
-fn can_skip_serializer(struct_name: &str) -> bool {
-    if struct_name.ends_with("Response") {
-        return true;
-    }
-    false
-}
-
-fn can_skip_deserializer(struct_name: &str) -> bool {
-    if struct_name.ends_with("Request") && 
-        !struct_name.starts_with("Failed") && 
-        !struct_name.starts_with("Workspace") &&
-        struct_name != "SampledHTTPRequest" &&
-        struct_name != "HTTPRequest" &&
-        struct_name != "WriteRequest" &&
-        struct_name != "PutRequest" &&
-        struct_name != "DeleteRequest"
-        {
-            return true;
-    }
-    false
 }
 
 fn generate_endpoint_modification(service: &Service) -> Option<String> {
