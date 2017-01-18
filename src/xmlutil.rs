@@ -184,8 +184,8 @@ mod tests {
         let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
         let mut body = String::new();
         let _size = file.read_to_string(&mut body);
-        let mut my_parser  = EventReader::new(body.as_bytes());
-        let my_stack = my_parser.events().peekable();
+        let my_parser  = EventReader::new(body.as_bytes());
+        let my_stack = my_parser.into_iter().peekable();
         let mut reader = XmlResponse::new(my_stack);
 
         loop {
@@ -206,8 +206,8 @@ mod tests {
         let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
         let mut body = String::new();
         let _size = file.read_to_string(&mut body);
-        let mut my_parser  = EventReader::new(body.as_bytes());
-        let my_stack = my_parser.events().peekable();
+        let my_parser  = EventReader::new(body.as_bytes());
+        let my_stack = my_parser.into_iter().peekable();
         let mut reader = XmlResponse::new(my_stack);
 
         // skip two leading fields since we ignore them (xml declaration, return type declaration)
@@ -225,8 +225,8 @@ mod tests {
         let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
         let mut body = String::new();
         let _size = file.read_to_string(&mut body);
-        let mut my_parser  = EventReader::new(body.as_bytes());
-        let my_stack = my_parser.events().peekable();
+        let my_parser  = EventReader::new(body.as_bytes());
+        let my_stack = my_parser.into_iter().peekable();
         let mut reader = XmlResponse::new(my_stack);
 
         // skip two leading fields since we ignore them (xml declaration, return type declaration)
@@ -245,8 +245,8 @@ mod tests {
         let mut file = File::open("tests/sample-data/list_queues_with_queue.xml").unwrap();
         let mut body = String::new();
         let _size = file.read_to_string(&mut body);
-        let mut my_parser  = EventReader::new(body.as_bytes());
-        let my_stack = my_parser.events().peekable();
+        let my_parser  = EventReader::new(body.as_bytes());
+        let my_stack = my_parser.into_iter().peekable();
         let mut reader = XmlResponse::new(my_stack);
 
         // skip two leading fields since we ignore them (xml declaration, return type declaration)
