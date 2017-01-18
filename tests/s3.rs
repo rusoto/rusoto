@@ -56,7 +56,7 @@ fn test_all_the_things() {
 
     // GET the object
     test_get_object(&client, &test_bucket, &filename);
-
+    test_get_object_range(&client, &test_bucket, &filename);
     // copy the object to change its settings
     test_copy_object(&client, &test_bucket, &filename);
 
@@ -181,6 +181,19 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
 
     let result = client.get_object(&get_req).unwrap();
     println!("get object result: {:#?}", result);
+}
+
+fn test_get_object_range(client: &TestClient, bucket: &str, filename: &str) {
+    let get_req = GetObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        range: Some("bytes=0-1".to_owned()),
+        ..Default::default()
+    };
+
+    let result = client.get_object(&get_req).unwrap();
+    println!("\nget object range result: {:#?}", result);
+    assert_eq!(result.content_length.unwrap(), 2);
 }
 
 fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
