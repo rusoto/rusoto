@@ -30,7 +30,7 @@ use serde_json::Value;
 
 /// AWS API access credentials, including access key, secret key, token (for IAM profiles), and
 /// expiration timestamp.
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct AwsCredentials {
     key: String,
     secret: String,
@@ -222,7 +222,7 @@ impl DefaultCredentialsProviderSync {
 /// 3. IAM instance profile. Will only work if running on an EC2 instance with an instance profile/role.
 ///
 /// If the sources are exhausted without finding credentials, an error is returned.
-#[derive(Debug, Default, Clone)]
+#[derive(Default, Clone)]
 pub struct ChainProvider {
     profile_provider: Option<ProfileProvider>,
 }

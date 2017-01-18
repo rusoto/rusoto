@@ -11,7 +11,7 @@ use regex::Regex;
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials, in_ten_minutes};
 
 /// Provides AWS credentials from a profile in a credentials file.
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct ProfileProvider {
     credentials: Option<AwsCredentials>,
     file_path: PathBuf,
