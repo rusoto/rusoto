@@ -17,9 +17,9 @@ optional = true
 version = "0.8.0"
 
 [dependencies]
-Inflector = "0.6.0"
+Inflector = "0.7.0"
 lazy_static = "0.2.1"
-regex = "0.1.65"
+regex = "0.2.1"
 serde = "0.8.0"
 serde_json = "0.8.0"
 hyper = "0.10.0"

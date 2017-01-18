@@ -31,7 +31,7 @@ hyper-native-tls = "0.2.1"
 lazy_static = "0.2.1"
 log = "0.3.6"
 md5 = "0.3.2"
-regex = "0.1.65"
+regex = "0.2.1"
 ring = "0.6"
 rustc-serialize = "0.3.19"
 serde = "0.8.0"
@@ -57,7 +57,7 @@ optional = true
 version = "0.8.19"
 
 [dev-dependencies]
-env_logger = "0.3.3"
+env_logger = "0.4.0"
 rand = "^0.3.14"
 
 [features]
