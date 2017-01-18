@@ -30,8 +30,8 @@ impl GenerateProtocol for Ec2Generator {
 
                     match result.status {{
                         StatusCode::Ok => {{
-                            let mut reader = EventReader::from_str(&result.body);
-                            let mut stack = XmlResponse::new(reader.events().peekable());
+                            let reader = EventReader::from_str(&result.body);
+                            let mut stack = XmlResponse::new(reader.into_iter().peekable());
                             stack.next();
                             {method_return_value}
                         }},
@@ -61,7 +61,7 @@ impl GenerateProtocol for Ec2Generator {
         use param::{Params, ServiceParams};
 
         use signature::SignedRequest;
-        use xml::reader::events::XmlEvent;
+        use xml::reader::XmlEvent;
         use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
         use xmlutil::{characters, end_element, start_element, skip_tree};
         use xmlerror::*;
@@ -227,8 +227,8 @@ fn generate_list_deserializer(shape: &Shape) -> String {
 
         loop {{
             let next_event = match stack.peek() {{
-                Some(&XmlEvent::EndElement {{ .. }}) => DeserializerNext::Close,
-                Some(&XmlEvent::StartElement {{ ref name, .. }}) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::EndElement {{ .. }})) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => DeserializerNext::Element(name.local_name.to_owned()),
                 _ => DeserializerNext::Skip,
             }};
 
@@ -302,8 +302,8 @@ fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
 
         loop {{
             let next_event = match stack.peek() {{
-                Some(&XmlEvent::EndElement {{ .. }}) => DeserializerNext::Close,   // TODO verify that we received the expected tag?
-                Some(&XmlEvent::StartElement {{ ref name, .. }}) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::EndElement {{ .. }})) => DeserializerNext::Close,   // TODO verify that we received the expected tag?
+                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => DeserializerNext::Element(name.local_name.to_owned()),
                 _ => DeserializerNext::Skip,
             }};
 
