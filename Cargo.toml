@@ -18,6 +18,7 @@ version = "0.22.0"
 
 [build-dependencies]
 rustc_version = "0.1.7"
+rayon = "0.6.0"
 
 [build-dependencies.rusoto_codegen]
 default-features = false

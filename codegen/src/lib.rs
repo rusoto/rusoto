@@ -48,7 +48,7 @@ impl Service {
     }
 }
 
-pub fn generate(service: Service, output_path: &Path) {
+pub fn generate(service: Service, output_path: &Path) -> i32 {
     let botocore_destination_path = output_path.join(format!("{}_botocore.rs", service.name));
     let serde_destination_path = output_path.join(format!("{}.rs", service.name));
     let botocore_service_data_path = Path::new(BOTOCORE_DIR)
@@ -58,6 +58,8 @@ pub fn generate(service: Service, output_path: &Path) {
                       botocore_destination_path.as_path());
     serde_generate(botocore_destination_path.as_path(),
                    serde_destination_path.as_path());
+
+    return 1;
 }
 
 fn botocore_generate(input_path: &Path, output_path: &Path) {
