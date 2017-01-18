@@ -6,8 +6,8 @@
 use std::iter::Peekable;
 use std::num::ParseIntError;
 use std::collections::HashMap;
-use xml::reader::*;
-use xml::reader::events::*;
+use xml::reader::{Events, XmlEvent};
+use xml;
 
 /// generic Error for XML parsing
 #[derive(Debug)]
@@ -20,25 +20,25 @@ impl XmlParseError {
 }
 
 /// syntactic sugar for the XML event stack we pass around
-pub type XmlStack<'a> = Peekable<Events<'a, &'a[u8]>>;
+pub type XmlStack<'a> = Peekable<Events<&'a[u8]>>;
 
 /// Peek at next items in the XML stack
 pub trait Peek {
-    fn peek(&mut self) -> Option<&XmlEvent>;
+    fn peek(&mut self) -> Option<&Result<XmlEvent, xml::reader::Error>>;
 }
 
 /// Move to the next part of the XML stack
 pub trait Next {
-    fn next(&mut self) -> Option<XmlEvent>;
+    fn next(&mut self) -> Option<Result<XmlEvent, xml::reader::Error>>;
 }
 
 /// Wraps the Hyper Response type
 pub struct XmlResponse<'b> {
-    xml_stack: Peekable<Events<'b, &'b [u8]>> // refactor to use XmlStack type?
+    xml_stack: Peekable<Events<&'b [u8]>> // refactor to use XmlStack type?
 }
 
 impl <'b>XmlResponse<'b> {
-    pub fn new(stack: Peekable<Events<'b, &'b [u8]>>) -> XmlResponse {
+    pub fn new(stack: Peekable<Events<&'b [u8]>>) -> XmlResponse {
         XmlResponse {
             xml_stack: stack,
         }
@@ -46,8 +46,8 @@ impl <'b>XmlResponse<'b> {
 }
 
 impl <'b>Peek for XmlResponse<'b> {
-    fn peek(&mut self) -> Option<&XmlEvent> {
-        while let Some(&XmlEvent::Whitespace(_)) = self.xml_stack.peek() {
+    fn peek(&mut self) -> Option<&Result<XmlEvent, xml::reader::Error>> {
+        while let Some(&Ok(XmlEvent::Whitespace(_))) = self.xml_stack.peek() {
             self.xml_stack.next();
         }
         self.xml_stack.peek()
@@ -55,12 +55,12 @@ impl <'b>Peek for XmlResponse<'b> {
 }
 
 impl <'b> Next for XmlResponse<'b> {
-    fn next(&mut self) -> Option<XmlEvent> {
+    fn next(&mut self) -> Option<Result<XmlEvent, xml::reader::Error>> {
         let mut maybe_event;
         loop {
             maybe_event = self.xml_stack.next();
             match maybe_event {
-                Some(XmlEvent::Whitespace(_)) => {},
+                Some(Ok(XmlEvent::Whitespace(_))) => {},
                 _ => break
             }
         }
@@ -97,11 +97,11 @@ pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError
         // Check to see if the next element is an end tag.
         // If it is, return an empty string.
         let current = stack.peek();
-        if let Some(&XmlEvent::EndElement{ .. } ) = current {
+        if let Some(&Ok(XmlEvent::EndElement{ .. })) = current {
             return Ok("".to_string())
         }
     }
-    if let Some(XmlEvent::Characters(data)) = stack.next() {
+    if let Some(Ok(XmlEvent::Characters(data))) = stack.next() {
         Ok(data.to_string())
     } else {
         Err(XmlParseError::new("Expected characters"))
@@ -111,7 +111,7 @@ pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError
 /// get the name of the current element in the stack.  throw a parse error if it's not a `StartElement`
 pub fn peek_at_name<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError> {
     let current = stack.peek();
-    if let Some(&XmlEvent::StartElement{ref name, ..}) = current {
+    if let Some(&Ok(XmlEvent::StartElement{ref name, ..})) = current {
         Ok(name.local_name.to_string())
     } else {
         Ok("".to_string())
@@ -122,7 +122,7 @@ pub fn peek_at_name<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseErr
 pub fn start_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result<HashMap<String, String>, XmlParseError> {
     let next = stack.next();
 
-    if let Some(XmlEvent::StartElement { name, attributes, .. }) = next {
+    if let Some(Ok(XmlEvent::StartElement { name, attributes, .. })) = next {
         if name.local_name == element_name {
             let mut attr_map = HashMap::new();
             for attr in attributes {
@@ -140,7 +140,7 @@ pub fn start_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Resu
 /// consume an `EndElement` with a specific name or throw an `XmlParseError`
 pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T)  -> Result<(), XmlParseError> {
     let next = stack.next();
-    if let Some(XmlEvent::EndElement { name, .. }) = next {
+    if let Some(Ok(XmlEvent::EndElement { name, .. })) = next {
         if name.local_name == element_name {
             Ok(())
         } else {
@@ -159,8 +159,8 @@ pub fn skip_tree<T: Peek + Next>(stack: &mut T) {
     loop {
         match stack.next() {
             None => break,
-            Some(XmlEvent::StartElement { .. }) => deep += 1,
-            Some(XmlEvent::EndElement { ..}) => {
+            Some(Ok(XmlEvent::StartElement { .. })) => deep += 1,
+            Some(Ok(XmlEvent::EndElement { .. })) => {
                 if deep > 1 {
                     deep -= 1;
                 } else {
