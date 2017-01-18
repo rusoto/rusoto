@@ -205,7 +205,8 @@ fn generate_deserializer_body(name: &str, shape: &Shape) -> Option<String> {
         match name {
             "CancelledSpotInstanceRequest" |
                 "PurchaseRequest" |
-                "SpotInstanceRequest" => (),
+                "SpotInstanceRequest" |
+                "TargetConfigurationRequest" => (),
             _ => return None,
         }
     }
