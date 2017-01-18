@@ -23,7 +23,7 @@ mod test {
         let mut file = BufReader::new(file);
         let mut raw = String::new();
         file.read_to_string(&mut raw).unwrap();
-        let mut my_parser  = EventReader::from_str(&raw);
+        let my_parser  = EventReader::from_str(&raw);
         let my_stack = my_parser.into_iter().peekable();
         let mut reader = XmlResponse::new(my_stack);
         reader.next(); // xml start node
@@ -45,7 +45,7 @@ mod test {
         let mut file = BufReader::new(file);
         let mut raw = String::new();
         file.read_to_string(&mut raw).unwrap();
-        let mut my_parser  = EventReader::from_str(&raw);
+        let my_parser  = EventReader::from_str(&raw);
         let my_stack = my_parser.into_iter().peekable();
         let mut reader = XmlResponse::new(my_stack);
         reader.next(); // xml start node
@@ -67,7 +67,7 @@ mod test {
         let mut file = BufReader::new(file);
         let mut raw = String::new();
         file.read_to_string(&mut raw).unwrap();
-        let mut my_parser  = EventReader::from_str(&raw);
+        let my_parser  = EventReader::from_str(&raw);
         let my_stack = my_parser.into_iter().peekable();
         let mut reader = XmlResponse::new(my_stack);
         reader.next(); // xml start node
