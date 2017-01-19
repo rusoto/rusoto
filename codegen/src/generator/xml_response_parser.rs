@@ -3,8 +3,19 @@ use inflector::Inflector;
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::{generate_field_name, mutate_type_name};
 
+
+pub fn generate_struct_attributes(deserialized: bool) -> String {
+    let mut derived = vec!["Default"];
+
+    if deserialized {
+        derived.push("Debug, Clone")
+    }
+
+    format!("#[derive({})]", derived.join(","))
+}
+
 pub fn generate_deserializer(name: &str, shape: &Shape, service: &Service) -> String {
-	format!("
+    format!("
         struct {name}Deserializer;
         impl {name}Deserializer {{
             #[allow(unused_variables)]
@@ -13,9 +24,8 @@ pub fn generate_deserializer(name: &str, shape: &Shape, service: &Service) -> St
                 {deserializer_body}
             }}
         }}",
-        name = name,
-        deserializer_body = generate_deserializer_body(name, shape, service))
-
+            name = name,
+            deserializer_body = generate_deserializer_body(name, shape, service))
 }
 
 pub fn generate_response_parser(service: &Service, operation: &Operation) -> String {
@@ -31,8 +41,8 @@ pub fn generate_response_parser(service: &Service, operation: &Operation) -> Str
     let mut mutable_result = false;
 
     if let Some(rhp) = generate_response_headers_parser(service, operation) {
-		response_headers_parser = rhp;
-		mutable_result = true;
+        response_headers_parser = rhp;
+        mutable_result = true;
     }
 
     // if the 'payload' field on the output shape is a blob or string, it indicates that
@@ -56,8 +66,8 @@ pub fn generate_response_parser(service: &Service, operation: &Operation) -> Str
         {body_parser}
         {response_headers_parser}
         Ok(result)",
-		body_parser = body_parser,
-		response_headers_parser = response_headers_parser)
+            body_parser = body_parser,
+            response_headers_parser = response_headers_parser)
 }
 
 fn payload_body_parser(payload_type: ShapeType,
@@ -76,15 +86,14 @@ fn payload_body_parser(payload_type: ShapeType,
             output_shape = output_shape,
             payload_member = payload_member.to_snake_case(),
             response_body = response_body)
-
 }
 
 fn xml_body_parser(output_shape: &str, mutable_result: bool) -> String {
-	let let_result = if mutable_result {
-		"let mut result;"
-	} else {
-		"let result;"
-	};
+    let let_result = if mutable_result {
+        "let mut result;"
+    } else {
+        "let result;"
+    };
 
     format!("
         {let_result}
@@ -97,31 +106,29 @@ fn xml_body_parser(output_shape: &str, mutable_result: bool) -> String {
                 ParserConfig::new().trim_whitespace(true)
             );
             let mut stack = XmlResponse::new(reader.events().peekable());
-            let _start_document = stack.next();         
+            let _start_document = stack.next();
             let actual_tag_name = try!(peek_at_name(&mut stack));
             result = try!({output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack));
         }}",
-        let_result = let_result,
-		output_shape = output_shape)
+            let_result = let_result,
+            output_shape = output_shape)
 }
 
 
 fn generate_response_headers_parser(service: &Service, operation: &Operation) -> Option<String> {
-
     // nothing to do if there's no output type
     if operation.output.is_none() {
         return None;
     }
 
     let shape = service.shapes.get(&operation.output.as_ref().unwrap().shape).unwrap();
-
     let members = shape.members.as_ref().unwrap();
 
     let parser_pieces = members.iter()
         .filter_map(|(member_name, member)| {
             if member.location.is_none() || member.location.as_ref().unwrap() != "header" {
                 return None;
-            }       
+            }
 
             let member_shape_name = &member.shape;
             let member_shape = service.shapes.get(member_shape_name).unwrap();
@@ -144,12 +151,13 @@ fn generate_response_headers_parser(service: &Service, operation: &Operation) ->
                              primitive_parser = generate_header_primitive_parser(&member_shape)))
             }
 
-        }).collect::<Vec<String>>();
+        })
+        .collect::<Vec<String>>();
 
     if parser_pieces.len() > 0 {
-    	Some(parser_pieces.join("\n"))
+        Some(parser_pieces.join("\n"))
     } else {
-    	None
+        None
     }
 }
 
@@ -252,7 +260,7 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 
     format!(
         "
-        let mut obj = HashMap::new();
+        let mut obj = ::std::collections::HashMap::new();
 
         while try!(peek_at_name(stack)) == tag_name {{
             try!(start_element(tag_name, stack));

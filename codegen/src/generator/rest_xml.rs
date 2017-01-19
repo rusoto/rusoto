@@ -22,8 +22,8 @@ impl GenerateProtocol for RestXmlGenerator {
             format!(
                 "{documentation}
                 #[allow(unused_variables, warnings)]
-                {method_signature} {{                  
-                    
+                {method_signature} {{
+
                     let mut params = Params::new();
                     let mut payload: Option<Vec<u8>> = None;
 
@@ -79,7 +79,7 @@ impl GenerateProtocol for RestXmlGenerator {
     fn generate_prelude(&self, service: &Service) -> String {
         let mut imports = "
             use std::str::{FromStr};
-            use xml::reader::ParserConfig;            
+            use xml::reader::ParserConfig;
             use param::{Params, ServiceParams};
             use signature::SignedRequest;
             use xml::EventReader;
@@ -95,14 +95,13 @@ impl GenerateProtocol for RestXmlGenerator {
 
         if service.service_type_name() == "S3" {
             imports += "
-                use std::collections::HashMap;
                 use md5;
                 use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};";
         }
 
         imports
     }
-   
+
     fn generate_struct_attributes(&self, _struct_name: &str, _serialized: bool, deserialized: bool) -> String {
         let mut derived = vec!["Default"];
 
@@ -111,7 +110,7 @@ impl GenerateProtocol for RestXmlGenerator {
         }
 
         format!("#[derive({})]", derived.join(","))
-    }   
+    }
 
     fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
         if name != "RestoreRequest" && name.ends_with("Request") {
@@ -134,7 +133,7 @@ impl GenerateProtocol for RestXmlGenerator {
 
     fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
         xml_response_parser::generate_deserializer(name, shape, service)
-    }    
+    }
 
     fn timestamp_type(&self) -> &'static str {
         "String"
@@ -618,8 +617,8 @@ fn generate_primitive_serializer(shape: &Shape) -> String {
         ShapeType::Blob => "String::from_utf8(obj.to_vec()).expect(\"Not a UTF-8 string\")",
         _ => "obj.to_string()",
     };
-    format!("format!(\"<{{name}}>{{value}}</{{name}}>\", 
-                name = name, 
+    format!("format!(\"<{{name}}>{{value}}</{{name}}>\",
+                name = name,
                 value = {value_str})",
             value_str = value_str)
 }

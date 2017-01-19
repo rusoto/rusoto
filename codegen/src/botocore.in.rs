@@ -272,10 +272,7 @@ impl<'a> Shape {
         &self.value.as_ref().expect("Value shape undefined").shape
     }
 
-    // note: the key_type and value_type fallbacks here are incorrect
-    // they also never happen in executed code.
-    // the need for them will go away once we trim serializers down to
-    // only the types that need serialization
+    /*
     pub fn key_name(&'a self) -> String {
         match self.key.as_ref().expect("Key undefined").location_name {
             Some(ref location) => location.to_owned(),
@@ -288,7 +285,7 @@ impl<'a> Shape {
             Some(ref location) => location.to_owned(),
             _ => self.value_type().to_owned()
         }
-    }
+    }*/
 
     pub fn member_type(&'a self) -> &'a str {
         &self.member.as_ref().expect("Member shape undefined").shape

@@ -1,7 +1,6 @@
 use inflector::Inflector;
 
 use botocore::{Service, Shape, ShapeType};
-use self::ec2::Ec2Generator;
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
 use self::rest_json::RestJsonGenerator;
@@ -11,14 +10,12 @@ use self::tests::generate_tests;
 use self::type_filter::filter_types;
 
 mod error_types;
-mod ec2;
 mod json;
 mod query;
 mod rest_json;
 mod tests;
 mod rest_xml;
 mod xml_response_parser;
-mod query_request_serializer;
 mod type_filter;
 
 pub trait GenerateProtocol {
@@ -42,8 +39,7 @@ pub trait GenerateProtocol {
 pub fn generate_source(service: &Service) -> String {
     match &service.metadata.protocol[..] {
         "json" => generate(service, JsonGenerator, JsonErrorTypes),
-        "ec2" => generate(service, Ec2Generator, XmlErrorTypes),
-        "query" => generate(service, QueryGenerator, XmlErrorTypes),
+        "query" | "ec2" => generate(service, QueryGenerator, XmlErrorTypes),
         "rest-json" => generate(service, RestJsonGenerator, JsonErrorTypes),
         "rest-xml" => generate(service, RestXmlGenerator, XmlErrorTypes),
         protocol => panic!("Unknown protocol {}", protocol),
@@ -197,7 +193,7 @@ fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
 
         if serialized {
             parts.push(protocol_generator.generate_serializer(&type_name, shape, service));
-        }        
+        }
 
         Some(parts.join("\n"))
     }).collect::<Vec<String>>().join("\n")
