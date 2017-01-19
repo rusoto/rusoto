@@ -18,6 +18,7 @@ mod rest_json;
 mod tests;
 mod rest_xml;
 mod xml_response_parser;
+mod query_request_serializer;
 mod type_filter;
 
 pub trait GenerateProtocol {
