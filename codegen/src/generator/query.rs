@@ -1,5 +1,5 @@
 use inflector::Inflector;
-use botocore::{Operation, Service, Shape, ShapeType};
+use botocore::{Operation, Service, Shape, ShapeType, Member};
 
 use super::xml_response_parser;
 use super::{GenerateProtocol, error_type_name, generate_field_name};
@@ -23,7 +23,6 @@ impl GenerateProtocol for QueryGenerator {
 
                     request.sign(&try!(self.credentials_provider.credentials()));
                     let response = try!(self.dispatcher.dispatch(&request));
-
                     match response.status {{
                         StatusCode::Ok => {{
                             {parse_response}
@@ -78,7 +77,10 @@ impl GenerateProtocol for QueryGenerator {
         format!("#[derive({})]", derived.join(","))
     }
 
-    fn generate_serializer(&self, name: &str, shape: &Shape, _service: &Service) -> String {
+    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
+        if shape.is_primitive() {
+            return "".to_owned()
+        }
         format!("
             /// Serialize `{name}` contents to a `SignedRequest`.
             struct {name}Serializer;
@@ -90,12 +92,12 @@ impl GenerateProtocol for QueryGenerator {
             ",
             name = name,
             serializer_signature = generate_serializer_signature(name, shape),
-            serializer_body = generate_serializer_body(shape))
+            serializer_body = generate_serializer_body(service, shape))
     }
 
     fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
         xml_response_parser::generate_deserializer(name, shape, service)
-    }    
+    }
 
     fn timestamp_type(&self) -> &'static str {
         "String"
@@ -142,12 +144,12 @@ fn generate_method_signature(operation_name: &str, operation: &Operation) -> Str
     }
 }
 
-fn generate_serializer_body(shape: &Shape) -> String {
+fn generate_serializer_body(service: &Service, shape: &Shape) -> String {
     match shape.shape_type {
-        ShapeType::List => generate_list_serializer(shape),
-        ShapeType::Map => generate_map_serializer(shape),
-        ShapeType::Structure => generate_struct_serializer(shape),
-        _ => generate_primitive_serializer(shape),
+        ShapeType::List => generate_list_serializer(service, shape),
+        ShapeType::Map => generate_map_serializer(service, shape),
+        ShapeType::Structure => generate_struct_serializer(service, shape),
+        _ => "".to_owned()
     }
 }
 
@@ -159,39 +161,62 @@ fn generate_serializer_signature(name: &str, shape: &Shape) -> String {
     }
 }
 
-fn generate_list_serializer(shape: &Shape) -> String {
-    // List format is different for CloudWatch: http://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutMetricData.html
-    format!("for (index, element) in obj.iter().enumerate() {{
-                let key = format!(\"{{}}.member.{{}}\", name, index+1);
-                {name}Serializer::serialize(params, &key, element);
-            }}",
-            name = shape.member_type(),
-    )
-}
-fn generate_map_serializer(shape: &Shape) -> String {
-    format!(
-        "for (index, (key, value)) in obj.iter().enumerate() {{
-            let prefix = format!(\"{{}}.{{}}\", name, index+1);
-            {key_type}Serializer::serialize(
-                params,
-                &format!(\"{{}}.{{}}\", prefix, \"{key_name}\"),
-                key,
-            );
-            {value_type}Serializer::serialize(
-                params,
-                &format!(\"{{}}.{{}}\", prefix, \"{value_name}\"),
-                value,
-            );
-        }}
-        ",
-        key_type = shape.key_type(),
-        value_type = shape.value_type(),
-        key_name = shape.key_name(),
-        value_name = shape.value_name()
-    )
+fn generate_list_serializer(service: &Service, shape: &Shape) -> String {
+
+    let member_shape = service.shape_for_member(shape.member.as_ref().unwrap()).unwrap();
+    let primitive = member_shape.is_primitive();
+
+    let mut parts = Vec::new();
+
+    parts.push("for (index, obj) in obj.iter().enumerate() {
+                    let key = format!(\"{}.member.{}\", name, index+1);".to_owned());
+
+    if primitive {
+        parts.push(format!("params.put(&key, {});", serialize_primitive_expression(&member_shape.shape_type, "obj")));
+    } else {
+        parts.push(format!("{}Serializer::serialize(params, &key, obj);", shape.member_type()));
+    }
+
+    parts.push("}".to_owned());
+    parts.join("\n")
 }
 
-fn generate_struct_serializer(shape: &Shape) -> String {
+fn generate_map_serializer(service: &Service, shape: &Shape) -> String {
+    let mut parts = Vec::new();
+
+    // the key is always a string type
+    parts.push(
+        format!("for (index, (key, value)) in obj.iter().enumerate() {{
+            let prefix = format!(\"{{}}.{{}}\", name, index+1);
+            params.put(&format!(\"{{}}.{{}}\", prefix, \"{key_name}\"), &key);",
+            key_name = shape.key_name(),
+        )
+    );
+
+    let value_shape = service.shape_for_value(shape.value.as_ref().unwrap()).unwrap();
+    let primitive_value = value_shape.is_primitive();
+
+    if primitive_value {
+        parts.push(format!("params.put(&key, {});", serialize_primitive_expression(&value_shape.shape_type, "value")));
+    } else {
+        parts.push(
+            format!(
+                "{value_type}Serializer::serialize(
+                    params,
+                    &format!(\"{{}}.{{}}\", prefix, \"{value_name}\"),
+                    value,
+                );",
+                value_type = shape.value_type(),
+                value_name = shape.value_name()
+            )
+        )
+    }
+
+    parts.push("}".to_owned());
+    parts.join("\n")
+}
+
+fn generate_struct_serializer(service: &Service, shape: &Shape) -> String {
     format!(
         "let mut prefix = name.to_string();
         if prefix != \"\" {{
@@ -200,47 +225,86 @@ fn generate_struct_serializer(shape: &Shape) -> String {
 
         {struct_field_serializers}
         ",
-        struct_field_serializers = generate_struct_field_serializers(shape),
+        struct_field_serializers = generate_struct_field_serializers(service, shape),
     )
 }
-fn generate_struct_field_serializers(shape: &Shape) -> String {
+fn generate_struct_field_serializers(service: &Service, shape: &Shape) -> String {
     shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
-        if shape.required(member_name) {
-            format!(
-                "{member_shape_name}Serializer::serialize(
-                    params,
-                    &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
-                    &obj.{field_name},
-                );
-                ",
-                field_name = generate_field_name(member_name),
-                member_shape_name = member.shape,
-                tag_name = member_name,
-            )
-        } else {
-            format!(
-                "if let Some(ref field_value) = obj.{field_name} {{
-                    {member_shape_name}Serializer::serialize(
-                        params,
-                        &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
-                        field_value,
-                    );
-                }}",
-                field_name = generate_field_name(member_name),
-                member_shape_name = member.shape,
-                tag_name = member.location_name.clone().unwrap_or(member_name.to_owned())
-            )
+
+        let member_shape = service.shape_for_member(&member).unwrap();
+        let primitive = member_shape.is_primitive();
+
+        match shape.required(member_name) {
+            true => {
+                match primitive {
+                    true => required_primitive_field_serializer(member_name, member, member_shape),
+                    false => required_complex_field_serializer(member_name, member)
+                }
+            },
+            false => {
+                match primitive {
+                    true => optional_primitive_field_serializer(member_name, member, member_shape),
+                    false => optional_complex_field_serializer(member_name, member)
+                }
+            }
         }
     }).collect::<Vec<String>>().join("\n")
 }
 
-fn generate_primitive_serializer(shape: &Shape) -> String {
-    let expression = match shape.shape_type {
-        ShapeType::String | ShapeType::Timestamp => "obj",
-        ShapeType::Integer | ShapeType::Double | ShapeType::Boolean => "&obj.to_string()",
-        ShapeType::Blob => "::std::str::from_utf8(obj).unwrap()",
-        shape_type => panic!("Unknown primitive shape type: {:?}", shape_type),
-    };
+fn optional_primitive_field_serializer(member_name: &str, member: &Member, member_shape: &Shape) -> String {
+    let expression = serialize_primitive_expression(&member_shape.shape_type, "field_value");
 
-    format!("params.put(name, {});", expression)
+    format!(
+        "if let Some(ref field_value) = obj.{field_name} {{
+            params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression});
+        }}",
+        field_name = generate_field_name(member_name),
+        expression = expression,
+        tag_name = member.location_name.clone().unwrap_or(member_name.to_owned())
+    )
+}
+
+fn required_primitive_field_serializer(member_name: &str, member: &Member, member_shape: &Shape) -> String {
+    let expression = serialize_primitive_expression(&member_shape.shape_type, &format!("obj.{}",generate_field_name(member_name)));
+
+    format!("params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression});",
+        expression = expression,
+        tag_name = member.location_name.clone().unwrap_or(member_name.to_owned())
+    )
+}
+
+fn serialize_primitive_expression(shape_type: &ShapeType, var_name: &str) -> String {
+    match *shape_type {
+        ShapeType::String | ShapeType::Timestamp => format!("&{}", var_name),
+        ShapeType::Integer | ShapeType::Double | ShapeType::Boolean => format!("&{}.to_string()", var_name),
+        ShapeType::Blob => format!("::std::str::from_utf8({}).unwrap()", var_name),
+        shape_type => panic!("Unknown primitive shape type: {:?}", shape_type),
+    }
+}
+
+fn required_complex_field_serializer(member_name: &str, member: &Member) -> String {
+    format!("{member_shape}Serializer::serialize(
+                params,
+                &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
+                &obj.{field_name},
+            );",
+            field_name = generate_field_name(member_name),
+            member_shape = member.shape,
+            tag_name = member.location_name.clone().unwrap_or(member_name.to_owned())
+    )
+}
+
+fn optional_complex_field_serializer(member_name: &str, member: &Member) -> String {
+    format!(
+        "if let Some(ref field_value) = obj.{field_name} {{
+            {member_shape_name}Serializer::serialize(
+                params,
+                &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
+                field_value,
+            );
+        }}",
+        field_name = generate_field_name(member_name),
+        member_shape_name = member.shape,
+        tag_name = member.location_name.clone().unwrap_or(member_name.to_owned())
+    )
 }

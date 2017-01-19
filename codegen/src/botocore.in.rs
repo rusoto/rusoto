@@ -88,6 +88,10 @@ impl Service {
         }
     }
 
+    pub fn shape_for_value<'a>(&'a self, value: &Value) -> Option<&'a Shape> {
+        self.shapes.get(&value.shape)
+    }
+
     pub fn shape_for_member<'a>(&'a self, member: &Member) -> Option<&'a Shape> {
         self.shapes.get(&member.shape)
     }
@@ -248,6 +252,16 @@ pub struct Shape {
     pub xml_namespace: Option<XmlNamespace>,
 }
 
+impl Shape {
+    pub fn is_primitive(&self) -> bool {
+        match self.shape_type {
+            ShapeType::Structure | ShapeType::Map | ShapeType::List => {
+                false
+            },
+            _ => true
+        }
+    }
+}
 
 impl<'a> Shape {
     pub fn key_type(&'a self) -> &'a str {
