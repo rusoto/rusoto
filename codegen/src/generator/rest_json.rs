@@ -197,8 +197,8 @@ fn generate_snake_case_uri(request_uri: &str) -> String {
     }
 
     URI_ARGS_REGEX.replace_all(request_uri, |caps: &Captures| {
-        format!("{{{}}}", caps.at(1).map(Inflector::to_snake_case).unwrap())
-    })
+        format!("{{{}}}", caps.get(1).map(|c| Inflector::to_snake_case(c.as_str())).unwrap())
+    }).to_string()
 }
 
 fn generate_params_loading_string(param_strings: &[String]) -> String {
