@@ -23,7 +23,11 @@ pub trait GenerateProtocol {
 
     fn generate_prelude(&self, service: &Service) -> String;
 
-    fn generate_struct_attributes(&self, struct_name: &str, serialized: bool, deserialized: bool) -> String;
+    fn generate_struct_attributes(&self,
+                                  struct_name: &str,
+                                  serialized: bool,
+                                  deserialized: bool)
+                                  -> String;
 
     fn timestamp_type(&self) -> &'static str;
 
@@ -52,8 +56,7 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
 
     // Initial capacity is a bit of a guess from looking at the end size:
     let mut service_code = String::with_capacity(969984);
-    service_code.push_str(
-        "#[allow(warnings)]
+    service_code.push_str("#[allow(warnings)]
         use hyper::Client;
         use hyper::status::StatusCode;
         use request::DispatchSignedRequest;
@@ -66,9 +69,10 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
     ");
     service_code.push_str(&protocol_generator.generate_prelude(service));
     service_code.push_str(&generate_types(service, &protocol_generator));
-    service_code.push_str(&error_type_generator.generate_error_types(service).unwrap_or("".to_string()));
+    service_code.push_str(&error_type_generator.generate_error_types(service)
+        .unwrap_or_else(|| "".to_string()));
     service_code.push_str(&generate_client(service, &protocol_generator));
-    service_code.push_str(&generate_tests(service).unwrap_or("".to_string()));
+    service_code.push_str(&generate_tests(service).unwrap_or_else(|| "".to_string()));
 
     service_code
 }
@@ -139,7 +143,7 @@ fn mutate_type_name(type_name: &str) -> String {
     let capitalized = capitalize_first(type_name.to_owned());
 
     // some cloudfront types have underscoare that anger the lint checker
-    let without_underscores = capitalized.replace("_","");
+    let without_underscores = capitalized.replace("_", "");
 
     match &without_underscores[..] {
         // S3 has an 'Error' shape that collides with Rust's Error trait
@@ -158,45 +162,61 @@ fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
 
     let (serialized_types, deserialized_types) = filter_types(service);
 
-    service.shapes.iter().filter_map(|(name, shape)| {
+    service.shapes
+        .iter()
+        .filter_map(|(name, shape)| {
 
-        let type_name = mutate_type_name(name);
+            let type_name = mutate_type_name(name);
 
-        // We generate enums for error types, so no need to create model objects for them
-        if shape.exception() {
-            return None;
-        }
-
-        let mut parts = Vec::with_capacity(4);
-
-        // If botocore includes documentation, clean it up a bit and use it
-        if let Some(ref docs) = shape.documentation {
-            parts.push(format!("#[doc=\"{}\"]", docs.replace("\\","\\\\").replace("\"", "\\\"")));
-        }
-
-        let deserialized = deserialized_types.contains(&type_name);
-        let serialized = serialized_types.contains(&type_name);
-
-        // generate a rust type for the shape
-        if type_name != "String" {
-            match shape.shape_type {
-                ShapeType::Structure => parts.push(generate_struct(service, &type_name, shape, serialized, deserialized, protocol_generator)),
-                ShapeType::Map => parts.push(generate_map(&type_name, shape)),
-                ShapeType::List => parts.push(generate_list(&type_name, shape)),
-                shape_type => parts.push(generate_primitive_type(&type_name, shape_type, protocol_generator.timestamp_type())),
+            // We generate enums for error types, so no need to create model objects for them
+            if shape.exception() {
+                return None;
             }
-        }
 
-        if deserialized {
-            parts.push(protocol_generator.generate_deserializer(&type_name, shape, service));
-        }
+            let mut parts = Vec::with_capacity(4);
 
-        if serialized {
-            parts.push(protocol_generator.generate_serializer(&type_name, shape, service));
-        }
+            // If botocore includes documentation, clean it up a bit and use it
+            if let Some(ref docs) = shape.documentation {
+                parts.push(format!("#[doc=\"{}\"]",
+                                   docs.replace("\\", "\\\\").replace("\"", "\\\"")));
+            }
 
-        Some(parts.join("\n"))
-    }).collect::<Vec<String>>().join("\n")
+            let deserialized = deserialized_types.contains(&type_name);
+            let serialized = serialized_types.contains(&type_name);
+
+            // generate a rust type for the shape
+            if type_name != "String" {
+                match shape.shape_type {
+                    ShapeType::Structure => {
+                        parts.push(generate_struct(service,
+                                                   &type_name,
+                                                   shape,
+                                                   serialized,
+                                                   deserialized,
+                                                   protocol_generator))
+                    }
+                    ShapeType::Map => parts.push(generate_map(&type_name, shape)),
+                    ShapeType::List => parts.push(generate_list(&type_name, shape)),
+                    shape_type => {
+                        parts.push(generate_primitive_type(&type_name,
+                                                           shape_type,
+                                                           protocol_generator.timestamp_type()))
+                    }
+                }
+            }
+
+            if deserialized {
+                parts.push(protocol_generator.generate_deserializer(&type_name, shape, service));
+            }
+
+            if serialized {
+                parts.push(protocol_generator.generate_serializer(&type_name, shape, service));
+            }
+
+            Some(parts.join("\n"))
+        })
+        .collect::<Vec<String>>()
+        .join("\n")
 }
 
 
@@ -218,7 +238,8 @@ fn generate_struct<P>(service: &Service,
             name = name,
         )
     } else {
-        let struct_attributes = protocol_generator.generate_struct_attributes(name, serialized, deserialized);
+        let struct_attributes =
+            protocol_generator.generate_struct_attributes(name, serialized, deserialized);
         // Serde attributes are only needed if deriving the Serialize or Deserialize trait
         let need_serde_attrs = struct_attributes.contains("erialize");
         format!(

@@ -255,10 +255,8 @@ pub struct Shape {
 impl Shape {
     pub fn is_primitive(&self) -> bool {
         match self.shape_type {
-            ShapeType::Structure | ShapeType::Map | ShapeType::List => {
-                false
-            },
-            _ => true
+            ShapeType::Structure | ShapeType::Map | ShapeType::List => false,
+            _ => true,
         }
     }
 }
@@ -271,21 +269,6 @@ impl<'a> Shape {
     pub fn value_type(&'a self) -> &'a str {
         &self.value.as_ref().expect("Value shape undefined").shape
     }
-
-    /*
-    pub fn key_name(&'a self) -> String {
-        match self.key.as_ref().expect("Key undefined").location_name {
-            Some(ref location) => location.to_owned(),
-            _ => self.key_type().to_owned()
-        }
-    }
-
-    pub fn value_name(&'a self) -> String {
-        match self.value.as_ref().expect("Value undefined").location_name {
-            Some(ref location) => location.to_owned(),
-            _ => self.value_type().to_owned()
-        }
-    }*/
 
     pub fn member_type(&'a self) -> &'a str {
         &self.member.as_ref().expect("Member shape undefined").shape

@@ -1,5 +1,4 @@
 #![cfg_attr(feature = "unstable", feature(const_fn, drop_types_in_const))]
-#![cfg_attr(feature = "serde_derive", feature(proc_macro))]
 #![cfg_attr(feature = "nightly-testing", feature(plugin))]
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
@@ -39,8 +38,7 @@ pub struct Service {
 
 impl Service {
     pub fn new<S>(name: S, protocol_date: S) -> Self
-        where S: Into<String>
-    {
+        where S: Into<String> {
         Service {
             name: name.into(),
             protocol_date: protocol_date.into(),
@@ -55,7 +53,7 @@ pub fn generate(service: Service, output_path: &Path) -> i32 {
         .join(format!("{}/{}/service-2.json", service.name, service.protocol_date));
 
     let needs_serde = botocore_generate(botocore_service_data_path.as_path(),
-                      botocore_destination_path.as_path());
+                                        botocore_destination_path.as_path());
 
     // only pass the generated code through serde if we actually need JSON serialization
     if needs_serde {
@@ -98,7 +96,7 @@ fn botocore_generate(input_path: &Path, output_path: &Path) -> bool {
 
     match &service.metadata.protocol[..] {
         "json" | "rest-json" => true,
-        _ => false
+        _ => false,
     }
 }
 

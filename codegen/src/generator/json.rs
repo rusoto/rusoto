@@ -7,7 +7,6 @@ use super::error_type_name;
 pub struct JsonGenerator;
 
 impl GenerateProtocol for JsonGenerator {
-
     fn generate_methods(&self, service: &Service) -> String {
         service.operations.iter().map(|(operation_name, operation)| {
 
@@ -54,10 +53,15 @@ impl GenerateProtocol for JsonGenerator {
         "use serde_json;
         use signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
-        use serde_json::from_str;".to_string()
+        use serde_json::from_str;"
+            .to_string()
     }
 
-    fn generate_struct_attributes(&self, _struct_name: &str, serialized: bool, deserialized: bool) -> String {
+    fn generate_struct_attributes(&self,
+                                  _struct_name: &str,
+                                  serialized: bool,
+                                  deserialized: bool)
+                                  -> String {
         let mut derived = vec!["Default"];
 
         if serialized {
@@ -80,29 +84,27 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
     if service.signing_name() == service.metadata.endpoint_prefix {
         None
     } else {
-        Some(format!("request.set_endpoint_prefix(\"{}\".to_string());", service.metadata.endpoint_prefix))
+        Some(format!("request.set_endpoint_prefix(\"{}\".to_string());",
+                     service.metadata.endpoint_prefix))
     }
 }
 
 fn generate_method_signature(operation: &Operation) -> String {
     if operation.input.is_some() {
-        format!(
-            "pub fn {method_name}(&self, input: &{input_type}) ",
-            input_type = operation.input_shape(),
-            method_name = operation.name.to_snake_case()
-        )
+        format!("pub fn {method_name}(&self, input: &{input_type}) ",
+                input_type = operation.input_shape(),
+                method_name = operation.name.to_snake_case())
     } else {
-        format!(
-            "pub fn {method_name}(&self) ",
-            method_name = operation.name.to_snake_case()
-        )
+        format!("pub fn {method_name}(&self) ",
+                method_name = operation.name.to_snake_case())
     }
 }
 
 fn generate_payload(operation: &Operation) -> String {
     if operation.input.is_some() {
         "let encoded = serde_json::to_string(input).unwrap();
-         let payload = Some(encoded.as_bytes());".to_string()
+         let payload = Some(encoded.as_bytes());"
+            .to_string()
     } else {
         "let payload = None;".to_string()
     }
@@ -110,15 +112,16 @@ fn generate_payload(operation: &Operation) -> String {
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
     operation.documentation.as_ref().map(|docs| {
-        format!("#[doc=\"{}\"]", docs.replace("\\","\\\\").replace("\"", "\\\""))
+        format!("#[doc=\"{}\"]",
+                docs.replace("\\", "\\\\").replace("\"", "\\\""))
     })
 }
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("Ok(serde_json::from_str::<{}>(&response.body).unwrap())", output_type)
+        format!("Ok(serde_json::from_str::<{}>(&response.body).unwrap())",
+                output_type)
     } else {
         "Ok(())".to_owned()
     }
 }
-

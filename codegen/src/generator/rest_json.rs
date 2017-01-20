@@ -98,10 +98,15 @@ impl GenerateProtocol for RestJsonGenerator {
         use serde_json;
         use serde_json::from_str;
         use serde_json::Value as SerdeJsonValue;
-        ".to_owned()
+        "
+            .to_owned()
     }
 
-    fn generate_struct_attributes(&self, _struct_name: &str, serialized: bool, deserialized: bool) -> String {
+    fn generate_struct_attributes(&self,
+                                  _struct_name: &str,
+                                  serialized: bool,
+                                  deserialized: bool)
+                                  -> String {
         let mut derived = vec!["Default"];
 
         if serialized {
@@ -135,9 +140,7 @@ impl CodegenString for StatusCode {
 
 fn http_code_to_status_code(code: Option<i32>) -> String {
     match code {
-        Some(actual_code) => {
-            StatusCode::from_u16(actual_code as u16).enum_as_string()
-        }
+        Some(actual_code) => StatusCode::from_u16(actual_code as u16).enum_as_string(),
         // Some service definitions such as elastictranscoder don't specify
         // the response code, we'll assume this:
         None => "StatusCode::Ok".to_string(),
@@ -149,7 +152,8 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
     if service.signing_name() == service.metadata.endpoint_prefix {
         None
     } else {
-        Some(format!("request.set_endpoint_prefix(\"{}\".to_string());", service.metadata.endpoint_prefix))
+        Some(format!("request.set_endpoint_prefix(\"{}\".to_string());",
+                     service.metadata.endpoint_prefix))
     }
 }
 
@@ -158,20 +162,21 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
 fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
     if shape.members.is_some() && !shape.members.as_ref().unwrap().is_empty() {
         format!("pub fn {method_name}(&self, input: &{input_type})",
-            method_name = operation.name.to_snake_case(),
-            input_type = operation.input_shape())
+                method_name = operation.name.to_snake_case(),
+                input_type = operation.input_shape())
     } else {
-        format!("pub fn {method_name}(&self)", method_name = operation.name.to_snake_case())
+        format!("pub fn {method_name}(&self)",
+                method_name = operation.name.to_snake_case())
     }
 }
 
 fn generate_encoding_string(load_payload: bool) -> String {
     if load_payload {
-       "let encoded = serde_json::to_string(input).unwrap();".to_owned()
+        "let encoded = serde_json::to_string(input).unwrap();".to_owned()
     } else {
         "".to_owned()
     }
- }
+}
 
 fn generate_payload_loading_string(load_payload: bool) -> String {
     if load_payload {
@@ -195,18 +200,19 @@ fn generate_params_loading_string(param_strings: &[String]) -> String {
     match param_strings.len() {
         0 => "".to_owned(),
         _ => {
-            format!(
-                "let mut params = Params::new();
+            format!("let mut params = Params::new();
                 {param_strings}
                 request.set_params(params);",
-                param_strings = param_strings.join("\n")
-            )
-        },
+                    param_strings = param_strings.join("\n"))
+        }
     }
 }
 
 fn generate_shape_member_param_strings(shape: &Shape) -> Vec<String> {
-    shape.members.as_ref().unwrap().iter()
+    shape.members
+        .as_ref()
+        .unwrap()
+        .iter()
         .filter_map(|(member_name, member)| generate_param_load_string(member_name, member, shape))
         .collect::<Vec<String>>()
 }
@@ -216,8 +222,8 @@ fn generate_param_load_string(member_name: &str, member: &Member, shape: &Shape)
         Some(ref x) if x == "querystring" => {
             if shape.required(member_name) {
                 Some(format!("params.put(\"{member_name}\", &input.{field_name}.to_string());",
-                    member_name = member_name,
-                    field_name = member_name.to_snake_case()))
+                             member_name = member_name,
+                             field_name = member_name.to_snake_case()))
             } else {
                 Some(format!(
                     "match input.{field_name} {{
@@ -228,7 +234,7 @@ fn generate_param_load_string(member_name: &str, member: &Member, shape: &Shape)
                     field_name = member_name.to_snake_case(),
                 ))
             }
-        },
+        }
         Some(_) | None => None,
     }
 }
@@ -240,19 +246,23 @@ fn generate_uri_formatter(request_uri: &str, uri_strings: &[String]) -> String {
                 "let request_uri = \"{request_uri}\";",
                 request_uri = request_uri,
             )
-        },
+        }
         _ => {
-            format!(
-                "let request_uri = format!(\"{request_uri}\", {uri_strings});",
-                request_uri = request_uri,
-                uri_strings = uri_strings.join(", "))
-        },
+            format!("let request_uri = format!(\"{request_uri}\", {uri_strings});",
+                    request_uri = request_uri,
+                    uri_strings = uri_strings.join(", "))
+        }
     }
 }
 
 fn generate_shape_member_uri_strings(shape: &Shape) -> Vec<String> {
-    shape.members.as_ref().unwrap().iter()
-        .filter_map(|(member_name, member)| generate_member_format_string(&member_name.to_snake_case(), member))
+    shape.members
+        .as_ref()
+        .unwrap()
+        .iter()
+        .filter_map(|(member_name, member)| {
+            generate_member_format_string(&member_name.to_snake_case(), member)
+        })
         .collect::<Vec<String>>()
 }
 
@@ -275,20 +285,21 @@ fn generate_member_format_string(member_name: &str, member: &Member) -> Option<S
                     ))
                 }
             }
-        },
+        }
         Some(_) | None => None,
     }
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
-    operation.documentation.as_ref().map(|docs| {
-        format!("#[doc=\"{}\"]", docs.replace("\"", "\\\""))
-    })
+    operation.documentation
+        .as_ref()
+        .map(|docs| format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")))
 }
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("Ok(serde_json::from_str::<{}>(&body).unwrap())", output_type)
+        format!("Ok(serde_json::from_str::<{}>(&body).unwrap())",
+                output_type)
     } else {
         "Ok(())".to_owned()
     }

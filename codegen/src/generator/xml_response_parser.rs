@@ -34,8 +34,7 @@ pub fn generate_response_parser(service: &Service, operation: &Operation) -> Str
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
-    let output_shape = service.shapes.get(shape_name).unwrap();
-
+    let output_shape = &service.shapes[shape_name];
 
     let mut response_headers_parser = "".to_owned();
     let mut mutable_result = false;
@@ -48,24 +47,23 @@ pub fn generate_response_parser(service: &Service, operation: &Operation) -> Str
     // if the 'payload' field on the output shape is a blob or string, it indicates that
     // the entire payload is set as one of the struct members, and not parsed
     let body_parser = match output_shape.payload {
-        None => xml_body_parser(&shape_name, mutable_result),
+        None => xml_body_parser(shape_name, mutable_result),
         Some(ref payload_member) => {
-            let payload_shape = service.shapes.get(payload_member).unwrap();
+            let payload_shape = &service.shapes[payload_member];
             match payload_shape.shape_type {
                 payload_type if payload_type == ShapeType::Blob ||
                                 payload_type == ShapeType::String => {
-                    payload_body_parser(payload_type, &shape_name, payload_member)
+                    payload_body_parser(payload_type, shape_name, payload_member)
                 }
-                _ => xml_body_parser(&shape_name, mutable_result),
+                _ => xml_body_parser(shape_name, mutable_result),
             }
 
         }
     };
 
-    format!("
-        {body_parser}
-        {response_headers_parser}
-        Ok(result)",
+    format!("{body_parser}
+            {response_headers_parser}
+            Ok(result)",
             body_parser = body_parser,
             response_headers_parser = response_headers_parser)
 }
@@ -121,7 +119,7 @@ fn generate_response_headers_parser(service: &Service, operation: &Operation) ->
         return None;
     }
 
-    let shape = service.shapes.get(&operation.output.as_ref().unwrap().shape).unwrap();
+    let shape = &service.shapes[&operation.output.as_ref().unwrap().shape];
     let members = shape.members.as_ref().unwrap();
 
     let parser_pieces = members.iter()
@@ -131,21 +129,19 @@ fn generate_response_headers_parser(service: &Service, operation: &Operation) ->
             }
 
             let member_shape_name = &member.shape;
-            let member_shape = service.shapes.get(member_shape_name).unwrap();
+            let member_shape = &service.shapes[member_shape_name];
 
-            if shape.required(&member_name) {
-                Some(format!("
-                let value = response.headers.get(\"{location_name}\").unwrap().to_owned();
-                result.{field_name} = {primitive_parser};",
+            if shape.required(member_name) {
+                Some(format!("let value = response.headers.get(\"{location_name}\").unwrap().to_owned();
+                              result.{field_name} = {primitive_parser};",
                              location_name = member.location_name.as_ref().unwrap(),
                              field_name = member_name.to_snake_case(),
                              primitive_parser = generate_header_primitive_parser(&member_shape)))
             } else {
-                Some(format!("
-                if let Some({field_name}) = response.headers.get(\"{location_name}\") {{
-                    let value = {field_name}.to_owned();
-                    result.{field_name} = Some({primitive_parser})
-                }}",
+                Some(format!("if let Some({field_name}) = response.headers.get(\"{location_name}\") {{
+                                let value = {field_name}.to_owned();
+                                result.{field_name} = Some({primitive_parser})
+                              }}",
                              location_name = member.location_name.as_ref().unwrap(),
                              field_name = member_name.to_snake_case(),
                              primitive_parser = generate_header_primitive_parser(&member_shape)))
@@ -154,7 +150,7 @@ fn generate_response_headers_parser(service: &Service, operation: &Operation) ->
         })
         .collect::<Vec<String>>();
 
-    if parser_pieces.len() > 0 {
+    if !parser_pieces.is_empty() {
         Some(parser_pieces.join("\n"))
     } else {
         None
@@ -195,7 +191,7 @@ fn generate_list_deserializer(shape: &Shape) -> String {
     let location_name = shape.member
         .as_ref()
         .and_then(|m| m.location_name.to_owned())
-        .unwrap_or(shape.member_type().to_owned());
+        .unwrap_or_else(|| shape.member_type().to_owned());
 
     format!("
         let mut obj = vec![];
@@ -251,7 +247,7 @@ fn generate_flat_list_deserializer(shape: &Shape) -> String {
 
         Ok(obj)
         ",
-        member_name = mutate_type_name(shape.member_type()))
+            member_name = mutate_type_name(shape.member_type()))
 }
 
 fn generate_map_deserializer(shape: &Shape) -> String {

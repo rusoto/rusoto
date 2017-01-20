@@ -91,7 +91,8 @@ impl GenerateProtocol for RestXmlGenerator {
                 Close,
                 Skip,
                 Element(String),
-            }".to_owned();
+            }"
+            .to_owned();
 
         if service.service_type_name() == "S3" {
             imports += "
@@ -102,7 +103,11 @@ impl GenerateProtocol for RestXmlGenerator {
         imports
     }
 
-    fn generate_struct_attributes(&self, _struct_name: &str, _serialized: bool, deserialized: bool) -> String {
+    fn generate_struct_attributes(&self,
+                                  _struct_name: &str,
+                                  _serialized: bool,
+                                  deserialized: bool)
+                                  -> String {
         let mut derived = vec!["Default"];
 
         if deserialized {
@@ -114,7 +119,7 @@ impl GenerateProtocol for RestXmlGenerator {
 
     fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
         if name != "RestoreRequest" && name.ends_with("Request") {
-            return "".to_string()
+            return "".to_string();
         }
 
         format!("
@@ -156,7 +161,7 @@ fn generate_method_input_serialization(service: &Service, operation: &Operation)
         return None;
     }
 
-    let input_shape = service.shapes.get(&operation.input.as_ref().unwrap().shape).unwrap();
+    let input_shape = &service.shapes[&operation.input.as_ref().unwrap().shape];
 
     let mut parts: Vec<String> = Vec::new();
 
@@ -174,7 +179,7 @@ fn generate_uri_modification(service: &Service, operation: &Operation) -> Option
         return None;
     }
 
-    let shape = service.shapes.get(&operation.input.as_ref().unwrap().shape).unwrap();
+    let shape = &service.shapes[&operation.input.as_ref().unwrap().shape];
 
     Some(shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
         if member.location.is_none() {
@@ -182,7 +187,7 @@ fn generate_uri_modification(service: &Service, operation: &Operation) -> Option
         }
         match &member.location.as_ref().unwrap()[..] {
             "uri" => {
-                if shape.required(&member_name) {
+                if shape.required(member_name) {
                     Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name}.to_string());",
                         location_name = member.location_name.as_ref().unwrap(),
                         field_name = generate_field_name(member_name)))
@@ -203,7 +208,7 @@ fn generate_headers(service: &Service, operation: &Operation) -> Option<String> 
         return None;
     }
 
-    let shape = service.shapes.get(&operation.input.as_ref().unwrap().shape).unwrap();
+    let shape = &service.shapes[&operation.input.as_ref().unwrap().shape];
 
     Some(shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
         if member.location.is_none() {
@@ -211,7 +216,7 @@ fn generate_headers(service: &Service, operation: &Operation) -> Option<String> 
         }
         match &member.location.as_ref().unwrap()[..] {
             "header" => {
-                if shape.required(&member_name) {
+                if shape.required(member_name) {
                     Some(format!("request.add_header(\"{location_name}\", &input.{field_name});",
                         location_name = member.location_name.as_ref().unwrap(),
                         field_name = member_name.to_snake_case()))
@@ -235,12 +240,12 @@ fn generate_parameters(service: &Service, operation: &Operation) -> Option<Strin
         return None;
     }
 
-    let shape = service.shapes.get(&operation.input.as_ref().unwrap().shape).unwrap();
+    let shape = &service.shapes[&operation.input.as_ref().unwrap().shape];
 
     Some(shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
         match member.location.as_ref().to_owned() {
             Some(location) if location == "querystring" => {
-                if shape.required(&member_name) {
+                if shape.required(member_name) {
                     Some(format!("params.put(\"{location_name}\", &input.{field_name}.to_string());",
                         location_name = member.location_name.as_ref().unwrap(),
                         field_name = member_name.to_snake_case()))
@@ -311,20 +316,19 @@ fn generate_payload_serialization(shape: &Shape) -> String {
                 payload_field.to_snake_case())
     }
     // otherwise serialize the object to XML and use that as the payload
-    else {
+    else if shape.required(payload_field) {
         // some payload types are not required members of their shape
-        if shape.required(&payload_field) {
-            format!("payload = Some({xml_type}Serializer::serialize(\"{xml_type}\", &input.{payload_field}).into_bytes());",
-                    payload_field = payload_field.to_snake_case(),
-                    xml_type = payload_member.shape)
-        } else {
-            format!("if input.{payload_field}.is_some() {{
+        format!("payload = Some({xml_type}Serializer::serialize(\"{xml_type}\", &input.{payload_field}).into_bytes());",
+                payload_field = payload_field.to_snake_case(),
+                xml_type = payload_member.shape)
+    } else {
+        format!("if input.{payload_field}.is_some() {{
                     payload = Some({xml_type}Serializer::serialize(\"{xml_type}\", input.{payload_field}.as_ref().unwrap()).into_bytes());
                 }}",
-                    payload_field = payload_field.to_snake_case(),
-                    xml_type = payload_member.shape)
-        }
+                payload_field = payload_field.to_snake_case(),
+                xml_type = payload_member.shape)
     }
+
 }
 
 fn generate_method_signature(operation_name: &str, operation: &Operation) -> String {
@@ -632,10 +636,10 @@ fn generate_list_serializer(shape: &Shape) -> String {
     };
 
     let element_type = &mutate_type_name(&shape.member_type()[..]);
-    let mut serializer = format!("let mut parts: Vec<String> = Vec::new();");
+    let mut serializer = "let mut parts: Vec<String> = Vec::new();".to_owned();
 
     if !flattened {
-        serializer += &format!("parts.push(format!(\"<{{}}>\", name));");
+        serializer += "parts.push(format!(\"<{}>\", name));";
     }
 
     serializer += &format!("
@@ -645,7 +649,7 @@ fn generate_list_serializer(shape: &Shape) -> String {
                            element_type = element_type);
 
     if !flattened {
-        serializer += &format!("parts.push(format!(\"</{{}}>\", name));");
+        serializer += "parts.push(format!(\"</{}>\", name));";
     }
 
     serializer += "parts.join(\"\")";
@@ -657,7 +661,7 @@ fn generate_map_serializer(_shape: &Shape) -> String {
 }
 
 fn generate_struct_serializer(shape: &Shape, service: &Service) -> String {
-    let mut serializer = format!("let mut serialized = format!(\"<{{name}}>\", name=name);");
+    let mut serializer = "let mut serialized = format!(\"<{name}>\", name=name);".to_owned();
 
     for (member_name, member) in shape.members.as_ref().unwrap().iter() {
         // look up member.shape in all_shapes.  use that shape.member.location_name
@@ -683,7 +687,7 @@ fn generate_struct_serializer(shape: &Shape, service: &Service) -> String {
         }
     }
 
-    serializer += &format!("serialized += &format!(\"</{{name}}>\", name=name);");
+    serializer += "serialized += &format!(\"</{name}>\", name=name);";
     serializer += "serialized";
     serializer
 }
@@ -692,7 +696,7 @@ fn generate_primitive_struct_field_serializer(shape: &Shape,
                                               location_name: &str,
                                               member_name: &str)
                                               -> String {
-    if shape.required(&member_name) {
+    if shape.required(member_name) {
         format!(
             "serialized += &format!(\"<{location_name}>{{value}}</{location_name}>\", value=obj.{field_name});",
             field_name = generate_field_name(member_name),
@@ -714,7 +718,7 @@ fn generate_complex_struct_field_serializer(shape: &Shape,
                                             location_name: &str,
                                             member_name: &str)
                                             -> String {
-    if shape.required(&member_name) {
+    if shape.required(member_name) {
         format!("serialized += &{xml_type}Serializer::serialize(\"{location_name}\", &obj.{field_name});",
                 xml_type = member.shape,
                 location_name = location_name,

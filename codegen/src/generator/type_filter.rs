@@ -24,18 +24,17 @@ fn recurse_find_shapes(service: &Service, types: &mut HashSet<String>, shape_nam
     match shape.shape_type {
         ShapeType::Structure => {
             if let Some(ref members) = shape.members {
-                for (_, member) in members {
-                    //let member_shape = service.shapes.get(member.shape).expect("Shape type missing from service definition");
+                for member in members.values() {
                     if !types.contains(&member.shape) {
                         recurse_find_shapes(service, types, &member.shape);
                     }
                 }
             }
-        },
+        }
         ShapeType::Map => {
             recurse_find_shapes(service, types, shape.key_type());
             recurse_find_shapes(service, types, shape.value_type());
-        },
+        }
         ShapeType::List => {
             recurse_find_shapes(service, types, shape.member_type());
         }
