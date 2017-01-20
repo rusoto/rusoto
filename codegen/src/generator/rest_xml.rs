@@ -83,7 +83,7 @@ impl GenerateProtocol for RestXmlGenerator {
             use param::{Params, ServiceParams};
             use signature::SignedRequest;
             use xml::EventReader;
-            use xml::reader::events::XmlEvent;
+            use xml::reader::XmlEvent;
             use xmlerror::*;
             use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
@@ -405,9 +405,9 @@ fn xml_body_parser(output_shape: &str) -> String {
         if response.body.is_empty() {{
             result = {output_shape}::default();
         }} else {{
-            let mut reader = EventReader::from_str(&response.body);
-            let mut stack = XmlResponse::new(reader.events().peekable());
-            let _start_document = stack.next();         
+            let reader = EventReader::from_str(&response.body);
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            let _start_document = stack.next();
             let actual_tag_name = try!(peek_at_name(&mut stack));
             result = try!({output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack));
         }}",
@@ -520,8 +520,8 @@ fn generate_list_deserializer(shape: &Shape) -> String {
 
         loop {{
             let next_event = match stack.peek() {{
-                Some(&XmlEvent::EndElement {{ .. }}) => DeserializerNext::Close,
-                Some(&XmlEvent::StartElement {{ ref name, .. }}) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::EndElement {{ .. }})) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => DeserializerNext::Element(name.local_name.to_owned()),
                 _ => DeserializerNext::Skip,
             }};
 
@@ -554,7 +554,7 @@ fn generate_flat_list_deserializer(shape: &Shape) -> String {
         loop {{
 
             let consume_next_tag = match stack.peek() {{
-                Some(&XmlEvent::StartElement {{ ref name, .. }}) => name.local_name == tag_name,
+                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => name.local_name == tag_name,
                 _ => false
             }};
 
@@ -660,8 +660,8 @@ fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
 
         loop {{
             let next_event = match stack.peek() {{
-                Some(&XmlEvent::EndElement {{ .. }}) => DeserializerNext::Close,   // TODO verify that we received the expected tag?
-                Some(&XmlEvent::StartElement {{ ref name, .. }}) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::EndElement {{ .. }})) => DeserializerNext::Close,   // TODO verify that we received the expected tag?
+                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => DeserializerNext::Element(name.local_name.to_owned()),
                 _ => DeserializerNext::Skip,
             }};
 

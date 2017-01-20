@@ -5,7 +5,7 @@ include!(concat!(env!("OUT_DIR"), "/s3.rs"));
 #[cfg(test)]
 mod test {
     use std::io::{Read, BufReader};
-    use std::fs::File;    
+    use std::fs::File;
     use s3::{S3Client, HeadObjectRequest, GetObjectRequest, ListMultipartUploadsRequest};
     use s3::{CreateMultipartUploadOutputDeserializer, CompleteMultipartUploadOutputDeserializer};
     use s3::{ListMultipartUploadsOutputDeserializer, ListPartsRequest, Initiator, Owner};
@@ -23,8 +23,8 @@ mod test {
         let mut file = BufReader::new(file);
         let mut raw = String::new();
         file.read_to_string(&mut raw).unwrap();
-        let mut my_parser  = EventReader::from_str(&raw);
-        let my_stack = my_parser.events().peekable();
+        let my_parser  = EventReader::from_str(&raw);
+        let my_stack = my_parser.into_iter().peekable();
         let mut reader = XmlResponse::new(my_stack);
         reader.next(); // xml start node
         let result = CreateMultipartUploadOutputDeserializer::deserialize("InitiateMultipartUploadResult", &mut reader);
@@ -45,8 +45,8 @@ mod test {
         let mut file = BufReader::new(file);
         let mut raw = String::new();
         file.read_to_string(&mut raw).unwrap();
-        let mut my_parser  = EventReader::from_str(&raw);
-        let my_stack = my_parser.events().peekable();
+        let my_parser  = EventReader::from_str(&raw);
+        let my_stack = my_parser.into_iter().peekable();
         let mut reader = XmlResponse::new(my_stack);
         reader.next(); // xml start node
         let result = CompleteMultipartUploadOutputDeserializer::deserialize("CompleteMultipartUploadResult", &mut reader);
@@ -67,8 +67,8 @@ mod test {
         let mut file = BufReader::new(file);
         let mut raw = String::new();
         file.read_to_string(&mut raw).unwrap();
-        let mut my_parser  = EventReader::from_str(&raw);
-        let my_stack = my_parser.events().peekable();
+        let my_parser  = EventReader::from_str(&raw);
+        let my_stack = my_parser.into_iter().peekable();
         let mut reader = XmlResponse::new(my_stack);
         reader.next(); // xml start node
         let result = ListMultipartUploadsOutputDeserializer::deserialize("ListMultipartUploadsResult", &mut reader);

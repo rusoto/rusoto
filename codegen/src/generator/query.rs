@@ -169,11 +169,11 @@ fn generate_xml_stack_loader(output_type: &str) -> String {
         "".to_owned()
     } else {
         format!(
-            "let mut reader = EventReader::with_config(
+            "let reader = EventReader::new_with_config(
                 result.body.as_bytes(),
                 ParserConfig::new().trim_whitespace(true)
             );
-            let mut stack = XmlResponse::new(reader.events().peekable());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
 
             // Look through the stack for the `StartElement` `XmlEvent` for the
             // `{output_type}`. This is necessary so that we being deserializing at the
