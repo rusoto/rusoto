@@ -57,9 +57,9 @@ script:
   - |
       echo "Setting Rusoto compilation arguments" &&
       if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
-        export CARGO_ARGS="--no-default-features --features $RUSOTO_FEATURES"
+        export CARGO_ARGS="--no-default-features --features $RUSOTO_FEATURES -vv"
       else
-        export CARGO_ARGS="--features $RUSOTO_FEATURES"
+        export CARGO_ARGS="--features $RUSOTO_FEATURES -vv"
       fi
   - echo "Compiling all of Rusoto" && travis_wait 30 travis-cargo build -- $CARGO_ARGS
   - echo "Running Rusoto tests" && travis_wait travis-cargo test -- --lib $CARGO_ARGS
