@@ -4,11 +4,10 @@ os: Visual Studio 2015
 
 environment:
   global:
-    # This will be used as part of the zipfile name
     PROJECT_NAME: rusoto
   matrix:
     - TARGET: x86_64-pc-windows-msvc
-      CHANNEL: stable
+      CHANNEL: beta
 cache:
   - 'C:\Users\appveyor\.cargo'
 # Install Rust and Cargo
