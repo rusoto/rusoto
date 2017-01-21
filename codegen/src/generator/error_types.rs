@@ -217,7 +217,7 @@ impl GenerateErrorTypes for JsonErrorTypes {
     }
 
     fn generate_error_from_type_impl(&self, operation_name: &str) -> String {
-        format!("            
+        format!("
             impl From<serde_json::error::Error> for {type_name} {{
                 fn from(err: serde_json::error::Error) -> {type_name} {{
                     {type_name}::Unknown(err.description().to_string())

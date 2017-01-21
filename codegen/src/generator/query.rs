@@ -53,7 +53,7 @@ impl GenerateProtocol for QueryGenerator {
         use xml::reader::ParserConfig;
         use param::{Params, ServiceParams};
         use signature::SignedRequest;
-        use xml::reader::events::XmlEvent;
+        use xml::reader::XmlEvent;
         use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
         use xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
         use xmlerror::*;
@@ -63,8 +63,7 @@ impl GenerateProtocol for QueryGenerator {
             Skip,
             Element(String),
         }
-        "
-            .to_owned()
+        ".to_owned()
     }
 
     fn generate_struct_attributes(&self,

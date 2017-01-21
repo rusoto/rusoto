@@ -99,11 +99,11 @@ fn xml_body_parser(output_shape: &str, mutable_result: bool) -> String {
         if response.body.is_empty() {{
             result = {output_shape}::default();
         }} else {{
-            let mut reader = EventReader::with_config(
+            let reader = EventReader::new_with_config(
                 response.body.as_bytes(),
                 ParserConfig::new().trim_whitespace(true)
             );
-            let mut stack = XmlResponse::new(reader.events().peekable());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
             let actual_tag_name = try!(peek_at_name(&mut stack));
             result = try!({output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack));
@@ -199,8 +199,8 @@ fn generate_list_deserializer(shape: &Shape) -> String {
 
         loop {{
             let next_event = match stack.peek() {{
-                Some(&XmlEvent::EndElement {{ .. }}) => DeserializerNext::Close,
-                Some(&XmlEvent::StartElement {{ ref name, .. }}) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::EndElement {{ .. }})) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => DeserializerNext::Element(name.local_name.to_owned()),
                 _ => DeserializerNext::Skip,
             }};
 
@@ -233,7 +233,7 @@ fn generate_flat_list_deserializer(shape: &Shape) -> String {
         loop {{
 
             let consume_next_tag = match stack.peek() {{
-                Some(&XmlEvent::StartElement {{ ref name, .. }}) => name.local_name == tag_name,
+                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => name.local_name == tag_name,
                 _ => false
             }};
 
@@ -332,8 +332,8 @@ fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
 
         loop {{
             let next_event = match stack.peek() {{
-                Some(&XmlEvent::EndElement {{ .. }}) => DeserializerNext::Close,   // TODO verify that we received the expected tag?
-                Some(&XmlEvent::StartElement {{ ref name, .. }}) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::EndElement {{ .. }})) => DeserializerNext::Close,   // TODO verify that we received the expected tag?
+                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => DeserializerNext::Element(name.local_name.to_owned()),
                 _ => DeserializerNext::Skip,
             }};
 
