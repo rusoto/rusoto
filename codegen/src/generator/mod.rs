@@ -31,12 +31,12 @@ pub trait GenerateProtocol {
 
     fn timestamp_type(&self) -> &'static str;
 
-    fn generate_serializer(&self, _name: &str, _shape: &Shape, _service: &Service) -> String {
-        "".to_owned()
+    fn generate_serializer(&self, _name: &str, _shape: &Shape, _service: &Service) -> Option<String> {
+        None
     }
 
-    fn generate_deserializer(&self, _name: &str, _shape: &Shape, _service: &Service) -> String {
-        "".to_owned()
+    fn generate_deserializer(&self, _name: &str, _shape: &Shape, _service: &Service) -> Option<String> {
+        None
     }
 }
 
@@ -206,11 +206,15 @@ fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
             }
 
             if deserialized {
-                parts.push(protocol_generator.generate_deserializer(&type_name, shape, service));
+                if let Some(deserializer) = protocol_generator.generate_deserializer(&type_name, shape, service) {
+                    parts.push(deserializer);
+                }
             }
 
             if serialized {
-                parts.push(protocol_generator.generate_serializer(&type_name, shape, service));
+                if let Some(serializer) = protocol_generator.generate_serializer(&type_name, shape, service) {
+                    parts.push(serializer);
+                }
             }
 
             Some(parts.join("\n"))

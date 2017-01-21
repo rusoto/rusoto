@@ -74,11 +74,13 @@ impl GenerateProtocol for QueryGenerator {
         xml_response_parser::generate_struct_attributes(deserialized)
     }
 
-    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
+    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
         if shape.is_primitive() {
-            return "".to_owned();
+           return None;
         }
-        format!("
+
+        Some(
+            format!("
             /// Serialize `{name}` contents to a `SignedRequest`.
             struct {name}Serializer;
             impl {name}Serializer {{
@@ -87,13 +89,15 @@ impl GenerateProtocol for QueryGenerator {
                 }}
             }}
             ",
-                name = name,
-                serializer_signature = generate_serializer_signature(name, shape),
-                serializer_body = generate_serializer_body(service, shape))
+            name = name,
+            serializer_signature = generate_serializer_signature(name, shape),
+            serializer_body = generate_serializer_body(service, shape)
+            )
+        )
     }
 
-    fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
-        xml_response_parser::generate_deserializer(name, shape, service)
+    fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
+        Some(xml_response_parser::generate_deserializer(name, shape, service))
     }
 
     fn timestamp_type(&self) -> &'static str {

@@ -117,12 +117,13 @@ impl GenerateProtocol for RestXmlGenerator {
         format!("#[derive({})]", derived.join(","))
     }
 
-    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
+    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
         if name != "RestoreRequest" && name.ends_with("Request") {
-            return "".to_string();
+            return None;
         }
 
-        format!("
+        Some(
+            format!("
                 pub struct {name}Serializer;
                 impl {name}Serializer {{
                     {serializer_signature} {{
@@ -134,10 +135,11 @@ impl GenerateProtocol for RestXmlGenerator {
                 serializer_body = generate_serializer_body(shape, service),
                 serializer_signature = generate_serializer_signature(name),
             )
+        )
     }
 
-    fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> String {
-        xml_response_parser::generate_deserializer(name, shape, service)
+    fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
+        Some(xml_response_parser::generate_deserializer(name, shape, service))
     }
 
     fn timestamp_type(&self) -> &'static str {
