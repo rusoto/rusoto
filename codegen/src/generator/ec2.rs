@@ -75,7 +75,7 @@ impl GenerateProtocol for Ec2Generator {
     }
 
     fn generate_struct_attributes(&self, _struct_name: &str) -> String {
-        "#[derive(Debug, Default, Clone)]".to_owned()
+        "#[derive(Debug, Default)]".to_owned()
     }
 
     fn generate_support_types(&self, name: &str, shape: &Shape, _service: &Service) -> Option<String> {

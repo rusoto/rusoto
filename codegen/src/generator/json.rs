@@ -62,9 +62,9 @@ impl GenerateProtocol for JsonGenerator {
             return "#[derive(Default, Serialize)]".to_owned();
         }
         if can_skip_serializer(struct_name) {
-            return "#[derive(Default, Debug, Deserialize, Clone)]".to_owned();
+            return "#[derive(Default, Debug, Deserialize)]".to_owned();
         }
-        "#[derive(Default, Debug, Deserialize, Serialize, Clone)]".to_owned()
+        "#[derive(Default, Debug, Deserialize, Serialize)]".to_owned()
     }
 
     fn timestamp_type(&self) -> &'static str {
