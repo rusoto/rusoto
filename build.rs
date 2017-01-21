@@ -1,13 +1,14 @@
 extern crate rustc_version;
 extern crate rusoto_codegen;
+extern crate rayon;
 
 use std::env;
 use std::path::Path;
 use std::io::Write;
 use std::fs::File;
-use std::thread;
 
 use rusoto_codegen::{Service, generate};
+use rayon::prelude::*;
 
 /// Parses and generates variables used to construct a User-Agent.
 ///
@@ -91,20 +92,8 @@ fn main() {
         ["workspaces", "2015-04-08"]
     };
 
-    let mut generate_threads = vec![];
-    for service in services {
-        let thread_outpath = out_path.clone();
-        generate_threads.push(thread::spawn(move || {
-            generate(service, &thread_outpath);
-        }));
-    }
-
-    for child_thread in generate_threads {
-        match child_thread.join() {
-            Ok(_) => {},
-            Err(err) => panic!(err)
-        }
-    }
+    let count: usize = services.into_par_iter().map(|service| generate(service, &out_path.clone())).count();
+    println!("Generated {:?} services.", count);
 
     generate_user_agent_vars(&out_path);
 
