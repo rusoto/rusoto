@@ -93,7 +93,7 @@ fn main() {
     };
 
     let count: usize = services.into_par_iter().map(|service| generate(service, &out_path.clone())).count();
-    println!("Generated {:?} services.", count);
+    println!("\nGenerated {:?} services.\n", count);
 
     generate_user_agent_vars(&out_path);
 
