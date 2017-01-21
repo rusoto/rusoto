@@ -2,14 +2,13 @@ use inflector::Inflector;
 use regex::{Captures, Regex};
 use hyper::status::StatusCode;
 use botocore::{Member, Operation, Service, Shape};
-use super::GenerateProtocol;
-use super::error_type_name;
+use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, write};
 
 pub struct RestJsonGenerator;
 
 impl GenerateProtocol for RestJsonGenerator {
-    fn generate_methods(&self, service: &Service) -> String {
-        service.operations.iter().map(|(operation_name, operation)| {
+    fn generate_methods(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+        for (operation_name, operation) in service.operations.iter() {
             let input_type = operation.input_shape();
             let output_type = operation.output_shape_or("()");
 
@@ -36,7 +35,7 @@ impl GenerateProtocol for RestJsonGenerator {
             // then be added to the request.
             let member_param_strings = generate_shape_member_param_strings(input_shape);
 
-            format!("
+            write(writer, format!("
                 {documentation}
                 {method_signature} -> Result<{output_type}, {error_type}> {{
                     {encode_input}
@@ -88,18 +87,18 @@ impl GenerateProtocol for RestJsonGenerator {
                 load_payload = generate_payload_loading_string(load_payload),
                 load_params = generate_params_loading_string(&member_param_strings),
                 encode_input = generate_encoding_string(load_payload),
-            )
-        }).collect::<Vec<String>>().join("\n")
+            ))?
+        }
+        Ok(())
     }
 
-    fn generate_prelude(&self, _: &Service) -> String {
-        "use param::{Params, ServiceParams};
+    fn generate_prelude(&self, writer: &mut FileWriter, _: &Service) -> IoResult {
+        write(writer, "use param::{Params, ServiceParams};
         use signature::SignedRequest;
         use serde_json;
         use serde_json::from_str;
-        use serde_json::Value as SerdeJsonValue;
-        "
-            .to_owned()
+        use serde_json::Value as SerdeJsonValue;")
+
     }
 
     fn generate_struct_attributes(&self,

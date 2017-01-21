@@ -3,13 +3,14 @@ use inflector::Inflector;
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::{xml_response_parser, mutate_type_name};
 use super::{GenerateProtocol, generate_field_name, error_type_name};
+use super::{IoResult, FileWriter, write};
 
 pub struct RestXmlGenerator;
 
 impl GenerateProtocol for RestXmlGenerator {
-    fn generate_methods(&self, service: &Service) -> String {
+    fn generate_methods(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
 
-        service.operations.iter().map(|(operation_name, operation)| {
+        for (operation_name, operation) in service.operations.iter() {
 
             // botocore includes + for greedy parameters and we don't care about it
             let (request_uri, maybe_params) = parse_query_string(&operation.http.request_uri);
@@ -19,7 +20,7 @@ impl GenerateProtocol for RestXmlGenerator {
                  _ => "".to_owned()
             };
 
-            format!(
+            write(writer, format!(
                 "{documentation}
                 #[allow(unused_variables, warnings)]
                 {method_signature} {{
@@ -72,11 +73,12 @@ impl GenerateProtocol for RestXmlGenerator {
                 set_parameters = generate_parameters(service, operation).unwrap_or("".to_string()),
                 parse_response = xml_response_parser::generate_response_parser(service, operation),
                 service_specifics = generate_service_specific_code(service, operation).unwrap_or("".to_string())
-            )
-        }).collect::<Vec<String>>().join("\n")
+            ))?;
+        }
+        Ok(())
     }
 
-    fn generate_prelude(&self, service: &Service) -> String {
+    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
         let mut imports = "
             use std::str::{FromStr};
             use xml::reader::ParserConfig;
@@ -100,7 +102,7 @@ impl GenerateProtocol for RestXmlGenerator {
                 use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};";
         }
 
-        imports
+        write(writer, imports)
     }
 
     fn generate_struct_attributes(&self,

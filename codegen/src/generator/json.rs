@@ -1,18 +1,17 @@
 use inflector::Inflector;
 
 use botocore::{Operation, Service};
-use super::GenerateProtocol;
-use super::error_type_name;
+use super::{GenerateProtocol, error_type_name, IoResult, FileWriter, write};
 
 pub struct JsonGenerator;
 
 impl GenerateProtocol for JsonGenerator {
-    fn generate_methods(&self, service: &Service) -> String {
-        service.operations.iter().map(|(operation_name, operation)| {
+    fn generate_methods(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+        for (operation_name, operation) in service.operations.iter() {
 
             let output_type = operation.output_shape_or("()");
 
-            format!("
+            write(writer, format!("
                 {documentation}
                 {method_signature} -> Result<{output_type}, {error_type}> {{
                     {payload}
@@ -45,16 +44,16 @@ impl GenerateProtocol for JsonGenerator {
                 json_version = service.metadata.json_version.as_ref().unwrap(),
                 error_type = error_type_name(operation_name),
                 output_type = output_type
-            )
-        }).collect::<Vec<String>>().join("\n")
+            ))?;
+        }
+        Ok(())
     }
 
-    fn generate_prelude(&self, _service: &Service) -> String {
-        "use serde_json;
+    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service) -> IoResult {
+        write(writer, "use serde_json;
         use signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
-        use serde_json::from_str;"
-            .to_string()
+        use serde_json::from_str;")
     }
 
     fn generate_struct_attributes(&self,

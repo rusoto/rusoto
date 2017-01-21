@@ -1,6 +1,5 @@
 use std::fs::File;
 use std::io::{Write, BufWriter};
-use std::io::Result as IoResult;
 use std::path::Path;
 
 use inflector::Inflector;
@@ -23,10 +22,13 @@ mod rest_xml;
 mod xml_response_parser;
 mod type_filter;
 
-pub trait GenerateProtocol {
-    fn generate_methods(&self, service: &Service) -> String;
+type FileWriter = BufWriter<File>;
+type IoResult = ::std::io::Result<()>;
 
-    fn generate_prelude(&self, service: &Service) -> String;
+pub trait GenerateProtocol {
+    fn generate_methods(&self, writer: &mut FileWriter, service: &Service) -> IoResult;
+
+    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service) -> IoResult;
 
     fn generate_struct_attributes(&self,
                                   struct_name: &str,
@@ -45,7 +47,7 @@ pub trait GenerateProtocol {
     }
 }
 
-pub fn generate_source(service: &Service, output_path: &Path) -> IoResult<()> {
+pub fn generate_source(service: &Service, output_path: &Path) -> IoResult {
     let output_file = File::create(output_path).expect(&format!(
         "Couldn't open file for writing: {:?}",
         output_path,
@@ -62,14 +64,13 @@ pub fn generate_source(service: &Service, output_path: &Path) -> IoResult<()> {
     }
 }
 
-fn write <W>(writer: &mut BufWriter<W>, source_code: &str) -> IoResult<()> where W: Write  {
-    writer.write_all(source_code.as_bytes())
+pub fn write <S>(writer: &mut FileWriter, source_code: S) -> IoResult where S: Into<String>  {
+    writer.write_all(source_code.into().as_bytes())
 }
 
-fn generate<P, E, W>(writer: &mut BufWriter<W>, service: &Service, protocol_generator: P, error_type_generator: E) -> IoResult<()>
+fn generate<P, E>(writer: &mut FileWriter, service: &Service, protocol_generator: P, error_type_generator: E) -> IoResult
     where P: GenerateProtocol,
-          E: GenerateErrorTypes,
-          W: Write {
+          E: GenerateErrorTypes {
 
     write(writer, "#[allow(warnings)]
         use hyper::Client;
@@ -82,19 +83,19 @@ fn generate<P, E, W>(writer: &mut BufWriter<W>, service: &Service, protocol_gene
         use request::HttpDispatchError;
         use rusoto_credential::{CredentialsError, ProvideAwsCredentials};
     ")?;
-    write(writer, &protocol_generator.generate_prelude(service))?;
-    write(writer, &generate_types(service, &protocol_generator))?;
-    write(writer, &error_type_generator.generate_error_types(service)
+    protocol_generator.generate_prelude(writer, service)?;
+    generate_types(writer, service, &protocol_generator)?;
+    write(writer, error_type_generator.generate_error_types(service)
         .unwrap_or_else(|| "".to_string()))?;
-    write(writer, &generate_client(service, &protocol_generator))?;
-    write(writer, &generate_tests(service).unwrap_or_else(|| "".to_string()))?;
+    generate_client(writer, service, &protocol_generator)?;
+    write(writer, generate_tests(service).unwrap_or_else(|| "".to_owned()))?;
     Ok(())
 
 }
 
-fn generate_client<P>(service: &Service, protocol_generator: &P) -> String
+fn generate_client<P>(writer: &mut FileWriter, service: &Service, protocol_generator: &P) -> IoResult
     where P: GenerateProtocol {
-    format!(
+    write(writer, format!(
         "/// A client for the {service_name} API.
         pub struct {type_name}<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {{
             credentials_provider: P,
@@ -110,16 +111,16 @@ fn generate_client<P>(service: &Service, protocol_generator: &P) -> String
                     dispatcher: request_dispatcher
                 }}
             }}
-            {methods}
-        }}
+
         ",
-        methods = protocol_generator.generate_methods(service),
         service_name = match &service.metadata.service_abbreviation {
             &Some(ref service_abbreviation) => service_abbreviation.as_str(),
             &None => service.metadata.service_full_name.as_ref()
         },
         type_name = service.client_type_name(),
-    )
+    ))?;
+    protocol_generator.generate_methods(writer, service)?;
+    write(writer, "}")
 }
 
 fn generate_list(name: &str, shape: &Shape) -> String {
@@ -172,28 +173,23 @@ fn mutate_type_name(type_name: &str) -> String {
     }
 }
 
-fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
+fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_generator: &P) -> IoResult
     where P: GenerateProtocol {
 
     let (serialized_types, deserialized_types) = filter_types(service);
 
-    service.shapes
-        .iter()
-        .filter_map(|(name, shape)| {
-
-            let type_name = mutate_type_name(name);
+    for (name, shape) in &service.shapes {
+            let type_name = mutate_type_name(&name);
 
             // We generate enums for error types, so no need to create model objects for them
             if shape.exception() {
-                return None;
+                continue;
             }
-
-            let mut parts = Vec::with_capacity(4);
 
             // If botocore includes documentation, clean it up a bit and use it
             if let Some(ref docs) = shape.documentation {
-                parts.push(format!("#[doc=\"{}\"]",
-                                   docs.replace("\\", "\\\\").replace("\"", "\\\"")));
+                write(writer, format!("#[doc=\"{}\"]",
+                                   docs.replace("\\", "\\\\").replace("\"", "\\\"")))?;
             }
 
             let deserialized = deserialized_types.contains(&type_name);
@@ -201,41 +197,39 @@ fn generate_types<P>(service: &Service, protocol_generator: &P) -> String
 
             // generate a rust type for the shape
             if type_name != "String" {
-                match shape.shape_type {
+                let generated_type = match shape.shape_type {
                     ShapeType::Structure => {
-                        parts.push(generate_struct(service,
+                        generate_struct(service,
                                                    &type_name,
-                                                   shape,
+                                                   &shape,
                                                    serialized,
                                                    deserialized,
-                                                   protocol_generator))
+                                                   protocol_generator)
                     }
-                    ShapeType::Map => parts.push(generate_map(&type_name, shape)),
-                    ShapeType::List => parts.push(generate_list(&type_name, shape)),
+                    ShapeType::Map => generate_map(&type_name, &shape),
+                    ShapeType::List => generate_list(&type_name, &shape),
                     shape_type => {
-                        parts.push(generate_primitive_type(&type_name,
+                        generate_primitive_type(&type_name,
                                                            shape_type,
-                                                           protocol_generator.timestamp_type()))
+                                                           protocol_generator.timestamp_type())
                     }
-                }
+                };
+                write(writer, generated_type)?;
             }
 
             if deserialized {
-                if let Some(deserializer) = protocol_generator.generate_deserializer(&type_name, shape, service) {
-                    parts.push(deserializer);
+                if let Some(deserializer) = protocol_generator.generate_deserializer(&type_name, &shape, service) {
+                    write(writer, deserializer)?;
                 }
             }
 
             if serialized {
-                if let Some(serializer) = protocol_generator.generate_serializer(&type_name, shape, service) {
-                    parts.push(serializer);
+                if let Some(serializer) = protocol_generator.generate_serializer(&type_name, &shape, service) {
+                    write(writer, serializer)?;
                 }
             }
-
-            Some(parts.join("\n"))
-        })
-        .collect::<Vec<String>>()
-        .join("\n")
+        }
+        Ok(())
 }
 
 

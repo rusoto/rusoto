@@ -2,14 +2,14 @@ use inflector::Inflector;
 use botocore::{Operation, Service, Shape, ShapeType, Member};
 
 use super::xml_response_parser;
-use super::{GenerateProtocol, error_type_name, capitalize_first, generate_field_name};
+use super::{IoResult, FileWriter, write, GenerateProtocol, error_type_name, capitalize_first, generate_field_name};
 
 pub struct QueryGenerator;
 
 impl GenerateProtocol for QueryGenerator {
-    fn generate_methods(&self, service: &Service) -> String {
-        service.operations.iter().map(|(operation_name, operation)| {
-            format!(
+    fn generate_methods(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+        for (operation_name, operation) in service.operations.iter() {
+            write(writer, format!(
                 "
                 {documentation}
                 {method_signature} {{
@@ -43,27 +43,28 @@ impl GenerateProtocol for QueryGenerator {
                 operation_name = &operation.name,
                 request_uri = &operation.http.request_uri,
                 serialize_input = generate_method_input_serialization(operation)
-            )
-        }).collect::<Vec<String>>().join("\n")
+            ))?;
+        }
+        Ok(())
     }
 
-    fn generate_prelude(&self, _service: &Service) -> String {
-        "use std::str::FromStr;
-        use xml::EventReader;
-        use xml::reader::ParserConfig;
-        use param::{Params, ServiceParams};
-        use signature::SignedRequest;
-        use xml::reader::XmlEvent;
-        use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-        use xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
-        use xmlerror::*;
+    fn generate_prelude(&self, writer: &mut FileWriter,_service: &Service) -> IoResult {
+        write(writer,
+            "use std::str::FromStr;
+            use xml::EventReader;
+            use xml::reader::ParserConfig;
+            use param::{Params, ServiceParams};
+            use signature::SignedRequest;
+            use xml::reader::XmlEvent;
+            use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+            use xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
+            use xmlerror::*;
 
-        enum DeserializerNext {
-            Close,
-            Skip,
-            Element(String),
-        }
-        ".to_owned()
+            enum DeserializerNext {
+                Close,
+                Skip,
+                Element(String),
+        }")
     }
 
     fn generate_struct_attributes(&self,
