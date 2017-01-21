@@ -14,13 +14,13 @@ impl GenerateProtocol for JsonGenerator {
             write(writer, format!("
                 {documentation}
                 {method_signature} -> Result<{output_type}, {error_type}> {{
-                    {payload}
                     let mut request = SignedRequest::new(\"{http_method}\", \"{signing_name}\", self.region, \"{request_uri}\");
                     {modify_endpoint_prefix}
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
-                    request.set_payload(payload);
+                    {payload}
                     request.sign(&try!(self.credentials_provider.credentials()));
+
                     let response = try!(self.dispatcher.dispatch(&request));
 
                     match response.status {{
@@ -102,10 +102,10 @@ fn generate_method_signature(operation: &Operation) -> String {
 fn generate_payload(operation: &Operation) -> String {
     if operation.input.is_some() {
         "let encoded = serde_json::to_string(input).unwrap();
-         let payload = Some(encoded.as_bytes());"
-            .to_string()
+         request.set_payload(Some(encoded.into_bytes()));
+         ".to_string()
     } else {
-        "let payload = None;".to_string()
+        "".to_string()
     }
 }
 

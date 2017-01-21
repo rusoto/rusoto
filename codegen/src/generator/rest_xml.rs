@@ -24,12 +24,7 @@ impl GenerateProtocol for RestXmlGenerator {
                 "{documentation}
                 #[allow(unused_variables, warnings)]
                 {method_signature} {{
-
                     let mut params = Params::new();
-                    let mut payload: Option<Vec<u8>> = None;
-
-                    {serialize_input}
-
                     let mut request_uri = \"{request_uri}\".to_string();
 
                     {add_uri_parameters}
@@ -39,15 +34,9 @@ impl GenerateProtocol for RestXmlGenerator {
 
                     {set_headers}
                     {set_parameters}
-
-                    if payload.is_some() {{
-                        request.set_payload(Some(payload.as_ref().unwrap().as_slice()));
-                    }}
+                    {build_payload}
 
                     request.set_params(params);
-
-                    {service_specifics}
-
                     request.sign(&try!(self.credentials_provider.credentials()));
 
                     let response = try!(self.dispatcher.dispatch(&request));
@@ -67,12 +56,11 @@ impl GenerateProtocol for RestXmlGenerator {
                 error_type = error_type_name(operation_name),
                 request_uri = request_uri,
                 add_uri_parameters = add_uri_parameters,
-                serialize_input = generate_method_input_serialization(service, operation).unwrap_or("".to_string()),
+                build_payload = generate_method_input_serialization(service, operation).unwrap_or("".to_string()),
                 modify_uri = generate_uri_modification(service, operation).unwrap_or("".to_string()),
                 set_headers = generate_headers(service, operation).unwrap_or("".to_string()),
                 set_parameters = generate_parameters(service, operation).unwrap_or("".to_string()),
-                parse_response = xml_response_parser::generate_response_parser(service, operation),
-                service_specifics = generate_service_specific_code(service, operation).unwrap_or("".to_string())
+                parse_response = xml_response_parser::generate_response_parser(service, operation)
             ))?;
         }
         Ok(())
@@ -164,14 +152,17 @@ fn generate_method_input_serialization(service: &Service, operation: &Operation)
     if operation.input.is_none() {
         return None;
     }
-
+    "let mut payload: Option<Vec<u8>> = None;";
     let input_shape = &service.shapes[&operation.input.as_ref().unwrap().shape];
 
     let mut parts: Vec<String> = Vec::new();
 
     // the payload field determines which member of the input shape is sent as the request body (if any)
     if input_shape.payload.is_some() {
+        parts.push("let mut payload: Vec<u8>;".to_owned());
         parts.push(generate_payload_serialization(input_shape));
+        parts.push(generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()));
+        parts.push("request.set_payload(Some(payload));".to_owned());
     }
 
     Some(parts.join("\n"))
@@ -279,7 +270,7 @@ fn generate_service_specific_code(service: &Service, operation: &Operation) -> O
                 "PutBucketCors" |
                 "DeleteObjects" |
                 "PutBucketReplication" => {
-                    Some("let digest = md5::compute(payload.as_ref().unwrap());
+                    Some("let digest = md5::compute(&payload);
                           request.add_header(\"Content-MD5\", &digest.to_base64(Config {
                                                                                     char_set: CharacterSet::Standard,
                                                                                     newline: Newline::LF,
@@ -316,18 +307,20 @@ fn generate_payload_serialization(shape: &Shape) -> String {
 
     // if the member is 'streaming', it's a Vec<u8> that should just be delivered as the body
     if payload_member.streaming() {
-        format!("payload = Some(input.{}.clone().unwrap());",
+        format!("payload = input.{}.clone().unwrap();",
                 payload_field.to_snake_case())
     }
     // otherwise serialize the object to XML and use that as the payload
     else if shape.required(payload_field) {
         // some payload types are not required members of their shape
-        format!("payload = Some({xml_type}Serializer::serialize(\"{xml_type}\", &input.{payload_field}).into_bytes());",
+        format!("payload = {xml_type}Serializer::serialize(\"{xml_type}\", &input.{payload_field}).into_bytes();",
                 payload_field = payload_field.to_snake_case(),
                 xml_type = payload_member.shape)
     } else {
         format!("if input.{payload_field}.is_some() {{
-                    payload = Some({xml_type}Serializer::serialize(\"{xml_type}\", input.{payload_field}.as_ref().unwrap()).into_bytes());
+                    payload = {xml_type}Serializer::serialize(\"{xml_type}\", input.{payload_field}.as_ref().unwrap()).into_bytes();
+                }} else {{
+                    payload = Vec::new();
                 }}",
                 payload_field = payload_field.to_snake_case(),
                 xml_type = payload_member.shape)

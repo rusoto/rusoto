@@ -27,7 +27,7 @@ const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process
 #[derive(Debug)]
-pub struct SignedRequest<'a> {
+pub struct SignedRequest {
     pub method: String,
     pub service: String,
     pub region: Region,
@@ -35,14 +35,14 @@ pub struct SignedRequest<'a> {
     pub headers: BTreeMap<String, Vec<Vec<u8>>>,
     pub params: Params,
     pub hostname: Option<String>,
-    pub payload: Option<&'a [u8]>,
+    pub payload: Option<Vec<u8>>,
     pub canonical_query_string: String,
     pub canonical_uri: String,
 }
 
-impl <'a> SignedRequest <'a> {
+impl SignedRequest {
     /// Default constructor
-    pub fn new(method: &str, service: &str, region: Region, path: &str) -> SignedRequest<'a> {
+    pub fn new(method: &str, service: &str, region: Region, path: &str) -> SignedRequest {
         SignedRequest {
             method: method.to_string(),
             service: service.to_string(),
@@ -68,7 +68,7 @@ impl <'a> SignedRequest <'a> {
         self.hostname = Some(build_hostname(&endpoint_prefix, self.region));
     }
 
-    pub fn set_payload(&mut self, payload: Option<&'a [u8]>) {
+    pub fn set_payload(&mut self, payload: Option<Vec<u8>>) {
         self.payload = payload;
     }
 
@@ -92,11 +92,7 @@ impl <'a> SignedRequest <'a> {
         &self.canonical_query_string
     }
 
-    pub fn payload(&self) -> Option<&'a [u8]> {
-        self.payload
-    }
-
-    pub fn headers(&'a self) -> &'a BTreeMap<String, Vec<Vec<u8>>> {
+    pub fn headers(&self) -> &BTreeMap<String, Vec<Vec<u8>>> {
         &self.headers
     }
 
@@ -176,32 +172,29 @@ impl <'a> SignedRequest <'a> {
 
         let canonical_request : String;
 
-        match self.payload {
-            None => {
-                canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-                    &self.method,
-                    self.canonical_uri,
-                    self.canonical_query_string,
-                    canonical_headers,
-                    signed_headers,
-                    &to_hexdigest(""));
-                self.remove_header("x-amz-content-sha256");
-                self.add_header("x-amz-content-sha256", &to_hexdigest(""));
-            }
-            Some(payload) => {
-                let digest = to_hexdigest(payload);
-                canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-                    &self.method,
-                    self.canonical_uri,
-                    self.canonical_query_string,
-                    canonical_headers,
-                    signed_headers,
-                    &digest);
-                self.remove_header("x-amz-content-sha256");
-                self.add_header("x-amz-content-sha256", &digest);
-                self.remove_header("content-length");
-                self.add_header("content-length", &format!("{}", payload.len()));
-            }
+        if self.payload.is_none() {
+            canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+                &self.method,
+                self.canonical_uri,
+                self.canonical_query_string,
+                canonical_headers,
+                signed_headers,
+                &to_hexdigest(""));
+            self.remove_header("x-amz-content-sha256");
+            self.add_header("x-amz-content-sha256", &to_hexdigest(""));
+        } else {
+            let (digest, len) = digest_payload(&self.payload);
+            canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+                &self.method,
+                self.canonical_uri,
+                self.canonical_query_string,
+                canonical_headers,
+                signed_headers,
+                &digest);
+            self.remove_header("x-amz-content-sha256");
+            self.add_header("x-amz-content-sha256", &digest);
+            self.remove_header("content-length");
+            self.add_header("content-length", &format!("{}", len));
         }
 
         // use the hashed canonical request to build the string to sign
@@ -220,6 +213,13 @@ impl <'a> SignedRequest <'a> {
         self.add_header("authorization", &auth_header);
     }
 
+}
+
+fn digest_payload(payload: &Option<Vec<u8>>) -> (String, usize) {
+    let payload = payload.as_ref().unwrap();
+    let digest = to_hexdigest(payload);
+    let len = payload.len();
+    (digest, len)
 }
 
 fn signature(string_to_sign: &str, signing_key: hmac::SigningKey) -> String {
@@ -317,7 +317,7 @@ fn build_canonical_query_string(params: &Params) -> String {
         }
 
         output.push_str(&encode_uri_strict(key));
-        output.push_str("=");        
+        output.push_str("=");
 
         if val.is_some() {
             output.push_str(&encode_uri_strict(val.as_ref().unwrap()));
@@ -327,14 +327,14 @@ fn build_canonical_query_string(params: &Params) -> String {
     output
 }
 
-// http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html 
+// http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
 //
-// Do not URI-encode any of the unreserved characters that RFC 3986 defines: 
+// Do not URI-encode any of the unreserved characters that RFC 3986 defines:
 // A-Z, a-z, 0-9, hyphen ( - ), underscore ( _ ), period ( . ), and tilde ( ~ ).
 //
-// Percent-encode all other characters with %XY, where X and Y are hexadecimal 
-// characters (0-9 and uppercase A-F). For example, the space character must be 
-// encoded as %20 (not using '+', as some encoding schemes do) and extended UTF-8 
+// Percent-encode all other characters with %XY, where X and Y are hexadecimal
+// characters (0-9 and uppercase A-F). For example, the space character must be
+// encoded as %20 (not using '+', as some encoding schemes do) and extended UTF-8
 // characters must be in the form %XY%ZA%BC
 #[derive(Clone)]
 pub struct StrictEncodeSet;

@@ -179,7 +179,7 @@ fn generate_encoding_string(load_payload: bool) -> String {
 
 fn generate_payload_loading_string(load_payload: bool) -> String {
     if load_payload {
-        "request.set_payload(Some(encoded.as_bytes()));".to_owned()
+        "request.set_payload(Some(encoded.into_bytes()));".to_owned()
     } else {
         "".to_owned()
     }
