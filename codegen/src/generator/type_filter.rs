@@ -18,7 +18,6 @@ pub fn filter_types(service: &Service) -> (HashSet<String>, HashSet<String>) {
 }
 
 fn recurse_find_shapes(service: &Service, types: &mut HashSet<String>, shape_name: &str) {
-    println!("recurse_find_shapes {}", shape_name);
     types.insert(mutate_type_name(shape_name).to_owned());
     let shape = service.shapes.get(shape_name).expect("Shape type missing from service definition");
     match shape.shape_type {
