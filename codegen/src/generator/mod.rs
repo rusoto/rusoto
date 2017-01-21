@@ -1,3 +1,8 @@
+use std::fs::File;
+use std::io::{Write, BufWriter};
+use std::io::Result as IoResult;
+use std::path::Path;
+
 use inflector::Inflector;
 
 use botocore::{Service, Shape, ShapeType};
@@ -40,23 +45,33 @@ pub trait GenerateProtocol {
     }
 }
 
-pub fn generate_source(service: &Service) -> String {
+pub fn generate_source(service: &Service, output_path: &Path) -> IoResult<()> {
+    let output_file = File::create(output_path).expect(&format!(
+        "Couldn't open file for writing: {:?}",
+        output_path,
+    ));
+
+    let mut writer = BufWriter::new(output_file);
+
     match &service.metadata.protocol[..] {
-        "json" => generate(service, JsonGenerator, JsonErrorTypes),
-        "query" | "ec2" => generate(service, QueryGenerator, XmlErrorTypes),
-        "rest-json" => generate(service, RestJsonGenerator, JsonErrorTypes),
-        "rest-xml" => generate(service, RestXmlGenerator, XmlErrorTypes),
+        "json" => generate(&mut writer, service, JsonGenerator, JsonErrorTypes),
+        "query" | "ec2" => generate(&mut writer, service, QueryGenerator, XmlErrorTypes),
+        "rest-json" => generate(&mut writer, service, RestJsonGenerator, JsonErrorTypes),
+        "rest-xml" => generate(&mut writer, service, RestXmlGenerator, XmlErrorTypes),
         protocol => panic!("Unknown protocol {}", protocol),
     }
 }
 
-fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator: E) -> String
-    where P: GenerateProtocol,
-          E: GenerateErrorTypes {
+fn write <W>(writer: &mut BufWriter<W>, source_code: &str) -> IoResult<()> where W: Write  {
+    writer.write_all(source_code.as_bytes())
+}
 
-    // Initial capacity is a bit of a guess from looking at the end size:
-    let mut service_code = String::with_capacity(969984);
-    service_code.push_str("#[allow(warnings)]
+fn generate<P, E, W>(writer: &mut BufWriter<W>, service: &Service, protocol_generator: P, error_type_generator: E) -> IoResult<()>
+    where P: GenerateProtocol,
+          E: GenerateErrorTypes,
+          W: Write {
+
+    write(writer, "#[allow(warnings)]
         use hyper::Client;
         use hyper::status::StatusCode;
         use request::DispatchSignedRequest;
@@ -66,15 +81,15 @@ fn generate<P, E>(service: &Service, protocol_generator: P, error_type_generator
         use std::error::Error;
         use request::HttpDispatchError;
         use rusoto_credential::{CredentialsError, ProvideAwsCredentials};
-    ");
-    service_code.push_str(&protocol_generator.generate_prelude(service));
-    service_code.push_str(&generate_types(service, &protocol_generator));
-    service_code.push_str(&error_type_generator.generate_error_types(service)
-        .unwrap_or_else(|| "".to_string()));
-    service_code.push_str(&generate_client(service, &protocol_generator));
-    service_code.push_str(&generate_tests(service).unwrap_or_else(|| "".to_string()));
+    ")?;
+    write(writer, &protocol_generator.generate_prelude(service))?;
+    write(writer, &generate_types(service, &protocol_generator))?;
+    write(writer, &error_type_generator.generate_error_types(service)
+        .unwrap_or_else(|| "".to_string()))?;
+    write(writer, &generate_client(service, &protocol_generator))?;
+    write(writer, &generate_tests(service).unwrap_or_else(|| "".to_string()))?;
+    Ok(())
 
-    service_code
 }
 
 fn generate_client<P>(service: &Service, protocol_generator: &P) -> String

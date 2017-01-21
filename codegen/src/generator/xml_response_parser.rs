@@ -15,15 +15,14 @@ pub fn generate_struct_attributes(deserialized: bool) -> String {
 }
 
 pub fn generate_deserializer(name: &str, shape: &Shape, service: &Service) -> String {
-    format!("
-        struct {name}Deserializer;
-        impl {name}Deserializer {{
-            #[allow(unused_variables)]
-            fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-            -> Result<{name}, XmlParseError> {{
-                {deserializer_body}
-            }}
-        }}",
+    format!("struct {name}Deserializer;
+            impl {name}Deserializer {{
+                #[allow(unused_variables)]
+                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
+                -> Result<{name}, XmlParseError> {{
+                    {deserializer_body}
+                }}
+            }}",
             name = name,
             deserializer_body = generate_deserializer_body(name, shape, service))
 }

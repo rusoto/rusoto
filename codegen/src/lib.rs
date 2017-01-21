@@ -18,7 +18,7 @@ extern crate serde_derive;
 extern crate serde_codegen;
 
 use std::fs::{File, rename};
-use std::io::{Write, BufReader, BufWriter};
+use std::io::BufReader;
 use std::path::Path;
 
 use botocore::Service as BotocoreService;
@@ -80,19 +80,10 @@ fn botocore_generate(input_path: &Path, output_path: &Path) -> bool {
         input_path,
     ));
 
-    let source_code = generate_source(&service);
-
-    let output_file = File::create(output_path).expect(&format!(
-        "Couldn't open file for writing: {:?}",
-        output_path,
-    ));
-
-    let mut output_bufwriter = BufWriter::new(output_file);
-
-    output_bufwriter.write_all(source_code.as_bytes()).expect(&format!(
-        "Failed to write generated source code to {:?}",
-        output_path,
-    ));
+    match generate_source(&service, output_path) {
+        Ok(()) => {},
+        _ => panic!("Failed to write file at {:?}", output_path)
+    }
 
     match &service.metadata.protocol[..] {
         "json" | "rest-json" => true,
