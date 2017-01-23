@@ -32,7 +32,7 @@ impl MockRequestDispatcher {
 			headers: HashMap::new(),
 		};
 
-		MockRequestDispatcher { 
+		MockRequestDispatcher {
 			mock_response: response,
 			request_checker: None
 		}
@@ -40,11 +40,6 @@ impl MockRequestDispatcher {
 
 	pub fn with_body(mut self, body: &str) -> MockRequestDispatcher {
 		self.mock_response.body = body.to_owned();
-		self
-	}
-
-	pub fn with_raw_body(mut self, raw_body: Vec<u8>) -> MockRequestDispatcher {
-		self.mock_response.raw_body = raw_body.to_owned();
 		self
 	}
 
@@ -89,5 +84,5 @@ impl ReadMockResponse for MockResponseReader {
 	    ));
 
         mock_response
-	} 
+	}
 }

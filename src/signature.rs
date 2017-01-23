@@ -11,7 +11,6 @@ use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
 
-use hyper::status::StatusCode;
 use ring::{digest, hmac};
 use rusoto_credential::AwsCredentials;
 use rustc_serialize::hex::ToHex;
@@ -21,8 +20,6 @@ use url::percent_encoding::{utf8_percent_encode, EncodeSet};
 
 use param::Params;
 use region::Region;
-
-const HTTP_TEMPORARY_REDIRECT: StatusCode = StatusCode::TemporaryRedirect;
 
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process

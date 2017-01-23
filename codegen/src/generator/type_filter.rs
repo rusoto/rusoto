@@ -2,6 +2,18 @@ use std::collections::HashSet;
 use botocore::{Service, ShapeType};
 use super::mutate_type_name;
 
+/*
+pub fn find_output_types(service: &Service) -> HashSet<String> {
+    let mut output_types = HashSet::new();
+
+    for operation in service.operations.values() {
+        if let Some(ref output) = operation.output {
+            output_types.insert(output.shape.to_owned());
+        }
+    }
+    output_types
+}
+*/
 pub fn filter_types(service: &Service) -> (HashSet<String>, HashSet<String>) {
     let mut deserialized_types: HashSet<String> = HashSet::new();
     let mut serialized_types: HashSet<String> = HashSet::new();
@@ -40,7 +52,11 @@ fn recurse_find_shapes(service: &Service, types: &mut HashSet<String>, shape_nam
         ShapeType::Structure => {
             if let Some(ref members) = shape.members {
                 for member in members.values() {
-                    if member.location != Some("header".to_owned()) && !types.contains(&member.shape) {
+                    if Some(true) != member.deprecated &&
+                       member.location != Some("header".to_owned()) &&
+                       member.location != Some("headers".to_owned()) &&
+                       !types.contains(&member.shape) {
+                        println!("{} -> {}", mutate_type_name(shape_name), member.shape);
                         recurse_find_shapes(service, types, &member.shape);
                     }
                 }

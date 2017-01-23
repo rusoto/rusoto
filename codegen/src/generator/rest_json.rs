@@ -212,7 +212,13 @@ fn generate_shape_member_param_strings(shape: &Shape) -> Vec<String> {
         .as_ref()
         .unwrap()
         .iter()
-        .filter_map(|(member_name, member)| generate_param_load_string(member_name, member, shape))
+        .filter_map(|(member_name, member)| {
+            if !member.deprecated() {
+                generate_param_load_string(member_name, member, shape)
+            } else {
+                None
+            }
+        })
         .collect::<Vec<String>>()
 }
 

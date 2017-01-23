@@ -243,6 +243,7 @@ fn generate_struct<P>(service: &Service,
                       protocol_generator: &P)
                       -> String
     where P: GenerateProtocol {
+
     if shape.members.is_none() || shape.members.as_ref().unwrap().is_empty() {
         format!(
             "{attributes}
@@ -280,7 +281,12 @@ pub fn generate_field_name(member_name: &str) -> String {
 }
 
 fn generate_struct_fields(service: &Service, shape: &Shape, serde_attrs: bool) -> String {
-    shape.members.as_ref().unwrap().iter().map(|(member_name, member)| {
+    shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
+
+        if member.deprecated == Some(true) {
+            return None;
+        }
+
         let mut lines: Vec<String> = Vec::new();
         let name = generate_field_name(member_name);
 
@@ -309,14 +315,14 @@ fn generate_struct_fields(service: &Service, shape: &Shape, serde_attrs: bool) -
         }
 
         if shape.required(member_name) {
-            lines.push(format!("pub {}: {},",  name, type_name));
+            lines.push(format!("pub {}: {},",  name, type_name))
         } else if name == "type" {
-            lines.push(format!("pub aws_{}: Option<{}>,",  name, type_name));
+            lines.push(format!("pub aws_{}: Option<{}>,",  name, type_name))
         } else {
-            lines.push(format!("pub {}: Option<{}>,",  name, type_name));
+            lines.push(format!("pub {}: Option<{}>,",  name, type_name))
         }
 
-        lines.join("\n")
+        Some(lines.join("\n"))
     }).collect::<Vec<String>>().join("\n")
 }
 
