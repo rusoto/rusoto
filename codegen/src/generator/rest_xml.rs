@@ -1,9 +1,10 @@
+use std::io::Write;
 use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::{xml_payload_parser, rest_response_parser, mutate_type_name};
 use super::{GenerateProtocol, generate_field_name, error_type_name};
-use super::{IoResult, FileWriter, write};
+use super::{IoResult, FileWriter};
 
 pub struct RestXmlGenerator;
 
@@ -20,7 +21,7 @@ impl GenerateProtocol for RestXmlGenerator {
                  _ => "".to_owned()
             };
 
-            write(writer, format!(
+            writeln!(writer,
                 "{documentation}
                 #[allow(unused_variables, warnings)]
                 {method_signature} {{
@@ -62,9 +63,9 @@ impl GenerateProtocol for RestXmlGenerator {
                 modify_uri = generate_uri_modification(service, operation).unwrap_or("".to_string()),
                 set_headers = generate_headers(service, operation).unwrap_or("".to_string()),
                 set_parameters = generate_parameters(service, operation).unwrap_or("".to_string()),
-                parse_non_payload = rest_response_parser::generate_response_headers_parser(service, operation).unwrap_or_else(|| "".to_owned()),                
+                parse_non_payload = rest_response_parser::generate_response_headers_parser(service, operation).unwrap_or_else(|| "".to_owned()),
                 parse_response_body = xml_payload_parser::generate_response_parser(service, operation, true)
-            ))?;
+            )?;
         }
         Ok(())
     }
@@ -93,7 +94,7 @@ impl GenerateProtocol for RestXmlGenerator {
                 use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};";
         }
 
-        write(writer, imports)
+        writeln!(writer, "{}", imports)
     }
 
     fn generate_struct_attributes(&self,

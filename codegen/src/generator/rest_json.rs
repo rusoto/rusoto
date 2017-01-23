@@ -1,8 +1,9 @@
+use std::io::Write;
 use inflector::Inflector;
 use regex::{Captures, Regex};
 use hyper::status::StatusCode;
 use botocore::{Member, Operation, Service, Shape};
-use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, write};
+use super::{GenerateProtocol, error_type_name, FileWriter, IoResult};
 
 pub struct RestJsonGenerator;
 
@@ -35,7 +36,7 @@ impl GenerateProtocol for RestJsonGenerator {
             // then be added to the request.
             let member_param_strings = generate_shape_member_param_strings(input_shape);
 
-            write(writer, format!("
+            writeln!(writer,"
                 {documentation}
                 {method_signature} -> Result<{output_type}, {error_type}> {{
                     {encode_input}
@@ -87,13 +88,13 @@ impl GenerateProtocol for RestJsonGenerator {
                 load_payload = generate_payload_loading_string(load_payload),
                 load_params = generate_params_loading_string(&member_param_strings),
                 encode_input = generate_encoding_string(load_payload),
-            ))?
+            )?
         }
         Ok(())
     }
 
     fn generate_prelude(&self, writer: &mut FileWriter, _: &Service) -> IoResult {
-        write(writer, "use param::{Params, ServiceParams};
+        writeln!(writer, "use param::{{Params, ServiceParams}};
         use signature::SignedRequest;
         use serde_json;
         use serde_json::from_str;

@@ -24,8 +24,8 @@ use std::path::Path;
 use botocore::Service as BotocoreService;
 use generator::generate_source;
 
-mod botocore;
-mod generator;
+pub mod botocore;
+pub mod generator;
 mod serialization;
 mod util;
 

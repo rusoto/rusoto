@@ -1,7 +1,8 @@
+use std::io::Write;
 use inflector::Inflector;
 
 use botocore::{Operation, Service};
-use super::{GenerateProtocol, error_type_name, IoResult, FileWriter, write};
+use super::{GenerateProtocol, error_type_name, IoResult, FileWriter};
 
 pub struct JsonGenerator;
 
@@ -11,7 +12,7 @@ impl GenerateProtocol for JsonGenerator {
 
             let output_type = operation.output_shape_or("()");
 
-            write(writer, format!("
+            writeln!(writer, "
                 {documentation}
                 {method_signature} -> Result<{output_type}, {error_type}> {{
                     let mut request = SignedRequest::new(\"{http_method}\", \"{signing_name}\", self.region, \"{request_uri}\");
@@ -44,13 +45,13 @@ impl GenerateProtocol for JsonGenerator {
                 json_version = service.metadata.json_version.as_ref().unwrap(),
                 error_type = error_type_name(operation_name),
                 output_type = output_type
-            ))?;
+            )?;
         }
         Ok(())
     }
 
     fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service) -> IoResult {
-        write(writer, "use serde_json;
+        writeln!(writer, "use serde_json;
         use signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
         use serde_json::from_str;")

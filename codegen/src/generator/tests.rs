@@ -1,8 +1,9 @@
-use std::fs;
 use std::collections::HashMap;
+use std::fs;
+use std::io::Write;
 use std::path::Path;
 
-use super::capitalize_first;
+use super::{capitalize_first, FileWriter, IoResult};
 use botocore::Service;
 use util::case_insensitive_btreemap_get;
 use inflector::Inflector;
@@ -12,14 +13,15 @@ const BOTOCORE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
 const OUR_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/unit/responses/");
 
 
-pub fn generate_tests(service: &Service) -> Option<String> {
-    Some(format!("
-        #[cfg(test)]
-        mod protocol_tests {{
-            {tests_body}
-        }}
-        ",
-                 tests_body = generate_tests_body(service).unwrap_or("".to_string())))
+pub fn generate_tests(writer: &mut FileWriter, service: &Service) -> IoResult {
+    writeln!(writer,
+             "
+            #[cfg(test)]
+            mod protocol_tests {{
+                {tests_body}
+            }}
+            ",
+             tests_body = generate_tests_body(service).unwrap_or("".to_string()))
 }
 
 fn generate_tests_body(service: &Service) -> Option<String> {
