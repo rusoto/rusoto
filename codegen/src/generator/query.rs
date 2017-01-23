@@ -1,7 +1,7 @@
 use inflector::Inflector;
 use botocore::{Operation, Service, Shape, ShapeType, Member};
 
-use super::xml_response_parser;
+use super::xml_payload_parser;
 use super::{IoResult, FileWriter, write, GenerateProtocol, error_type_name, capitalize_first, generate_field_name};
 
 pub struct QueryGenerator;
@@ -25,7 +25,8 @@ impl GenerateProtocol for QueryGenerator {
                     let response = try!(self.dispatcher.dispatch(&request));
                     match response.status {{
                         StatusCode::Ok => {{
-                            {parse_response}
+                            {parse_payload}
+                            Ok(result)
                         }}
                         _ => {{
                             Err({error_type}::from_body(&response.body))
@@ -38,7 +39,7 @@ impl GenerateProtocol for QueryGenerator {
                 error_type = error_type_name(operation_name),
                 http_method = &operation.http.method,
                 endpoint_prefix = &service.metadata.endpoint_prefix,
-                parse_response = xml_response_parser::generate_response_parser(service, operation),
+                parse_payload = xml_payload_parser::generate_response_parser(service, operation, false),
                 method_signature = generate_method_signature(operation_name, operation),
                 operation_name = &operation.name,
                 request_uri = &operation.http.request_uri,
@@ -72,7 +73,7 @@ impl GenerateProtocol for QueryGenerator {
                                   _serialized: bool,
                                   deserialized: bool)
                                   -> String {
-        xml_response_parser::generate_struct_attributes(deserialized)
+        xml_payload_parser::generate_struct_attributes(deserialized)
     }
 
     fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
@@ -98,7 +99,7 @@ impl GenerateProtocol for QueryGenerator {
     }
 
     fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
-        Some(xml_response_parser::generate_deserializer(name, shape, service))
+        Some(xml_payload_parser::generate_deserializer(name, shape, service))
     }
 
     fn timestamp_type(&self) -> &'static str {

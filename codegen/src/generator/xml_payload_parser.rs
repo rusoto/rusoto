@@ -3,7 +3,6 @@ use inflector::Inflector;
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::{generate_field_name, mutate_type_name};
 
-
 pub fn generate_struct_attributes(deserialized: bool) -> String {
     let mut derived = vec!["Default"];
 
@@ -27,25 +26,17 @@ pub fn generate_deserializer(name: &str, shape: &Shape, service: &Service) -> St
             deserializer_body = generate_deserializer_body(name, shape, service))
 }
 
-pub fn generate_response_parser(service: &Service, operation: &Operation) -> String {
+pub fn generate_response_parser(service: &Service, operation: &Operation, mutable_result: bool) -> String {
     if operation.output.is_none() {
-        return "Ok(())".to_string();
+        return "let result = ();".to_string();
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
     let output_shape = &service.shapes[shape_name];
 
-    let mut response_headers_parser = "".to_owned();
-    let mut mutable_result = false;
-
-    if let Some(rhp) = generate_response_headers_parser(service, operation) {
-        response_headers_parser = rhp;
-        mutable_result = true;
-    }
-
     // if the 'payload' field on the output shape is a blob or string, it indicates that
     // the entire payload is set as one of the struct members, and not parsed
-    let body_parser = match output_shape.payload {
+    match output_shape.payload {
         None => xml_body_parser(shape_name, mutable_result),
         Some(ref payload_member) => {
             let payload_shape = &service.shapes[payload_member];
@@ -56,15 +47,8 @@ pub fn generate_response_parser(service: &Service, operation: &Operation) -> Str
                 }
                 _ => xml_body_parser(shape_name, mutable_result),
             }
-
         }
-    };
-
-    format!("{body_parser}
-            {response_headers_parser}
-            Ok(result)",
-            body_parser = body_parser,
-            response_headers_parser = response_headers_parser)
+    }
 }
 
 fn payload_body_parser(payload_type: ShapeType,
@@ -109,66 +93,6 @@ fn xml_body_parser(output_shape: &str, mutable_result: bool) -> String {
         }}",
             let_result = let_result,
             output_shape = output_shape)
-}
-
-
-fn generate_response_headers_parser(service: &Service, operation: &Operation) -> Option<String> {
-    // nothing to do if there's no output type
-    if operation.output.is_none() {
-        return None;
-    }
-
-    let shape = &service.shapes[&operation.output.as_ref().unwrap().shape];
-    let members = shape.members.as_ref().unwrap();
-
-    let parser_pieces = members.iter()
-        .filter_map(|(member_name, member)| {
-            if member.location.is_none() || member.location.as_ref().unwrap() != "header" {
-                return None;
-            }
-
-            let member_shape_name = &member.shape;
-            let member_shape = &service.shapes[member_shape_name];
-
-            if shape.required(member_name) {
-                Some(format!("let value = response.headers.get(\"{location_name}\").unwrap().to_owned();
-                              result.{field_name} = {primitive_parser};",
-                             location_name = member.location_name.as_ref().unwrap(),
-                             field_name = member_name.to_snake_case(),
-                             primitive_parser = generate_header_primitive_parser(&member_shape)))
-            } else {
-                Some(format!("if let Some({field_name}) = response.headers.get(\"{location_name}\") {{
-                                let value = {field_name}.to_owned();
-                                result.{field_name} = Some({primitive_parser})
-                              }}",
-                             location_name = member.location_name.as_ref().unwrap(),
-                             field_name = member_name.to_snake_case(),
-                             primitive_parser = generate_header_primitive_parser(&member_shape)))
-            }
-
-        })
-        .collect::<Vec<String>>();
-
-    if !parser_pieces.is_empty() {
-        Some(parser_pieces.join("\n"))
-    } else {
-        None
-    }
-}
-
-/// Parse a primitive type from the response headers
-fn generate_header_primitive_parser(shape: &Shape) -> String {
-    let statement = match shape.shape_type {
-        ShapeType::String | ShapeType::Timestamp => "value",
-        ShapeType::Integer => "i32::from_str(&value).unwrap()",
-        ShapeType::Long => "i64::from_str(&value).unwrap()",
-        ShapeType::Double => "f64::from_str(&value).unwrap()",
-        ShapeType::Float => "f32::from_str(&value).unwrap()",
-        ShapeType::Boolean => "bool::from_str(&value).unwrap()",
-        _ => panic!("Unknown primitive shape type"),
-    };
-
-    statement.to_string()
 }
 
 fn generate_deserializer_body(name: &str, shape: &Shape, _service: &Service) -> String {
@@ -367,6 +291,10 @@ fn generate_struct_field_deserializers(shape: &Shape) -> String {
             let location_name = member.location_name.as_ref().unwrap_or(member_name);
 
             if member.deprecated() {
+                return None;
+            }
+
+            if member.location == Some("header".to_owned()) {
                 return None;
             }
 

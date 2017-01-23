@@ -19,7 +19,8 @@ mod query;
 mod rest_json;
 mod tests;
 mod rest_xml;
-mod xml_response_parser;
+mod xml_payload_parser;
+mod rest_response_parser;
 mod type_filter;
 
 type FileWriter = BufWriter<File>;

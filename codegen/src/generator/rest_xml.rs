@@ -1,7 +1,7 @@
 use inflector::Inflector;
 
 use botocore::{Member, Operation, Service, Shape, ShapeType};
-use super::{xml_response_parser, mutate_type_name};
+use super::{xml_payload_parser, rest_response_parser, mutate_type_name};
 use super::{GenerateProtocol, generate_field_name, error_type_name};
 use super::{IoResult, FileWriter, write};
 
@@ -43,7 +43,9 @@ impl GenerateProtocol for RestXmlGenerator {
 
                     match response.status {{
                         StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {{
-                            {parse_response}
+                            {parse_response_body}
+                            {parse_non_payload}
+                            Ok(result)
                         }},
                         _ => Err({error_type}::from_body(&response.body))
                     }}
@@ -60,7 +62,8 @@ impl GenerateProtocol for RestXmlGenerator {
                 modify_uri = generate_uri_modification(service, operation).unwrap_or("".to_string()),
                 set_headers = generate_headers(service, operation).unwrap_or("".to_string()),
                 set_parameters = generate_parameters(service, operation).unwrap_or("".to_string()),
-                parse_response = xml_response_parser::generate_response_parser(service, operation)
+                parse_non_payload = rest_response_parser::generate_response_headers_parser(service, operation).unwrap_or_else(|| "".to_owned()),                
+                parse_response_body = xml_payload_parser::generate_response_parser(service, operation, true)
             ))?;
         }
         Ok(())
@@ -129,13 +132,17 @@ impl GenerateProtocol for RestXmlGenerator {
     }
 
     fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
-        Some(xml_response_parser::generate_deserializer(name, shape, service))
+        Some(xml_payload_parser::generate_deserializer(name, shape, service))
     }
 
     fn timestamp_type(&self) -> &'static str {
         "String"
     }
 }
+
+/*fn generate_response_headers_parser(service: &Service, operation: &Operation) -> Option<String> {
+
+}*/
 
 fn generate_documentation(operation: &Operation) -> String {
     match operation.documentation {
