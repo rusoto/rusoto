@@ -40,8 +40,6 @@ pub fn filter_types(service: &Service) -> (HashSet<String>, HashSet<String>) {
         }
     }
 
-    println!("----------------------\n{:#?}\n----------------------------\n", deserialized_types);
-
     (serialized_types, deserialized_types)
 }
 
@@ -56,20 +54,16 @@ fn recurse_find_shapes(service: &Service, types: &mut HashSet<String>, shape_nam
                        member.location != Some("header".to_owned()) &&
                        member.location != Some("headers".to_owned()) &&
                        !types.contains(&member.shape) {
-                        println!("{} -> {}", mutate_type_name(shape_name), member.shape);
                         recurse_find_shapes(service, types, &member.shape);
                     }
                 }
             }
         }
         ShapeType::Map => {
-            println!("{} -> {}", mutate_type_name(shape_name), mutate_type_name(shape.key_type()));
             recurse_find_shapes(service, types, shape.key_type());
-            println!("{} -> {}", mutate_type_name(shape_name), mutate_type_name(shape.value_type()));
             recurse_find_shapes(service, types, shape.value_type());
         }
         ShapeType::List => {
-            println!("{} -> {}", mutate_type_name(shape_name), mutate_type_name(shape.member_type()));
             recurse_find_shapes(service, types, shape.member_type());
         }
         _ => {}
