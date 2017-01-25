@@ -294,7 +294,7 @@ fn generate_struct_field_deserializers(shape: &Shape) -> String {
                 return None;
             }
 
-            if member.location == Some("header".to_owned()) {
+            if member.location == Some("header".to_owned()) || member.location == Some("headers".to_owned()) {
                 return None;
             }
 

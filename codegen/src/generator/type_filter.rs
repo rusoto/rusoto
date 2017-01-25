@@ -1,5 +1,5 @@
 use std::collections::HashSet;
-use botocore::{Service, ShapeType};
+use botocore::{Service, ShapeType, Shape};
 use super::mutate_type_name;
 
 pub fn filter_types(service: &Service) -> (HashSet<String>, HashSet<String>) {
@@ -8,18 +8,11 @@ pub fn filter_types(service: &Service) -> (HashSet<String>, HashSet<String>) {
     for operation in service.operations.values() {
         if let Some(ref output) = operation.output {
 
-            let output_shape = service.shapes.get(&output.shape).expect("Shape type missing from service definition");
+            let output_shape = service.shapes
+                .get(&output.shape)
+                .expect("Shape type missing from service definition");
 
-            // output shapes with a payload blob don't get deserialized
-            let streaming = match output_shape.payload {
-                None => false,
-                Some(ref payload_member) => {
-                    let payload_shape = &service.shapes[payload_member];
-                    payload_shape.shape_type == ShapeType::Blob || payload_shape.shape_type == ShapeType::String
-                }
-            };
-
-            if !streaming {
+            if !can_skip_deserializer(service, output_shape) {
                 recurse_find_shapes(service, &mut deserialized_types, &output.shape);
             }
         }
@@ -55,5 +48,30 @@ fn recurse_find_shapes(service: &Service, types: &mut HashSet<String>, shape_nam
             recurse_find_shapes(service, types, shape.member_type());
         }
         _ => {}
+    }
+}
+
+// output shapes with a payload blob don't get deserialized
+// unless they have non-payload elements from the headers etc.
+fn can_skip_deserializer(service: &Service, output_shape: &Shape) -> bool {
+    match output_shape.payload {
+        None => false,
+        Some(ref payload_member) => {
+            let payload_shape_type = &output_shape.members.as_ref().unwrap()[payload_member].shape;
+            let payload_shape = &service.shapes[payload_shape_type];
+
+            let has_streaming_payload = payload_shape.shape_type == ShapeType::Blob ||
+                                        payload_shape.shape_type == ShapeType::String;
+            let mut has_other_members = false;
+
+            for member in output_shape.members.as_ref().unwrap().values() {
+                if member.location.is_some() {
+                    has_other_members = true;
+                    break;
+                }
+            }
+
+            has_streaming_payload && !has_other_members
+        }
     }
 }
