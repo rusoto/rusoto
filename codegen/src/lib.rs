@@ -1,5 +1,4 @@
 #![cfg_attr(feature = "unstable", feature(const_fn, drop_types_in_const))]
-#![cfg_attr(feature = "serde_derive", feature(proc_macro))]
 #![cfg_attr(feature = "nightly-testing", feature(plugin))]
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
@@ -18,29 +17,28 @@ extern crate serde_derive;
 #[cfg(not(feature = "serde_derive"))]
 extern crate serde_codegen;
 
-use std::fs::File;
-use std::io::{Write, BufReader, BufWriter};
+use std::fs::{File, rename};
+use std::io::BufReader;
 use std::path::Path;
 
 use botocore::Service as BotocoreService;
 use generator::generate_source;
 
-mod botocore;
-mod generator;
+pub mod botocore;
+pub mod generator;
 mod serialization;
 mod util;
 
 const BOTOCORE_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/botocore/data/");
 
 pub struct Service {
-    name: String,
+    pub name: String,
     protocol_date: String,
 }
 
 impl Service {
     pub fn new<S>(name: S, protocol_date: S) -> Self
-        where S: Into<String>
-    {
+        where S: Into<String> {
         Service {
             name: name.into(),
             protocol_date: protocol_date.into(),
@@ -54,15 +52,22 @@ pub fn generate(service: Service, output_path: &Path) -> i32 {
     let botocore_service_data_path = Path::new(BOTOCORE_DIR)
         .join(format!("{}/{}/service-2.json", service.name, service.protocol_date));
 
-    botocore_generate(botocore_service_data_path.as_path(),
-                      botocore_destination_path.as_path());
-    serde_generate(botocore_destination_path.as_path(),
-                   serde_destination_path.as_path());
+    let needs_serde = botocore_generate(botocore_service_data_path.as_path(),
+                                        botocore_destination_path.as_path());
+
+    // only pass the generated code through serde if we actually need JSON serialization
+    if needs_serde {
+        serde_generate(botocore_destination_path.as_path(),
+                       serde_destination_path.as_path());
+    } else {
+        rename(botocore_destination_path, serde_destination_path).unwrap();
+    }
 
     return 1;
+
 }
 
-fn botocore_generate(input_path: &Path, output_path: &Path) {
+fn botocore_generate(input_path: &Path, output_path: &Path) -> bool {
     let input_file = File::open(input_path).expect(&format!(
         "{:?} not found",
         input_path,
@@ -75,19 +80,15 @@ fn botocore_generate(input_path: &Path, output_path: &Path) {
         input_path,
     ));
 
-    let source_code = generate_source(&service);
+    match generate_source(&service, output_path) {
+        Ok(()) => {},
+        _ => panic!("Failed to write file at {:?}", output_path)
+    }
 
-    let output_file = File::create(output_path).expect(&format!(
-        "Couldn't open file for writing: {:?}",
-        output_path,
-    ));
-
-    let mut output_bufwriter = BufWriter::new(output_file);
-
-    output_bufwriter.write_all(source_code.as_bytes()).expect(&format!(
-        "Failed to write generated source code to {:?}",
-        output_path,
-    ));
+    match &service.metadata.protocol[..] {
+        "json" | "rest-json" => true,
+        _ => false,
+    }
 }
 
 #[cfg(not(feature = "serde_derive"))]

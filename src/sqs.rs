@@ -37,6 +37,8 @@ mod test {
               </ResponseMetadata>
             </SendMessageResponse>"#)
             .with_request_checker(|request: &SignedRequest| {
+                println!("{:#?}", request.params);
+
                 assert_eq!("POST", request.method);
                 assert_eq!("/", request.path);
                 assert_eq!(None, request.payload);

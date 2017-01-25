@@ -107,22 +107,19 @@ impl DispatchSignedRequest for Client {
         }
 
         if log_enabled!(Debug) {
-            let payload = request.payload().map(|mut payload_bytes| {
-                let mut payload_string = String::new();
+            let payload = match &request.payload {
+                &Some(ref payload_bytes) => String::from_utf8(payload_bytes.to_owned()).unwrap_or_else(|_| String::from("<non-UTF-8 data>")),
+                _ => "".to_owned()
+            };
 
-                payload_bytes.read_to_string(&mut payload_string)
-                    .map(|_| payload_string)
-                    .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
-            });
-
-            debug!("Full request: \n method: {}\n final_uri: {}\n payload: {}\nHeaders:\n", hyper_method, final_uri, payload.unwrap_or("".to_owned()));
+            debug!("Full request: \n method: {}\n final_uri: {}\n payload: {}\nHeaders:\n", hyper_method, final_uri, payload);
             for h in hyper_headers.iter() {
                 debug!("{}:{}", h.name(), h.value_string());
             }
         }
-        let mut hyper_response = match request.payload() {
+        let mut hyper_response = match request.payload {
             None => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send()),
-            Some(payload_contents) => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body(payload_contents).send()),
+            Some(ref payload_contents) => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body(payload_contents.as_slice()).send()),
         };
         let mut body = String::new();
         let mut body_as_bytes : Vec<u8> = Vec::new();

@@ -88,6 +88,10 @@ impl Service {
         }
     }
 
+    pub fn shape_for_value<'a>(&'a self, value: &Value) -> Option<&'a Shape> {
+        self.shapes.get(&value.shape)
+    }
+
     pub fn shape_for_member<'a>(&'a self, member: &Member) -> Option<&'a Shape> {
         self.shapes.get(&member.shape)
     }
@@ -248,6 +252,14 @@ pub struct Shape {
     pub xml_namespace: Option<XmlNamespace>,
 }
 
+impl Shape {
+    pub fn is_primitive(&self) -> bool {
+        match self.shape_type {
+            ShapeType::Structure | ShapeType::Map | ShapeType::List => false,
+            _ => true,
+        }
+    }
+}
 
 impl<'a> Shape {
     pub fn key_type(&'a self) -> &'a str {
@@ -256,24 +268,6 @@ impl<'a> Shape {
 
     pub fn value_type(&'a self) -> &'a str {
         &self.value.as_ref().expect("Value shape undefined").shape
-    }
-
-    // note: the key_type and value_type fallbacks here are incorrect
-    // they also never happen in executed code.
-    // the need for them will go away once we trim serializers down to
-    // only the types that need serialization
-    pub fn key_name(&'a self) -> String {
-        match self.key.as_ref().expect("Key undefined").location_name {
-            Some(ref location) => location.to_owned(),
-            _ => self.key_type().to_owned()
-        }
-    }
-
-    pub fn value_name(&'a self) -> String {
-        match self.value.as_ref().expect("Value undefined").location_name {
-            Some(ref location) => location.to_owned(),
-            _ => self.value_type().to_owned()
-        }
     }
 
     pub fn member_type(&'a self) -> &'a str {
@@ -338,22 +332,6 @@ impl<'a> Operation {
     pub fn output_shape_or(&'a self, default: &'a str) -> &'a str {
         match self.output.as_ref() {
             Some(output) => &output.shape,
-            None => default,
-        }
-    }
-
-    pub fn wrapper(&'a self) -> Option<&'a str> {
-        self.output.as_ref().and_then(|o| o.result_wrapper.as_ref().map(|s| &s[..]))
-    }
-
-    pub fn output_shape_or_wrapper_or(&'a self, default: &'a str) -> &'a str {
-        match self.output.as_ref() {
-            Some(output) => {
-                match output.result_wrapper.as_ref() {
-                    Some(wrapper) => wrapper,
-                    None => default,
-                }
-            }
             None => default,
         }
     }

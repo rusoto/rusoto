@@ -1,15 +1,15 @@
+use std::io::Write;
 use inflector::Inflector;
 use regex::{Captures, Regex};
 use hyper::status::StatusCode;
 use botocore::{Member, Operation, Service, Shape};
-use super::GenerateProtocol;
-use super::error_type_name;
+use super::{GenerateProtocol, error_type_name, FileWriter, IoResult};
 
 pub struct RestJsonGenerator;
 
 impl GenerateProtocol for RestJsonGenerator {
-    fn generate_methods(&self, service: &Service) -> String {
-        service.operations.iter().map(|(operation_name, operation)| {
+    fn generate_methods(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+        for (operation_name, operation) in service.operations.iter() {
             let input_type = operation.input_shape();
             let output_type = operation.output_shape_or("()");
 
@@ -36,7 +36,7 @@ impl GenerateProtocol for RestJsonGenerator {
             // then be added to the request.
             let member_param_strings = generate_shape_member_param_strings(input_shape);
 
-            format!("
+            writeln!(writer,"
                 {documentation}
                 {method_signature} -> Result<{output_type}, {error_type}> {{
                     {encode_input}
@@ -88,27 +88,36 @@ impl GenerateProtocol for RestJsonGenerator {
                 load_payload = generate_payload_loading_string(load_payload),
                 load_params = generate_params_loading_string(&member_param_strings),
                 encode_input = generate_encoding_string(load_payload),
-            )
-        }).collect::<Vec<String>>().join("\n")
+            )?
+        }
+        Ok(())
     }
 
-    fn generate_prelude(&self, _: &Service) -> String {
-        "use param::{Params, ServiceParams};
+    fn generate_prelude(&self, writer: &mut FileWriter, _: &Service) -> IoResult {
+        writeln!(writer, "use param::{{Params, ServiceParams}};
         use signature::SignedRequest;
         use serde_json;
         use serde_json::from_str;
-        use serde_json::Value as SerdeJsonValue;
-        ".to_owned()
+        use serde_json::Value as SerdeJsonValue;")
+
     }
 
-    fn generate_struct_attributes(&self, struct_name: &str) -> String {
-        if can_skip_deserializer(struct_name) {
-            return "#[derive(Default, Serialize)]".to_owned();
+    fn generate_struct_attributes(&self,
+                                  _struct_name: &str,
+                                  serialized: bool,
+                                  deserialized: bool)
+                                  -> String {
+        let mut derived = vec!["Default"];
+
+        if serialized {
+            derived.push("Serialize");
         }
-        if can_skip_serializer(struct_name) {
-            return "#[derive(Default, Debug, Deserialize)]".to_owned();
+
+        if deserialized {
+            derived.push("Deserialize, Debug, Clone")
         }
-        "#[derive(Default, Debug, Deserialize, Serialize)]".to_owned()
+
+        format!("#[derive({})]", derived.join(","))
     }
 
     fn timestamp_type(&self) -> &'static str {
@@ -131,27 +140,11 @@ impl CodegenString for StatusCode {
 
 fn http_code_to_status_code(code: Option<i32>) -> String {
     match code {
-        Some(actual_code) => {
-            StatusCode::from_u16(actual_code as u16).enum_as_string()
-        }
+        Some(actual_code) => StatusCode::from_u16(actual_code as u16).enum_as_string(),
         // Some service definitions such as elastictranscoder don't specify
         // the response code, we'll assume this:
         None => "StatusCode::Ok".to_string(),
     }
-}
-
-fn can_skip_serializer(struct_name: &str) -> bool {
-    if struct_name.ends_with("Response") {
-        return true;
-    }
-    false
-}
-
-fn can_skip_deserializer(struct_name: &str) -> bool {
-    if struct_name.ends_with("Request"){
-        return true;
-    }
-    false
 }
 
 // IoT has an endpoint_prefix and a signing_name that differ
@@ -159,7 +152,8 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
     if service.signing_name() == service.metadata.endpoint_prefix {
         None
     } else {
-        Some(format!("request.set_endpoint_prefix(\"{}\".to_string());", service.metadata.endpoint_prefix))
+        Some(format!("request.set_endpoint_prefix(\"{}\".to_string());",
+                     service.metadata.endpoint_prefix))
     }
 }
 
@@ -168,24 +162,25 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
 fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
     if shape.members.is_some() && !shape.members.as_ref().unwrap().is_empty() {
         format!("pub fn {method_name}(&self, input: &{input_type})",
-            method_name = operation.name.to_snake_case(),
-            input_type = operation.input_shape())
+                method_name = operation.name.to_snake_case(),
+                input_type = operation.input_shape())
     } else {
-        format!("pub fn {method_name}(&self)", method_name = operation.name.to_snake_case())
+        format!("pub fn {method_name}(&self)",
+                method_name = operation.name.to_snake_case())
     }
 }
 
 fn generate_encoding_string(load_payload: bool) -> String {
     if load_payload {
-       "let encoded = serde_json::to_string(input).unwrap();".to_owned()
+        "let encoded = serde_json::to_string(input).unwrap();".to_owned()
     } else {
         "".to_owned()
     }
- }
+}
 
 fn generate_payload_loading_string(load_payload: bool) -> String {
     if load_payload {
-        "request.set_payload(Some(encoded.as_bytes()));".to_owned()
+        "request.set_payload(Some(encoded.into_bytes()));".to_owned()
     } else {
         "".to_owned()
     }
@@ -205,19 +200,26 @@ fn generate_params_loading_string(param_strings: &[String]) -> String {
     match param_strings.len() {
         0 => "".to_owned(),
         _ => {
-            format!(
-                "let mut params = Params::new();
+            format!("let mut params = Params::new();
                 {param_strings}
                 request.set_params(params);",
-                param_strings = param_strings.join("\n")
-            )
-        },
+                    param_strings = param_strings.join("\n"))
+        }
     }
 }
 
 fn generate_shape_member_param_strings(shape: &Shape) -> Vec<String> {
-    shape.members.as_ref().unwrap().iter()
-        .filter_map(|(member_name, member)| generate_param_load_string(member_name, member, shape))
+    shape.members
+        .as_ref()
+        .unwrap()
+        .iter()
+        .filter_map(|(member_name, member)| {
+            if !member.deprecated() {
+                generate_param_load_string(member_name, member, shape)
+            } else {
+                None
+            }
+        })
         .collect::<Vec<String>>()
 }
 
@@ -226,8 +228,8 @@ fn generate_param_load_string(member_name: &str, member: &Member, shape: &Shape)
         Some(ref x) if x == "querystring" => {
             if shape.required(member_name) {
                 Some(format!("params.put(\"{member_name}\", &input.{field_name}.to_string());",
-                    member_name = member_name,
-                    field_name = member_name.to_snake_case()))
+                             member_name = member_name,
+                             field_name = member_name.to_snake_case()))
             } else {
                 Some(format!(
                     "match input.{field_name} {{
@@ -238,7 +240,7 @@ fn generate_param_load_string(member_name: &str, member: &Member, shape: &Shape)
                     field_name = member_name.to_snake_case(),
                 ))
             }
-        },
+        }
         Some(_) | None => None,
     }
 }
@@ -250,19 +252,23 @@ fn generate_uri_formatter(request_uri: &str, uri_strings: &[String]) -> String {
                 "let request_uri = \"{request_uri}\";",
                 request_uri = request_uri,
             )
-        },
+        }
         _ => {
-            format!(
-                "let request_uri = format!(\"{request_uri}\", {uri_strings});",
-                request_uri = request_uri,
-                uri_strings = uri_strings.join(", "))
-        },
+            format!("let request_uri = format!(\"{request_uri}\", {uri_strings});",
+                    request_uri = request_uri,
+                    uri_strings = uri_strings.join(", "))
+        }
     }
 }
 
 fn generate_shape_member_uri_strings(shape: &Shape) -> Vec<String> {
-    shape.members.as_ref().unwrap().iter()
-        .filter_map(|(member_name, member)| generate_member_format_string(&member_name.to_snake_case(), member))
+    shape.members
+        .as_ref()
+        .unwrap()
+        .iter()
+        .filter_map(|(member_name, member)| {
+            generate_member_format_string(&member_name.to_snake_case(), member)
+        })
         .collect::<Vec<String>>()
 }
 
@@ -285,20 +291,21 @@ fn generate_member_format_string(member_name: &str, member: &Member) -> Option<S
                     ))
                 }
             }
-        },
+        }
         Some(_) | None => None,
     }
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
-    operation.documentation.as_ref().map(|docs| {
-        format!("#[doc=\"{}\"]", docs.replace("\"", "\\\""))
-    })
+    operation.documentation
+        .as_ref()
+        .map(|docs| format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")))
 }
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("Ok(serde_json::from_str::<{}>(&body).unwrap())", output_type)
+        format!("Ok(serde_json::from_str::<{}>(&body).unwrap())",
+                output_type)
     } else {
         "Ok(())".to_owned()
     }

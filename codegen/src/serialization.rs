@@ -25,16 +25,14 @@ impl Visitor for ShapeNameVisitor {
     type Value = String;
 
     fn visit_str<E>(&mut self, v: &str) -> Result<Self::Value, E>
-        where E: SerdeError,
-    {
+        where E: SerdeError {
         Ok(capitalize_first(v))
     }
 }
 
 impl ShapeName for String {
     fn deserialize_shape_name<D>(deserializer: &mut D) -> Result<String, D::Error>
-        where D: Deserializer,
-    {
+        where D: Deserializer {
         deserializer.deserialize_string(ShapeNameVisitor)
     }
 }
@@ -50,26 +48,21 @@ struct ShapesMapVisitor<V> {
 
 impl<V> ShapesMapVisitor<V> {
     pub fn new() -> Self {
-        ShapesMapVisitor {
-            marker: PhantomData,
-        }
+        ShapesMapVisitor { marker: PhantomData }
     }
 }
 
 impl<V> Visitor for ShapesMapVisitor<V>
-    where V: Deserialize,
-{
+    where V: Deserialize {
     type Value = BTreeMap<String, V>;
 
     fn visit_unit<E>(&mut self) -> Result<BTreeMap<String, V>, E>
-        where E: SerdeError,
-    {
+        where E: SerdeError {
         Ok(BTreeMap::new())
     }
 
     fn visit_map<Visitor>(&mut self, mut visitor: Visitor) -> Result<Self::Value, Visitor::Error>
-        where Visitor: MapVisitor,
-    {
+        where Visitor: MapVisitor {
         let mut values = BTreeMap::new();
 
         while let Some((key, value)) = try!(visitor.visit()) {
@@ -85,11 +78,9 @@ impl<V> Visitor for ShapesMapVisitor<V>
 
 impl<V> ShapesMap for BTreeMap<String, V>
     where String: Deserialize,
-          V: Deserialize,
-{
+          V: Deserialize {
     fn deserialize_shapes_map<D>(deserializer: &mut D) -> Result<BTreeMap<String, V>, D::Error>
-        where D: Deserializer,
-    {
+        where D: Deserializer {
         deserializer.deserialize(ShapesMapVisitor::new())
     }
 }

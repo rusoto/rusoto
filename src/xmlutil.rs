@@ -72,17 +72,6 @@ impl From<ParseIntError> for XmlParseError{
     fn from(_e:ParseIntError) -> XmlParseError { XmlParseError::new("ParseIntError") }
 }
 
-
-/// parse Some(String) if the next tag has the right name, otherwise None
-pub fn optional_string_field<T: Peek + Next>(field_name: &str, stack: &mut T) -> Result<Option<String>, XmlParseError> {
-    if try!(peek_at_name(stack)) == field_name {
-        let val = try!(string_field(field_name, stack));
-        Ok(Some(val))
-    } else {
-        Ok(None)
-    }
-}
-
 /// return a string field with the right name or throw a parse error
 pub fn string_field<T: Peek + Next>(name: &str, stack: &mut T) -> Result<String, XmlParseError> {
     try!(start_element(name, stack));
