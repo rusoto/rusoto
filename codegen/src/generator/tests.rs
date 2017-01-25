@@ -16,10 +16,10 @@ const OUR_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/
 pub fn generate_tests(writer: &mut FileWriter, service: &Service) -> IoResult {
     writeln!(writer,
              "
-#[cfg(test)]
-mod protocol_tests {{
-    {tests_body}
-}}
+            #[cfg(test)]
+            mod protocol_tests {{
+                {tests_body}
+            }}
             ",
              tests_body = generate_tests_body(service).unwrap_or("".to_string()))
 }
