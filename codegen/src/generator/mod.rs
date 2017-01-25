@@ -71,6 +71,9 @@ pub fn generate_source(service: &Service, output_path: &Path) -> IoResult {
 
     let mut writer = BufWriter::new(output_file);
 
+    // EC2 service protocol is similar to query but not the same.  Rusoto is able to generate Rust code
+    // from the service definition through the same QueryGenerator, but botocore uses a special class.
+    // See https://github.com/boto/botocore/blob/dff99fdf2666accf6b448aef7f03fe3d66dd38fa/botocore/serialize.py#L259-L266 .
     match &service.metadata.protocol[..] {
         "json" => generate(&mut writer, service, JsonGenerator, JsonErrorTypes),
         "query" | "ec2" => generate(&mut writer, service, QueryGenerator, XmlErrorTypes),
