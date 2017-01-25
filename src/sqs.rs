@@ -1,4 +1,6 @@
 //! The AWS SQS API.
+//!
+//! If you're using the service, you're probably looking for [SqsClient](struct.SqsClient.html).
 
 #![cfg_attr(feature = "nightly-testing", allow(while_let_loop))]
 
