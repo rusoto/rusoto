@@ -16,10 +16,10 @@ const OUR_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/
 pub fn generate_tests(writer: &mut FileWriter, service: &Service) -> IoResult {
     writeln!(writer,
              "
-            #[cfg(test)]
-            mod protocol_tests {{
-                {tests_body}
-            }}
+#[cfg(test)]
+mod protocol_tests {{
+    {tests_body}
+}}
             ",
              tests_body = generate_tests_body(service).unwrap_or("".to_string()))
 }
@@ -81,15 +81,14 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
             {request_constructor}
             let result = client.{action}({request_params});
             assert!(result.is_ok(), \"parse error: {{:?}}\", result);
-        }}
-    ",
-                 service_name = response.service.to_snake_case(),
-                 action = response.action.to_snake_case(),
-                 response_dir_name = response.dir_name,
-                 response_file_name = response.file_name,
-                 client_type = service.client_type_name(),
-                 request_constructor = request_constructor,
-                 request_params = request_params))
+        }}",
+        service_name = response.service.to_snake_case(),
+        action = response.action.to_snake_case(),
+        response_dir_name = response.dir_name,
+        response_file_name = response.file_name,
+        client_type = service.client_type_name(),
+        request_constructor = request_constructor,
+        request_params = request_params))
 }
 
 #[derive(Debug, Clone)]
