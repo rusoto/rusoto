@@ -71,6 +71,7 @@ fn main() {
         ["ecr", "2015-09-21"],
         ["ecs", "2014-11-13"],
         ["elasticache", "2015-02-02"],
+        ["elasticbeanstalk", "2010-12-01"],
         ["elastictranscoder", "2012-09-25"],
         ["emr", "2009-03-31"],
         ["events", "2015-10-07"],

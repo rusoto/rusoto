@@ -140,6 +140,8 @@ pub mod ecs;
 pub mod emr;
 #[cfg(feature = "elasticache")]
 pub mod elasticache;
+#[cfg(feature = "elasticbeanstalk")]
+pub mod elasticbeanstalk;
 #[cfg(feature = "elastictranscoder")]
 pub mod elastictranscoder;
 #[cfg(feature = "events")]
