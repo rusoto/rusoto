@@ -73,6 +73,7 @@ fn main() {
         ["elasticache", "2015-02-02"],
         ["elasticbeanstalk", "2010-12-01"],
         ["elastictranscoder", "2012-09-25"],
+        ["elb", "2012-06-01"],
         ["emr", "2009-03-31"],
         ["events", "2015-10-07"],
         ["firehose", "2015-08-04"],

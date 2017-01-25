@@ -144,6 +144,8 @@ pub mod elasticache;
 pub mod elasticbeanstalk;
 #[cfg(feature = "elastictranscoder")]
 pub mod elastictranscoder;
+#[cfg(feature = "elb")]
+pub mod elb;
 #[cfg(feature = "events")]
 pub mod events;
 #[cfg(feature = "firehose")]
