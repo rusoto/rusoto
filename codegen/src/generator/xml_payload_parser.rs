@@ -199,9 +199,9 @@ fn generate_map_deserializer(shape: &Shape) -> String {
                                             .map(String::as_ref)
                                             .unwrap_or_else(|| "entry");
 
-    format!(
+    // the core of the map parser is the same whether or not it's flattened
+    let entries_parser = format!(
         "
-        try!(start_element(tag_name, stack));
         let mut obj = ::std::collections::HashMap::new();
 
         while try!(peek_at_name(stack)) == \"{entry_location}\" {{
@@ -211,16 +211,27 @@ fn generate_map_deserializer(shape: &Shape) -> String {
             obj.insert(key, value);
             try!(end_element(\"{entry_location}\", stack));
         }}
-
-        try!(end_element(tag_name, stack));
-        Ok(obj)
         ",
         key_tag_name = key.tag_name(),
         key_type_name = key.shape,
         value_tag_name = value.tag_name(),
         value_type_name = value.shape,
         entry_location = entry_location
-    )
+    );
+
+    // if the map is flattened, just return the entries parser
+    // otherwise parse a start and end tag around the whole map
+    match shape.flattened {
+        Some(true) => format!("{entries_parser}
+                               Ok(obj)",
+                              entries_parser = entries_parser),
+        _ => format!("try!(start_element(tag_name, stack));
+                    {entries_parser}
+                    try!(end_element(tag_name, stack));
+                    Ok(obj)
+                    ",
+                    entries_parser = entries_parser)
+    }
 }
 
 fn generate_primitive_deserializer(shape: &Shape) -> String {
