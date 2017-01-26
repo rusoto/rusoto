@@ -62,7 +62,57 @@ env_logger = "0.4.0"
 rand = "^0.3.14"
 
 [features]
-all = ["acm", "autoscaling", "cloudformation", "cloudfront", "cloudhsm", "cloudsearch", "cloudtrail", "cloudwatch", "codecommit", "codedeploy", "codepipeline", "cognito-identity", "config", "datapipeline", "devicefarm", "directconnect", "ds", "dynamodb", "dynamodbstreams", "ec2", "ecr", "ecs", "elasticache", "elasticbeanstalk", "elastictranscoder", "elb", "emr", "events", "firehose", "iam", "inspector", "iot", "kinesis", "kms", "lambda", "logs", "machinelearning", "marketplacecommerceanalytics", "opsworks", "route53", "route53domains", "s3", "sns", "sqs", "ssm", "storagegateway", "swf", "waf", "workspaces"]
+all = [
+		"acm",
+	   	"autoscaling",
+	   	"cloudformation",
+	   	"cloudfront",
+	   	"cloudhsm",
+	   	"cloudsearch",
+	   	"cloudtrail",
+	   	"cloudwatch",
+	   	"codecommit",
+	   	"codedeploy",
+	   	"codepipeline",
+	   	"cognito-identity",
+	   	"config",
+	   	"datapipeline",
+	   	"devicefarm",
+	   	"directconnect",
+	   	"ds",
+	   	"dynamodb",
+	   	"dynamodbstreams",
+	   	"ec2",
+	   	"ecr",
+	   	"ecs",
+	   	"elasticache",
+	   	"elasticbeanstalk",
+	   	"elastictranscoder",
+	   	"elb",
+	   	"emr",
+	   	"events",
+	   	"firehose",
+	   	"iam",
+	   	"inspector",
+	   	"iot",
+	   	"kinesis",
+	   	"kms",
+	   	"lambda",
+	   	"logs",
+	   	"machinelearning",
+	   	"marketplacecommerceanalytics",
+	   	"opsworks",
+	   	"route53",
+	   	"route53domains",
+	   	"s3",
+	   	"sns",
+	   	"sqs",
+	   	"ssm",
+	   	"storagegateway",
+	   	"swf",
+	   	"waf",
+	   	"workspaces"
+	]
 acm = []
 autoscaling = []
 cloudformation = []
