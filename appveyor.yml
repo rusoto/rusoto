@@ -29,9 +29,14 @@ build_script:
   - set OPENSSL_LIBS=ssleay32MT:libeay32MT
   - set OPENSSL_LIB_DIR=C:\OpenSSL-Win64\lib\VC
   - path C:\OpenSSL-Win64\bin;%PATH%
-  - cargo build --features all -vv
+  - ps: >-
+    $features = Select-String -Pattern "all =" -Path .\Cargo.toml | % { $_ -replace "\[","" -replace "\]","" -replace "=","" -replace ",","" } | %{ $_.split() }
+    foreach ($feature in $features) { if ($feature.length -gt 0 -and $feature -notlike "*Cargo.toml*") { cargo build --features $feature } }
+
 test_script:
-  - cargo test --lib --features all
+  - ps: >-
+    $features = Select-String -Pattern "all =" -Path .\Cargo.toml | % { $_ -replace "\[","" -replace "\]","" -replace "=","" -replace ",","" } | %{ $_.split() }
+    foreach ($feature in $features) { if ($feature.length -gt 0 -and $feature -notlike "*Cargo.toml*") { cargo test --lib --features $feature } }
 
 branches:
   only:
