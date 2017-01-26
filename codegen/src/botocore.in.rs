@@ -10,7 +10,7 @@ pub struct Service {
     pub operations: BTreeMap<String, Operation>,
     #[serde(deserialize_with="ShapesMap::deserialize_shapes_map")]
     pub shapes: BTreeMap<String, Shape>,
-    pub version: String,
+    pub version: Option<String>,
 }
 
 impl Service {

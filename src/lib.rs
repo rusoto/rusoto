@@ -184,6 +184,8 @@ pub mod route53;
 pub mod route53domains;
 #[cfg(feature = "s3")]
 pub mod s3;
+#[cfg(feature = "sdb")]
+pub mod sdb;
 #[cfg(feature = "sns")]
 pub mod sns;
 #[cfg(feature = "sqs")]
