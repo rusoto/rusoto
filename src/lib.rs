@@ -154,6 +154,8 @@ pub mod events;
 pub mod firehose;
 #[cfg(feature = "iam")]
 pub mod iam;
+#[cfg(feature = "importexport")]
+pub mod importexport;
 #[cfg(feature = "inspector")]
 pub mod inspector;
 #[cfg(feature = "iot")]

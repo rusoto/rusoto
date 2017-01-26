@@ -94,6 +94,7 @@ all = [
 	   	"events",
 	   	"firehose",
 	   	"iam",
+	   	"importexport",
 	   	"inspector",
 	   	"iot",
 	   	"kinesis",
@@ -146,6 +147,7 @@ emr = []
 events = []
 firehose = []
 iam = []
+importexport = []
 inspector = []
 iot = []
 kinesis = []
