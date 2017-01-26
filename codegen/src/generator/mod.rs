@@ -135,6 +135,8 @@ fn generate<P, E>(writer: &mut FileWriter, service: &Service, protocol_generator
 
 fn generate_client<P>(writer: &mut FileWriter, service: &Service, protocol_generator: &P) -> IoResult
     where P: GenerateProtocol {
+    // If the struct name is changed, the links in each service documentation should change.
+    // See https://github.com/rusoto/rusoto/issues/519
     writeln!(writer,
         "/// A client for the {service_name} API.
         pub struct {type_name}<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {{

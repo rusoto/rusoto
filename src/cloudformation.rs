@@ -1,4 +1,6 @@
 //! AWS CloudFormation
+//!
+//! If you're using the service, you're probably looking for [CloudformationClient](struct.CloudformationClient.html).
 
 include!(concat!(env!("OUT_DIR"), "/cloudformation.rs"));
 

@@ -1,4 +1,6 @@
 //! AWS CloudWatch
+//!
+//! If you're using the service, you're probably looking for [CloudWatchClient](struct.CloudWatchClient.html).
 
 include!(concat!(env!("OUT_DIR"), "/cloudwatch.rs"));
 

@@ -1,4 +1,6 @@
 //! The AWS S3 API.
+//!
+//! If you're using the service, you're probably looking for [S3Client](struct.S3Client.html).
 
 include!(concat!(env!("OUT_DIR"), "/s3.rs"));
 
