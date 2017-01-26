@@ -85,8 +85,7 @@ pub trait GenerateErrorTypes {
         let mut enum_types: Vec<String> = Vec::new();
 
         if operation.errors.is_some() {
-            for error in operation.errors.as_ref().unwrap().iter() {
-
+            for error in operation.errors() {
                 // some botocore definitions include Validation in every errors list, some take it as assumed
                 // skip it if it's listed, as we implement it for all error types below
                 if error.idiomatic_error_name() != "Validation" {
@@ -114,8 +113,8 @@ pub trait GenerateErrorTypes {
         let error_type = error_type_name(operation_name);
 
         if operation.errors.is_some() {
-            for error in operation.errors.as_ref().unwrap().iter() {
-
+            // botocore has some dulicated errors
+            for error in operation.errors() {
                 // some botocore definitions include Validation in every errors list, some take it as assumed
                 // skip it if it's listed, as we implement it for all error types below
                 if error.idiomatic_error_name() != "Validation" {
@@ -186,7 +185,7 @@ impl XmlErrorTypes {
         let error_type = error_type_name(operation_name);
 
         if operation.errors.is_some() {
-            for error in operation.errors.as_ref().unwrap().iter() {
+            for error in operation.errors() {
                 type_matchers.push(format!("\"{error_shape}\" => {error_type}::{error_name}(String::from(parsed_error.message))",
                     error_shape = error.shape,
                     error_type = error_type,
@@ -241,7 +240,7 @@ impl JsonErrorTypes {
         let error_type = error_type_name(operation_name);
 
         if operation.errors.is_some() {
-            for error in operation.errors.as_ref().unwrap().iter() {
+            for error in operation.errors() {
                 if error.shape != "ValidationException" {
                     type_matchers.push(format!("\"{error_shape}\" => {error_type}::{error_name}(String::from(error_message))",
                         error_shape = error.shape,
