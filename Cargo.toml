@@ -104,6 +104,7 @@ all = [
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
 	   	"opsworks",
+	   	"redshift",
 	   	"rds",
 	   	"route53",
 	   	"route53domains",
@@ -159,6 +160,7 @@ machinelearning = []
 marketplacecommerceanalytics = []
 nightly-testing = ["clippy", "rusoto_codegen/nightly-testing", "rusoto_credential/nightly-testing", "unstable"]
 opsworks = []
+redshift = []
 rds = []
 route53 = []
 route53domains = []

@@ -89,6 +89,7 @@ fn main() {
         ["machinelearning", "2014-12-12"],
         ["marketplacecommerceanalytics", "2015-07-01"],
         ["opsworks", "2013-02-18"],
+        ["redshift", "2012-12-01"],
         ["rds", "2014-10-31"],
         ["route53", "2013-04-01"],
         ["route53domains", "2014-05-15"],
