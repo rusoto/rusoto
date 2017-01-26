@@ -32,12 +32,13 @@ pub fn generate_response_parser(service: &Service, operation: &Operation, mutabl
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
+    let result_wrapper = &operation.output.as_ref().unwrap().result_wrapper;
     let output_shape = &service.shapes[shape_name];
 
     // if the 'payload' field on the output shape is a blob or string, it indicates that
     // the entire payload is set as one of the struct members, and not parsed
     match output_shape.payload {
-        None => xml_body_parser(shape_name, mutable_result),
+        None => xml_body_parser(shape_name, result_wrapper, mutable_result),
         Some(ref payload_member) => {
             let payload_shape = &service.shapes[payload_member];
             match payload_shape.shape_type {
@@ -45,7 +46,7 @@ pub fn generate_response_parser(service: &Service, operation: &Operation, mutabl
                                 payload_type == ShapeType::String => {
                     payload_body_parser(payload_type, shape_name, payload_member)
                 }
-                _ => xml_body_parser(shape_name, mutable_result),
+                _ => xml_body_parser(shape_name, result_wrapper, mutable_result),
             }
         }
     }
@@ -69,11 +70,26 @@ fn payload_body_parser(payload_type: ShapeType,
             response_body = response_body)
 }
 
-fn xml_body_parser(output_shape: &str, mutable_result: bool) -> String {
+fn xml_body_parser(output_shape: &str, result_wrapper: &Option<String>, mutable_result: bool) -> String {
     let let_result = if mutable_result {
         "let mut result;"
     } else {
         "let result;"
+    };
+
+    let deserialize = match result_wrapper {
+        &Some(ref tag_name) => {
+            format!("try!(start_element(&actual_tag_name, &mut stack));
+                     result = try!({output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack));
+                     skip_tree(&mut stack);
+                     try!(end_element(&actual_tag_name, &mut stack));",
+                     output_shape = output_shape,
+                     tag_name = tag_name)
+        },
+        &None => {
+            format!("result = try!({output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack));",
+                     output_shape = output_shape)
+        }
     };
 
     format!("
@@ -89,17 +105,19 @@ fn xml_body_parser(output_shape: &str, mutable_result: bool) -> String {
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
             let actual_tag_name = try!(peek_at_name(&mut stack));
-            result = try!({output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack));
+            {deserialize}
         }}",
             let_result = let_result,
-            output_shape = output_shape)
+            output_shape = output_shape,
+            deserialize = deserialize)
 }
 
-fn generate_deserializer_body(name: &str, shape: &Shape, _service: &Service) -> String {
+
+fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> String {
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape),
         ShapeType::Map => generate_map_deserializer(shape),
-        ShapeType::Structure => generate_struct_deserializer(name, shape),
+        ShapeType::Structure => generate_struct_deserializer(name, service, shape),
         _ => generate_primitive_deserializer(shape),
     }
 }
@@ -114,7 +132,7 @@ fn generate_list_deserializer(shape: &Shape) -> String {
     let location_name = shape.member
         .as_ref()
         .and_then(|m| m.location_name.to_owned())
-        .unwrap_or_else(|| shape.member_type().to_owned());
+        .unwrap_or_else(|| "member".to_owned());
 
     format!("
         let mut obj = vec![];
@@ -177,24 +195,31 @@ fn generate_map_deserializer(shape: &Shape) -> String {
     let key = shape.key.as_ref().unwrap();
     let value = shape.value.as_ref().unwrap();
 
+    let entry_location = shape.location_name.as_ref()
+                                            .map(String::as_ref)
+                                            .unwrap_or_else(|| "entry");
+
     format!(
         "
+        try!(start_element(tag_name, stack));
         let mut obj = ::std::collections::HashMap::new();
 
-        while try!(peek_at_name(stack)) == tag_name {{
-            try!(start_element(tag_name, stack));
+        while try!(peek_at_name(stack)) == \"{entry_location}\" {{
+            try!(start_element(\"{entry_location}\", stack));
             let key = try!({key_type_name}Deserializer::deserialize(\"{key_tag_name}\", stack));
             let value = try!({value_type_name}Deserializer::deserialize(\"{value_tag_name}\", stack));
             obj.insert(key, value);
-            try!(end_element(tag_name, stack));
+            try!(end_element(\"{entry_location}\", stack));
         }}
 
+        try!(end_element(tag_name, stack));
         Ok(obj)
         ",
         key_tag_name = key.tag_name(),
         key_type_name = key.shape,
         value_tag_name = value.tag_name(),
         value_type_name = value.shape,
+        entry_location = entry_location
     )
 }
 
@@ -221,7 +246,7 @@ fn generate_primitive_deserializer(shape: &Shape) -> String {
     )
 }
 
-fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
+fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) -> String {
     let mut needs_xml_deserializer = false;
 
     // don't generate an xml deserializer if we don't need to
@@ -235,6 +260,7 @@ fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
     if !needs_xml_deserializer || shape.members.as_ref().unwrap().is_empty() {
         return format!(
             "try!(start_element(tag_name, stack));
+
             stack.next();
 
             let obj = {name}::default();
@@ -255,7 +281,7 @@ fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
 
         loop {{
             let next_event = match stack.peek() {{
-                Some(&Ok(XmlEvent::EndElement {{ .. }})) => DeserializerNext::Close,   // TODO verify that we received the expected tag?
+                Some(&Ok(XmlEvent::EndElement {{ ref name, .. }})) => DeserializerNext::Close,
                 Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => DeserializerNext::Element(name.local_name.to_owned()),
                 _ => DeserializerNext::Skip,
             }};
@@ -277,32 +303,40 @@ fn generate_struct_deserializer(name: &str, shape: &Shape) -> String {
         Ok(obj)
         ",
         name = name,
-        struct_field_deserializers = generate_struct_field_deserializers(shape),
+        struct_field_deserializers = generate_struct_field_deserializers(service, shape),
     )
 }
 
-fn generate_struct_field_deserializers(shape: &Shape) -> String {
+fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> String {
     shape.members
         .as_ref()
         .unwrap()
         .iter()
         .filter_map(|(member_name, member)| {
             // look up member.shape in all_shapes.  use that shape.member.location_name
-            let location_name = member.location_name.as_ref().unwrap_or(member_name);
+            let mut location_name = member.location_name.as_ref().unwrap_or(member_name);
 
-            if member.deprecated() {
+            // skip deprecated and non-XML fields
+            if member.deprecated() ||
+               member.location == Some("header".to_owned()) ||
+               member.location == Some("headers".to_owned()) {
                 return None;
             }
 
-            if member.location == Some("header".to_owned()) || member.location == Some("headers".to_owned()) {
-                return None;
+            let member_shape = &service.shapes[&member.shape];
+
+            // flattened lists have no surrounding tag, so match on the list member's tag
+            if member_shape.shape_type == ShapeType::List && member_shape.flattened == Some(true) {
+                let list_member = member_shape.member.as_ref().expect("list member undefined");
+                if let Some(ref list_member_location) = list_member.location_name {
+                    location_name = list_member_location;
+                }
             }
 
             let parse_expression = generate_struct_field_parse_expression(shape,
                                                                           member_name,
                                                                           member,
-                                                                          member.location_name
-                                                                              .as_ref());
+                                                                          location_name);
             Some(format!(
             "\"{location_name}\" => {{
                 obj.{field_name} = {parse_expression};
@@ -320,16 +354,12 @@ fn generate_struct_field_deserializers(shape: &Shape) -> String {
 fn generate_struct_field_parse_expression(shape: &Shape,
                                           member_name: &str,
                                           member: &Member,
-                                          location_name: Option<&String>)
+                                          location_name: &String)
                                           -> String {
-    let location_to_use = match location_name {
-        Some(loc) => loc.to_string(),
-        None => member_name.to_string(),
-    };
     let expression = format!(
-        "try!({name}Deserializer::deserialize(\"{location}\", stack))",
+        "try!({name}Deserializer::deserialize(\"{location_name}\", stack))",
         name = member.shape,
-        location = location_to_use,
+        location_name = location_name,
     );
 
     if shape.required(member_name) {

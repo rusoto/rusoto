@@ -10,11 +10,12 @@ use rusoto::default_tls_client;
 #[test]
 fn list_queues() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let sqs = SqsClient::new(default_tls_client().unwrap(), credentials, Region::EuWest1);
+    let sqs = SqsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
-    // http://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html
     let request = ListQueuesRequest {
         ..Default::default()
     };
-    sqs.list_queues(&request).unwrap();
+
+    let result = sqs.list_queues(&request).unwrap();
+    println!("{:#?}", result);
 }

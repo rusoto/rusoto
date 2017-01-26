@@ -202,7 +202,7 @@ pub struct Key {
 
 impl Key {
     pub fn tag_name(&self) -> String {
-        self.location_name.clone().unwrap_or(self.shape.clone())
+        self.location_name.as_ref().map(String::as_ref).unwrap_or_else(|| "key").to_owned()
     }
 }
 
@@ -217,7 +217,7 @@ pub struct Value {
 
 impl Value {
     pub fn tag_name(&self) -> String {
-        self.location_name.clone().unwrap_or(self.shape.clone())
+        self.location_name.as_ref().map(String::as_ref).unwrap_or_else(|| "value").to_owned()
     }
 }
 
