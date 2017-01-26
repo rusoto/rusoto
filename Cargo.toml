@@ -89,6 +89,7 @@ all = [
 	   	"elasticbeanstalk",
 	   	"elastictranscoder",
 	   	"elb",
+	   	"elbv2",
 	   	"emr",
 	   	"events",
 	   	"firehose",
@@ -140,6 +141,7 @@ elasticache = []
 elasticbeanstalk = []
 elastictranscoder = []
 elb = []
+elbv2 = []
 emr = []
 events = []
 firehose = []
