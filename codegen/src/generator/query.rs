@@ -207,7 +207,8 @@ fn key_name(service: &Service, shape: &Shape) -> String {
         .expect("Key undefined")
         .location_name
         .as_ref()
-        .expect("Key location undefined");
+        .map(String::as_ref)
+        .unwrap_or_else(|| "key");
     capitalize_if_ec2(service, key_name)
 }
 
@@ -217,7 +218,8 @@ fn value_name(service: &Service, shape: &Shape) -> String {
         .expect("Value undefined")
         .location_name
         .as_ref()
-        .expect("Value location undefined");
+        .map(String::as_ref)
+        .unwrap_or_else(|| "value");
     capitalize_if_ec2(service, value_name)
 }
 

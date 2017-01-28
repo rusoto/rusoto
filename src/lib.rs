@@ -93,6 +93,8 @@ mod mock;
 
 #[cfg(feature = "acm")]
 pub mod acm;
+#[cfg(feature = "autoscaling")]
+pub mod autoscaling;
 #[allow(unused_imports)]
 #[cfg(feature = "cloudformation")]
 pub mod cloudformation;
@@ -100,6 +102,8 @@ pub mod cloudformation;
 pub mod cloudfront;
 #[cfg(feature = "cloudhsm")]
 pub mod cloudhsm;
+#[cfg(feature = "cloudsearch")]
+pub mod cloudsearch;
 #[cfg(feature = "cloudtrail")]
 pub mod cloudtrail;
 #[cfg(feature = "cloudwatch")]
@@ -134,14 +138,24 @@ pub mod ecr;
 pub mod ecs;
 #[cfg(feature = "emr")]
 pub mod emr;
+#[cfg(feature = "elasticache")]
+pub mod elasticache;
+#[cfg(feature = "elasticbeanstalk")]
+pub mod elasticbeanstalk;
 #[cfg(feature = "elastictranscoder")]
 pub mod elastictranscoder;
+#[cfg(feature = "elb")]
+pub mod elb;
+#[cfg(feature = "elbv2")]
+pub mod elbv2;
 #[cfg(feature = "events")]
 pub mod events;
 #[cfg(feature = "firehose")]
 pub mod firehose;
 #[cfg(feature = "iam")]
 pub mod iam;
+#[cfg(feature = "importexport")]
+pub mod importexport;
 #[cfg(feature = "inspector")]
 pub mod inspector;
 #[cfg(feature = "iot")]
@@ -150,6 +164,8 @@ pub mod iot;
 pub mod kinesis;
 #[cfg(feature = "kms")]
 pub mod kms;
+#[cfg(feature = "lambda")]
+pub mod lambda;
 #[cfg(feature = "logs")]
 pub mod logs;
 #[cfg(feature = "machinelearning")]
@@ -158,12 +174,20 @@ pub mod machinelearning;
 pub mod marketplacecommerceanalytics;
 #[cfg(feature = "opsworks")]
 pub mod opsworks;
+#[cfg(feature = "redshift")]
+pub mod redshift;
+#[cfg(feature = "rds")]
+pub mod rds;
 #[cfg(feature = "route53")]
 pub mod route53;
 #[cfg(feature = "route53domains")]
 pub mod route53domains;
 #[cfg(feature = "s3")]
 pub mod s3;
+#[cfg(feature = "sdb")]
+pub mod sdb;
+#[cfg(feature = "sns")]
+pub mod sns;
 #[cfg(feature = "sqs")]
 pub mod sqs;
 #[cfg(feature = "ssm")]

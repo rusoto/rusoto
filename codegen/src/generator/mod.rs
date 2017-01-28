@@ -205,10 +205,13 @@ fn mutate_type_name(type_name: &str) -> String {
 
     match &without_underscores[..] {
         // S3 has an 'Error' shape that collides with Rust's Error trait
-        "Error" => "S3Error".to_string(),
+        "Error" => "S3Error".to_owned(),
 
         // EC2 has a CancelSpotFleetRequestsError struct, avoid collision with our error enum
         "CancelSpotFleetRequests" => "EC2CancelSpotFleetRequests".to_owned(),
+
+        // RDS has a conveniently named "Option" type
+        "Option" => "RDSOption".to_owned(),
 
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,

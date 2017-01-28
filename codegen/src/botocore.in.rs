@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{HashSet, BTreeMap};
 
 use serialization::{ShapesMap, ShapeName};
 
@@ -10,7 +10,7 @@ pub struct Service {
     pub operations: BTreeMap<String, Operation>,
     #[serde(deserialize_with="ShapesMap::deserialize_shapes_map")]
     pub shapes: BTreeMap<String, Shape>,
-    pub version: String,
+    pub version: Option<String>,
 }
 
 impl Service {
@@ -133,7 +133,7 @@ pub struct Output {
     pub shape: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, PartialEq, Eq, Hash)]
 pub struct Error {
     pub documentation: Option<String>,
     pub error: Option<HttpError>,
@@ -148,7 +148,7 @@ impl Error {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, PartialEq, Eq, Hash)]
 pub struct HttpError {
     pub code: Option<String>,
     #[serde(rename="httpStatusCode")]
@@ -202,7 +202,7 @@ pub struct Key {
 
 impl Key {
     pub fn tag_name(&self) -> String {
-        self.location_name.clone().unwrap_or(self.shape.clone())
+        self.location_name.as_ref().map(String::as_ref).unwrap_or_else(|| "key").to_owned()
     }
 }
 
@@ -217,7 +217,7 @@ pub struct Value {
 
 impl Value {
     pub fn tag_name(&self) -> String {
-        self.location_name.clone().unwrap_or(self.shape.clone())
+        self.location_name.as_ref().map(String::as_ref).unwrap_or_else(|| "value").to_owned()
     }
 }
 
@@ -334,6 +334,12 @@ impl<'a> Operation {
             Some(output) => &output.shape,
             None => default,
         }
+    }
+
+    // botocore duplicates errors in a few places
+    // return a unique set
+    pub fn errors(&'a self) -> HashSet<&'a Error> {
+        self.errors.as_ref().unwrap().iter().collect()
     }
 }
 
