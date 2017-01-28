@@ -2,6 +2,7 @@
 
 extern crate rusoto;
 
+use rusoto::default_tls_client;
 use rusoto::sts::StsClient;
 use rusoto::sts::{AssumeRoleRequest, AssumeRoleError};
 use rusoto::sts::{GetSessionTokenRequest};
@@ -14,9 +15,9 @@ fn main() {
 
     let aws_creds = credentials.credentials().unwrap();
     
-    let sts = StsClient::new(aws_creds, Region::UsEast1);
+    let sts = StsClient::new(default_tls_client().unwrap(), aws_creds, Region::UsEast1);
 
-    let sts = StsClient::new(credentials, Region::UsEast1);
+    let sts = StsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
     // http://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html
     match sts.assume_role(&AssumeRoleRequest{
