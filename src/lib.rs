@@ -78,8 +78,6 @@ pub use rusoto_credential::{
     DefaultCredentialsProviderSync,
 };
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError};
-#[cfg(feature = "sts")]
-pub use sts::{StsSessionCredentialsProvider};
 pub use signature::SignedRequest;
 pub use request::default_tls_client;
 

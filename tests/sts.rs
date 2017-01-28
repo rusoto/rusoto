@@ -5,9 +5,9 @@ extern crate rusoto;
 use rusoto::default_tls_client;
 use rusoto::sts::StsClient;
 use rusoto::sts::{AssumeRoleRequest, AssumeRoleError};
-use rusoto::sts::{GetSessionTokenRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::{StsSessionCredentialsProvider, ProvideAwsCredentials};
+use rusoto::sts::GetSessionTokenRequest;
+use rusoto::sts::StsSessionCredentialsProvider;
+use rusoto::{DefaultCredentialsProvider, Region, ProvideAwsCredentials};
 
 #[test]
 fn main() {
