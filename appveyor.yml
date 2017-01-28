@@ -29,9 +29,10 @@ build_script:
   - set OPENSSL_LIBS=ssleay32MT:libeay32MT
   - set OPENSSL_LIB_DIR=C:\OpenSSL-Win64\lib\VC
   - path C:\OpenSSL-Win64\bin;%PATH%
-  - cargo build --features all -vv
+  # We only build and test a subset due to https://github.com/rusoto/rusoto/issues/537
+  - cargo build --features "dynamodb s3 sqs" -vv
 test_script:
-  - cargo test --lib --features all
+  - cargo test --lib --features "dynamodb s3 sqs"
 
 branches:
   only:
