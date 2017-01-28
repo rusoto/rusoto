@@ -12,7 +12,7 @@ fn should_describe_cache_clusters() {
     let client = ElastiCacheClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeCacheClustersMessage::default();
 
- 	let response = client.describe_cache_clusters(&request).unwrap();
+    let response = client.describe_cache_clusters(&request).unwrap();
     println!("{:#?}", response);
 }
 

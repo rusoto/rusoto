@@ -8,7 +8,7 @@ use rusoto::default_tls_client;
 
 #[test]
 fn should_list_topics() {
-	let credentials = DefaultCredentialsProvider::new().unwrap();
+    let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = SnsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListTopicsInput::default();
 

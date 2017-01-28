@@ -8,7 +8,7 @@ use rusoto::default_tls_client;
 
 #[test]
 fn should_describe_load_balancers() {
-	let _ = env_logger::init();
+    let _ = env_logger::init();
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = ElbClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeLoadBalancersInput::default();
