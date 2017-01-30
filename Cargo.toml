@@ -67,6 +67,7 @@ all = [
 		"application-autoscaling",
 		"appstream",
 	   	"autoscaling",
+	   	"budgets",
 	   	"cloudformation",
 	   	"cloudfront",
 	   	"cloudhsm",
@@ -124,6 +125,7 @@ acm = []
 application-autoscaling = []
 appstream = []
 autoscaling = []
+budgets = []
 cloudformation = []
 cloudfront = []
 cloudhsm = []

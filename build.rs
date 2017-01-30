@@ -47,6 +47,7 @@ fn main() {
         ["application-autoscaling", "2016-02-06"],
         ["appstream", "2016-12-01"],
         ["autoscaling", "2011-01-01"],
+        ["budgets", "2016-10-20"],
         ["cloudformation", "2010-05-15"],
         ["cloudfront", "2016-11-25"],
         ["cloudhsm", "2014-05-30"],

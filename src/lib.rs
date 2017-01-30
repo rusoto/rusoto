@@ -99,6 +99,8 @@ pub mod applicationautoscaling;
 pub mod appstream;
 #[cfg(feature = "autoscaling")]
 pub mod autoscaling;
+#[cfg(feature = "budgets")]
+pub mod budgets;
 #[allow(unused_imports)]
 #[cfg(feature = "cloudformation")]
 pub mod cloudformation;
