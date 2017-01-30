@@ -168,6 +168,8 @@ pub mod elbv2;
 pub mod events;
 #[cfg(feature = "firehose")]
 pub mod firehose;
+#[cfg(feature = "gamelift")]
+pub mod gamelift;
 #[cfg(feature = "iam")]
 pub mod iam;
 #[cfg(feature = "importexport")]

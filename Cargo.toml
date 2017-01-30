@@ -101,6 +101,7 @@ all = [
 	   	"emr",
 	   	"events",
 	   	"firehose",
+	   	"gamelift",
 	   	"iam",
 	   	"importexport",
 	   	"inspector",
@@ -165,6 +166,7 @@ elbv2 = []
 emr = []
 events = []
 firehose = []
+gamelift = []
 iam = []
 importexport = []
 inspector = []
