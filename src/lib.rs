@@ -136,6 +136,8 @@ pub mod datapipeline;
 pub mod devicefarm;
 #[cfg(feature = "directconnect")]
 pub mod directconnect;
+#[cfg(feature = "discovery")]
+pub mod discovery;
 #[cfg(feature = "ds")]
 pub mod ds;
 #[cfg(feature = "dynamodb")]

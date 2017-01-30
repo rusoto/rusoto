@@ -20,6 +20,7 @@ impl Service {
 
     pub fn service_type_name(&self) -> &str {
         match &self.metadata.service_full_name[..] {
+            "AWS Application Discovery Service" => "ApplicationDiscovery",
             "AWS Budgets" => "Budgets",
             "AWS Certificate Manager" => "Acm",
             "AWS CloudFormation" => "CloudFormation",

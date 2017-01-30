@@ -85,6 +85,7 @@ all = [
 	   	"datapipeline",
 	   	"devicefarm",
 	   	"directconnect",
+	   	"discovery",
 	   	"ds",
 	   	"dynamodb",
 	   	"dynamodbstreams",
@@ -147,6 +148,7 @@ datapipeline = []
 default = ["rusoto_codegen/serde_codegen", "serde_codegen"]
 devicefarm = []
 directconnect = []
+discovery = []
 ds = []
 dynamodb = []
 dynamodbstreams = []
