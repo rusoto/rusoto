@@ -138,6 +138,8 @@ pub mod devicefarm;
 pub mod directconnect;
 #[cfg(feature = "discovery")]
 pub mod discovery;
+#[cfg(feature = "dms")]
+pub mod dms;
 #[cfg(feature = "ds")]
 pub mod ds;
 #[cfg(feature = "dynamodb")]

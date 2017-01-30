@@ -32,6 +32,7 @@ impl Service {
             "AWS Config" => "ConfigService",
             "AWS Cost and Usage Report Service" => "CostAndUsageReport",
             "AWS Data Pipeline" => "DataPipeline",
+            "AWS Database Migration Service" => "DatabaseMigration",
             "AWS Device Farm" => "DeviceFarm",
             "AWS Direct Connect" => "DirectConnect",
             "AWS Directory Service" => "DirectoryService",

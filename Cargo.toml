@@ -86,6 +86,7 @@ all = [
 	   	"devicefarm",
 	   	"directconnect",
 	   	"discovery",
+	   	"dms",
 	   	"ds",
 	   	"dynamodb",
 	   	"dynamodbstreams",
@@ -149,6 +150,7 @@ default = ["rusoto_codegen/serde_codegen", "serde_codegen"]
 devicefarm = []
 directconnect = []
 discovery = []
+dms = []
 ds = []
 dynamodb = []
 dynamodbstreams = []

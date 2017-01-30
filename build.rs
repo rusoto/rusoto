@@ -66,6 +66,7 @@ fn main() {
         ["devicefarm", "2015-06-23"],
         ["directconnect", "2012-10-25"],
         ["discovery", "2015-11-01"],
+        ["dms", "2016-01-01"],
         ["ds", "2015-04-16"],
         ["dynamodb", "2012-08-10"],
         ["dynamodbstreams", "2012-08-10"],
