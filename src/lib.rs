@@ -128,6 +128,8 @@ pub mod cognitoidentity;
 pub mod cognitoidp;
 #[cfg(feature = "config")]
 pub mod config;
+#[cfg(feature = "cur")]
+pub mod cur;
 #[cfg(feature = "datapipeline")]
 pub mod datapipeline;
 #[cfg(feature = "devicefarm")]

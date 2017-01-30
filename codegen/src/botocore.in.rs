@@ -29,6 +29,7 @@ impl Service {
             "AWS CodeDeploy" => "CodeDeploy",
             "AWS CodePipeline" => "CodePipeline",
             "AWS Config" => "ConfigService",
+            "AWS Cost and Usage Report Service" => "CostAndUsageReport",
             "AWS Data Pipeline" => "DataPipeline",
             "AWS Device Farm" => "DeviceFarm",
             "AWS Direct Connect" => "DirectConnect",

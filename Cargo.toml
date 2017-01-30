@@ -81,6 +81,7 @@ all = [
 	   	"cognito-identity",
 	   	"cognito-idp",
 	   	"config",
+	   	"cur",
 	   	"datapipeline",
 	   	"devicefarm",
 	   	"directconnect",
@@ -141,6 +142,7 @@ codepipeline = []
 cognito-identity = []
 cognito-idp = []
 config = []
+cur = []
 datapipeline = []
 default = ["rusoto_codegen/serde_codegen", "serde_codegen"]
 devicefarm = []

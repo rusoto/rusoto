@@ -61,6 +61,7 @@ fn main() {
         ["cognito-identity", "2014-06-30"],
         ["cognito-idp", "2016-04-18"],
         ["config", "2014-11-12"],
+        ["cur", "2017-01-06"],
         ["datapipeline", "2012-10-29"],
         ["devicefarm", "2015-06-23"],
         ["directconnect", "2012-10-25"],
