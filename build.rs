@@ -44,7 +44,8 @@ fn main() {
 
     let services = services! {
         ["acm", "2015-12-08"],
-        ["application-autoscaling", "2016-02-06"], 
+        ["application-autoscaling", "2016-02-06"],
+        ["appstream", "2016-12-01"],
         ["autoscaling", "2011-01-01"],
         ["cloudformation", "2010-05-15"],
         ["cloudfront", "2016-11-25"],

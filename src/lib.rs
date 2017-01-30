@@ -95,6 +95,8 @@ mod mock;
 pub mod acm;
 #[cfg(feature = "application-autoscaling")]
 pub mod applicationautoscaling;
+#[cfg(feature = "appstream")]
+pub mod appstream;
 #[cfg(feature = "autoscaling")]
 pub mod autoscaling;
 #[allow(unused_imports)]

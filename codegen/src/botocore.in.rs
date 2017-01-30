@@ -45,6 +45,7 @@ impl Service {
             "AWS Support" => "Support",
             "AWS WAF" => "Waf",
             "Amazon API Gateway" => "ApiGateway",
+            "Amazon AppStream" => "AppStream",
             "Amazon CloudFront" => "CloudFront",
             "Amazon CloudHSM" => "CloudHsm",
             "Amazon CloudSearch Domain" => "CloudSearchDomain",
