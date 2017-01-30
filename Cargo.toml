@@ -74,6 +74,7 @@ all = [
 	   	"cloudsearch",
 	   	"cloudtrail",
 	   	"cloudwatch",
+	   	"codebuild",
 	   	"codecommit",
 	   	"codedeploy",
 	   	"codepipeline",
@@ -133,6 +134,7 @@ cloudsearch = []
 cloudtrail = []
 cloudwatch = []
 codecommit = []
+codebuild = []
 codedeploy = []
 codepipeline = []
 cognito-identity = []

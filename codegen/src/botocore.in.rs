@@ -24,6 +24,7 @@ impl Service {
             "AWS Certificate Manager" => "Acm",
             "AWS CloudFormation" => "CloudFormation",
             "AWS CloudTrail" => "CloudTrail",
+            "AWS CodeBuild" => "CodeBuild",
             "AWS CodeCommit" => "CodeCommit",
             "AWS CodeDeploy" => "CodeDeploy",
             "AWS CodePipeline" => "CodePipeline",

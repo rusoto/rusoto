@@ -54,6 +54,7 @@ fn main() {
         ["cloudsearch", "2013-01-01"],
         ["cloudtrail", "2013-11-01"],
         ["cloudwatch", "2010-08-01"],
+        ["codebuild", "2016-10-06"],
         ["codecommit", "2015-04-13"],
         ["codedeploy", "2014-10-06"],
         ["codepipeline", "2015-07-09"],

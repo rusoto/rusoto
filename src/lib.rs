@@ -114,6 +114,8 @@ pub mod cloudsearch;
 pub mod cloudtrail;
 #[cfg(feature = "cloudwatch")]
 pub mod cloudwatch;
+#[cfg(feature = "codebuild")]
+pub mod codebuild;
 #[cfg(feature = "codecommit")]
 pub mod codecommit;
 #[cfg(feature = "codedeploy")]
