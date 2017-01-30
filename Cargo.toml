@@ -79,6 +79,7 @@ all = [
 	   	"codedeploy",
 	   	"codepipeline",
 	   	"cognito-identity",
+	   	"cognito-idp",
 	   	"config",
 	   	"datapipeline",
 	   	"devicefarm",
@@ -138,6 +139,7 @@ codebuild = []
 codedeploy = []
 codepipeline = []
 cognito-identity = []
+cognito-idp = []
 config = []
 datapipeline = []
 default = ["rusoto_codegen/serde_codegen", "serde_codegen"]

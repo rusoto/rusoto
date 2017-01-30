@@ -56,6 +56,7 @@ impl Service {
             "Amazon CloudWatch Logs" => "CloudWatchLogs",
             "Amazon CloudWatch" => "CloudWatch",
             "Amazon Cognito Identity" => "CognitoIdentity",
+            "Amazon Cognito Identity Provider" => "CognitoIdentityProvider",
             "Amazon Cognito Sync" => "CognitoSync",
             "Amazon DynamoDB Streams" => "DynamoDbStreams",
             "Amazon DynamoDB" => "DynamoDb",

@@ -59,6 +59,7 @@ fn main() {
         ["codedeploy", "2014-10-06"],
         ["codepipeline", "2015-07-09"],
         ["cognito-identity", "2014-06-30"],
+        ["cognito-idp", "2016-04-18"],
         ["config", "2014-11-12"],
         ["datapipeline", "2012-10-29"],
         ["devicefarm", "2015-06-23"],

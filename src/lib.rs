@@ -124,6 +124,8 @@ pub mod codedeploy;
 pub mod codepipeline;
 #[cfg(feature = "cognito-identity")]
 pub mod cognitoidentity;
+#[cfg(feature = "cognito-idp")]
+pub mod cognitoidp;
 #[cfg(feature = "config")]
 pub mod config;
 #[cfg(feature = "datapipeline")]
