@@ -213,6 +213,9 @@ fn mutate_type_name(type_name: &str) -> String {
         // RDS has a conveniently named "Option" type
         "Option" => "RDSOption".to_owned(),
 
+        // Support has a Result type that causes problems
+        "Result" => "SupportResult".to_owned(),
+
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,
     }
@@ -343,7 +346,11 @@ fn generate_struct_fields(service: &Service, shape: &Shape, serde_attrs: bool) -
                             default,
                         )]".to_owned()
                     );
-                } else if shape_type == ShapeType::Boolean && !shape.required(member_name) {
+                } else if (shape_type == ShapeType::Boolean  ||
+                        shape_type == ShapeType::Integer ||
+                        shape_type == ShapeType::Long ||
+                        shape_type == ShapeType::Double)
+                    && !shape.required(member_name) {
                     lines.push("#[serde(skip_serializing_if=\"::std::option::Option::is_none\")]".to_owned());
                 }
             }

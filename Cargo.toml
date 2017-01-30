@@ -57,21 +57,29 @@ rand = "^0.3.14"
 [features]
 all = [
 		"acm",
+		"application-autoscaling",
+		"appstream",
 	   	"autoscaling",
+	   	"budgets",
 	   	"cloudformation",
 	   	"cloudfront",
 	   	"cloudhsm",
 	   	"cloudsearch",
 	   	"cloudtrail",
 	   	"cloudwatch",
+	   	"codebuild",
 	   	"codecommit",
 	   	"codedeploy",
 	   	"codepipeline",
 	   	"cognito-identity",
+	   	"cognito-idp",
 	   	"config",
+		"cur",
 	   	"datapipeline",
 	   	"devicefarm",
 	   	"directconnect",
+	   	"discovery",
+	   	"dms",
 	   	"ds",
 	   	"dynamodb",
 	   	"dynamodbstreams",
@@ -86,33 +94,49 @@ all = [
 	   	"emr",
 	   	"events",
 	   	"firehose",
+	   	"gamelift",
+	   	"health",
 	   	"iam",
 	   	"importexport",
 	   	"inspector",
 	   	"iot",
 	   	"kinesis",
+	   	"kinesisanalytics",
 	   	"kms",
 	   	"lambda",
+	   	"lightsail",
 	   	"logs",
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
+	   	"meteringmarketplace",
 	   	"opsworks",
+	   	"opsworkscm",
 	   	"redshift",
+	   	"rekognition",
 	   	"rds",
 	   	"route53",
 	   	"route53domains",
 	   	"s3",
 	   	"sdb",
+	   	"servicecatalog",
+	   	"shield",
+	   	"snowball",
 	   	"sns",
 	   	"sqs",
 	   	"ssm",
+	   	"stepfunctions",
 	   	"storagegateway",
+	   	"support",
 	   	"swf",
 	   	"waf",
+	   	"waf-regional",
 	   	"workspaces"
 	]
 acm = []
+application-autoscaling = []
+appstream = []
 autoscaling = []
+budgets = []
 cloudformation = []
 cloudfront = []
 cloudhsm = []
@@ -120,14 +144,19 @@ cloudsearch = []
 cloudtrail = []
 cloudwatch = []
 codecommit = []
+codebuild = []
 codedeploy = []
 codepipeline = []
 cognito-identity = []
+cognito-idp = []
 config = []
+cur = []
 datapipeline = []
 default = []
 devicefarm = []
 directconnect = []
+discovery = []
+dms = []
 ds = []
 dynamodb = []
 dynamodbstreams = []
@@ -142,31 +171,44 @@ elbv2 = []
 emr = []
 events = []
 firehose = []
+gamelift = []
+health = []
 iam = []
 importexport = []
 inspector = []
 iot = []
 kinesis = []
+kinesisanalytics = []
 kms = []
 lambda = []
+lightsail = []
 logs = []
 machinelearning = []
 marketplacecommerceanalytics = []
 nightly-testing = ["clippy", "rusoto_codegen/nightly-testing", "rusoto_credential/nightly-testing"]
+meteringmarketplace = []
 opsworks = []
+opsworkscm = []
 redshift = []
+rekognition = []
 rds = []
 route53 = []
 route53domains = []
 s3 = []
 sdb = []
+servicecatalog = []
+shield = []
+snowball = []
 sns = []
 sqs = []
 ssm = []
+stepfunctions = []
 storagegateway = []
+support = []
 swf = []
 unstable = []
 waf = []
+waf-regional = []
 workspaces = []
 packagea = [
 	"acm",
