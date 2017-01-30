@@ -93,6 +93,8 @@ mod mock;
 
 #[cfg(feature = "acm")]
 pub mod acm;
+#[cfg(feature = "application-autoscaling")]
+pub mod applicationautoscaling;
 #[cfg(feature = "autoscaling")]
 pub mod autoscaling;
 #[allow(unused_imports)]

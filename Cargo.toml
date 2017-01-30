@@ -64,6 +64,7 @@ rand = "^0.3.14"
 [features]
 all = [
 		"acm",
+		"application-autoscaling",
 	   	"autoscaling",
 	   	"cloudformation",
 	   	"cloudfront",
@@ -119,6 +120,7 @@ all = [
 	   	"workspaces"
 	]
 acm = []
+application-autoscaling = []
 autoscaling = []
 cloudformation = []
 cloudfront = []

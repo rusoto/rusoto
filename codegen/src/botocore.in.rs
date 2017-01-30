@@ -82,6 +82,7 @@ impl Service {
             "Amazon Simple Workflow Service" => "Swf",
             "Amazon SimpleDB" => "SimpleDb",
             "Amazon WorkSpaces" => "Workspaces",
+            "Application Auto Scaling" => "ApplicationAutoScaling",
             "Auto Scaling" => "Autoscaling",
             "Elastic Load Balancing" => "Elb",
             name => panic!("Unknown service full name: {}", name),

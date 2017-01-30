@@ -22,11 +22,6 @@ fn generate_user_agent_vars(output_path: &Path) {
             .expect("Unable to write user agent");
 }
 
-/*
-gamelift/2015-10-01/service-2.json:    "protocol":"json"
-support/2013-04-15/service-2.json:    "protocol":"json"
-*/
-
 // expand to use cfg!() so codegen only gets run for services
 // in the features list
 macro_rules! services {
@@ -49,6 +44,7 @@ fn main() {
 
     let services = services! {
         ["acm", "2015-12-08"],
+        ["application-autoscaling", "2016-02-06"], 
         ["autoscaling", "2011-01-01"],
         ["cloudformation", "2010-05-15"],
         ["cloudfront", "2016-11-25"],
