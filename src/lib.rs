@@ -182,6 +182,8 @@ pub mod inspector;
 pub mod iot;
 #[cfg(feature = "kinesis")]
 pub mod kinesis;
+#[cfg(feature = "kinesisanalytics")]
+pub mod kinesisanalytics;
 #[cfg(feature = "kms")]
 pub mod kms;
 #[cfg(feature = "lambda")]

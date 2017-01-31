@@ -77,6 +77,7 @@ impl Service {
             "Amazon Inspector" => "Inspector",
             "Amazon Kinesis Firehose" => "KinesisFirehose",
             "Amazon Kinesis" => "Kinesis",
+            "Amazon Kinesis Analytics" => "KinesisAnalytics",
             "Amazon Machine Learning" => "MachineLearning",
             "Amazon Redshift" => "Redshift",
             "Amazon Relational Database Service" => "Rds",

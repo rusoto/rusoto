@@ -108,6 +108,7 @@ all = [
 	   	"inspector",
 	   	"iot",
 	   	"kinesis",
+	   	"kinesisanalytics",
 	   	"kms",
 	   	"lambda",
 	   	"logs",
@@ -174,6 +175,7 @@ importexport = []
 inspector = []
 iot = []
 kinesis = []
+kinesisanalytics = []
 kms = []
 lambda = []
 logs = []
