@@ -102,7 +102,11 @@ fn generate_method_signature(operation: &Operation) -> String {
 
 fn generate_payload(operation: &Operation) -> String {
     if operation.input.is_some() {
-        "let encoded = serde_json::to_string(input).unwrap();
+        "let mut encoded = serde_json::to_string(input).unwrap();
+         if encoded == \"null\" {
+            encoded = \"{}\".to_owned();
+         }
+         debug!(\"Setting payload to '{}'\", encoded);
          request.set_payload(Some(encoded.into_bytes()));
          ".to_string()
     } else {
