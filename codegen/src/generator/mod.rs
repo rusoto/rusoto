@@ -343,7 +343,11 @@ fn generate_struct_fields(service: &Service, shape: &Shape, serde_attrs: bool) -
                             default,
                         )]".to_owned()
                     );
-                } else if shape_type == ShapeType::Boolean && !shape.required(member_name) {
+                } else if (shape_type == ShapeType::Boolean  ||
+                        shape_type == ShapeType::Integer ||
+                        shape_type == ShapeType::Long ||
+                        shape_type == ShapeType::Double)
+                    && !shape.required(member_name) {
                     lines.push("#[serde(skip_serializing_if=\"::std::option::Option::is_none\")]".to_owned());
                 }
             }
