@@ -97,6 +97,7 @@ fn main() {
         ["marketplacecommerceanalytics", "2015-07-01"],
         ["meteringmarketplace", "2016-01-14"],
         ["opsworks", "2013-02-18"],
+        ["opsworkscm", "2016-11-01"],
         ["redshift", "2012-12-01"],
         ["rds", "2014-10-31"],
         ["route53", "2013-04-01"],

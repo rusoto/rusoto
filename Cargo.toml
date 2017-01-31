@@ -117,6 +117,7 @@ all = [
 	   	"marketplacecommerceanalytics",
 	   	"meteringmarketplace",
 	   	"opsworks",
+	   	"opsworkscm",
 	   	"redshift",
 	   	"rds",
 	   	"route53",
@@ -187,6 +188,7 @@ marketplacecommerceanalytics = []
 meteringmarketplace = []
 nightly-testing = ["clippy", "rusoto_codegen/nightly-testing", "rusoto_credential/nightly-testing", "unstable"]
 opsworks = []
+opsworkscm = []
 redshift = []
 rds = []
 route53 = []

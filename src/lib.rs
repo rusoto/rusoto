@@ -200,6 +200,8 @@ pub mod marketplacecommerceanalytics;
 pub mod meteringmarketplace;
 #[cfg(feature = "opsworks")]
 pub mod opsworks;
+#[cfg(feature = "opsworkscm")]
+pub mod opsworkscm;
 #[cfg(feature = "redshift")]
 pub mod redshift;
 #[cfg(feature = "rds")]

@@ -46,6 +46,7 @@ impl Service {
             "AWS Lambda" => "Lambda",
             "AWS Marketplace Commerce Analytics" => "MarketplaceCommerceAnalytics",
             "AWS OpsWorks" => "OpsWorks",
+            "AWS OpsWorks for Chef Automate" => "OpsWorksCm",
             "AWS Security Token Service" => "Sts",
             "AWS Storage Gateway" => "StorageGateway",
             "AWS Support" => "Support",
