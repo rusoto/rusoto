@@ -111,6 +111,7 @@ all = [
 	   	"kinesisanalytics",
 	   	"kms",
 	   	"lambda",
+	   	"lightsail",
 	   	"logs",
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
@@ -178,6 +179,7 @@ kinesis = []
 kinesisanalytics = []
 kms = []
 lambda = []
+lightsail = []
 logs = []
 machinelearning = []
 marketplacecommerceanalytics = []

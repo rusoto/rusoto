@@ -188,6 +188,8 @@ pub mod kinesisanalytics;
 pub mod kms;
 #[cfg(feature = "lambda")]
 pub mod lambda;
+#[cfg(feature = "lightsail")]
+pub mod lightsail;
 #[cfg(feature = "logs")]
 pub mod logs;
 #[cfg(feature = "machinelearning")]

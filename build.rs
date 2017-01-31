@@ -91,6 +91,7 @@ fn main() {
         ["kinesisanalytics", "2015-08-14"],
         ["kms", "2014-11-01"],
         ["lambda", "2015-03-31"],
+        ["lightsail", "2016-11-28"],
         ["logs", "2014-03-28"],
         ["machinelearning", "2014-12-12"],
         ["marketplacecommerceanalytics", "2015-07-01"],

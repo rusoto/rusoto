@@ -78,6 +78,7 @@ impl Service {
             "Amazon Kinesis Firehose" => "KinesisFirehose",
             "Amazon Kinesis" => "Kinesis",
             "Amazon Kinesis Analytics" => "KinesisAnalytics",
+            "Amazon Lightsail" => "Lightsail",
             "Amazon Machine Learning" => "MachineLearning",
             "Amazon Redshift" => "Redshift",
             "Amazon Relational Database Service" => "Rds",
