@@ -126,6 +126,7 @@ all = [
 	   	"s3",
 	   	"sdb",
 	   	"servicecatalog",
+	   	"shield",
 	   	"sns",
 	   	"sqs",
 	   	"ssm",
@@ -199,6 +200,7 @@ route53domains = []
 s3 = []
 sdb = []
 servicecatalog = []
+shield = []
 sns = []
 sqs = []
 ssm = []

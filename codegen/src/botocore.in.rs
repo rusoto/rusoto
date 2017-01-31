@@ -49,6 +49,7 @@ impl Service {
             "AWS OpsWorks for Chef Automate" => "OpsWorksCm",
             "AWS Security Token Service" => "Sts",
             "AWS Service Catalog" => "ServiceCatalog",
+            "AWS Shield" => "Shield",
             "AWS Storage Gateway" => "StorageGateway",
             "AWS Support" => "Support",
             "AWS WAF" => "Waf",
