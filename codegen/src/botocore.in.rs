@@ -37,6 +37,7 @@ impl Service {
             "AWS Direct Connect" => "DirectConnect",
             "AWS Directory Service" => "DirectoryService",
             "AWS Elastic Beanstalk" => "ElasticBeanstalk",
+            "AWS Health APIs and Notifications" => "Health",
             "AWS Identity and Access Management" => "Iam",
             "AWS Import/Export" => "ImportExport",
             "AWS IoT Data Plane" => "IotDataPlane",

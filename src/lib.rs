@@ -170,6 +170,8 @@ pub mod events;
 pub mod firehose;
 #[cfg(feature = "gamelift")]
 pub mod gamelift;
+#[cfg(feature = "health")]
+pub mod health;
 #[cfg(feature = "iam")]
 pub mod iam;
 #[cfg(feature = "importexport")]

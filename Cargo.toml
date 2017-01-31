@@ -102,6 +102,7 @@ all = [
 	   	"events",
 	   	"firehose",
 	   	"gamelift",
+	   	"health",
 	   	"iam",
 	   	"importexport",
 	   	"inspector",
@@ -167,6 +168,7 @@ emr = []
 events = []
 firehose = []
 gamelift = []
+health = []
 iam = []
 importexport = []
 inspector = []
