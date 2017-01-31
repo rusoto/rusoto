@@ -95,6 +95,7 @@ fn main() {
         ["logs", "2014-03-28"],
         ["machinelearning", "2014-12-12"],
         ["marketplacecommerceanalytics", "2015-07-01"],
+        ["meteringmarketplace", "2016-01-14"],
         ["opsworks", "2013-02-18"],
         ["redshift", "2012-12-01"],
         ["rds", "2014-10-31"],

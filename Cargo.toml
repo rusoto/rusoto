@@ -115,6 +115,7 @@ all = [
 	   	"logs",
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
+	   	"meteringmarketplace",
 	   	"opsworks",
 	   	"redshift",
 	   	"rds",
@@ -183,6 +184,7 @@ lightsail = []
 logs = []
 machinelearning = []
 marketplacecommerceanalytics = []
+meteringmarketplace = []
 nightly-testing = ["clippy", "rusoto_codegen/nightly-testing", "rusoto_credential/nightly-testing", "unstable"]
 opsworks = []
 redshift = []

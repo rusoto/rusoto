@@ -50,6 +50,7 @@ impl Service {
             "AWS Storage Gateway" => "StorageGateway",
             "AWS Support" => "Support",
             "AWS WAF" => "Waf",
+            "AWSMarketplace Metering" => "MarketplaceMetering",
             "Amazon API Gateway" => "ApiGateway",
             "Amazon AppStream" => "AppStream",
             "Amazon CloudFront" => "CloudFront",

@@ -196,6 +196,8 @@ pub mod logs;
 pub mod machinelearning;
 #[cfg(feature = "marketplacecommerceanalytics")]
 pub mod marketplacecommerceanalytics;
+#[cfg(feature = "meteringmarketplace")]
+pub mod meteringmarketplace;
 #[cfg(feature = "opsworks")]
 pub mod opsworks;
 #[cfg(feature = "redshift")]
