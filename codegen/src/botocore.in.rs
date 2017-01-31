@@ -48,6 +48,7 @@ impl Service {
             "AWS OpsWorks" => "OpsWorks",
             "AWS OpsWorks for Chef Automate" => "OpsWorksCm",
             "AWS Security Token Service" => "Sts",
+            "AWS Service Catalog" => "ServiceCatalog",
             "AWS Storage Gateway" => "StorageGateway",
             "AWS Support" => "Support",
             "AWS WAF" => "Waf",
@@ -268,10 +269,14 @@ pub struct Shape {
 
 impl Shape {
     pub fn is_primitive(&self) -> bool {
-        match self.shape_type {
-            ShapeType::Structure | ShapeType::Map | ShapeType::List => false,
-            _ => true,
-        }
+        is_primitive(&self.shape_type)
+    }
+}
+
+pub fn is_primitive(shape_type: &ShapeType) -> bool {
+    match *shape_type {
+        ShapeType::Structure | ShapeType::Map | ShapeType::List => false,
+        _ => true,
     }
 }
 

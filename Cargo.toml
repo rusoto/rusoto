@@ -81,7 +81,7 @@ all = [
 	   	"cognito-identity",
 	   	"cognito-idp",
 	   	"config",
-	   	"cur",
+		"cur",
 	   	"datapipeline",
 	   	"devicefarm",
 	   	"directconnect",
@@ -125,6 +125,7 @@ all = [
 	   	"route53domains",
 	   	"s3",
 	   	"sdb",
+	   	"servicecatalog",
 	   	"sns",
 	   	"sqs",
 	   	"ssm",
@@ -197,6 +198,7 @@ route53 = []
 route53domains = []
 s3 = []
 sdb = []
+servicecatalog = []
 sns = []
 sqs = []
 ssm = []
