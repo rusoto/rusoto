@@ -83,6 +83,7 @@ impl Service {
             "Amazon Lightsail" => "Lightsail",
             "Amazon Machine Learning" => "MachineLearning",
             "Amazon Redshift" => "Redshift",
+            "Amazon Rekognition" => "Rekognition",
             "Amazon Relational Database Service" => "Rds",
             "Amazon Route 53 Domains" => "Route53Domains",
             "Amazon Route 53" => "Route53",

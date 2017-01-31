@@ -119,6 +119,7 @@ all = [
 	   	"opsworks",
 	   	"opsworkscm",
 	   	"redshift",
+	   	"rekognition",
 	   	"rds",
 	   	"route53",
 	   	"route53domains",
@@ -190,6 +191,7 @@ nightly-testing = ["clippy", "rusoto_codegen/nightly-testing", "rusoto_credentia
 opsworks = []
 opsworkscm = []
 redshift = []
+rekognition = []
 rds = []
 route53 = []
 route53domains = []

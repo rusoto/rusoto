@@ -206,6 +206,8 @@ pub mod opsworkscm;
 pub mod redshift;
 #[cfg(feature = "rds")]
 pub mod rds;
+#[cfg(feature = "rekognition")]
+pub mod rekognition;
 #[cfg(feature = "route53")]
 pub mod route53;
 #[cfg(feature = "route53domains")]
