@@ -78,6 +78,7 @@ impl Service {
             "Amazon Elasticsearch Service" => "ElasticsearchService",
             "Amazon GameLift" => "GameLift",
             "Amazon Glacier" => "Glacier",
+            "Amazon Import/Export Snowball" => "Snowball",
             "Amazon Inspector" => "Inspector",
             "Amazon Kinesis Firehose" => "KinesisFirehose",
             "Amazon Kinesis" => "Kinesis",

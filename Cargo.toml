@@ -127,6 +127,7 @@ all = [
 	   	"sdb",
 	   	"servicecatalog",
 	   	"shield",
+	   	"snowball",
 	   	"sns",
 	   	"sqs",
 	   	"ssm",
@@ -201,6 +202,7 @@ s3 = []
 sdb = []
 servicecatalog = []
 shield = []
+snowball = []
 sns = []
 sqs = []
 ssm = []

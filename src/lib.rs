@@ -220,6 +220,8 @@ pub mod sdb;
 pub mod servicecatalog;
 #[cfg(feature = "shield")]
 pub mod shield;
+#[cfg(feature = "snowball")]
+pub mod snowball;
 #[cfg(feature = "sns")]
 pub mod sns;
 #[cfg(feature = "sqs")]
