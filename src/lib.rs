@@ -232,6 +232,8 @@ pub mod ssm;
 pub mod stepfunctions;
 #[cfg(feature = "storagegateway")]
 pub mod storagegateway;
+#[cfg(feature = "support")]
+pub mod support;
 #[cfg(feature = "swf")]
 pub mod swf;
 #[cfg(feature = "waf")]

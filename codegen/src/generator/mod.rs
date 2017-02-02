@@ -213,6 +213,9 @@ fn mutate_type_name(type_name: &str) -> String {
         // RDS has a conveniently named "Option" type
         "Option" => "RDSOption".to_owned(),
 
+        // Support has a Result type that causes problems
+        "Result" => "SupportResult".to_owned(),
+
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,
     }
