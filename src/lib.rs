@@ -238,6 +238,8 @@ pub mod support;
 pub mod swf;
 #[cfg(feature = "waf")]
 pub mod waf;
+#[cfg(feature = "waf-regional")]
+pub mod wafregional;
 #[cfg(feature = "workspaces")]
 pub mod workspaces;
 

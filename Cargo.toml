@@ -136,6 +136,7 @@ all = [
 	   	"support",
 	   	"swf",
 	   	"waf",
+	   	"waf-regional",
 	   	"workspaces"
 	]
 acm = []
@@ -214,4 +215,5 @@ support = []
 swf = []
 unstable = ["rusoto_codegen/unstable", "rusoto_credential/unstable", "serde_derive"]
 waf = []
+waf-regional = []
 workspaces = []
