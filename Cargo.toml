@@ -131,6 +131,7 @@ all = [
 	   	"sns",
 	   	"sqs",
 	   	"ssm",
+	   	"stepfunctions",
 	   	"storagegateway",
 	   	"swf",
 	   	"waf",
@@ -206,6 +207,7 @@ snowball = []
 sns = []
 sqs = []
 ssm = []
+stepfunctions = []
 storagegateway = []
 swf = []
 unstable = ["rusoto_codegen/unstable", "rusoto_credential/unstable", "serde_derive"]

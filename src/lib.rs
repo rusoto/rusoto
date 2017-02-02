@@ -228,6 +228,8 @@ pub mod sns;
 pub mod sqs;
 #[cfg(feature = "ssm")]
 pub mod ssm;
+#[cfg(feature = "stepfunctions")]
+pub mod stepfunctions;
 #[cfg(feature = "storagegateway")]
 pub mod storagegateway;
 #[cfg(feature = "swf")]

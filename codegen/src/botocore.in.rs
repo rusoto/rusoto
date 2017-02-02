@@ -50,6 +50,7 @@ impl Service {
             "AWS Security Token Service" => "Sts",
             "AWS Service Catalog" => "ServiceCatalog",
             "AWS Shield" => "Shield",
+            "AWS Step Functions" => "StepFunctions",
             "AWS Storage Gateway" => "StorageGateway",
             "AWS Support" => "Support",
             "AWS WAF" => "Waf",
