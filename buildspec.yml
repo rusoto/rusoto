@@ -1,0 +1,21 @@
+version: 0.1
+
+environment_variables:
+  plaintext:
+    SNS_TOPIC_ARN: arn:aws:sns:us-east-1:455897087921:rusoto-builder
+
+phases:
+  install:
+    commands:
+      - echo Nothing to do in the install phase...
+  pre_build:
+    commands:
+      - git submodule update --init --recursive
+  build:
+    commands:
+      - echo Build started on `date`
+      - cargo test --lib --features all
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - 'aws sns publish --topic-arn arn:aws:sns:us-east-1:455897087921:rusoto-builder --message "{\"buildId\": \"$CODEBUILD_BUILD_ID\"}"'
