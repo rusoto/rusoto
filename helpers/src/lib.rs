@@ -1,5 +1,4 @@
 extern crate rusoto;
-extern crate serde;
 
 #[cfg(feature = "dynamodb")]
 pub mod dynamodb;
