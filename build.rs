@@ -17,9 +17,9 @@ use rayon::prelude::*;
 fn generate_user_agent_vars(output_path: &Path) {
     let rust_version = rustc_version::version();
     let mut f = File::create(&output_path.join("user_agent_vars.rs"))
-            .expect("Could not create user agent file");
+        .expect("Could not create user agent file");
     f.write_all(format!("static RUST_VERSION: &'static str = \"{}\";", rust_version).as_bytes())
-            .expect("Unable to write user agent");
+        .expect("Unable to write user agent");
 }
 
 /*
@@ -104,7 +104,8 @@ fn main() {
         ["workspaces", "2015-04-08"]
     };
 
-    let count: usize = services.into_par_iter().map(|service| generate(service, &out_path.clone())).count();
+    let count: usize =
+        services.into_par_iter().map(|service| generate(service, &out_path.clone())).count();
     println!("\nGenerated {:?} services.\n", count);
 
     generate_user_agent_vars(&out_path);

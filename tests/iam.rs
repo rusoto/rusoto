@@ -14,9 +14,7 @@ fn get_user() {
     let iam = IamClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
     // http://docs.aws.amazon.com/IAM/latest/APIReference/Welcome.html
-    let request = GetUserRequest {
-        ..Default::default()
-    };
+    let request = GetUserRequest { ..Default::default() };
     iam.get_user(&request).unwrap();
 }
 
@@ -27,8 +25,6 @@ fn list_users() {
     let iam = IamClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
     // http://docs.aws.amazon.com/IAM/latest/APIReference/Welcome.html
-    let request = ListUsersRequest {
-        ..Default::default()
-    };
+    let request = ListUsersRequest { ..Default::default() };
     iam.list_users(&request).unwrap();
 }

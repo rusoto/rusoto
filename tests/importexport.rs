@@ -10,11 +10,10 @@ use rusoto::default_tls_client;
 fn should_list_jobs() {
     let _ = env_logger::init();
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = ImportExportClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client =
+        ImportExportClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListJobsInput::default();
 
     let result = client.list_jobs(&request);
     println!("{:#?}", result);
 }
-
-

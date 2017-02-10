@@ -14,4 +14,3 @@ fn should_describe_repositories() {
 
     client.describe_repositories(&request).unwrap();
 }
-

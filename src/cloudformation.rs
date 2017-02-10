@@ -64,9 +64,7 @@ mod test {
         let filters = vec!["CREATE_IN_PROGRESS".to_owned(), "DELETE_COMPLETE".to_owned()];
         let request = ListStacksInput { stack_status_filter: Some(filters), ..Default::default() };
 
-        let client = CloudFormationClient::new(mock,
-                                                                   MockCredentialsProvider,
-                                                                   Region::UsEast1);
+        let client = CloudFormationClient::new(mock, MockCredentialsProvider, Region::UsEast1);
         let _result = client.list_stacks(&request).unwrap();
     }
 }

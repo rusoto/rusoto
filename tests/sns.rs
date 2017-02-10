@@ -15,5 +15,3 @@ fn should_list_topics() {
     let result = client.list_topics(&request).unwrap();
     println!("{:#?}", result);
 }
-
-

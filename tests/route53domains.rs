@@ -9,7 +9,8 @@ use rusoto::default_tls_client;
 #[test]
 fn should_list_operations() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = Route53DomainsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client =
+        Route53DomainsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = ListOperationsRequest::default();
 
     client.list_operations(&request).unwrap();

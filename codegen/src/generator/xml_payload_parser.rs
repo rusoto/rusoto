@@ -26,7 +26,10 @@ pub fn generate_deserializer(name: &str, shape: &Shape, service: &Service) -> St
             deserializer_body = generate_deserializer_body(name, shape, service))
 }
 
-pub fn generate_response_parser(service: &Service, operation: &Operation, mutable_result: bool) -> String {
+pub fn generate_response_parser(service: &Service,
+                                operation: &Operation,
+                                mutable_result: bool)
+                                -> String {
     if operation.output.is_none() {
         return "let result = ();".to_string();
     }
@@ -57,8 +60,8 @@ fn payload_body_parser(payload_type: ShapeType,
                        payload_member: &str)
                        -> String {
     let response_body = match payload_type {
-        ShapeType::Blob => "Some(response.raw_body.to_vec())",
-        _ => "Some(response.body.to_owned())",
+        ShapeType::Blob => "Some(response.body)",
+        _ => "Some(String::from_utf8_lossy(&response.body).into_owned())",
     };
 
     format!("
@@ -70,7 +73,10 @@ fn payload_body_parser(payload_type: ShapeType,
             response_body = response_body)
 }
 
-fn xml_body_parser(output_shape: &str, result_wrapper: &Option<String>, mutable_result: bool) -> String {
+fn xml_body_parser(output_shape: &str,
+                   result_wrapper: &Option<String>,
+                   mutable_result: bool)
+                   -> String {
     let let_result = if mutable_result {
         "let mut result;"
     } else {
@@ -83,12 +89,12 @@ fn xml_body_parser(output_shape: &str, result_wrapper: &Option<String>, mutable_
                      result = try!({output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack));
                      skip_tree(&mut stack);
                      try!(end_element(&actual_tag_name, &mut stack));",
-                     output_shape = output_shape,
-                     tag_name = tag_name)
-        },
+                    output_shape = output_shape,
+                    tag_name = tag_name)
+        }
         &None => {
             format!("result = try!({output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack));",
-                     output_shape = output_shape)
+                    output_shape = output_shape)
         }
     };
 
@@ -99,7 +105,7 @@ fn xml_body_parser(output_shape: &str, result_wrapper: &Option<String>, mutable_
             result = {output_shape}::default();
         }} else {{
             let reader = EventReader::new_with_config(
-                response.body.as_bytes(),
+                response.body.as_slice(),
                 ParserConfig::new().trim_whitespace(true)
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -195,13 +201,13 @@ fn generate_map_deserializer(shape: &Shape) -> String {
     let key = shape.key.as_ref().unwrap();
     let value = shape.value.as_ref().unwrap();
 
-    let entry_location = shape.location_name.as_ref()
-                                            .map(String::as_ref)
-                                            .unwrap_or_else(|| "entry");
+    let entry_location = shape.location_name
+        .as_ref()
+        .map(String::as_ref)
+        .unwrap_or_else(|| "entry");
 
     // the core of the map parser is the same whether or not it's flattened
-    let entries_parser = format!(
-        "
+    let entries_parser = format!("
         let mut obj = ::std::collections::HashMap::new();
 
         while try!(peek_at_name(stack)) == \"{entry_location}\" {{
@@ -212,25 +218,28 @@ fn generate_map_deserializer(shape: &Shape) -> String {
             try!(end_element(\"{entry_location}\", stack));
         }}
         ",
-        key_tag_name = key.tag_name(),
-        key_type_name = key.shape,
-        value_tag_name = value.tag_name(),
-        value_type_name = value.shape,
-        entry_location = entry_location
-    );
+                                 key_tag_name = key.tag_name(),
+                                 key_type_name = key.shape,
+                                 value_tag_name = value.tag_name(),
+                                 value_type_name = value.shape,
+                                 entry_location = entry_location);
 
     // if the map is flattened, just return the entries parser
     // otherwise parse a start and end tag around the whole map
     match shape.flattened {
-        Some(true) => format!("{entries_parser}
+        Some(true) => {
+            format!("{entries_parser}
                                Ok(obj)",
-                              entries_parser = entries_parser),
-        _ => format!("try!(start_element(tag_name, stack));
+                    entries_parser = entries_parser)
+        }
+        _ => {
+            format!("try!(start_element(tag_name, stack));
                     {entries_parser}
                     try!(end_element(tag_name, stack));
                     Ok(obj)
                     ",
                     entries_parser = entries_parser)
+        }
     }
 }
 
@@ -328,8 +337,7 @@ fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> Stri
             let mut location_name = member.location_name.as_ref().unwrap_or(member_name);
 
             // skip deprecated and non-XML fields
-            if member.deprecated() ||
-               member.location == Some("header".to_owned()) ||
+            if member.deprecated() || member.location == Some("header".to_owned()) ||
                member.location == Some("headers".to_owned()) {
                 return None;
             }
@@ -344,10 +352,8 @@ fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> Stri
                 }
             }
 
-            let parse_expression = generate_struct_field_parse_expression(shape,
-                                                                          member_name,
-                                                                          member,
-                                                                          location_name);
+            let parse_expression =
+                generate_struct_field_parse_expression(shape, member_name, member, location_name);
             Some(format!(
             "\"{location_name}\" => {{
                 obj.{field_name} = {parse_expression};

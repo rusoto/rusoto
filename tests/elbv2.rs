@@ -16,5 +16,3 @@ fn should_describe_load_balancers() {
     let result = client.describe_load_balancers(&request);
     println!("{:#?}", result);
 }
-
-
