@@ -20,18 +20,24 @@ impl Service {
 
     pub fn service_type_name(&self) -> &str {
         match &self.metadata.service_full_name[..] {
+            "AWS Application Discovery Service" => "ApplicationDiscovery",
+            "AWS Budgets" => "Budgets",
             "AWS Certificate Manager" => "Acm",
             "AWS CloudFormation" => "CloudFormation",
             "AWS CloudTrail" => "CloudTrail",
+            "AWS CodeBuild" => "CodeBuild",
             "AWS CodeCommit" => "CodeCommit",
             "AWS CodeDeploy" => "CodeDeploy",
             "AWS CodePipeline" => "CodePipeline",
             "AWS Config" => "ConfigService",
+            "AWS Cost and Usage Report Service" => "CostAndUsageReport",
             "AWS Data Pipeline" => "DataPipeline",
+            "AWS Database Migration Service" => "DatabaseMigration",
             "AWS Device Farm" => "DeviceFarm",
             "AWS Direct Connect" => "DirectConnect",
             "AWS Directory Service" => "DirectoryService",
             "AWS Elastic Beanstalk" => "ElasticBeanstalk",
+            "AWS Health APIs and Notifications" => "Health",
             "AWS Identity and Access Management" => "Iam",
             "AWS Import/Export" => "ImportExport",
             "AWS IoT Data Plane" => "IotDataPlane",
@@ -40,11 +46,18 @@ impl Service {
             "AWS Lambda" => "Lambda",
             "AWS Marketplace Commerce Analytics" => "MarketplaceCommerceAnalytics",
             "AWS OpsWorks" => "OpsWorks",
+            "AWS OpsWorks for Chef Automate" => "OpsWorksCm",
             "AWS Security Token Service" => "Sts",
+            "AWS Service Catalog" => "ServiceCatalog",
+            "AWS Shield" => "Shield",
+            "AWS Step Functions" => "StepFunctions",
             "AWS Storage Gateway" => "StorageGateway",
             "AWS Support" => "Support",
             "AWS WAF" => "Waf",
+            "AWS WAF Regional" => "WafRegional",
+            "AWSMarketplace Metering" => "MarketplaceMetering",
             "Amazon API Gateway" => "ApiGateway",
+            "Amazon AppStream" => "AppStream",
             "Amazon CloudFront" => "CloudFront",
             "Amazon CloudHSM" => "CloudHsm",
             "Amazon CloudSearch Domain" => "CloudSearchDomain",
@@ -53,6 +66,7 @@ impl Service {
             "Amazon CloudWatch Logs" => "CloudWatchLogs",
             "Amazon CloudWatch" => "CloudWatch",
             "Amazon Cognito Identity" => "CognitoIdentity",
+            "Amazon Cognito Identity Provider" => "CognitoIdentityProvider",
             "Amazon Cognito Sync" => "CognitoSync",
             "Amazon DynamoDB Streams" => "DynamoDbStreams",
             "Amazon DynamoDB" => "DynamoDb",
@@ -66,11 +80,15 @@ impl Service {
             "Amazon Elasticsearch Service" => "ElasticsearchService",
             "Amazon GameLift" => "GameLift",
             "Amazon Glacier" => "Glacier",
+            "Amazon Import/Export Snowball" => "Snowball",
             "Amazon Inspector" => "Inspector",
             "Amazon Kinesis Firehose" => "KinesisFirehose",
             "Amazon Kinesis" => "Kinesis",
+            "Amazon Kinesis Analytics" => "KinesisAnalytics",
+            "Amazon Lightsail" => "Lightsail",
             "Amazon Machine Learning" => "MachineLearning",
             "Amazon Redshift" => "Redshift",
+            "Amazon Rekognition" => "Rekognition",
             "Amazon Relational Database Service" => "Rds",
             "Amazon Route 53 Domains" => "Route53Domains",
             "Amazon Route 53" => "Route53",
@@ -82,6 +100,7 @@ impl Service {
             "Amazon Simple Workflow Service" => "Swf",
             "Amazon SimpleDB" => "SimpleDb",
             "Amazon WorkSpaces" => "Workspaces",
+            "Application Auto Scaling" => "ApplicationAutoScaling",
             "Auto Scaling" => "Autoscaling",
             "Elastic Load Balancing" => "Elb",
             name => panic!("Unknown service full name: {}", name),
@@ -254,10 +273,14 @@ pub struct Shape {
 
 impl Shape {
     pub fn is_primitive(&self) -> bool {
-        match self.shape_type {
-            ShapeType::Structure | ShapeType::Map | ShapeType::List => false,
-            _ => true,
-        }
+        is_primitive(&self.shape_type)
+    }
+}
+
+pub fn is_primitive(shape_type: &ShapeType) -> bool {
+    match *shape_type {
+        ShapeType::Structure | ShapeType::Map | ShapeType::List => false,
+        _ => true,
     }
 }
 
