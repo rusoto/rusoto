@@ -54,14 +54,11 @@ extern crate ring;
 extern crate rusoto_credential;
 extern crate rustc_serialize;
 extern crate serde;
+#[macro_use] extern crate serde_derive;
 extern crate serde_json;
 extern crate time;
 extern crate url;
 extern crate xml;
-
-#[cfg(feature = "serde_derive")]
-#[macro_use]
-extern crate serde_derive;
 
 pub use region::{ParseRegionError, Region};
 pub use rusoto_credential::{

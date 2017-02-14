@@ -35,8 +35,9 @@ md5 = "0.3.2"
 regex = "0.2.1"
 ring = "0.6"
 rustc-serialize = "0.3.19"
-serde = "0.8.0"
-serde_json = "0.8.0"
+serde = "0.9.5"
+serde_derive = "0.9.5"
+serde_json = "0.9.4"
 time = "0.1.35"
 url = "1.2.0"
 xml-rs = "0.3"
@@ -48,14 +49,6 @@ version = "0.0"
 [dependencies.rusoto_credential]
 path = "credential"
 version = "0.4.0"
-
-[dependencies.serde_codegen]
-optional = true
-version = "0.8.0"
-
-[dependencies.serde_derive]
-optional = true
-version = "0.8.19"
 
 [dev-dependencies]
 env_logger = "0.4.0"
@@ -132,7 +125,7 @@ codepipeline = []
 cognito-identity = []
 config = []
 datapipeline = []
-default = ["rusoto_codegen/serde_codegen", "serde_codegen"]
+default = []
 devicefarm = []
 directconnect = []
 ds = []
@@ -159,7 +152,7 @@ lambda = []
 logs = []
 machinelearning = []
 marketplacecommerceanalytics = []
-nightly-testing = ["clippy", "rusoto_codegen/nightly-testing", "rusoto_credential/nightly-testing", "unstable"]
+nightly-testing = ["clippy", "rusoto_codegen/nightly-testing", "rusoto_credential/nightly-testing"]
 opsworks = []
 redshift = []
 rds = []
@@ -172,6 +165,5 @@ sqs = []
 ssm = []
 storagegateway = []
 swf = []
-unstable = ["rusoto_codegen/unstable", "rusoto_credential/unstable", "serde_derive"]
 waf = []
 workspaces = []
