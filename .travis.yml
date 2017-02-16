@@ -15,9 +15,6 @@ cache: cargo
 rust:
   # check that it compiles on the latest stable compiler
   - stable
-  # and the first stable one (this should be bumped as the minimum Rust version
-  # required changes)
-  - 1.13.0
   - beta
   - nightly
 os:
@@ -35,34 +32,19 @@ before_script:
       else
         export PATH=$HOME/Library/Python/2.7/bin:$PATH
       fi
-  - |
-      if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-        brew install openssl && \
-        export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include && \
-        export OPENSSL_LIB_DIR=`brew --prefix openssl`/lib && \
-        echo "Installed openssl for osx."
-      fi
 
 # the main build
 script:
   - |
       echo "Compiling Rusoto codegen" &&
-      if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
-        export CARGO_ARGS="--no-default-features"
-      fi &&
       (cd codegen && \
         travis-cargo build -- $CARGO_ARGS && \
         travis-cargo test -- --lib $CARGO_ARGS && \
         travis-cargo bench -- $CARGO_ARGS)
   - |
       echo "Setting Rusoto compilation arguments" &&
-      if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
-        export CARGO_ARGS="--no-default-features --features $RUSOTO_FEATURES -vv"
-      else
-        export CARGO_ARGS="--features $RUSOTO_FEATURES -vv"
-      fi
-  - echo "Compiling all of Rusoto" && travis_wait 30 travis-cargo build -- $CARGO_ARGS
-  - echo "Running Rusoto tests" && travis_wait travis-cargo test -- --lib $CARGO_ARGS
+      export CARGO_ARGS="--features $RUSOTO_FEATURES -vv"
+  - echo "Running Rusoto tests" && travis_wait 40 travis-cargo test -- --lib $CARGO_ARGS
   - echo "Running Rusoto benchmarks" && travis_wait travis-cargo bench -- $CARGO_ARGS
   - echo "Running rusoto_credential tests" && (cd credential && travis_wait travis-cargo test)
   - |

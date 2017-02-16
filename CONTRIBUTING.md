@@ -4,19 +4,7 @@
 
 See minimum version of Rust required in [README](README.md).
 
-Check out code from github.
-
-If you're on OSX, you'll probably need a new version of openssl.  Run `brew install openssl`.
-
-Do one of the following to make rust-openssl see the Homebrew-installed OpenSSL:
-
-1.  Run `brew link --force openssl`.
-2.  Run:
-
-    ``` bash
-    export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include
-    export OPENSSL_LIB_DIR=`brew --prefix openssl`/lib
-    ```
+Check out code from GitHub.
 
 Set up AWS credentials: environment variables (export AWS_ACCESS_KEY_ID and
 AWS_SECRET_ACCESS_KEY), populate the ~/.aws/credentials file, or use an

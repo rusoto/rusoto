@@ -5,38 +5,24 @@ authors = [
     "Matthew Mayer <matthewkmayer@gmail.com>",
     "Nikita Pekin <contact@nikitapek.in>"
 ]
-build = "build.rs"
 description = "Code generation library for Rusoto."
 license = "MIT"
 name = "rusoto_codegen"
 repository = "https://github.com/rusoto/rusoto"
 version = "0.6.0"
 
-[build-dependencies.serde_codegen]
-optional = true
-version = "0.8.0"
-
 [dependencies]
 Inflector = "0.7.0"
 lazy_static = "0.2.1"
 regex = "0.2.1"
-serde = "0.8.0"
-serde_json = "0.8.0"
+serde = "0.9.5"
+serde_derive = "0.9.5"
+serde_json = "0.9.4"
 hyper = "0.10.0"
 
 [dependencies.clippy]
 optional = true
 version = "0.0"
 
-[dependencies.serde_codegen]
-optional = true
-version = "0.8.19"
-
-[dependencies.serde_derive]
-optional = true
-version = "0.8.19"
-
 [features]
-default = ["serde_codegen"]
-nightly-testing = ["clippy", "unstable"]
-unstable = ["serde_derive"]
+nightly-testing = ["clippy"]

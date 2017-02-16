@@ -31,9 +31,9 @@ You may be looking for:
 
 ## Requirements
 
-Rust 1.13.0 or later is required.
+Rust 1.15.0 or later is required.
 
-On OS X and Windows, you may need to install the openssl runtime and headers to get the `rust-openssl` dependency to build. Instructions for that can be found [here](https://github.com/sfackler/rust-openssl#building).
+On Linux, OpenSSL is required.
 
 ## Installation
 
@@ -44,7 +44,7 @@ For example, to include only S3 and SQS:
 
 ``` toml
 [dependencies]
-rusoto = {version = "0.20", features = ["s3", "sqs"]}
+rusoto = {version = "0.22", features = ["s3", "sqs"]}
 ```
 
 You can use the Cargo feature "all" to build Rusoto with support for every available service. Warning: building with "all" can require upwards of 5 GB of memory. Most people do not need all 40+ services so use individual features to enable the services you use.

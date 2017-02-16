@@ -285,7 +285,7 @@ fn in_ten_minutes() -> DateTime<UTC> {
 }
 
 fn extract_string_value_from_json(json_object: &Value, key: &str) -> Result<String, CredentialsError> {
-    match json_object.find(key) {
+    match json_object.get(key) {
         Some(v) => Ok(v.as_str().expect(&format!("{} value was not a string", key)).to_owned()),
         None => Err(CredentialsError::new(format!("Couldn't find {} in response.", key))),
     }
