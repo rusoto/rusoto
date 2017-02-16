@@ -23,7 +23,7 @@ impl ProvideAwsCredentials for ContainerProvider {
         let address: String = format!("http://{}{}", AWS_CREDENTIALS_PROVIDER_IP, aws_container_credentials_relative_uri);
 
         let mut response =
-            match retry::retry_exponentially(5, 0_f64, || { reqwest::get(&address) },
+            match retry::retry_exponentially(5, 7f64, || { reqwest::get(&address) },
             |response_attempt| {
                 match response_attempt.as_ref() {
                     Ok(response_returned) => response_returned.status().is_success(),

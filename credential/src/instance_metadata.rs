@@ -14,7 +14,7 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         let mut address : String = "http://169.254.169.254/latest/meta-data/iam/security-credentials".to_string();
         let mut response =
-            match retry::retry_exponentially(5, 0_f64, || { reqwest::get(&address) },
+            match retry::retry_exponentially(5, 7f64, || { reqwest::get(&address) },
             |response_attempt| {
                 match response_attempt.as_ref() {
                     Ok(response_returned) => response_returned.status().is_success(),
