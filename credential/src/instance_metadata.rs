@@ -39,10 +39,24 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
         address.push_str("/");
         address.push_str(&body);
         body = String::new();
-        match reqwest::get(&address) {
-                Err(_) => return Err(CredentialsError::new("Didn't get a parseable response body from instance role details")),
-                Ok(received_response) => response = received_response
-            };
+
+        response =
+            match retry::retry_exponentially(5, 7f64, || { reqwest::get(&address) },
+            |response_attempt| {
+                match response_attempt.as_ref() {
+                    Ok(response_returned) => response_returned.status().is_success(),
+                    Err(_) => false,
+                }
+            })
+        {
+            Ok(response_from_try) => {
+                match response_from_try {
+                    Ok(resp) => resp,
+                    Err(err) => return Err(CredentialsError::new(&format!("Couldn't connect to credentials provider: {}", err))),
+                }
+            }
+            Err(error) => return Err(CredentialsError::new(&format!("Couldn't connect to credentials provider: {}", error))),
+        };
 
         if response.read_to_string(&mut body).is_err() {
             return Err(CredentialsError::new("Had issues with reading iam role response: {}"));
