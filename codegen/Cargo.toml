@@ -26,3 +26,4 @@ version = "0.0"
 
 [features]
 nightly-testing = ["clippy"]
+unstable = []
