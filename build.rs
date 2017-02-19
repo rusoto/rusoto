@@ -101,7 +101,8 @@ fn main() {
         ["storagegateway", "2013-06-30"],
         ["swf", "2012-01-25"],
         ["waf", "2015-08-24"],
-        ["workspaces", "2015-04-08"]
+        ["workspaces", "2015-04-08"],
+        ["xray", "2016-04-12"]
     };
 
     let count: usize = services.into_par_iter().map(|service| generate(service, &out_path.clone())).count();
