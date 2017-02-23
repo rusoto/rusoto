@@ -14,7 +14,7 @@ license = "MIT"
 name = "rusoto"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.22.0"
+version = "0.23.0"
 
 [build-dependencies]
 rustc_version = "0.1.7"
@@ -23,7 +23,7 @@ rayon = "0.6.0"
 [build-dependencies.rusoto_codegen]
 default-features = false
 path = "codegen"
-version = ">= 0.6.0"
+version = ">= 0.7.0"
 
 [dependencies]
 chrono = "0.2.21"
@@ -48,7 +48,7 @@ version = "0.0"
 
 [dependencies.rusoto_credential]
 path = "credential"
-version = "0.4.0"
+version = "0.5.0"
 
 [dev-dependencies]
 env_logger = "0.4.0"
