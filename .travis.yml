@@ -44,7 +44,9 @@ script:
   - |
       echo "Setting Rusoto compilation arguments" &&
       export CARGO_ARGS="--features $RUSOTO_FEATURES -vv"
-  - echo "Running Rusoto tests" && travis_wait 40 travis-cargo test -- --lib $CARGO_ARGS
+  # get around our code being too big: split compilation up into A and B packages:
+  - echo "Running Rusoto tests A" && travis_wait 40 travis-cargo test -- --lib --features packagea -vv
+  - echo "Running Rusoto tests B" && travis_wait 40 travis-cargo test -- --lib --features packageb -vv
   - echo "Running Rusoto benchmarks" && travis_wait travis-cargo bench -- $CARGO_ARGS
   - echo "Running rusoto_credential tests" && (cd credential && travis_wait travis-cargo test)
   - |
