@@ -165,6 +165,7 @@ sqs = []
 ssm = []
 storagegateway = []
 swf = []
+unstable = []
 waf = []
 workspaces = []
 packagea = [
