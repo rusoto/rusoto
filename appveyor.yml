@@ -24,9 +24,11 @@ install:
 # Equivalent to Travis' `script` phase
 build_script:
   # We only build and test a subset due to https://github.com/rusoto/rusoto/issues/537
-  - cargo build --features "dynamodb s3 sqs" -vv
+  - cargo build --features "packagea" -vv
+  - cargo build --features "packageb" -vv
 test_script:
-  - cargo test --lib --features "dynamodb s3 sqs"
+  - cargo test --lib --features "packagea"
+  - cargo test --lib --features "packageb"
 
 branches:
   only:
