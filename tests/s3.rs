@@ -181,6 +181,7 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
 
     let result = client.get_object(&get_req).unwrap();
     println!("get object result: {:#?}", result);
+    assert!(result.body.unwrap().len() > 0);
 }
 
 fn test_get_object_range(client: &TestClient, bucket: &str, filename: &str) {
