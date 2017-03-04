@@ -57,7 +57,7 @@ fn payload_body_parser(payload_type: ShapeType,
                        payload_member: &str)
                        -> String {
     let response_body = match payload_type {
-        ShapeType::Blob => "Some(response.body.as_bytes().to_vec())",
+        ShapeType::Blob => "Some(response.raw_body.to_vec())",
         _ => "Some(response.body.to_owned())",
     };
 
