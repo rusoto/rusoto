@@ -1,3 +1,4 @@
 format_strings = false
 fn_brace_style = "PreferSameLine"
 item_brace_style = "PreferSameLine"
+max_width = 140 # allow longer lines to run through rustfmt
