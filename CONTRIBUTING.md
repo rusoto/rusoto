@@ -38,3 +38,17 @@ For more verbose test output, you can run `cargo test --verbose --features FEATU
 
 See [Cargo.toml](codegen/Cargo.toml) and [build.rs](codegen/build.rs) in the
 rusoto_codegen subcrate.
+
+## Clippy
+
+Instructions on [clippy's homepage](https://github.com/Manishearth/rust-clippy) has details on how to install and run.
+These commands assume `rustup` is installed and clippy isn't installed yet:
+
+`rustup update`
+`rustup default nightly`
+`cargo install clippy`
+`cargo clippy`
+
+Once installed, clippy can be run via `cargo clippy` if `rustup` is using the nightly branch, or it can be run like this:
+
+`rustup run nightly cargo clippy`
