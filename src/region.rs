@@ -4,6 +4,7 @@
 //!
 //! For example: `UsEast1` to "us-east-1"
 
+use std;
 use std::error::Error;
 use std::str::FromStr;
 use std::fmt::{Display, Error as FmtError, Formatter};
@@ -63,7 +64,8 @@ impl FromStr for Region {
     type Err = ParseRegionError;
 
     fn from_str(s: &str) -> Result<Region, ParseRegionError> {
-        match s {
+        let v : &str = &s.to_lowercase();
+        match v {
             "ap-northeast-1" => Ok(Region::ApNortheast1),
             "ap-northeast-2" => Ok(Region::ApNortheast2),
             "ap-south-1" => Ok(Region::ApSouth1),
@@ -101,6 +103,19 @@ impl Error for ParseRegionError {
 impl Display for ParseRegionError {
     fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
         write!(f, "{}", self.message)
+    }
+}
+
+pub fn default_region() -> Region {
+    match std::env::var("AWS_DEFAULT_REGION") {
+        Ok(v) => {
+            let slice : &str = &v;
+            match Region::from_str(slice) {
+                Ok(region) => region,
+                Err(_) => Region::UsEast1,
+            }
+        },
+        Err(_) => Region::UsEast1,
     }
 }
 
