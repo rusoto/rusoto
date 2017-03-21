@@ -76,6 +76,7 @@ pub use rusoto_credential::{
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError};
 pub use signature::SignedRequest;
 pub use request::default_tls_client;
+pub use region::default_region;
 
 mod param;
 mod region;
