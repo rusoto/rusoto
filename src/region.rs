@@ -106,6 +106,8 @@ impl Display for ParseRegionError {
     }
 }
 
+/// Get the region from AWS_DEFAULT_REGION environment variable.
+/// Uses us-east-1 if not set or value is malformed.
 pub fn default_region() -> Region {
     match std::env::var("AWS_DEFAULT_REGION") {
         Ok(v) => {
