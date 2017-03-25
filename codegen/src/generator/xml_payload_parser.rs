@@ -3,13 +3,8 @@ use inflector::Inflector;
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::{generate_field_name, mutate_type_name};
 
-pub fn generate_struct_attributes(deserialized: bool) -> String {
-    let mut derived = vec!["Default"];
-
-    if deserialized {
-        derived.push("Debug, Clone")
-    }
-
+pub fn generate_struct_attributes(_deserialized: bool) -> String {
+    let derived = vec!["Default", "Debug", "Clone"];
     format!("#[derive({})]", derived.join(","))
 }
 
