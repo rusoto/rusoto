@@ -15,22 +15,32 @@ impl GenerateProtocol for JsonGenerator {
             writeln!(writer,
                      "
                 {documentation}
-                {method_signature} -> Result<{output_type}, {error_type}> {{
+                {method_signature} -> Box<Future<Item = {output_type}, Error = {error_type}>> {{
                     let mut request = SignedRequest::new(\"{http_method}\", \"{signing_name}\", self.region, \"{request_uri}\");
                     {modify_endpoint_prefix}
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {{
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err({error_type}::from(err)))
+                    }};
 
-                    match response.status {{
-                        StatusCode::Ok => {{
-                            {ok_response}
-                        }}
-                        _ => Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref())),
-                    }}
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| {error_type}::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {{
+                                StatusCode::Ok => {{
+                                    {ok_response}
+                                }}
+                                _ => future::err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                            }}
+                        );
+
+                    Box::new(res)
                 }}
                 ",
                      documentation = generate_documentation(operation).unwrap_or("".to_owned()),
@@ -56,7 +66,8 @@ impl GenerateProtocol for JsonGenerator {
                  "use serde_json;
         use signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
-        use serde_json::from_str;")
+        use serde_json::from_str;
+        use futures::{{Future, future}};")
     }
 
     fn generate_struct_attributes(&self,
@@ -122,9 +133,9 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("Ok(serde_json::from_str::<{}>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())",
+        format!("future::ok(serde_json::from_str::<{}>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())",
                 output_type)
     } else {
-        "Ok(())".to_owned()
+        "future::ok(())".to_owned()
     }
 }

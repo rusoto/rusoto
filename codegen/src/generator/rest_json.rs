@@ -38,7 +38,7 @@ impl GenerateProtocol for RestJsonGenerator {
 
             writeln!(writer,"
                 {documentation}
-                {method_signature} -> Result<{output_type}, {error_type}> {{
+                {method_signature} -> Box<Future<Item = {output_type}, Error = {error_type}>> {{
                     {encode_input}
 
                     {request_uri_formatter}
@@ -49,27 +49,37 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_payload}
                     {load_params}
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    let credentials = match self.credentials_provider.credentials() {{
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err({error_type}::from(err)))
+                    }};
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    request.sign(&credentials);
 
-                    // `serde-json` serializes field-less structs as \"null\", but AWS returns
-                    // \"{{}}\" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b\"{{}}\" {{
-                        body = b\"null\".to_vec();
-                    }}
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| {error_type}::from(dispatch_err))
+                        .and_then(|result| {{
+                            let mut body = result.body;
 
-                    debug!(\"Response body: {{:?}}\", body);
-                    debug!(\"Response status: {{}}\", result.status);
+                            // `serde-json` serializes field-less structs as \"null\", but AWS returns
+                            // \"{{}}\" for a field-less response, so we must check for this result
+                            // and convert it if necessary.
+                            if body == \"{{}}\" {{
+                                body = \"null\".to_owned();
+                            }}
 
-                    match result.status {{
-                        {status_code} => {{
-                            {ok_response}
-                        }}
-                         _ => Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref())),
-                    }}
+                            debug!(\"Response body: {{}}\", body);
+                            debug!(\"Response status: {{}}\", result.status);
+
+                            match result.status {{
+                                {status_code} => {{
+                                    {ok_response}
+                                }}
+                                 _ => future::err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref()),
+                            }}
+                        }});
+
+                    Box::new(res)
                 }}
                 ",
                 documentation = generate_documentation(operation).unwrap_or("".to_owned()),
@@ -99,7 +109,8 @@ impl GenerateProtocol for RestJsonGenerator {
         use signature::SignedRequest;
         use serde_json;
         use serde_json::from_str;
-        use serde_json::Value as SerdeJsonValue;")
+        use serde_json::Value as SerdeJsonValue;
+        use futures::{{Future, future}};")
 
     }
 
@@ -305,9 +316,9 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("Ok(serde_json::from_str::<{}>(String::from_utf8_lossy(&body).as_ref()).unwrap())",
+        format!("future::ok(serde_json::from_str::<{}>(String::from_utf8_lossy(&body).as_ref()).unwrap())",
                 output_type)
     } else {
-        "Ok(())".to_owned()
+        "future::ok(())".to_owned()
     }
 }

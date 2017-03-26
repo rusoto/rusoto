@@ -5,20 +5,22 @@
 extern crate lazy_static;
 
 use std::env;
-use std::io::Read;
 use std::io::Error as IoError;
 use std::error::Error;
 use std::fmt;
 use std::collections::HashMap;
+use std::str::FromStr;
 
-use hyper::Client;
+use hyper::{Client, Uri, Body};
 use hyper::Error as HyperError;
-use hyper::header::{Headers, UserAgent};
+use hyper::client::Request;
+use hyper::header::UserAgent;
 use hyper::status::StatusCode;
-use hyper::method::Method;
-use hyper::client::RedirectPolicy;
-use hyper::net::HttpsConnector;
-use hyper_native_tls::NativeTlsClient;
+use hyper::Method;
+use hyper_tls::HttpsConnector;
+
+use futures::{Future, future, Stream};
+use tokio_core::reactor::Handle;
 
 use log::LogLevel::Debug;
 
@@ -71,31 +73,22 @@ impl From<IoError> for HttpDispatchError {
     }
 }
 
+type AwsFuture = Box<Future<Item = HttpResponse, Error = HttpDispatchError>>;
+
 pub trait DispatchSignedRequest {
-    fn dispatch(&self, request: &SignedRequest) -> Result<HttpResponse, HttpDispatchError>;
+    fn dispatch(&self, request: &SignedRequest) -> AwsFuture;
 }
 
-impl DispatchSignedRequest for Client {
-    fn dispatch(&self, request: &SignedRequest) -> Result<HttpResponse, HttpDispatchError> {
+impl DispatchSignedRequest for Client<HttpsConnector> {
+    fn dispatch(&self, request: &SignedRequest) -> AwsFuture {
         let hyper_method = match request.method().as_ref() {
             "POST" => Method::Post,
             "PUT" => Method::Put,
             "DELETE" => Method::Delete,
             "GET" => Method::Get,
             "HEAD" => Method::Head,
-            v => return Err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) }),
+            v => return Box::new(future::err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) })),
         };
-
-        // translate the headers map to a format Hyper likes
-        let mut hyper_headers = Headers::new();
-        for h in request.headers().iter() {
-            hyper_headers.set_raw(h.0.to_owned(), h.1.to_owned());
-        }
-
-        // Add a default user-agent header if one is not already present.
-        if !hyper_headers.has::<UserAgent>() {
-            hyper_headers.set_raw("user-agent".to_owned(), DEFAULT_USER_AGENT.clone());
-        }
 
         let mut final_uri = format!("https://{}{}", request.hostname(), request.canonical_path());
         if !request.canonical_query_string().is_empty() {
@@ -115,41 +108,71 @@ impl DispatchSignedRequest for Client {
                    hyper_method,
                    final_uri,
                    payload);
-            for h in hyper_headers.iter() {
-                debug!("{}:{}", h.name(), h.value_string());
+
+            for h in request.headers().iter() {
+                debug!("{}:{:?}", h.0, h.1);
             }
         }
-        let mut hyper_response = match request.payload {
-            None => {
-                try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send())
-            }
-            Some(ref payload_contents) => {
-                try!(self.request(hyper_method, &final_uri)
-                    .headers(hyper_headers)
-                    .body(payload_contents.as_slice())
-                    .send())
-            }
+
+        let hyper_uri = match Uri::from_str(&final_uri) {
+            Ok(uri) => uri,
+            Err(err) => return Box::new(future::err(HttpDispatchError { message: format!("Failed to parse URI {}", err) }))
         };
-        let mut body: Vec<u8> = Vec::new();
 
-        try!(hyper_response.read_to_end(&mut body));
+        let mut hyper_request = Request::new(hyper_method, hyper_uri);
 
-        if log_enabled!(Debug) {
-            debug!("Response body:\n{:?}", body);
+        // translate the headers map to a format Hyper likes
+        for h in request.headers().iter() {
+            hyper_request
+                .headers_mut()
+                .set_raw(h.0.to_owned(), h.1.to_owned());
         }
 
-        let mut headers: HashMap<String, String> = HashMap::new();
-
-        for header in hyper_response.headers.iter() {
-            headers.insert(header.name().to_string(), header.value_string());
+        // Add a default user-agent header if one is not already present.
+        if !hyper_request.headers().has::<UserAgent>() {
+            hyper_request.headers_mut().set_raw("user-agent".to_owned(), DEFAULT_USER_AGENT.clone());
         }
 
-        Ok(HttpResponse {
-            status: hyper_response.status.clone(),
-            body: body,
-            headers: headers,
-        })
+        // TODO: remove this in favor of the logs above?
+        // debug!("Full request: {:?}", hyper_request);
 
+        // TODO: remove this clone()
+        match request.payload {
+            None => (),
+            Some(ref payload_contents) => hyper_request.set_body(Body::from(payload_contents.clone()))
+        };
+
+        let hyper_response = self.request(hyper_request);
+
+        let converted = hyper_response
+            .and_then(|res| {
+                let mut headers: HashMap<String, String> = HashMap::new();
+                let status = res.status().to_owned();
+
+                for header in res.headers().iter() {
+                    headers.insert(header.name().to_string(), header.value_string());
+                }
+
+                res.body()
+                    .fold(Vec::new(), |mut buffer, chunk| {
+                        buffer.extend_from_slice(chunk.as_ref());
+                        future::ok::<_, HyperError>(buffer)
+                    })
+                    .and_then(move |body| {
+                        if log_enabled!(Debug) {
+                            debug!("Response body:\n{:?}", body);
+                        }
+
+                        future::ok(HttpResponse {
+                            status: status,
+                            body: body,
+                            headers: headers
+                        })
+                    })
+            })
+            .map_err(|hyper_err| HttpDispatchError { message: hyper_err.description().to_string() });
+
+        Box::new(converted)
     }
 }
 
@@ -172,17 +195,16 @@ impl fmt::Display for TlsError {
 
 /// Helper method for creating an http client with tls.
 /// Makes a `hyper` client with NativeTls for HTTPS support.
-pub fn default_tls_client() -> Result<Client, TlsError> {
-    let ssl = match NativeTlsClient::new() {
-        Ok(ssl) => ssl,
-        Err(tls_error) => {
-            return Err(TlsError {
-                message: format!("Couldn't create NativeTlsClient: {}", tls_error),
-            })
-        }
-    };
-    let connector = HttpsConnector::new(ssl);
-    let mut client = Client::with_connector(connector);
-    client.set_redirect_policy(RedirectPolicy::FollowNone);
+pub fn default_tls_client(threads: usize, handle: &Handle) -> Result<Client<HttpsConnector>, TlsError> {
+    // TODO: refactor not to return a Result and return a Client<HttpsConnector> instead?
+    let connector = HttpsConnector::new(threads, handle);
+
+    let client = Client::configure()
+        .connector(connector)
+        .build(handle);
+
+    // FIXME: new client doesn't support redirect policy
+    // client.set_redirect_policy(RedirectPolicy::FollowNone);
+
     Ok(client)
 }

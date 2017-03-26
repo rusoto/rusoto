@@ -85,15 +85,15 @@ fn xml_body_parser(output_shape: &str,
 
     let deserialize = match result_wrapper {
         &Some(ref tag_name) => {
-            format!("try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!({output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack));
+            format!("try_future!(start_element(&actual_tag_name, &mut stack));
+                     result = try_future!({output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack));
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));",
+                     try_future!(end_element(&actual_tag_name, &mut stack));",
                     output_shape = output_shape,
                     tag_name = tag_name)
-        }
+        },
         &None => {
-            format!("result = try!({output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack));",
+            format!("result = try_future!({output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack));",
                     output_shape = output_shape)
         }
     };
@@ -110,7 +110,7 @@ fn xml_body_parser(output_shape: &str,
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
+            let actual_tag_name = try_future!(peek_at_name(&mut stack));
             {deserialize}
         }}",
             let_result = let_result,

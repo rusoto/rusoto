@@ -27,8 +27,10 @@ version = ">= 0.7.1"
 
 [dependencies]
 chrono = "0.2.21"
-hyper = "0.10.0"
-hyper-native-tls = "0.2.1"
+futures = { version = "*" }
+tokio-core = { version = "*" }
+hyper = { git = "https://github.com/hyperium/hyper" }
+hyper-tls = { git = "https://github.com/hyperium/hyper-tls" }
 lazy_static = "0.2.1"
 log = "0.3.6"
 md5 = "0.3.2"

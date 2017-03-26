@@ -23,17 +23,26 @@ impl GenerateProtocol for QueryGenerator {
                     {serialize_input}
                     request.set_params(params);
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {{
-                        StatusCode::Ok => {{
-                            {parse_payload}
-                            Ok(result)
-                        }}
-                        _ => {{
-                            Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }}
-                    }}
+                    let credentials = match self.credentials_provider.credentials() {{
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err({error_type}::from(err)))
+                    }};
+
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| {error_type}::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {{
+                                StatusCode::Ok => {{
+                                    {parse_payload}
+                                    future::ok(result)
+                                }}
+                                _ => future::err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }}
+                        );
+
+                    Box::new(res)
                 }}
                 ",
                      api_version = &service.metadata.api_version,
@@ -62,6 +71,16 @@ impl GenerateProtocol for QueryGenerator {
             use xmlutil::{{Next, Peek, XmlParseError, XmlResponse}};
             use xmlutil::{{characters, end_element, start_element, skip_tree, peek_at_name}};
             use xmlerror::*;
+            use futures::{{Future, future}};
+
+            macro_rules! try_future {{
+                ($expr:expr) => (match $expr {{
+                    Ok(val) => val,
+                    Err(err) => {{
+                        return future::err(From::from(err))
+                    }}
+                }})
+            }}
 
             enum DeserializerNext {{
                 Close,
@@ -357,7 +376,7 @@ fn generate_documentation(operation: &Operation) -> String {
 fn generate_method_signature(operation_name: &str, operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "pub fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
+            "pub fn {operation_name}(&self, input: &{input_type}) -> Box<Future<Item = {output_type}, Error = {error_type}>>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
@@ -365,7 +384,7 @@ fn generate_method_signature(operation_name: &str, operation: &Operation) -> Str
         )
     } else {
         format!(
-            "pub fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
+            "pub fn {operation_name}(&self) -> Box<Future<Item = {output_type}, Error = {error_type}>>",
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
             error_type = error_type_name(operation_name),
