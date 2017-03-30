@@ -41,14 +41,15 @@ rusoto_codegen subcrate.
 
 ## Clippy
 
-Instructions on [clippy's homepage](https://github.com/Manishearth/rust-clippy) has details on how to install and run.
-These commands assume `rustup` is installed and clippy isn't installed yet:
+Instructions on [clippy's homepage](https://github.com/Manishearth/rust-clippy) have details on how to install and run.
+A nightly version of Rust is required.  To get the latest nightly version of Rust and switch to it, you can run:
 
-`rustup update`
-`rustup default nightly`
-`cargo install clippy`
-`cargo clippy`
+`rustup update && rustup default nightly`
 
-Once installed, clippy can be run via `cargo clippy` if `rustup` is using the nightly branch, or it can be run like this:
+To run clippy against the checked-in code, assuming nightly Rust is used:
 
-`rustup run nightly cargo clippy`
+`cargo build --no-default-features --features nightly-testing`
+
+To run clippy against the generated code as well as the checked-in code, assuming nightly Rust is used:
+
+`rustup run nightly cargo build --features "nightly-testing all"`
