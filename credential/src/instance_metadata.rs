@@ -25,10 +25,10 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
             Ok(response_from_try) => {
                 match response_from_try {
                     Ok(resp) => resp,
-                    Err(err) => return Err(CredentialsError::new(&format!("Couldn't connect to credentials provider: {}", err))),
+                    Err(err) => return Err(CredentialsError::new(format!("Couldn't connect to credentials provider: {}", err))),
                 }
             }
-            Err(error) => return Err(CredentialsError::new(&format!("Couldn't connect to credentials provider: {}", error))),
+            Err(error) => return Err(CredentialsError::new(format!("Couldn't connect to credentials provider: {}", error))),
         };
 
         let mut body = String::new();
@@ -52,10 +52,10 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
             Ok(response_from_try) => {
                 match response_from_try {
                     Ok(resp) => resp,
-                    Err(err) => return Err(CredentialsError::new(&format!("Couldn't connect to credentials provider: {}", err))),
+                    Err(err) => return Err(CredentialsError::new(format!("Couldn't connect to credentials provider: {}", err))),
                 }
             }
-            Err(error) => return Err(CredentialsError::new(&format!("Couldn't connect to credentials provider: {}", error))),
+            Err(error) => return Err(CredentialsError::new(format!("Couldn't connect to credentials provider: {}", error))),
         };
 
         if response.read_to_string(&mut body).is_err() {
