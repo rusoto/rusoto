@@ -107,7 +107,7 @@ all = [
 	   	"sqs",
 	   	"ssm",
 	   	"storagegateway",
-                "sts",
+        "sts",
 	   	"swf",
 	   	"waf",
 	   	"workspaces"
