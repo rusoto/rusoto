@@ -1,5 +1,6 @@
 //! The AWS STS API.
-
+//!
+//! If you're using the service, you're probably looking for [StsClient](struct.StsClient.html).
 #![allow(unused_imports)]
 
 include!(concat!(env!("OUT_DIR"), "/sts.rs"));
