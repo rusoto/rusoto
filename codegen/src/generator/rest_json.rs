@@ -57,18 +57,18 @@ impl GenerateProtocol for RestJsonGenerator {
                     // `serde-json` serializes field-less structs as \"null\", but AWS returns
                     // \"{{}}\" for a field-less response, so we must check for this result
                     // and convert it if necessary.
-                    if body == \"{{}}\" {{
-                        body = \"null\".to_owned();
+                    if body == b\"{{}}\" {{
+                        body = b\"null\".to_vec();
                     }}
 
-                    debug!(\"Response body: {{}}\", body);
+                    debug!(\"Response body: {{:?}}\", body);
                     debug!(\"Response status: {{}}\", result.status);
 
                     match result.status {{
                         {status_code} => {{
                             {ok_response}
                         }}
-                         _ => Err({error_type}::from_body(&body)),
+                         _ => Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref())),
                     }}
                 }}
                 ",
@@ -94,7 +94,8 @@ impl GenerateProtocol for RestJsonGenerator {
     }
 
     fn generate_prelude(&self, writer: &mut FileWriter, _: &Service) -> IoResult {
-        writeln!(writer, "use param::{{Params, ServiceParams}};
+        writeln!(writer,
+                 "use param::{{Params, ServiceParams}};
         use signature::SignedRequest;
         use serde_json;
         use serde_json::from_str;
@@ -192,8 +193,10 @@ fn generate_snake_case_uri(request_uri: &str) -> String {
     }
 
     URI_ARGS_REGEX.replace_all(request_uri, |caps: &Captures| {
-        format!("{{{}}}", caps.get(1).map(|c| Inflector::to_snake_case(c.as_str())).unwrap())
-    }).to_string()
+            format!("{{{}}}",
+                    caps.get(1).map(|c| Inflector::to_snake_case(c.as_str())).unwrap())
+        })
+        .to_string()
 }
 
 fn generate_params_loading_string(param_strings: &[String]) -> String {
@@ -213,12 +216,10 @@ fn generate_shape_member_param_strings(shape: &Shape) -> Vec<String> {
         .as_ref()
         .unwrap()
         .iter()
-        .filter_map(|(member_name, member)| {
-            if !member.deprecated() {
-                generate_param_load_string(member_name, member, shape)
-            } else {
-                None
-            }
+        .filter_map(|(member_name, member)| if !member.deprecated() {
+            generate_param_load_string(member_name, member, shape)
+        } else {
+            None
         })
         .collect::<Vec<String>>()
 }
@@ -304,7 +305,7 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("Ok(serde_json::from_str::<{}>(&body).unwrap())",
+        format!("Ok(serde_json::from_str::<{}>(String::from_utf8_lossy(&body).as_ref()).unwrap())",
                 output_type)
     } else {
         "Ok(())".to_owned()

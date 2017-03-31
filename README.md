@@ -44,7 +44,7 @@ For example, to include only S3 and SQS:
 
 ``` toml
 [dependencies]
-rusoto = {version = "0.22", features = ["s3", "sqs"]}
+rusoto = {version = "0.23", features = ["s3", "sqs"]}
 ```
 
 You can use the Cargo feature "all" to build Rusoto with support for every available service. Warning: building with "all" can require upwards of 5 GB of memory. Most people do not need all 40+ services so use individual features to enable the services you use.

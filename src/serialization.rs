@@ -20,19 +20,20 @@ impl Visitor for BlobVisitor {
         write!(formatter, "a blob")
     }
 
-    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E> where E: SerdeError {
+    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+        where E: SerdeError {
         v.from_base64().map_err(|err| SerdeError::custom(err.description()))
     }
 }
 
 impl SerdeBlob for Vec<u8> {
     fn deserialize_blob<D>(deserializer: D) -> Result<Vec<u8>, D::Error>
-    where D: Deserializer {
+        where D: Deserializer {
         deserializer.deserialize(BlobVisitor)
     }
 
     fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where S: Serializer {
+        where S: Serializer {
         serializer.serialize_str(&self.as_slice().to_base64(STANDARD))
     }
 }
@@ -46,23 +47,25 @@ impl Visitor for OptionalBlobVisitor {
         write!(formatter, "a blob")
     }
 
-    fn visit_none<E>(self) -> Result<Self::Value, E> where E: SerdeError {
+    fn visit_none<E>(self) -> Result<Self::Value, E>
+        where E: SerdeError {
         Ok(None)
     }
 
     fn visit_some<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
-    where D: Deserializer {
+        where D: Deserializer {
         Ok(Some(try!(SerdeBlob::deserialize_blob(deserializer))))
     }
 }
 
 impl SerdeBlob for Option<Vec<u8>> {
     fn deserialize_blob<D>(deserializer: D) -> Result<Option<Vec<u8>>, D::Error>
-    where D: Deserializer {
+        where D: Deserializer {
         deserializer.deserialize_option(OptionalBlobVisitor)
     }
 
-    fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
+    fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+        where S: Serializer {
         match *self {
             Some(ref vec) => serializer.serialize_some(vec),
             None => serializer.serialize_none(),

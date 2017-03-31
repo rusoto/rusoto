@@ -13,8 +13,7 @@ use std::collections::HashMap;
 
 use hyper::Client;
 use hyper::Error as HyperError;
-use hyper::header::{Headers, UserAgent, ContentType};
-use hyper::mime::{Mime, TopLevel, SubLevel};
+use hyper::header::{Headers, UserAgent};
 use hyper::status::StatusCode;
 use hyper::method::Method;
 use hyper::client::RedirectPolicy;
@@ -34,21 +33,18 @@ lazy_static! {
     static ref DEFAULT_USER_AGENT: Vec<Vec<u8>> = vec![format!("rusoto/{} rust/{} {}",
             env!("CARGO_PKG_VERSION"), RUST_VERSION, env::consts::OS).as_bytes().to_vec()];
 }
-lazy_static! {
-    static ref BINARY_RESPONSE_CONTENTS: ContentType = ContentType(Mime(TopLevel::Application, SubLevel::OctetStream, Vec::new()));
-}
+
 
 #[derive(Clone)]
 pub struct HttpResponse {
     pub status: StatusCode,
-    pub body: String,
-    pub raw_body: Vec<u8>,
-    pub headers: HashMap<String, String>
+    pub body: Vec<u8>,
+    pub headers: HashMap<String, String>,
 }
 
 #[derive(Debug, PartialEq)]
 pub struct HttpDispatchError {
-    message: String
+    message: String,
 }
 
 impl Error for HttpDispatchError {
@@ -87,7 +83,7 @@ impl DispatchSignedRequest for Client {
             "DELETE" => Method::Delete,
             "GET" => Method::Get,
             "HEAD" => Method::Head,
-            v => return Err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) })
+            v => return Err(HttpDispatchError { message: format!("Unsupported HTTP verb {}", v) }),
         };
 
         // translate the headers map to a format Hyper likes
@@ -108,30 +104,38 @@ impl DispatchSignedRequest for Client {
 
         if log_enabled!(Debug) {
             let payload = match &request.payload {
-                &Some(ref payload_bytes) => String::from_utf8(payload_bytes.to_owned()).unwrap_or_else(|_| String::from("<non-UTF-8 data>")),
-                _ => "".to_owned()
+                &Some(ref payload_bytes) => {
+                    String::from_utf8(payload_bytes.to_owned())
+                        .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
+                }
+                _ => "".to_owned(),
             };
 
-            debug!("Full request: \n method: {}\n final_uri: {}\n payload: {}\nHeaders:\n", hyper_method, final_uri, payload);
+            debug!("Full request: \n method: {}\n final_uri: {}\n payload: {}\nHeaders:\n",
+                   hyper_method,
+                   final_uri,
+                   payload);
             for h in hyper_headers.iter() {
                 debug!("{}:{}", h.name(), h.value_string());
             }
         }
         let mut hyper_response = match request.payload {
-            None => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send()),
-            Some(ref payload_contents) => try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body(payload_contents.as_slice()).send()),
+            None => {
+                try!(self.request(hyper_method, &final_uri).headers(hyper_headers).body("").send())
+            }
+            Some(ref payload_contents) => {
+                try!(self.request(hyper_method, &final_uri)
+                    .headers(hyper_headers)
+                    .body(payload_contents.as_slice())
+                    .send())
+            }
         };
-        let mut body = String::new();
-        let mut body_as_bytes : Vec<u8> = Vec::new();
+        let mut body: Vec<u8> = Vec::new();
 
-        match is_binary(&hyper_response.headers) {
-            true => try!(hyper_response.read_to_end(&mut body_as_bytes)),
-            false => try!(hyper_response.read_to_string(&mut body)),
-        };
+        try!(hyper_response.read_to_end(&mut body));
 
         if log_enabled!(Debug) {
-            debug!("Response body:\n{}", body);
-            debug!("Response raw_body:\n{:?}", body_as_bytes);
+            debug!("Response body:\n{:?}", body);
         }
 
         let mut headers: HashMap<String, String> = HashMap::new();
@@ -143,23 +147,15 @@ impl DispatchSignedRequest for Client {
         Ok(HttpResponse {
             status: hyper_response.status.clone(),
             body: body,
-            raw_body: body_as_bytes,
-            headers: headers
+            headers: headers,
         })
 
     }
 }
 
-fn is_binary(headers: &Headers) -> bool {
-    match headers.get::<ContentType>() {
-        Some(content_type) => content_type.eq(&BINARY_RESPONSE_CONTENTS),
-        None => false,
-    }
-}
-
 #[derive(Debug, PartialEq)]
 pub struct TlsError {
-    message: String
+    message: String,
 }
 
 impl Error for TlsError {
@@ -179,7 +175,11 @@ impl fmt::Display for TlsError {
 pub fn default_tls_client() -> Result<Client, TlsError> {
     let ssl = match NativeTlsClient::new() {
         Ok(ssl) => ssl,
-        Err(tls_error) => return Err(TlsError {message: format!("Couldn't create NativeTlsClient: {}", tls_error)}),
+        Err(tls_error) => {
+            return Err(TlsError {
+                message: format!("Couldn't create NativeTlsClient: {}", tls_error),
+            })
+        }
     };
     let connector = HttpsConnector::new(ssl);
     let mut client = Client::with_connector(connector);

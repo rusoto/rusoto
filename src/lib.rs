@@ -46,37 +46,32 @@
 extern crate chrono;
 extern crate hyper;
 extern crate hyper_native_tls;
-#[macro_use] extern crate lazy_static;
-#[macro_use] extern crate log;
+#[macro_use]
+extern crate lazy_static;
+#[macro_use]
+extern crate log;
 extern crate md5;
 extern crate regex;
 extern crate ring;
 extern crate rusoto_credential;
 extern crate rustc_serialize;
 extern crate serde;
-#[macro_use] extern crate serde_derive;
+#[macro_use]
+extern crate serde_derive;
 extern crate serde_json;
 extern crate time;
 extern crate url;
 extern crate xml;
 
 pub use region::{ParseRegionError, Region};
-pub use rusoto_credential::{
-    claims,
-    AwsCredentials,
-    ChainProvider,
-    ContainerProvider,
-    CredentialsError,
-    EnvironmentProvider,
-    InstanceMetadataProvider,
-    ProfileProvider,
-    ProvideAwsCredentials,
-    DefaultCredentialsProvider,
-    DefaultCredentialsProviderSync,
-};
+pub use rusoto_credential::{AwsCredentials, ChainProvider, ContainerProvider, CredentialsError,
+                            EnvironmentProvider, InstanceMetadataProvider, ProfileProvider,
+                            ProvideAwsCredentials, DefaultCredentialsProvider,
+                            DefaultCredentialsProviderSync, claims};
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError};
 pub use signature::SignedRequest;
 pub use request::default_tls_client;
+pub use region::default_region;
 
 mod param;
 mod region;
@@ -84,7 +79,8 @@ mod request;
 mod xmlerror;
 mod xmlutil;
 mod serialization;
-#[macro_use] mod signature;
+#[macro_use]
+mod signature;
 
 #[cfg(test)]
 mod mock;

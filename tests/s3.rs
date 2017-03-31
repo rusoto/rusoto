@@ -11,9 +11,9 @@ use std::io::Read;
 use time::get_time;
 
 use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::s3::{S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest,
-                 PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
-                 CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
+use rusoto::s3::{S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest, PutObjectRequest,
+                 DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration, CORSRule,
+                 CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
                  CompletedPart, CompletedPartList};
 use rusoto::default_tls_client;
@@ -28,7 +28,8 @@ fn test_all_the_things() {
     let _ = env_logger::init();
 
     let client = S3Client::new(default_tls_client().unwrap(),
-        DefaultCredentialsProvider::new().unwrap(), Region::UsEast1);
+                               DefaultCredentialsProvider::new().unwrap(),
+                               Region::UsEast1);
 
     // a random number should probably be appended here too
     let test_bucket = format!("rusoto_test_bucket_{}", get_time().sec);
@@ -49,7 +50,10 @@ fn test_all_the_things() {
     test_put_bucket_cors(&client, &test_bucket);
 
     // PUT an object (no_credentials is an arbitrary choice)
-    test_put_object_with_filename(&client, &test_bucket, &filename, &"tests/sample-data/no_credentials");
+    test_put_object_with_filename(&client,
+                                  &test_bucket,
+                                  &filename,
+                                  &"tests/sample-data/no_credentials");
 
     // HEAD the object that was PUT
     test_head_object(&client, &test_bucket, &filename);
@@ -64,7 +68,10 @@ fn test_all_the_things() {
     test_delete_object(&client, &test_bucket, &filename);
 
     // Binary objects:
-    test_put_object_with_filename(&client, &test_bucket, &binary_filename, &"tests/sample-data/binary-file");
+    test_put_object_with_filename(&client,
+                                  &test_bucket,
+                                  &binary_filename,
+                                  &"tests/sample-data/binary-file");
     test_get_object(&client, &test_bucket, &binary_filename);
     test_delete_object(&client, &test_bucket, &binary_filename);
 
@@ -143,7 +150,10 @@ fn test_delete_bucket(client: &TestClient, bucket: &str) {
     println!("{:#?}", result);
 }
 
-fn test_put_object_with_filename(client: &TestClient, bucket: &str, dest_filename: &str, local_filename: &str) {
+fn test_put_object_with_filename(client: &TestClient,
+                                 bucket: &str,
+                                 dest_filename: &str,
+                                 local_filename: &str) {
     let mut f = File::open(local_filename).unwrap();
     let mut contents: Vec<u8> = Vec::new();
     match f.read_to_end(&mut contents) {
@@ -181,6 +191,7 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
 
     let result = client.get_object(&get_req).unwrap();
     println!("get object result: {:#?}", result);
+    assert!(result.body.unwrap().len() > 0);
 }
 
 fn test_get_object_range(client: &TestClient, bucket: &str, filename: &str) {

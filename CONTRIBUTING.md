@@ -38,3 +38,18 @@ For more verbose test output, you can run `cargo test --verbose --features FEATU
 
 See [Cargo.toml](codegen/Cargo.toml) and [build.rs](codegen/build.rs) in the
 rusoto_codegen subcrate.
+
+## Clippy
+
+Instructions on [clippy's homepage](https://github.com/Manishearth/rust-clippy) have details on how to install and run.
+A nightly version of Rust is required.  To get the latest nightly version of Rust and switch to it, you can run:
+
+`rustup update && rustup default nightly`
+
+To run clippy against the checked-in code, assuming nightly Rust is used:
+
+`cargo build --no-default-features --features nightly-testing`
+
+To run clippy against the generated code as well as the checked-in code, assuming nightly Rust is used:
+
+`rustup run nightly cargo build --features "nightly-testing all"`

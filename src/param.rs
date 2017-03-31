@@ -19,7 +19,6 @@ impl ServiceParams for Params {
     }
 
     fn put_key(&mut self, key: &str) {
-		self.insert(key.to_owned(), None);
-	}
+        self.insert(key.to_owned(), None);
+    }
 }
-
