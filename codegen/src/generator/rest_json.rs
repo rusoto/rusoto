@@ -104,7 +104,6 @@ impl GenerateProtocol for RestJsonGenerator {
     }
 
     fn generate_struct_attributes(&self,
-                                  _struct_name: &str,
                                   serialized: bool,
                                   deserialized: bool)
                                   -> String {

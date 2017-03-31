@@ -104,7 +104,6 @@ impl GenerateProtocol for RestXmlGenerator {
     }
 
     fn generate_struct_attributes(&self,
-                                  _struct_name: &str,
                                   _serialized: bool,
                                   _deserialized: bool)
                                   -> String {
