@@ -256,6 +256,14 @@ mod credential {
                         aws_creds.claims_mut().insert(::claims::SUBJECT.to_owned(), subject_from_wif);
                     }
 
+                    if let Some(audience) = resp.audience {
+                        aws_creds.claims_mut().insert(::claims::AUDIENCE.to_owned(), audience);
+                    }
+
+                    if let Some(issuer) = resp.provider {
+                        aws_creds.claims_mut().insert(::claims::ISSUER.to_owned(), issuer);
+                    }
+
                     Ok(aws_creds)
                 }
             }
