@@ -3,7 +3,8 @@ use inflector::Inflector;
 use botocore::{Operation, Service, Shape, ShapeType, Member};
 
 use super::xml_payload_parser;
-use super::{IoResult, FileWriter, GenerateProtocol, error_type_name, capitalize_first, generate_field_name};
+use super::{IoResult, FileWriter, GenerateProtocol, error_type_name, capitalize_first,
+            generate_field_name};
 
 pub struct QueryGenerator;
 
@@ -11,7 +12,7 @@ impl GenerateProtocol for QueryGenerator {
     fn generate_methods(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
         for (operation_name, operation) in service.operations.iter() {
             writeln!(writer,
-                "
+                     "
                 {documentation}
                 {method_signature} {{
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, \"{request_uri}\");
@@ -30,29 +31,29 @@ impl GenerateProtocol for QueryGenerator {
                             Ok(result)
                         }}
                         _ => {{
-                            Err({error_type}::from_body(&response.body))
+                            Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
                         }}
                     }}
                 }}
                 ",
-                api_version = &service.metadata.api_version,
-                documentation = generate_documentation(operation),
-                error_type = error_type_name(operation_name),
-                http_method = &operation.http.method,
-                endpoint_prefix = &service.metadata.endpoint_prefix,
-                parse_payload = xml_payload_parser::generate_response_parser(service, operation, false),
-                method_signature = generate_method_signature(operation_name, operation),
-                operation_name = &operation.name,
-                request_uri = &operation.http.request_uri,
-                serialize_input = generate_method_input_serialization(operation)
-            )?;
+                     api_version = &service.metadata.api_version,
+                     documentation = generate_documentation(operation),
+                     error_type = error_type_name(operation_name),
+                     http_method = &operation.http.method,
+                     endpoint_prefix = &service.metadata.endpoint_prefix,
+                     parse_payload =
+                         xml_payload_parser::generate_response_parser(service, operation, false),
+                     method_signature = generate_method_signature(operation_name, operation),
+                     operation_name = &operation.name,
+                     request_uri = &operation.http.request_uri,
+                     serialize_input = generate_method_input_serialization(operation))?;
         }
         Ok(())
     }
 
-    fn generate_prelude(&self, writer: &mut FileWriter,_service: &Service) -> IoResult {
+    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service) -> IoResult {
         writeln!(writer,
-            "use std::str::FromStr;
+                 "use std::str::FromStr;
             use xml::EventReader;
             use xml::reader::ParserConfig;
             use param::{{Params, ServiceParams}};
@@ -79,11 +80,10 @@ impl GenerateProtocol for QueryGenerator {
 
     fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
         if shape.is_primitive() {
-           return None;
+            return None;
         }
 
-        Some(
-            format!("
+        Some(format!("
             /// Serialize `{name}` contents to a `SignedRequest`.
             struct {name}Serializer;
             impl {name}Serializer {{
@@ -92,14 +92,16 @@ impl GenerateProtocol for QueryGenerator {
                 }}
             }}
             ",
-            name = name,
-            serializer_signature = generate_serializer_signature(name, shape),
-            serializer_body = generate_serializer_body(service, shape)
-            )
-        )
+                     name = name,
+                     serializer_signature = generate_serializer_signature(name, shape),
+                     serializer_body = generate_serializer_body(service, shape)))
     }
 
-    fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
+    fn generate_deserializer(&self,
+                             name: &str,
+                             shape: &Shape,
+                             service: &Service)
+                             -> Option<String> {
         Some(xml_payload_parser::generate_deserializer(name, shape, service))
     }
 

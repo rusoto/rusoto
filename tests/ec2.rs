@@ -18,7 +18,7 @@ fn main() {
     match ec2.describe_instances(&req) {
         Ok(_) => {
             panic!("DescribeInstances should fail");
-        },
+        }
         Err(error) => {
             assert!(error.description().contains("<Message>The instance IDs 'i-00000000, i-00000001' do not exist</Message>"), "Missing error message");
         }
@@ -35,9 +35,9 @@ fn dry_run() {
     let req = CreateSnapshotRequest {
         volume_id: "v-00000001".into(),
         description: None,
-        dry_run: Some(true)
+        dry_run: Some(true),
     };
-    let _ = ec2.create_snapshot(&req) .unwrap();
+    let _ = ec2.create_snapshot(&req).unwrap();
 }
 
 // Issue 387
@@ -50,9 +50,9 @@ fn query_serialization_name() {
         dry_run: None,
         resources: vec!["v-00000001".into()],
         tags: vec![Tag {
-            key: Some("key".into()),
-            value: Some("val".into())
-        }]
+                       key: Some("key".into()),
+                       value: Some("val".into()),
+                   }],
     };
-    let _ = ec2.create_tags(&req) .unwrap();
+    let _ = ec2.create_tags(&req).unwrap();
 }

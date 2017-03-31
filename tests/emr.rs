@@ -22,8 +22,9 @@ fn should_handle_deprecation_gracefully() {
     let request = DescribeJobFlowsInput::default();
 
     match client.describe_job_flows(&request) {
-        Err(DescribeJobFlowsError::Validation(msg)) => assert!(msg.contains("DescribeJobFlows API is deprecated.")),
-        err @ _ => panic!("Expected OK response, got {:#?}", err)
+        Err(DescribeJobFlowsError::Validation(msg)) => {
+            assert!(msg.contains("DescribeJobFlows API is deprecated."))
+        }
+        err @ _ => panic!("Expected OK response, got {:#?}", err),
     };
 }
-

@@ -14,5 +14,3 @@ fn should_list_certificates() {
 
     client.list_certificates(&request).unwrap();
 }
-
-

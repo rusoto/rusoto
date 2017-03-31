@@ -13,5 +13,3 @@ fn should_list_domains() {
     let result = client.list_domains(&request);
     println!("{:#?}", result);
 }
-
-

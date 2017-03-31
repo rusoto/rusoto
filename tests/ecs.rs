@@ -18,17 +18,19 @@ fn main() {
             for arn in clusters.cluster_arns.unwrap_or(vec![]) {
                 println!("arn -> {:?}", arn);
             }
-        },
+        }
         Err(err) => {
             panic!("Error listing container instances {:#?}", err);
         }
     }
 
-    match ecs.list_clusters(
-        &ListClustersRequest {
-            next_token: Some("bogus".to_owned()), ..Default::default()
-        }) {
-        Err(ListClustersError::InvalidParameter(msg)) => assert!(msg.contains("Invalid token bogus")),
-        _ => panic!("this should have been an InvalidParameterException ECSError")
+    match ecs.list_clusters(&ListClustersRequest {
+        next_token: Some("bogus".to_owned()),
+        ..Default::default()
+    }) {
+        Err(ListClustersError::InvalidParameter(msg)) => {
+            assert!(msg.contains("Invalid token bogus"))
+        }
+        _ => panic!("this should have been an InvalidParameterException ECSError"),
     }
 }

@@ -2,7 +2,8 @@
 
 extern crate env_logger;
 extern crate hyper;
-#[macro_use] extern crate log;
+#[macro_use]
+extern crate log;
 extern crate rand;
 extern crate rusoto;
 
@@ -22,8 +23,7 @@ const AWS_REGION: Region = Region::UsEast1;
 const AWS_SERVICE_RANDOM_SUFFIX_LENGTH: usize = 20;
 
 struct TestEtsClient<P>
-    where P: ProvideAwsCredentials,
-{
+    where P: ProvideAwsCredentials {
     credentials_provider: P,
     region: Region,
 
@@ -35,8 +35,7 @@ struct TestEtsClient<P>
 }
 
 impl<P> TestEtsClient<P>
-    where P: ProvideAwsCredentials + Clone,
-{
+    where P: ProvideAwsCredentials + Clone {
     /// Creates a new `EtsClient` for a test.
     fn new(credentials_provider: P, region: Region) -> TestEtsClient<P> {
         TestEtsClient {
@@ -51,26 +50,22 @@ impl<P> TestEtsClient<P>
 
     fn create_s3_client(&mut self) {
         self.s3_client = Some(S3Client::new(default_tls_client().unwrap(),
-            self.credentials_provider.clone(),
-            self.region
-        ));
+                                            self.credentials_provider.clone(),
+                                            self.region));
     }
 
     fn create_bucket(&mut self) -> BucketName {
         let bucket_name = generate_unique_name("ets-bucket-1");
 
-        let create_bucket_req = CreateBucketRequest {
-            bucket: bucket_name.to_owned(),
-            ..Default::default()
-        };        
+        let create_bucket_req =
+            CreateBucketRequest { bucket: bucket_name.to_owned(), ..Default::default() };
 
         let result = self.s3_client
             .as_ref()
             .unwrap()
             .create_bucket(&create_bucket_req);
 
-        let mut location = result
-            .unwrap()
+        let mut location = result.unwrap()
             .location
             .unwrap();
         // A `Location` is identical to a `BucketName` except that it has a
@@ -82,8 +77,7 @@ impl<P> TestEtsClient<P>
 }
 
 impl<P> Deref for TestEtsClient<P>
-    where P: ProvideAwsCredentials,
-{
+    where P: ProvideAwsCredentials {
     type Target = EtsClient<P, Client>;
     fn deref(&self) -> &Self::Target {
         &self.client
@@ -91,40 +85,34 @@ impl<P> Deref for TestEtsClient<P>
 }
 
 impl<P> DerefMut for TestEtsClient<P>
-    where P: ProvideAwsCredentials,
-{
+    where P: ProvideAwsCredentials {
     fn deref_mut<'a>(&'a mut self) -> &'a mut EtsClient<P, Client> {
         &mut self.client
     }
 }
 
 impl<P> Drop for TestEtsClient<P>
-    where P: ProvideAwsCredentials,
-{
+    where P: ProvideAwsCredentials {
     fn drop(&mut self) {
         self.s3_client.take().map(|s3_client| {
             self.input_bucket.take().map(|bucket| {
 
-                let delete_bucket_req = DeleteBucketRequest {
-                    bucket: bucket.to_owned(),
-                    ..Default::default()
-                };
+                let delete_bucket_req =
+                    DeleteBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
                 match s3_client.delete_bucket(&delete_bucket_req) {
-                    Ok(_) => { info!("Deleted S3 bucket: {}", bucket) },
-                    Err(e) => { error!("Failed to delete S3 bucket: {}", e) }
+                    Ok(_) => info!("Deleted S3 bucket: {}", bucket),
+                    Err(e) => error!("Failed to delete S3 bucket: {}", e),
                 };
             });
             self.output_bucket.take().map(|bucket| {
 
-                let delete_bucket_req = DeleteBucketRequest {
-                    bucket: bucket.to_owned(),
-                    ..Default::default()
-                };
+                let delete_bucket_req =
+                    DeleteBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
                 match s3_client.delete_bucket(&delete_bucket_req) {
-                    Ok(_) => { info!("Deleted S3 bucket: {}", bucket) },
-                    Err(e) => { error!("Failed to delete S3 bucket: {}", e) }
+                    Ok(_) => info!("Deleted S3 bucket: {}", bucket),
+                    Err(e) => error!("Failed to delete S3 bucket: {}", e),
                 };
             });
         });
@@ -139,23 +127,18 @@ fn initialize() {
 }
 
 fn create_client() -> TestEtsClient<ChainProvider> {
-    TestEtsClient::new(
-        ChainProvider::new(),
-        AWS_REGION
-    )
+    TestEtsClient::new(ChainProvider::new(), AWS_REGION)
 }
 
 /// Generates a random name for an AWS service by appending a random sequence of
 /// ASCII characters to the specified prefix.
 fn generate_unique_name(prefix: &str) -> String {
-    format!(
-        "{}-{}",
-        prefix,
-        rand::thread_rng()
-            .gen_ascii_chars()
-            .take(AWS_SERVICE_RANDOM_SUFFIX_LENGTH)
-            .collect::<String>()
-    )
+    format!("{}-{}",
+            prefix,
+            rand::thread_rng()
+                .gen_ascii_chars()
+                .take(AWS_SERVICE_RANDOM_SUFFIX_LENGTH)
+                .collect::<String>())
 }
 
 #[test]
@@ -182,12 +165,8 @@ fn create_pipeline_without_arn() {
 
 #[test]
 fn create_preset() {
-    use rusoto::elastictranscoder::{
-        AudioCodecOptions,
-        AudioParameters,
-        CreatePresetRequest,
-        DeletePresetRequest,
-    };
+    use rusoto::elastictranscoder::{AudioCodecOptions, AudioParameters, CreatePresetRequest,
+                                    DeletePresetRequest};
 
     initialize();
 
@@ -221,7 +200,8 @@ fn create_preset() {
     let preset = response.preset.unwrap();
 
     assert_eq!(preset.container, Some("flac".to_owned()));
-    assert_eq!(preset.description, Some("This is an example FLAC preset".to_owned()));
+    assert_eq!(preset.description,
+               Some("This is an example FLAC preset".to_owned()));
     assert_eq!(preset.name, Some(name));
     assert!(preset.id.is_some());
 
@@ -231,20 +211,14 @@ fn create_preset() {
 
     // Cleanup
 
-    let request = DeletePresetRequest {
-        id: id,
-    };
+    let request = DeletePresetRequest { id: id };
     client.delete_preset(&request).ok();
 }
 
 #[test]
 fn delete_preset() {
-    use rusoto::elastictranscoder::{
-        AudioCodecOptions,
-        AudioParameters,
-        CreatePresetRequest,
-        DeletePresetRequest,
-    };
+    use rusoto::elastictranscoder::{AudioCodecOptions, AudioParameters, CreatePresetRequest,
+                                    DeletePresetRequest};
 
     initialize();
 
@@ -271,9 +245,7 @@ fn delete_preset() {
     let preset = response.preset.unwrap();
     let id = preset.id.unwrap();
 
-    let request = DeletePresetRequest {
-        id: id.clone(),
-    };
+    let request = DeletePresetRequest { id: id.clone() };
     let response = client.delete_preset(&request);
 
     assert!(response.is_ok());
@@ -289,17 +261,17 @@ fn list_jobs_by_status() {
     let client = create_client();
 
     let status = "Submitted".to_owned();
-    let request = ListJobsByStatusRequest {
-        status: status.clone(),
-        ..ListJobsByStatusRequest::default()
-    };
+    let request =
+        ListJobsByStatusRequest { status: status.clone(), ..ListJobsByStatusRequest::default() };
     let response = client.list_jobs_by_status(&request);
 
     assert!(response.is_ok());
 
     let response = response.unwrap();
 
-    info!("Got list of jobs with status \"{}\": {:?}", &status, response.jobs);
+    info!("Got list of jobs with status \"{}\": {:?}",
+          &status,
+          response.jobs);
 }
 
 #[test]
@@ -363,9 +335,7 @@ fn read_preset() {
 
     let client = create_client();
 
-    let request = ReadPresetRequest {
-        id: AWS_ETS_WEB_PRESET_ID.to_owned(),
-    };
+    let request = ReadPresetRequest { id: AWS_ETS_WEB_PRESET_ID.to_owned() };
     let response = client.read_preset(&request);
 
     assert!(response.is_ok());

@@ -16,5 +16,3 @@ fn should_describe_db_clusters() {
     let result = client.describe_db_clusters(&request);
     println!("{:#?}", result);
 }
-
-

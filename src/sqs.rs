@@ -67,8 +67,7 @@ mod test {
             ..Default::default()
         };
 
-        let client =
-            SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
+        let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
         let _result = client.send_message(&request).unwrap();
     }
 
@@ -106,18 +105,22 @@ mod test {
             .with_request_checker(|request: &SignedRequest| {
                 assert_eq!("POST", request.method);
                 assert_eq!("/", request.path);
-                assert_eq!(request.params.get("Action"), Some(&Some("ReceiveMessage".to_owned())));
-                assert_eq!(request.params.get("MaxNumberOfMessages"), Some(&Some("1".to_owned())));
-                assert_eq!(request.params.get("VisibilityTimeout"), Some(&Some("2".to_owned())));
-                assert_eq!(request.params.get("WaitTimeSeconds"), Some(&Some("3".to_owned())));
+                assert_eq!(request.params.get("Action"),
+                           Some(&Some("ReceiveMessage".to_owned())));
+                assert_eq!(request.params.get("MaxNumberOfMessages"),
+                           Some(&Some("1".to_owned())));
+                assert_eq!(request.params.get("VisibilityTimeout"),
+                           Some(&Some("2".to_owned())));
+                assert_eq!(request.params.get("WaitTimeSeconds"),
+                           Some(&Some("3".to_owned())));
                 assert_eq!(request.params.get("Integer"), None);
             });
 
         let request = ReceiveMessageRequest {
-          max_number_of_messages: Some(1),
-          queue_url: "foo".to_owned(),
-          visibility_timeout: Some(2),
-          wait_time_seconds: Some(3),
+            max_number_of_messages: Some(1),
+            queue_url: "foo".to_owned(),
+            visibility_timeout: Some(2),
+            wait_time_seconds: Some(3),
             ..Default::default()
         };
 
