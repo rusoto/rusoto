@@ -64,18 +64,18 @@ impl GenerateProtocol for RestJsonGenerator {
                             // `serde-json` serializes field-less structs as \"null\", but AWS returns
                             // \"{{}}\" for a field-less response, so we must check for this result
                             // and convert it if necessary.
-                            if body == \"{{}}\" {{
-                                body = \"null\".to_owned();
+                            if body == b\"{{}}\" {{
+                                body = b\"null\".to_vec();
                             }}
 
-                            debug!(\"Response body: {{}}\", body);
+                            debug!(\"Response body: {{:?}}\", body);
                             debug!(\"Response status: {{}}\", result.status);
 
                             match result.status {{
                                 {status_code} => {{
                                     {ok_response}
                                 }}
-                                 _ => future::err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref()),
+                                 _ => future::err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref())),
                             }}
                         }});
 
