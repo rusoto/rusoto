@@ -80,13 +80,13 @@ impl GenerateProtocol for RestXmlGenerator {
         let mut imports = "
             use std::str::{FromStr};
             use xml::reader::ParserConfig;
-            use param::{Params, ServiceParams};
-            use signature::SignedRequest;
+            use rusoto::param::{Params, ServiceParams};
+            use rusoto::signature::SignedRequest;
             use xml::EventReader;
             use xml::reader::XmlEvent;
-            use xmlerror::*;
-            use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-            use xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
+            use rusoto::xmlerror::*;
+            use rusoto::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+            use rusoto::xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
             enum DeserializerNext {
                 Close,
                 Skip,
@@ -96,7 +96,7 @@ impl GenerateProtocol for RestXmlGenerator {
 
         if service.service_type_name() == "S3" {
             imports += "
-                use md5;
+                // use md5;
                 use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};";
         }
 

@@ -2,6 +2,19 @@
 //!
 //! If you're using the service, you're probably looking for [S3Client](struct.S3Client.html).
 
+extern crate rusoto;
+extern crate hyper;
+extern crate md5;
+extern crate xml;
+extern crate rustc_serialize;
+extern crate rusoto_credential;
+
+// use hyper::status::StatusCode::*;
+
+use rusoto::*;
+
+use std::result::Result::Ok;
+
 include!(concat!(env!("OUT_DIR"), "/s3.rs"));
 
 #[cfg(test)]

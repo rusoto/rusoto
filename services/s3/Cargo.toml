@@ -1,0 +1,233 @@
+[package]
+authors = [
+    "Anthony DiMarco <ocramida@gmail.com>",
+    "Jimmy Cuadra <jimmy@jimmycuadra.com>",
+    "Matthew Mayer <matthewkmayer@gmail.com>",
+    "Nikita Pekin <contact@nikitapek.in>"
+]
+build = "build.rs"
+description = "AWS SDK for Rust - S3"
+documentation = "http://rusoto.github.io/rusoto/rusoto/index.html"
+exclude = [".gitignore", ".travis.yml", "docgen.sh", "helpers/**/*", "codegen/**/*"]
+keywords = ["AWS", "Amazon"]
+license = "MIT"
+name = "rusoto_s3"
+readme = "README.md"
+repository = "https://github.com/rusoto/rusoto"
+version = "0.23.1"
+
+[build-dependencies]
+rustc_version = "0.1.7"
+rayon = "0.6.0"
+
+[build-dependencies.rusoto_codegen]
+default-features = false
+path = "../../codegen"
+version = ">= 0.7.1"
+
+[dependencies]
+chrono = "0.2.21"
+hyper = "0.10.0"
+hyper-native-tls = "0.2.1"
+lazy_static = "0.2.1"
+log = "0.3.6"
+md5 = "0.3.2"
+regex = "0.2.1"
+ring = "0.7"
+rustc-serialize = "0.3.19"
+serde = "0.9.5"
+serde_derive = "0.9.5"
+serde_json = "0.9.4"
+time = "0.1.35"
+url = "1.2.0"
+xml-rs = "0.3"
+
+[dependencies.clippy]
+optional = true
+version = "0.0"
+
+[dependencies.rusoto_credential]
+path = "../../credential"
+version = "0.5.0"
+
+
+[dependencies.rusoto]
+path = "../../"
+version = "0.23.1"
+
+[dev-dependencies]
+env_logger = "0.4.0"
+rand = "^0.3.14"
+
+[features]
+all = [
+		"acm",
+	   	"autoscaling",
+	   	"cloudformation",
+	   	"cloudfront",
+	   	"cloudhsm",
+	   	"cloudsearch",
+	   	"cloudtrail",
+	   	"cloudwatch",
+	   	"codecommit",
+	   	"codedeploy",
+	   	"codepipeline",
+	   	"cognito-identity",
+	   	"config",
+	   	"datapipeline",
+	   	"devicefarm",
+	   	"directconnect",
+	   	"ds",
+	   	"dynamodb",
+	   	"dynamodbstreams",
+	   	"ec2",
+	   	"ecr",
+	   	"ecs",
+	   	"elasticache",
+	   	"elasticbeanstalk",
+	   	"elastictranscoder",
+	   	"elb",
+	   	"elbv2",
+	   	"emr",
+	   	"events",
+	   	"firehose",
+	   	"iam",
+	   	"importexport",
+	   	"inspector",
+	   	"iot",
+	   	"kinesis",
+	   	"kms",
+	   	"lambda",
+	   	"logs",
+	   	"machinelearning",
+	   	"marketplacecommerceanalytics",
+	   	"opsworks",
+	   	"redshift",
+	   	"rds",
+	   	"route53",
+	   	"route53domains",
+	   	"s3",
+	   	"sdb",
+	   	"sns",
+	   	"sqs",
+	   	"ssm",
+	   	"storagegateway",
+	   	"swf",
+	   	"waf",
+	   	"workspaces"
+	]
+acm = []
+autoscaling = []
+cloudformation = []
+cloudfront = []
+cloudhsm = []
+cloudsearch = []
+cloudtrail = []
+cloudwatch = []
+codecommit = []
+codedeploy = []
+codepipeline = []
+cognito-identity = []
+config = []
+datapipeline = []
+default = []
+devicefarm = []
+directconnect = []
+ds = []
+dynamodb = []
+dynamodbstreams = []
+ec2 = []
+ecr = []
+ecs = []
+elasticache = []
+elasticbeanstalk = []
+elastictranscoder = []
+elb = []
+elbv2 = []
+emr = []
+events = []
+firehose = []
+iam = []
+importexport = []
+inspector = []
+iot = []
+kinesis = []
+kms = []
+lambda = []
+logs = []
+machinelearning = []
+marketplacecommerceanalytics = []
+nightly-testing = ["clippy", "rusoto_codegen/nightly-testing", "rusoto_credential/nightly-testing"]
+opsworks = []
+redshift = []
+rds = []
+route53 = []
+route53domains = []
+s3 = []
+sdb = []
+sns = []
+sqs = []
+ssm = []
+storagegateway = []
+swf = []
+unstable = []
+waf = []
+workspaces = []
+packagea = [
+	"acm",
+	"autoscaling",
+	"cloudformation",
+	"cloudfront",
+	"cloudhsm",
+	"cloudsearch",
+	"cloudtrail",
+	"cloudwatch",
+	"codecommit",
+	"codedeploy",
+	"codepipeline",
+	"cognito-identity",
+	"config",
+	"datapipeline",
+	"devicefarm",
+	"directconnect",
+	"ds",
+	"dynamodb",
+	"dynamodbstreams",
+	"ec2",
+	"ecr",
+	"ecs",
+	"elasticache",
+	"elasticbeanstalk",
+	"elastictranscoder",
+	"elb",
+	"elbv2",
+	"emr",
+	"events",
+	"firehose"
+]
+packageb = [
+	"iam",
+	"importexport",
+	"inspector",
+	"iot",
+	"kinesis",
+	"kms",
+	"lambda",
+	"logs",
+	"machinelearning",
+	"marketplacecommerceanalytics",
+	"opsworks",
+	"redshift",
+	"rds",
+	"route53",
+	"route53domains",
+	"s3",
+	"sdb",
+	"sns",
+	"sqs",
+	"ssm",
+	"storagegateway",
+	"swf",
+	"waf",
+	"workspaces"
+]
