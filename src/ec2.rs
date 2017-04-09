@@ -2,6 +2,4 @@
 //!
 //! If you're using the service, you're probably looking for [Ec2Client](struct.Ec2Client.html).
 
-use region;
-
 include!(concat!(env!("OUT_DIR"), "/ec2.rs"));

@@ -115,7 +115,7 @@ fn generate<P, E>(writer: &mut FileWriter, service: &Service, protocol_generator
         use hyper::Client;
         use hyper::status::StatusCode;
         use request::DispatchSignedRequest;
-        // use rusoto::region;
+        use region;
 
         use std::fmt;
         use std::error::Error;
