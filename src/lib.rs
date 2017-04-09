@@ -82,8 +82,9 @@ pub mod serialization;
 #[macro_use]
 pub mod signature;
 
-#[cfg(test)]
-mod mock;
+// This isn't exported if you compile just the S3 crate, so tests fail.
+// #[cfg(test)]
+pub mod mock;
 
 #[cfg(feature = "acm")]
 pub mod acm;

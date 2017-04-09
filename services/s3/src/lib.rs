@@ -21,16 +21,17 @@ include!(concat!(env!("OUT_DIR"), "/s3.rs"));
 mod test {
     use std::io::{Read, BufReader};
     use std::fs::File;
-    use s3::{S3Client, HeadObjectRequest, GetObjectRequest, ListMultipartUploadsRequest};
-    use s3::{CreateMultipartUploadOutputDeserializer, CompleteMultipartUploadOutputDeserializer};
-    use s3::{ListMultipartUploadsOutputDeserializer, ListPartsRequest, Initiator, Owner};
+    use super::{S3Client, HeadObjectRequest, GetObjectRequest, ListMultipartUploadsRequest};
+    use super::{CreateMultipartUploadOutputDeserializer, CompleteMultipartUploadOutputDeserializer};
+    use super::{ListMultipartUploadsOutputDeserializer, ListPartsRequest, Initiator, Owner};
     use xmlutil::{XmlResponse, Next};
     use xml::EventReader;
 
-    use super::super::{Region, SignedRequest};
-    use super::super::mock::*;
+    use rusoto::{Region, SignedRequest};
+    use mock::{MockRequestDispatcher, MockCredentialsProvider};
 
     extern crate env_logger;
+    extern crate rusoto;
 
     #[test]
     fn initiate_multipart_upload_happy_path() {
@@ -130,7 +131,7 @@ mod test {
 
     #[test]
     fn list_multipart_upload_parts_happy_path() {
-        let mock = MockRequestDispatcher::with_status(200)
+        let mock = rusoto::mock::MockRequestDispatcher::with_status(200)
             .with_body(r#"
             <?xml version="1.0" encoding="UTF-8"?>
             <ListPartsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
