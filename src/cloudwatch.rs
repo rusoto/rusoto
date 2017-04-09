@@ -2,6 +2,8 @@
 //!
 //! If you're using the service, you're probably looking for [CloudWatchClient](struct.CloudWatchClient.html).
 
+use region;
+
 include!(concat!(env!("OUT_DIR"), "/cloudwatch.rs"));
 
 #[cfg(test)]

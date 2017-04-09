@@ -9,8 +9,6 @@ extern crate xml;
 extern crate rustc_serialize;
 extern crate rusoto_credential;
 
-// use hyper::status::StatusCode::*;
-
 use rusoto::*;
 
 use std::result::Result::Ok;

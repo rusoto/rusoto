@@ -2,6 +2,8 @@
 //!
 //! If you're using the service, you're probably looking for [CloudFormationClient](struct.CloudFormationClient.html).
 
+use region;
+
 include!(concat!(env!("OUT_DIR"), "/cloudformation.rs"));
 
 #[cfg(test)]

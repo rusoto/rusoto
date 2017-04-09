@@ -2,4 +2,6 @@
 //!
 //! If you're using the service, you're probably looking for [SsmClient](struct.SsmClient.html).
 
+use region;
+
 include!(concat!(env!("OUT_DIR"), "/ssm.rs"));
