@@ -67,7 +67,9 @@ pub use region::{ParseRegionError, Region};
 pub use rusoto_credential::{AwsCredentials, ChainProvider, ContainerProvider, CredentialsError,
                             EnvironmentProvider, InstanceMetadataProvider, ProfileProvider,
                             ProvideAwsCredentials, DefaultCredentialsProvider,
-                            DefaultCredentialsProviderSync, claims};
+                            DefaultCredentialsProviderSync, claims,
+                            AutoRefreshingProviderSync, AutoRefreshingProvider,
+                            BaseAutoRefreshingProvider};
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError};
 pub use signature::SignedRequest;
 pub use request::default_tls_client;

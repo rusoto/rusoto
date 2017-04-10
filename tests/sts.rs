@@ -13,10 +13,6 @@ use rusoto::{DefaultCredentialsProvider, Region, ProvideAwsCredentials};
 fn main() {
     let credentials = DefaultCredentialsProvider::new().unwrap();
 
-    let aws_creds = credentials.credentials().unwrap();
-    
-    let sts = StsClient::new(default_tls_client().unwrap(), aws_creds, Region::UsEast1);
-
     let sts = StsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
 
     // http://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html

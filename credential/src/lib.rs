@@ -137,12 +137,6 @@ pub trait ProvideAwsCredentials {
     fn credentials(&self) -> Result<AwsCredentials, CredentialsError>;
 }
 
-impl ProvideAwsCredentials for AwsCredentials {
-    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        Ok(self.clone())
-    }
-}
-
 /// Wrapper for `ProvideAwsCredentials` that caches the credentials returned by the
 /// wrapped provider.  Each time the credentials are accessed, they are checked to see if
 /// they have expired, in which case they are retrieved from the wrapped provider again.
