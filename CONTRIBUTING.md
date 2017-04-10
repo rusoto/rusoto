@@ -34,7 +34,7 @@ To run only the in-crate unit tests, which don't call out to AWS, include the `-
 
 For more verbose test output, you can run `cargo test --verbose --features FEATURE -- --nocapture`.
 
-**Warning**: When building or testing with `--features all` the build/test can require upwards of 5 GB of memory. You can limit the number of features to build at once to prevent running out of memory. That can be achieved using the `--features` flag, e.g. `cargo build --features "packagea packageb"`. See [README](README.md) for a table of available services and their Cargo feature names. 
+**Warning**: When building or testing with `--features all` the build/test can require upwards of 5 GB of memory. You can limit the number of features to build at once to prevent running out of memory. That can be achieved using the `--features` flag, e.g. `cargo build --features packagea && cargo build --features packageb`. See [README](README.md) for a table of available services and their Cargo feature names. 
 
 ### Rust code generation from boto core service definitions:
 
