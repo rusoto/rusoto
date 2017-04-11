@@ -22,11 +22,6 @@ fn generate_user_agent_vars(output_path: &Path) {
         .expect("Unable to write user agent");
 }
 
-/*
-gamelift/2015-10-01/service-2.json:    "protocol":"json"
-support/2013-04-15/service-2.json:    "protocol":"json"
-*/
-
 // expand to use cfg!() so codegen only gets run for services
 // in the features list
 macro_rules! services {
@@ -49,21 +44,29 @@ fn main() {
 
     let services = services! {
         ["acm", "2015-12-08"],
+        ["application-autoscaling", "2016-02-06"],
+        ["appstream", "2016-12-01"],
         ["autoscaling", "2011-01-01"],
+        ["budgets", "2016-10-20"],
         ["cloudformation", "2010-05-15"],
         ["cloudfront", "2016-11-25"],
         ["cloudhsm", "2014-05-30"],
         ["cloudsearch", "2013-01-01"],
         ["cloudtrail", "2013-11-01"],
         ["cloudwatch", "2010-08-01"],
+        ["codebuild", "2016-10-06"],
         ["codecommit", "2015-04-13"],
         ["codedeploy", "2014-10-06"],
         ["codepipeline", "2015-07-09"],
         ["cognito-identity", "2014-06-30"],
+        ["cognito-idp", "2016-04-18"],
         ["config", "2014-11-12"],
+        ["cur", "2017-01-06"],
         ["datapipeline", "2012-10-29"],
         ["devicefarm", "2015-06-23"],
         ["directconnect", "2012-10-25"],
+        ["discovery", "2015-11-01"],
+        ["dms", "2016-01-01"],
         ["ds", "2015-04-16"],
         ["dynamodb", "2012-08-10"],
         ["dynamodbstreams", "2012-08-10"],
@@ -78,29 +81,42 @@ fn main() {
         ["emr", "2009-03-31"],
         ["events", "2015-10-07"],
         ["firehose", "2015-08-04"],
+        ["gamelift", "2015-10-01"],
+        ["health", "2016-08-04"],
         ["iam", "2010-05-08"],
         ["importexport", "2010-06-01"],
         ["inspector", "2016-02-16"],
         ["iot", "2015-05-28"],
         ["kinesis", "2013-12-02"],
+        ["kinesisanalytics", "2015-08-14"],
         ["kms", "2014-11-01"],
         ["lambda", "2015-03-31"],
+        ["lightsail", "2016-11-28"],
         ["logs", "2014-03-28"],
         ["machinelearning", "2014-12-12"],
         ["marketplacecommerceanalytics", "2015-07-01"],
+        ["meteringmarketplace", "2016-01-14"],
         ["opsworks", "2013-02-18"],
+        ["opsworkscm", "2016-11-01"],
         ["redshift", "2012-12-01"],
+        ["rekognition", "2016-06-27"],
         ["rds", "2014-10-31"],
         ["route53", "2013-04-01"],
         ["route53domains", "2014-05-15"],
         ["s3", "2006-03-01"],
         ["sdb", "2009-04-15"],
+        ["servicecatalog", "2015-12-10"],
+        ["shield", "2016-06-02"],
+        ["snowball", "2016-06-30"],
         ["sns", "2010-03-31"],
         ["sqs", "2012-11-05"],
         ["ssm", "2014-11-06"],
+        ["stepfunctions", "2016-11-23"],
         ["storagegateway", "2013-06-30"],
+        ["support", "2013-04-15"],
         ["swf", "2012-01-25"],
         ["waf", "2015-08-24"],
+        ["waf-regional", "2016-11-28"],
         ["workspaces", "2015-04-08"]
     };
 

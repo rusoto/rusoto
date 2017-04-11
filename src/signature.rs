@@ -393,6 +393,8 @@ fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
 fn build_hostname(service: &str, region: Region) -> String {
     //iam has only 1 endpoint, other services have region-based endpoints
     match service {
+        "budgets" => "budgets.amazonaws.com".to_owned(),
+        "shield" => "Shield.us-east-1.amazonaws.com".to_owned(),
         "iam" => {
             match region {
                 Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
