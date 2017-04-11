@@ -19,24 +19,27 @@ mod container;
 mod environment;
 mod instance_metadata;
 mod profile;
+pub mod claims;
 
 use std::fmt;
 use std::error::Error;
 use std::io::Error as IoError;
 use std::sync::Mutex;
 use std::cell::RefCell;
+use std::collections::BTreeMap;
 
 use chrono::{Duration, UTC, DateTime, ParseError};
 use serde_json::Value;
 
-/// AWS API access credentials, including access key, secret key, token (for IAM profiles), and
-/// expiration timestamp.
+/// AWS API access credentials, including access key, secret key, token (for IAM profiles),
+/// expiration timestamp, and claims from federated login.
 #[derive(Clone, Debug)]
 pub struct AwsCredentials {
     key: String,
     secret: String,
     token: Option<String>,
-    expires_at: DateTime<UTC>
+    expires_at: DateTime<UTC>,
+    claims: BTreeMap<String, String>,
 }
 
 impl AwsCredentials {
@@ -49,6 +52,7 @@ impl AwsCredentials {
             secret: secret.into(),
             token: token,
             expires_at: expires_at,
+            claims: BTreeMap::new(),
         }
     }
 
@@ -78,6 +82,16 @@ impl AwsCredentials {
         // before issuing the request:
         self.expires_at < UTC::now() + Duration::seconds(20)
     }
+
+    /// Get the token claims
+    pub fn claims(&self) -> &BTreeMap<String, String> {
+        &self.claims
+    }
+
+    /// Get the mutable token claims
+    pub fn claims_mut(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.claims
+    }
 }
 
 #[derive(Debug, PartialEq)]
@@ -86,9 +100,9 @@ pub struct CredentialsError {
 }
 
 impl CredentialsError {
-    fn new(message: &str) -> CredentialsError {
+    pub fn new<S>(message: S) -> CredentialsError where S: Into<String>  {
         CredentialsError {
-            message: message.to_string()
+            message: message.into()
         }
     }
 }
@@ -268,7 +282,7 @@ fn in_ten_minutes() -> DateTime<UTC> {
 fn extract_string_value_from_json(json_object: &Value, key: &str) -> Result<String, CredentialsError> {
     match json_object.get(key) {
         Some(v) => Ok(v.as_str().expect(&format!("{} value was not a string", key)).to_owned()),
-        None => Err(CredentialsError::new(&format!("Couldn't find {} in response.", key))),
+        None => Err(CredentialsError::new(format!("Couldn't find {} in response.", key))),
     }
 }
 
