@@ -104,17 +104,10 @@ impl GenerateProtocol for RestXmlGenerator {
     }
 
     fn generate_struct_attributes(&self,
-                                  struct_name: &str,
                                   _serialized: bool,
-                                  deserialized: bool)
+                                  _deserialized: bool)
                                   -> String {
-        let mut derived = vec!["Default"];
-
-        // a few exceptions to get the generated S3 tests to compile
-        if deserialized || struct_name == "GetBucketPolicyOutput" ||
-           struct_name == "GetObjectOutput" {
-            derived.push("Debug")
-        }
+        let derived = vec!["Default", "Clone", "Debug"];
 
         format!("#[derive({})]", derived.join(","))
     }

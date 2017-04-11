@@ -71,7 +71,6 @@ impl GenerateProtocol for QueryGenerator {
     }
 
     fn generate_struct_attributes(&self,
-                                  _struct_name: &str,
                                   _serialized: bool,
                                   deserialized: bool)
                                   -> String {
