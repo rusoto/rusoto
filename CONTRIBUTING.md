@@ -20,7 +20,7 @@ git submodule update
 
 You are now ready to build the project with `cargo build`.
 Remember to include the appropriate feature flags for the AWS services you want to use.
-See [README](README.md) for a table of available services and their Cargo feature names.
+See [rusoto.org](https://www.rusoto.org/supported-aws-services.html) for a table of available services and their Cargo feature names.
 
 ### Building after initial setup
 
@@ -33,6 +33,8 @@ The integration tests will create real AWS resources and you may be charged.
 To run only the in-crate unit tests, which don't call out to AWS, include the `--lib` option to `cargo test`.
 
 For more verbose test output, you can run `cargo test --verbose --features FEATURE -- --nocapture`.
+
+**Warning**: When building or testing with `--features all` the build/test can require upwards of 5 GB of memory. You can limit the number of features to build at once to prevent running out of memory. That can be achieved using the `--features` flag, e.g. `cargo build --features packagea && cargo build --features packageb`. See [rusoto.org](https://www.rusoto.org/supported-aws-services.html) for a table of available services and their Cargo feature names. 
 
 ### Rust code generation from boto core service definitions:
 
