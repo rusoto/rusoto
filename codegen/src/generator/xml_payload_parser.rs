@@ -120,6 +120,31 @@ fn xml_body_parser(output_shape: &str,
 
 
 fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> String {
+    match (&service.metadata.endpoint_prefix[..], name) {
+        ("s3", "GetBucketLocationOutput") => {
+            // override custom deserializer
+            let struct_field_deserializers = shape.members
+                .as_ref()
+                .unwrap()
+                .iter()
+                .filter_map(|(member_name, member)| {
+                    Some(format!("obj.{field_name} = {parse_expression};",
+                                 field_name = generate_field_name(member_name),
+                                 parse_expression = generate_struct_field_parse_expression(shape,
+                                                                                           member_name,
+                                                                                           member,
+                                                                                           &member_name.to_string())))
+                })
+                .collect::<Vec<String>>()
+                .join("\n");
+            return format!("let mut obj = {name}::default();
+                            {struct_field_deserializers}
+                            Ok(obj)",
+                           name = name,
+                           struct_field_deserializers = struct_field_deserializers);
+        },
+        _ => {},
+    }
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape),
         ShapeType::Map => generate_map_deserializer(shape),
