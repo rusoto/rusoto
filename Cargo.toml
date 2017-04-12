@@ -19,7 +19,7 @@ homepage = "https://www.rusoto.org/"
 categories = [ "development-tools" ]
 
 [badges]
-travis-ci = { repository = "rusoto/rusoto" }
+travis-ci = { repository = "rusoto/rusoto", branch = "master" }
 appveyor = { repository = "rusoto/rusoto" }
 
 [build-dependencies]
