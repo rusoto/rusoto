@@ -9,7 +9,7 @@ description = "Code generation library for Rusoto."
 license = "MIT"
 name = "rusoto_codegen"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.7.1"
+version = "0.8.0"
 
 [dependencies]
 Inflector = "0.7.0"
