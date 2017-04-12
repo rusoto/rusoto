@@ -56,6 +56,7 @@ extern crate ring;
 extern crate rusoto_credential;
 extern crate rustc_serialize;
 extern crate serde;
+#[cfg(any(feature = "ecs", feature = "all", feature = "packagea", feature = "packageb"))]
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
