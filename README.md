@@ -113,6 +113,15 @@ Information on release schedules and procedures are in [RELEASING](RELEASING.md)
 
 See [CONTRIBUTING](CONTRIBUTING.md).
 
+## Supported OSs and Rust versions
+
+Linux, OSX and Windows are supported and tested via TravisCI and Appveyor.
+
+Rust stable is supported.  Older versions of Rust are supported and tested via TravisCI.  The minimum Rust version is
+incremented when it becomes inconvenient to support older versions.  The current minimum version of Rust supported can
+be found in [.travis.yml](.travis.yml).  If a version number is not specified in the `rust` section, only the named versions
+listed are supported.  This should be stable, beta and nightly.
+
 ## License
 
 Rusoto is distributed under the terms of the MIT license.
