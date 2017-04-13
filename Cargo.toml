@@ -19,7 +19,7 @@ homepage = "https://www.rusoto.org/"
 
 [badges]
 travis-ci = { repository = "rusoto/rusoto", branch = "master" }
-appveyor = { repository = "rusoto/rusoto" }
+appveyor = { repository = "rusoto/rusoto", branch = "master" }
 
 [build-dependencies]
 rustc_version = "0.1.7"
