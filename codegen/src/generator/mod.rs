@@ -185,7 +185,7 @@ fn generate_primitive_type(name: &str, shape_type: ShapeType, for_timestamps: &s
         ShapeType::Boolean => "bool",
         ShapeType::Double => "f64",
         ShapeType::Float => "f32",
-        ShapeType::Integer => "i32",
+        ShapeType::Integer => "i64",
         ShapeType::Long => "i64",
         ShapeType::String => "String",
         ShapeType::Timestamp => for_timestamps,
