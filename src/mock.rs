@@ -6,6 +6,8 @@ use std::collections::HashMap;
 use super::{DispatchSignedRequest, HttpResponse, HttpDispatchError, SignedRequest};
 use super::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
 use chrono::{Duration, UTC};
+
+use futures::{Future, future};
 use hyper::status::StatusCode;
 
 const ONE_DAY: i64 = 86400;
@@ -58,12 +60,13 @@ impl MockRequestDispatcher {
 }
 
 impl DispatchSignedRequest for MockRequestDispatcher {
-    fn dispatch(&self, request: &SignedRequest) -> Result<HttpResponse, HttpDispatchError> {
-        if self.request_checker.is_some() {
-            self.request_checker.as_ref().unwrap()(request);
-        }
-        Ok(self.mock_response.clone())
-    }
+	fn dispatch(&self, request: &SignedRequest) -> Box<Future<Item = HttpResponse, Error = HttpDispatchError>> {
+		if self.request_checker.is_some() {
+			self.request_checker.as_ref().unwrap()(request);
+		}
+
+		Box::new(future::ok(self.mock_response.clone()))
+	}
 }
 
 pub trait ReadMockResponse {

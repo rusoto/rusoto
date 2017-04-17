@@ -44,8 +44,9 @@
 //! }
 
 extern crate chrono;
+extern crate futures;
 extern crate hyper;
-extern crate hyper_native_tls;
+extern crate hyper_tls;
 #[macro_use]
 extern crate lazy_static;
 #[macro_use]
@@ -60,6 +61,7 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 extern crate time;
+extern crate tokio_core;
 extern crate url;
 extern crate xml;
 

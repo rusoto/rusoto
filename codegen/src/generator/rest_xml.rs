@@ -38,18 +38,28 @@ impl GenerateProtocol for RestXmlGenerator {
                     {build_payload}
 
                     request.set_params(params);
-                    request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let credentials = match self.credentials_provider.credentials() {{
+                        Ok(c) => c,
+                        Err(err) => return Box::new(future::err({error_type}::from(err)))
+                    }};
 
-                    match response.status {{
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {{
-                            {parse_response_body}
-                            {parse_non_payload}
-                            Ok(result)
-                        }},
-                        _ => Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                    }}
+                    request.sign(&credentials);
+
+                    let res = self.dispatcher.dispatch(&request)
+                        .map_err(|dispatch_err| {error_type}::from(dispatch_err))
+                        .and_then(
+                            |response| match response.status {{
+                                StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {{
+                                    {parse_response_body}
+                                    {parse_non_payload}
+                                    future::ok(result)
+                                }},
+                                _ => future::err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            }}
+                        );
+
+                    Box::new(res)
                 }}
                 ",
                      documentation = generate_documentation(operation),
@@ -87,6 +97,17 @@ impl GenerateProtocol for RestXmlGenerator {
             use xmlerror::*;
             use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
+            use futures::{Future, future};
+
+            macro_rules! try_future {
+                ($expr:expr) => (match $expr {
+                    Ok(val) => val,
+                    Err(err) => {
+                        return future::err(From::from(err))
+                    }
+                })
+            }
+
             enum DeserializerNext {
                 Close,
                 Skip,
@@ -343,7 +364,7 @@ fn generate_payload_serialization(shape: &Shape) -> String {
 fn generate_method_signature(operation_name: &str, operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "pub fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
+            "pub fn {operation_name}(&self, input: &{input_type}) -> Box<Future<Item = {output_type}, Error = {error_type}>>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation_name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
@@ -351,7 +372,7 @@ fn generate_method_signature(operation_name: &str, operation: &Operation) -> Str
         )
     } else {
         format!(
-            "pub fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
+            "pub fn {operation_name}(&self) -> Box<Future<Item = {output_type}, Error = {error_type}>>",
             operation_name = operation_name.to_snake_case(),
             error_type = error_type_name(operation_name),
             output_type = &operation.output_shape_or("()"),
