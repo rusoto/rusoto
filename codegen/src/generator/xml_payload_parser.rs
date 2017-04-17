@@ -301,12 +301,9 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
         return format!(
             "try!(start_element(tag_name, stack));
 
-            stack.next();
-
             let obj = {name}::default();
 
             try!(end_element(tag_name, stack));
-            stack.next();
 
             Ok(obj)
             ",
