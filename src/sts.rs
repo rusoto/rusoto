@@ -191,7 +191,7 @@ mod credential {
                 &GetSessionTokenRequest {
                     serial_number: self.mfa_serial.clone(),
                     token_code: self.mfa_code.clone(),
-                    duration_seconds: Some(self.session_duration.num_seconds() as i32),
+                    duration_seconds: Some(self.session_duration.num_seconds() as i64),
                     ..Default::default()
                 }) {
                 Ok(resp) => {
@@ -276,7 +276,7 @@ mod credential {
             match self.sts_client.assume_role(&AssumeRoleRequest {
                 role_arn: self.role_arn.clone(),
                 role_session_name: self.session_name.clone(),
-                duration_seconds: Some(self.session_duration.num_seconds() as i32),
+                duration_seconds: Some(self.session_duration.num_seconds() as i64),
                 external_id: self.external_id.clone(),
                 policy: self.scope_down_policy.clone(),
                 serial_number: self.mfa_serial.clone(),
@@ -350,7 +350,7 @@ mod credential {
                 provider_id: self.wif_provider.clone(),
                 role_arn: self.role_arn.clone(),
                 role_session_name: self.session_name.clone(),
-                duration_seconds: Some(self.session_duration.num_seconds() as i32),
+                duration_seconds: Some(self.session_duration.num_seconds() as i64),
                 policy: self.scope_down_policy.clone(),
                 ..Default::default()
             }) {
