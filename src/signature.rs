@@ -160,7 +160,7 @@ impl SignedRequest {
         // if there's no content-type header set, set it to the default value
         if let Entry::Vacant(entry) = self.headers.entry("content-type".to_owned()) {
             let mut values = Vec::new();
-            values.push("application/octet-stream".as_bytes().to_vec());
+            values.push(b"application/octet-stream".to_vec());
             entry.insert(values);
         }
 
@@ -209,7 +209,7 @@ impl SignedRequest {
                                       date,
                                       &self.region.to_string(),
                                       &self.service);
-        let signature = signature(&string_to_sign, signing_key);
+        let signature = signature(&string_to_sign, &signing_key);
 
         // build the actual auth header
         let auth_header = format!("AWS4-HMAC-SHA256 Credential={}/{}, SignedHeaders={}, Signature={}",
@@ -229,8 +229,8 @@ fn digest_payload(payload: &Option<Vec<u8>>) -> (String, usize) {
     (digest, len)
 }
 
-fn signature(string_to_sign: &str, signing_key: hmac::SigningKey) -> String {
-    hmac::sign(&signing_key, string_to_sign.as_bytes()).as_ref().to_hex().to_string()
+fn signature(string_to_sign: &str, signing_key: &hmac::SigningKey) -> String {
+    hmac::sign(signing_key, string_to_sign.as_bytes()).as_ref().to_hex().to_string()
 }
 
 fn signing_key(secret: &str, date: Tm, region: &str, service: &str) -> hmac::SigningKey {
