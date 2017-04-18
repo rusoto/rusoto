@@ -8,7 +8,9 @@ use botocore::Service;
 use util::case_insensitive_btreemap_get;
 use inflector::Inflector;
 
-const BOTOCORE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
+const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
+                                                 "/botocore/tests/unit/response_parsing/xml/errors/");
+const BOTOCORE_VALID_RESPONSE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
                                                  "/botocore/tests/unit/response_parsing/xml/responses/");
 const OUR_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/unit/responses/");
 
@@ -25,7 +27,41 @@ pub fn generate_tests(writer: &mut FileWriter, service: &Service) -> IoResult {
 }
 
 fn generate_tests_body(service: &Service) -> Option<String> {
-    let responses: HashMap<String, Response> = find_responses();
+    let valid_tests = generate_response_tests(
+        service,
+        find_valid_responses(),
+        200,
+        true,
+    );
+    // TODO: Find the true status code. Sadly, it isn't stored with the xml response.
+    let error_tests = generate_response_tests(
+        service,
+        find_error_responses(),
+        400,
+        false,
+    );
+
+    if valid_tests.is_some() || error_tests.is_some() {
+        Some(format!("
+                use mock::*;
+                use super::*;
+                use super::super::Region as rusoto_region;
+
+                {error_tests}
+                {valid_tests}",
+                error_tests = error_tests.unwrap_or("".to_string()),
+                valid_tests = valid_tests.unwrap_or("".to_string())))
+    } else {
+        None
+    }
+}
+
+fn generate_response_tests(
+    service: &Service,
+    responses: HashMap<String, Response>,
+    status_code: i32,
+    is_ok: bool,
+) -> Option<String> {
 
     let our_responses: Vec<Response> = responses.values()
         .into_iter()
@@ -34,25 +70,22 @@ fn generate_tests_body(service: &Service) -> Option<String> {
         .collect();
 
     let test_bodies: Vec<String> = our_responses.into_iter()
-        .flat_map(|response| generate_response_parse_test(service, response))
+        .flat_map(|response| generate_response_parse_test(service, response, status_code, is_ok))
         .collect();
 
     if !test_bodies.is_empty() {
-        let tests_str = test_bodies.join("\n\n");
-
-        Some(format!("
-                use mock::*;
-                use super::*;
-                use super::super::Region as rusoto_region;
-
-                {test_bodies}",
-                     test_bodies = tests_str))
+        Some(test_bodies.join("\n\n"))
     } else {
         None
     }
 }
 
-fn generate_response_parse_test(service: &Service, response: Response) -> Option<String> {
+fn generate_response_parse_test(
+    service: &Service,
+    response: Response,
+    status_code: i32,
+    is_ok: bool,
+) -> Option<String> {
     let maybe_operation = case_insensitive_btreemap_get(&service.operations, &response.action);
 
     if maybe_operation.is_none() {
@@ -73,22 +106,25 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
 
     Some(format!("
         #[test]
-        fn test_parse_{service_name}_{action}() {{
+        fn test_parse_{error_or_valid}_{service_name}_{action}() {{
             let mock_response =  MockResponseReader::read_response(r#\"{response_dir_name}\"#, \"{response_file_name}\");
-            let mock = MockRequestDispatcher::with_status(200)
+            let mock = MockRequestDispatcher::with_status({status_code})
                 .with_body(&mock_response);
             let client = {client_type}::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             {request_constructor}
             let result = client.{action}({request_params});
-            assert!(result.is_ok(), \"parse error: {{:?}}\", result);
+            assert!({is_ok}result.is_ok(), \"parse error: {{:?}}\", result);
         }}",
+        error_or_valid = if is_ok { "valid" } else { "error" },
         service_name = response.service.to_snake_case(),
         action = response.action.to_snake_case(),
+        status_code = status_code,
         response_dir_name = response.dir_name,
         response_file_name = response.file_name,
         client_type = service.client_type_name(),
         request_constructor = request_constructor,
-        request_params = request_params))
+        request_params = request_params,
+        is_ok = if is_ok { "" } else { "!" }))
 }
 
 #[derive(Debug, Clone)]
@@ -141,10 +177,20 @@ pub fn find_responses_in_dir(dir_path: &Path) -> Vec<Response> {
         .collect()
 }
 
-pub fn find_responses() -> HashMap<String, Response> {
+pub fn find_error_responses() -> HashMap<String, Response> {
     let mut responses = HashMap::new();
 
-    for r in find_responses_in_dir(Path::new(BOTOCORE_TESTS_DIR)) {
+    for r in find_responses_in_dir(Path::new(BOTOCORE_ERROR_RESPONSE_TESTS_DIR)) {
+        responses.insert(r.file_name.clone(), r);
+    }
+
+    responses
+}
+
+pub fn find_valid_responses() -> HashMap<String, Response> {
+    let mut responses = HashMap::new();
+
+    for r in find_responses_in_dir(Path::new(BOTOCORE_VALID_RESPONSE_TESTS_DIR)) {
         responses.insert(r.file_name.clone(), r);
     }
 
