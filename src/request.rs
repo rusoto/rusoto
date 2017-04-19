@@ -1,6 +1,6 @@
 //! AWS API requests.
 //!
-//! Wraps the Hyper library to send PUT, POST, DELETE and GET requests.
+//! Wraps the `hyper` library to send PUT, POST, DELETE and GET requests.
 
 extern crate lazy_static;
 
@@ -103,8 +103,8 @@ impl DispatchSignedRequest for Client {
         }
 
         if log_enabled!(Debug) {
-            let payload = match &request.payload {
-                &Some(ref payload_bytes) => {
+            let payload = match request.payload {
+                Some(ref payload_bytes) => {
                     String::from_utf8(payload_bytes.to_owned())
                         .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
                 }
@@ -145,7 +145,7 @@ impl DispatchSignedRequest for Client {
         }
 
         Ok(HttpResponse {
-            status: hyper_response.status.clone(),
+            status: hyper_response.status,
             body: body,
             headers: headers,
         })
@@ -171,7 +171,7 @@ impl fmt::Display for TlsError {
 }
 
 /// Helper method for creating an http client with tls.
-/// Makes a `hyper` client with NativeTls for HTTPS support.
+/// Makes a `hyper` client with `NativeTls` for HTTPS support.
 pub fn default_tls_client() -> Result<Client, TlsError> {
     let ssl = match NativeTlsClient::new() {
         Ok(ssl) => ssl,
