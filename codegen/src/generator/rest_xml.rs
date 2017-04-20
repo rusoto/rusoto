@@ -17,7 +17,17 @@ impl GenerateProtocol for RestXmlGenerator {
             let (request_uri, maybe_params) = parse_query_string(&operation.http.request_uri);
 
             let add_uri_parameters = match maybe_params {
-                Some(key) => format!("params.put_key(\"{}\");", key),
+                Some(key) => {
+                    if key.contains("=") {
+                        let parts: Vec<_> = key.split("=").collect();
+                        assert_eq!(parts.len(), 2, "service uri parameter has multiple '=' chars");
+                        format!("params.put(\"{}\", \"{}\");",
+                                parts[0],
+                                parts[1])
+                    } else {
+                        format!("params.put_key(\"{}\");", key)
+                    }
+                },
                 _ => "".to_owned(),
             };
 
