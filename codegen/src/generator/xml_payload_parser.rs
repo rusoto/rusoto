@@ -3,13 +3,8 @@ use inflector::Inflector;
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::{generate_field_name, mutate_type_name};
 
-pub fn generate_struct_attributes(deserialized: bool) -> String {
-    let mut derived = vec!["Default"];
-
-    if deserialized {
-        derived.push("Debug, Clone")
-    }
-
+pub fn generate_struct_attributes(_deserialized: bool) -> String {
+    let derived = vec!["Default", "Debug", "Clone"];
     format!("#[derive({})]", derived.join(","))
 }
 
@@ -120,6 +115,31 @@ fn xml_body_parser(output_shape: &str,
 
 
 fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> String {
+    match (&service.metadata.endpoint_prefix[..], name) {
+        ("s3", "GetBucketLocationOutput") => {
+            // override custom deserializer
+            let struct_field_deserializers = shape.members
+                .as_ref()
+                .unwrap()
+                .iter()
+                .filter_map(|(member_name, member)| {
+                    Some(format!("obj.{field_name} = {parse_expression};",
+                                 field_name = generate_field_name(member_name),
+                                 parse_expression = generate_struct_field_parse_expression(shape,
+                                                                                           member_name,
+                                                                                           member,
+                                                                                           &member_name.to_string())))
+                })
+                .collect::<Vec<String>>()
+                .join("\n");
+            return format!("let mut obj = {name}::default();
+                            {struct_field_deserializers}
+                            Ok(obj)",
+                           name = name,
+                           struct_field_deserializers = struct_field_deserializers);
+        },
+        _ => {},
+    }
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape),
         ShapeType::Map => generate_map_deserializer(shape),
@@ -246,7 +266,7 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 fn generate_primitive_deserializer(shape: &Shape) -> String {
     let statement = match shape.shape_type {
         ShapeType::String | ShapeType::Timestamp => "try!(characters(stack))",
-        ShapeType::Integer => "i32::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::Integer => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Long => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Double => "f64::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Float => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
@@ -281,12 +301,9 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
         return format!(
             "try!(start_element(tag_name, stack));
 
-            stack.next();
-
             let obj = {name}::default();
 
             try!(end_element(tag_name, stack));
-            stack.next();
 
             Ok(obj)
             ",

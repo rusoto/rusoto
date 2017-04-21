@@ -67,7 +67,9 @@ pub use region::{ParseRegionError, Region};
 pub use rusoto_credential::{AwsCredentials, ChainProvider, ContainerProvider, CredentialsError,
                             EnvironmentProvider, InstanceMetadataProvider, ProfileProvider,
                             ProvideAwsCredentials, DefaultCredentialsProvider,
-                            DefaultCredentialsProviderSync};
+                            DefaultCredentialsProviderSync, claims,
+                            AutoRefreshingProviderSync, AutoRefreshingProvider,
+                            BaseAutoRefreshingProvider};
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError};
 pub use signature::SignedRequest;
 pub use request::default_tls_client;
@@ -181,6 +183,8 @@ pub mod route53domains;
 pub mod s3;
 #[cfg(feature = "sdb")]
 pub mod sdb;
+#[cfg(feature = "ses")]
+pub mod ses;
 #[cfg(feature = "sns")]
 pub mod sns;
 #[cfg(feature = "sqs")]
@@ -189,6 +193,8 @@ pub mod sqs;
 pub mod ssm;
 #[cfg(feature = "storagegateway")]
 pub mod storagegateway;
+#[cfg(feature = "sts")]
+pub mod sts;
 #[cfg(feature = "swf")]
 pub mod swf;
 #[cfg(feature = "waf")]

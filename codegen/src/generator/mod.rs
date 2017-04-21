@@ -39,7 +39,6 @@ pub trait GenerateProtocol {
 
     /// Add any attributes that should decorate the struct for the given type (typically `Debug`, `Clone`, etc.)
     fn generate_struct_attributes(&self,
-                                  struct_name: &str,
                                   serialized: bool,
                                   deserialized: bool)
                                   -> String;
@@ -186,7 +185,7 @@ fn generate_primitive_type(name: &str, shape_type: ShapeType, for_timestamps: &s
         ShapeType::Boolean => "bool",
         ShapeType::Double => "f64",
         ShapeType::Float => "f32",
-        ShapeType::Integer => "i32",
+        ShapeType::Integer => "i64",
         ShapeType::Long => "i64",
         ShapeType::String => "String",
         ShapeType::Timestamp => for_timestamps,
@@ -293,12 +292,12 @@ fn generate_struct<P>(service: &Service,
             "{attributes}
             pub struct {name};
             ",
-            attributes = protocol_generator.generate_struct_attributes(name, serialized, deserialized),
+            attributes = protocol_generator.generate_struct_attributes(serialized, deserialized),
             name = name,
         )
     } else {
         let struct_attributes =
-            protocol_generator.generate_struct_attributes(name, serialized, deserialized);
+            protocol_generator.generate_struct_attributes(serialized, deserialized);
         // Serde attributes are only needed if deriving the Serialize or Deserialize trait
         let need_serde_attrs = struct_attributes.contains("erialize");
         format!(

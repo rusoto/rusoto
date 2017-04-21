@@ -20,7 +20,7 @@ mod test {
     use std::io::{Read, BufReader};
     use std::fs::File;
     use super::{S3Client, HeadObjectRequest, GetObjectRequest, ListMultipartUploadsRequest};
-    use super::{CreateMultipartUploadOutputDeserializer, CompleteMultipartUploadOutputDeserializer};
+    use super::{CreateMultipartUploadOutputDeserializer, CompleteMultipartUploadOutputDeserializer, GetBucketLocationOutputDeserializer};
     use super::{ListMultipartUploadsOutputDeserializer, ListPartsRequest, Initiator, Owner};
     use xmlutil::{XmlResponse, Next};
     use xml::EventReader;
@@ -336,6 +336,26 @@ mod test {
 
         let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
         let _ = client.get_object(&request).unwrap();
+    }
+
+    #[test]
+    fn should_parse_location_constraint() {
+        let file = File::open("codegen/botocore/tests/unit/response_parsing/xml/responses/s3-get-bucket-location.xml").unwrap();
+        let mut file = BufReader::new(file);
+        let mut raw = String::new();
+        file.read_to_string(&mut raw).unwrap();
+        let my_parser  = EventReader::from_str(&raw);
+        let my_stack = my_parser.into_iter().peekable();
+        let mut reader = XmlResponse::new(my_stack);
+        reader.next(); // xml start node
+        let result = GetBucketLocationOutputDeserializer::deserialize("LocationConstraint", &mut reader);
+
+        match result {
+            Err(_) => panic!("Couldn't parse get_bucket_location"),
+            Ok(result) => {
+                assert_eq!(sstr("EU"), result.location_constraint);
+            }
+        }
     }
 
     /// returns Some(String)

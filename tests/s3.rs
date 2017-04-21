@@ -92,7 +92,7 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
     let upload_id = response.upload_id.unwrap();
 
     // create 2 upload parts
-    let create_upload_part = |body: Vec<u8>, part_number: i32| -> UploadPartRequest {
+    let create_upload_part = |body: Vec<u8>, part_number: i64| -> UploadPartRequest {
         UploadPartRequest {
             body: Some(body),
             bucket: bucket.to_owned(),
