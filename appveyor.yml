@@ -23,12 +23,10 @@ install:
 
 # Equivalent to Travis' `script` phase
 build_script:
-  # We only build and test a subset due to https://github.com/rusoto/rusoto/issues/537
-  - cargo build --features "packagea" -vv
-  - cargo build --features "packageb" -vv
-test_script:
   - cargo test --lib --features "packagea"
   - cargo test --lib --features "packageb"
+  - cd services/s3
+  - cargo test --lib --features "s3"
 
 branches:
   only:

@@ -2,22 +2,34 @@
 //!
 //! If you're using the service, you're probably looking for [S3Client](struct.S3Client.html).
 
+extern crate rusoto;
+extern crate hyper;
+extern crate md5;
+extern crate xml;
+extern crate rustc_serialize;
+extern crate rusoto_credential;
+
+use rusoto::*;
+
+use std::result::Result::Ok;
+
 include!(concat!(env!("OUT_DIR"), "/s3.rs"));
 
 #[cfg(test)]
 mod test {
     use std::io::{Read, BufReader};
     use std::fs::File;
-    use s3::{S3Client, HeadObjectRequest, GetObjectRequest, ListMultipartUploadsRequest};
-    use s3::{CreateMultipartUploadOutputDeserializer, CompleteMultipartUploadOutputDeserializer, GetBucketLocationOutputDeserializer};
-    use s3::{ListMultipartUploadsOutputDeserializer, ListPartsRequest, Initiator, Owner};
+    use super::{S3Client, HeadObjectRequest, GetObjectRequest, ListMultipartUploadsRequest};
+    use super::{CreateMultipartUploadOutputDeserializer, CompleteMultipartUploadOutputDeserializer, GetBucketLocationOutputDeserializer};
+    use super::{ListMultipartUploadsOutputDeserializer, ListPartsRequest, Initiator, Owner};
     use xmlutil::{XmlResponse, Next};
     use xml::EventReader;
 
-    use super::super::{Region, SignedRequest};
-    use super::super::mock::*;
+    use rusoto::{Region, SignedRequest};
+    use mock::{MockRequestDispatcher, MockCredentialsProvider};
 
     extern crate env_logger;
+    extern crate rusoto;
 
     #[test]
     fn initiate_multipart_upload_happy_path() {
@@ -117,7 +129,7 @@ mod test {
 
     #[test]
     fn list_multipart_upload_parts_happy_path() {
-        let mock = MockRequestDispatcher::with_status(200)
+        let mock = rusoto::mock::MockRequestDispatcher::with_status(200)
             .with_body(r#"
             <?xml version="1.0" encoding="UTF-8"?>
             <ListPartsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
@@ -328,7 +340,7 @@ mod test {
 
     #[test]
     fn should_parse_location_constraint() {
-        let file = File::open("codegen/botocore/tests/unit/response_parsing/xml/responses/s3-get-bucket-location.xml").unwrap();
+        let file = File::open("../../codegen/botocore/tests/unit/response_parsing/xml/responses/s3-get-bucket-location.xml").unwrap();
         let mut file = BufReader::new(file);
         let mut raw = String::new();
         file.read_to_string(&mut raw).unwrap();

@@ -84,7 +84,7 @@ impl GenerateProtocol for RestXmlGenerator {
             use signature::SignedRequest;
             use xml::EventReader;
             use xml::reader::XmlEvent;
-            use xmlerror::*;
+            use xmlerror::{XmlErrorDeserializer};
             use xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
             enum DeserializerNext {
@@ -95,9 +95,7 @@ impl GenerateProtocol for RestXmlGenerator {
             .to_owned();
 
         if service.service_type_name() == "S3" {
-            imports += "
-                use md5;
-                use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};";
+            imports += "use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};";
         }
 
         writeln!(writer, "{}", imports)

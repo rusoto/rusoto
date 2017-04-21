@@ -106,7 +106,6 @@ all = [
 	   	"rds",
 	   	"route53",
 	   	"route53domains",
-	   	"s3",
 	   	"sdb",
 	   	"ses",
 	   	"sns",
@@ -165,7 +164,6 @@ redshift = []
 rds = []
 route53 = []
 route53domains = []
-s3 = []
 sdb = []
 ses = []
 sns = []
@@ -225,7 +223,6 @@ packageb = [
 	"rds",
 	"route53",
 	"route53domains",
-	"s3",
 	"sdb",
 	"ses",
 	"sns",

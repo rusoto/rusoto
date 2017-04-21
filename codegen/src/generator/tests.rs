@@ -43,7 +43,7 @@ fn generate_tests_body(service: &Service) -> Option<String> {
         Some(format!("
                 use mock::*;
                 use super::*;
-                use super::super::Region as rusoto_region;
+                use Region as rusoto_region;
 
                 {test_bodies}",
                      test_bodies = tests_str))

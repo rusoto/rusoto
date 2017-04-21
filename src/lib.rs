@@ -5,7 +5,7 @@
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 #![cfg_attr(feature = "nightly-testing", allow(cyclomatic_complexity, used_underscore_binding, ptr_arg, suspicious_else_formatting))]
 #![allow(dead_code)]
-#![cfg_attr(not(feature = "unstable"), deny(warnings))]
+// #![cfg_attr(not(feature = "unstable"), deny(warnings))]
 
 //! Rusoto is an [AWS](https://aws.amazon.com/) SDK for Rust.
 //! A high level overview is available in `README.md` at https://github.com/rusoto/rusoto.
@@ -75,17 +75,18 @@ pub use signature::SignedRequest;
 pub use request::default_tls_client;
 pub use region::default_region;
 
-mod param;
-mod region;
-mod request;
-mod xmlerror;
-mod xmlutil;
-mod serialization;
+pub mod param;
+pub mod region;
+pub mod request;
+pub mod xmlerror;
+pub mod xmlutil;
+pub mod serialization;
 #[macro_use]
-mod signature;
+pub mod signature;
 
-#[cfg(test)]
-mod mock;
+// This isn't exported if you compile just the S3 crate, so tests fail.
+// #[cfg(test)]
+pub mod mock;
 
 #[cfg(feature = "acm")]
 pub mod acm;
