@@ -340,7 +340,7 @@ mod test {
 
     #[test]
     fn should_parse_location_constraint() {
-        let file = File::open("codegen/botocore/tests/unit/response_parsing/xml/responses/s3-get-bucket-location.xml").unwrap();
+        let file = File::open("../../codegen/botocore/tests/unit/response_parsing/xml/responses/s3-get-bucket-location.xml").unwrap();
         let mut file = BufReader::new(file);
         let mut raw = String::new();
         file.read_to_string(&mut raw).unwrap();
