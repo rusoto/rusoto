@@ -1,0 +1,27 @@
+[package]
+authors = [
+    "Anthony DiMarco <ocramida@gmail.com>",
+    "Jimmy Cuadra <jimmy@jimmycuadra.com>",
+    "Matthew Mayer <matthewkmayer@gmail.com>",
+    "Nikita Pekin <contact@nikitapek.in>"
+]
+build = "build.rs"
+description = "AWS SDK for Rust - documentation metapackage"
+documentation = "http://rusoto.github.io/rusoto/rusoto/index.html"
+exclude = [".gitignore", ".travis.yml", "docgen.sh", "helpers/**/*", "codegen/**/*"]
+keywords = ["AWS", "Amazon"]
+license = "MIT"
+name = "rusoto_all"
+readme = "README.md"
+repository = "https://github.com/rusoto/rusoto"
+version = "0.1.0"
+
+[dependencies.rusoto]
+path = "../"
+version = "0.24.0"
+features = ["all"]
+
+[dependencies.rusoto_s3]
+path = "../services/s3/"
+version = "0.1.0"
+features = ["s3"]
