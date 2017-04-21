@@ -13,5 +13,3 @@ fn should_describe_clusters() {
     let result = client.describe_clusters(&request);
     println!("{:#?}", result);
 }
-
-

@@ -17,9 +17,9 @@ use rayon::prelude::*;
 fn generate_user_agent_vars(output_path: &Path) {
     let rust_version = rustc_version::version();
     let mut f = File::create(&output_path.join("user_agent_vars.rs"))
-            .expect("Could not create user agent file");
+        .expect("Could not create user agent file");
     f.write_all(format!("static RUST_VERSION: &'static str = \"{}\";", rust_version).as_bytes())
-            .expect("Unable to write user agent");
+        .expect("Unable to write user agent");
 }
 
 /*
@@ -95,16 +95,19 @@ fn main() {
         ["route53domains", "2014-05-15"],
         ["s3", "2006-03-01"],
         ["sdb", "2009-04-15"],
+        ["ses", "2010-12-01"],
         ["sns", "2010-03-31"],
         ["sqs", "2012-11-05"],
         ["ssm", "2014-11-06"],
         ["storagegateway", "2013-06-30"],
+        ["sts", "2011-06-15"],
         ["swf", "2012-01-25"],
         ["waf", "2015-08-24"],
         ["workspaces", "2015-04-08"]
     };
 
-    let count: usize = services.into_par_iter().map(|service| generate(service, &out_path.clone())).count();
+    let count: usize =
+        services.into_par_iter().map(|service| generate(service, &out_path.clone())).count();
     println!("\nGenerated {:?} services.\n", count);
 
     generate_user_agent_vars(&out_path);

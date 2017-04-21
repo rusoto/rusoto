@@ -51,7 +51,7 @@ impl SignedRequest {
             payload: None,
             canonical_query_string: String::new(),
             canonical_uri: String::new(),
-         }
+        }
     }
     pub fn set_content_type(&mut self, content_type: String) {
         self.add_header("content-type", &content_type);
@@ -96,7 +96,7 @@ impl SignedRequest {
     pub fn hostname(&self) -> String {
         match self.hostname {
             Some(ref h) => h.to_string(),
-            None => build_hostname(&self.service, self.region)
+            None => build_hostname(&self.service, self.region),
         }
     }
 
@@ -124,11 +124,12 @@ impl SignedRequest {
         }
     }
 
-    pub fn add_param<S>(&mut self, key: S, value: S)  where S: Into<String> {
+    pub fn add_param<S>(&mut self, key: S, value: S)
+        where S: Into<String> {
         self.params.insert(key.into(), Some(value.into()));
     }
 
-    pub fn set_params(&mut self, params: Params){
+    pub fn set_params(&mut self, params: Params) {
         self.params = params;
     }
 
@@ -136,7 +137,7 @@ impl SignedRequest {
         debug!("Creating request to send to AWS.");
         let hostname = match self.hostname {
             Some(ref h) => h.to_string(),
-            None => build_hostname(&self.service, self.region)
+            None => build_hostname(&self.service, self.region),
         };
 
         // Gotta remove and re-add headers since by default they append the value.  If we're following
@@ -153,12 +154,13 @@ impl SignedRequest {
 
         let date = now_utc();
         self.remove_header("x-amz-date");
-        self.add_header("x-amz-date", &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
+        self.add_header("x-amz-date",
+                        &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
 
         // if there's no content-type header set, set it to the default value
         if let Entry::Vacant(entry) = self.headers.entry("content-type".to_owned()) {
             let mut values = Vec::new();
-            values.push("application/octet-stream".as_bytes().to_vec());
+            values.push(b"application/octet-stream".to_vec());
             entry.insert(values);
         }
 
@@ -167,27 +169,27 @@ impl SignedRequest {
         self.canonical_uri = canonical_uri(&self.path);
         let canonical_headers = canonical_headers(&self.headers);
 
-        let canonical_request : String;
+        let canonical_request: String;
 
         if self.payload.is_none() {
             canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-                &self.method,
-                self.canonical_uri,
-                self.canonical_query_string,
-                canonical_headers,
-                signed_headers,
-                &to_hexdigest(""));
+                                        &self.method,
+                                        self.canonical_uri,
+                                        self.canonical_query_string,
+                                        canonical_headers,
+                                        signed_headers,
+                                        &to_hexdigest(""));
             self.remove_header("x-amz-content-sha256");
             self.add_header("x-amz-content-sha256", &to_hexdigest(""));
         } else {
             let (digest, len) = digest_payload(&self.payload);
             canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-                &self.method,
-                self.canonical_uri,
-                self.canonical_query_string,
-                canonical_headers,
-                signed_headers,
-                &digest);
+                                        &self.method,
+                                        self.canonical_uri,
+                                        self.canonical_query_string,
+                                        canonical_headers,
+                                        signed_headers,
+                                        &digest);
             self.remove_header("x-amz-content-sha256");
             self.add_header("x-amz-content-sha256", &digest);
             self.remove_header("content-length");
@@ -196,20 +198,28 @@ impl SignedRequest {
 
         // use the hashed canonical request to build the string to sign
         let hashed_canonical_request = to_hexdigest(&canonical_request);
-        let scope = format!("{}/{}/{}/aws4_request", date.strftime("%Y%m%d").unwrap(), self.region, &self.service);
+        let scope = format!("{}/{}/{}/aws4_request",
+                            date.strftime("%Y%m%d").unwrap(),
+                            self.region,
+                            &self.service);
         let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
 
         // construct the signing key and sign the string with it
-        let signing_key = signing_key(creds.aws_secret_access_key(), date, &self.region.to_string(), &self.service);
-        let signature = signature(&string_to_sign, signing_key);
+        let signing_key = signing_key(creds.aws_secret_access_key(),
+                                      date,
+                                      &self.region.to_string(),
+                                      &self.service);
+        let signature = signature(&string_to_sign, &signing_key);
 
         // build the actual auth header
         let auth_header = format!("AWS4-HMAC-SHA256 Credential={}/{}, SignedHeaders={}, Signature={}",
-                   &creds.aws_access_key_id(), scope, signed_headers, signature);
+                                  &creds.aws_access_key_id(),
+                                  scope,
+                                  signed_headers,
+                                  signature);
         self.remove_header("authorization");
         self.add_header("authorization", &auth_header);
     }
-
 }
 
 fn digest_payload(payload: &Option<Vec<u8>>) -> (String, usize) {
@@ -219,13 +229,14 @@ fn digest_payload(payload: &Option<Vec<u8>>) -> (String, usize) {
     (digest, len)
 }
 
-fn signature(string_to_sign: &str, signing_key: hmac::SigningKey) -> String {
-    hmac::sign(&signing_key, string_to_sign.as_bytes()).as_ref().to_hex().to_string()
+fn signature(string_to_sign: &str, signing_key: &hmac::SigningKey) -> String {
+    hmac::sign(signing_key, string_to_sign.as_bytes()).as_ref().to_hex().to_string()
 }
 
 fn signing_key(secret: &str, date: Tm, region: &str, service: &str) -> hmac::SigningKey {
     let date_key = hmac::SigningKey::new(&digest::SHA256, format!("AWS4{}", secret).as_bytes());
-    let date_hmac = hmac::sign(&date_key, date.strftime("%Y%m%d").unwrap().to_string().as_bytes());
+    let date_hmac = hmac::sign(&date_key,
+                               date.strftime("%Y%m%d").unwrap().to_string().as_bytes());
 
     let region_key = hmac::SigningKey::new(&digest::SHA256, date_hmac.as_ref());
     let region_hmac = hmac::sign(&region_key, region.as_bytes());
@@ -242,15 +253,15 @@ fn signing_key(secret: &str, date: Tm, region: &str, service: &str) -> hmac::Sig
 /// Mark string as AWS4-HMAC-SHA256 hashed
 pub fn string_to_sign(date: Tm, hashed_canonical_request: &str, scope: &str) -> String {
     format!("AWS4-HMAC-SHA256\n{}\n{}\n{}",
-        date.strftime("%Y%m%dT%H%M%SZ").unwrap(),
-        scope,
-        hashed_canonical_request)
+            date.strftime("%Y%m%dT%H%M%SZ").unwrap(),
+            scope,
+            hashed_canonical_request)
 }
 
 fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     let mut signed = String::new();
 
-    for (key,_) in headers.iter() {
+    for (key, _) in headers.iter() {
         if !signed.is_empty() {
             signed.push(';')
         }
@@ -270,7 +281,10 @@ fn canonical_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
         if skipped_headers(item.0) {
             continue;
         }
-        canonical.push_str(format!("{}:{}\n", item.0.to_ascii_lowercase(), canonical_values(item.1)).as_ref());
+        canonical.push_str(format!("{}:{}\n",
+                                   item.0.to_ascii_lowercase(),
+                                   canonical_values(item.1))
+            .as_ref());
     }
     canonical
 }
@@ -298,7 +312,7 @@ fn skipped_headers(header: &str) -> bool {
 fn canonical_uri(path: &str) -> String {
     match path {
         "" => "/".to_string(),
-        _ => encode_uri_path(path)
+        _ => encode_uri_path(path),
     }
 }
 
@@ -380,24 +394,24 @@ fn build_hostname(service: &str, region: Region) -> String {
     //iam has only 1 endpoint, other services have region-based endpoints
     match service {
         "iam" => {
-                match region {
-                    Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
-                    _ => format!("{}.amazonaws.com", service),
-                }
+            match region {
+                Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
+                _ => format!("{}.amazonaws.com", service),
             }
+        }
         "s3" => {
-                match region {
-                    Region::UsEast1 => "s3.amazonaws.com".to_string(),
-                    Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region),
-                    _ => format!("s3-{}.amazonaws.com", region),
-                }
+            match region {
+                Region::UsEast1 => "s3.amazonaws.com".to_string(),
+                Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region),
+                _ => format!("s3-{}.amazonaws.com", region),
             }
+        }
         _ => {
-                match region {
-                    Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
-                    _ => format!("{}.{}.amazonaws.com", service, region),
-                }
+            match region {
+                Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
+                _ => format!("{}.{}.amazonaws.com", service, region),
             }
+        }
     }
 }
 
@@ -428,13 +442,15 @@ mod tests {
     }
     #[test]
     fn path_percent_encoded() {
-        let provider = ProfileProvider::with_configuration(
-            "tests/sample-data/multiple_profile_credentials",
-            "foo",
-        );
-        let mut request = SignedRequest::new("GET", "s3", Region::UsEast1, "/path with spaces: the sequel");
+        let provider = ProfileProvider::with_configuration("tests/sample-data/multiple_profile_credentials",
+                                                           "foo");
+        let mut request = SignedRequest::new("GET",
+                                             "s3",
+                                             Region::UsEast1,
+                                             "/path with spaces: the sequel");
         request.sign(provider.credentials().as_ref().unwrap());
-        assert_eq!("/path%20with%20spaces%3A%20the%20sequel", request.canonical_uri());
+        assert_eq!("/path%20with%20spaces%3A%20the%20sequel",
+                   request.canonical_uri());
     }
     #[test]
     fn query_encoding_escaped_chars() {
@@ -457,11 +473,17 @@ mod tests {
     }
     #[test]
     fn query_percent_encoded() {
-        let mut request = SignedRequest::new("GET", "s3", Region::UsEast1, "/path with spaces: the sequel++");
-        request.add_param("key:with@funny&characters", "value with/funny%characters/Рускии");
+        let mut request = SignedRequest::new("GET",
+                                             "s3",
+                                             Region::UsEast1,
+                                             "/path with spaces: the sequel++");
+        request.add_param("key:with@funny&characters",
+                          "value with/funny%characters/Рускии");
         let canonical_query_string = super::build_canonical_query_string(&request.params);
-        assert_eq!("key%3Awith%40funny%26characters=value%20with%2Ffunny%25characters%2F%D0%A0%D1%83%D1%81%D0%BA%D0%B8%D0%B8", canonical_query_string);
+        assert_eq!("key%3Awith%40funny%26characters=value%20with%2Ffunny%25characters%2F%D0%A0%D1%83%D1%81%D0%BA%D0%B8%D0%B8",
+                   canonical_query_string);
         let canonical_uri_string = super::canonical_uri(&request.path);
-        assert_eq!("/path%20with%20spaces%3A%20the%20sequel%2B%2B", canonical_uri_string);
+        assert_eq!("/path%20with%20spaces%3A%20the%20sequel%2B%2B",
+                   canonical_uri_string);
     }
 }

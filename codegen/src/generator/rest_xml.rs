@@ -17,12 +17,12 @@ impl GenerateProtocol for RestXmlGenerator {
             let (request_uri, maybe_params) = parse_query_string(&operation.http.request_uri);
 
             let add_uri_parameters = match maybe_params {
-                 Some(key) => format!("params.put_key(\"{}\");", key),
-                 _ => "".to_owned()
+                Some(key) => format!("params.put_key(\"{}\");", key),
+                _ => "".to_owned(),
             };
 
             writeln!(writer,
-                "{documentation}
+                     "{documentation}
                 #[allow(unused_variables, warnings)]
                 {method_signature} {{
                     let mut params = Params::new();
@@ -48,24 +48,30 @@ impl GenerateProtocol for RestXmlGenerator {
                             {parse_non_payload}
                             Ok(result)
                         }},
-                        _ => Err({error_type}::from_body(&response.body))
+                        _ => Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
                     }}
                 }}
                 ",
-                documentation = generate_documentation(operation),
-                http_method = &operation.http.method,
-                endpoint_prefix = &service.metadata.endpoint_prefix,
-                method_signature = generate_method_signature(operation_name, operation),
-                error_type = error_type_name(operation_name),
-                request_uri = request_uri,
-                add_uri_parameters = add_uri_parameters,
-                build_payload = generate_method_input_serialization(service, operation).unwrap_or("".to_string()),
-                modify_uri = generate_uri_modification(service, operation).unwrap_or("".to_string()),
-                set_headers = generate_headers(service, operation).unwrap_or("".to_string()),
-                set_parameters = generate_parameters(service, operation).unwrap_or("".to_string()),
-                parse_non_payload = rest_response_parser::generate_response_headers_parser(service, operation).unwrap_or_else(|| "".to_owned()),
-                parse_response_body = xml_payload_parser::generate_response_parser(service, operation, true)
-            )?;
+                     documentation = generate_documentation(operation),
+                     http_method = &operation.http.method,
+                     endpoint_prefix = &service.metadata.endpoint_prefix,
+                     method_signature = generate_method_signature(operation_name, operation),
+                     error_type = error_type_name(operation_name),
+                     request_uri = request_uri,
+                     add_uri_parameters = add_uri_parameters,
+                     build_payload = generate_method_input_serialization(service, operation)
+                         .unwrap_or("".to_string()),
+                     modify_uri = generate_uri_modification(service, operation)
+                         .unwrap_or("".to_string()),
+                     set_headers = generate_headers(service, operation).unwrap_or("".to_string()),
+                     set_parameters = generate_parameters(service, operation)
+                         .unwrap_or("".to_string()),
+                     parse_non_payload =
+                         rest_response_parser::generate_response_headers_parser(service,
+                                                                                operation)
+                             .unwrap_or_else(|| "".to_owned()),
+                     parse_response_body =
+                         xml_payload_parser::generate_response_parser(service, operation, true))?;
         }
         Ok(())
     }
@@ -98,18 +104,10 @@ impl GenerateProtocol for RestXmlGenerator {
     }
 
     fn generate_struct_attributes(&self,
-                                  struct_name: &str,
                                   _serialized: bool,
-                                  deserialized: bool)
+                                  _deserialized: bool)
                                   -> String {
-        let mut derived = vec!["Default"];
-
-        // a few exceptions to get the generated S3 tests to compile
-        if deserialized ||
-            struct_name == "GetBucketPolicyOutput" ||
-            struct_name == "GetObjectOutput" {
-            derived.push("Debug")
-        }
+        let derived = vec!["Default", "Clone", "Debug"];
 
         format!("#[derive({})]", derived.join(","))
     }
@@ -119,8 +117,7 @@ impl GenerateProtocol for RestXmlGenerator {
             return None;
         }
 
-        Some(
-            format!("
+        Some(format!("
                 pub struct {name}Serializer;
                 impl {name}Serializer {{
                     {serializer_signature} {{
@@ -131,11 +128,14 @@ impl GenerateProtocol for RestXmlGenerator {
                 name = name,
                 serializer_body = generate_serializer_body(shape, service),
                 serializer_signature = generate_serializer_signature(name),
-            )
-        )
+            ))
     }
 
-    fn generate_deserializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
+    fn generate_deserializer(&self,
+                             name: &str,
+                             shape: &Shape,
+                             service: &Service)
+                             -> Option<String> {
         Some(xml_payload_parser::generate_deserializer(name, shape, service))
     }
 
@@ -172,7 +172,8 @@ fn generate_method_input_serialization(service: &Service, operation: &Operation)
     if input_shape.payload.is_some() {
         parts.push("let mut payload: Vec<u8>;".to_owned());
         parts.push(generate_payload_serialization(input_shape));
-        parts.push(generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()));
+        parts.push(generate_service_specific_code(service, operation)
+            .unwrap_or_else(|| "".to_owned()));
         parts.push("request.set_payload(Some(payload));".to_owned());
     }
 
