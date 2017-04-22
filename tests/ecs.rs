@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::ecs::{EcsClient, ListClustersRequest, ListClustersError};
+use rusoto::ecs::{Ecs, EcsClient, ListClustersRequest, ListClustersError};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

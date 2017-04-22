@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::acm::{AcmClient, ListCertificatesRequest};
+use rusoto::acm::{Acm, AcmClient, ListCertificatesRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

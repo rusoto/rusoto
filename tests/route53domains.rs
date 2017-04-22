@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::route53domains::{Route53DomainsClient, ListOperationsRequest};
+use rusoto::route53domains::{Route53Domains, Route53DomainsClient, ListOperationsRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

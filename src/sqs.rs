@@ -1,6 +1,6 @@
 //! The AWS SQS API.
 //!
-//! If you're using the service, you're probably looking for [SqsClient](struct.SqsClient.html).
+//! If you're using the service, you're probably looking for [SqsClient](struct.SqsClient.html) and [Sqs](trait.Sqs.html).
 
 #![cfg_attr(feature = "nightly-testing", allow(while_let_loop))]
 
@@ -9,7 +9,7 @@ include!(concat!(env!("OUT_DIR"), "/sqs.rs"));
 #[cfg(test)]
 mod test {
     use std::collections::HashMap;
-    use sqs::{SqsClient, SendMessageRequest, ReceiveMessageRequest, MessageAttributeValue};
+    use sqs::{Sqs, SqsClient, SendMessageRequest, ReceiveMessageRequest, MessageAttributeValue};
 
     use super::super::{Region, SignedRequest};
     use super::super::mock::*;

@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::lambda::{LambdaClient, ListFunctionsRequest};
+use rusoto::lambda::{Lambda, LambdaClient, ListFunctionsRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

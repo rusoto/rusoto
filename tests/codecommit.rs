@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::codecommit::{CodeCommitClient, ListRepositoriesInput};
+use rusoto::codecommit::{CodeCommit, CodeCommitClient, ListRepositoriesInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

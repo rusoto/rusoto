@@ -2,7 +2,8 @@
 
 extern crate rusoto;
 
-use rusoto::elasticbeanstalk::{ElasticBeanstalkClient, DescribeApplicationsMessage};
+use rusoto::elasticbeanstalk::{ElasticBeanstalk, ElasticBeanstalkClient,
+                               DescribeApplicationsMessage};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

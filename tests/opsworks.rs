@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::opsworks::{OpsWorksClient, DescribeStacksRequest};
+use rusoto::opsworks::{OpsWorks, OpsWorksClient, DescribeStacksRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

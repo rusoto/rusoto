@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::workspaces::{WorkspacesClient, DescribeWorkspacesRequest};
+use rusoto::workspaces::{Workspaces, WorkspacesClient, DescribeWorkspacesRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

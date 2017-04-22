@@ -4,7 +4,7 @@ extern crate rusoto;
 extern crate env_logger;
 #[macro_use]
 extern crate log;
-use rusoto::iot::{IotClient, ListThingsRequest};
+use rusoto::iot::{Iot, IotClient, ListThingsRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

@@ -1,6 +1,6 @@
 //! AWS CloudFormation
 //!
-//! If you're using the service, you're probably looking for [CloudFormationClient](struct.CloudFormationClient.html).
+//! If you're using the service, you're probably looking for [CloudFormationClient](struct.CloudFormationClient.html) and [CloudFormation](trait.CloudFormation.html).
 
 include!(concat!(env!("OUT_DIR"), "/cloudformation.rs"));
 
@@ -8,7 +8,7 @@ include!(concat!(env!("OUT_DIR"), "/cloudformation.rs"));
 mod test {
     use std::io::{Read, BufReader};
     use std::fs::File;
-    use cloudformation::{CloudFormationClient, ListStacksInput};
+    use cloudformation::{CloudFormation, CloudFormationClient, ListStacksInput};
 
     use super::super::{Region, SignedRequest};
     use super::super::mock::*;

@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::dynamodbstreams::{DynamoDbStreamsClient, ListStreamsInput};
+use rusoto::dynamodbstreams::{DynamoDbStreams, DynamoDbStreamsClient, ListStreamsInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

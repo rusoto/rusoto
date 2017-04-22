@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::ssm::{SsmClient, ListDocumentsRequest, ListCommandsRequest,
+use rusoto::ssm::{Ssm, SsmClient, ListDocumentsRequest, ListCommandsRequest,
                   ListCommandInvocationsRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
