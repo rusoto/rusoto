@@ -56,7 +56,16 @@ extern crate ring;
 extern crate rusoto_credential;
 extern crate rustc_serialize;
 extern crate serde;
-#[cfg(any(feature = "ecs", feature = "all", feature = "packagea", feature = "packageb"))]
+// This bit is to only bring in serde_derive for services that use it.
+// TODO: check with SES.
+#[cfg(any(feature = "ecs", feature = "acm", feature = "cloudhsm", feature = "cloudtrail",
+    feature = "codecommit", feature = "codedeploy", feature = "codepipeline", feature = "cognito-identity",
+    feature = "config", feature = "datapipeline", feature = "devicefarm", feature = "directconnect",
+    feature = "ds", feature = "dynamodb", feature = "dynamodbstreams", feature = "ecr", feature = "elastictranscoder",
+    feature = "emr", feature = "events", feature = "firehose", feature = "inspector", feature = "iot",
+    feature = "kinesis", feature = "kms", feature = "lambda", feature = "logs", feature = "machinelearning",
+    feature = "marketplacecommerceanalytics", feature = "opsworks", feature = "route53domains",
+    feature = "ssm", feature = "storagegateway", feature = "swf", feature = "waf", feature = "workspaces"))]
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
