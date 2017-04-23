@@ -57,7 +57,6 @@ extern crate rusoto_credential;
 extern crate rustc_serialize;
 extern crate serde;
 // This bit is to only bring in serde_derive for services that use it.
-// TODO: check with SES.
 #[cfg(any(feature = "ecs", feature = "acm", feature = "cloudhsm", feature = "cloudtrail",
     feature = "codecommit", feature = "codedeploy", feature = "codepipeline", feature = "cognito-identity",
     feature = "config", feature = "datapipeline", feature = "devicefarm", feature = "directconnect",
