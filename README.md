@@ -44,7 +44,7 @@ For example, to include only S3 and SQS:
 
 ``` toml
 [dependencies]
-rusoto = {version = "0.23", features = ["s3", "sqs"]}
+rusoto = {version = "0.24", features = ["s3", "sqs"]}
 ```
 
 You can use the Cargo feature "all" to build Rusoto with support for every available service. Warning: building with "all" can require upwards of 5 GB of memory. Most people do not need all 40+ services so use individual features to enable the services you use.
@@ -112,6 +112,15 @@ Information on release schedules and procedures are in [RELEASING](RELEASING.md)
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md).
+
+## Supported OSs and Rust versions
+
+Linux, OSX and Windows are supported and tested via TravisCI and Appveyor.
+
+Rust stable is supported.  Older versions of Rust are supported and tested via TravisCI.  The minimum Rust version is
+incremented when it becomes inconvenient to support older versions.  The current minimum version of Rust supported can
+be found in [.travis.yml](.travis.yml).  If a version number is not specified in the `rust` section, only the named versions
+listed are supported.  This should be stable, beta and nightly.
 
 ## License
 

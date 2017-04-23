@@ -266,7 +266,7 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 fn generate_primitive_deserializer(shape: &Shape) -> String {
     let statement = match shape.shape_type {
         ShapeType::String | ShapeType::Timestamp => "try!(characters(stack))",
-        ShapeType::Integer => "i32::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::Integer => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Long => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Double => "f64::from_str(try!(characters(stack)).as_ref()).unwrap()",
         ShapeType::Float => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
@@ -301,12 +301,9 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
         return format!(
             "try!(start_element(tag_name, stack));
 
-            stack.next();
-
             let obj = {name}::default();
 
             try!(end_element(tag_name, stack));
-            stack.next();
 
             Ok(obj)
             ",
