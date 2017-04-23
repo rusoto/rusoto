@@ -57,7 +57,7 @@ extern crate rusoto_credential;
 extern crate rustc_serialize;
 extern crate serde;
 // Only bring in serde_derive for services that use it.
-#[cfg(any(feature = "needs_serde_derive"))]
+#[cfg(feature = "needs_serde_derive")]
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
