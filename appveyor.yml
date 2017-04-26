@@ -25,6 +25,9 @@ install:
 
 # Equivalent to Travis' `script` phase
 build_script:
+  - cd service_crategen
+  - cargo run -- -c ./services.json -o ../rusoto/services
+  - cd ..
   # We only build and test a subset due to https://github.com/rusoto/rusoto/issues/537
   - cargo build --features "packagea" -vv
   - cargo build --features "packageb" -vv
