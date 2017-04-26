@@ -12,7 +12,6 @@ use std::collections::btree_map::Entry;
 use std::str;
 
 use ring::{digest, hmac};
-use rusoto_credential::AwsCredentials;
 use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
@@ -20,6 +19,7 @@ use url::percent_encoding::{utf8_percent_encode, EncodeSet};
 
 use param::Params;
 use region::Region;
+use credential::AwsCredentials;
 
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process
@@ -418,15 +418,11 @@ fn build_hostname(service: &str, region: Region) -> String {
 
 #[cfg(test)]
 mod tests {
-    use rusoto_credential::ProvideAwsCredentials;
+    use credential::{ProvideAwsCredentials, ProfileProvider};
+    use Region;
+    use ::param::Params;
 
-    use region::Region;
-
-    use super::SignedRequest;
-    use param::Params;
-
-    use super::super::ProfileProvider;
-    use super::build_canonical_query_string;
+    use super::{SignedRequest,build_canonical_query_string};
 
     #[test]
     fn get_hostname_none_present() {
@@ -442,7 +438,7 @@ mod tests {
     }
     #[test]
     fn path_percent_encoded() {
-        let provider = ProfileProvider::with_configuration("tests/sample-data/multiple_profile_credentials",
+        let provider = ProfileProvider::with_configuration("test_resources/multiple_profile_credentials",
                                                            "foo");
         let mut request = SignedRequest::new("GET",
                                              "s3",

@@ -119,7 +119,7 @@ fn generate<P, E>(writer: &mut FileWriter, service: &Service, protocol_generator
         use std::fmt;
         use std::error::Error;
         use request::HttpDispatchError;
-        use rusoto_credential::{{CredentialsError, ProvideAwsCredentials}};
+        use credential::{{CredentialsError, ProvideAwsCredentials}};
     ")?;
 
     protocol_generator.generate_prelude(writer, service)?;

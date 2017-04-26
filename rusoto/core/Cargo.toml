@@ -1,0 +1,52 @@
+[package]
+authors = [
+    "Anthony DiMarco <ocramida@gmail.com>",
+    "Jimmy Cuadra <jimmy@jimmycuadra.com>",
+    "Matthew Mayer <matthewkmayer@gmail.com>",
+    "Nikita Pekin <contact@nikitapek.in>"
+]
+build = "build.rs"
+description = "AWS SDK for Rust - Core"
+documentation = "http://rusoto.github.io/rusoto/rusoto/index.html"
+keywords = ["AWS", "Amazon"]
+license = "MIT"
+name = "rusoto_core"
+readme = "README.md"
+repository = "https://github.com/rusoto/rusoto"
+version = "0.24.0"
+homepage = "https://www.rusoto.org/"
+
+[badges]
+travis-ci = { repository = "rusoto/rusoto", branch = "master" }
+appveyor = { repository = "rusoto/rusoto", branch = "master" }
+
+[build-dependencies]
+rustc_version = "0.1.7"
+
+[dependencies]
+hyper = "0.10.0"
+hyper-native-tls = "0.2.1"
+lazy_static = "0.2.1"
+log = "0.3.6"
+ring = "0.7"
+rustc-serialize = "0.3.19"
+serde = "0.9.5"
+time = "0.1.35"
+url = "1.2.0"
+xml-rs = "0.3"
+
+[dependencies.rusoto_credential]
+path = "../../credential"
+version = "0.6.0"
+
+[dependencies.clippy]
+optional = true
+version = "0.0"
+
+[dev-dependencies]
+env_logger = "0.4.0"
+rand = "^0.3.14"
+
+[features]
+nightly-testing = ["clippy", "rusoto_credential/nightly-testing"]
+unstable = []
