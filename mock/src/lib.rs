@@ -5,6 +5,7 @@ extern crate hyper;
 extern crate rusoto_core;
 
 use std::fs::File;
+use std::io::Cursor;
 use std::io::Read;
 use std::collections::HashMap;
 
@@ -67,7 +68,7 @@ impl DispatchSignedRequest for MockRequestDispatcher {
         }
         Ok(HttpResponse {
             status: self.status,
-            body: self.body.clone(),
+            body: Box::new(Cursor::new(self.body.clone())),
             headers: self.headers.clone(),
         })
     }

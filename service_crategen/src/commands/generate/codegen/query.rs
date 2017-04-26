@@ -39,14 +39,16 @@ impl GenerateProtocol for QueryGenerator {
                     request.set_params(params);
 
                     request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let mut response = try!(self.dispatcher.dispatch(&request));
                     match response.status {{
                         StatusCode::Ok => {{
                             {parse_payload}
                             Ok(result)
                         }}
                         _ => {{
-                            Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                            let mut body: Vec<u8> = Vec::new();
+                            try!(response.body.read_to_end(&mut body));
+                            Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref()))
                         }}
                     }}
                 }}

@@ -76,8 +76,7 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_params}
 
                     request.sign(&self.credentials_provider.credentials()?);
-
-                    let response = self.dispatcher.dispatch(&request)?;
+                    let mut response = self.dispatcher.dispatch(&request)?;
 
                     match response.status {{
                         {status_code} => {{
@@ -86,7 +85,11 @@ impl GenerateProtocol for RestJsonGenerator {
                             {parse_status_code}
                             Ok(result)
                         }}
-                         _ => Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+                         _ => {{
+                             let mut body: Vec<u8> = Vec::new();
+                             try!(response.body.read_to_end(&mut body));
+                             Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref()))
+                         }}
                     }}
                 }}
                 ",
@@ -445,12 +448,16 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
 fn payload_body_parser(payload_type: ShapeType, output_shape: &str, payload_member: &str, mutable_result: bool) -> String {
 
     let response_body = match payload_type {
-        ShapeType::Blob => "Some(response.body)",
-        _ => "Some(String::from_utf8_lossy(&response.body).into_owned())",
+        ShapeType::Blob => "Some(body)",
+        _ => "Some(String::from_utf8_lossy(body).into_owned())",
     };
 
     format!("
         let {mutable} result = {output_shape}::default();
+
+        let mut body: Vec<u8> = Vec::new();
+        try!(response.body.read_to_end(&mut body));
+
         result.{payload_member} = {response_body};
         ",
         output_shape = output_shape,
@@ -467,7 +474,8 @@ fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
     // "{{}}" for a field-less response, so we must check for this result
     // and convert it if necessary.
     format!("
-            let mut body = response.body;
+            let mut body: Vec<u8> = Vec::new();
+            try!(response.body.read_to_end(&mut body));
 
             if body == b\"{{}}\" {{
                 body = b\"null\".to_vec();

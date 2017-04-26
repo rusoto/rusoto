@@ -57,11 +57,14 @@ fn payload_body_parser(payload_type: ShapeType,
                        payload_member: &str)
                        -> String {
     let response_body = match payload_type {
-        ShapeType::Blob => "Some(response.body)",
-        _ => "Some(String::from_utf8_lossy(&response.body).into_owned())",
+        ShapeType::Blob => "Some(body)",
+        _ => "Some(String::from_utf8_lossy(&body).into_owned())",
     };
 
     format!("
+        let mut body: Vec<u8> = Vec::new();
+        try!(response.body.read_to_end(&mut body));
+
         let mut result = {output_shape}::default();
         result.{payload_member} = {response_body};
         ",
@@ -97,12 +100,14 @@ fn xml_body_parser(output_shape: &str,
 
     format!("
         {let_result}
+        let mut body: Vec<u8> = Vec::new();
+        try!(response.body.read_to_end(&mut body));
 
-        if response.body.is_empty() {{
+        if body.is_empty() {{
             result = {output_shape}::default();
         }} else {{
             let reader = EventReader::new_with_config(
-                response.body.as_slice(),
+                body.as_slice(),
                 ParserConfig::new().trim_whitespace(true)
             );
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
