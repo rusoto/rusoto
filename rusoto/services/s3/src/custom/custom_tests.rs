@@ -257,8 +257,8 @@ fn should_parse_sample_list_buckets_response() {
 fn should_parse_headers() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body("")
-        .with_header("x-amz-expiration".to_string(), "foo".to_string())
-        .with_header("x-amz-restore".to_string(), "bar".to_string());
+        .with_header("x-amz-expiration", "foo")
+        .with_header("x-amz-restore", "bar");
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
     let request = HeadObjectRequest::default();

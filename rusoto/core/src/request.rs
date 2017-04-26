@@ -35,7 +35,6 @@ lazy_static! {
 }
 
 
-#[derive(Clone)]
 pub struct HttpResponse {
     pub status: StatusCode,
     pub body: Vec<u8>,
