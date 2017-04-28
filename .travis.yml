@@ -13,10 +13,10 @@ language: rust
 cache: cargo
 # run builds for all the trains (and more)
 rust:
-  # check that it compiles on the latest stable compiler
   - stable
   - beta
   - nightly
+  - 1.16.0
 os:
   - linux
   - osx
