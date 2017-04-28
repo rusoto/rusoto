@@ -12,11 +12,13 @@ extern crate retry;
 
 pub use environment::EnvironmentProvider;
 pub use container::ContainerProvider;
+pub use static_provider::StaticProvider;
 pub use instance_metadata::InstanceMetadataProvider;
 pub use profile::ProfileProvider;
 
 mod container;
 mod environment;
+mod static_provider;
 mod instance_metadata;
 mod profile;
 pub mod claims;
