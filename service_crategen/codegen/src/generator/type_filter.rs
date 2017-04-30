@@ -1,10 +1,10 @@
-use std::collections::HashSet;
+use std::collections::BTreeSet;
 use botocore::{Service, ShapeType, Shape};
 use super::mutate_type_name;
 
-pub fn filter_types(service: &Service) -> (HashSet<String>, HashSet<String>) {
-    let mut deserialized_types: HashSet<String> = HashSet::new();
-    let mut serialized_types: HashSet<String> = HashSet::new();
+pub fn filter_types(service: &Service) -> (BTreeSet<String>, BTreeSet<String>) {
+    let mut deserialized_types: BTreeSet<String> = BTreeSet::new();
+    let mut serialized_types: BTreeSet<String> = BTreeSet::new();
     for operation in service.operations.values() {
         if let Some(ref output) = operation.output {
 
@@ -24,7 +24,7 @@ pub fn filter_types(service: &Service) -> (HashSet<String>, HashSet<String>) {
     (serialized_types, deserialized_types)
 }
 
-fn recurse_find_shapes(service: &Service, types: &mut HashSet<String>, shape_name: &str) {
+fn recurse_find_shapes(service: &Service, types: &mut BTreeSet<String>, shape_name: &str) {
     types.insert(mutate_type_name(shape_name).to_owned());
     let shape = service.shapes.get(shape_name).expect("Shape type missing from service definition");
     match shape.shape_type {

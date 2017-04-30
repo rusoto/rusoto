@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::io::Write;
 use botocore::{Operation, Service};
 use super::{IoResult, FileWriter, error_type_name};
@@ -14,7 +14,7 @@ pub trait GenerateErrorTypes {
     fn generate_error_types(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
         // grab error type documentation for use with error enums in generated code
         // botocore presents errors as structs.  we filter those out in generate_types.
-        let mut error_documentation = HashMap::new();
+        let mut error_documentation = BTreeMap::new();
 
         for (name, shape) in &service.shapes {
             if shape.exception() && shape.documentation.is_some() {
@@ -32,7 +32,7 @@ pub trait GenerateErrorTypes {
                            writer: &mut FileWriter,
                            operation_name: &str,
                            operation: &Operation,
-                           error_documentation: &HashMap<&String, &String>)
+                           error_documentation: &BTreeMap<&String, &String>)
                            -> IoResult {
         writeln!(writer,
                  "/// Errors returned by {operation}
@@ -80,7 +80,7 @@ pub trait GenerateErrorTypes {
     /// generate an enum of all possible errors output by this operation
     fn generate_error_enum_types(&self,
                                  operation: &Operation,
-                                 error_documentation: &HashMap<&String, &String>)
+                                 error_documentation: &BTreeMap<&String, &String>)
                                  -> Option<String> {
         let mut enum_types: Vec<String> = Vec::new();
 
