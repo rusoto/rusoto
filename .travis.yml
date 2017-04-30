@@ -38,19 +38,16 @@ script:
   - |
       echo "Generating service crates..." &&
       ( cd service_crategen && \
-        travis-cargo run -- -c ./services.json -o ../rusoto/services && \
+        cargo run -- -c ./services.json -o ../rusoto/services && \
         cd .. )
-  # get around our code being too big: split compilation up into A and B packages:
-  - echo "Running Rusoto tests A" && travis_wait 40 travis-cargo test -- --lib --features packagea -v
-  - echo "Running Rusoto tests B" && travis_wait 40 travis-cargo test -- --lib --features packageb -v
-  - echo "Running Rusoto tests" && cd rusoto && travis_wait 40 cargo test --lib --all -v && cd ..
-  - echo "Running rusoto_credential tests" && cd credential && travis_wait 40 travis-cargo test && cd ..
+  - echo "Running Rusoto tests" && cd rusoto && cargo test --lib --all -v && cd ..
+  - echo "Running rusoto_credential tests" && cd credential && cargo test && cd ..
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         # Don't generate docs for `rusoto_codegen`, as it is intended entirely
         # for internal use.
-        travis_wait travis-cargo --only stable doc -- --no-deps -p rusoto -p rusoto_credential
+        travis_wait travis-cargo --only stable doc -- --no-deps
       fi
 after_success:
   # upload the documentation from the build with stable (automatically only
