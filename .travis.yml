@@ -45,16 +45,14 @@ script:
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        # Don't generate docs for `rusoto_codegen`, as it is intended entirely
-        # for internal use.
-        travis_wait travis-cargo --only stable doc -- --no-deps
+        cd rusoto && travis-cargo --only stable doc -- --all --no-deps && cd ..
       fi
 after_success:
   # upload the documentation from the build with stable (automatically only
   # actually runs from the master branch, not individual PRs), not on OSX.
   - |
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        travis-cargo --only stable doc-upload
+        cd rusoto && travis-cargo --only stable doc-upload && cd ..
       fi
   # measure code coverage and upload to coveralls.io (the verify argument
   # mitigates kcov crashes due to malformed debuginfo, at the cost of some
@@ -66,7 +64,6 @@ after_success:
       fi
 env:
   global:
-    - RUSOTO_FEATURES="all"
     - RUST_BACKTRACE=1
     # encrypted Github token for doc upload
     - secure: rWVjaDybqYUL6pwb9JbKRAQJYJTTWkbIMsh92l1Y9vz+QJiF903HEaxea98Z7e1Qywizm60EoAu8CSj5e+TfOC9hb6ZwN9nQs4FPnywiAUXtiuxUXDpcjacXVXl8YcLG+mOnq/+thOo+J1l2+j7SLsBrP4ybHh4NS7rqj8Os/5fiIfHfwlSVPlbw1gtTmLv5SXyofWB9VHMgkDzzP9Bss5HwwXQyzyj1EF8AQNexSsWj/MPYhj3eQaBpIK49guCqe1JjWdKXoiu4XQFsWMV6LBf7OgrWHR9MNf1H6UHM97i8onTeDAviC3RaWQe8crb2cQwNXk/n/8kde0F/1oBaljbOHTbLScflQNRGxV2jpbiIMVLgxdXUWK8d2JveVrXM5TKx6Wp8IolJ8Cr8egzLn9dRn1OG5pwt7b/Cr6DRaXFH5TRSz0Uln0GMA08NWC2sbDz1xtlkiUkRpHmBPmAGNjjDPaJs+OLPyPFMw5Gqr8g/zzCbGI92t210oMsVoCci5S8MO74HExYhsyAz4/CI0fqSSXDKG1xveguktmKWSxH5idyAmfDg556nSmuP+5w69QM9Vcg8j0szuSzsVoc/YsHMsdbZPdANLagbU9K59M1OpMkL3RSAav/cyL41+pSI3zybHKGim+kHZSwBWlLVKCX7P2FmineEFriLK8UJFxo=
