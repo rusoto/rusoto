@@ -44,7 +44,7 @@ script:
   # get around our code being too big: split compilation up into A and B packages:
   - echo "Running Rusoto tests A" && travis_wait 40 travis-cargo test -- --lib --features packagea -v
   - echo "Running Rusoto tests B" && travis_wait 40 travis-cargo test -- --lib --features packageb -v
-  - echo "Running Rusoto tests" && cd rusoto && travis_wait 40 travis-cargo test --lib --all -v && cd ..
+  - echo "Running Rusoto tests" && cd rusoto && travis_wait 40 cargo test --lib --all -v && cd ..
   - echo "Running rusoto_credential tests" && cd credential && travis_wait 40 travis-cargo test && cd ..
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
