@@ -280,10 +280,6 @@ fn main() {
 
                 for resource in test_resources {
                     fs::copy(resource.full_path, generated_test_resources_dir.join(&resource.file_name)).expect("Failed to copy test resource file");
-                    // TODO: remove this. added to migrate
-                    if test_resources_dir.join(&resource.file_name).exists() {
-                        fs::remove_file(test_resources_dir.join(&resource.file_name)).unwrap();
-                    }
                 }
             }
         }
