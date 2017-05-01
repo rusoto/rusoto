@@ -5,15 +5,15 @@ use rustc_serialize::base64::{FromBase64, STANDARD, ToBase64};
 use serde::{Deserializer, Serializer};
 use serde::de::{Error as SerdeError, Visitor};
 
-pub trait SerdeBlob: Sized {
-    fn deserialize_blob<D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer;
+pub trait SerdeBlob<'de>: Sized {
+    fn deserialize_blob<D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer<'de>;
 
     fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer;
 }
 
 struct BlobVisitor;
 
-impl Visitor for BlobVisitor {
+impl <'de> Visitor<'de> for BlobVisitor {
     type Value = Vec<u8>;
 
     fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
@@ -26,10 +26,10 @@ impl Visitor for BlobVisitor {
     }
 }
 
-impl SerdeBlob for Vec<u8> {
+impl <'de> SerdeBlob<'de> for Vec<u8> {
     fn deserialize_blob<D>(deserializer: D) -> Result<Vec<u8>, D::Error>
-        where D: Deserializer {
-        deserializer.deserialize(BlobVisitor)
+        where D: Deserializer<'de> {
+        deserializer.deserialize_any(BlobVisitor)
     }
 
     fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -40,7 +40,7 @@ impl SerdeBlob for Vec<u8> {
 
 struct OptionalBlobVisitor;
 
-impl Visitor for OptionalBlobVisitor {
+impl <'de> Visitor<'de> for OptionalBlobVisitor {
     type Value = Option<Vec<u8>>;
 
     fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
@@ -53,14 +53,14 @@ impl Visitor for OptionalBlobVisitor {
     }
 
     fn visit_some<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
-        where D: Deserializer {
+        where D: Deserializer<'de> {
         Ok(Some(try!(SerdeBlob::deserialize_blob(deserializer))))
     }
 }
 
-impl SerdeBlob for Option<Vec<u8>> {
+impl <'de> SerdeBlob<'de> for Option<Vec<u8>> {
     fn deserialize_blob<D>(deserializer: D) -> Result<Option<Vec<u8>>, D::Error>
-        where D: Deserializer {
+        where D: Deserializer<'de> {
         deserializer.deserialize_option(OptionalBlobVisitor)
     }
 
