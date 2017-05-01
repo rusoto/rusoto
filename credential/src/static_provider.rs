@@ -1,17 +1,20 @@
+//! Provides a way to create static/programmatically generated AWS Credentials.
+//! For those who can't get them from an environment, or a file.
+
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials};
 use chrono::{Duration, UTC};
 
 /// Provides AWS credentials from statically/programmatically provided strings.
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct StaticProvider {
     /// The AWS Access Key ID to use for authenticating to AWS.
-    pub aws_access_key_id: String,
+    aws_access_key_id: String,
     /// The AWS Secret Access Key to use for authenticating to AWS.
-    pub aws_secret_access_key: String,
+    aws_secret_access_key: String,
     /// The optional token to use for authenticating to aWS.
-    pub token: Option<String>,
+    token: Option<String>,
     /// The time in seconds each issued token should be valid ofr.
-    pub valid_for: i64,
+    valid_for: i64,
 }
 
 impl StaticProvider {
@@ -35,6 +38,31 @@ impl StaticProvider {
             token: None,
             valid_for: 600,
         }
+    }
+
+    /// Gets the AWS Access Key ID for this Static Provider.
+    pub fn get_aws_access_key_id(&self) -> &str {
+        &self.aws_access_key_id
+    }
+
+    /// Gets the AWS Secret Access Key for this Static Provider.
+    pub fn get_aws_secret_access_key(&self) -> &str {
+        &self.aws_secret_access_key
+    }
+
+    /// Determines if this Static Provider was given a Token.
+    pub fn has_token(&self) -> bool {
+        self.token.is_some()
+    }
+
+    /// Gets The Token this Static Provider was given.
+    pub fn get_token(&self) -> &Option<String> {
+        &self.token
+    }
+
+    /// Returns the length in seconds this Static Provider will be valid for.
+    pub fn is_valid_for(&self) -> &i64 {
+        &self.valid_for
     }
 }
 
@@ -70,7 +98,7 @@ mod tests {
         let finalized = result.unwrap();
         let time_diff = (finalized.expires_at().clone() - start_time).num_minutes();
 
-        /// Give a wide range of time, just incase there's somehow an immense amount of lag.
+        // Give a wide range of time, just incase there's somehow an immense amount of lag.
         assert!(time_diff > 100);
         assert!(time_diff < 200);
     }
