@@ -45,7 +45,7 @@ script:
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        cd rusoto && travis-cargo --only stable doc -- --all --no-deps && cd ..
+        cd rusoto && cargo doc --all --no-deps && cd ..
       fi
 after_success:
   # upload the documentation from the build with stable (automatically only
