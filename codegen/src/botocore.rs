@@ -233,10 +233,10 @@ pub struct Shape {
     pub key: Option<Key>,
     #[serde(rename="locationName")]
     pub location_name: Option<String>,
-    pub max: Option<u64>,
+    pub max: Option<f64>,
     pub member: Option<Member>,
     pub members: Option<BTreeMap<String, Member>>,
-    pub min: Option<i32>,
+    pub min: Option<f32>,
     pub pattern: Option<String>,
     pub payload: Option<String>,
     pub required: Option<Vec<String>>,

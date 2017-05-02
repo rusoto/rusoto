@@ -15,9 +15,9 @@ version = "0.8.0"
 Inflector = "0.7.0"
 lazy_static = "0.2.1"
 regex = "0.2.1"
-serde = "0.9.5"
-serde_derive = "0.9.5"
-serde_json = "0.9.4"
+serde = "1.0.2"
+serde_derive = "1.0.2"
+serde_json = "1.0.1"
 hyper = "0.10.0"
 
 [dependencies.clippy]
