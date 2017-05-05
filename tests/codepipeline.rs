@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::codepipeline::{CodePipelineClient, ListPipelinesInput};
+use rusoto::codepipeline::{CodePipeline, CodePipelineClient, ListPipelinesInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

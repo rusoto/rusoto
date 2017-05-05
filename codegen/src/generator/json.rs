@@ -7,7 +7,24 @@ use super::{GenerateProtocol, error_type_name, IoResult, FileWriter};
 pub struct JsonGenerator;
 
 impl GenerateProtocol for JsonGenerator {
-    fn generate_methods(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+        for (operation_name, operation) in service.operations.iter() {
+            let output_type = operation.output_shape_or("()");
+
+            writeln!(writer,"
+                {documentation}
+                {method_signature} -> Result<{output_type}, {error_type}>;
+                ",
+                documentation = generate_documentation(operation).unwrap_or("".to_owned()),
+                method_signature = generate_method_signature(operation),
+                error_type = error_type_name(operation_name),
+                output_type = output_type
+            )?
+        }
+        Ok(())
+    }
+
+    fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
         for (operation_name, operation) in service.operations.iter() {
 
             let output_type = operation.output_shape_or("()");
@@ -92,11 +109,11 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
 
 fn generate_method_signature(operation: &Operation) -> String {
     if operation.input.is_some() {
-        format!("pub fn {method_name}(&self, input: &{input_type}) ",
+        format!("fn {method_name}(&self, input: &{input_type}) ",
                 input_type = operation.input_shape(),
                 method_name = operation.name.to_snake_case())
     } else {
-        format!("pub fn {method_name}(&self) ",
+        format!("fn {method_name}(&self) ",
                 method_name = operation.name.to_snake_case())
     }
 }

@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::sns::{SnsClient, ListTopicsInput};
+use rusoto::sns::{Sns, SnsClient, ListTopicsInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

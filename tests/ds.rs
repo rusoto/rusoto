@@ -2,7 +2,8 @@
 
 extern crate rusoto;
 
-use rusoto::ds::{DirectoryServiceClient, DescribeTrustsRequest, DescribeDirectoriesRequest};
+use rusoto::ds::{DirectoryService, DirectoryServiceClient, DescribeTrustsRequest,
+                 DescribeDirectoriesRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

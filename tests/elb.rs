@@ -2,7 +2,7 @@
 extern crate env_logger;
 extern crate rusoto;
 
-use rusoto::elb::{ElbClient, DescribeAccessPointsInput};
+use rusoto::elb::{Elb, ElbClient, DescribeAccessPointsInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

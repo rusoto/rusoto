@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::cloudwatch::{CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
+use rusoto::cloudwatch::{CloudWatch, CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

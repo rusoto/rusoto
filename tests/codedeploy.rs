@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::codedeploy::{CodeDeployClient, ListApplicationsInput};
+use rusoto::codedeploy::{CodeDeploy, CodeDeployClient, ListApplicationsInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

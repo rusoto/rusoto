@@ -19,7 +19,7 @@
 //! use std::default::Default;
 //!
 //! use rusoto::{DefaultCredentialsProvider, Region};
-//! use rusoto::dynamodb::{DynamoDbClient, ListTablesInput};
+//! use rusoto::dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
 //!
 //! let provider = DefaultCredentialsProvider::new().unwrap();
 //! let client = DynamoDbClient::new(provider, Region::UsEast1);

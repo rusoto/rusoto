@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::emr::{EmrClient, ListClustersInput, DescribeJobFlowsInput, DescribeJobFlowsError};
+use rusoto::emr::{Emr, EmrClient, ListClustersInput, DescribeJobFlowsInput, DescribeJobFlowsError};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 
