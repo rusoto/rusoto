@@ -47,7 +47,6 @@ extern crate rusoto_core;
 
 extern crate chrono;
 extern crate hyper;
-// #[macro_use]
 extern crate log;
 extern crate md5;
 extern crate rustc_serialize;
