@@ -1,6 +1,6 @@
 //! The AWS S3 API.
 //!
-//! If you're using the service, you're probably looking for [S3Client](struct.S3Client.html).
+//! If you're using the service, you're probably looking for [S3Client](struct.S3Client.html) and [S3](trait.S3.html).
 
 include!(concat!(env!("OUT_DIR"), "/s3.rs"));
 
@@ -8,7 +8,7 @@ include!(concat!(env!("OUT_DIR"), "/s3.rs"));
 mod test {
     use std::io::{Read, BufReader};
     use std::fs::File;
-    use s3::{S3Client, HeadObjectRequest, GetObjectRequest, ListMultipartUploadsRequest};
+    use s3::{S3, S3Client, HeadObjectRequest, GetObjectRequest, ListMultipartUploadsRequest};
     use s3::{CreateMultipartUploadOutputDeserializer, CompleteMultipartUploadOutputDeserializer, GetBucketLocationOutputDeserializer};
     use s3::{ListMultipartUploadsOutputDeserializer, ListPartsRequest, Initiator, Owner};
     use xmlutil::{XmlResponse, Next};

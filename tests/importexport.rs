@@ -2,7 +2,7 @@
 extern crate env_logger;
 extern crate rusoto;
 
-use rusoto::importexport::{ImportExportClient, ListJobsInput};
+use rusoto::importexport::{ImportExport, ImportExportClient, ListJobsInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

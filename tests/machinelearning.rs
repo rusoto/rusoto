@@ -2,8 +2,9 @@
 
 extern crate rusoto;
 
-use rusoto::machinelearning::{MachineLearningClient, DescribeDataSourcesInput,
-                              DescribeBatchPredictionsInput, DescribeEvaluationsInput};
+use rusoto::machinelearning::{MachineLearning, MachineLearningClient,
+                              DescribeDataSourcesInput, DescribeBatchPredictionsInput,
+                              DescribeEvaluationsInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

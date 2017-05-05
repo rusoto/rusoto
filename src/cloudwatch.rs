@@ -1,12 +1,12 @@
 //! AWS CloudWatch
 //!
-//! If you're using the service, you're probably looking for [CloudWatchClient](struct.CloudWatchClient.html).
+//! If you're using the service, you're probably looking for [CloudWatchClient](struct.CloudWatchClient.html) and [CloudWatch](trait.CloudWatch.html).
 
 include!(concat!(env!("OUT_DIR"), "/cloudwatch.rs"));
 
 #[cfg(test)]
 mod test {
-    use cloudwatch::{CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
+    use cloudwatch::{CloudWatch, CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
 
     use super::super::{Region, SignedRequest};
     use super::super::mock::*;

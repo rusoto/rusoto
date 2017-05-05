@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::ec2::{Ec2Client, CreateSnapshotRequest, DescribeInstancesRequest};
+use rusoto::ec2::{Ec2, Ec2Client, CreateSnapshotRequest, DescribeInstancesRequest};
 use rusoto::ec2::{CreateTagsRequest, Tag};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;

@@ -13,7 +13,7 @@ use std::ops::{Deref, DerefMut};
 use hyper::Client;
 use rand::Rng;
 use rusoto::{ChainProvider, ProvideAwsCredentials, Region};
-use rusoto::elastictranscoder::EtsClient;
+use rusoto::elastictranscoder::{Ets, EtsClient};
 use rusoto::s3::{BucketName, S3Client, CreateBucketRequest, DeleteBucketRequest};
 use rusoto::default_tls_client;
 

@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::kms::{KmsClient, ListKeysRequest};
+use rusoto::kms::{Kms, KmsClient, ListKeysRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

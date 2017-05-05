@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::logs::{CloudWatchLogsClient, DescribeLogGroupsRequest};
+use rusoto::logs::{CloudWatchLogs, CloudWatchLogsClient, DescribeLogGroupsRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

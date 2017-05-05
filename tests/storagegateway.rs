@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::storagegateway::{StorageGatewayClient, ListGatewaysInput};
+use rusoto::storagegateway::{StorageGateway, StorageGatewayClient, ListGatewaysInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

@@ -9,7 +9,20 @@ use super::{IoResult, FileWriter, GenerateProtocol, error_type_name, capitalize_
 pub struct QueryGenerator;
 
 impl GenerateProtocol for QueryGenerator {
-    fn generate_methods(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+        for (operation_name, operation) in service.operations.iter() {
+            writeln!(writer,"
+                {documentation}
+                {method_signature};
+                ",
+                documentation = generate_documentation(operation),
+                method_signature = generate_method_signature(operation_name, operation),
+            )?
+        }
+        Ok(())
+    }
+
+    fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
         for (operation_name, operation) in service.operations.iter() {
             writeln!(writer,
                      "
@@ -356,7 +369,7 @@ fn generate_documentation(operation: &Operation) -> String {
 fn generate_method_signature(operation_name: &str, operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "pub fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
+            "fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
@@ -364,7 +377,7 @@ fn generate_method_signature(operation_name: &str, operation: &Operation) -> Str
         )
     } else {
         format!(
-            "pub fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
+            "fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
             error_type = error_type_name(operation_name),

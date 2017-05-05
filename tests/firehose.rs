@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::firehose::{KinesisFirehoseClient, ListDeliveryStreamsInput};
+use rusoto::firehose::{KinesisFirehose, KinesisFirehoseClient, ListDeliveryStreamsInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::config::{ConfigServiceClient, DescribeConfigRulesRequest,
+use rusoto::config::{ConfigService, ConfigServiceClient, DescribeConfigRulesRequest,
                      DescribeDeliveryChannelsRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
