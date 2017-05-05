@@ -47,6 +47,9 @@ extern crate rusoto_core;
 
 extern crate chrono;
 extern crate hyper;
+// Logging macro is part of rest-json services
+#[cfg(feature = "needs_serde_derive")]
+#[macro_use]
 extern crate log;
 extern crate md5;
 extern crate rustc_serialize;
