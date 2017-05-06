@@ -140,7 +140,7 @@ fn main() {
         let service = Service::load(name, service_version);
 
         if let Err(ref e) = service {
-            println!("Failed to load service {}: {}", name, e);
+            println!("Failed to load service {}: {}. Make sure the botocore submodule has been initialized!", name, e);
             return;
         }
         
