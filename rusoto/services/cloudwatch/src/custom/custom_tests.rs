@@ -1,6 +1,6 @@
 extern crate rusoto_mock;
 
-use ::{CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
+use ::{CloudWatch, CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
 
 use rusoto_core::{Region, SignedRequest};
 use self::rusoto_mock::*;

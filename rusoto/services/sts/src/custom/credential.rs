@@ -10,7 +10,7 @@ use ::{AssumeRoleRequest, AssumeRoleResponse, AssumeRoleError,
     DecodeAuthorizationMessageRequest, DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError,
     GetCallerIdentityRequest, GetCallerIdentityResponse, GetCallerIdentityError,
     GetFederationTokenRequest, GetFederationTokenResponse, GetFederationTokenError,
-    GetSessionTokenRequest, GetSessionTokenResponse, GetSessionTokenError,
+    GetSessionTokenRequest, GetSessionTokenResponse, GetSessionTokenError, Sts,
     StsClient};
 
 pub const DEFAULT_DURATION_SECONDS: i32 = 3600;
@@ -53,33 +53,33 @@ pub trait StsSessionCredentialsClient {
     fn get_session_token(&self, input: &GetSessionTokenRequest) -> Result<GetSessionTokenResponse, GetSessionTokenError>;
 }
 
-impl <P,D> StsSessionCredentialsClient for StsClient<P,D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {
+impl<T> StsSessionCredentialsClient for T where T: Sts {
     fn assume_role(&self, input: &AssumeRoleRequest) -> Result<AssumeRoleResponse, AssumeRoleError> {
-        StsClient::assume_role(self, input)
+        T::assume_role(self, input)
     }
 
     fn assume_role_with_saml(&self, input: &AssumeRoleWithSAMLRequest) -> Result<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError> {
-        StsClient::assume_role_with_saml(self, input)
+        T::assume_role_with_saml(self, input)
     }
 
     fn assume_role_with_web_identity(&self, input: &AssumeRoleWithWebIdentityRequest) -> Result<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError> {
-        StsClient::assume_role_with_web_identity(self, input)
+        T::assume_role_with_web_identity(self, input)
     }
 
     fn decode_authorization_message(&self, input: &DecodeAuthorizationMessageRequest) -> Result<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError> {
-        StsClient::decode_authorization_message(self, input)
+        T::decode_authorization_message(self, input)
     }
 
     fn get_caller_identity(&self, input: &GetCallerIdentityRequest) -> Result<GetCallerIdentityResponse, GetCallerIdentityError> {
-        StsClient::get_caller_identity(self, input)
+        T::get_caller_identity(self, input)
     }
 
     fn get_federation_token(&self, input: &GetFederationTokenRequest) -> Result<GetFederationTokenResponse, GetFederationTokenError> {
-        StsClient::get_federation_token(self, input)
+        T::get_federation_token(self, input)
     }
 
     fn get_session_token(&self, input: &GetSessionTokenRequest) -> Result<GetSessionTokenResponse, GetSessionTokenError> {
-        StsClient::get_session_token(self, input)
+        T::get_session_token(self, input)
     }
 }
 

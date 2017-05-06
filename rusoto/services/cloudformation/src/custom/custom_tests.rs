@@ -1,6 +1,6 @@
 extern crate rusoto_mock;
 
-use ::{CloudFormationClient, ListStacksInput};
+use ::{CloudFormation, CloudFormationClient, ListStacksInput};
 
 use rusoto_core::{Region, SignedRequest};
 use self::rusoto_mock::*;
