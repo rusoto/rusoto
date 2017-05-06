@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::autoscaling::{AutoscalingClient, AutoScalingGroupNamesType};
+use rusoto::autoscaling::{Autoscaling, AutoscalingClient, AutoScalingGroupNamesType};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

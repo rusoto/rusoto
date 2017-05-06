@@ -2,7 +2,7 @@
 extern crate env_logger;
 extern crate rusoto;
 
-use rusoto::rds::{RdsClient, DescribeDBClustersMessage};
+use rusoto::rds::{Rds, RdsClient, DescribeDBClustersMessage};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

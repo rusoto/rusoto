@@ -1,7 +1,7 @@
 #![cfg(feature = "sdb")]
 extern crate rusoto;
 
-use rusoto::sdb::{SimpleDbClient, ListDomainsRequest};
+use rusoto::sdb::{SimpleDb, SimpleDbClient, ListDomainsRequest};
 use rusoto::{DefaultCredentialsProvider, Region, default_tls_client};
 
 #[test]

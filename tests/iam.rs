@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::iam::IamClient;
+use rusoto::iam::{Iam, IamClient};
 use rusoto::iam::{GetUserRequest, ListUsersRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;

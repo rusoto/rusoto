@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::cloudformation::{CloudFormationClient, ListStacksInput};
+use rusoto::cloudformation::{CloudFormation, CloudFormationClient, ListStacksInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

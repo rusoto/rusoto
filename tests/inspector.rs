@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::inspector::{InspectorClient, ListAssessmentRunsRequest};
+use rusoto::inspector::{Inspector, InspectorClient, ListAssessmentRunsRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

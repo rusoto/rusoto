@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::directconnect::{DirectConnectClient, DescribeConnectionsRequest,
+use rusoto::directconnect::{DirectConnect, DirectConnectClient, DescribeConnectionsRequest,
                             DescribeConnectionsError};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;

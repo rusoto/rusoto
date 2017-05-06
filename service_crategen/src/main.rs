@@ -270,7 +270,8 @@ fn main() {
                 fs::create_dir(&test_resources_dir).expect(&format!("Unable to create directory at {}", test_resources_dir.display()));
             }
             
-            let test_resources = rusoto_codegen::generator::tests::find_responses_for_service(&service);
+            let mut test_resources = rusoto_codegen::generator::tests::find_valid_responses_for_service(&service);
+            test_resources.extend(rusoto_codegen::generator::tests::find_error_responses_for_service(&service));
             if !test_resources.is_empty() {
                 let generated_test_resources_dir = test_resources_dir.join("generated");
 

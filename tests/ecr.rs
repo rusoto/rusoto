@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::ecr::{EcrClient, DescribeRepositoriesRequest};
+use rusoto::ecr::{Ecr, EcrClient, DescribeRepositoriesRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

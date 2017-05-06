@@ -64,7 +64,7 @@ extern crate rusoto;
 use std::default::Default;
 
 use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::dynamodb::{DynamoDbClient, ListTablesInput};
+use rusoto::dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
 use rusoto::default_tls_client;
 
 fn main() {

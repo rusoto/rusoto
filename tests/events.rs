@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::events::{CloudWatchEventsClient, ListRulesRequest};
+use rusoto::events::{CloudWatchEvents, CloudWatchEventsClient, ListRulesRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

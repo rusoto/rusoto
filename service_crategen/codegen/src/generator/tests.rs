@@ -7,7 +7,9 @@ use botocore::Service;
 use util::case_insensitive_btreemap_get;
 use inflector::Inflector;
 
-const BOTOCORE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
+const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
+                                                 "/botocore/tests/unit/response_parsing/xml/errors/");
+const BOTOCORE_VALID_RESPONSE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
                                                  "/botocore/tests/unit/response_parsing/xml/responses/");
 
 pub fn generate_tests(writer: &mut FileWriter, service: &Service) -> IoResult {
@@ -21,31 +23,68 @@ pub fn generate_tests(writer: &mut FileWriter, service: &Service) -> IoResult {
              tests_body = generate_tests_body(service).unwrap_or("".to_string()))
 }
 
-pub fn generate_tests_body(service: &Service) -> Option<String> {
-    let responses = find_responses_for_service(service);
+fn generate_tests_body(service: &Service) -> Option<String> {
+    let valid_tests = generate_response_tests(
+        service,
+        find_valid_responses_for_service(service),
+        200,
+        true,
+    );
+    // TODO: Find the true status code. Sadly, it isn't stored with the xml response.
+    let error_tests = generate_response_tests(
+        service,
+        find_error_responses_for_service(service),
+        400,
+        false,
+    );
 
-    let test_bodies: Vec<String> = responses.into_iter()
-        .flat_map(|response| generate_response_parse_test(service, response))
-        .collect();
-    
-    if !test_bodies.is_empty() {
-        let tests_str = test_bodies.join("\n\n");
-
+    if valid_tests.is_some() || error_tests.is_some() {
         Some(format!("
-                extern crate rusoto_mock;
+            extern crate rusoto_mock;
 
-                use super::*;
-                use self::rusoto_mock::*;
-                use rusoto_core::Region as rusoto_region;
+            use super::*;
+            use self::rusoto_mock::*;
+            use rusoto_core::Region as rusoto_region;
 
-                {test_bodies}",
-                     test_bodies = tests_str))
+            {error_tests}
+            {valid_tests}",
+            error_tests = error_tests.unwrap_or("".to_string()),
+            valid_tests = valid_tests.unwrap_or("".to_string())))
     } else {
         None
     }
 }
 
-fn generate_response_parse_test(service: &Service, response: Response) -> Option<String> {
+fn generate_response_tests(
+    service: &Service,
+    responses: Vec<Response>,
+    status_code: i32,
+    is_ok: bool,
+) -> Option<String> {
+
+    let our_responses: Vec<Response> = responses
+        .into_iter()
+        .filter(|r| r.service.to_lowercase() == service.service_type_name().to_lowercase())
+        .map(|r| r.to_owned())
+        .collect();
+
+    let test_bodies: Vec<String> = our_responses.into_iter()
+        .flat_map(|response| generate_response_parse_test(service, response, status_code, is_ok))
+        .collect();
+    
+    if !test_bodies.is_empty() {
+        Some(test_bodies.join("\n\n"))
+    } else {
+        None
+    }
+}
+
+fn generate_response_parse_test(
+    service: &Service,
+    response: Response,
+    status_code: i32,
+    is_ok: bool,
+) -> Option<String> {
     let maybe_operation = case_insensitive_btreemap_get(&service.operations, &response.action);
 
     if maybe_operation.is_none() {
@@ -66,20 +105,23 @@ fn generate_response_parse_test(service: &Service, response: Response) -> Option
 
     Some(format!("
         #[test]
-        fn test_parse_{service_name}_{action}() {{
+        fn test_parse_{error_or_valid}_{service_name}_{action}() {{
             let mock_response =  MockResponseReader::read_response(\"test_resources/generated\", \"{response_file_name}\");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+            let mock = MockRequestDispatcher::with_status({status_code}).with_body(&mock_response);
             let client = {client_type}::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
             {request_constructor}
             let result = client.{action}({request_params});
-            assert!(result.is_ok(), \"parse error: {{:?}}\", result);
+            assert!({is_ok}result.is_ok(), \"parse error: {{:?}}\", result);
         }}",
+        error_or_valid = if is_ok { "valid" } else { "error" },
         service_name = response.service.to_snake_case(),
         action = response.action.to_snake_case(),
+        status_code = status_code,
         response_file_name = response.file_name,
         client_type = service.client_type_name(),
         request_constructor = request_constructor,
-        request_params = request_params))
+        request_params = request_params,
+        is_ok = if is_ok { "" } else { "!" }))
 }
 
 #[derive(Debug, Clone)]
@@ -130,10 +172,22 @@ pub fn find_responses_in_dir(dir_path: &Path) -> Vec<Response> {
         .collect()
 }
 
-pub fn find_responses_for_service(service: &Service) -> Vec<Response> {
+pub fn find_error_responses_for_service(service: &Service) -> Vec<Response> {
     let mut responses = Vec::new();
 
-    for r in find_responses_in_dir(Path::new(BOTOCORE_TESTS_DIR)) {
+    for r in find_responses_in_dir(Path::new(BOTOCORE_ERROR_RESPONSE_TESTS_DIR)) {
+        if r.service.to_lowercase() == service.service_type_name().to_lowercase() {
+            responses.push(r);
+        }
+    }
+
+    responses
+}
+
+pub fn find_valid_responses_for_service(service: &Service) -> Vec<Response> {
+    let mut responses = Vec::new();
+
+    for r in find_responses_in_dir(Path::new(BOTOCORE_VALID_RESPONSE_TESTS_DIR)) {
         if r.service.to_lowercase() == service.service_type_name().to_lowercase() {
             responses.push(r);
         }

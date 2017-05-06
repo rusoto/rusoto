@@ -11,9 +11,9 @@ use std::io::Read;
 use time::get_time;
 
 use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::s3::{S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest, PutObjectRequest,
-                 DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration, CORSRule,
-                 CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
+use rusoto::s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest,
+                 PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
+                 CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
                  CompletedPart, CompletedPartList};
 use rusoto::default_tls_client;

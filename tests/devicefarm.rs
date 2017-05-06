@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::devicefarm::{DeviceFarmClient, ListDevicesRequest};
+use rusoto::devicefarm::{DeviceFarm, DeviceFarmClient, ListDevicesRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

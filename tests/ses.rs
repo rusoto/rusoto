@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::ses::SesClient;
+use rusoto::ses::{Ses, SesClient};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 
