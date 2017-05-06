@@ -277,19 +277,33 @@ See [LICENSE][license] for details.
 
             let lib_file_path = src_dir.join("lib.rs");
 
-            let lib_file = OpenOptions::new()
+            let mut lib_file = OpenOptions::new()
                 .write(true)
                 .truncate(true)
                 .create(true)
                 .open(&lib_file_path)
                 .expect("Unable to write lib.rs");
             
-            let mut lib_writer = BufWriter::new(lib_file);
+            let lib_file_contents = format!(r#"
+//! {service_full_name}
+//!
+//! If you're using the service, you're probably looking for [{client_name}](struct.{client_name}.html) and [{trait_name}](trait.{trait_name}.html).
 
-            lib_writer.write_all(extern_crates.as_bytes()).unwrap();
-            lib_writer.write_all(b"\n\n").unwrap();
-            lib_writer.write_all(b"mod generated;\npub use generated::*;\n").unwrap();
-            lib_writer.write_all(b"mod custom;\npub use custom::*;\n").unwrap();
+{extern_crates}
+
+mod generated;
+mod custom;
+
+pub use generated::*;
+pub use custom::*;
+            "#,
+            service_full_name = service.metadata.service_full_name,
+            client_name = service.client_type_name(),
+            trait_name = service.service_type_name(),
+            extern_crates = extern_crates
+            );
+
+            lib_file.write_all(lib_file_contents.as_bytes()).unwrap();
 
             let gen_file_path = src_dir.join("generated.rs");
             
