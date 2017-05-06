@@ -309,7 +309,7 @@ fn should_serialize_complicated_request() {
 
 #[test]
 fn should_parse_location_constraint() {
-    let body = MockResponseReader::read_response("test_resources/generated", "s3-get-bucket-location.xml");
+    let body = MockResponseReader::read_response("test_resources/generated/valid", "s3-get-bucket-location.xml");
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
     
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
