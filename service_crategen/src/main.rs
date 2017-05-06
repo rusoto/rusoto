@@ -189,7 +189,7 @@ fn main() {
                 keywords: Some(vec!["AWS".into(), "Amazon".into(), name.clone(), service.metadata.service_full_name.clone(), service.metadata.endpoint_prefix.clone()]),
                 license: Some("MIT".into()),
                 name: crate_name.clone(),
-                readme: None,
+                readme: Some("README.md".into()),
                 repository: Some("https://github.com/rusoto/rusoto".into()),
                 version: version.clone(),
                 homepage: Some("https://www.rusoto.org/".into()),
@@ -209,6 +209,64 @@ fn main() {
         };
 
         cargo_manifest.write_all(toml::to_string(&manifest).unwrap().as_bytes()).unwrap();
+
+        let mut readme_file = OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .create(true)
+            .open(crate_dir.join("README.md"))
+            .expect("Unable to write README.md");
+        
+        let readme = format!(r#"
+# Rusoto {short_name}
+Rust SDK for {aws_name}
+
+You may be looking for:
+
+* [An overview of Rusoto][rusoto-overview]
+* [AWS services supported by Rusoto][supported-aws-services]
+* [API documentation][api-documentation]
+* [Getting help with Rusoto][rusoto-help]
+
+## Requirements
+
+Rust 1.15.0 or later is required.
+
+On Linux, OpenSSL is required.
+
+## Installation
+
+To use `{crate_name}` in your application, add it as a dependency in your `Cargo.toml`:
+
+```toml
+[dependencies]
+{crate_name} = "{version}"
+```
+
+## Contributing
+
+See [CONTRIBUTING][contributing].
+
+## License
+
+Rusoto is distributed under the terms of the MIT license.
+
+See [LICENSE][license] for details.
+
+[api-documentation]: https://rusoto.github.io/rusoto/rusoto/ "API documentation"
+[license]: https://github.com/rusoto/rusoto/blob/master/LICENSE "MIT License"
+[contributing]: https://github.com/rusoto/rusoto/blob/master/CONTRIBUTING.md "Contributing Guide"
+[rusoto-help]: https://www.rusoto.org/help.html "Getting help with Rusoto"
+[rusoto-overview]: https://www.rusoto.org/ "Rusoto overview"
+[supported-aws-services]: https://www.rusoto.org/supported-aws-services.html "List of AWS services supported by Rusoto"
+        "#,
+        short_name = service.service_type_name(),
+        aws_name = service.metadata.service_full_name,
+        crate_name = crate_name,
+        version = version
+        );
+
+        readme_file.write_all(readme.as_bytes()).unwrap();
 
         {
             let src_dir = crate_dir.join("src");
