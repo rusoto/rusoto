@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "core",
+    "credential",
     "services/acm",
     "services/autoscaling",
     "services/cloudformation",

@@ -198,7 +198,7 @@ fn main() {
             dependencies: service_dependencies,
             dev_dependencies: vec![
                 ("rusoto_mock".to_owned(), cargo::Dependency::Extended {
-                    path: Some("../../mock".into()),
+                    path: Some("../../../mock".into()),
                     version: None,
                     optional: None,
                     default_features: None,

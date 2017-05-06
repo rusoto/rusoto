@@ -41,7 +41,6 @@ script:
         cargo run -- -c ./services.json -o ../rusoto/services && \
         cd .. )
   - echo "Running Rusoto tests" && cd rusoto && cargo test --lib --all -v && cd ..
-  - echo "Running rusoto_credential tests" && cd credential && cargo test && cd ..
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
