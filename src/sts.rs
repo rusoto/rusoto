@@ -62,15 +62,14 @@ mod credential {
     use chrono::*;
 
     use ::{AwsCredentials, CredentialsError,
-        ProvideAwsCredentials, DispatchSignedRequest};
+        ProvideAwsCredentials};
     use super::{AssumeRoleRequest, AssumeRoleResponse, AssumeRoleError,
         AssumeRoleWithSAMLRequest, AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError,
         AssumeRoleWithWebIdentityRequest, AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError,
         DecodeAuthorizationMessageRequest, DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError,
         GetCallerIdentityRequest, GetCallerIdentityResponse, GetCallerIdentityError,
         GetFederationTokenRequest, GetFederationTokenResponse, GetFederationTokenError,
-        GetSessionTokenRequest, GetSessionTokenResponse, GetSessionTokenError, Sts,
-        StsClient};
+        GetSessionTokenRequest, GetSessionTokenResponse, GetSessionTokenError, Sts};
 
     pub const DEFAULT_DURATION_SECONDS: i32 = 3600;
     pub const DEFAULT_ROLE_DURATION_SECONDS: i32 = 900;
