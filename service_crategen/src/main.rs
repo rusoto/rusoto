@@ -269,18 +269,36 @@ fn main() {
             if !test_resources_dir.exists() {
                 fs::create_dir(&test_resources_dir).expect(&format!("Unable to create directory at {}", test_resources_dir.display()));
             }
-            
-            let mut test_resources = rusoto_codegen::generator::tests::find_valid_responses_for_service(&service);
-            test_resources.extend(rusoto_codegen::generator::tests::find_error_responses_for_service(&service));
-            if !test_resources.is_empty() {
-                let generated_test_resources_dir = test_resources_dir.join("generated");
 
-                if !generated_test_resources_dir.exists() {
-                    fs::create_dir(&generated_test_resources_dir).expect(&format!("Unable to create directory at {}", generated_test_resources_dir.display()));
+            let generated_test_resources_dir = test_resources_dir.join("generated");
+
+            if !generated_test_resources_dir.exists() {
+                fs::create_dir(&generated_test_resources_dir).expect(&format!("Unable to create directory at {}", generated_test_resources_dir.display()));
+            }
+            
+            let test_valid_resources = rusoto_codegen::generator::tests::find_valid_responses_for_service(&service);
+            if !test_valid_resources.is_empty() {
+                let test_valid_resources_dir = generated_test_resources_dir.join("valid");
+
+                if !test_valid_resources_dir.exists() {
+                    fs::create_dir(&test_valid_resources_dir).expect(&format!("Unable to create directory at {}", generated_test_resources_dir.display()));
                 }
 
-                for resource in test_resources {
-                    fs::copy(resource.full_path, generated_test_resources_dir.join(&resource.file_name)).expect("Failed to copy test resource file");
+                for resource in test_valid_resources {
+                    fs::copy(resource.full_path, test_valid_resources_dir.join(&resource.file_name)).expect("Failed to copy test resource file");
+                }
+            }
+
+            let test_error_resources = rusoto_codegen::generator::tests::find_error_responses_for_service(&service);
+            if !test_error_resources.is_empty() {
+                let test_error_resources_dir = generated_test_resources_dir.join("error");
+
+                if !test_error_resources_dir.exists() {
+                    fs::create_dir(&test_error_resources_dir).expect(&format!("Unable to create directory at {}", generated_test_resources_dir.display()));
+                }
+
+                for resource in test_error_resources {
+                    fs::copy(resource.full_path, test_error_resources_dir.join(&resource.file_name)).expect("Failed to copy test resource file");
                 }
             }
         }
