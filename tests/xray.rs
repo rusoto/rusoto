@@ -12,7 +12,7 @@ extern crate rusoto;
 use rand::Rng;
 
 use rusoto::{DefaultCredentialsProvider, Region, default_tls_client};
-use rusoto::xray::{XRayClient, PutTraceSegmentsRequest};
+use rusoto::xray::{XRay, XRayClient, PutTraceSegmentsRequest};
 
 #[derive(Debug, Deserialize, Serialize)]
 struct SegmentDocument {

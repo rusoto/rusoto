@@ -173,7 +173,7 @@ swf = ["needs_serde_derive"]
 unstable = []
 waf = ["needs_serde_derive"]
 workspaces = ["needs_serde_derive"]
-xray = []
+xray = ["needs_serde_derive"]
 packagea = [
 	"acm",
 	"autoscaling",
