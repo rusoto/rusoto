@@ -17,22 +17,28 @@ use std::path::Path;
 
 use rayon::prelude::*;
 
-use clap::{Arg, ArgGroup, App};
+use clap::{Arg, App};
 
 use rusoto_codegen::botocore::Service;
 
-#[derive(Deserialize)]
+#[derive(Clone, Deserialize)]
 struct ServiceConfig {
-    pub version: String
+    pub version: String,
+    #[serde(rename = "coreVersion")]
+    pub core_version: String,
+    #[serde(rename = "protocolVersion")]
+    pub protocol_version: String,
+    #[serde(rename = "customDependencies")]
+    pub custom_dependencies: Option<BTreeMap<String, cargo::Dependency>>
 }
 
-fn get_dependencies(service: &Service, core_version: &str) -> BTreeMap<String, cargo::Dependency> {
+fn get_dependencies(service: &Service, config: &ServiceConfig) -> BTreeMap<String, cargo::Dependency> {
     let mut dependencies = BTreeMap::new();
 
     dependencies.insert("hyper".to_owned(), cargo::Dependency::Simple("0.10.0".into()));
     dependencies.insert("rusoto_core".to_owned(), cargo::Dependency::Extended {
         path: Some("../../core".into()),
-        version: Some(core_version.to_owned()),
+        version: Some(config.core_version.clone()),
         optional: None,
         default_features: None,
         features: None
@@ -59,16 +65,9 @@ fn get_dependencies(service: &Service, core_version: &str) -> BTreeMap<String, c
         protocol => panic!("Unknown protocol {}", protocol),
     }
 
-    match &service.metadata.endpoint_prefix[..] {
-        "s3" => {
-            dependencies.insert("rustc-serialize".to_owned(), cargo::Dependency::Simple("0.3.19".into()));
-            dependencies.insert("md5".to_owned(), cargo::Dependency::Simple("0.3.2".into()));
-        },
-        "sts" => {
-            dependencies.insert("chrono".to_owned(), cargo::Dependency::Simple("0.2.25".into()));
-        }
-        _ => {}
-    };
+    if let Some(ref custom_dependencies) = config.custom_dependencies {
+        dependencies.extend(custom_dependencies.clone());
+    }
 
     dependencies
 }
@@ -78,36 +77,16 @@ fn main() {
         .version(crate_version!())
         .author(crate_authors!())
         .about(crate_description!())
-        .arg(Arg::with_name("services_list")
-            .long("services")
-            .use_delimiter(true)
-            .takes_value(true))
         .arg(Arg::with_name("services_config")
             .long("config")
             .short("c")
             .takes_value(true))
-        .group(ArgGroup::with_name("services")
-            .args(&["services_list", "services_config"])
-            .required(true))
         .arg(Arg::with_name("out_dir")
             .long("outdir")
             .short("o")
             .takes_value(true)
             .required(true))
         .get_matches();
-    
-    let core_manifest_raw = OpenOptions::new()
-        .read(true)
-        .open("../rusoto/core/Cargo.toml")
-        .and_then(|mut f| {
-            let mut buf = String::new();
-            f.read_to_string(&mut buf).map(|_| buf)
-        })
-        .expect("Unable to read core crate's Cargo.toml");
-    
-    let core_manifest: cargo::Manifest = toml::from_str(&core_manifest_raw).expect("Unable to parse core crate's Cargo.toml");
-
-    let version = &core_manifest.package.version;
 
     let out_dir = Path::new(matches.value_of("out_dir").unwrap());
 
@@ -115,29 +94,19 @@ fn main() {
         fs::create_dir(out_dir).expect("Unable to create output directory");
     }
 
-    let service_versions: Vec<(String, String)> = {
-        if let Some(services) = matches.values_of("services_list") {
-            services.map(|s| {
-                let mut service_parts = s.splitn(2, "@");
-                let name = service_parts.next().expect(&format!("Invalid service value {}. Must be in format name@version.", s)).to_owned();
-                let version = service_parts.next().expect(&format!("Invalid service value {}. Must be in format name@version.", s)).to_owned();
-                (name, version)
-            }).collect()
-        } else if let Some(services_config) = matches.value_of("services_config") {
-            let contents = File::open(services_config).and_then(|mut f| {
-                let mut contents = String::new();
-                f.read_to_string(&mut contents).map(|_| contents)
-            }).expect("Unable to read services configuration file.");
+    let service_configs: Vec<(String, ServiceConfig)> = {
+        let services_config = matches.value_of("services_config").unwrap();
+        let contents = File::open(services_config).and_then(|mut f| {
+            let mut contents = String::new();
+            f.read_to_string(&mut contents).map(|_| contents)
+        }).expect("Unable to read services configuration file.");
 
-            let parsed: BTreeMap<String, ServiceConfig> = serde_json::from_str(&contents).expect("Unable to parse services configuration file.");
-            parsed.iter().map(|(k, v)| (k.clone(), v.version.clone())).collect()
-        } else {
-            unreachable!("Arg parsing failed. Did not have services config or services list.");
-        }
+        let parsed: BTreeMap<String, ServiceConfig> = serde_json::from_str(&contents).expect("Unable to parse services configuration file.");
+        parsed.iter().map(|(k, v)| (k.clone(), v.clone())).collect()
     };
 
-    service_versions.par_iter().for_each(|&(ref name, ref service_version)| {
-        let service = Service::load(name, service_version);
+    service_configs.par_iter().for_each(|&(ref name, ref service_config)| {
+        let service = Service::load(name, &service_config.protocol_version);
 
         if let Err(ref e) = service {
             println!("Failed to load service {}: {}. Make sure the botocore submodule has been initialized!", name, e);
@@ -155,7 +124,7 @@ fn main() {
             fs::create_dir(&crate_dir).expect(&format!("Unable to create directory at {}", crate_dir.display()));
         }
 
-        let service_dependencies = get_dependencies(&service, &version);
+        let service_dependencies = get_dependencies(&service, &service_config);
 
         let extern_crates = service_dependencies.iter().map(|(k, _)| {
             if k == "xml-rs" {
@@ -191,7 +160,7 @@ fn main() {
                 name: crate_name.clone(),
                 readme: Some("README.md".into()),
                 repository: Some("https://github.com/rusoto/rusoto".into()),
-                version: version.clone(),
+                version: service_config.version.clone(),
                 homepage: Some("https://www.rusoto.org/".into()),
                 ..cargo::Metadata::default()
             },
@@ -263,7 +232,7 @@ See [LICENSE][license] for details.
         short_name = service.service_type_name(),
         aws_name = service.metadata.service_full_name,
         crate_name = crate_name,
-        version = version
+        version = service_config.version
         );
 
         readme_file.write_all(readme.as_bytes()).unwrap();
