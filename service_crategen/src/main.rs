@@ -116,7 +116,7 @@ fn main() {
         let service = service.as_ref().unwrap();
 
         let crate_dir = out_dir.join(&name);
-        let crate_name = format!("rusoto_{}", &name);
+        let crate_name = format!("rusoto_{}", &name.replace('-', "_"));
 
         println!("Generating crate for {} @ {}...", service.metadata.service_full_name, service.metadata.api_version);
 
