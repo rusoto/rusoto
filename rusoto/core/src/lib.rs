@@ -11,18 +11,13 @@ extern crate hyper_native_tls;
 extern crate lazy_static;
 #[macro_use]
 extern crate log;
-extern crate ring;
 extern crate rustc_serialize;
 pub extern crate rusoto_credential as credential;
+pub extern crate rusoto_signature as signature;
 extern crate serde;
-extern crate time;
-extern crate url;
 extern crate xml;
 
-pub mod param;
-pub mod region;
 pub mod request;
-pub mod signature;
 
 #[doc(hidden)]
 pub mod serialization;
@@ -37,6 +32,6 @@ pub use credential::{AwsCredentials, ChainProvider, ContainerProvider, Credentia
                      DefaultCredentialsProviderSync, claims,
                      AutoRefreshingProviderSync, AutoRefreshingProvider,
                      BaseAutoRefreshingProvider};
-pub use region::{ParseRegionError, Region, default_region};
+pub use signature::{SignedRequest, param, region};
+pub use signature::region::{ParseRegionError, Region, default_region};
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError, default_tls_client};
-pub use signature::SignedRequest;
