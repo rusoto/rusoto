@@ -14,7 +14,7 @@ use hyper::Client;
 use rand::Rng;
 use rusoto::{ChainProvider, ProvideAwsCredentials, Region};
 use rusoto::elastictranscoder::{Ets, EtsClient};
-use rusoto::s3::{BucketName, S3Client, CreateBucketRequest, DeleteBucketRequest};
+use rusoto::s3::{BucketName, S3, S3Client, CreateBucketRequest, DeleteBucketRequest};
 use rusoto::default_tls_client;
 
 const AWS_ETS_WEB_PRESET_ID: &'static str = "1351620000001-100070";
