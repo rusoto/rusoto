@@ -39,6 +39,10 @@ xml-rs = "0.3"
 path = "../../credential"
 version = "0.6.0"
 
+[dependencies.rusoto_signature]
+path = "../../signature"
+version = "0.1.0"
+
 [dependencies.clippy]
 optional = true
 version = "0.0"
@@ -48,5 +52,9 @@ env_logger = "0.4.0"
 rand = "^0.3.14"
 
 [features]
-nightly-testing = ["clippy", "rusoto_credential/nightly-testing"]
+nightly-testing = [
+    "clippy",
+    "rusoto_credential/nightly-testing",
+    "rusoto_signature/nightly-testing"
+]
 unstable = []

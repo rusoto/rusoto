@@ -6,12 +6,24 @@
 //! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
 //! newly created S3 buckets not in us-standard/us-east-1.
 
+#[macro_use]
+extern crate log;
+extern crate ring;
+extern crate rusoto_credential;
+extern crate rustc_serialize;
+extern crate time;
+extern crate url;
+
+pub mod param;
+pub mod region;
+
 use std::ascii::AsciiExt;
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::str;
 
 use ring::{digest, hmac};
+use rusoto_credential::AwsCredentials;
 use rustc_serialize::hex::ToHex;
 use time::Tm;
 use time::now_utc;
@@ -19,7 +31,6 @@ use url::percent_encoding::{utf8_percent_encode, EncodeSet};
 
 use param::Params;
 use region::Region;
-use credential::AwsCredentials;
 
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process
@@ -418,9 +429,9 @@ fn build_hostname(service: &str, region: Region) -> String {
 
 #[cfg(test)]
 mod tests {
-    use credential::{ProvideAwsCredentials, ProfileProvider};
-    use Region;
-    use ::param::Params;
+    use rusoto_credential::{ProvideAwsCredentials, ProfileProvider};
+    use region::Region;
+    use param::Params;
 
     use super::{SignedRequest,build_canonical_query_string};
 
