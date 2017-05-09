@@ -110,7 +110,8 @@ all = [
 	   	"sts",
 	   	"swf",
 	   	"waf",
-	   	"workspaces"
+	   	"workspaces",
+		"xray"
 	]
 acm = ["needs_serde_derive"]
 autoscaling = []
@@ -172,6 +173,7 @@ swf = ["needs_serde_derive"]
 unstable = []
 waf = ["needs_serde_derive"]
 workspaces = ["needs_serde_derive"]
+xray = ["needs_serde_derive"]
 packagea = [
 	"acm",
 	"autoscaling",
@@ -229,5 +231,6 @@ packageb = [
 	"storagegateway",
 	"swf",
 	"waf",
-	"workspaces"
+	"workspaces",
+	"xray"
 ]

@@ -115,8 +115,7 @@ impl GenerateProtocol for RestJsonGenerator {
     }
 
     fn generate_prelude(&self, writer: &mut FileWriter, _: &Service) -> IoResult {
-        writeln!(writer,
-                 "use param::{{Params, ServiceParams}};
+        writeln!(writer, "
         use signature::SignedRequest;
         use serde_json;
         use serde_json::from_str;
@@ -223,7 +222,9 @@ fn generate_params_loading_string(param_strings: &[String]) -> String {
     match param_strings.len() {
         0 => "".to_owned(),
         _ => {
-            format!("let mut params = Params::new();
+            format!("
+            use param::{{Params, ServiceParams}};
+            let mut params = Params::new();
                 {param_strings}
                 request.set_params(params);",
                     param_strings = param_strings.join("\n"))

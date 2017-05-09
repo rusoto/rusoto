@@ -44,6 +44,7 @@ impl Service {
             "AWS Storage Gateway" => "StorageGateway",
             "AWS Support" => "Support",
             "AWS WAF" => "Waf",
+            "AWS X-Ray" => "XRay",
             "Amazon API Gateway" => "ApiGateway",
             "Amazon CloudFront" => "CloudFront",
             "Amazon CloudHSM" => "CloudHsm",

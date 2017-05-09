@@ -186,6 +186,8 @@ pub mod swf;
 pub mod waf;
 #[cfg(feature = "workspaces")]
 pub mod workspaces;
+#[cfg(feature = "xray")]
+pub mod xray;
 
 /*
 #[cfg(feature = "gamelift")]
