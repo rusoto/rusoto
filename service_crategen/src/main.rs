@@ -154,7 +154,7 @@ fn main() {
                     "Nikita Pekin <contact@nikitapek.in>".into()
                 ]),
                 description: Some(format!("AWS SDK for Rust - {} @ {}", &service.metadata.service_full_name, &service.metadata.api_version)),
-                documentation: Some("http://rusoto.github.io/rusoto/rusoto_core/index.html".into()),
+                documentation: Some("https://rusoto.github.io/rusoto/rusoto_core/index.html".into()),
                 keywords: Some(vec!["AWS".into(), "Amazon".into(), name.clone(), service.metadata.service_full_name.clone(), service.metadata.endpoint_prefix.clone()]),
                 license: Some("MIT".into()),
                 name: crate_name.clone(),
