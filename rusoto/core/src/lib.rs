@@ -37,6 +37,7 @@ pub use credential::{AwsCredentials, ChainProvider, ContainerProvider, Credentia
                      DefaultCredentialsProviderSync, claims,
                      AutoRefreshingProviderSync, AutoRefreshingProvider,
                      BaseAutoRefreshingProvider};
+
 pub use region::{ParseRegionError, Region, default_region};
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError, default_tls_client};
 pub use signature::SignedRequest;

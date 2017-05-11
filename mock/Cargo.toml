@@ -1,0 +1,31 @@
+[package]
+authors = [
+    "Anthony DiMarco <ocramida@gmail.com>",
+    "Jimmy Cuadra <jimmy@jimmycuadra.com>",
+    "Matthew Mayer <matthewkmayer@gmail.com>",
+    "Nikita Pekin <contact@nikitapek.in>"
+]
+description = "AWS SDK for Rust - Request Mocking Helpers"
+documentation = "http://rusoto.github.io/rusoto/rusoto/index.html"
+keywords = ["AWS", "Amazon"]
+license = "MIT"
+name = "rusoto_mock"
+readme = "README.md"
+repository = "https://github.com/rusoto/rusoto"
+version = "0.24.0"
+homepage = "https://www.rusoto.org/"
+
+[dependencies]
+chrono = "0.2.21"
+hyper = "0.10.0"
+
+[dependencies.clippy]
+optional = true
+version = "0.0"
+
+[dependencies.rusoto_core]
+path = "../rusoto/core"
+
+[features]
+nightly-testing = ["clippy", "rusoto_core/nightly-testing"]
+unstable = []

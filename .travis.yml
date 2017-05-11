@@ -36,29 +36,22 @@ before_script:
 # the main build
 script:
   - |
-      echo "Compiling Rusoto codegen" &&
-      (cd codegen && \
-        travis-cargo build && \
-        travis-cargo test -- --lib && \
-        travis-cargo bench)
-  # get around our code being too big: split compilation up into A and B packages:
-  - echo "Running Rusoto tests A" && travis_wait 40 travis-cargo test -- --lib --features packagea -v
-  - echo "Running Rusoto tests B" && travis_wait 40 travis-cargo test -- --lib --features packageb -v
-  - echo "Running Rusoto tests" && cd rusoto && travis_wait 40 cargo test --lib --all -v && cd ..
-  - echo "Running rusoto_credential tests" && cd credential && travis_wait 40 travis-cargo test && cd ..
+      echo "Generating service crates..." &&
+      ( cd service_crategen && \
+        cargo run -- -c ./services.json -o ../rusoto/services && \
+        cd .. )
+  - echo "Running Rusoto tests" && cd rusoto && cargo test --lib --all -v && cd ..
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        # Don't generate docs for `rusoto_codegen`, as it is intended entirely
-        # for internal use.
-        travis_wait travis-cargo --only stable doc -- --no-deps -p rusoto -p rusoto_credential
+        cd rusoto && cargo doc --all --no-deps && cd ..
       fi
 after_success:
   # upload the documentation from the build with stable (automatically only
   # actually runs from the master branch, not individual PRs), not on OSX.
   - |
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        travis-cargo --only stable doc-upload
+        cd rusoto && travis-cargo --only stable doc-upload && cd ..
       fi
   # measure code coverage and upload to coveralls.io (the verify argument
   # mitigates kcov crashes due to malformed debuginfo, at the cost of some
@@ -70,7 +63,6 @@ after_success:
       fi
 env:
   global:
-    - RUSOTO_FEATURES="all"
     - RUST_BACKTRACE=1
     # encrypted Github token for doc upload
     - secure: zcYaxF4IGX+8XnSnG9Sh3q05rp+XX8Fc7gRLM3VcSpaNNd6tvNNxvjZNAn6gySuaoKBApCIMFAKHgfpO46DHqBjxU7ONnFW3xRGfi4f4VCx7+bagRmrMfxZPcDgZ0tZRs4S+0mALkYmvjhJmymQIAOUmz0LEezKsiVhh5qlkC/GLKaQzaU6Hy6u2+pymU9jfFt14O1s3e+UyyYeY22Bo6PZoRxdSDhLjvDZQQNxMx5CmCZHU7j3sH6aYRCltOdiYNTR3TB7GKrVJt6kn/q2SKwUxPDFvBpmE1v4NZr26262mZtBtUvxIUwTgPritntSPLm/qcNAKP93P9Bleq0QJXSDDOxl4Jf+Vpi1MUdf6MvacRVLsXInKJvNHDztBgmrLnkXWF70EmAwV9MjuGRhzjXCWhxVq/I0nebIdJHgJH195OpBa2jdeh6E0Xf6NOQ6N1S5vCyhotFIswwFAaff0znZw3je/iM7jxSPlRCMpxXkSjRVTbvoqDGIpNvxqs8WYDCpOTmDHz0rdOqvumIQFVt/i9Vk5gwNrZBOeOppjYg8jP0E0PHglfeU05SojgWBNbpn9j6JzTdPWbNhOE/HXNzTbHf5S9khqcI324c9bllOYAi0qrpBt1hawnuYi8cURpm64sYGODVhIt1fkqcqD6Nlv4uARF/+U4jWHGgPzBRQ=
