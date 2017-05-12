@@ -1,27 +1,29 @@
+//! The Credentials Provider for Credentials stored in a profile inside of a Credentials file.
+
+use regex::Regex;
 use std::ascii::AsciiExt;
 use std::collections::HashMap;
-use std::env;
+use std::env::{home_dir, var as env_var};
 use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
-
-use regex::Regex;
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials, in_ten_minutes};
 
 /// Provides AWS credentials from a profile in a credentials file.
 #[derive(Clone, Debug)]
 pub struct ProfileProvider {
-    credentials: Option<AwsCredentials>,
+    /// The File Path the Credentials File is located at.
     file_path: PathBuf,
+    /// The Profile Path to parse out of the Credentials File.
     profile: String,
 }
 
 impl ProfileProvider {
     /// Create a new `ProfileProvider` for the default credentials file path and profile name.
     pub fn new() -> Result<ProfileProvider, CredentialsError> {
-        let profile_location = match env::var("AWS_SHARED_CREDENTIALS_FILE") {
+        let profile_location = match env_var("AWS_SHARED_CREDENTIALS_FILE") {
             Ok(path) => PathBuf::from(path),
             Err(_) => {
                 match ProfileProvider::default_profile_location() {
@@ -32,7 +34,6 @@ impl ProfileProvider {
         };
 
         Ok(ProfileProvider {
-            credentials: None,
             file_path: profile_location,
             profile: "default".to_owned(),
         })
@@ -42,7 +43,7 @@ impl ProfileProvider {
     /// `~/.aws/credentials` (Linux/Mac)
     /// `%USERPROFILE%\.aws\credentials` (Windows)
     fn default_profile_location() -> Result<PathBuf, CredentialsError> {
-        match env::home_dir() {
+        match home_dir() {
             Some(home_path) => {
                 let mut credentials_path = PathBuf::from(".aws");
 
@@ -59,7 +60,6 @@ impl ProfileProvider {
     pub fn with_configuration<F, P>(file_path: F, profile: P) -> ProfileProvider
     where F: Into<PathBuf>, P: Into<String> {
         ProfileProvider {
-            credentials: None,
             file_path: file_path.into(),
             profile: profile.into(),
         }
@@ -94,12 +94,17 @@ impl ProvideAwsCredentials for ProfileProvider {
     }
 }
 
+/// Parses a Credentials file into a Map of <ProfileName, AwsCredentials>
 fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredentials>, CredentialsError> {
     match fs::metadata(file_path) {
-        Err(_) => return Err(CredentialsError::new("Couldn't stat credentials file.")),
+        Err(_) => return Err(
+            CredentialsError::new(
+                format!("Couldn't stat credentials file: [ {:?} ]. Non existant, or no permission.", file_path)
+            )
+        ),
         Ok(metadata) => {
             if !metadata.is_file() {
-                return Err(CredentialsError::new("Couldn't open file."));
+                return Err(CredentialsError::new(format!("Credentials file: [ {:?} ] is not a file.", file_path)));
             }
         }
     };
@@ -114,8 +119,13 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
     let mut profile_name: Option<String> = None;
 
     let file_lines = BufReader::new(&file);
-    for line in file_lines.lines() {
-        let unwrapped_line: String = line.expect("Failed to read credentials file");
+    for (line_no, line) in file_lines.lines().enumerate() {
+        let unwrapped_line: String = line.expect(&format!("Failed to read credentials file, line: {}", line_no));
+
+        // skip empty lines
+        if unwrapped_line.is_empty() {
+            continue;
+        }
 
         // skip comments
         if unwrapped_line.starts_with('#') {
@@ -124,7 +134,6 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
 
         // handle the opening of named profile blocks
         if profile_regex.is_match(&unwrapped_line) {
-
             if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
                 let creds = AwsCredentials::new(access_key.unwrap(), secret_key.unwrap(), token, in_ten_minutes());
                 profiles.insert(profile_name.unwrap(), creds);
@@ -163,9 +172,14 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
             if !v.is_empty() {
                 token = Some(v[1].trim_matches(' ').to_string());
             }
+        } else if lower_case_line.contains("region") ||
+            lower_case_line.contains("output")
+        {
+            // Not Supported here, but valid according to: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files
+            continue;
+        } else {
+            return Err(CredentialsError::new(format!("Invalid AWS Config line: [ {} ]", lower_case_line)))
         }
-
-        // we could potentially explode here to indicate that the file is invalid
 
     }
 
@@ -199,7 +213,7 @@ mod tests {
         let profiles = result.ok().unwrap();
         assert_eq!(profiles.len(), 1);
 
-        let default_profile = profiles.get("default").unwrap();
+        let default_profile = profiles.get("default").expect("No Default profile in default_profile_credentials");
         assert_eq!(default_profile.aws_access_key_id(), "foo");
         assert_eq!(default_profile.aws_secret_access_key(), "bar");
     }
@@ -214,14 +228,29 @@ mod tests {
         let profiles = result.ok().unwrap();
         assert_eq!(profiles.len(), 2);
 
-        let foo_profile = profiles.get("foo").unwrap();
+        let foo_profile = profiles.get("foo").expect("No foo profile in multiple_profile_credentials");
         assert_eq!(foo_profile.aws_access_key_id(), "foo_access_key");
         assert_eq!(foo_profile.aws_secret_access_key(), "foo_secret_key");
 
-        let bar_profile = profiles.get("bar").unwrap();
+        let bar_profile = profiles.get("bar").expect("No bar profile in multiple_profile_credentials");
         assert_eq!(bar_profile.aws_access_key_id(), "bar_access_key");
         assert_eq!(bar_profile.aws_secret_access_key(), "bar_secret_key");
 
+    }
+
+    #[test]
+    fn parse_all_values_credentials_file() {
+        let result = super::parse_credentials_file(
+            Path::new("tests/sample-data/full_profile_credentials")
+        );
+        assert!(result.is_ok());
+
+        let profiles = result.ok().unwrap();
+        assert_eq!(profiles.len(), 1);
+
+        let default_profile = profiles.get("default").expect("No default profile in full_profile_credentials");
+        assert_eq!(default_profile.aws_access_key_id(), "foo");
+        assert_eq!(default_profile.aws_secret_access_key(), "bar");
     }
 
     #[test]
@@ -279,12 +308,18 @@ mod tests {
     #[test]
     fn parse_credentials_bad_path() {
         let result = super::parse_credentials_file(Path::new("/bad/file/path"));
-        assert_eq!(result.err(), Some(CredentialsError::new("Couldn't stat credentials file.")));
+        assert_eq!(result.err(), Some(CredentialsError::new("Couldn\'t stat credentials file: [ \"/bad/file/path\" ]. Non existant, or no permission.")));
     }
 
     #[test]
     fn parse_credentials_directory_path() {
         let result = super::parse_credentials_file(Path::new("tests/"));
-        assert_eq!(result.err(), Some(CredentialsError::new("Couldn't open file.")));
+        assert_eq!(result.err(), Some(CredentialsError::new("Credentials file: [ \"tests/\" ] is not a file.")));
+    }
+
+    #[test]
+    fn parse_credentials_invalid() {
+        let result = super::parse_credentials_file(Path::new("tests/sample-data/invalid_profile_credentials"));
+        assert_eq!(result.err(), Some(CredentialsError::new("Invalid AWS Config line: [ some_super_awesome_value = baz ]")));
     }
 }

@@ -1,4 +1,6 @@
-use std::env;
+//! The Credentials Provider to read from Environment Variables.
+
+use std::env::var as env_var;
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials, in_ten_minutes};
 
@@ -12,12 +14,13 @@ impl ProvideAwsCredentials for EnvironmentProvider {
     }
 }
 
+/// Grabs the Credentials from the environment. These credentials are good for 10 minutes.
 fn credentials_from_environment() -> Result<AwsCredentials, CredentialsError> {
-    let env_key = match env::var("AWS_ACCESS_KEY_ID") {
+    let env_key = match env_var("AWS_ACCESS_KEY_ID") {
         Ok(val) => val,
         Err(_) => return Err(CredentialsError::new("No AWS_ACCESS_KEY_ID in environment"))
     };
-    let env_secret = match env::var("AWS_SECRET_ACCESS_KEY") {
+    let env_secret = match env_var("AWS_SECRET_ACCESS_KEY") {
         Ok(val) => val,
         Err(_) => return Err(CredentialsError::new("No AWS_SECRET_ACCESS_KEY in environment"))
     };
@@ -27,7 +30,7 @@ fn credentials_from_environment() -> Result<AwsCredentials, CredentialsError> {
     }
 
     // Present when using temporary credentials, e.g. on Lambda with IAM roles
-    let token = match env::var("AWS_SESSION_TOKEN") {
+    let token = match env_var("AWS_SESSION_TOKEN") {
         Ok(val) => {
             if val.is_empty() {
                 None
