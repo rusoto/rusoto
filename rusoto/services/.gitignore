@@ -1,6 +1,0 @@
-# Remove this file when generated service source starts getting checked in
-**/generated.rs
-**/lib.rs
-**/Cargo.toml
-**/README.md
-**/test_resources/generated/

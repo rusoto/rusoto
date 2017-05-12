@@ -1,0 +1,25 @@
+[package]
+authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
+description = "AWS SDK for Rust - Amazon Simple Storage Service @ 2006-03-01"
+documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
+keywords = ["AWS", "Amazon", "s3", "Amazon Simple Storage Service", "s3"]
+license = "MIT"
+name = "rusoto_s3"
+readme = "README.md"
+repository = "https://github.com/rusoto/rusoto"
+version = "0.24.0"
+homepage = "https://www.rusoto.org/"
+
+[build-dependencies]
+
+[dependencies]
+hyper = "0.10.0"
+md5 = "0.3.2"
+rustc-serialize = "0.3.19"
+xml-rs = "0.3"
+
+[dependencies.rusoto_core]
+version = "0.24.0"
+path = "../../core"
+[dev-dependencies.rusoto_mock]
+path = "../../../mock"
