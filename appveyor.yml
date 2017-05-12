@@ -10,7 +10,7 @@ environment:
     - TARGET: x86_64-pc-windows-msvc
       CHANNEL: stable
     - TARGET: x86_64-pc-windows-msvc
-      CHANNEL: 1.16.0
+      CHANNEL: beta
 cache:
   - 'C:\Users\appveyor\.cargo'
 # Install Rust and Cargo
