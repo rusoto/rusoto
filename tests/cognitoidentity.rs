@@ -2,8 +2,8 @@
 
 extern crate rusoto;
 
-use rusoto::cognitoidentity::{CognitoIdentityClient, ListIdentitiesInput, ListIdentitiesError,
-                              ListIdentityPoolsInput};
+use rusoto::cognitoidentity::{CognitoIdentity, CognitoIdentityClient, ListIdentitiesInput,
+                              ListIdentitiesError, ListIdentityPoolsInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

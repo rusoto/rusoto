@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::cloudtrail::{CloudTrailClient, DescribeTrailsRequest};
+use rusoto::cloudtrail::{CloudTrail, CloudTrailClient, DescribeTrailsRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

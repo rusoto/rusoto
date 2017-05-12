@@ -13,10 +13,10 @@ language: rust
 cache: cargo
 # run builds for all the trains (and more)
 rust:
-  # check that it compiles on the latest stable compiler
   - stable
   - beta
   - nightly
+  - 1.16.0
 os:
   - linux
   - osx
@@ -36,32 +36,25 @@ before_script:
 # the main build
 script:
   - |
-      echo "Compiling Rusoto codegen" &&
-      (cd codegen && \
-        travis-cargo build -- $CARGO_ARGS && \
-        travis-cargo test -- --lib $CARGO_ARGS && \
-        travis-cargo bench -- $CARGO_ARGS)
-  - |
-      echo "Setting Rusoto compilation arguments" &&
-      export CARGO_ARGS="--features $RUSOTO_FEATURES -vv"
-  # get around our code being too big: split compilation up into A and B packages:
-  - echo "Running Rusoto tests A" && travis_wait 40 travis-cargo test -- --lib --features packagea -vv
-  - echo "Running Rusoto tests B" && travis_wait 40 travis-cargo test -- --lib --features packageb -vv
-  - echo "Running Rusoto benchmarks" && travis_wait travis-cargo bench -- $CARGO_ARGS
-  - echo "Running rusoto_credential tests" && (cd credential && travis_wait travis-cargo test)
+      echo "Generating service crates..." &&
+      ( cd service_crategen && \
+        cargo run -- -c ./services.json -o ../rusoto/services && \
+        cd .. )
+  - echo "Running Rusoto tests" && cd rusoto && cargo test --lib --all -v && cd ..
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        # Don't generate docs for `rusoto_codegen`, as it is intended entirely
-        # for internal use.
-        travis_wait travis-cargo --only stable doc -- --no-deps -p rusoto -p rusoto_credential $CARGO_ARGS
+        cd rusoto && cargo doc --all --no-deps && cd ..
       fi
 after_success:
-  # upload the documentation from the build with stable (automatically only
-  # actually runs from the master branch, not individual PRs), not on OSX.
+  # upload the documentation from the build if it's from Rust stable, Linux and not a pull request:
   - |
-      if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        travis-cargo --only stable doc-upload
+      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$TRAVIS_PULL_REQUEST" == false ]]; then
+        cd rusoto && echo '<meta http-equiv=refresh content=0;url=rusoto_core/index.html>' > target/doc/index.html \
+        && mkdir target/doc/rusoto/ && echo '<meta http-equiv=refresh content=0;url=../rusoto_core/index.html>' > target/doc/rusoto/index.html \
+        && sudo pip install ghp-import && ghp-import -n target/doc \
+        && git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages \
+        && cd ..
       fi
   # measure code coverage and upload to coveralls.io (the verify argument
   # mitigates kcov crashes due to malformed debuginfo, at the cost of some
@@ -73,10 +66,9 @@ after_success:
       fi
 env:
   global:
-    - RUSOTO_FEATURES="all"
     - RUST_BACKTRACE=1
     # encrypted Github token for doc upload
-    - secure: rWVjaDybqYUL6pwb9JbKRAQJYJTTWkbIMsh92l1Y9vz+QJiF903HEaxea98Z7e1Qywizm60EoAu8CSj5e+TfOC9hb6ZwN9nQs4FPnywiAUXtiuxUXDpcjacXVXl8YcLG+mOnq/+thOo+J1l2+j7SLsBrP4ybHh4NS7rqj8Os/5fiIfHfwlSVPlbw1gtTmLv5SXyofWB9VHMgkDzzP9Bss5HwwXQyzyj1EF8AQNexSsWj/MPYhj3eQaBpIK49guCqe1JjWdKXoiu4XQFsWMV6LBf7OgrWHR9MNf1H6UHM97i8onTeDAviC3RaWQe8crb2cQwNXk/n/8kde0F/1oBaljbOHTbLScflQNRGxV2jpbiIMVLgxdXUWK8d2JveVrXM5TKx6Wp8IolJ8Cr8egzLn9dRn1OG5pwt7b/Cr6DRaXFH5TRSz0Uln0GMA08NWC2sbDz1xtlkiUkRpHmBPmAGNjjDPaJs+OLPyPFMw5Gqr8g/zzCbGI92t210oMsVoCci5S8MO74HExYhsyAz4/CI0fqSSXDKG1xveguktmKWSxH5idyAmfDg556nSmuP+5w69QM9Vcg8j0szuSzsVoc/YsHMsdbZPdANLagbU9K59M1OpMkL3RSAav/cyL41+pSI3zybHKGim+kHZSwBWlLVKCX7P2FmineEFriLK8UJFxo=
+    - secure: zcYaxF4IGX+8XnSnG9Sh3q05rp+XX8Fc7gRLM3VcSpaNNd6tvNNxvjZNAn6gySuaoKBApCIMFAKHgfpO46DHqBjxU7ONnFW3xRGfi4f4VCx7+bagRmrMfxZPcDgZ0tZRs4S+0mALkYmvjhJmymQIAOUmz0LEezKsiVhh5qlkC/GLKaQzaU6Hy6u2+pymU9jfFt14O1s3e+UyyYeY22Bo6PZoRxdSDhLjvDZQQNxMx5CmCZHU7j3sH6aYRCltOdiYNTR3TB7GKrVJt6kn/q2SKwUxPDFvBpmE1v4NZr26262mZtBtUvxIUwTgPritntSPLm/qcNAKP93P9Bleq0QJXSDDOxl4Jf+Vpi1MUdf6MvacRVLsXInKJvNHDztBgmrLnkXWF70EmAwV9MjuGRhzjXCWhxVq/I0nebIdJHgJH195OpBa2jdeh6E0Xf6NOQ6N1S5vCyhotFIswwFAaff0znZw3je/iM7jxSPlRCMpxXkSjRVTbvoqDGIpNvxqs8WYDCpOTmDHz0rdOqvumIQFVt/i9Vk5gwNrZBOeOppjYg8jP0E0PHglfeU05SojgWBNbpn9j6JzTdPWbNhOE/HXNzTbHf5S9khqcI324c9bllOYAi0qrpBt1hawnuYi8cURpm64sYGODVhIt1fkqcqD6Nlv4uARF/+U4jWHGgPzBRQ=
 
 branches:
   only:

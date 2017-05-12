@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::cloudsearch::{CloudSearchClient, DescribeDomainsRequest};
+use rusoto::cloudsearch::{CloudSearch, CloudSearchClient, DescribeDomainsRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

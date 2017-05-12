@@ -11,7 +11,7 @@
     </tr>
     <tr>
         <td colspan="2">
-            <a href="https://rusoto.github.io/rusoto/rusoto/" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
+            <a href="https://rusoto.github.io/rusoto/" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
             <a href="https://crates.io/crates/rusoto" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto.svg" alt="crates-io"></img></a>
             <a href="#license" title="License: MIT"><img src="https://img.shields.io/crates/l/rusoto.svg" alt="license-badge"></img></a>
         </td>
@@ -44,7 +44,7 @@ For example, to include only S3 and SQS:
 
 ``` toml
 [dependencies]
-rusoto = {version = "0.23", features = ["s3", "sqs"]}
+rusoto = {version = "0.24", features = ["s3", "sqs"]}
 ```
 
 You can use the Cargo feature "all" to build Rusoto with support for every available service. Warning: building with "all" can require upwards of 5 GB of memory. Most people do not need all 40+ services so use individual features to enable the services you use.
@@ -64,7 +64,7 @@ extern crate rusoto;
 use std::default::Default;
 
 use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::dynamodb::{DynamoDbClient, ListTablesInput};
+use rusoto::dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
 use rusoto::default_tls_client;
 
 fn main() {

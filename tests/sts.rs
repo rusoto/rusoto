@@ -3,7 +3,7 @@
 extern crate rusoto;
 
 use rusoto::default_tls_client;
-use rusoto::sts::StsClient;
+use rusoto::sts::{Sts, StsClient};
 use rusoto::sts::{AssumeRoleRequest, AssumeRoleError};
 use rusoto::sts::{GetSessionTokenRequest, GetSessionTokenError};
 use rusoto::sts::StsSessionCredentialsProvider;

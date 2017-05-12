@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::dynamodb::{DynamoDbClient, ListTablesInput, ListTablesError};
+use rusoto::dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput, ListTablesError};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::sqs::SqsClient;
+use rusoto::sqs::{Sqs, SqsClient};
 use rusoto::sqs::ListQueuesRequest;
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;

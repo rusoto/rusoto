@@ -9,6 +9,8 @@ environment:
   matrix:
     - TARGET: x86_64-pc-windows-msvc
       CHANNEL: stable
+    - TARGET: x86_64-pc-windows-msvc
+      CHANNEL: 1.16.0
 cache:
   - 'C:\Users\appveyor\.cargo'
 # Install Rust and Cargo
@@ -23,12 +25,16 @@ install:
 
 # Equivalent to Travis' `script` phase
 build_script:
-  # We only build and test a subset due to https://github.com/rusoto/rusoto/issues/537
-  - cargo build --features "packagea" -vv
-  - cargo build --features "packageb" -vv
+  - cd service_crategen
+  - cargo run -- -c ./services.json -o ../rusoto/services
+  - cd ..
+  - cd rusoto
+  - cargo build --all -v
+  - cd ..
 test_script:
-  - cargo test --lib --features "packagea"
-  - cargo test --lib --features "packageb"
+  - cd rusoto
+  - cargo test --all --lib -v
+  - cd ..
 
 branches:
   only:

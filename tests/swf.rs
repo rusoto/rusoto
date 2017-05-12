@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::swf::{SwfClient, ListDomainsInput};
+use rusoto::swf::{Swf, SwfClient, ListDomainsInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

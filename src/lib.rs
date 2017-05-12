@@ -19,7 +19,7 @@
 //! use std::default::Default;
 //!
 //! use rusoto::{DefaultCredentialsProvider, Region};
-//! use rusoto::dynamodb::{DynamoDbClient, ListTablesInput};
+//! use rusoto::dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
 //!
 //! let provider = DefaultCredentialsProvider::new().unwrap();
 //! let client = DynamoDbClient::new(provider, Region::UsEast1);
@@ -43,167 +43,126 @@
 //!     },
 //! }
 
-extern crate chrono;
-extern crate hyper;
-extern crate hyper_native_tls;
-#[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate log;
-extern crate md5;
-extern crate regex;
-extern crate ring;
-extern crate rusoto_credential;
-extern crate rustc_serialize;
-extern crate serde;
-#[macro_use] 
-extern crate serde_derive;
-extern crate serde_json;
-extern crate time;
-extern crate url;
-extern crate xml;
+extern crate rusoto_core;
 
-pub use region::{ParseRegionError, Region};
-pub use rusoto_credential::{AwsCredentials, ChainProvider, ContainerProvider, CredentialsError,
-                            EnvironmentProvider, InstanceMetadataProvider, ProfileProvider,
-                            ProvideAwsCredentials, DefaultCredentialsProvider,
-                            DefaultCredentialsProviderSync, claims,
-                            AutoRefreshingProviderSync, AutoRefreshingProvider,
-                            BaseAutoRefreshingProvider};
-pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError};
-pub use signature::SignedRequest;
-pub use request::default_tls_client;
-pub use region::default_region;
-
-mod param;
-mod region;
-mod request;
-mod xmlerror;
-mod xmlutil;
-mod serialization;
-#[macro_use]
-mod signature;
-
-#[cfg(test)]
-mod mock;
+pub use rusoto_core::*;
 
 #[cfg(feature = "acm")]
-pub mod acm;
+pub extern crate rusoto_acm as acm;
 #[cfg(feature = "autoscaling")]
-pub mod autoscaling;
-#[allow(unused_imports)]
+pub extern crate rusoto_autoscaling as autoscaling;
 #[cfg(feature = "cloudformation")]
-pub mod cloudformation;
+pub extern crate rusoto_cloudformation as cloudformation;
 #[cfg(feature = "cloudfront")]
-pub mod cloudfront;
+pub extern crate rusoto_cloudfront as cloudfront;
 #[cfg(feature = "cloudhsm")]
-pub mod cloudhsm;
+pub extern crate rusoto_cloudhsm as cloudhsm;
 #[cfg(feature = "cloudsearch")]
-pub mod cloudsearch;
+pub extern crate rusoto_cloudsearch as cloudsearch;
 #[cfg(feature = "cloudtrail")]
-pub mod cloudtrail;
+pub extern crate rusoto_cloudtrail as cloudtrail;
 #[cfg(feature = "cloudwatch")]
-pub mod cloudwatch;
+pub extern crate rusoto_cloudwatch as cloudwatch;
 #[cfg(feature = "codecommit")]
-pub mod codecommit;
+pub extern crate rusoto_codecommit as codecommit;
 #[cfg(feature = "codedeploy")]
-pub mod codedeploy;
+pub extern crate rusoto_codedeploy as codedeploy;
 #[cfg(feature = "codepipeline")]
-pub mod codepipeline;
+pub extern crate rusoto_codepipeline as codepipeline;
 #[cfg(feature = "cognito-identity")]
-pub mod cognitoidentity;
+pub extern crate rusoto_cognito_identity as cognitoidentity;
 #[cfg(feature = "config")]
-pub mod config;
+pub extern crate rusoto_config as config;
 #[cfg(feature = "datapipeline")]
-pub mod datapipeline;
+pub extern crate rusoto_datapipeline as datapipeline;
 #[cfg(feature = "devicefarm")]
-pub mod devicefarm;
+pub extern crate rusoto_devicefarm as devicefarm;
 #[cfg(feature = "directconnect")]
-pub mod directconnect;
+pub extern crate rusoto_directconnect as directconnect;
 #[cfg(feature = "ds")]
-pub mod ds;
+pub extern crate rusoto_ds as ds;
 #[cfg(feature = "dynamodb")]
-pub mod dynamodb;
+pub extern crate rusoto_dynamodb as dynamodb;
 #[cfg(feature = "dynamodbstreams")]
-pub mod dynamodbstreams;
+pub extern crate rusoto_dynamodbstreams as dynamodbstreams;
 #[cfg(feature = "ec2")]
-pub mod ec2;
+pub extern crate rusoto_ec2 as ec2;
 #[cfg(feature = "ecr")]
-pub mod ecr;
+pub extern crate rusoto_ecr as ecr;
 #[cfg(feature = "ecs")]
-pub mod ecs;
+pub extern crate rusoto_ecs as ecs;
 #[cfg(feature = "emr")]
-pub mod emr;
+pub extern crate rusoto_emr as emr;
 #[cfg(feature = "elasticache")]
-pub mod elasticache;
+pub extern crate rusoto_elasticache as elasticache;
 #[cfg(feature = "elasticbeanstalk")]
-pub mod elasticbeanstalk;
+pub extern crate rusoto_elasticbeanstalk as elasticbeanstalk;
 #[cfg(feature = "elastictranscoder")]
-pub mod elastictranscoder;
+pub extern crate rusoto_elastictranscoder as elastictranscoder;
 #[cfg(feature = "elb")]
-pub mod elb;
+pub extern crate rusoto_elb as elb;
 #[cfg(feature = "elbv2")]
-pub mod elbv2;
+pub extern crate rusoto_elbv2 as elbv2;
 #[cfg(feature = "events")]
-pub mod events;
+pub extern crate rusoto_events as events;
 #[cfg(feature = "firehose")]
-pub mod firehose;
+pub extern crate rusoto_firehose as firehose;
 #[cfg(feature = "iam")]
-pub mod iam;
+pub extern crate rusoto_iam as iam;
 #[cfg(feature = "importexport")]
-pub mod importexport;
+pub extern crate rusoto_importexport as importexport;
 #[cfg(feature = "inspector")]
-pub mod inspector;
+pub extern crate rusoto_inspector as inspector;
 #[cfg(feature = "iot")]
-pub mod iot;
+pub extern crate rusoto_iot as iot;
 #[cfg(feature = "kinesis")]
-pub mod kinesis;
+pub extern crate rusoto_kinesis as kinesis;
 #[cfg(feature = "kms")]
-pub mod kms;
+pub extern crate rusoto_kms as kms;
 #[cfg(feature = "lambda")]
-pub mod lambda;
+pub extern crate rusoto_lambda as lambda;
 #[cfg(feature = "logs")]
-pub mod logs;
+pub extern crate rusoto_logs as logs;
 #[cfg(feature = "machinelearning")]
-pub mod machinelearning;
+pub extern crate rusoto_machinelearning as machinelearning;
 #[cfg(feature = "marketplacecommerceanalytics")]
-pub mod marketplacecommerceanalytics;
+pub extern crate rusoto_marketplacecommerceanalytics as marketplacecommerceanalytics;
 #[cfg(feature = "opsworks")]
-pub mod opsworks;
+pub extern crate rusoto_opsworks as opsworks;
 #[cfg(feature = "redshift")]
-pub mod redshift;
+pub extern crate rusoto_redshift as redshift;
 #[cfg(feature = "rds")]
-pub mod rds;
+pub extern crate rusoto_rds as rds;
 #[cfg(feature = "route53")]
-pub mod route53;
+pub extern crate rusoto_route53 as route53;
 #[cfg(feature = "route53domains")]
-pub mod route53domains;
+pub extern crate rusoto_route53domains as route53domains;
 #[cfg(feature = "s3")]
-pub mod s3;
+pub extern crate rusoto_s3 as s3;
 #[cfg(feature = "sdb")]
-pub mod sdb;
+pub extern crate rusoto_sdb as sdb;
 #[cfg(feature = "ses")]
-pub mod ses;
+pub extern crate rusoto_ses as ses;
 #[cfg(feature = "sns")]
-pub mod sns;
+pub extern crate rusoto_sns as sns;
 #[cfg(feature = "sqs")]
-pub mod sqs;
+pub extern crate rusoto_sqs as sqs;
 #[cfg(feature = "ssm")]
-pub mod ssm;
+pub extern crate rusoto_ssm as ssm;
 #[cfg(feature = "storagegateway")]
-pub mod storagegateway;
+pub extern crate rusoto_storagegateway as storagegateway;
 #[cfg(feature = "sts")]
-pub mod sts;
+pub extern crate rusoto_sts as sts;
 #[cfg(feature = "swf")]
-pub mod swf;
+pub extern crate rusoto_swf as swf;
 #[cfg(feature = "waf")]
-pub mod waf;
+pub extern crate rusoto_waf as waf;
 #[cfg(feature = "workspaces")]
-pub mod workspaces;
+pub extern crate rusoto_workspaces as workspaces;
 
 /*
 #[cfg(feature = "gamelift")]
-pub mod gamelift;
+pub extern crate rusoto_gamelift as gamelift;
 #[cfg(feature = "support")]
-pub mod support;
+pub extern crate rusoto_support as support;
 */

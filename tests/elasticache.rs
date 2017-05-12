@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::elasticache::{ElastiCacheClient, DescribeCacheClustersMessage};
+use rusoto::elasticache::{ElastiCache, ElastiCacheClient, DescribeCacheClustersMessage};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 

@@ -2,7 +2,7 @@
 
 extern crate rusoto;
 
-use rusoto::kinesis::{KinesisClient, ListStreamsInput};
+use rusoto::kinesis::{Kinesis, KinesisClient, ListStreamsInput};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 
