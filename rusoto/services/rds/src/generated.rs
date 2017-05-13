@@ -13817,14 +13817,14 @@ struct VpcSecurityGroupMembershipListDeserializer;
                 #[derive(Debug, PartialEq)]
                 pub enum AddRoleToDBClusterError {
                     
-///<p>You have exceeded the maximum number of IAM roles that can be associated with the specified DB cluster.</p>
-DBClusterRoleQuotaExceededFault(String),
+///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+DBClusterNotFoundFault(String),
 ///<p>The specified IAM role Amazon Resource Name (ARN) is already associated with the specified DB cluster.</p>
 DBClusterRoleAlreadyExistsFault(String),
+///<p>You have exceeded the maximum number of IAM roles that can be associated with the specified DB cluster.</p>
+DBClusterRoleQuotaExceededFault(String),
 ///<p>The DB cluster is not in a valid state.</p>
-InvalidDBClusterStateFault(String),
-///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
-DBClusterNotFoundFault(String),/// An error occurred dispatching the HTTP request
+InvalidDBClusterStateFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -13841,7 +13841,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBClusterRoleAlreadyExistsFault" => AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => AddRoleToDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => AddRoleToDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterRoleQuotaExceededFault" => AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(String::from(parsed_error.message)),_ => AddRoleToDBClusterError::Unknown(String::from(body))
+                                    "DBClusterNotFoundFault" => AddRoleToDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterRoleAlreadyExistsFault" => AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterRoleQuotaExceededFault" => AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => AddRoleToDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),_ => AddRoleToDBClusterError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AddRoleToDBClusterError::Unknown(body.to_string())
@@ -13873,7 +13873,14 @@ Unknown(String)
                 impl Error for AddRoleToDBClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddRoleToDBClusterError::DBClusterNotFoundFault(ref cause) => cause,AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(ref cause) => cause,AddRoleToDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(ref cause) => cause,AddRoleToDBClusterError::Validation(ref cause) => cause,AddRoleToDBClusterError::Credentials(ref err) => err.description(),AddRoleToDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddRoleToDBClusterError::Unknown(ref cause) => cause
+                            AddRoleToDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
+AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(ref cause) => cause,
+AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(ref cause) => cause,
+AddRoleToDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
+AddRoleToDBClusterError::Validation(ref cause) => cause,
+AddRoleToDBClusterError::Credentials(ref err) => err.description(),
+AddRoleToDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddRoleToDBClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13881,10 +13888,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AddSourceIdentifierToSubscriptionError {
                     
-///<p>The subscription name does not exist.</p>
-SubscriptionNotFoundFault(String),
 ///<p>The requested source could not be found.</p>
-SourceNotFoundFault(String),/// An error occurred dispatching the HTTP request
+SourceNotFoundFault(String),
+///<p>The subscription name does not exist.</p>
+SubscriptionNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -13901,7 +13908,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "SubscriptionNotFoundFault" => AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(String::from(parsed_error.message)),"SourceNotFoundFault" => AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(String::from(parsed_error.message)),_ => AddSourceIdentifierToSubscriptionError::Unknown(String::from(body))
+                                    "SourceNotFoundFault" => AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(String::from(parsed_error.message)),"SubscriptionNotFoundFault" => AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(String::from(parsed_error.message)),_ => AddSourceIdentifierToSubscriptionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AddSourceIdentifierToSubscriptionError::Unknown(body.to_string())
@@ -13933,7 +13940,12 @@ Unknown(String)
                 impl Error for AddSourceIdentifierToSubscriptionError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(ref cause) => cause,AddSourceIdentifierToSubscriptionError::Validation(ref cause) => cause,AddSourceIdentifierToSubscriptionError::Credentials(ref err) => err.description(),AddSourceIdentifierToSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddSourceIdentifierToSubscriptionError::Unknown(ref cause) => cause
+                            AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(ref cause) => cause,
+AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,
+AddSourceIdentifierToSubscriptionError::Validation(ref cause) => cause,
+AddSourceIdentifierToSubscriptionError::Credentials(ref err) => err.description(),
+AddSourceIdentifierToSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddSourceIdentifierToSubscriptionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13941,10 +13953,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AddTagsToResourceError {
                     
-///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
-DBInstanceNotFoundFault(String),
 ///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
 DBClusterNotFoundFault(String),
+///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+DBInstanceNotFoundFault(String),
 ///<p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
 DBSnapshotNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -13963,7 +13975,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBInstanceNotFoundFault" => AddTagsToResourceError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => AddTagsToResourceError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => AddTagsToResourceError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),_ => AddTagsToResourceError::Unknown(String::from(body))
+                                    "DBClusterNotFoundFault" => AddTagsToResourceError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => AddTagsToResourceError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => AddTagsToResourceError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),_ => AddTagsToResourceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AddTagsToResourceError::Unknown(body.to_string())
@@ -13995,7 +14007,13 @@ Unknown(String)
                 impl Error for AddTagsToResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddTagsToResourceError::DBInstanceNotFoundFault(ref cause) => cause,AddTagsToResourceError::DBSnapshotNotFoundFault(ref cause) => cause,AddTagsToResourceError::DBClusterNotFoundFault(ref cause) => cause,AddTagsToResourceError::Validation(ref cause) => cause,AddTagsToResourceError::Credentials(ref err) => err.description(),AddTagsToResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddTagsToResourceError::Unknown(ref cause) => cause
+                            AddTagsToResourceError::DBClusterNotFoundFault(ref cause) => cause,
+AddTagsToResourceError::DBInstanceNotFoundFault(ref cause) => cause,
+AddTagsToResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
+AddTagsToResourceError::Validation(ref cause) => cause,
+AddTagsToResourceError::Credentials(ref err) => err.description(),
+AddTagsToResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddTagsToResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14053,7 +14071,11 @@ Unknown(String)
                 impl Error for ApplyPendingMaintenanceActionError {
                     fn description(&self) -> &str {
                         match *self {
-                            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => cause,ApplyPendingMaintenanceActionError::Validation(ref cause) => cause,ApplyPendingMaintenanceActionError::Credentials(ref err) => err.description(),ApplyPendingMaintenanceActionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ApplyPendingMaintenanceActionError::Unknown(ref cause) => cause
+                            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => cause,
+ApplyPendingMaintenanceActionError::Validation(ref cause) => cause,
+ApplyPendingMaintenanceActionError::Credentials(ref err) => err.description(),
+ApplyPendingMaintenanceActionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ApplyPendingMaintenanceActionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14061,14 +14083,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AuthorizeDBSecurityGroupIngressError {
                     
-///<p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
-DBSecurityGroupNotFoundFault(String),
 ///<p>The specified CIDRIP or EC2 security group is already authorized for the specified DB security group.</p>
 AuthorizationAlreadyExistsFault(String),
-///<p>The state of the DB security group does not allow deletion.</p>
-InvalidDBSecurityGroupStateFault(String),
 ///<p>DB security group authorization quota has been reached.</p>
-AuthorizationQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
+AuthorizationQuotaExceededFault(String),
+///<p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
+DBSecurityGroupNotFoundFault(String),
+///<p>The state of the DB security group does not allow deletion.</p>
+InvalidDBSecurityGroupStateFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14085,7 +14107,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBSecurityGroupStateFault" => AuthorizeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => AuthorizeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"AuthorizationQuotaExceededFault" => AuthorizeDBSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message)),"AuthorizationAlreadyExistsFault" => AuthorizeDBSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),_ => AuthorizeDBSecurityGroupIngressError::Unknown(String::from(body))
+                                    "AuthorizationAlreadyExistsFault" => AuthorizeDBSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"AuthorizationQuotaExceededFault" => AuthorizeDBSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => AuthorizeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBSecurityGroupStateFault" => AuthorizeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(String::from(parsed_error.message)),_ => AuthorizeDBSecurityGroupIngressError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AuthorizeDBSecurityGroupIngressError::Unknown(body.to_string())
@@ -14117,7 +14139,14 @@ Unknown(String)
                 impl Error for AuthorizeDBSecurityGroupIngressError {
                     fn description(&self) -> &str {
                         match *self {
-                            AuthorizeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(ref cause) => cause,AuthorizeDBSecurityGroupIngressError::AuthorizationAlreadyExistsFault(ref cause) => cause,AuthorizeDBSecurityGroupIngressError::AuthorizationQuotaExceededFault(ref cause) => cause,AuthorizeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(ref cause) => cause,AuthorizeDBSecurityGroupIngressError::Validation(ref cause) => cause,AuthorizeDBSecurityGroupIngressError::Credentials(ref err) => err.description(),AuthorizeDBSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AuthorizeDBSecurityGroupIngressError::Unknown(ref cause) => cause
+                            AuthorizeDBSecurityGroupIngressError::AuthorizationAlreadyExistsFault(ref cause) => cause,
+AuthorizeDBSecurityGroupIngressError::AuthorizationQuotaExceededFault(ref cause) => cause,
+AuthorizeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(ref cause) => cause,
+AuthorizeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(ref cause) => cause,
+AuthorizeDBSecurityGroupIngressError::Validation(ref cause) => cause,
+AuthorizeDBSecurityGroupIngressError::Credentials(ref err) => err.description(),
+AuthorizeDBSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AuthorizeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14125,12 +14154,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CopyDBClusterParameterGroupError {
                     
+///<p>A DB parameter group with the same name exists.</p>
+DBParameterGroupAlreadyExistsFault(String),
 ///<p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
 DBParameterGroupNotFoundFault(String),
 ///<p>Request would result in user exceeding the allowed number of DB parameter groups.</p>
-DBParameterGroupQuotaExceededFault(String),
-///<p>A DB parameter group with the same name exists.</p>
-DBParameterGroupAlreadyExistsFault(String),/// An error occurred dispatching the HTTP request
+DBParameterGroupQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14147,7 +14176,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBParameterGroupQuotaExceededFault" => CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBParameterGroupAlreadyExistsFault" => CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(String::from(parsed_error.message)),_ => CopyDBClusterParameterGroupError::Unknown(String::from(body))
+                                    "DBParameterGroupAlreadyExistsFault" => CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBParameterGroupQuotaExceededFault" => CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(String::from(parsed_error.message)),_ => CopyDBClusterParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CopyDBClusterParameterGroupError::Unknown(body.to_string())
@@ -14179,7 +14208,13 @@ Unknown(String)
                 impl Error for CopyDBClusterParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => cause,CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => cause,CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,CopyDBClusterParameterGroupError::Validation(ref cause) => cause,CopyDBClusterParameterGroupError::Credentials(ref err) => err.description(),CopyDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CopyDBClusterParameterGroupError::Unknown(ref cause) => cause
+                            CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => cause,
+CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => cause,
+CopyDBClusterParameterGroupError::Validation(ref cause) => cause,
+CopyDBClusterParameterGroupError::Credentials(ref err) => err.description(),
+CopyDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CopyDBClusterParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14189,16 +14224,16 @@ Unknown(String)
                     
 ///<p>User already has a DB cluster snapshot with the given identifier.</p>
 DBClusterSnapshotAlreadyExistsFault(String),
-///<p>The DB cluster is not in a valid state.</p>
-InvalidDBClusterStateFault(String),
-///<p>The supplied value is not a valid DB cluster snapshot state.</p>
-InvalidDBClusterSnapshotStateFault(String),
 ///<p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
 DBClusterSnapshotNotFoundFault(String),
-///<p>Request would result in user exceeding the allowed number of DB snapshots.</p>
-SnapshotQuotaExceededFault(String),
+///<p>The supplied value is not a valid DB cluster snapshot state.</p>
+InvalidDBClusterSnapshotStateFault(String),
+///<p>The DB cluster is not in a valid state.</p>
+InvalidDBClusterStateFault(String),
 ///<p>Error accessing KMS key.</p>
-KMSKeyNotAccessibleFault(String),/// An error occurred dispatching the HTTP request
+KMSKeyNotAccessibleFault(String),
+///<p>Request would result in user exceeding the allowed number of DB snapshots.</p>
+SnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14215,7 +14250,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBClusterStateFault" => CopyDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"DBClusterSnapshotAlreadyExistsFault" => CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterSnapshotNotFoundFault" => CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),_ => CopyDBClusterSnapshotError::Unknown(String::from(body))
+                                    "DBClusterSnapshotAlreadyExistsFault" => CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterSnapshotNotFoundFault" => CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => CopyDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => CopyDBClusterSnapshotError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CopyDBClusterSnapshotError::Unknown(body.to_string())
@@ -14247,7 +14282,16 @@ Unknown(String)
                 impl Error for CopyDBClusterSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,CopyDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => cause,CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,CopyDBClusterSnapshotError::Validation(ref cause) => cause,CopyDBClusterSnapshotError::Credentials(ref err) => err.description(),CopyDBClusterSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CopyDBClusterSnapshotError::Unknown(ref cause) => cause
+                            CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,
+CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
+CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
+CopyDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => cause,
+CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,
+CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+CopyDBClusterSnapshotError::Validation(ref cause) => cause,
+CopyDBClusterSnapshotError::Credentials(ref err) => err.description(),
+CopyDBClusterSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CopyDBClusterSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14255,12 +14299,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CopyDBParameterGroupError {
                     
-///<p>Request would result in user exceeding the allowed number of DB parameter groups.</p>
-DBParameterGroupQuotaExceededFault(String),
 ///<p>A DB parameter group with the same name exists.</p>
 DBParameterGroupAlreadyExistsFault(String),
 ///<p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
-DBParameterGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
+DBParameterGroupNotFoundFault(String),
+///<p>Request would result in user exceeding the allowed number of DB parameter groups.</p>
+DBParameterGroupQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14277,7 +14321,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBParameterGroupQuotaExceededFault" => CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => CopyDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBParameterGroupAlreadyExistsFault" => CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(String::from(parsed_error.message)),_ => CopyDBParameterGroupError::Unknown(String::from(body))
+                                    "DBParameterGroupAlreadyExistsFault" => CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => CopyDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBParameterGroupQuotaExceededFault" => CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(String::from(parsed_error.message)),_ => CopyDBParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CopyDBParameterGroupError::Unknown(body.to_string())
@@ -14309,7 +14353,13 @@ Unknown(String)
                 impl Error for CopyDBParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CopyDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => cause,CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => cause,CopyDBParameterGroupError::Validation(ref cause) => cause,CopyDBParameterGroupError::Credentials(ref err) => err.description(),CopyDBParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CopyDBParameterGroupError::Unknown(ref cause) => cause
+                            CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => cause,
+CopyDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => cause,
+CopyDBParameterGroupError::Validation(ref cause) => cause,
+CopyDBParameterGroupError::Credentials(ref err) => err.description(),
+CopyDBParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CopyDBParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14319,14 +14369,14 @@ Unknown(String)
                     
 ///<p> <i>DBSnapshotIdentifier</i> is already used by an existing snapshot. </p>
 DBSnapshotAlreadyExistsFault(String),
+///<p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
+DBSnapshotNotFoundFault(String),
 ///<p>The state of the DB snapshot does not allow deletion.</p>
 InvalidDBSnapshotStateFault(String),
 ///<p>Error accessing KMS key.</p>
 KMSKeyNotAccessibleFault(String),
 ///<p>Request would result in user exceeding the allowed number of DB snapshots.</p>
-SnapshotQuotaExceededFault(String),
-///<p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
-DBSnapshotNotFoundFault(String),/// An error occurred dispatching the HTTP request
+SnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14343,7 +14393,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBSnapshotAlreadyExistsFault" => CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => CopyDBSnapshotError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"InvalidDBSnapshotStateFault" => CopyDBSnapshotError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => CopyDBSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => CopyDBSnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => CopyDBSnapshotError::Unknown(String::from(body))
+                                    "DBSnapshotAlreadyExistsFault" => CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => CopyDBSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidDBSnapshotStateFault" => CopyDBSnapshotError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => CopyDBSnapshotError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => CopyDBSnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => CopyDBSnapshotError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CopyDBSnapshotError::Unknown(body.to_string())
@@ -14375,7 +14425,15 @@ Unknown(String)
                 impl Error for CopyDBSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            CopyDBSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,CopyDBSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(ref cause) => cause,CopyDBSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,CopyDBSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,CopyDBSnapshotError::Validation(ref cause) => cause,CopyDBSnapshotError::Credentials(ref err) => err.description(),CopyDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CopyDBSnapshotError::Unknown(ref cause) => cause
+                            CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(ref cause) => cause,
+CopyDBSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,
+CopyDBSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,
+CopyDBSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,
+CopyDBSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+CopyDBSnapshotError::Validation(ref cause) => cause,
+CopyDBSnapshotError::Credentials(ref err) => err.description(),
+CopyDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CopyDBSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14383,12 +14441,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CopyOptionGroupError {
                     
+///<p>The option group you are trying to create already exists.</p>
+OptionGroupAlreadyExistsFault(String),
 ///<p>The specified option group could not be found.</p>
 OptionGroupNotFoundFault(String),
 ///<p>The quota of 20 option groups was exceeded for this AWS account.</p>
-OptionGroupQuotaExceededFault(String),
-///<p>The option group you are trying to create already exists.</p>
-OptionGroupAlreadyExistsFault(String),/// An error occurred dispatching the HTTP request
+OptionGroupQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14405,7 +14463,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "OptionGroupAlreadyExistsFault" => CopyOptionGroupError::OptionGroupAlreadyExistsFault(String::from(parsed_error.message)),"OptionGroupQuotaExceededFault" => CopyOptionGroupError::OptionGroupQuotaExceededFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => CopyOptionGroupError::OptionGroupNotFoundFault(String::from(parsed_error.message)),_ => CopyOptionGroupError::Unknown(String::from(body))
+                                    "OptionGroupAlreadyExistsFault" => CopyOptionGroupError::OptionGroupAlreadyExistsFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => CopyOptionGroupError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"OptionGroupQuotaExceededFault" => CopyOptionGroupError::OptionGroupQuotaExceededFault(String::from(parsed_error.message)),_ => CopyOptionGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CopyOptionGroupError::Unknown(body.to_string())
@@ -14437,7 +14495,13 @@ Unknown(String)
                 impl Error for CopyOptionGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CopyOptionGroupError::OptionGroupQuotaExceededFault(ref cause) => cause,CopyOptionGroupError::OptionGroupAlreadyExistsFault(ref cause) => cause,CopyOptionGroupError::OptionGroupNotFoundFault(ref cause) => cause,CopyOptionGroupError::Validation(ref cause) => cause,CopyOptionGroupError::Credentials(ref err) => err.description(),CopyOptionGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CopyOptionGroupError::Unknown(ref cause) => cause
+                            CopyOptionGroupError::OptionGroupAlreadyExistsFault(ref cause) => cause,
+CopyOptionGroupError::OptionGroupNotFoundFault(ref cause) => cause,
+CopyOptionGroupError::OptionGroupQuotaExceededFault(ref cause) => cause,
+CopyOptionGroupError::Validation(ref cause) => cause,
+CopyOptionGroupError::Credentials(ref err) => err.description(),
+CopyOptionGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CopyOptionGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14445,32 +14509,32 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDBClusterError {
                     
-///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
-StorageQuotaExceededFault(String),
-///<p>Error accessing KMS key.</p>
-KMSKeyNotAccessibleFault(String),
-///<p>There is insufficient storage available for the current action. You may be able to resolve this error by updating your subnet group to use different Availability Zones that have more storage available.</p>
-InsufficientStorageClusterCapacityFault(String),
 ///<p>User already has a DB cluster with the given identifier.</p>
 DBClusterAlreadyExistsFault(String),
-///<p>User attempted to create a new DB cluster and the user has already reached the maximum allowed DB cluster quota.</p>
-DBClusterQuotaExceededFault(String),
-///<p> The specified DB instance is not in the <i>available</i> state. </p>
-InvalidDBInstanceStateFault(String),
-///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
-InvalidSubnet(String),
+///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+DBClusterNotFoundFault(String),
 ///<p> <i>DBClusterParameterGroupName</i> does not refer to an existing DB Cluster parameter group. </p>
 DBClusterParameterGroupNotFoundFault(String),
-///<p>The DB subnet group cannot be deleted because it is in use.</p>
-InvalidDBSubnetGroupStateFault(String),
+///<p>User attempted to create a new DB cluster and the user has already reached the maximum allowed DB cluster quota.</p>
+DBClusterQuotaExceededFault(String),
 ///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
 DBSubnetGroupNotFoundFault(String),
-///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
-InvalidVPCNetworkStateFault(String),
+///<p>There is insufficient storage available for the current action. You may be able to resolve this error by updating your subnet group to use different Availability Zones that have more storage available.</p>
+InsufficientStorageClusterCapacityFault(String),
 ///<p>The DB cluster is not in a valid state.</p>
 InvalidDBClusterStateFault(String),
-///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
-DBClusterNotFoundFault(String),/// An error occurred dispatching the HTTP request
+///<p> The specified DB instance is not in the <i>available</i> state. </p>
+InvalidDBInstanceStateFault(String),
+///<p>The DB subnet group cannot be deleted because it is in use.</p>
+InvalidDBSubnetGroupStateFault(String),
+///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
+InvalidSubnet(String),
+///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
+InvalidVPCNetworkStateFault(String),
+///<p>Error accessing KMS key.</p>
+KMSKeyNotAccessibleFault(String),
+///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
+StorageQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14487,7 +14551,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBClusterNotFoundFault" => CreateDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => CreateDBClusterError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"DBClusterQuotaExceededFault" => CreateDBClusterError::DBClusterQuotaExceededFault(String::from(parsed_error.message)),"DBClusterAlreadyExistsFault" => CreateDBClusterError::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => CreateDBClusterError::StorageQuotaExceededFault(String::from(parsed_error.message)),"InvalidDBSubnetGroupStateFault" => CreateDBClusterError::InvalidDBSubnetGroupStateFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => CreateDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => CreateDBClusterError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => CreateDBClusterError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"InsufficientStorageClusterCapacityFault" => CreateDBClusterError::InsufficientStorageClusterCapacityFault(String::from(parsed_error.message)),"InvalidSubnet" => CreateDBClusterError::InvalidSubnet(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => CreateDBClusterError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DBClusterParameterGroupNotFoundFault" => CreateDBClusterError::DBClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),_ => CreateDBClusterError::Unknown(String::from(body))
+                                    "DBClusterAlreadyExistsFault" => CreateDBClusterError::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => CreateDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterParameterGroupNotFoundFault" => CreateDBClusterError::DBClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBClusterQuotaExceededFault" => CreateDBClusterError::DBClusterQuotaExceededFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => CreateDBClusterError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InsufficientStorageClusterCapacityFault" => CreateDBClusterError::InsufficientStorageClusterCapacityFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => CreateDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => CreateDBClusterError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"InvalidDBSubnetGroupStateFault" => CreateDBClusterError::InvalidDBSubnetGroupStateFault(String::from(parsed_error.message)),"InvalidSubnet" => CreateDBClusterError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => CreateDBClusterError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => CreateDBClusterError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => CreateDBClusterError::StorageQuotaExceededFault(String::from(parsed_error.message)),_ => CreateDBClusterError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDBClusterError::Unknown(body.to_string())
@@ -14519,7 +14583,23 @@ Unknown(String)
                 impl Error for CreateDBClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDBClusterError::DBClusterAlreadyExistsFault(ref cause) => cause,CreateDBClusterError::DBClusterQuotaExceededFault(ref cause) => cause,CreateDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => cause,CreateDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => cause,CreateDBClusterError::StorageQuotaExceededFault(ref cause) => cause,CreateDBClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,CreateDBClusterError::KMSKeyNotAccessibleFault(ref cause) => cause,CreateDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,CreateDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,CreateDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => cause,CreateDBClusterError::DBClusterNotFoundFault(ref cause) => cause,CreateDBClusterError::InvalidSubnet(ref cause) => cause,CreateDBClusterError::InsufficientStorageClusterCapacityFault(ref cause) => cause,CreateDBClusterError::Validation(ref cause) => cause,CreateDBClusterError::Credentials(ref err) => err.description(),CreateDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDBClusterError::Unknown(ref cause) => cause
+                            CreateDBClusterError::DBClusterAlreadyExistsFault(ref cause) => cause,
+CreateDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
+CreateDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => cause,
+CreateDBClusterError::DBClusterQuotaExceededFault(ref cause) => cause,
+CreateDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+CreateDBClusterError::InsufficientStorageClusterCapacityFault(ref cause) => cause,
+CreateDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
+CreateDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
+CreateDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => cause,
+CreateDBClusterError::InvalidSubnet(ref cause) => cause,
+CreateDBClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
+CreateDBClusterError::KMSKeyNotAccessibleFault(ref cause) => cause,
+CreateDBClusterError::StorageQuotaExceededFault(ref cause) => cause,
+CreateDBClusterError::Validation(ref cause) => cause,
+CreateDBClusterError::Credentials(ref err) => err.description(),
+CreateDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDBClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14527,10 +14607,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDBClusterParameterGroupError {
                     
-///<p>Request would result in user exceeding the allowed number of DB parameter groups.</p>
-DBParameterGroupQuotaExceededFault(String),
 ///<p>A DB parameter group with the same name exists.</p>
-DBParameterGroupAlreadyExistsFault(String),/// An error occurred dispatching the HTTP request
+DBParameterGroupAlreadyExistsFault(String),
+///<p>Request would result in user exceeding the allowed number of DB parameter groups.</p>
+DBParameterGroupQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14547,7 +14627,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBParameterGroupQuotaExceededFault" => CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(String::from(parsed_error.message)),"DBParameterGroupAlreadyExistsFault" => CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(String::from(parsed_error.message)),_ => CreateDBClusterParameterGroupError::Unknown(String::from(body))
+                                    "DBParameterGroupAlreadyExistsFault" => CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(String::from(parsed_error.message)),"DBParameterGroupQuotaExceededFault" => CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(String::from(parsed_error.message)),_ => CreateDBClusterParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDBClusterParameterGroupError::Unknown(body.to_string())
@@ -14579,7 +14659,12 @@ Unknown(String)
                 impl Error for CreateDBClusterParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => cause,CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => cause,CreateDBClusterParameterGroupError::Validation(ref cause) => cause,CreateDBClusterParameterGroupError::Credentials(ref err) => err.description(),CreateDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDBClusterParameterGroupError::Unknown(ref cause) => cause
+                            CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => cause,
+CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => cause,
+CreateDBClusterParameterGroupError::Validation(ref cause) => cause,
+CreateDBClusterParameterGroupError::Credentials(ref err) => err.description(),
+CreateDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDBClusterParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14587,16 +14672,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDBClusterSnapshotError {
                     
-///<p>The supplied value is not a valid DB cluster snapshot state.</p>
-InvalidDBClusterSnapshotStateFault(String),
 ///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
 DBClusterNotFoundFault(String),
-///<p>Request would result in user exceeding the allowed number of DB snapshots.</p>
-SnapshotQuotaExceededFault(String),
+///<p>User already has a DB cluster snapshot with the given identifier.</p>
+DBClusterSnapshotAlreadyExistsFault(String),
+///<p>The supplied value is not a valid DB cluster snapshot state.</p>
+InvalidDBClusterSnapshotStateFault(String),
 ///<p>The DB cluster is not in a valid state.</p>
 InvalidDBClusterStateFault(String),
-///<p>User already has a DB cluster snapshot with the given identifier.</p>
-DBClusterSnapshotAlreadyExistsFault(String),/// An error occurred dispatching the HTTP request
+///<p>Request would result in user exceeding the allowed number of DB snapshots.</p>
+SnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14613,7 +14698,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBClusterStateFault" => CreateDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => CreateDBClusterSnapshotError::DBClusterNotFoundFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),"DBClusterSnapshotAlreadyExistsFault" => CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(String::from(parsed_error.message)),_ => CreateDBClusterSnapshotError::Unknown(String::from(body))
+                                    "DBClusterNotFoundFault" => CreateDBClusterSnapshotError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterSnapshotAlreadyExistsFault" => CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => CreateDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => CreateDBClusterSnapshotError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDBClusterSnapshotError::Unknown(body.to_string())
@@ -14645,7 +14730,15 @@ Unknown(String)
                 impl Error for CreateDBClusterSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => cause,CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,CreateDBClusterSnapshotError::DBClusterNotFoundFault(ref cause) => cause,CreateDBClusterSnapshotError::Validation(ref cause) => cause,CreateDBClusterSnapshotError::Credentials(ref err) => err.description(),CreateDBClusterSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDBClusterSnapshotError::Unknown(ref cause) => cause
+                            CreateDBClusterSnapshotError::DBClusterNotFoundFault(ref cause) => cause,
+CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,
+CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
+CreateDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => cause,
+CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+CreateDBClusterSnapshotError::Validation(ref cause) => cause,
+CreateDBClusterSnapshotError::Credentials(ref err) => err.description(),
+CreateDBClusterSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDBClusterSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14653,42 +14746,42 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDBInstanceError {
                     
-///<p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
-DBSubnetGroupDoesNotCoverEnoughAZs(String),
-///<p>The specified option group could not be found.</p>
-OptionGroupNotFoundFault(String),
-///<p>User already has a DB instance with the given identifier.</p>
-DBInstanceAlreadyExistsFault(String),
-///<p>The DB cluster is not in a valid state.</p>
-InvalidDBClusterStateFault(String),
 ///<p>Specified CIDRIP or EC2 security group is not authorized for the specified DB security group.</p> <p>RDS may not also be authorized via IAM to perform necessary actions on your behalf.</p>
 AuthorizationNotFoundFault(String),
+///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+DBClusterNotFoundFault(String),
+///<p>User already has a DB instance with the given identifier.</p>
+DBInstanceAlreadyExistsFault(String),
 ///<p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
 DBParameterGroupNotFoundFault(String),
-///<p>Specified DB instance class is not available in the specified Availability Zone.</p>
-InsufficientDBInstanceCapacityFault(String),
-///<p>Provisioned IOPS not available in the specified Availability Zone.</p>
-ProvisionedIopsNotAvailableInAZFault(String),
-///<p>Request would result in user exceeding the allowed number of DB instances.</p>
-InstanceQuotaExceededFault(String),
 ///<p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
 DBSecurityGroupNotFoundFault(String),
-///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
-StorageQuotaExceededFault(String),
+///<p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
+DBSubnetGroupDoesNotCoverEnoughAZs(String),
+///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+DBSubnetGroupNotFoundFault(String),
+///<p> <i>Domain</i> does not refer to an existing Active Directory Domain. </p>
+DomainNotFoundFault(String),
+///<p>Request would result in user exceeding the allowed number of DB instances.</p>
+InstanceQuotaExceededFault(String),
+///<p>Specified DB instance class is not available in the specified Availability Zone.</p>
+InsufficientDBInstanceCapacityFault(String),
+///<p>The DB cluster is not in a valid state.</p>
+InvalidDBClusterStateFault(String),
 ///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
 InvalidSubnet(String),
 ///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
 InvalidVPCNetworkStateFault(String),
-///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
-DBClusterNotFoundFault(String),
-///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
-DBSubnetGroupNotFoundFault(String),
-///<p> <i>StorageType</i> specified cannot be associated with the DB Instance. </p>
-StorageTypeNotSupportedFault(String),
-///<p> <i>Domain</i> does not refer to an existing Active Directory Domain. </p>
-DomainNotFoundFault(String),
 ///<p>Error accessing KMS key.</p>
-KMSKeyNotAccessibleFault(String),/// An error occurred dispatching the HTTP request
+KMSKeyNotAccessibleFault(String),
+///<p>The specified option group could not be found.</p>
+OptionGroupNotFoundFault(String),
+///<p>Provisioned IOPS not available in the specified Availability Zone.</p>
+ProvisionedIopsNotAvailableInAZFault(String),
+///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
+StorageQuotaExceededFault(String),
+///<p> <i>StorageType</i> specified cannot be associated with the DB Instance. </p>
+StorageTypeNotSupportedFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14705,7 +14798,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBInstanceAlreadyExistsFault" => CreateDBInstanceError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => CreateDBInstanceError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"DomainNotFoundFault" => CreateDBInstanceError::DomainNotFoundFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => CreateDBInstanceError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => CreateDBInstanceError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"InstanceQuotaExceededFault" => CreateDBInstanceError::InstanceQuotaExceededFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => CreateDBInstanceError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"AuthorizationNotFoundFault" => CreateDBInstanceError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => CreateDBInstanceError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => CreateDBInstanceError::DBClusterNotFoundFault(String::from(parsed_error.message)),"InvalidSubnet" => CreateDBInstanceError::InvalidSubnet(String::from(parsed_error.message)),"StorageTypeNotSupportedFault" => CreateDBInstanceError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => CreateDBInstanceError::StorageQuotaExceededFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => CreateDBInstanceError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => CreateDBInstanceError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"InsufficientDBInstanceCapacityFault" => CreateDBInstanceError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),_ => CreateDBInstanceError::Unknown(String::from(body))
+                                    "AuthorizationNotFoundFault" => CreateDBInstanceError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => CreateDBInstanceError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBInstanceAlreadyExistsFault" => CreateDBInstanceError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => CreateDBInstanceError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => CreateDBInstanceError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => CreateDBInstanceError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DomainNotFoundFault" => CreateDBInstanceError::DomainNotFoundFault(String::from(parsed_error.message)),"InstanceQuotaExceededFault" => CreateDBInstanceError::InstanceQuotaExceededFault(String::from(parsed_error.message)),"InsufficientDBInstanceCapacityFault" => CreateDBInstanceError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => CreateDBInstanceError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"InvalidSubnet" => CreateDBInstanceError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => CreateDBInstanceError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => CreateDBInstanceError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => CreateDBInstanceError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => CreateDBInstanceError::StorageQuotaExceededFault(String::from(parsed_error.message)),"StorageTypeNotSupportedFault" => CreateDBInstanceError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),_ => CreateDBInstanceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDBInstanceError::Unknown(body.to_string())
@@ -14737,7 +14830,28 @@ Unknown(String)
                 impl Error for CreateDBInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDBInstanceError::DBClusterNotFoundFault(ref cause) => cause,CreateDBInstanceError::KMSKeyNotAccessibleFault(ref cause) => cause,CreateDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => cause,CreateDBInstanceError::InvalidDBClusterStateFault(ref cause) => cause,CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,CreateDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => cause,CreateDBInstanceError::InstanceQuotaExceededFault(ref cause) => cause,CreateDBInstanceError::StorageTypeNotSupportedFault(ref cause) => cause,CreateDBInstanceError::OptionGroupNotFoundFault(ref cause) => cause,CreateDBInstanceError::DomainNotFoundFault(ref cause) => cause,CreateDBInstanceError::InvalidSubnet(ref cause) => cause,CreateDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => cause,CreateDBInstanceError::StorageQuotaExceededFault(ref cause) => cause,CreateDBInstanceError::AuthorizationNotFoundFault(ref cause) => cause,CreateDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => cause,CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,CreateDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => cause,CreateDBInstanceError::DBSubnetGroupNotFoundFault(ref cause) => cause,CreateDBInstanceError::Validation(ref cause) => cause,CreateDBInstanceError::Credentials(ref err) => err.description(),CreateDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDBInstanceError::Unknown(ref cause) => cause
+                            CreateDBInstanceError::AuthorizationNotFoundFault(ref cause) => cause,
+CreateDBInstanceError::DBClusterNotFoundFault(ref cause) => cause,
+CreateDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => cause,
+CreateDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => cause,
+CreateDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => cause,
+CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
+CreateDBInstanceError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+CreateDBInstanceError::DomainNotFoundFault(ref cause) => cause,
+CreateDBInstanceError::InstanceQuotaExceededFault(ref cause) => cause,
+CreateDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => cause,
+CreateDBInstanceError::InvalidDBClusterStateFault(ref cause) => cause,
+CreateDBInstanceError::InvalidSubnet(ref cause) => cause,
+CreateDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => cause,
+CreateDBInstanceError::KMSKeyNotAccessibleFault(ref cause) => cause,
+CreateDBInstanceError::OptionGroupNotFoundFault(ref cause) => cause,
+CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,
+CreateDBInstanceError::StorageQuotaExceededFault(ref cause) => cause,
+CreateDBInstanceError::StorageTypeNotSupportedFault(ref cause) => cause,
+CreateDBInstanceError::Validation(ref cause) => cause,
+CreateDBInstanceError::Credentials(ref err) => err.description(),
+CreateDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDBInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14745,42 +14859,42 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDBInstanceReadReplicaError {
                     
-///<p>Provisioned IOPS not available in the specified Availability Zone.</p>
-ProvisionedIopsNotAvailableInAZFault(String),
-///<p>Specified DB instance class is not available in the specified Availability Zone.</p>
-InsufficientDBInstanceCapacityFault(String),
-///<p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
-DBSecurityGroupNotFoundFault(String),
-///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
-StorageQuotaExceededFault(String),
-///<p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
-DBSubnetGroupDoesNotCoverEnoughAZs(String),
-///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
-InvalidSubnet(String),
-///<p>Request would result in user exceeding the allowed number of DB instances.</p>
-InstanceQuotaExceededFault(String),
 ///<p>User already has a DB instance with the given identifier.</p>
 DBInstanceAlreadyExistsFault(String),
-///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
-InvalidVPCNetworkStateFault(String),
-///<p> The specified DB instance is not in the <i>available</i> state. </p>
-InvalidDBInstanceStateFault(String),
 ///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
 DBInstanceNotFoundFault(String),
-///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
-DBSubnetGroupNotFoundFault(String),
-///<p>Error accessing KMS key.</p>
-KMSKeyNotAccessibleFault(String),
+///<p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+DBParameterGroupNotFoundFault(String),
+///<p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
+DBSecurityGroupNotFoundFault(String),
+///<p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
+DBSubnetGroupDoesNotCoverEnoughAZs(String),
 ///<p>Indicates that the DBSubnetGroup should not be specified while creating read replicas that lie in the same region as the source instance.</p>
 DBSubnetGroupNotAllowedFault(String),
+///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+DBSubnetGroupNotFoundFault(String),
+///<p>Request would result in user exceeding the allowed number of DB instances.</p>
+InstanceQuotaExceededFault(String),
+///<p>Specified DB instance class is not available in the specified Availability Zone.</p>
+InsufficientDBInstanceCapacityFault(String),
+///<p> The specified DB instance is not in the <i>available</i> state. </p>
+InvalidDBInstanceStateFault(String),
 ///<p>Indicates the DBSubnetGroup does not belong to the same VPC as that of an existing cross region read replica of the same source instance.</p>
 InvalidDBSubnetGroupFault(String),
+///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
+InvalidSubnet(String),
+///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
+InvalidVPCNetworkStateFault(String),
+///<p>Error accessing KMS key.</p>
+KMSKeyNotAccessibleFault(String),
 ///<p>The specified option group could not be found.</p>
 OptionGroupNotFoundFault(String),
+///<p>Provisioned IOPS not available in the specified Availability Zone.</p>
+ProvisionedIopsNotAvailableInAZFault(String),
+///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
+StorageQuotaExceededFault(String),
 ///<p> <i>StorageType</i> specified cannot be associated with the DB Instance. </p>
-StorageTypeNotSupportedFault(String),
-///<p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
-DBParameterGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
+StorageTypeNotSupportedFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14797,7 +14911,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBSubnetGroupDoesNotCoverEnoughAZs" => CreateDBInstanceReadReplicaError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"StorageTypeNotSupportedFault" => CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),"InstanceQuotaExceededFault" => CreateDBInstanceReadReplicaError::InstanceQuotaExceededFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => CreateDBInstanceReadReplicaError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => CreateDBInstanceReadReplicaError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"InvalidDBSubnetGroupFault" => CreateDBInstanceReadReplicaError::InvalidDBSubnetGroupFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => CreateDBInstanceReadReplicaError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => CreateDBInstanceReadReplicaError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InsufficientDBInstanceCapacityFault" => CreateDBInstanceReadReplicaError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupNotAllowedFault" => CreateDBInstanceReadReplicaError::DBSubnetGroupNotAllowedFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => CreateDBInstanceReadReplicaError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => CreateDBInstanceReadReplicaError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(String::from(parsed_error.message)),"InvalidSubnet" => CreateDBInstanceReadReplicaError::InvalidSubnet(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => CreateDBInstanceReadReplicaError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"DBInstanceAlreadyExistsFault" => CreateDBInstanceReadReplicaError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => CreateDBInstanceReadReplicaError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),_ => CreateDBInstanceReadReplicaError::Unknown(String::from(body))
+                                    "DBInstanceAlreadyExistsFault" => CreateDBInstanceReadReplicaError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => CreateDBInstanceReadReplicaError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => CreateDBInstanceReadReplicaError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => CreateDBInstanceReadReplicaError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBSubnetGroupNotAllowedFault" => CreateDBInstanceReadReplicaError::DBSubnetGroupNotAllowedFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => CreateDBInstanceReadReplicaError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InstanceQuotaExceededFault" => CreateDBInstanceReadReplicaError::InstanceQuotaExceededFault(String::from(parsed_error.message)),"InsufficientDBInstanceCapacityFault" => CreateDBInstanceReadReplicaError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => CreateDBInstanceReadReplicaError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"InvalidDBSubnetGroupFault" => CreateDBInstanceReadReplicaError::InvalidDBSubnetGroupFault(String::from(parsed_error.message)),"InvalidSubnet" => CreateDBInstanceReadReplicaError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => CreateDBInstanceReadReplicaError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => CreateDBInstanceReadReplicaError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => CreateDBInstanceReadReplicaError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => CreateDBInstanceReadReplicaError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(String::from(parsed_error.message)),"StorageTypeNotSupportedFault" => CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),_ => CreateDBInstanceReadReplicaError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDBInstanceReadReplicaError::Unknown(body.to_string())
@@ -14829,7 +14943,28 @@ Unknown(String)
                 impl Error for CreateDBInstanceReadReplicaError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDBInstanceReadReplicaError::DBParameterGroupNotFoundFault(ref cause) => cause,CreateDBInstanceReadReplicaError::InvalidVPCNetworkStateFault(ref cause) => cause,CreateDBInstanceReadReplicaError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(ref cause) => cause,CreateDBInstanceReadReplicaError::InstanceQuotaExceededFault(ref cause) => cause,CreateDBInstanceReadReplicaError::DBSecurityGroupNotFoundFault(ref cause) => cause,CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(ref cause) => cause,CreateDBInstanceReadReplicaError::InsufficientDBInstanceCapacityFault(ref cause) => cause,CreateDBInstanceReadReplicaError::OptionGroupNotFoundFault(ref cause) => cause,CreateDBInstanceReadReplicaError::DBSubnetGroupNotAllowedFault(ref cause) => cause,CreateDBInstanceReadReplicaError::DBInstanceAlreadyExistsFault(ref cause) => cause,CreateDBInstanceReadReplicaError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,CreateDBInstanceReadReplicaError::InvalidDBInstanceStateFault(ref cause) => cause,CreateDBInstanceReadReplicaError::KMSKeyNotAccessibleFault(ref cause) => cause,CreateDBInstanceReadReplicaError::DBSubnetGroupNotFoundFault(ref cause) => cause,CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(ref cause) => cause,CreateDBInstanceReadReplicaError::InvalidDBSubnetGroupFault(ref cause) => cause,CreateDBInstanceReadReplicaError::InvalidSubnet(ref cause) => cause,CreateDBInstanceReadReplicaError::Validation(ref cause) => cause,CreateDBInstanceReadReplicaError::Credentials(ref err) => err.description(),CreateDBInstanceReadReplicaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDBInstanceReadReplicaError::Unknown(ref cause) => cause
+                            CreateDBInstanceReadReplicaError::DBInstanceAlreadyExistsFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::DBParameterGroupNotFoundFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::DBSecurityGroupNotFoundFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
+CreateDBInstanceReadReplicaError::DBSubnetGroupNotAllowedFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::InstanceQuotaExceededFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::InsufficientDBInstanceCapacityFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::InvalidDBInstanceStateFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::InvalidDBSubnetGroupFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::InvalidSubnet(ref cause) => cause,
+CreateDBInstanceReadReplicaError::InvalidVPCNetworkStateFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::KMSKeyNotAccessibleFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::OptionGroupNotFoundFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(ref cause) => cause,
+CreateDBInstanceReadReplicaError::Validation(ref cause) => cause,
+CreateDBInstanceReadReplicaError::Credentials(ref err) => err.description(),
+CreateDBInstanceReadReplicaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDBInstanceReadReplicaError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14889,7 +15024,12 @@ Unknown(String)
                 impl Error for CreateDBParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => cause,CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => cause,CreateDBParameterGroupError::Validation(ref cause) => cause,CreateDBParameterGroupError::Credentials(ref err) => err.description(),CreateDBParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDBParameterGroupError::Unknown(ref cause) => cause
+                            CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => cause,
+CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => cause,
+CreateDBParameterGroupError::Validation(ref cause) => cause,
+CreateDBParameterGroupError::Credentials(ref err) => err.description(),
+CreateDBParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDBParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14899,10 +15039,10 @@ Unknown(String)
                     
 ///<p> A DB security group with the name specified in <i>DBSecurityGroupName</i> already exists. </p>
 DBSecurityGroupAlreadyExistsFault(String),
-///<p>Request would result in user exceeding the allowed number of DB security groups.</p>
-DBSecurityGroupQuotaExceededFault(String),
 ///<p>A DB security group is not allowed for this action.</p>
-DBSecurityGroupNotSupportedFault(String),/// An error occurred dispatching the HTTP request
+DBSecurityGroupNotSupportedFault(String),
+///<p>Request would result in user exceeding the allowed number of DB security groups.</p>
+DBSecurityGroupQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14919,7 +15059,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBSecurityGroupQuotaExceededFault" => CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(String::from(parsed_error.message)),"DBSecurityGroupNotSupportedFault" => CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(String::from(parsed_error.message)),"DBSecurityGroupAlreadyExistsFault" => CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(String::from(parsed_error.message)),_ => CreateDBSecurityGroupError::Unknown(String::from(body))
+                                    "DBSecurityGroupAlreadyExistsFault" => CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(String::from(parsed_error.message)),"DBSecurityGroupNotSupportedFault" => CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(String::from(parsed_error.message)),"DBSecurityGroupQuotaExceededFault" => CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(String::from(parsed_error.message)),_ => CreateDBSecurityGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDBSecurityGroupError::Unknown(body.to_string())
@@ -14951,7 +15091,13 @@ Unknown(String)
                 impl Error for CreateDBSecurityGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(ref cause) => cause,CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(ref cause) => cause,CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(ref cause) => cause,CreateDBSecurityGroupError::Validation(ref cause) => cause,CreateDBSecurityGroupError::Credentials(ref err) => err.description(),CreateDBSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDBSecurityGroupError::Unknown(ref cause) => cause
+                            CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(ref cause) => cause,
+CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(ref cause) => cause,
+CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(ref cause) => cause,
+CreateDBSecurityGroupError::Validation(ref cause) => cause,
+CreateDBSecurityGroupError::Credentials(ref err) => err.description(),
+CreateDBSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDBSecurityGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14959,14 +15105,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDBSnapshotError {
                     
-///<p>Request would result in user exceeding the allowed number of DB snapshots.</p>
-SnapshotQuotaExceededFault(String),
-///<p> The specified DB instance is not in the <i>available</i> state. </p>
-InvalidDBInstanceStateFault(String),
 ///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
 DBInstanceNotFoundFault(String),
 ///<p> <i>DBSnapshotIdentifier</i> is already used by an existing snapshot. </p>
-DBSnapshotAlreadyExistsFault(String),/// An error occurred dispatching the HTTP request
+DBSnapshotAlreadyExistsFault(String),
+///<p> The specified DB instance is not in the <i>available</i> state. </p>
+InvalidDBInstanceStateFault(String),
+///<p>Request would result in user exceeding the allowed number of DB snapshots.</p>
+SnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14983,7 +15129,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBSnapshotAlreadyExistsFault" => CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => CreateDBSnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => CreateDBSnapshotError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => CreateDBSnapshotError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),_ => CreateDBSnapshotError::Unknown(String::from(body))
+                                    "DBInstanceNotFoundFault" => CreateDBSnapshotError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBSnapshotAlreadyExistsFault" => CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => CreateDBSnapshotError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => CreateDBSnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => CreateDBSnapshotError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDBSnapshotError::Unknown(body.to_string())
@@ -15015,7 +15161,14 @@ Unknown(String)
                 impl Error for CreateDBSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDBSnapshotError::InvalidDBInstanceStateFault(ref cause) => cause,CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(ref cause) => cause,CreateDBSnapshotError::DBInstanceNotFoundFault(ref cause) => cause,CreateDBSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,CreateDBSnapshotError::Validation(ref cause) => cause,CreateDBSnapshotError::Credentials(ref err) => err.description(),CreateDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDBSnapshotError::Unknown(ref cause) => cause
+                            CreateDBSnapshotError::DBInstanceNotFoundFault(ref cause) => cause,
+CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(ref cause) => cause,
+CreateDBSnapshotError::InvalidDBInstanceStateFault(ref cause) => cause,
+CreateDBSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+CreateDBSnapshotError::Validation(ref cause) => cause,
+CreateDBSnapshotError::Credentials(ref err) => err.description(),
+CreateDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDBSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15023,16 +15176,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDBSubnetGroupError {
                     
+///<p> <i>DBSubnetGroupName</i> is already used by an existing DB subnet group. </p>
+DBSubnetGroupAlreadyExistsFault(String),
+///<p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
+DBSubnetGroupDoesNotCoverEnoughAZs(String),
 ///<p>Request would result in user exceeding the allowed number of DB subnet groups.</p>
 DBSubnetGroupQuotaExceededFault(String),
 ///<p>Request would result in user exceeding the allowed number of subnets in a DB subnet groups.</p>
 DBSubnetQuotaExceededFault(String),
-///<p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
-DBSubnetGroupDoesNotCoverEnoughAZs(String),
 ///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
-InvalidSubnet(String),
-///<p> <i>DBSubnetGroupName</i> is already used by an existing DB subnet group. </p>
-DBSubnetGroupAlreadyExistsFault(String),/// An error occurred dispatching the HTTP request
+InvalidSubnet(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15049,7 +15202,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBSubnetGroupAlreadyExistsFault" => CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(String::from(parsed_error.message)),"InvalidSubnet" => CreateDBSubnetGroupError::InvalidSubnet(String::from(parsed_error.message)),"DBSubnetGroupQuotaExceededFault" => CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBSubnetQuotaExceededFault" => CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(parsed_error.message)),_ => CreateDBSubnetGroupError::Unknown(String::from(body))
+                                    "DBSubnetGroupAlreadyExistsFault" => CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBSubnetGroupQuotaExceededFault" => CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(String::from(parsed_error.message)),"DBSubnetQuotaExceededFault" => CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(parsed_error.message)),"InvalidSubnet" => CreateDBSubnetGroupError::InvalidSubnet(String::from(parsed_error.message)),_ => CreateDBSubnetGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDBSubnetGroupError::Unknown(body.to_string())
@@ -15081,7 +15234,15 @@ Unknown(String)
                 impl Error for CreateDBSubnetGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(ref cause) => cause,CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => cause,CreateDBSubnetGroupError::InvalidSubnet(ref cause) => cause,CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(ref cause) => cause,CreateDBSubnetGroupError::Validation(ref cause) => cause,CreateDBSubnetGroupError::Credentials(ref err) => err.description(),CreateDBSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDBSubnetGroupError::Unknown(ref cause) => cause
+                            CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(ref cause) => cause,
+CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
+CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(ref cause) => cause,
+CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => cause,
+CreateDBSubnetGroupError::InvalidSubnet(ref cause) => cause,
+CreateDBSubnetGroupError::Validation(ref cause) => cause,
+CreateDBSubnetGroupError::Credentials(ref err) => err.description(),
+CreateDBSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDBSubnetGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15089,20 +15250,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateEventSubscriptionError {
                     
-///<p>SNS has responded that there is a problem with the SND topic specified.</p>
-SNSInvalidTopicFault(String),
-///<p>The supplied subscription name already exists.</p>
-SubscriptionAlreadyExistFault(String),
-///<p>The supplied category does not exist.</p>
-SubscriptionCategoryNotFoundFault(String),
-///<p>You do not have permission to publish to the SNS topic ARN.</p>
-SNSNoAuthorizationFault(String),
 ///<p>You have reached the maximum number of event subscriptions.</p>
 EventSubscriptionQuotaExceededFault(String),
+///<p>SNS has responded that there is a problem with the SND topic specified.</p>
+SNSInvalidTopicFault(String),
+///<p>You do not have permission to publish to the SNS topic ARN.</p>
+SNSNoAuthorizationFault(String),
 ///<p>The SNS topic ARN does not exist.</p>
 SNSTopicArnNotFoundFault(String),
 ///<p>The requested source could not be found.</p>
-SourceNotFoundFault(String),/// An error occurred dispatching the HTTP request
+SourceNotFoundFault(String),
+///<p>The supplied subscription name already exists.</p>
+SubscriptionAlreadyExistFault(String),
+///<p>The supplied category does not exist.</p>
+SubscriptionCategoryNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15119,7 +15280,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "SubscriptionAlreadyExistFault" => CreateEventSubscriptionError::SubscriptionAlreadyExistFault(String::from(parsed_error.message)),"SNSNoAuthorizationFault" => CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(parsed_error.message)),"SNSInvalidTopicFault" => CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(parsed_error.message)),"SNSTopicArnNotFoundFault" => CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(parsed_error.message)),"SubscriptionCategoryNotFoundFault" => CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(parsed_error.message)),"EventSubscriptionQuotaExceededFault" => CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(String::from(parsed_error.message)),"SourceNotFoundFault" => CreateEventSubscriptionError::SourceNotFoundFault(String::from(parsed_error.message)),_ => CreateEventSubscriptionError::Unknown(String::from(body))
+                                    "EventSubscriptionQuotaExceededFault" => CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(String::from(parsed_error.message)),"SNSInvalidTopicFault" => CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(parsed_error.message)),"SNSNoAuthorizationFault" => CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(parsed_error.message)),"SNSTopicArnNotFoundFault" => CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(parsed_error.message)),"SourceNotFoundFault" => CreateEventSubscriptionError::SourceNotFoundFault(String::from(parsed_error.message)),"SubscriptionAlreadyExistFault" => CreateEventSubscriptionError::SubscriptionAlreadyExistFault(String::from(parsed_error.message)),"SubscriptionCategoryNotFoundFault" => CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(parsed_error.message)),_ => CreateEventSubscriptionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateEventSubscriptionError::Unknown(body.to_string())
@@ -15151,7 +15312,17 @@ Unknown(String)
                 impl Error for CreateEventSubscriptionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => cause,CreateEventSubscriptionError::SubscriptionAlreadyExistFault(ref cause) => cause,CreateEventSubscriptionError::SourceNotFoundFault(ref cause) => cause,CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => cause,CreateEventSubscriptionError::SNSInvalidTopicFault(ref cause) => cause,CreateEventSubscriptionError::SNSTopicArnNotFoundFault(ref cause) => cause,CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(ref cause) => cause,CreateEventSubscriptionError::Validation(ref cause) => cause,CreateEventSubscriptionError::Credentials(ref err) => err.description(),CreateEventSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateEventSubscriptionError::Unknown(ref cause) => cause
+                            CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(ref cause) => cause,
+CreateEventSubscriptionError::SNSInvalidTopicFault(ref cause) => cause,
+CreateEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => cause,
+CreateEventSubscriptionError::SNSTopicArnNotFoundFault(ref cause) => cause,
+CreateEventSubscriptionError::SourceNotFoundFault(ref cause) => cause,
+CreateEventSubscriptionError::SubscriptionAlreadyExistFault(ref cause) => cause,
+CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => cause,
+CreateEventSubscriptionError::Validation(ref cause) => cause,
+CreateEventSubscriptionError::Credentials(ref err) => err.description(),
+CreateEventSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateEventSubscriptionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15179,7 +15350,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "OptionGroupQuotaExceededFault" => CreateOptionGroupError::OptionGroupQuotaExceededFault(String::from(parsed_error.message)),"OptionGroupAlreadyExistsFault" => CreateOptionGroupError::OptionGroupAlreadyExistsFault(String::from(parsed_error.message)),_ => CreateOptionGroupError::Unknown(String::from(body))
+                                    "OptionGroupAlreadyExistsFault" => CreateOptionGroupError::OptionGroupAlreadyExistsFault(String::from(parsed_error.message)),"OptionGroupQuotaExceededFault" => CreateOptionGroupError::OptionGroupQuotaExceededFault(String::from(parsed_error.message)),_ => CreateOptionGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateOptionGroupError::Unknown(body.to_string())
@@ -15211,7 +15382,12 @@ Unknown(String)
                 impl Error for CreateOptionGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateOptionGroupError::OptionGroupAlreadyExistsFault(ref cause) => cause,CreateOptionGroupError::OptionGroupQuotaExceededFault(ref cause) => cause,CreateOptionGroupError::Validation(ref cause) => cause,CreateOptionGroupError::Credentials(ref err) => err.description(),CreateOptionGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateOptionGroupError::Unknown(ref cause) => cause
+                            CreateOptionGroupError::OptionGroupAlreadyExistsFault(ref cause) => cause,
+CreateOptionGroupError::OptionGroupQuotaExceededFault(ref cause) => cause,
+CreateOptionGroupError::Validation(ref cause) => cause,
+CreateOptionGroupError::Credentials(ref err) => err.description(),
+CreateOptionGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateOptionGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15219,16 +15395,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDBClusterError {
                     
+///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+DBClusterNotFoundFault(String),
+///<p>User already has a DB cluster snapshot with the given identifier.</p>
+DBClusterSnapshotAlreadyExistsFault(String),
 ///<p>The supplied value is not a valid DB cluster snapshot state.</p>
 InvalidDBClusterSnapshotStateFault(String),
 ///<p>The DB cluster is not in a valid state.</p>
 InvalidDBClusterStateFault(String),
-///<p>User already has a DB cluster snapshot with the given identifier.</p>
-DBClusterSnapshotAlreadyExistsFault(String),
 ///<p>Request would result in user exceeding the allowed number of DB snapshots.</p>
-SnapshotQuotaExceededFault(String),
-///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
-DBClusterNotFoundFault(String),/// An error occurred dispatching the HTTP request
+SnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15245,7 +15421,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBClusterSnapshotStateFault" => DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => DeleteDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"DBClusterSnapshotAlreadyExistsFault" => DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => DeleteDBClusterError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => DeleteDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),_ => DeleteDBClusterError::Unknown(String::from(body))
+                                    "DBClusterNotFoundFault" => DeleteDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterSnapshotAlreadyExistsFault" => DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => DeleteDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => DeleteDBClusterError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => DeleteDBClusterError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteDBClusterError::Unknown(body.to_string())
@@ -15277,7 +15453,15 @@ Unknown(String)
                 impl Error for DeleteDBClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDBClusterError::DBClusterNotFoundFault(ref cause) => cause,DeleteDBClusterError::SnapshotQuotaExceededFault(ref cause) => cause,DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,DeleteDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,DeleteDBClusterError::Validation(ref cause) => cause,DeleteDBClusterError::Credentials(ref err) => err.description(),DeleteDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDBClusterError::Unknown(ref cause) => cause
+                            DeleteDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
+DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(ref cause) => cause,
+DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
+DeleteDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
+DeleteDBClusterError::SnapshotQuotaExceededFault(ref cause) => cause,
+DeleteDBClusterError::Validation(ref cause) => cause,
+DeleteDBClusterError::Credentials(ref err) => err.description(),
+DeleteDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDBClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15305,7 +15489,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBParameterGroupStateFault" => DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),_ => DeleteDBClusterParameterGroupError::Unknown(String::from(body))
+                                    "DBParameterGroupNotFoundFault" => DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBParameterGroupStateFault" => DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),_ => DeleteDBClusterParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteDBClusterParameterGroupError::Unknown(body.to_string())
@@ -15337,7 +15521,12 @@ Unknown(String)
                 impl Error for DeleteDBClusterParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,DeleteDBClusterParameterGroupError::Validation(ref cause) => cause,DeleteDBClusterParameterGroupError::Credentials(ref err) => err.description(),DeleteDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDBClusterParameterGroupError::Unknown(ref cause) => cause
+                            DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,
+DeleteDBClusterParameterGroupError::Validation(ref cause) => cause,
+DeleteDBClusterParameterGroupError::Credentials(ref err) => err.description(),
+DeleteDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDBClusterParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15345,10 +15534,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDBClusterSnapshotError {
                     
-///<p>The supplied value is not a valid DB cluster snapshot state.</p>
-InvalidDBClusterSnapshotStateFault(String),
 ///<p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
-DBClusterSnapshotNotFoundFault(String),/// An error occurred dispatching the HTTP request
+DBClusterSnapshotNotFoundFault(String),
+///<p>The supplied value is not a valid DB cluster snapshot state.</p>
+InvalidDBClusterSnapshotStateFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15365,7 +15554,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBClusterSnapshotStateFault" => DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"DBClusterSnapshotNotFoundFault" => DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),_ => DeleteDBClusterSnapshotError::Unknown(String::from(body))
+                                    "DBClusterSnapshotNotFoundFault" => DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),_ => DeleteDBClusterSnapshotError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteDBClusterSnapshotError::Unknown(body.to_string())
@@ -15397,7 +15586,12 @@ Unknown(String)
                 impl Error for DeleteDBClusterSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,DeleteDBClusterSnapshotError::Validation(ref cause) => cause,DeleteDBClusterSnapshotError::Credentials(ref err) => err.description(),DeleteDBClusterSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDBClusterSnapshotError::Unknown(ref cause) => cause
+                            DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
+DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
+DeleteDBClusterSnapshotError::Validation(ref cause) => cause,
+DeleteDBClusterSnapshotError::Credentials(ref err) => err.description(),
+DeleteDBClusterSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDBClusterSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15405,16 +15599,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDBInstanceError {
                     
-///<p>Request would result in user exceeding the allowed number of DB snapshots.</p>
-SnapshotQuotaExceededFault(String),
-///<p> The specified DB instance is not in the <i>available</i> state. </p>
-InvalidDBInstanceStateFault(String),
 ///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
 DBInstanceNotFoundFault(String),
 ///<p> <i>DBSnapshotIdentifier</i> is already used by an existing snapshot. </p>
 DBSnapshotAlreadyExistsFault(String),
 ///<p>The DB cluster is not in a valid state.</p>
-InvalidDBClusterStateFault(String),/// An error occurred dispatching the HTTP request
+InvalidDBClusterStateFault(String),
+///<p> The specified DB instance is not in the <i>available</i> state. </p>
+InvalidDBInstanceStateFault(String),
+///<p>Request would result in user exceeding the allowed number of DB snapshots.</p>
+SnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15431,7 +15625,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBSnapshotAlreadyExistsFault" => DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => DeleteDBInstanceError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => DeleteDBInstanceError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => DeleteDBInstanceError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => DeleteDBInstanceError::DBInstanceNotFoundFault(String::from(parsed_error.message)),_ => DeleteDBInstanceError::Unknown(String::from(body))
+                                    "DBInstanceNotFoundFault" => DeleteDBInstanceError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBSnapshotAlreadyExistsFault" => DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => DeleteDBInstanceError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => DeleteDBInstanceError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => DeleteDBInstanceError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => DeleteDBInstanceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteDBInstanceError::Unknown(body.to_string())
@@ -15463,7 +15657,15 @@ Unknown(String)
                 impl Error for DeleteDBInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDBInstanceError::SnapshotQuotaExceededFault(ref cause) => cause,DeleteDBInstanceError::InvalidDBClusterStateFault(ref cause) => cause,DeleteDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,DeleteDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(ref cause) => cause,DeleteDBInstanceError::Validation(ref cause) => cause,DeleteDBInstanceError::Credentials(ref err) => err.description(),DeleteDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDBInstanceError::Unknown(ref cause) => cause
+                            DeleteDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,
+DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(ref cause) => cause,
+DeleteDBInstanceError::InvalidDBClusterStateFault(ref cause) => cause,
+DeleteDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
+DeleteDBInstanceError::SnapshotQuotaExceededFault(ref cause) => cause,
+DeleteDBInstanceError::Validation(ref cause) => cause,
+DeleteDBInstanceError::Credentials(ref err) => err.description(),
+DeleteDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDBInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15491,7 +15693,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBParameterGroupStateFault" => DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),_ => DeleteDBParameterGroupError::Unknown(String::from(body))
+                                    "DBParameterGroupNotFoundFault" => DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBParameterGroupStateFault" => DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),_ => DeleteDBParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteDBParameterGroupError::Unknown(body.to_string())
@@ -15523,7 +15725,12 @@ Unknown(String)
                 impl Error for DeleteDBParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,DeleteDBParameterGroupError::Validation(ref cause) => cause,DeleteDBParameterGroupError::Credentials(ref err) => err.description(),DeleteDBParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDBParameterGroupError::Unknown(ref cause) => cause
+                            DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,
+DeleteDBParameterGroupError::Validation(ref cause) => cause,
+DeleteDBParameterGroupError::Credentials(ref err) => err.description(),
+DeleteDBParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDBParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15531,10 +15738,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDBSecurityGroupError {
                     
-///<p>The state of the DB security group does not allow deletion.</p>
-InvalidDBSecurityGroupStateFault(String),
 ///<p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
-DBSecurityGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
+DBSecurityGroupNotFoundFault(String),
+///<p>The state of the DB security group does not allow deletion.</p>
+InvalidDBSecurityGroupStateFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15583,7 +15790,12 @@ Unknown(String)
                 impl Error for DeleteDBSecurityGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDBSecurityGroupError::InvalidDBSecurityGroupStateFault(ref cause) => cause,DeleteDBSecurityGroupError::DBSecurityGroupNotFoundFault(ref cause) => cause,DeleteDBSecurityGroupError::Validation(ref cause) => cause,DeleteDBSecurityGroupError::Credentials(ref err) => err.description(),DeleteDBSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDBSecurityGroupError::Unknown(ref cause) => cause
+                            DeleteDBSecurityGroupError::DBSecurityGroupNotFoundFault(ref cause) => cause,
+DeleteDBSecurityGroupError::InvalidDBSecurityGroupStateFault(ref cause) => cause,
+DeleteDBSecurityGroupError::Validation(ref cause) => cause,
+DeleteDBSecurityGroupError::Credentials(ref err) => err.description(),
+DeleteDBSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDBSecurityGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15591,10 +15803,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDBSnapshotError {
                     
-///<p>The state of the DB snapshot does not allow deletion.</p>
-InvalidDBSnapshotStateFault(String),
 ///<p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
-DBSnapshotNotFoundFault(String),/// An error occurred dispatching the HTTP request
+DBSnapshotNotFoundFault(String),
+///<p>The state of the DB snapshot does not allow deletion.</p>
+InvalidDBSnapshotStateFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15611,7 +15823,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBSnapshotStateFault" => DeleteDBSnapshotError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => DeleteDBSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),_ => DeleteDBSnapshotError::Unknown(String::from(body))
+                                    "DBSnapshotNotFoundFault" => DeleteDBSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidDBSnapshotStateFault" => DeleteDBSnapshotError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),_ => DeleteDBSnapshotError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteDBSnapshotError::Unknown(body.to_string())
@@ -15643,7 +15855,12 @@ Unknown(String)
                 impl Error for DeleteDBSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDBSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,DeleteDBSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,DeleteDBSnapshotError::Validation(ref cause) => cause,DeleteDBSnapshotError::Credentials(ref err) => err.description(),DeleteDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDBSnapshotError::Unknown(ref cause) => cause
+                            DeleteDBSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,
+DeleteDBSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,
+DeleteDBSnapshotError::Validation(ref cause) => cause,
+DeleteDBSnapshotError::Credentials(ref err) => err.description(),
+DeleteDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDBSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15651,12 +15868,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDBSubnetGroupError {
                     
-///<p> The DB subnet is not in the <i>available</i> state. </p>
-InvalidDBSubnetStateFault(String),
+///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+DBSubnetGroupNotFoundFault(String),
 ///<p>The DB subnet group cannot be deleted because it is in use.</p>
 InvalidDBSubnetGroupStateFault(String),
-///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
-DBSubnetGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
+///<p> The DB subnet is not in the <i>available</i> state. </p>
+InvalidDBSubnetStateFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15673,7 +15890,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBSubnetGroupNotFoundFault" => DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBSubnetStateFault" => DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(String::from(parsed_error.message)),"InvalidDBSubnetGroupStateFault" => DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(String::from(parsed_error.message)),_ => DeleteDBSubnetGroupError::Unknown(String::from(body))
+                                    "DBSubnetGroupNotFoundFault" => DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBSubnetGroupStateFault" => DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(String::from(parsed_error.message)),"InvalidDBSubnetStateFault" => DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(String::from(parsed_error.message)),_ => DeleteDBSubnetGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteDBSubnetGroupError::Unknown(body.to_string())
@@ -15705,7 +15922,13 @@ Unknown(String)
                 impl Error for DeleteDBSubnetGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(ref cause) => cause,DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => cause,DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(ref cause) => cause,DeleteDBSubnetGroupError::Validation(ref cause) => cause,DeleteDBSubnetGroupError::Credentials(ref err) => err.description(),DeleteDBSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDBSubnetGroupError::Unknown(ref cause) => cause
+                            DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(ref cause) => cause,
+DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(ref cause) => cause,
+DeleteDBSubnetGroupError::Validation(ref cause) => cause,
+DeleteDBSubnetGroupError::Credentials(ref err) => err.description(),
+DeleteDBSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDBSubnetGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15713,10 +15936,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteEventSubscriptionError {
                     
-///<p>The subscription name does not exist.</p>
-SubscriptionNotFoundFault(String),
 ///<p>This error can occur if someone else is modifying a subscription. You should retry the action.</p>
-InvalidEventSubscriptionStateFault(String),/// An error occurred dispatching the HTTP request
+InvalidEventSubscriptionStateFault(String),
+///<p>The subscription name does not exist.</p>
+SubscriptionNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15733,7 +15956,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "SubscriptionNotFoundFault" => DeleteEventSubscriptionError::SubscriptionNotFoundFault(String::from(parsed_error.message)),"InvalidEventSubscriptionStateFault" => DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(String::from(parsed_error.message)),_ => DeleteEventSubscriptionError::Unknown(String::from(body))
+                                    "InvalidEventSubscriptionStateFault" => DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(String::from(parsed_error.message)),"SubscriptionNotFoundFault" => DeleteEventSubscriptionError::SubscriptionNotFoundFault(String::from(parsed_error.message)),_ => DeleteEventSubscriptionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteEventSubscriptionError::Unknown(body.to_string())
@@ -15765,7 +15988,12 @@ Unknown(String)
                 impl Error for DeleteEventSubscriptionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(ref cause) => cause,DeleteEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,DeleteEventSubscriptionError::Validation(ref cause) => cause,DeleteEventSubscriptionError::Credentials(ref err) => err.description(),DeleteEventSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteEventSubscriptionError::Unknown(ref cause) => cause
+                            DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(ref cause) => cause,
+DeleteEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,
+DeleteEventSubscriptionError::Validation(ref cause) => cause,
+DeleteEventSubscriptionError::Credentials(ref err) => err.description(),
+DeleteEventSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteEventSubscriptionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15793,7 +16021,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "OptionGroupNotFoundFault" => DeleteOptionGroupError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"InvalidOptionGroupStateFault" => DeleteOptionGroupError::InvalidOptionGroupStateFault(String::from(parsed_error.message)),_ => DeleteOptionGroupError::Unknown(String::from(body))
+                                    "InvalidOptionGroupStateFault" => DeleteOptionGroupError::InvalidOptionGroupStateFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => DeleteOptionGroupError::OptionGroupNotFoundFault(String::from(parsed_error.message)),_ => DeleteOptionGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteOptionGroupError::Unknown(body.to_string())
@@ -15825,7 +16053,12 @@ Unknown(String)
                 impl Error for DeleteOptionGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteOptionGroupError::OptionGroupNotFoundFault(ref cause) => cause,DeleteOptionGroupError::InvalidOptionGroupStateFault(ref cause) => cause,DeleteOptionGroupError::Validation(ref cause) => cause,DeleteOptionGroupError::Credentials(ref err) => err.description(),DeleteOptionGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteOptionGroupError::Unknown(ref cause) => cause
+                            DeleteOptionGroupError::InvalidOptionGroupStateFault(ref cause) => cause,
+DeleteOptionGroupError::OptionGroupNotFoundFault(ref cause) => cause,
+DeleteOptionGroupError::Validation(ref cause) => cause,
+DeleteOptionGroupError::Credentials(ref err) => err.description(),
+DeleteOptionGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteOptionGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15881,7 +16114,10 @@ Unknown(String)
                 impl Error for DescribeAccountAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAccountAttributesError::Validation(ref cause) => cause,DescribeAccountAttributesError::Credentials(ref err) => err.description(),DescribeAccountAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAccountAttributesError::Unknown(ref cause) => cause
+                            DescribeAccountAttributesError::Validation(ref cause) => cause,
+DescribeAccountAttributesError::Credentials(ref err) => err.description(),
+DescribeAccountAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAccountAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15939,7 +16175,11 @@ Unknown(String)
                 impl Error for DescribeCertificatesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeCertificatesError::CertificateNotFoundFault(ref cause) => cause,DescribeCertificatesError::Validation(ref cause) => cause,DescribeCertificatesError::Credentials(ref err) => err.description(),DescribeCertificatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeCertificatesError::Unknown(ref cause) => cause
+                            DescribeCertificatesError::CertificateNotFoundFault(ref cause) => cause,
+DescribeCertificatesError::Validation(ref cause) => cause,
+DescribeCertificatesError::Credentials(ref err) => err.description(),
+DescribeCertificatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeCertificatesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15997,7 +16237,11 @@ Unknown(String)
                 impl Error for DescribeDBClusterParameterGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(ref cause) => cause,DescribeDBClusterParameterGroupsError::Validation(ref cause) => cause,DescribeDBClusterParameterGroupsError::Credentials(ref err) => err.description(),DescribeDBClusterParameterGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBClusterParameterGroupsError::Unknown(ref cause) => cause
+                            DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(ref cause) => cause,
+DescribeDBClusterParameterGroupsError::Validation(ref cause) => cause,
+DescribeDBClusterParameterGroupsError::Credentials(ref err) => err.description(),
+DescribeDBClusterParameterGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBClusterParameterGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16055,7 +16299,11 @@ Unknown(String)
                 impl Error for DescribeDBClusterParametersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(ref cause) => cause,DescribeDBClusterParametersError::Validation(ref cause) => cause,DescribeDBClusterParametersError::Credentials(ref err) => err.description(),DescribeDBClusterParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBClusterParametersError::Unknown(ref cause) => cause
+                            DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(ref cause) => cause,
+DescribeDBClusterParametersError::Validation(ref cause) => cause,
+DescribeDBClusterParametersError::Credentials(ref err) => err.description(),
+DescribeDBClusterParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBClusterParametersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16113,7 +16361,11 @@ Unknown(String)
                 impl Error for DescribeDBClusterSnapshotAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBClusterSnapshotAttributesError::DBClusterSnapshotNotFoundFault(ref cause) => cause,DescribeDBClusterSnapshotAttributesError::Validation(ref cause) => cause,DescribeDBClusterSnapshotAttributesError::Credentials(ref err) => err.description(),DescribeDBClusterSnapshotAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBClusterSnapshotAttributesError::Unknown(ref cause) => cause
+                            DescribeDBClusterSnapshotAttributesError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
+DescribeDBClusterSnapshotAttributesError::Validation(ref cause) => cause,
+DescribeDBClusterSnapshotAttributesError::Credentials(ref err) => err.description(),
+DescribeDBClusterSnapshotAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBClusterSnapshotAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16171,7 +16423,11 @@ Unknown(String)
                 impl Error for DescribeDBClusterSnapshotsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(ref cause) => cause,DescribeDBClusterSnapshotsError::Validation(ref cause) => cause,DescribeDBClusterSnapshotsError::Credentials(ref err) => err.description(),DescribeDBClusterSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBClusterSnapshotsError::Unknown(ref cause) => cause
+                            DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
+DescribeDBClusterSnapshotsError::Validation(ref cause) => cause,
+DescribeDBClusterSnapshotsError::Credentials(ref err) => err.description(),
+DescribeDBClusterSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBClusterSnapshotsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16229,7 +16485,11 @@ Unknown(String)
                 impl Error for DescribeDBClustersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBClustersError::DBClusterNotFoundFault(ref cause) => cause,DescribeDBClustersError::Validation(ref cause) => cause,DescribeDBClustersError::Credentials(ref err) => err.description(),DescribeDBClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBClustersError::Unknown(ref cause) => cause
+                            DescribeDBClustersError::DBClusterNotFoundFault(ref cause) => cause,
+DescribeDBClustersError::Validation(ref cause) => cause,
+DescribeDBClustersError::Credentials(ref err) => err.description(),
+DescribeDBClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBClustersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16285,7 +16545,10 @@ Unknown(String)
                 impl Error for DescribeDBEngineVersionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBEngineVersionsError::Validation(ref cause) => cause,DescribeDBEngineVersionsError::Credentials(ref err) => err.description(),DescribeDBEngineVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBEngineVersionsError::Unknown(ref cause) => cause
+                            DescribeDBEngineVersionsError::Validation(ref cause) => cause,
+DescribeDBEngineVersionsError::Credentials(ref err) => err.description(),
+DescribeDBEngineVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBEngineVersionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16343,7 +16606,11 @@ Unknown(String)
                 impl Error for DescribeDBInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBInstancesError::DBInstanceNotFoundFault(ref cause) => cause,DescribeDBInstancesError::Validation(ref cause) => cause,DescribeDBInstancesError::Credentials(ref err) => err.description(),DescribeDBInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBInstancesError::Unknown(ref cause) => cause
+                            DescribeDBInstancesError::DBInstanceNotFoundFault(ref cause) => cause,
+DescribeDBInstancesError::Validation(ref cause) => cause,
+DescribeDBInstancesError::Credentials(ref err) => err.description(),
+DescribeDBInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16401,7 +16668,11 @@ Unknown(String)
                 impl Error for DescribeDBLogFilesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBLogFilesError::DBInstanceNotFoundFault(ref cause) => cause,DescribeDBLogFilesError::Validation(ref cause) => cause,DescribeDBLogFilesError::Credentials(ref err) => err.description(),DescribeDBLogFilesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBLogFilesError::Unknown(ref cause) => cause
+                            DescribeDBLogFilesError::DBInstanceNotFoundFault(ref cause) => cause,
+DescribeDBLogFilesError::Validation(ref cause) => cause,
+DescribeDBLogFilesError::Credentials(ref err) => err.description(),
+DescribeDBLogFilesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBLogFilesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16459,7 +16730,11 @@ Unknown(String)
                 impl Error for DescribeDBParameterGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(ref cause) => cause,DescribeDBParameterGroupsError::Validation(ref cause) => cause,DescribeDBParameterGroupsError::Credentials(ref err) => err.description(),DescribeDBParameterGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBParameterGroupsError::Unknown(ref cause) => cause
+                            DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(ref cause) => cause,
+DescribeDBParameterGroupsError::Validation(ref cause) => cause,
+DescribeDBParameterGroupsError::Credentials(ref err) => err.description(),
+DescribeDBParameterGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBParameterGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16517,7 +16792,11 @@ Unknown(String)
                 impl Error for DescribeDBParametersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBParametersError::DBParameterGroupNotFoundFault(ref cause) => cause,DescribeDBParametersError::Validation(ref cause) => cause,DescribeDBParametersError::Credentials(ref err) => err.description(),DescribeDBParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBParametersError::Unknown(ref cause) => cause
+                            DescribeDBParametersError::DBParameterGroupNotFoundFault(ref cause) => cause,
+DescribeDBParametersError::Validation(ref cause) => cause,
+DescribeDBParametersError::Credentials(ref err) => err.description(),
+DescribeDBParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBParametersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16575,7 +16854,11 @@ Unknown(String)
                 impl Error for DescribeDBSecurityGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBSecurityGroupsError::DBSecurityGroupNotFoundFault(ref cause) => cause,DescribeDBSecurityGroupsError::Validation(ref cause) => cause,DescribeDBSecurityGroupsError::Credentials(ref err) => err.description(),DescribeDBSecurityGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBSecurityGroupsError::Unknown(ref cause) => cause
+                            DescribeDBSecurityGroupsError::DBSecurityGroupNotFoundFault(ref cause) => cause,
+DescribeDBSecurityGroupsError::Validation(ref cause) => cause,
+DescribeDBSecurityGroupsError::Credentials(ref err) => err.description(),
+DescribeDBSecurityGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBSecurityGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16633,7 +16916,11 @@ Unknown(String)
                 impl Error for DescribeDBSnapshotAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(ref cause) => cause,DescribeDBSnapshotAttributesError::Validation(ref cause) => cause,DescribeDBSnapshotAttributesError::Credentials(ref err) => err.description(),DescribeDBSnapshotAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBSnapshotAttributesError::Unknown(ref cause) => cause
+                            DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(ref cause) => cause,
+DescribeDBSnapshotAttributesError::Validation(ref cause) => cause,
+DescribeDBSnapshotAttributesError::Credentials(ref err) => err.description(),
+DescribeDBSnapshotAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBSnapshotAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16691,7 +16978,11 @@ Unknown(String)
                 impl Error for DescribeDBSnapshotsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBSnapshotsError::DBSnapshotNotFoundFault(ref cause) => cause,DescribeDBSnapshotsError::Validation(ref cause) => cause,DescribeDBSnapshotsError::Credentials(ref err) => err.description(),DescribeDBSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBSnapshotsError::Unknown(ref cause) => cause
+                            DescribeDBSnapshotsError::DBSnapshotNotFoundFault(ref cause) => cause,
+DescribeDBSnapshotsError::Validation(ref cause) => cause,
+DescribeDBSnapshotsError::Credentials(ref err) => err.description(),
+DescribeDBSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBSnapshotsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16749,7 +17040,11 @@ Unknown(String)
                 impl Error for DescribeDBSubnetGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(ref cause) => cause,DescribeDBSubnetGroupsError::Validation(ref cause) => cause,DescribeDBSubnetGroupsError::Credentials(ref err) => err.description(),DescribeDBSubnetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDBSubnetGroupsError::Unknown(ref cause) => cause
+                            DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+DescribeDBSubnetGroupsError::Validation(ref cause) => cause,
+DescribeDBSubnetGroupsError::Credentials(ref err) => err.description(),
+DescribeDBSubnetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDBSubnetGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16805,7 +17100,10 @@ Unknown(String)
                 impl Error for DescribeEngineDefaultClusterParametersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEngineDefaultClusterParametersError::Validation(ref cause) => cause,DescribeEngineDefaultClusterParametersError::Credentials(ref err) => err.description(),DescribeEngineDefaultClusterParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEngineDefaultClusterParametersError::Unknown(ref cause) => cause
+                            DescribeEngineDefaultClusterParametersError::Validation(ref cause) => cause,
+DescribeEngineDefaultClusterParametersError::Credentials(ref err) => err.description(),
+DescribeEngineDefaultClusterParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEngineDefaultClusterParametersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16861,7 +17159,10 @@ Unknown(String)
                 impl Error for DescribeEngineDefaultParametersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEngineDefaultParametersError::Validation(ref cause) => cause,DescribeEngineDefaultParametersError::Credentials(ref err) => err.description(),DescribeEngineDefaultParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEngineDefaultParametersError::Unknown(ref cause) => cause
+                            DescribeEngineDefaultParametersError::Validation(ref cause) => cause,
+DescribeEngineDefaultParametersError::Credentials(ref err) => err.description(),
+DescribeEngineDefaultParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEngineDefaultParametersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16917,7 +17218,10 @@ Unknown(String)
                 impl Error for DescribeEventCategoriesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEventCategoriesError::Validation(ref cause) => cause,DescribeEventCategoriesError::Credentials(ref err) => err.description(),DescribeEventCategoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEventCategoriesError::Unknown(ref cause) => cause
+                            DescribeEventCategoriesError::Validation(ref cause) => cause,
+DescribeEventCategoriesError::Credentials(ref err) => err.description(),
+DescribeEventCategoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEventCategoriesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16975,7 +17279,11 @@ Unknown(String)
                 impl Error for DescribeEventSubscriptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEventSubscriptionsError::SubscriptionNotFoundFault(ref cause) => cause,DescribeEventSubscriptionsError::Validation(ref cause) => cause,DescribeEventSubscriptionsError::Credentials(ref err) => err.description(),DescribeEventSubscriptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEventSubscriptionsError::Unknown(ref cause) => cause
+                            DescribeEventSubscriptionsError::SubscriptionNotFoundFault(ref cause) => cause,
+DescribeEventSubscriptionsError::Validation(ref cause) => cause,
+DescribeEventSubscriptionsError::Credentials(ref err) => err.description(),
+DescribeEventSubscriptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEventSubscriptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17031,7 +17339,10 @@ Unknown(String)
                 impl Error for DescribeEventsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEventsError::Validation(ref cause) => cause,DescribeEventsError::Credentials(ref err) => err.description(),DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEventsError::Unknown(ref cause) => cause
+                            DescribeEventsError::Validation(ref cause) => cause,
+DescribeEventsError::Credentials(ref err) => err.description(),
+DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEventsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17087,7 +17398,10 @@ Unknown(String)
                 impl Error for DescribeOptionGroupOptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeOptionGroupOptionsError::Validation(ref cause) => cause,DescribeOptionGroupOptionsError::Credentials(ref err) => err.description(),DescribeOptionGroupOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeOptionGroupOptionsError::Unknown(ref cause) => cause
+                            DescribeOptionGroupOptionsError::Validation(ref cause) => cause,
+DescribeOptionGroupOptionsError::Credentials(ref err) => err.description(),
+DescribeOptionGroupOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeOptionGroupOptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17145,7 +17459,11 @@ Unknown(String)
                 impl Error for DescribeOptionGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeOptionGroupsError::OptionGroupNotFoundFault(ref cause) => cause,DescribeOptionGroupsError::Validation(ref cause) => cause,DescribeOptionGroupsError::Credentials(ref err) => err.description(),DescribeOptionGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeOptionGroupsError::Unknown(ref cause) => cause
+                            DescribeOptionGroupsError::OptionGroupNotFoundFault(ref cause) => cause,
+DescribeOptionGroupsError::Validation(ref cause) => cause,
+DescribeOptionGroupsError::Credentials(ref err) => err.description(),
+DescribeOptionGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeOptionGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17201,7 +17519,10 @@ Unknown(String)
                 impl Error for DescribeOrderableDBInstanceOptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeOrderableDBInstanceOptionsError::Validation(ref cause) => cause,DescribeOrderableDBInstanceOptionsError::Credentials(ref err) => err.description(),DescribeOrderableDBInstanceOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeOrderableDBInstanceOptionsError::Unknown(ref cause) => cause
+                            DescribeOrderableDBInstanceOptionsError::Validation(ref cause) => cause,
+DescribeOrderableDBInstanceOptionsError::Credentials(ref err) => err.description(),
+DescribeOrderableDBInstanceOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeOrderableDBInstanceOptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17259,7 +17580,11 @@ Unknown(String)
                 impl Error for DescribePendingMaintenanceActionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => cause,DescribePendingMaintenanceActionsError::Validation(ref cause) => cause,DescribePendingMaintenanceActionsError::Credentials(ref err) => err.description(),DescribePendingMaintenanceActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribePendingMaintenanceActionsError::Unknown(ref cause) => cause
+                            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => cause,
+DescribePendingMaintenanceActionsError::Validation(ref cause) => cause,
+DescribePendingMaintenanceActionsError::Credentials(ref err) => err.description(),
+DescribePendingMaintenanceActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribePendingMaintenanceActionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17317,7 +17642,11 @@ Unknown(String)
                 impl Error for DescribeReservedDBInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(ref cause) => cause,DescribeReservedDBInstancesError::Validation(ref cause) => cause,DescribeReservedDBInstancesError::Credentials(ref err) => err.description(),DescribeReservedDBInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeReservedDBInstancesError::Unknown(ref cause) => cause
+                            DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(ref cause) => cause,
+DescribeReservedDBInstancesError::Validation(ref cause) => cause,
+DescribeReservedDBInstancesError::Credentials(ref err) => err.description(),
+DescribeReservedDBInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeReservedDBInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17375,7 +17704,11 @@ Unknown(String)
                 impl Error for DescribeReservedDBInstancesOfferingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(ref cause) => cause,DescribeReservedDBInstancesOfferingsError::Validation(ref cause) => cause,DescribeReservedDBInstancesOfferingsError::Credentials(ref err) => err.description(),DescribeReservedDBInstancesOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeReservedDBInstancesOfferingsError::Unknown(ref cause) => cause
+                            DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(ref cause) => cause,
+DescribeReservedDBInstancesOfferingsError::Validation(ref cause) => cause,
+DescribeReservedDBInstancesOfferingsError::Credentials(ref err) => err.description(),
+DescribeReservedDBInstancesOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeReservedDBInstancesOfferingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17431,7 +17764,10 @@ Unknown(String)
                 impl Error for DescribeSourceRegionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSourceRegionsError::Validation(ref cause) => cause,DescribeSourceRegionsError::Credentials(ref err) => err.description(),DescribeSourceRegionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSourceRegionsError::Unknown(ref cause) => cause
+                            DescribeSourceRegionsError::Validation(ref cause) => cause,
+DescribeSourceRegionsError::Credentials(ref err) => err.description(),
+DescribeSourceRegionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSourceRegionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17459,7 +17795,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBLogFileNotFoundFault" => DownloadDBLogFilePortionError::DBLogFileNotFoundFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => DownloadDBLogFilePortionError::DBInstanceNotFoundFault(String::from(parsed_error.message)),_ => DownloadDBLogFilePortionError::Unknown(String::from(body))
+                                    "DBInstanceNotFoundFault" => DownloadDBLogFilePortionError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBLogFileNotFoundFault" => DownloadDBLogFilePortionError::DBLogFileNotFoundFault(String::from(parsed_error.message)),_ => DownloadDBLogFilePortionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DownloadDBLogFilePortionError::Unknown(body.to_string())
@@ -17491,7 +17827,12 @@ Unknown(String)
                 impl Error for DownloadDBLogFilePortionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DownloadDBLogFilePortionError::DBLogFileNotFoundFault(ref cause) => cause,DownloadDBLogFilePortionError::DBInstanceNotFoundFault(ref cause) => cause,DownloadDBLogFilePortionError::Validation(ref cause) => cause,DownloadDBLogFilePortionError::Credentials(ref err) => err.description(),DownloadDBLogFilePortionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DownloadDBLogFilePortionError::Unknown(ref cause) => cause
+                            DownloadDBLogFilePortionError::DBInstanceNotFoundFault(ref cause) => cause,
+DownloadDBLogFilePortionError::DBLogFileNotFoundFault(ref cause) => cause,
+DownloadDBLogFilePortionError::Validation(ref cause) => cause,
+DownloadDBLogFilePortionError::Credentials(ref err) => err.description(),
+DownloadDBLogFilePortionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DownloadDBLogFilePortionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17521,7 +17862,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBClusterStateFault" => FailoverDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => FailoverDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => FailoverDBClusterError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),_ => FailoverDBClusterError::Unknown(String::from(body))
+                                    "DBClusterNotFoundFault" => FailoverDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => FailoverDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => FailoverDBClusterError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),_ => FailoverDBClusterError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => FailoverDBClusterError::Unknown(body.to_string())
@@ -17553,7 +17894,13 @@ Unknown(String)
                 impl Error for FailoverDBClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            FailoverDBClusterError::DBClusterNotFoundFault(ref cause) => cause,FailoverDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,FailoverDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,FailoverDBClusterError::Validation(ref cause) => cause,FailoverDBClusterError::Credentials(ref err) => err.description(),FailoverDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),FailoverDBClusterError::Unknown(ref cause) => cause
+                            FailoverDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
+FailoverDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
+FailoverDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
+FailoverDBClusterError::Validation(ref cause) => cause,
+FailoverDBClusterError::Credentials(ref err) => err.description(),
+FailoverDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+FailoverDBClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17561,12 +17908,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTagsForResourceError {
                     
-///<p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
-DBSnapshotNotFoundFault(String),
+///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+DBClusterNotFoundFault(String),
 ///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
 DBInstanceNotFoundFault(String),
-///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
-DBClusterNotFoundFault(String),/// An error occurred dispatching the HTTP request
+///<p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
+DBSnapshotNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17583,7 +17930,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBInstanceNotFoundFault" => ListTagsForResourceError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => ListTagsForResourceError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => ListTagsForResourceError::DBClusterNotFoundFault(String::from(parsed_error.message)),_ => ListTagsForResourceError::Unknown(String::from(body))
+                                    "DBClusterNotFoundFault" => ListTagsForResourceError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => ListTagsForResourceError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => ListTagsForResourceError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),_ => ListTagsForResourceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListTagsForResourceError::Unknown(body.to_string())
@@ -17615,7 +17962,13 @@ Unknown(String)
                 impl Error for ListTagsForResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTagsForResourceError::DBSnapshotNotFoundFault(ref cause) => cause,ListTagsForResourceError::DBClusterNotFoundFault(ref cause) => cause,ListTagsForResourceError::DBInstanceNotFoundFault(ref cause) => cause,ListTagsForResourceError::Validation(ref cause) => cause,ListTagsForResourceError::Credentials(ref err) => err.description(),ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTagsForResourceError::Unknown(ref cause) => cause
+                            ListTagsForResourceError::DBClusterNotFoundFault(ref cause) => cause,
+ListTagsForResourceError::DBInstanceNotFoundFault(ref cause) => cause,
+ListTagsForResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
+ListTagsForResourceError::Validation(ref cause) => cause,
+ListTagsForResourceError::Credentials(ref err) => err.description(),
+ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTagsForResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17623,28 +17976,28 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ModifyDBClusterError {
                     
-///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
-DBClusterNotFoundFault(String),
-///<p>The DB cluster is not in a valid state.</p>
-InvalidDBClusterStateFault(String),
-///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
-DBSubnetGroupNotFoundFault(String),
-///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
-InvalidSubnet(String),
-///<p> <i>DBClusterParameterGroupName</i> does not refer to an existing DB Cluster parameter group. </p>
-DBClusterParameterGroupNotFoundFault(String),
 ///<p>User already has a DB cluster with the given identifier.</p>
 DBClusterAlreadyExistsFault(String),
-///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
-StorageQuotaExceededFault(String),
-///<p>The DB subnet group cannot be deleted because it is in use.</p>
-InvalidDBSubnetGroupStateFault(String),
+///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+DBClusterNotFoundFault(String),
+///<p> <i>DBClusterParameterGroupName</i> does not refer to an existing DB Cluster parameter group. </p>
+DBClusterParameterGroupNotFoundFault(String),
+///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+DBSubnetGroupNotFoundFault(String),
+///<p>The DB cluster is not in a valid state.</p>
+InvalidDBClusterStateFault(String),
+///<p> The specified DB instance is not in the <i>available</i> state. </p>
+InvalidDBInstanceStateFault(String),
 ///<p>The state of the DB security group does not allow deletion.</p>
 InvalidDBSecurityGroupStateFault(String),
+///<p>The DB subnet group cannot be deleted because it is in use.</p>
+InvalidDBSubnetGroupStateFault(String),
+///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
+InvalidSubnet(String),
 ///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
 InvalidVPCNetworkStateFault(String),
-///<p> The specified DB instance is not in the <i>available</i> state. </p>
-InvalidDBInstanceStateFault(String),/// An error occurred dispatching the HTTP request
+///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
+StorageQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17661,7 +18014,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidSubnet" => ModifyDBClusterError::InvalidSubnet(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => ModifyDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => ModifyDBClusterError::StorageQuotaExceededFault(String::from(parsed_error.message)),"InvalidDBSubnetGroupStateFault" => ModifyDBClusterError::InvalidDBSubnetGroupStateFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => ModifyDBClusterError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyDBClusterError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"InvalidDBSecurityGroupStateFault" => ModifyDBClusterError::InvalidDBSecurityGroupStateFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => ModifyDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterAlreadyExistsFault" => ModifyDBClusterError::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterParameterGroupNotFoundFault" => ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => ModifyDBClusterError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),_ => ModifyDBClusterError::Unknown(String::from(body))
+                                    "DBClusterAlreadyExistsFault" => ModifyDBClusterError::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => ModifyDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterParameterGroupNotFoundFault" => ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => ModifyDBClusterError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => ModifyDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => ModifyDBClusterError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"InvalidDBSecurityGroupStateFault" => ModifyDBClusterError::InvalidDBSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidDBSubnetGroupStateFault" => ModifyDBClusterError::InvalidDBSubnetGroupStateFault(String::from(parsed_error.message)),"InvalidSubnet" => ModifyDBClusterError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyDBClusterError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => ModifyDBClusterError::StorageQuotaExceededFault(String::from(parsed_error.message)),_ => ModifyDBClusterError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyDBClusterError::Unknown(body.to_string())
@@ -17693,7 +18046,21 @@ Unknown(String)
                 impl Error for ModifyDBClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyDBClusterError::InvalidSubnet(ref cause) => cause,ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => cause,ModifyDBClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,ModifyDBClusterError::InvalidDBSecurityGroupStateFault(ref cause) => cause,ModifyDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,ModifyDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => cause,ModifyDBClusterError::DBClusterNotFoundFault(ref cause) => cause,ModifyDBClusterError::StorageQuotaExceededFault(ref cause) => cause,ModifyDBClusterError::DBClusterAlreadyExistsFault(ref cause) => cause,ModifyDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,ModifyDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => cause,ModifyDBClusterError::Validation(ref cause) => cause,ModifyDBClusterError::Credentials(ref err) => err.description(),ModifyDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyDBClusterError::Unknown(ref cause) => cause
+                            ModifyDBClusterError::DBClusterAlreadyExistsFault(ref cause) => cause,
+ModifyDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
+ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(ref cause) => cause,
+ModifyDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+ModifyDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
+ModifyDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
+ModifyDBClusterError::InvalidDBSecurityGroupStateFault(ref cause) => cause,
+ModifyDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => cause,
+ModifyDBClusterError::InvalidSubnet(ref cause) => cause,
+ModifyDBClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
+ModifyDBClusterError::StorageQuotaExceededFault(ref cause) => cause,
+ModifyDBClusterError::Validation(ref cause) => cause,
+ModifyDBClusterError::Credentials(ref err) => err.description(),
+ModifyDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyDBClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17721,7 +18088,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBParameterGroupStateFault" => ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),_ => ModifyDBClusterParameterGroupError::Unknown(String::from(body))
+                                    "DBParameterGroupNotFoundFault" => ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBParameterGroupStateFault" => ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),_ => ModifyDBClusterParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyDBClusterParameterGroupError::Unknown(body.to_string())
@@ -17753,7 +18120,12 @@ Unknown(String)
                 impl Error for ModifyDBClusterParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,ModifyDBClusterParameterGroupError::Validation(ref cause) => cause,ModifyDBClusterParameterGroupError::Credentials(ref err) => err.description(),ModifyDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyDBClusterParameterGroupError::Unknown(ref cause) => cause
+                            ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,
+ModifyDBClusterParameterGroupError::Validation(ref cause) => cause,
+ModifyDBClusterParameterGroupError::Credentials(ref err) => err.description(),
+ModifyDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyDBClusterParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17761,12 +18133,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ModifyDBClusterSnapshotAttributeError {
                     
+///<p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
+DBClusterSnapshotNotFoundFault(String),
 ///<p>The supplied value is not a valid DB cluster snapshot state.</p>
 InvalidDBClusterSnapshotStateFault(String),
 ///<p>You have exceeded the maximum number of accounts that you can share a manual DB snapshot with.</p>
-SharedSnapshotQuotaExceededFault(String),
-///<p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
-DBClusterSnapshotNotFoundFault(String),/// An error occurred dispatching the HTTP request
+SharedSnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17783,7 +18155,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBClusterSnapshotNotFoundFault" => ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"SharedSnapshotQuotaExceededFault" => ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),_ => ModifyDBClusterSnapshotAttributeError::Unknown(String::from(body))
+                                    "DBClusterSnapshotNotFoundFault" => ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"SharedSnapshotQuotaExceededFault" => ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => ModifyDBClusterSnapshotAttributeError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyDBClusterSnapshotAttributeError::Unknown(body.to_string())
@@ -17815,7 +18187,13 @@ Unknown(String)
                 impl Error for ModifyDBClusterSnapshotAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(ref cause) => cause,ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(ref cause) => cause,ModifyDBClusterSnapshotAttributeError::Validation(ref cause) => cause,ModifyDBClusterSnapshotAttributeError::Credentials(ref err) => err.description(),ModifyDBClusterSnapshotAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyDBClusterSnapshotAttributeError::Unknown(ref cause) => cause
+                            ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
+ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
+ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(ref cause) => cause,
+ModifyDBClusterSnapshotAttributeError::Validation(ref cause) => cause,
+ModifyDBClusterSnapshotAttributeError::Credentials(ref err) => err.description(),
+ModifyDBClusterSnapshotAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyDBClusterSnapshotAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17823,38 +18201,38 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ModifyDBInstanceError {
                     
-///<p>The specified option group could not be found.</p>
-OptionGroupNotFoundFault(String),
-///<p> The specified DB instance is not in the <i>available</i> state. </p>
-InvalidDBInstanceStateFault(String),
-///<p>Specified DB instance class is not available in the specified Availability Zone.</p>
-InsufficientDBInstanceCapacityFault(String),
-///<p>User already has a DB instance with the given identifier.</p>
-DBInstanceAlreadyExistsFault(String),
-///<p> <i>Domain</i> does not refer to an existing Active Directory Domain. </p>
-DomainNotFoundFault(String),
-///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
-DBInstanceNotFoundFault(String),
-///<p> <i>StorageType</i> specified cannot be associated with the DB Instance. </p>
-StorageTypeNotSupportedFault(String),
-///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
-InvalidVPCNetworkStateFault(String),
-///<p>The DB upgrade failed because a resource the DB depends on could not be modified.</p>
-DBUpgradeDependencyFailureFault(String),
 ///<p>Specified CIDRIP or EC2 security group is not authorized for the specified DB security group.</p> <p>RDS may not also be authorized via IAM to perform necessary actions on your behalf.</p>
 AuthorizationNotFoundFault(String),
-///<p>The state of the DB security group does not allow deletion.</p>
-InvalidDBSecurityGroupStateFault(String),
-///<p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
-DBParameterGroupNotFoundFault(String),
 ///<p> <i>CertificateIdentifier</i> does not refer to an existing certificate. </p>
 CertificateNotFoundFault(String),
+///<p>User already has a DB instance with the given identifier.</p>
+DBInstanceAlreadyExistsFault(String),
+///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+DBInstanceNotFoundFault(String),
+///<p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+DBParameterGroupNotFoundFault(String),
 ///<p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
 DBSecurityGroupNotFoundFault(String),
+///<p>The DB upgrade failed because a resource the DB depends on could not be modified.</p>
+DBUpgradeDependencyFailureFault(String),
+///<p> <i>Domain</i> does not refer to an existing Active Directory Domain. </p>
+DomainNotFoundFault(String),
+///<p>Specified DB instance class is not available in the specified Availability Zone.</p>
+InsufficientDBInstanceCapacityFault(String),
+///<p> The specified DB instance is not in the <i>available</i> state. </p>
+InvalidDBInstanceStateFault(String),
+///<p>The state of the DB security group does not allow deletion.</p>
+InvalidDBSecurityGroupStateFault(String),
+///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
+InvalidVPCNetworkStateFault(String),
+///<p>The specified option group could not be found.</p>
+OptionGroupNotFoundFault(String),
 ///<p>Provisioned IOPS not available in the specified Availability Zone.</p>
 ProvisionedIopsNotAvailableInAZFault(String),
 ///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
-StorageQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
+StorageQuotaExceededFault(String),
+///<p> <i>StorageType</i> specified cannot be associated with the DB Instance. </p>
+StorageTypeNotSupportedFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17871,7 +18249,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InsufficientDBInstanceCapacityFault" => ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => ModifyDBInstanceError::StorageQuotaExceededFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => ModifyDBInstanceError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBInstanceAlreadyExistsFault" => ModifyDBInstanceError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"AuthorizationNotFoundFault" => ModifyDBInstanceError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => ModifyDBInstanceError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"CertificateNotFoundFault" => ModifyDBInstanceError::CertificateNotFoundFault(String::from(parsed_error.message)),"DBUpgradeDependencyFailureFault" => ModifyDBInstanceError::DBUpgradeDependencyFailureFault(String::from(parsed_error.message)),"InvalidDBSecurityGroupStateFault" => ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyDBInstanceError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"DomainNotFoundFault" => ModifyDBInstanceError::DomainNotFoundFault(String::from(parsed_error.message)),"StorageTypeNotSupportedFault" => ModifyDBInstanceError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => ModifyDBInstanceError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => ModifyDBInstanceError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => ModifyDBInstanceError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),_ => ModifyDBInstanceError::Unknown(String::from(body))
+                                    "AuthorizationNotFoundFault" => ModifyDBInstanceError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"CertificateNotFoundFault" => ModifyDBInstanceError::CertificateNotFoundFault(String::from(parsed_error.message)),"DBInstanceAlreadyExistsFault" => ModifyDBInstanceError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => ModifyDBInstanceError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => ModifyDBInstanceError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => ModifyDBInstanceError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"DBUpgradeDependencyFailureFault" => ModifyDBInstanceError::DBUpgradeDependencyFailureFault(String::from(parsed_error.message)),"DomainNotFoundFault" => ModifyDBInstanceError::DomainNotFoundFault(String::from(parsed_error.message)),"InsufficientDBInstanceCapacityFault" => ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => ModifyDBInstanceError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"InvalidDBSecurityGroupStateFault" => ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyDBInstanceError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => ModifyDBInstanceError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => ModifyDBInstanceError::StorageQuotaExceededFault(String::from(parsed_error.message)),"StorageTypeNotSupportedFault" => ModifyDBInstanceError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),_ => ModifyDBInstanceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyDBInstanceError::Unknown(body.to_string())
@@ -17903,7 +18281,26 @@ Unknown(String)
                 impl Error for ModifyDBInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyDBInstanceError::AuthorizationNotFoundFault(ref cause) => cause,ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => cause,ModifyDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => cause,ModifyDBInstanceError::StorageQuotaExceededFault(ref cause) => cause,ModifyDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => cause,ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,ModifyDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,ModifyDBInstanceError::DBUpgradeDependencyFailureFault(ref cause) => cause,ModifyDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => cause,ModifyDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,ModifyDBInstanceError::DomainNotFoundFault(ref cause) => cause,ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(ref cause) => cause,ModifyDBInstanceError::StorageTypeNotSupportedFault(ref cause) => cause,ModifyDBInstanceError::CertificateNotFoundFault(ref cause) => cause,ModifyDBInstanceError::OptionGroupNotFoundFault(ref cause) => cause,ModifyDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => cause,ModifyDBInstanceError::Validation(ref cause) => cause,ModifyDBInstanceError::Credentials(ref err) => err.description(),ModifyDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyDBInstanceError::Unknown(ref cause) => cause
+                            ModifyDBInstanceError::AuthorizationNotFoundFault(ref cause) => cause,
+ModifyDBInstanceError::CertificateNotFoundFault(ref cause) => cause,
+ModifyDBInstanceError::DBInstanceAlreadyExistsFault(ref cause) => cause,
+ModifyDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,
+ModifyDBInstanceError::DBParameterGroupNotFoundFault(ref cause) => cause,
+ModifyDBInstanceError::DBSecurityGroupNotFoundFault(ref cause) => cause,
+ModifyDBInstanceError::DBUpgradeDependencyFailureFault(ref cause) => cause,
+ModifyDBInstanceError::DomainNotFoundFault(ref cause) => cause,
+ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => cause,
+ModifyDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
+ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(ref cause) => cause,
+ModifyDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => cause,
+ModifyDBInstanceError::OptionGroupNotFoundFault(ref cause) => cause,
+ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,
+ModifyDBInstanceError::StorageQuotaExceededFault(ref cause) => cause,
+ModifyDBInstanceError::StorageTypeNotSupportedFault(ref cause) => cause,
+ModifyDBInstanceError::Validation(ref cause) => cause,
+ModifyDBInstanceError::Credentials(ref err) => err.description(),
+ModifyDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyDBInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17931,7 +18328,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBParameterGroupStateFault" => ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),_ => ModifyDBParameterGroupError::Unknown(String::from(body))
+                                    "DBParameterGroupNotFoundFault" => ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBParameterGroupStateFault" => ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),_ => ModifyDBParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyDBParameterGroupError::Unknown(body.to_string())
@@ -17963,7 +18360,12 @@ Unknown(String)
                 impl Error for ModifyDBParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,ModifyDBParameterGroupError::Validation(ref cause) => cause,ModifyDBParameterGroupError::Credentials(ref err) => err.description(),ModifyDBParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyDBParameterGroupError::Unknown(ref cause) => cause
+                            ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,
+ModifyDBParameterGroupError::Validation(ref cause) => cause,
+ModifyDBParameterGroupError::Credentials(ref err) => err.description(),
+ModifyDBParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyDBParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17973,10 +18375,10 @@ Unknown(String)
                     
 ///<p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
 DBSnapshotNotFoundFault(String),
-///<p>You have exceeded the maximum number of accounts that you can share a manual DB snapshot with.</p>
-SharedSnapshotQuotaExceededFault(String),
 ///<p>The state of the DB snapshot does not allow deletion.</p>
-InvalidDBSnapshotStateFault(String),/// An error occurred dispatching the HTTP request
+InvalidDBSnapshotStateFault(String),
+///<p>You have exceeded the maximum number of accounts that you can share a manual DB snapshot with.</p>
+SharedSnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17993,7 +18395,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBSnapshotStateFault" => ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"SharedSnapshotQuotaExceededFault" => ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),_ => ModifyDBSnapshotAttributeError::Unknown(String::from(body))
+                                    "DBSnapshotNotFoundFault" => ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidDBSnapshotStateFault" => ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"SharedSnapshotQuotaExceededFault" => ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => ModifyDBSnapshotAttributeError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyDBSnapshotAttributeError::Unknown(body.to_string())
@@ -18025,7 +18427,13 @@ Unknown(String)
                 impl Error for ModifyDBSnapshotAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(ref cause) => cause,ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(ref cause) => cause,ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(ref cause) => cause,ModifyDBSnapshotAttributeError::Validation(ref cause) => cause,ModifyDBSnapshotAttributeError::Credentials(ref err) => err.description(),ModifyDBSnapshotAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyDBSnapshotAttributeError::Unknown(ref cause) => cause
+                            ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(ref cause) => cause,
+ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(ref cause) => cause,
+ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(ref cause) => cause,
+ModifyDBSnapshotAttributeError::Validation(ref cause) => cause,
+ModifyDBSnapshotAttributeError::Credentials(ref err) => err.description(),
+ModifyDBSnapshotAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyDBSnapshotAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18033,16 +18441,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ModifyDBSubnetGroupError {
                     
-///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
-InvalidSubnet(String),
 ///<p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
 DBSubnetGroupDoesNotCoverEnoughAZs(String),
-///<p>The DB subnet is already in use in the Availability Zone.</p>
-SubnetAlreadyInUse(String),
 ///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
 DBSubnetGroupNotFoundFault(String),
 ///<p>Request would result in user exceeding the allowed number of subnets in a DB subnet groups.</p>
-DBSubnetQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
+DBSubnetQuotaExceededFault(String),
+///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
+InvalidSubnet(String),
+///<p>The DB subnet is already in use in the Availability Zone.</p>
+SubnetAlreadyInUse(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -18059,7 +18467,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "SubnetAlreadyInUse" => ModifyDBSubnetGroupError::SubnetAlreadyInUse(String::from(parsed_error.message)),"InvalidSubnet" => ModifyDBSubnetGroupError::InvalidSubnet(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBSubnetQuotaExceededFault" => ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(parsed_error.message)),_ => ModifyDBSubnetGroupError::Unknown(String::from(body))
+                                    "DBSubnetGroupDoesNotCoverEnoughAZs" => ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DBSubnetQuotaExceededFault" => ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(parsed_error.message)),"InvalidSubnet" => ModifyDBSubnetGroupError::InvalidSubnet(String::from(parsed_error.message)),"SubnetAlreadyInUse" => ModifyDBSubnetGroupError::SubnetAlreadyInUse(String::from(parsed_error.message)),_ => ModifyDBSubnetGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyDBSubnetGroupError::Unknown(body.to_string())
@@ -18091,7 +18499,15 @@ Unknown(String)
                 impl Error for ModifyDBSubnetGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => cause,ModifyDBSubnetGroupError::SubnetAlreadyInUse(ref cause) => cause,ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => cause,ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,ModifyDBSubnetGroupError::InvalidSubnet(ref cause) => cause,ModifyDBSubnetGroupError::Validation(ref cause) => cause,ModifyDBSubnetGroupError::Credentials(ref err) => err.description(),ModifyDBSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyDBSubnetGroupError::Unknown(ref cause) => cause
+                            ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
+ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => cause,
+ModifyDBSubnetGroupError::InvalidSubnet(ref cause) => cause,
+ModifyDBSubnetGroupError::SubnetAlreadyInUse(ref cause) => cause,
+ModifyDBSubnetGroupError::Validation(ref cause) => cause,
+ModifyDBSubnetGroupError::Credentials(ref err) => err.description(),
+ModifyDBSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyDBSubnetGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18099,18 +18515,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ModifyEventSubscriptionError {
                     
-///<p>The supplied category does not exist.</p>
-SubscriptionCategoryNotFoundFault(String),
-///<p>The subscription name does not exist.</p>
-SubscriptionNotFoundFault(String),
+///<p>You have reached the maximum number of event subscriptions.</p>
+EventSubscriptionQuotaExceededFault(String),
 ///<p>SNS has responded that there is a problem with the SND topic specified.</p>
 SNSInvalidTopicFault(String),
 ///<p>You do not have permission to publish to the SNS topic ARN.</p>
 SNSNoAuthorizationFault(String),
 ///<p>The SNS topic ARN does not exist.</p>
 SNSTopicArnNotFoundFault(String),
-///<p>You have reached the maximum number of event subscriptions.</p>
-EventSubscriptionQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
+///<p>The supplied category does not exist.</p>
+SubscriptionCategoryNotFoundFault(String),
+///<p>The subscription name does not exist.</p>
+SubscriptionNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -18127,7 +18543,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "SubscriptionCategoryNotFoundFault" => ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(parsed_error.message)),"EventSubscriptionQuotaExceededFault" => ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(String::from(parsed_error.message)),"SNSInvalidTopicFault" => ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(parsed_error.message)),"SNSTopicArnNotFoundFault" => ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(parsed_error.message)),"SNSNoAuthorizationFault" => ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(parsed_error.message)),"SubscriptionNotFoundFault" => ModifyEventSubscriptionError::SubscriptionNotFoundFault(String::from(parsed_error.message)),_ => ModifyEventSubscriptionError::Unknown(String::from(body))
+                                    "EventSubscriptionQuotaExceededFault" => ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(String::from(parsed_error.message)),"SNSInvalidTopicFault" => ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(parsed_error.message)),"SNSNoAuthorizationFault" => ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(parsed_error.message)),"SNSTopicArnNotFoundFault" => ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(parsed_error.message)),"SubscriptionCategoryNotFoundFault" => ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(parsed_error.message)),"SubscriptionNotFoundFault" => ModifyEventSubscriptionError::SubscriptionNotFoundFault(String::from(parsed_error.message)),_ => ModifyEventSubscriptionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyEventSubscriptionError::Unknown(body.to_string())
@@ -18159,7 +18575,16 @@ Unknown(String)
                 impl Error for ModifyEventSubscriptionError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyEventSubscriptionError::SNSInvalidTopicFault(ref cause) => cause,ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(ref cause) => cause,ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => cause,ModifyEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(ref cause) => cause,ModifyEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => cause,ModifyEventSubscriptionError::Validation(ref cause) => cause,ModifyEventSubscriptionError::Credentials(ref err) => err.description(),ModifyEventSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyEventSubscriptionError::Unknown(ref cause) => cause
+                            ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(ref cause) => cause,
+ModifyEventSubscriptionError::SNSInvalidTopicFault(ref cause) => cause,
+ModifyEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => cause,
+ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(ref cause) => cause,
+ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => cause,
+ModifyEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,
+ModifyEventSubscriptionError::Validation(ref cause) => cause,
+ModifyEventSubscriptionError::Credentials(ref err) => err.description(),
+ModifyEventSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyEventSubscriptionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18187,7 +18612,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "OptionGroupNotFoundFault" => ModifyOptionGroupError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"InvalidOptionGroupStateFault" => ModifyOptionGroupError::InvalidOptionGroupStateFault(String::from(parsed_error.message)),_ => ModifyOptionGroupError::Unknown(String::from(body))
+                                    "InvalidOptionGroupStateFault" => ModifyOptionGroupError::InvalidOptionGroupStateFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => ModifyOptionGroupError::OptionGroupNotFoundFault(String::from(parsed_error.message)),_ => ModifyOptionGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyOptionGroupError::Unknown(body.to_string())
@@ -18219,7 +18644,12 @@ Unknown(String)
                 impl Error for ModifyOptionGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyOptionGroupError::OptionGroupNotFoundFault(ref cause) => cause,ModifyOptionGroupError::InvalidOptionGroupStateFault(ref cause) => cause,ModifyOptionGroupError::Validation(ref cause) => cause,ModifyOptionGroupError::Credentials(ref err) => err.description(),ModifyOptionGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyOptionGroupError::Unknown(ref cause) => cause
+                            ModifyOptionGroupError::InvalidOptionGroupStateFault(ref cause) => cause,
+ModifyOptionGroupError::OptionGroupNotFoundFault(ref cause) => cause,
+ModifyOptionGroupError::Validation(ref cause) => cause,
+ModifyOptionGroupError::Credentials(ref err) => err.description(),
+ModifyOptionGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyOptionGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18227,10 +18657,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PromoteReadReplicaError {
                     
-///<p> The specified DB instance is not in the <i>available</i> state. </p>
-InvalidDBInstanceStateFault(String),
 ///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
-DBInstanceNotFoundFault(String),/// An error occurred dispatching the HTTP request
+DBInstanceNotFoundFault(String),
+///<p> The specified DB instance is not in the <i>available</i> state. </p>
+InvalidDBInstanceStateFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -18247,7 +18677,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBInstanceStateFault" => PromoteReadReplicaError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => PromoteReadReplicaError::DBInstanceNotFoundFault(String::from(parsed_error.message)),_ => PromoteReadReplicaError::Unknown(String::from(body))
+                                    "DBInstanceNotFoundFault" => PromoteReadReplicaError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => PromoteReadReplicaError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),_ => PromoteReadReplicaError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PromoteReadReplicaError::Unknown(body.to_string())
@@ -18279,7 +18709,12 @@ Unknown(String)
                 impl Error for PromoteReadReplicaError {
                     fn description(&self) -> &str {
                         match *self {
-                            PromoteReadReplicaError::DBInstanceNotFoundFault(ref cause) => cause,PromoteReadReplicaError::InvalidDBInstanceStateFault(ref cause) => cause,PromoteReadReplicaError::Validation(ref cause) => cause,PromoteReadReplicaError::Credentials(ref err) => err.description(),PromoteReadReplicaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PromoteReadReplicaError::Unknown(ref cause) => cause
+                            PromoteReadReplicaError::DBInstanceNotFoundFault(ref cause) => cause,
+PromoteReadReplicaError::InvalidDBInstanceStateFault(ref cause) => cause,
+PromoteReadReplicaError::Validation(ref cause) => cause,
+PromoteReadReplicaError::Credentials(ref err) => err.description(),
+PromoteReadReplicaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PromoteReadReplicaError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18339,7 +18774,12 @@ Unknown(String)
                 impl Error for PromoteReadReplicaDBClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            PromoteReadReplicaDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(ref cause) => cause,PromoteReadReplicaDBClusterError::Validation(ref cause) => cause,PromoteReadReplicaDBClusterError::Credentials(ref err) => err.description(),PromoteReadReplicaDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PromoteReadReplicaDBClusterError::Unknown(ref cause) => cause
+                            PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
+PromoteReadReplicaDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
+PromoteReadReplicaDBClusterError::Validation(ref cause) => cause,
+PromoteReadReplicaDBClusterError::Credentials(ref err) => err.description(),
+PromoteReadReplicaDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PromoteReadReplicaDBClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18369,7 +18809,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ReservedDBInstancesOfferingNotFoundFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),"ReservedDBInstanceAlreadyExistsFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"ReservedDBInstanceQuotaExceededFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(String::from(parsed_error.message)),_ => PurchaseReservedDBInstancesOfferingError::Unknown(String::from(body))
+                                    "ReservedDBInstanceAlreadyExistsFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"ReservedDBInstanceQuotaExceededFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(String::from(parsed_error.message)),"ReservedDBInstancesOfferingNotFoundFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => PurchaseReservedDBInstancesOfferingError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PurchaseReservedDBInstancesOfferingError::Unknown(body.to_string())
@@ -18401,7 +18841,13 @@ Unknown(String)
                 impl Error for PurchaseReservedDBInstancesOfferingError {
                     fn description(&self) -> &str {
                         match *self {
-                            PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(ref cause) => cause,PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(ref cause) => cause,PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(ref cause) => cause,PurchaseReservedDBInstancesOfferingError::Validation(ref cause) => cause,PurchaseReservedDBInstancesOfferingError::Credentials(ref err) => err.description(),PurchaseReservedDBInstancesOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PurchaseReservedDBInstancesOfferingError::Unknown(ref cause) => cause
+                            PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(ref cause) => cause,
+PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(ref cause) => cause,
+PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(ref cause) => cause,
+PurchaseReservedDBInstancesOfferingError::Validation(ref cause) => cause,
+PurchaseReservedDBInstancesOfferingError::Credentials(ref err) => err.description(),
+PurchaseReservedDBInstancesOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PurchaseReservedDBInstancesOfferingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18461,7 +18907,12 @@ Unknown(String)
                 impl Error for RebootDBInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            RebootDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,RebootDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,RebootDBInstanceError::Validation(ref cause) => cause,RebootDBInstanceError::Credentials(ref err) => err.description(),RebootDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RebootDBInstanceError::Unknown(ref cause) => cause
+                            RebootDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,
+RebootDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
+RebootDBInstanceError::Validation(ref cause) => cause,
+RebootDBInstanceError::Credentials(ref err) => err.description(),
+RebootDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RebootDBInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18491,7 +18942,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBClusterStateFault" => RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => RemoveRoleFromDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterRoleNotFoundFault" => RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(String::from(parsed_error.message)),_ => RemoveRoleFromDBClusterError::Unknown(String::from(body))
+                                    "DBClusterNotFoundFault" => RemoveRoleFromDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterRoleNotFoundFault" => RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(String::from(parsed_error.message)),_ => RemoveRoleFromDBClusterError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RemoveRoleFromDBClusterError::Unknown(body.to_string())
@@ -18523,7 +18974,13 @@ Unknown(String)
                 impl Error for RemoveRoleFromDBClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveRoleFromDBClusterError::DBClusterNotFoundFault(ref cause) => cause,RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(ref cause) => cause,RemoveRoleFromDBClusterError::Validation(ref cause) => cause,RemoveRoleFromDBClusterError::Credentials(ref err) => err.description(),RemoveRoleFromDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveRoleFromDBClusterError::Unknown(ref cause) => cause
+                            RemoveRoleFromDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
+RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(ref cause) => cause,
+RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
+RemoveRoleFromDBClusterError::Validation(ref cause) => cause,
+RemoveRoleFromDBClusterError::Credentials(ref err) => err.description(),
+RemoveRoleFromDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveRoleFromDBClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18531,10 +18988,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RemoveSourceIdentifierFromSubscriptionError {
                     
-///<p>The subscription name does not exist.</p>
-SubscriptionNotFoundFault(String),
 ///<p>The requested source could not be found.</p>
-SourceNotFoundFault(String),/// An error occurred dispatching the HTTP request
+SourceNotFoundFault(String),
+///<p>The subscription name does not exist.</p>
+SubscriptionNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -18583,7 +19040,12 @@ Unknown(String)
                 impl Error for RemoveSourceIdentifierFromSubscriptionError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(ref cause) => cause,RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,RemoveSourceIdentifierFromSubscriptionError::Validation(ref cause) => cause,RemoveSourceIdentifierFromSubscriptionError::Credentials(ref err) => err.description(),RemoveSourceIdentifierFromSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveSourceIdentifierFromSubscriptionError::Unknown(ref cause) => cause
+                            RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(ref cause) => cause,
+RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,
+RemoveSourceIdentifierFromSubscriptionError::Validation(ref cause) => cause,
+RemoveSourceIdentifierFromSubscriptionError::Credentials(ref err) => err.description(),
+RemoveSourceIdentifierFromSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveSourceIdentifierFromSubscriptionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18593,10 +19055,10 @@ Unknown(String)
                     
 ///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
 DBClusterNotFoundFault(String),
-///<p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
-DBSnapshotNotFoundFault(String),
 ///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
-DBInstanceNotFoundFault(String),/// An error occurred dispatching the HTTP request
+DBInstanceNotFoundFault(String),
+///<p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
+DBSnapshotNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -18613,7 +19075,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBClusterNotFoundFault" => RemoveTagsFromResourceError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => RemoveTagsFromResourceError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => RemoveTagsFromResourceError::DBInstanceNotFoundFault(String::from(parsed_error.message)),_ => RemoveTagsFromResourceError::Unknown(String::from(body))
+                                    "DBClusterNotFoundFault" => RemoveTagsFromResourceError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => RemoveTagsFromResourceError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => RemoveTagsFromResourceError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),_ => RemoveTagsFromResourceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RemoveTagsFromResourceError::Unknown(body.to_string())
@@ -18645,7 +19107,13 @@ Unknown(String)
                 impl Error for RemoveTagsFromResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveTagsFromResourceError::DBSnapshotNotFoundFault(ref cause) => cause,RemoveTagsFromResourceError::DBInstanceNotFoundFault(ref cause) => cause,RemoveTagsFromResourceError::DBClusterNotFoundFault(ref cause) => cause,RemoveTagsFromResourceError::Validation(ref cause) => cause,RemoveTagsFromResourceError::Credentials(ref err) => err.description(),RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveTagsFromResourceError::Unknown(ref cause) => cause
+                            RemoveTagsFromResourceError::DBClusterNotFoundFault(ref cause) => cause,
+RemoveTagsFromResourceError::DBInstanceNotFoundFault(ref cause) => cause,
+RemoveTagsFromResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
+RemoveTagsFromResourceError::Validation(ref cause) => cause,
+RemoveTagsFromResourceError::Credentials(ref err) => err.description(),
+RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveTagsFromResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18673,7 +19141,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBParameterGroupStateFault" => ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),_ => ResetDBClusterParameterGroupError::Unknown(String::from(body))
+                                    "DBParameterGroupNotFoundFault" => ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBParameterGroupStateFault" => ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),_ => ResetDBClusterParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ResetDBClusterParameterGroupError::Unknown(body.to_string())
@@ -18705,7 +19173,12 @@ Unknown(String)
                 impl Error for ResetDBClusterParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,ResetDBClusterParameterGroupError::Validation(ref cause) => cause,ResetDBClusterParameterGroupError::Credentials(ref err) => err.description(),ResetDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ResetDBClusterParameterGroupError::Unknown(ref cause) => cause
+                            ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,
+ResetDBClusterParameterGroupError::Validation(ref cause) => cause,
+ResetDBClusterParameterGroupError::Credentials(ref err) => err.description(),
+ResetDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ResetDBClusterParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18733,7 +19206,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBParameterGroupStateFault" => ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),"DBParameterGroupNotFoundFault" => ResetDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),_ => ResetDBParameterGroupError::Unknown(String::from(body))
+                                    "DBParameterGroupNotFoundFault" => ResetDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBParameterGroupStateFault" => ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(parsed_error.message)),_ => ResetDBParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ResetDBParameterGroupError::Unknown(body.to_string())
@@ -18765,7 +19238,12 @@ Unknown(String)
                 impl Error for ResetDBParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,ResetDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,ResetDBParameterGroupError::Validation(ref cause) => cause,ResetDBParameterGroupError::Credentials(ref err) => err.description(),ResetDBParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ResetDBParameterGroupError::Unknown(ref cause) => cause
+                            ResetDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
+ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,
+ResetDBParameterGroupError::Validation(ref cause) => cause,
+ResetDBParameterGroupError::Credentials(ref err) => err.description(),
+ResetDBParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ResetDBParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18773,32 +19251,32 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RestoreDBClusterFromS3Error {
                     
-///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
-StorageQuotaExceededFault(String),
-///<p>The DB subnet group cannot be deleted because it is in use.</p>
-InvalidDBSubnetGroupStateFault(String),
-///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
-InvalidVPCNetworkStateFault(String),
-///<p>The specified Amazon S3 bucket name could not be found or Amazon RDS is not authorized to access the specified Amazon S3 bucket. Verify the <b>SourceS3BucketName</b> and <b>S3IngestionRoleArn</b> values and try again.</p>
-InvalidS3BucketFault(String),
-///<p>User attempted to create a new DB cluster and the user has already reached the maximum allowed DB cluster quota.</p>
-DBClusterQuotaExceededFault(String),
+///<p>User already has a DB cluster with the given identifier.</p>
+DBClusterAlreadyExistsFault(String),
+///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+DBClusterNotFoundFault(String),
 ///<p> <i>DBClusterParameterGroupName</i> does not refer to an existing DB Cluster parameter group. </p>
 DBClusterParameterGroupNotFoundFault(String),
-///<p>The DB cluster is not in a valid state.</p>
-InvalidDBClusterStateFault(String),
-///<p>Error accessing KMS key.</p>
-KMSKeyNotAccessibleFault(String),
+///<p>User attempted to create a new DB cluster and the user has already reached the maximum allowed DB cluster quota.</p>
+DBClusterQuotaExceededFault(String),
 ///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
 DBSubnetGroupNotFoundFault(String),
 ///<p>There is insufficient storage available for the current action. You may be able to resolve this error by updating your subnet group to use different Availability Zones that have more storage available.</p>
 InsufficientStorageClusterCapacityFault(String),
-///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
-DBClusterNotFoundFault(String),
-///<p>User already has a DB cluster with the given identifier.</p>
-DBClusterAlreadyExistsFault(String),
+///<p>The DB cluster is not in a valid state.</p>
+InvalidDBClusterStateFault(String),
+///<p>The DB subnet group cannot be deleted because it is in use.</p>
+InvalidDBSubnetGroupStateFault(String),
+///<p>The specified Amazon S3 bucket name could not be found or Amazon RDS is not authorized to access the specified Amazon S3 bucket. Verify the <b>SourceS3BucketName</b> and <b>S3IngestionRoleArn</b> values and try again.</p>
+InvalidS3BucketFault(String),
 ///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
-InvalidSubnet(String),/// An error occurred dispatching the HTTP request
+InvalidSubnet(String),
+///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
+InvalidVPCNetworkStateFault(String),
+///<p>Error accessing KMS key.</p>
+KMSKeyNotAccessibleFault(String),
+///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
+StorageQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -18815,7 +19293,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBSubnetGroupStateFault" => RestoreDBClusterFromS3Error::InvalidDBSubnetGroupStateFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => RestoreDBClusterFromS3Error::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => RestoreDBClusterFromS3Error::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => RestoreDBClusterFromS3Error::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"DBClusterQuotaExceededFault" => RestoreDBClusterFromS3Error::DBClusterQuotaExceededFault(String::from(parsed_error.message)),"InsufficientStorageClusterCapacityFault" => RestoreDBClusterFromS3Error::InsufficientStorageClusterCapacityFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => RestoreDBClusterFromS3Error::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"DBClusterAlreadyExistsFault" => RestoreDBClusterFromS3Error::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterParameterGroupNotFoundFault" => RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidS3BucketFault" => RestoreDBClusterFromS3Error::InvalidS3BucketFault(String::from(parsed_error.message)),"InvalidSubnet" => RestoreDBClusterFromS3Error::InvalidSubnet(String::from(parsed_error.message)),"StorageQuotaExceededFault" => RestoreDBClusterFromS3Error::StorageQuotaExceededFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => RestoreDBClusterFromS3Error::InvalidDBClusterStateFault(String::from(parsed_error.message)),_ => RestoreDBClusterFromS3Error::Unknown(String::from(body))
+                                    "DBClusterAlreadyExistsFault" => RestoreDBClusterFromS3Error::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => RestoreDBClusterFromS3Error::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterParameterGroupNotFoundFault" => RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBClusterQuotaExceededFault" => RestoreDBClusterFromS3Error::DBClusterQuotaExceededFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => RestoreDBClusterFromS3Error::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InsufficientStorageClusterCapacityFault" => RestoreDBClusterFromS3Error::InsufficientStorageClusterCapacityFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => RestoreDBClusterFromS3Error::InvalidDBClusterStateFault(String::from(parsed_error.message)),"InvalidDBSubnetGroupStateFault" => RestoreDBClusterFromS3Error::InvalidDBSubnetGroupStateFault(String::from(parsed_error.message)),"InvalidS3BucketFault" => RestoreDBClusterFromS3Error::InvalidS3BucketFault(String::from(parsed_error.message)),"InvalidSubnet" => RestoreDBClusterFromS3Error::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => RestoreDBClusterFromS3Error::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => RestoreDBClusterFromS3Error::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => RestoreDBClusterFromS3Error::StorageQuotaExceededFault(String::from(parsed_error.message)),_ => RestoreDBClusterFromS3Error::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RestoreDBClusterFromS3Error::Unknown(body.to_string())
@@ -18847,7 +19325,23 @@ Unknown(String)
                 impl Error for RestoreDBClusterFromS3Error {
                     fn description(&self) -> &str {
                         match *self {
-                            RestoreDBClusterFromS3Error::InvalidSubnet(ref cause) => cause,RestoreDBClusterFromS3Error::DBClusterQuotaExceededFault(ref cause) => cause,RestoreDBClusterFromS3Error::InvalidVPCNetworkStateFault(ref cause) => cause,RestoreDBClusterFromS3Error::InvalidS3BucketFault(ref cause) => cause,RestoreDBClusterFromS3Error::StorageQuotaExceededFault(ref cause) => cause,RestoreDBClusterFromS3Error::DBClusterNotFoundFault(ref cause) => cause,RestoreDBClusterFromS3Error::InsufficientStorageClusterCapacityFault(ref cause) => cause,RestoreDBClusterFromS3Error::DBSubnetGroupNotFoundFault(ref cause) => cause,RestoreDBClusterFromS3Error::InvalidDBClusterStateFault(ref cause) => cause,RestoreDBClusterFromS3Error::DBClusterAlreadyExistsFault(ref cause) => cause,RestoreDBClusterFromS3Error::InvalidDBSubnetGroupStateFault(ref cause) => cause,RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(ref cause) => cause,RestoreDBClusterFromS3Error::KMSKeyNotAccessibleFault(ref cause) => cause,RestoreDBClusterFromS3Error::Validation(ref cause) => cause,RestoreDBClusterFromS3Error::Credentials(ref err) => err.description(),RestoreDBClusterFromS3Error::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RestoreDBClusterFromS3Error::Unknown(ref cause) => cause
+                            RestoreDBClusterFromS3Error::DBClusterAlreadyExistsFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::DBClusterNotFoundFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::DBClusterQuotaExceededFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::DBSubnetGroupNotFoundFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::InsufficientStorageClusterCapacityFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::InvalidDBClusterStateFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::InvalidDBSubnetGroupStateFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::InvalidS3BucketFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::InvalidSubnet(ref cause) => cause,
+RestoreDBClusterFromS3Error::InvalidVPCNetworkStateFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::KMSKeyNotAccessibleFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::StorageQuotaExceededFault(ref cause) => cause,
+RestoreDBClusterFromS3Error::Validation(ref cause) => cause,
+RestoreDBClusterFromS3Error::Credentials(ref err) => err.description(),
+RestoreDBClusterFromS3Error::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RestoreDBClusterFromS3Error::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18857,34 +19351,34 @@ Unknown(String)
                     
 ///<p>User already has a DB cluster with the given identifier.</p>
 DBClusterAlreadyExistsFault(String),
-///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
-InvalidVPCNetworkStateFault(String),
+///<p>User attempted to create a new DB cluster and the user has already reached the maximum allowed DB cluster quota.</p>
+DBClusterQuotaExceededFault(String),
+///<p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
+DBClusterSnapshotNotFoundFault(String),
 ///<p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
 DBSnapshotNotFoundFault(String),
 ///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
 DBSubnetGroupNotFoundFault(String),
-///<p>The specified option group could not be found.</p>
-OptionGroupNotFoundFault(String),
-///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
-InvalidSubnet(String),
-///<p>Error accessing KMS key.</p>
-KMSKeyNotAccessibleFault(String),
 ///<p>The DB cluster does not have enough capacity for the current operation.</p>
 InsufficientDBClusterCapacityFault(String),
-///<p>The state of the DB snapshot does not allow deletion.</p>
-InvalidDBSnapshotStateFault(String),
+///<p>There is insufficient storage available for the current action. You may be able to resolve this error by updating your subnet group to use different Availability Zones that have more storage available.</p>
+InsufficientStorageClusterCapacityFault(String),
 ///<p>The supplied value is not a valid DB cluster snapshot state.</p>
 InvalidDBClusterSnapshotStateFault(String),
-///<p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
-DBClusterSnapshotNotFoundFault(String),
-///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
-StorageQuotaExceededFault(String),
+///<p>The state of the DB snapshot does not allow deletion.</p>
+InvalidDBSnapshotStateFault(String),
 ///<p>Cannot restore from vpc backup to non-vpc DB instance.</p>
 InvalidRestoreFault(String),
-///<p>User attempted to create a new DB cluster and the user has already reached the maximum allowed DB cluster quota.</p>
-DBClusterQuotaExceededFault(String),
-///<p>There is insufficient storage available for the current action. You may be able to resolve this error by updating your subnet group to use different Availability Zones that have more storage available.</p>
-InsufficientStorageClusterCapacityFault(String),/// An error occurred dispatching the HTTP request
+///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
+InvalidSubnet(String),
+///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
+InvalidVPCNetworkStateFault(String),
+///<p>Error accessing KMS key.</p>
+KMSKeyNotAccessibleFault(String),
+///<p>The specified option group could not be found.</p>
+OptionGroupNotFoundFault(String),
+///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
+StorageQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -18901,7 +19395,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidDBClusterSnapshotStateFault" => RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"DBClusterSnapshotNotFoundFault" => RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidSubnet" => RestoreDBClusterFromSnapshotError::InvalidSubnet(String::from(parsed_error.message)),"DBClusterQuotaExceededFault" => RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(String::from(parsed_error.message)),"InsufficientDBClusterCapacityFault" => RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(String::from(parsed_error.message)),"DBClusterAlreadyExistsFault" => RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"InvalidRestoreFault" => RestoreDBClusterFromSnapshotError::InvalidRestoreFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"InsufficientStorageClusterCapacityFault" => RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"InvalidDBSnapshotStateFault" => RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => RestoreDBClusterFromSnapshotError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),_ => RestoreDBClusterFromSnapshotError::Unknown(String::from(body))
+                                    "DBClusterAlreadyExistsFault" => RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterQuotaExceededFault" => RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(String::from(parsed_error.message)),"DBClusterSnapshotNotFoundFault" => RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InsufficientDBClusterCapacityFault" => RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(String::from(parsed_error.message)),"InsufficientStorageClusterCapacityFault" => RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidDBSnapshotStateFault" => RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"InvalidRestoreFault" => RestoreDBClusterFromSnapshotError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => RestoreDBClusterFromSnapshotError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => RestoreDBClusterFromSnapshotError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(String::from(parsed_error.message)),_ => RestoreDBClusterFromSnapshotError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RestoreDBClusterFromSnapshotError::Unknown(body.to_string())
@@ -18933,7 +19427,25 @@ Unknown(String)
                 impl Error for RestoreDBClusterFromSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::OptionGroupNotFoundFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::InvalidSubnet(ref cause) => cause,RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::InvalidRestoreFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,RestoreDBClusterFromSnapshotError::Validation(ref cause) => cause,RestoreDBClusterFromSnapshotError::Credentials(ref err) => err.description(),RestoreDBClusterFromSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RestoreDBClusterFromSnapshotError::Unknown(ref cause) => cause
+                            RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::InvalidRestoreFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::InvalidSubnet(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::OptionGroupNotFoundFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::Validation(ref cause) => cause,
+RestoreDBClusterFromSnapshotError::Credentials(ref err) => err.description(),
+RestoreDBClusterFromSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RestoreDBClusterFromSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18941,36 +19453,36 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RestoreDBClusterToPointInTimeError {
                     
-///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
-InvalidVPCNetworkStateFault(String),
-///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
-DBSubnetGroupNotFoundFault(String),
-///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
-StorageQuotaExceededFault(String),
-///<p>The supplied value is not a valid DB cluster snapshot state.</p>
-InvalidDBClusterSnapshotStateFault(String),
-///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
-DBClusterNotFoundFault(String),
-///<p>The specified option group could not be found.</p>
-OptionGroupNotFoundFault(String),
-///<p>Error accessing KMS key.</p>
-KMSKeyNotAccessibleFault(String),
-///<p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
-DBClusterSnapshotNotFoundFault(String),
-///<p>There is insufficient storage available for the current action. You may be able to resolve this error by updating your subnet group to use different Availability Zones that have more storage available.</p>
-InsufficientStorageClusterCapacityFault(String),
-///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
-InvalidSubnet(String),
 ///<p>User already has a DB cluster with the given identifier.</p>
 DBClusterAlreadyExistsFault(String),
-///<p>Cannot restore from vpc backup to non-vpc DB instance.</p>
-InvalidRestoreFault(String),
+///<p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+DBClusterNotFoundFault(String),
+///<p>User attempted to create a new DB cluster and the user has already reached the maximum allowed DB cluster quota.</p>
+DBClusterQuotaExceededFault(String),
+///<p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
+DBClusterSnapshotNotFoundFault(String),
+///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+DBSubnetGroupNotFoundFault(String),
 ///<p>The DB cluster does not have enough capacity for the current operation.</p>
 InsufficientDBClusterCapacityFault(String),
+///<p>There is insufficient storage available for the current action. You may be able to resolve this error by updating your subnet group to use different Availability Zones that have more storage available.</p>
+InsufficientStorageClusterCapacityFault(String),
+///<p>The supplied value is not a valid DB cluster snapshot state.</p>
+InvalidDBClusterSnapshotStateFault(String),
 ///<p>The state of the DB snapshot does not allow deletion.</p>
 InvalidDBSnapshotStateFault(String),
-///<p>User attempted to create a new DB cluster and the user has already reached the maximum allowed DB cluster quota.</p>
-DBClusterQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
+///<p>Cannot restore from vpc backup to non-vpc DB instance.</p>
+InvalidRestoreFault(String),
+///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
+InvalidSubnet(String),
+///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
+InvalidVPCNetworkStateFault(String),
+///<p>Error accessing KMS key.</p>
+KMSKeyNotAccessibleFault(String),
+///<p>The specified option group could not be found.</p>
+OptionGroupNotFoundFault(String),
+///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
+StorageQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -18987,7 +19499,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidRestoreFault" => RestoreDBClusterToPointInTimeError::InvalidRestoreFault(String::from(parsed_error.message)),"InsufficientDBClusterCapacityFault" => RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => RestoreDBClusterToPointInTimeError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterSnapshotNotFoundFault" => RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidDBSnapshotStateFault" => RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"InsufficientStorageClusterCapacityFault" => RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"DBClusterAlreadyExistsFault" => RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"InvalidSubnet" => RestoreDBClusterToPointInTimeError::InvalidSubnet(String::from(parsed_error.message)),"DBClusterQuotaExceededFault" => RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(String::from(parsed_error.message)),_ => RestoreDBClusterToPointInTimeError::Unknown(String::from(body))
+                                    "DBClusterAlreadyExistsFault" => RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterQuotaExceededFault" => RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(String::from(parsed_error.message)),"DBClusterSnapshotNotFoundFault" => RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InsufficientDBClusterCapacityFault" => RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(String::from(parsed_error.message)),"InsufficientStorageClusterCapacityFault" => RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidDBSnapshotStateFault" => RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"InvalidRestoreFault" => RestoreDBClusterToPointInTimeError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => RestoreDBClusterToPointInTimeError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => RestoreDBClusterToPointInTimeError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(String::from(parsed_error.message)),_ => RestoreDBClusterToPointInTimeError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RestoreDBClusterToPointInTimeError::Unknown(body.to_string())
@@ -19019,7 +19531,25 @@ Unknown(String)
                 impl Error for RestoreDBClusterToPointInTimeError {
                     fn description(&self) -> &str {
                         match *self {
-                            RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::OptionGroupNotFoundFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::InvalidRestoreFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::InvalidSubnet(ref cause) => cause,RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(ref cause) => cause,RestoreDBClusterToPointInTimeError::Validation(ref cause) => cause,RestoreDBClusterToPointInTimeError::Credentials(ref err) => err.description(),RestoreDBClusterToPointInTimeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RestoreDBClusterToPointInTimeError::Unknown(ref cause) => cause
+                            RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::InvalidRestoreFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::InvalidSubnet(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::OptionGroupNotFoundFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::Validation(ref cause) => cause,
+RestoreDBClusterToPointInTimeError::Credentials(ref err) => err.description(),
+RestoreDBClusterToPointInTimeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RestoreDBClusterToPointInTimeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -19027,42 +19557,42 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RestoreDBInstanceFromDBSnapshotError {
                     
-///<p> <i>Domain</i> does not refer to an existing Active Directory Domain. </p>
-DomainNotFoundFault(String),
+///<p>Specified CIDRIP or EC2 security group is not authorized for the specified DB security group.</p> <p>RDS may not also be authorized via IAM to perform necessary actions on your behalf.</p>
+AuthorizationNotFoundFault(String),
+///<p>User already has a DB instance with the given identifier.</p>
+DBInstanceAlreadyExistsFault(String),
 ///<p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
 DBSecurityGroupNotFoundFault(String),
 ///<p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
 DBSnapshotNotFoundFault(String),
-///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
-InvalidSubnet(String),
-///<p>Provisioned IOPS not available in the specified Availability Zone.</p>
-ProvisionedIopsNotAvailableInAZFault(String),
-///<p>Cannot restore from vpc backup to non-vpc DB instance.</p>
-InvalidRestoreFault(String),
-///<p>Request would result in user exceeding the allowed number of DB instances.</p>
-InstanceQuotaExceededFault(String),
-///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
-DBSubnetGroupNotFoundFault(String),
-///<p>Specified DB instance class is not available in the specified Availability Zone.</p>
-InsufficientDBInstanceCapacityFault(String),
-///<p>The specified option group could not be found.</p>
-OptionGroupNotFoundFault(String),
-///<p>The state of the DB snapshot does not allow deletion.</p>
-InvalidDBSnapshotStateFault(String),
-///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
-StorageQuotaExceededFault(String),
-///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
-InvalidVPCNetworkStateFault(String),
-///<p>User already has a DB instance with the given identifier.</p>
-DBInstanceAlreadyExistsFault(String),
-///<p> <i>StorageType</i> specified cannot be associated with the DB Instance. </p>
-StorageTypeNotSupportedFault(String),
-///<p>Specified CIDRIP or EC2 security group is not authorized for the specified DB security group.</p> <p>RDS may not also be authorized via IAM to perform necessary actions on your behalf.</p>
-AuthorizationNotFoundFault(String),
 ///<p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
 DBSubnetGroupDoesNotCoverEnoughAZs(String),
+///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+DBSubnetGroupNotFoundFault(String),
+///<p> <i>Domain</i> does not refer to an existing Active Directory Domain. </p>
+DomainNotFoundFault(String),
+///<p>Request would result in user exceeding the allowed number of DB instances.</p>
+InstanceQuotaExceededFault(String),
+///<p>Specified DB instance class is not available in the specified Availability Zone.</p>
+InsufficientDBInstanceCapacityFault(String),
+///<p>The state of the DB snapshot does not allow deletion.</p>
+InvalidDBSnapshotStateFault(String),
+///<p>Cannot restore from vpc backup to non-vpc DB instance.</p>
+InvalidRestoreFault(String),
+///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
+InvalidSubnet(String),
+///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
+InvalidVPCNetworkStateFault(String),
 ///<p>Error accessing KMS key.</p>
-KMSKeyNotAccessibleFault(String),/// An error occurred dispatching the HTTP request
+KMSKeyNotAccessibleFault(String),
+///<p>The specified option group could not be found.</p>
+OptionGroupNotFoundFault(String),
+///<p>Provisioned IOPS not available in the specified Availability Zone.</p>
+ProvisionedIopsNotAvailableInAZFault(String),
+///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
+StorageQuotaExceededFault(String),
+///<p> <i>StorageType</i> specified cannot be associated with the DB Instance. </p>
+StorageTypeNotSupportedFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -19079,7 +19609,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidVPCNetworkStateFault" => RestoreDBInstanceFromDBSnapshotError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InstanceQuotaExceededFault" => RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(String::from(parsed_error.message)),"InvalidDBSnapshotStateFault" => RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"InvalidRestoreFault" => RestoreDBInstanceFromDBSnapshotError::InvalidRestoreFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => RestoreDBInstanceFromDBSnapshotError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"AuthorizationNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => RestoreDBInstanceFromDBSnapshotError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"StorageTypeNotSupportedFault" => RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBInstanceAlreadyExistsFault" => RestoreDBInstanceFromDBSnapshotError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"InvalidSubnet" => RestoreDBInstanceFromDBSnapshotError::InvalidSubnet(String::from(parsed_error.message)),"InsufficientDBInstanceCapacityFault" => RestoreDBInstanceFromDBSnapshotError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"DomainNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::DomainNotFoundFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),_ => RestoreDBInstanceFromDBSnapshotError::Unknown(String::from(body))
+                                    "AuthorizationNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"DBInstanceAlreadyExistsFault" => RestoreDBInstanceFromDBSnapshotError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"DBSnapshotNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DomainNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::DomainNotFoundFault(String::from(parsed_error.message)),"InstanceQuotaExceededFault" => RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(String::from(parsed_error.message)),"InsufficientDBInstanceCapacityFault" => RestoreDBInstanceFromDBSnapshotError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"InvalidDBSnapshotStateFault" => RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"InvalidRestoreFault" => RestoreDBInstanceFromDBSnapshotError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => RestoreDBInstanceFromDBSnapshotError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => RestoreDBInstanceFromDBSnapshotError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => RestoreDBInstanceFromDBSnapshotError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => RestoreDBInstanceFromDBSnapshotError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(String::from(parsed_error.message)),"StorageTypeNotSupportedFault" => RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),_ => RestoreDBInstanceFromDBSnapshotError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RestoreDBInstanceFromDBSnapshotError::Unknown(body.to_string())
@@ -19111,7 +19641,28 @@ Unknown(String)
                 impl Error for RestoreDBInstanceFromDBSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            RestoreDBInstanceFromDBSnapshotError::InvalidSubnet(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::InvalidRestoreFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::DBSecurityGroupNotFoundFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::AuthorizationNotFoundFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupNotFoundFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::OptionGroupNotFoundFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::InsufficientDBInstanceCapacityFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::DomainNotFoundFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::DBInstanceAlreadyExistsFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::InvalidVPCNetworkStateFault(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::Validation(ref cause) => cause,RestoreDBInstanceFromDBSnapshotError::Credentials(ref err) => err.description(),RestoreDBInstanceFromDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RestoreDBInstanceFromDBSnapshotError::Unknown(ref cause) => cause
+                            RestoreDBInstanceFromDBSnapshotError::AuthorizationNotFoundFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::DBInstanceAlreadyExistsFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::DBSecurityGroupNotFoundFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::DomainNotFoundFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::InsufficientDBInstanceCapacityFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::InvalidRestoreFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::InvalidSubnet(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::InvalidVPCNetworkStateFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::OptionGroupNotFoundFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::Validation(ref cause) => cause,
+RestoreDBInstanceFromDBSnapshotError::Credentials(ref err) => err.description(),
+RestoreDBInstanceFromDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RestoreDBInstanceFromDBSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -19119,44 +19670,44 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RestoreDBInstanceToPointInTimeError {
                     
-///<p>Request would result in user exceeding the allowed number of DB instances.</p>
-InstanceQuotaExceededFault(String),
-///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
-DBInstanceNotFoundFault(String),
-///<p> <i>SourceDBInstanceIdentifier</i> refers to a DB instance with <i>BackupRetentionPeriod</i> equal to 0. </p>
-PointInTimeRestoreNotEnabledFault(String),
-///<p>Error accessing KMS key.</p>
-KMSKeyNotAccessibleFault(String),
-///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
-StorageQuotaExceededFault(String),
-///<p>Specified DB instance class is not available in the specified Availability Zone.</p>
-InsufficientDBInstanceCapacityFault(String),
-///<p> <i>Domain</i> does not refer to an existing Active Directory Domain. </p>
-DomainNotFoundFault(String),
-///<p> <i>StorageType</i> specified cannot be associated with the DB Instance. </p>
-StorageTypeNotSupportedFault(String),
-///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
-InvalidVPCNetworkStateFault(String),
-///<p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
-DBSubnetGroupDoesNotCoverEnoughAZs(String),
-///<p>The specified option group could not be found.</p>
-OptionGroupNotFoundFault(String),
-///<p>Cannot restore from vpc backup to non-vpc DB instance.</p>
-InvalidRestoreFault(String),
-///<p> The specified DB instance is not in the <i>available</i> state. </p>
-InvalidDBInstanceStateFault(String),
-///<p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
-DBSecurityGroupNotFoundFault(String),
-///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
-DBSubnetGroupNotFoundFault(String),
-///<p>Provisioned IOPS not available in the specified Availability Zone.</p>
-ProvisionedIopsNotAvailableInAZFault(String),
+///<p>Specified CIDRIP or EC2 security group is not authorized for the specified DB security group.</p> <p>RDS may not also be authorized via IAM to perform necessary actions on your behalf.</p>
+AuthorizationNotFoundFault(String),
 ///<p>User already has a DB instance with the given identifier.</p>
 DBInstanceAlreadyExistsFault(String),
+///<p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+DBInstanceNotFoundFault(String),
+///<p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
+DBSecurityGroupNotFoundFault(String),
+///<p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
+DBSubnetGroupDoesNotCoverEnoughAZs(String),
+///<p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+DBSubnetGroupNotFoundFault(String),
+///<p> <i>Domain</i> does not refer to an existing Active Directory Domain. </p>
+DomainNotFoundFault(String),
+///<p>Request would result in user exceeding the allowed number of DB instances.</p>
+InstanceQuotaExceededFault(String),
+///<p>Specified DB instance class is not available in the specified Availability Zone.</p>
+InsufficientDBInstanceCapacityFault(String),
+///<p> The specified DB instance is not in the <i>available</i> state. </p>
+InvalidDBInstanceStateFault(String),
+///<p>Cannot restore from vpc backup to non-vpc DB instance.</p>
+InvalidRestoreFault(String),
 ///<p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
 InvalidSubnet(String),
-///<p>Specified CIDRIP or EC2 security group is not authorized for the specified DB security group.</p> <p>RDS may not also be authorized via IAM to perform necessary actions on your behalf.</p>
-AuthorizationNotFoundFault(String),/// An error occurred dispatching the HTTP request
+///<p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
+InvalidVPCNetworkStateFault(String),
+///<p>Error accessing KMS key.</p>
+KMSKeyNotAccessibleFault(String),
+///<p>The specified option group could not be found.</p>
+OptionGroupNotFoundFault(String),
+///<p> <i>SourceDBInstanceIdentifier</i> refers to a DB instance with <i>BackupRetentionPeriod</i> equal to 0. </p>
+PointInTimeRestoreNotEnabledFault(String),
+///<p>Provisioned IOPS not available in the specified Availability Zone.</p>
+ProvisionedIopsNotAvailableInAZFault(String),
+///<p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
+StorageQuotaExceededFault(String),
+///<p> <i>StorageType</i> specified cannot be associated with the DB Instance. </p>
+StorageTypeNotSupportedFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -19173,7 +19724,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidSubnet" => RestoreDBInstanceToPointInTimeError::InvalidSubnet(String::from(parsed_error.message)),"StorageTypeNotSupportedFault" => RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),"InstanceQuotaExceededFault" => RestoreDBInstanceToPointInTimeError::InstanceQuotaExceededFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => RestoreDBInstanceToPointInTimeError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => RestoreDBInstanceToPointInTimeError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => RestoreDBInstanceToPointInTimeError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => RestoreDBInstanceToPointInTimeError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"DomainNotFoundFault" => RestoreDBInstanceToPointInTimeError::DomainNotFoundFault(String::from(parsed_error.message)),"DBInstanceAlreadyExistsFault" => RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"InsufficientDBInstanceCapacityFault" => RestoreDBInstanceToPointInTimeError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => RestoreDBInstanceToPointInTimeError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"PointInTimeRestoreNotEnabledFault" => RestoreDBInstanceToPointInTimeError::PointInTimeRestoreNotEnabledFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => RestoreDBInstanceToPointInTimeError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"AuthorizationNotFoundFault" => RestoreDBInstanceToPointInTimeError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"InvalidRestoreFault" => RestoreDBInstanceToPointInTimeError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => RestoreDBInstanceToPointInTimeError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),_ => RestoreDBInstanceToPointInTimeError::Unknown(String::from(body))
+                                    "AuthorizationNotFoundFault" => RestoreDBInstanceToPointInTimeError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"DBInstanceAlreadyExistsFault" => RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"DBInstanceNotFoundFault" => RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => RestoreDBInstanceToPointInTimeError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => RestoreDBInstanceToPointInTimeError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DomainNotFoundFault" => RestoreDBInstanceToPointInTimeError::DomainNotFoundFault(String::from(parsed_error.message)),"InstanceQuotaExceededFault" => RestoreDBInstanceToPointInTimeError::InstanceQuotaExceededFault(String::from(parsed_error.message)),"InsufficientDBInstanceCapacityFault" => RestoreDBInstanceToPointInTimeError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"InvalidDBInstanceStateFault" => RestoreDBInstanceToPointInTimeError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"InvalidRestoreFault" => RestoreDBInstanceToPointInTimeError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => RestoreDBInstanceToPointInTimeError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => RestoreDBInstanceToPointInTimeError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => RestoreDBInstanceToPointInTimeError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => RestoreDBInstanceToPointInTimeError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"PointInTimeRestoreNotEnabledFault" => RestoreDBInstanceToPointInTimeError::PointInTimeRestoreNotEnabledFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => RestoreDBInstanceToPointInTimeError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"StorageQuotaExceededFault" => RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(String::from(parsed_error.message)),"StorageTypeNotSupportedFault" => RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),_ => RestoreDBInstanceToPointInTimeError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RestoreDBInstanceToPointInTimeError::Unknown(body.to_string())
@@ -19205,7 +19756,29 @@ Unknown(String)
                 impl Error for RestoreDBInstanceToPointInTimeError {
                     fn description(&self) -> &str {
                         match *self {
-                            RestoreDBInstanceToPointInTimeError::PointInTimeRestoreNotEnabledFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::InvalidVPCNetworkStateFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::InstanceQuotaExceededFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::InvalidSubnet(ref cause) => cause,RestoreDBInstanceToPointInTimeError::InsufficientDBInstanceCapacityFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::InvalidDBInstanceStateFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::DBSubnetGroupNotFoundFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,RestoreDBInstanceToPointInTimeError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::OptionGroupNotFoundFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::KMSKeyNotAccessibleFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::DomainNotFoundFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::InvalidRestoreFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::AuthorizationNotFoundFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(ref cause) => cause,RestoreDBInstanceToPointInTimeError::Validation(ref cause) => cause,RestoreDBInstanceToPointInTimeError::Credentials(ref err) => err.description(),RestoreDBInstanceToPointInTimeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RestoreDBInstanceToPointInTimeError::Unknown(ref cause) => cause
+                            RestoreDBInstanceToPointInTimeError::AuthorizationNotFoundFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::DBSubnetGroupDoesNotCoverEnoughAZs(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::DBSubnetGroupNotFoundFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::DomainNotFoundFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::InstanceQuotaExceededFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::InsufficientDBInstanceCapacityFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::InvalidDBInstanceStateFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::InvalidRestoreFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::InvalidSubnet(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::InvalidVPCNetworkStateFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::KMSKeyNotAccessibleFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::OptionGroupNotFoundFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::PointInTimeRestoreNotEnabledFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::Validation(ref cause) => cause,
+RestoreDBInstanceToPointInTimeError::Credentials(ref err) => err.description(),
+RestoreDBInstanceToPointInTimeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RestoreDBInstanceToPointInTimeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -19215,10 +19788,10 @@ Unknown(String)
                     
 ///<p>Specified CIDRIP or EC2 security group is not authorized for the specified DB security group.</p> <p>RDS may not also be authorized via IAM to perform necessary actions on your behalf.</p>
 AuthorizationNotFoundFault(String),
-///<p>The state of the DB security group does not allow deletion.</p>
-InvalidDBSecurityGroupStateFault(String),
 ///<p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
-DBSecurityGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
+DBSecurityGroupNotFoundFault(String),
+///<p>The state of the DB security group does not allow deletion.</p>
+InvalidDBSecurityGroupStateFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -19235,7 +19808,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DBSecurityGroupNotFoundFault" => RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBSecurityGroupStateFault" => RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(String::from(parsed_error.message)),"AuthorizationNotFoundFault" => RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(parsed_error.message)),_ => RevokeDBSecurityGroupIngressError::Unknown(String::from(body))
+                                    "AuthorizationNotFoundFault" => RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFoundFault" => RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBSecurityGroupStateFault" => RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(String::from(parsed_error.message)),_ => RevokeDBSecurityGroupIngressError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RevokeDBSecurityGroupIngressError::Unknown(body.to_string())
@@ -19267,7 +19840,13 @@ Unknown(String)
                 impl Error for RevokeDBSecurityGroupIngressError {
                     fn description(&self) -> &str {
                         match *self {
-                            RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(ref cause) => cause,RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(ref cause) => cause,RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(ref cause) => cause,RevokeDBSecurityGroupIngressError::Validation(ref cause) => cause,RevokeDBSecurityGroupIngressError::Credentials(ref err) => err.description(),RevokeDBSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
+                            RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(ref cause) => cause,
+RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(ref cause) => cause,
+RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(ref cause) => cause,
+RevokeDBSecurityGroupIngressError::Validation(ref cause) => cause,
+RevokeDBSecurityGroupIngressError::Credentials(ref err) => err.description(),
+RevokeDBSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RevokeDBSecurityGroupIngressError::Unknown(ref cause) => cause
                         }
                     }
                  }

@@ -1064,10 +1064,10 @@ struct WebIdentitySubjectTypeDeserializer;
                     
 ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
 MalformedPolicyDocument(String),
-///<p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
-RegionDisabled(String),
 ///<p>The request was rejected because the policy document was too large. The error message describes how big the policy document is, in packed form, as a percentage of what the API allows.</p>
-PackedPolicyTooLarge(String),/// An error occurred dispatching the HTTP request
+PackedPolicyTooLarge(String),
+///<p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
+RegionDisabled(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1084,7 +1084,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "RegionDisabledException" => AssumeRoleError::RegionDisabled(String::from(parsed_error.message)),"PackedPolicyTooLargeException" => AssumeRoleError::PackedPolicyTooLarge(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => AssumeRoleError::MalformedPolicyDocument(String::from(parsed_error.message)),_ => AssumeRoleError::Unknown(String::from(body))
+                                    "MalformedPolicyDocumentException" => AssumeRoleError::MalformedPolicyDocument(String::from(parsed_error.message)),"PackedPolicyTooLargeException" => AssumeRoleError::PackedPolicyTooLarge(String::from(parsed_error.message)),"RegionDisabledException" => AssumeRoleError::RegionDisabled(String::from(parsed_error.message)),_ => AssumeRoleError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AssumeRoleError::Unknown(body.to_string())
@@ -1116,7 +1116,13 @@ Unknown(String)
                 impl Error for AssumeRoleError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssumeRoleError::MalformedPolicyDocument(ref cause) => cause,AssumeRoleError::RegionDisabled(ref cause) => cause,AssumeRoleError::PackedPolicyTooLarge(ref cause) => cause,AssumeRoleError::Validation(ref cause) => cause,AssumeRoleError::Credentials(ref err) => err.description(),AssumeRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssumeRoleError::Unknown(ref cause) => cause
+                            AssumeRoleError::MalformedPolicyDocument(ref cause) => cause,
+AssumeRoleError::PackedPolicyTooLarge(ref cause) => cause,
+AssumeRoleError::RegionDisabled(ref cause) => cause,
+AssumeRoleError::Validation(ref cause) => cause,
+AssumeRoleError::Credentials(ref err) => err.description(),
+AssumeRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssumeRoleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1124,18 +1130,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AssumeRoleWithSAMLError {
                     
-///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
-MalformedPolicyDocument(String),
-///<p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
-RegionDisabled(String),
 ///<p>The web identity token that was passed is expired or is not valid. Get a new identity token from the identity provider and then retry the request.</p>
 ExpiredToken(String),
-///<p>The web identity token that was passed could not be validated by AWS. Get a new identity token from the identity provider and then retry the request.</p>
-InvalidIdentityToken(String),
 ///<p>The identity provider (IdP) reported that authentication failed. This might be because the claim is invalid.</p> <p>If this error is returned for the <code>AssumeRoleWithWebIdentity</code> operation, it can also mean that the claim has expired or has been explicitly revoked. </p>
 IDPRejectedClaim(String),
+///<p>The web identity token that was passed could not be validated by AWS. Get a new identity token from the identity provider and then retry the request.</p>
+InvalidIdentityToken(String),
+///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+MalformedPolicyDocument(String),
 ///<p>The request was rejected because the policy document was too large. The error message describes how big the policy document is, in packed form, as a percentage of what the API allows.</p>
-PackedPolicyTooLarge(String),/// An error occurred dispatching the HTTP request
+PackedPolicyTooLarge(String),
+///<p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
+RegionDisabled(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1152,7 +1158,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "IDPRejectedClaimException" => AssumeRoleWithSAMLError::IDPRejectedClaim(String::from(parsed_error.message)),"InvalidIdentityTokenException" => AssumeRoleWithSAMLError::InvalidIdentityToken(String::from(parsed_error.message)),"RegionDisabledException" => AssumeRoleWithSAMLError::RegionDisabled(String::from(parsed_error.message)),"PackedPolicyTooLargeException" => AssumeRoleWithSAMLError::PackedPolicyTooLarge(String::from(parsed_error.message)),"ExpiredTokenException" => AssumeRoleWithSAMLError::ExpiredToken(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => AssumeRoleWithSAMLError::MalformedPolicyDocument(String::from(parsed_error.message)),_ => AssumeRoleWithSAMLError::Unknown(String::from(body))
+                                    "ExpiredTokenException" => AssumeRoleWithSAMLError::ExpiredToken(String::from(parsed_error.message)),"IDPRejectedClaimException" => AssumeRoleWithSAMLError::IDPRejectedClaim(String::from(parsed_error.message)),"InvalidIdentityTokenException" => AssumeRoleWithSAMLError::InvalidIdentityToken(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => AssumeRoleWithSAMLError::MalformedPolicyDocument(String::from(parsed_error.message)),"PackedPolicyTooLargeException" => AssumeRoleWithSAMLError::PackedPolicyTooLarge(String::from(parsed_error.message)),"RegionDisabledException" => AssumeRoleWithSAMLError::RegionDisabled(String::from(parsed_error.message)),_ => AssumeRoleWithSAMLError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AssumeRoleWithSAMLError::Unknown(body.to_string())
@@ -1184,7 +1190,16 @@ Unknown(String)
                 impl Error for AssumeRoleWithSAMLError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssumeRoleWithSAMLError::RegionDisabled(ref cause) => cause,AssumeRoleWithSAMLError::MalformedPolicyDocument(ref cause) => cause,AssumeRoleWithSAMLError::IDPRejectedClaim(ref cause) => cause,AssumeRoleWithSAMLError::InvalidIdentityToken(ref cause) => cause,AssumeRoleWithSAMLError::PackedPolicyTooLarge(ref cause) => cause,AssumeRoleWithSAMLError::ExpiredToken(ref cause) => cause,AssumeRoleWithSAMLError::Validation(ref cause) => cause,AssumeRoleWithSAMLError::Credentials(ref err) => err.description(),AssumeRoleWithSAMLError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssumeRoleWithSAMLError::Unknown(ref cause) => cause
+                            AssumeRoleWithSAMLError::ExpiredToken(ref cause) => cause,
+AssumeRoleWithSAMLError::IDPRejectedClaim(ref cause) => cause,
+AssumeRoleWithSAMLError::InvalidIdentityToken(ref cause) => cause,
+AssumeRoleWithSAMLError::MalformedPolicyDocument(ref cause) => cause,
+AssumeRoleWithSAMLError::PackedPolicyTooLarge(ref cause) => cause,
+AssumeRoleWithSAMLError::RegionDisabled(ref cause) => cause,
+AssumeRoleWithSAMLError::Validation(ref cause) => cause,
+AssumeRoleWithSAMLError::Credentials(ref err) => err.description(),
+AssumeRoleWithSAMLError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssumeRoleWithSAMLError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1192,20 +1207,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AssumeRoleWithWebIdentityError {
                     
-///<p>The request could not be fulfilled because the non-AWS identity provider (IDP) that was asked to verify the incoming identity token could not be reached. This is often a transient error caused by network conditions. Retry the request a limited number of times so that you don't exceed the request rate. If the error persists, the non-AWS identity provider might be down or not responding.</p>
-IDPCommunicationError(String),
 ///<p>The web identity token that was passed is expired or is not valid. Get a new identity token from the identity provider and then retry the request.</p>
 ExpiredToken(String),
-///<p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
-RegionDisabled(String),
-///<p>The web identity token that was passed could not be validated by AWS. Get a new identity token from the identity provider and then retry the request.</p>
-InvalidIdentityToken(String),
+///<p>The request could not be fulfilled because the non-AWS identity provider (IDP) that was asked to verify the incoming identity token could not be reached. This is often a transient error caused by network conditions. Retry the request a limited number of times so that you don't exceed the request rate. If the error persists, the non-AWS identity provider might be down or not responding.</p>
+IDPCommunicationError(String),
 ///<p>The identity provider (IdP) reported that authentication failed. This might be because the claim is invalid.</p> <p>If this error is returned for the <code>AssumeRoleWithWebIdentity</code> operation, it can also mean that the claim has expired or has been explicitly revoked. </p>
 IDPRejectedClaim(String),
+///<p>The web identity token that was passed could not be validated by AWS. Get a new identity token from the identity provider and then retry the request.</p>
+InvalidIdentityToken(String),
 ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
 MalformedPolicyDocument(String),
 ///<p>The request was rejected because the policy document was too large. The error message describes how big the policy document is, in packed form, as a percentage of what the API allows.</p>
-PackedPolicyTooLarge(String),/// An error occurred dispatching the HTTP request
+PackedPolicyTooLarge(String),
+///<p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
+RegionDisabled(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1222,7 +1237,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "PackedPolicyTooLargeException" => AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(String::from(parsed_error.message)),"RegionDisabledException" => AssumeRoleWithWebIdentityError::RegionDisabled(String::from(parsed_error.message)),"InvalidIdentityTokenException" => AssumeRoleWithWebIdentityError::InvalidIdentityToken(String::from(parsed_error.message)),"IDPRejectedClaimException" => AssumeRoleWithWebIdentityError::IDPRejectedClaim(String::from(parsed_error.message)),"IDPCommunicationErrorException" => AssumeRoleWithWebIdentityError::IDPCommunicationError(String::from(parsed_error.message)),"ExpiredTokenException" => AssumeRoleWithWebIdentityError::ExpiredToken(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => AssumeRoleWithWebIdentityError::MalformedPolicyDocument(String::from(parsed_error.message)),_ => AssumeRoleWithWebIdentityError::Unknown(String::from(body))
+                                    "ExpiredTokenException" => AssumeRoleWithWebIdentityError::ExpiredToken(String::from(parsed_error.message)),"IDPCommunicationErrorException" => AssumeRoleWithWebIdentityError::IDPCommunicationError(String::from(parsed_error.message)),"IDPRejectedClaimException" => AssumeRoleWithWebIdentityError::IDPRejectedClaim(String::from(parsed_error.message)),"InvalidIdentityTokenException" => AssumeRoleWithWebIdentityError::InvalidIdentityToken(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => AssumeRoleWithWebIdentityError::MalformedPolicyDocument(String::from(parsed_error.message)),"PackedPolicyTooLargeException" => AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(String::from(parsed_error.message)),"RegionDisabledException" => AssumeRoleWithWebIdentityError::RegionDisabled(String::from(parsed_error.message)),_ => AssumeRoleWithWebIdentityError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AssumeRoleWithWebIdentityError::Unknown(body.to_string())
@@ -1254,7 +1269,17 @@ Unknown(String)
                 impl Error for AssumeRoleWithWebIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssumeRoleWithWebIdentityError::InvalidIdentityToken(ref cause) => cause,AssumeRoleWithWebIdentityError::IDPRejectedClaim(ref cause) => cause,AssumeRoleWithWebIdentityError::ExpiredToken(ref cause) => cause,AssumeRoleWithWebIdentityError::RegionDisabled(ref cause) => cause,AssumeRoleWithWebIdentityError::IDPCommunicationError(ref cause) => cause,AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(ref cause) => cause,AssumeRoleWithWebIdentityError::MalformedPolicyDocument(ref cause) => cause,AssumeRoleWithWebIdentityError::Validation(ref cause) => cause,AssumeRoleWithWebIdentityError::Credentials(ref err) => err.description(),AssumeRoleWithWebIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssumeRoleWithWebIdentityError::Unknown(ref cause) => cause
+                            AssumeRoleWithWebIdentityError::ExpiredToken(ref cause) => cause,
+AssumeRoleWithWebIdentityError::IDPCommunicationError(ref cause) => cause,
+AssumeRoleWithWebIdentityError::IDPRejectedClaim(ref cause) => cause,
+AssumeRoleWithWebIdentityError::InvalidIdentityToken(ref cause) => cause,
+AssumeRoleWithWebIdentityError::MalformedPolicyDocument(ref cause) => cause,
+AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(ref cause) => cause,
+AssumeRoleWithWebIdentityError::RegionDisabled(ref cause) => cause,
+AssumeRoleWithWebIdentityError::Validation(ref cause) => cause,
+AssumeRoleWithWebIdentityError::Credentials(ref err) => err.description(),
+AssumeRoleWithWebIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssumeRoleWithWebIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1312,7 +1337,11 @@ Unknown(String)
                 impl Error for DecodeAuthorizationMessageError {
                     fn description(&self) -> &str {
                         match *self {
-                            DecodeAuthorizationMessageError::InvalidAuthorizationMessage(ref cause) => cause,DecodeAuthorizationMessageError::Validation(ref cause) => cause,DecodeAuthorizationMessageError::Credentials(ref err) => err.description(),DecodeAuthorizationMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DecodeAuthorizationMessageError::Unknown(ref cause) => cause
+                            DecodeAuthorizationMessageError::InvalidAuthorizationMessage(ref cause) => cause,
+DecodeAuthorizationMessageError::Validation(ref cause) => cause,
+DecodeAuthorizationMessageError::Credentials(ref err) => err.description(),
+DecodeAuthorizationMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DecodeAuthorizationMessageError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1368,7 +1397,10 @@ Unknown(String)
                 impl Error for GetCallerIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetCallerIdentityError::Validation(ref cause) => cause,GetCallerIdentityError::Credentials(ref err) => err.description(),GetCallerIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetCallerIdentityError::Unknown(ref cause) => cause
+                            GetCallerIdentityError::Validation(ref cause) => cause,
+GetCallerIdentityError::Credentials(ref err) => err.description(),
+GetCallerIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetCallerIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1376,10 +1408,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetFederationTokenError {
                     
-///<p>The request was rejected because the policy document was too large. The error message describes how big the policy document is, in packed form, as a percentage of what the API allows.</p>
-PackedPolicyTooLarge(String),
 ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
 MalformedPolicyDocument(String),
+///<p>The request was rejected because the policy document was too large. The error message describes how big the policy document is, in packed form, as a percentage of what the API allows.</p>
+PackedPolicyTooLarge(String),
 ///<p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
 RegionDisabled(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1398,7 +1430,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "RegionDisabledException" => GetFederationTokenError::RegionDisabled(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => GetFederationTokenError::MalformedPolicyDocument(String::from(parsed_error.message)),"PackedPolicyTooLargeException" => GetFederationTokenError::PackedPolicyTooLarge(String::from(parsed_error.message)),_ => GetFederationTokenError::Unknown(String::from(body))
+                                    "MalformedPolicyDocumentException" => GetFederationTokenError::MalformedPolicyDocument(String::from(parsed_error.message)),"PackedPolicyTooLargeException" => GetFederationTokenError::PackedPolicyTooLarge(String::from(parsed_error.message)),"RegionDisabledException" => GetFederationTokenError::RegionDisabled(String::from(parsed_error.message)),_ => GetFederationTokenError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetFederationTokenError::Unknown(body.to_string())
@@ -1430,7 +1462,13 @@ Unknown(String)
                 impl Error for GetFederationTokenError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetFederationTokenError::PackedPolicyTooLarge(ref cause) => cause,GetFederationTokenError::MalformedPolicyDocument(ref cause) => cause,GetFederationTokenError::RegionDisabled(ref cause) => cause,GetFederationTokenError::Validation(ref cause) => cause,GetFederationTokenError::Credentials(ref err) => err.description(),GetFederationTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetFederationTokenError::Unknown(ref cause) => cause
+                            GetFederationTokenError::MalformedPolicyDocument(ref cause) => cause,
+GetFederationTokenError::PackedPolicyTooLarge(ref cause) => cause,
+GetFederationTokenError::RegionDisabled(ref cause) => cause,
+GetFederationTokenError::Validation(ref cause) => cause,
+GetFederationTokenError::Credentials(ref err) => err.description(),
+GetFederationTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetFederationTokenError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1488,7 +1526,11 @@ Unknown(String)
                 impl Error for GetSessionTokenError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetSessionTokenError::RegionDisabled(ref cause) => cause,GetSessionTokenError::Validation(ref cause) => cause,GetSessionTokenError::Credentials(ref err) => err.description(),GetSessionTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetSessionTokenError::Unknown(ref cause) => cause
+                            GetSessionTokenError::RegionDisabled(ref cause) => cause,
+GetSessionTokenError::Validation(ref cause) => cause,
+GetSessionTokenError::Credentials(ref err) => err.description(),
+GetSessionTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetSessionTokenError::Unknown(ref cause) => cause
                         }
                     }
                  }

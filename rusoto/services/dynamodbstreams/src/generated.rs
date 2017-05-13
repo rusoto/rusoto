@@ -337,7 +337,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerError" => DescribeStreamError::InternalServerError(String::from(error_message)),"ResourceNotFoundException" => DescribeStreamError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeStreamError::Validation(error_message.to_string()),_ => DescribeStreamError::Unknown(String::from(body))
+                                    "InternalServerError" => DescribeStreamError::InternalServerError(String::from(error_message)),
+"ResourceNotFoundException" => DescribeStreamError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeStreamError::Validation(error_message.to_string()),
+_ => DescribeStreamError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeStreamError::Unknown(String::from(body))
@@ -368,7 +371,12 @@ Unknown(String)
                 impl Error for DescribeStreamError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeStreamError::InternalServerError(ref cause) => cause,DescribeStreamError::ResourceNotFound(ref cause) => cause,DescribeStreamError::Validation(ref cause) => cause,DescribeStreamError::Credentials(ref err) => err.description(),DescribeStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeStreamError::Unknown(ref cause) => cause
+                            DescribeStreamError::InternalServerError(ref cause) => cause,
+DescribeStreamError::ResourceNotFound(ref cause) => cause,
+DescribeStreamError::Validation(ref cause) => cause,
+DescribeStreamError::Credentials(ref err) => err.description(),
+DescribeStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeStreamError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -376,16 +384,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetRecordsError {
                     
-///<p>The operation tried to access a nonexistent stream.</p>
-ResourceNotFound(String),
-///<p>The operation attempted to read past the oldest stream record in a shard.</p> <p>In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream. You might receive a TrimmedDataAccessException if:</p> <ul> <li><p>You request a shard iterator with a sequence number older than the trim point (24 hours).</p> </li> <li><p>You obtain a shard iterator, but before you use the iterator in a <i>GetRecords</i> request, a stream record in the shard exceeds the 24 hour period and is trimmed. This causes the iterator to access a record that no longer exists.</p> </li> </ul>
-TrimmedDataAccess(String),
+///<p>The shard iterator has expired and can no longer be used to retrieve stream records. A shard iterator expires 15 minutes after it is retrieved using the <i>GetShardIterator</i> action.</p>
+ExpiredIterator(String),
 ///<p>An error occurred on the server side.</p>
 InternalServerError(String),
 ///<p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#APIRetries">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
 LimitExceeded(String),
-///<p>The shard iterator has expired and can no longer be used to retrieve stream records. A shard iterator expires 15 minutes after it is retrieved using the <i>GetShardIterator</i> action.</p>
-ExpiredIterator(String),/// An error occurred dispatching the HTTP request
+///<p>The operation tried to access a nonexistent stream.</p>
+ResourceNotFound(String),
+///<p>The operation attempted to read past the oldest stream record in a shard.</p> <p>In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream. You might receive a TrimmedDataAccessException if:</p> <ul> <li><p>You request a shard iterator with a sequence number older than the trim point (24 hours).</p> </li> <li><p>You obtain a shard iterator, but before you use the iterator in a <i>GetRecords</i> request, a stream record in the shard exceeds the 24 hour period and is trimmed. This causes the iterator to access a record that no longer exists.</p> </li> </ul>
+TrimmedDataAccess(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -404,7 +412,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ExpiredIteratorException" => GetRecordsError::ExpiredIterator(String::from(error_message)),"ResourceNotFoundException" => GetRecordsError::ResourceNotFound(String::from(error_message)),"LimitExceededException" => GetRecordsError::LimitExceeded(String::from(error_message)),"InternalServerError" => GetRecordsError::InternalServerError(String::from(error_message)),"TrimmedDataAccessException" => GetRecordsError::TrimmedDataAccess(String::from(error_message)),"ValidationException" => GetRecordsError::Validation(error_message.to_string()),_ => GetRecordsError::Unknown(String::from(body))
+                                    "ExpiredIteratorException" => GetRecordsError::ExpiredIterator(String::from(error_message)),
+"InternalServerError" => GetRecordsError::InternalServerError(String::from(error_message)),
+"LimitExceededException" => GetRecordsError::LimitExceeded(String::from(error_message)),
+"ResourceNotFoundException" => GetRecordsError::ResourceNotFound(String::from(error_message)),
+"TrimmedDataAccessException" => GetRecordsError::TrimmedDataAccess(String::from(error_message)),
+"ValidationException" => GetRecordsError::Validation(error_message.to_string()),
+_ => GetRecordsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetRecordsError::Unknown(String::from(body))
@@ -435,7 +449,15 @@ Unknown(String)
                 impl Error for GetRecordsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetRecordsError::ExpiredIterator(ref cause) => cause,GetRecordsError::TrimmedDataAccess(ref cause) => cause,GetRecordsError::ResourceNotFound(ref cause) => cause,GetRecordsError::LimitExceeded(ref cause) => cause,GetRecordsError::InternalServerError(ref cause) => cause,GetRecordsError::Validation(ref cause) => cause,GetRecordsError::Credentials(ref err) => err.description(),GetRecordsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetRecordsError::Unknown(ref cause) => cause
+                            GetRecordsError::ExpiredIterator(ref cause) => cause,
+GetRecordsError::InternalServerError(ref cause) => cause,
+GetRecordsError::LimitExceeded(ref cause) => cause,
+GetRecordsError::ResourceNotFound(ref cause) => cause,
+GetRecordsError::TrimmedDataAccess(ref cause) => cause,
+GetRecordsError::Validation(ref cause) => cause,
+GetRecordsError::Credentials(ref err) => err.description(),
+GetRecordsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetRecordsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -443,12 +465,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetShardIteratorError {
                     
-///<p>The operation attempted to read past the oldest stream record in a shard.</p> <p>In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream. You might receive a TrimmedDataAccessException if:</p> <ul> <li><p>You request a shard iterator with a sequence number older than the trim point (24 hours).</p> </li> <li><p>You obtain a shard iterator, but before you use the iterator in a <i>GetRecords</i> request, a stream record in the shard exceeds the 24 hour period and is trimmed. This causes the iterator to access a record that no longer exists.</p> </li> </ul>
-TrimmedDataAccess(String),
+///<p>An error occurred on the server side.</p>
+InternalServerError(String),
 ///<p>The operation tried to access a nonexistent stream.</p>
 ResourceNotFound(String),
-///<p>An error occurred on the server side.</p>
-InternalServerError(String),/// An error occurred dispatching the HTTP request
+///<p>The operation attempted to read past the oldest stream record in a shard.</p> <p>In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream. You might receive a TrimmedDataAccessException if:</p> <ul> <li><p>You request a shard iterator with a sequence number older than the trim point (24 hours).</p> </li> <li><p>You obtain a shard iterator, but before you use the iterator in a <i>GetRecords</i> request, a stream record in the shard exceeds the 24 hour period and is trimmed. This causes the iterator to access a record that no longer exists.</p> </li> </ul>
+TrimmedDataAccess(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -467,7 +489,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => GetShardIteratorError::ResourceNotFound(String::from(error_message)),"InternalServerError" => GetShardIteratorError::InternalServerError(String::from(error_message)),"TrimmedDataAccessException" => GetShardIteratorError::TrimmedDataAccess(String::from(error_message)),"ValidationException" => GetShardIteratorError::Validation(error_message.to_string()),_ => GetShardIteratorError::Unknown(String::from(body))
+                                    "InternalServerError" => GetShardIteratorError::InternalServerError(String::from(error_message)),
+"ResourceNotFoundException" => GetShardIteratorError::ResourceNotFound(String::from(error_message)),
+"TrimmedDataAccessException" => GetShardIteratorError::TrimmedDataAccess(String::from(error_message)),
+"ValidationException" => GetShardIteratorError::Validation(error_message.to_string()),
+_ => GetShardIteratorError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetShardIteratorError::Unknown(String::from(body))
@@ -498,7 +524,13 @@ Unknown(String)
                 impl Error for GetShardIteratorError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetShardIteratorError::ResourceNotFound(ref cause) => cause,GetShardIteratorError::InternalServerError(ref cause) => cause,GetShardIteratorError::TrimmedDataAccess(ref cause) => cause,GetShardIteratorError::Validation(ref cause) => cause,GetShardIteratorError::Credentials(ref err) => err.description(),GetShardIteratorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetShardIteratorError::Unknown(ref cause) => cause
+                            GetShardIteratorError::InternalServerError(ref cause) => cause,
+GetShardIteratorError::ResourceNotFound(ref cause) => cause,
+GetShardIteratorError::TrimmedDataAccess(ref cause) => cause,
+GetShardIteratorError::Validation(ref cause) => cause,
+GetShardIteratorError::Credentials(ref err) => err.description(),
+GetShardIteratorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetShardIteratorError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -528,7 +560,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => ListStreamsError::ResourceNotFound(String::from(error_message)),"InternalServerError" => ListStreamsError::InternalServerError(String::from(error_message)),"ValidationException" => ListStreamsError::Validation(error_message.to_string()),_ => ListStreamsError::Unknown(String::from(body))
+                                    "InternalServerError" => ListStreamsError::InternalServerError(String::from(error_message)),
+"ResourceNotFoundException" => ListStreamsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => ListStreamsError::Validation(error_message.to_string()),
+_ => ListStreamsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListStreamsError::Unknown(String::from(body))
@@ -559,7 +594,12 @@ Unknown(String)
                 impl Error for ListStreamsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListStreamsError::InternalServerError(ref cause) => cause,ListStreamsError::ResourceNotFound(ref cause) => cause,ListStreamsError::Validation(ref cause) => cause,ListStreamsError::Credentials(ref err) => err.description(),ListStreamsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListStreamsError::Unknown(ref cause) => cause
+                            ListStreamsError::InternalServerError(ref cause) => cause,
+ListStreamsError::ResourceNotFound(ref cause) => cause,
+ListStreamsError::Validation(ref cause) => cause,
+ListStreamsError::Credentials(ref err) => err.description(),
+ListStreamsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListStreamsError::Unknown(ref cause) => cause
                         }
                     }
                  }

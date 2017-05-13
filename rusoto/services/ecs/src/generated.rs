@@ -1411,12 +1411,12 @@ pub type VolumeList = Vec<Volume>;
                 #[derive(Debug, PartialEq)]
                 pub enum CreateClusterError {
                     
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1435,7 +1435,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => CreateClusterError::Client(String::from(error_message)),"InvalidParameterException" => CreateClusterError::InvalidParameter(String::from(error_message)),"ServerException" => CreateClusterError::Server(String::from(error_message)),"ValidationException" => CreateClusterError::Validation(error_message.to_string()),_ => CreateClusterError::Unknown(String::from(body))
+                                    "ClientException" => CreateClusterError::Client(String::from(error_message)),
+"InvalidParameterException" => CreateClusterError::InvalidParameter(String::from(error_message)),
+"ServerException" => CreateClusterError::Server(String::from(error_message)),
+"ValidationException" => CreateClusterError::Validation(error_message.to_string()),
+_ => CreateClusterError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateClusterError::Unknown(String::from(body))
@@ -1466,7 +1470,13 @@ Unknown(String)
                 impl Error for CreateClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateClusterError::Server(ref cause) => cause,CreateClusterError::Client(ref cause) => cause,CreateClusterError::InvalidParameter(ref cause) => cause,CreateClusterError::Validation(ref cause) => cause,CreateClusterError::Credentials(ref err) => err.description(),CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateClusterError::Unknown(ref cause) => cause
+                            CreateClusterError::Client(ref cause) => cause,
+CreateClusterError::InvalidParameter(ref cause) => cause,
+CreateClusterError::Server(ref cause) => cause,
+CreateClusterError::Validation(ref cause) => cause,
+CreateClusterError::Credentials(ref err) => err.description(),
+CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1474,14 +1484,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateServiceError {
                     
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
-ClusterNotFound(String),/// An error occurred dispatching the HTTP request
+ClusterNotFound(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1500,7 +1510,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClusterNotFoundException" => CreateServiceError::ClusterNotFound(String::from(error_message)),"ClientException" => CreateServiceError::Client(String::from(error_message)),"ServerException" => CreateServiceError::Server(String::from(error_message)),"InvalidParameterException" => CreateServiceError::InvalidParameter(String::from(error_message)),"ValidationException" => CreateServiceError::Validation(error_message.to_string()),_ => CreateServiceError::Unknown(String::from(body))
+                                    "ClientException" => CreateServiceError::Client(String::from(error_message)),
+"ClusterNotFoundException" => CreateServiceError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => CreateServiceError::InvalidParameter(String::from(error_message)),
+"ServerException" => CreateServiceError::Server(String::from(error_message)),
+"ValidationException" => CreateServiceError::Validation(error_message.to_string()),
+_ => CreateServiceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateServiceError::Unknown(String::from(body))
@@ -1531,7 +1546,14 @@ Unknown(String)
                 impl Error for CreateServiceError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateServiceError::InvalidParameter(ref cause) => cause,CreateServiceError::ClusterNotFound(ref cause) => cause,CreateServiceError::Server(ref cause) => cause,CreateServiceError::Client(ref cause) => cause,CreateServiceError::Validation(ref cause) => cause,CreateServiceError::Credentials(ref err) => err.description(),CreateServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateServiceError::Unknown(ref cause) => cause
+                            CreateServiceError::Client(ref cause) => cause,
+CreateServiceError::ClusterNotFound(ref cause) => cause,
+CreateServiceError::InvalidParameter(ref cause) => cause,
+CreateServiceError::Server(ref cause) => cause,
+CreateServiceError::Validation(ref cause) => cause,
+CreateServiceError::Credentials(ref err) => err.description(),
+CreateServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateServiceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1541,10 +1563,10 @@ Unknown(String)
                     
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
 ClusterNotFound(String),
-///<p>The specified target could not be found. You can view your available container instances with <a>ListContainerInstances</a>. Amazon ECS container instances are cluster-specific and region-specific.</p>
-TargetNotFound(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>The specified target could not be found. You can view your available container instances with <a>ListContainerInstances</a>. Amazon ECS container instances are cluster-specific and region-specific.</p>
+TargetNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1563,7 +1585,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => DeleteAttributesError::InvalidParameter(String::from(error_message)),"ClusterNotFoundException" => DeleteAttributesError::ClusterNotFound(String::from(error_message)),"TargetNotFoundException" => DeleteAttributesError::TargetNotFound(String::from(error_message)),"ValidationException" => DeleteAttributesError::Validation(error_message.to_string()),_ => DeleteAttributesError::Unknown(String::from(body))
+                                    "ClusterNotFoundException" => DeleteAttributesError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => DeleteAttributesError::InvalidParameter(String::from(error_message)),
+"TargetNotFoundException" => DeleteAttributesError::TargetNotFound(String::from(error_message)),
+"ValidationException" => DeleteAttributesError::Validation(error_message.to_string()),
+_ => DeleteAttributesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteAttributesError::Unknown(String::from(body))
@@ -1594,7 +1620,13 @@ Unknown(String)
                 impl Error for DeleteAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAttributesError::TargetNotFound(ref cause) => cause,DeleteAttributesError::InvalidParameter(ref cause) => cause,DeleteAttributesError::ClusterNotFound(ref cause) => cause,DeleteAttributesError::Validation(ref cause) => cause,DeleteAttributesError::Credentials(ref err) => err.description(),DeleteAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAttributesError::Unknown(ref cause) => cause
+                            DeleteAttributesError::ClusterNotFound(ref cause) => cause,
+DeleteAttributesError::InvalidParameter(ref cause) => cause,
+DeleteAttributesError::TargetNotFound(ref cause) => cause,
+DeleteAttributesError::Validation(ref cause) => cause,
+DeleteAttributesError::Credentials(ref err) => err.description(),
+DeleteAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1602,18 +1634,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteClusterError {
                     
-///<p>You cannot delete a cluster that has registered container instances. You must first deregister the container instances before you can delete the cluster. For more information, see <a>DeregisterContainerInstance</a>.</p>
-ClusterContainsContainerInstances(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
+///<p>You cannot delete a cluster that has registered container instances. You must first deregister the container instances before you can delete the cluster. For more information, see <a>DeregisterContainerInstance</a>.</p>
+ClusterContainsContainerInstances(String),
+///<p>You cannot delete a cluster that contains services. You must first update the service to reduce its desired task count to 0 and then delete the service. For more information, see <a>UpdateService</a> and <a>DeleteService</a>.</p>
+ClusterContainsServices(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
 ClusterNotFound(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
-///<p>You cannot delete a cluster that contains services. You must first update the service to reduce its desired task count to 0 and then delete the service. For more information, see <a>UpdateService</a> and <a>DeleteService</a>.</p>
-ClusterContainsServices(String),/// An error occurred dispatching the HTTP request
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1632,7 +1664,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClusterContainsContainerInstancesException" => DeleteClusterError::ClusterContainsContainerInstances(String::from(error_message)),"ClusterContainsServicesException" => DeleteClusterError::ClusterContainsServices(String::from(error_message)),"InvalidParameterException" => DeleteClusterError::InvalidParameter(String::from(error_message)),"ClusterNotFoundException" => DeleteClusterError::ClusterNotFound(String::from(error_message)),"ServerException" => DeleteClusterError::Server(String::from(error_message)),"ClientException" => DeleteClusterError::Client(String::from(error_message)),"ValidationException" => DeleteClusterError::Validation(error_message.to_string()),_ => DeleteClusterError::Unknown(String::from(body))
+                                    "ClientException" => DeleteClusterError::Client(String::from(error_message)),
+"ClusterContainsContainerInstancesException" => DeleteClusterError::ClusterContainsContainerInstances(String::from(error_message)),
+"ClusterContainsServicesException" => DeleteClusterError::ClusterContainsServices(String::from(error_message)),
+"ClusterNotFoundException" => DeleteClusterError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => DeleteClusterError::InvalidParameter(String::from(error_message)),
+"ServerException" => DeleteClusterError::Server(String::from(error_message)),
+"ValidationException" => DeleteClusterError::Validation(error_message.to_string()),
+_ => DeleteClusterError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteClusterError::Unknown(String::from(body))
@@ -1663,7 +1702,16 @@ Unknown(String)
                 impl Error for DeleteClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteClusterError::Server(ref cause) => cause,DeleteClusterError::ClusterContainsServices(ref cause) => cause,DeleteClusterError::InvalidParameter(ref cause) => cause,DeleteClusterError::Client(ref cause) => cause,DeleteClusterError::ClusterContainsContainerInstances(ref cause) => cause,DeleteClusterError::ClusterNotFound(ref cause) => cause,DeleteClusterError::Validation(ref cause) => cause,DeleteClusterError::Credentials(ref err) => err.description(),DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteClusterError::Unknown(ref cause) => cause
+                            DeleteClusterError::Client(ref cause) => cause,
+DeleteClusterError::ClusterContainsContainerInstances(ref cause) => cause,
+DeleteClusterError::ClusterContainsServices(ref cause) => cause,
+DeleteClusterError::ClusterNotFound(ref cause) => cause,
+DeleteClusterError::InvalidParameter(ref cause) => cause,
+DeleteClusterError::Server(ref cause) => cause,
+DeleteClusterError::Validation(ref cause) => cause,
+DeleteClusterError::Credentials(ref err) => err.description(),
+DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1671,16 +1719,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteServiceError {
                     
-///<p>The specified service could not be found. You can view your available services with <a>ListServices</a>. Amazon ECS services are cluster-specific and region-specific.</p>
-ServiceNotFound(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
 ClusterNotFound(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),
+///<p>The specified service could not be found. You can view your available services with <a>ListServices</a>. Amazon ECS services are cluster-specific and region-specific.</p>
+ServiceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1699,7 +1747,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceNotFoundException" => DeleteServiceError::ServiceNotFound(String::from(error_message)),"ClusterNotFoundException" => DeleteServiceError::ClusterNotFound(String::from(error_message)),"ClientException" => DeleteServiceError::Client(String::from(error_message)),"ServerException" => DeleteServiceError::Server(String::from(error_message)),"InvalidParameterException" => DeleteServiceError::InvalidParameter(String::from(error_message)),"ValidationException" => DeleteServiceError::Validation(error_message.to_string()),_ => DeleteServiceError::Unknown(String::from(body))
+                                    "ClientException" => DeleteServiceError::Client(String::from(error_message)),
+"ClusterNotFoundException" => DeleteServiceError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => DeleteServiceError::InvalidParameter(String::from(error_message)),
+"ServerException" => DeleteServiceError::Server(String::from(error_message)),
+"ServiceNotFoundException" => DeleteServiceError::ServiceNotFound(String::from(error_message)),
+"ValidationException" => DeleteServiceError::Validation(error_message.to_string()),
+_ => DeleteServiceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteServiceError::Unknown(String::from(body))
@@ -1730,7 +1784,15 @@ Unknown(String)
                 impl Error for DeleteServiceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteServiceError::ClusterNotFound(ref cause) => cause,DeleteServiceError::InvalidParameter(ref cause) => cause,DeleteServiceError::ServiceNotFound(ref cause) => cause,DeleteServiceError::Server(ref cause) => cause,DeleteServiceError::Client(ref cause) => cause,DeleteServiceError::Validation(ref cause) => cause,DeleteServiceError::Credentials(ref err) => err.description(),DeleteServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteServiceError::Unknown(ref cause) => cause
+                            DeleteServiceError::Client(ref cause) => cause,
+DeleteServiceError::ClusterNotFound(ref cause) => cause,
+DeleteServiceError::InvalidParameter(ref cause) => cause,
+DeleteServiceError::Server(ref cause) => cause,
+DeleteServiceError::ServiceNotFound(ref cause) => cause,
+DeleteServiceError::Validation(ref cause) => cause,
+DeleteServiceError::Credentials(ref err) => err.description(),
+DeleteServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteServiceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1738,14 +1800,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeregisterContainerInstanceError {
                     
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
-ClusterNotFound(String),/// An error occurred dispatching the HTTP request
+ClusterNotFound(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1764,7 +1826,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => DeregisterContainerInstanceError::InvalidParameter(String::from(error_message)),"ServerException" => DeregisterContainerInstanceError::Server(String::from(error_message)),"ClusterNotFoundException" => DeregisterContainerInstanceError::ClusterNotFound(String::from(error_message)),"ClientException" => DeregisterContainerInstanceError::Client(String::from(error_message)),"ValidationException" => DeregisterContainerInstanceError::Validation(error_message.to_string()),_ => DeregisterContainerInstanceError::Unknown(String::from(body))
+                                    "ClientException" => DeregisterContainerInstanceError::Client(String::from(error_message)),
+"ClusterNotFoundException" => DeregisterContainerInstanceError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => DeregisterContainerInstanceError::InvalidParameter(String::from(error_message)),
+"ServerException" => DeregisterContainerInstanceError::Server(String::from(error_message)),
+"ValidationException" => DeregisterContainerInstanceError::Validation(error_message.to_string()),
+_ => DeregisterContainerInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeregisterContainerInstanceError::Unknown(String::from(body))
@@ -1795,7 +1862,14 @@ Unknown(String)
                 impl Error for DeregisterContainerInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeregisterContainerInstanceError::Server(ref cause) => cause,DeregisterContainerInstanceError::InvalidParameter(ref cause) => cause,DeregisterContainerInstanceError::ClusterNotFound(ref cause) => cause,DeregisterContainerInstanceError::Client(ref cause) => cause,DeregisterContainerInstanceError::Validation(ref cause) => cause,DeregisterContainerInstanceError::Credentials(ref err) => err.description(),DeregisterContainerInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeregisterContainerInstanceError::Unknown(ref cause) => cause
+                            DeregisterContainerInstanceError::Client(ref cause) => cause,
+DeregisterContainerInstanceError::ClusterNotFound(ref cause) => cause,
+DeregisterContainerInstanceError::InvalidParameter(ref cause) => cause,
+DeregisterContainerInstanceError::Server(ref cause) => cause,
+DeregisterContainerInstanceError::Validation(ref cause) => cause,
+DeregisterContainerInstanceError::Credentials(ref err) => err.description(),
+DeregisterContainerInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeregisterContainerInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1805,10 +1879,10 @@ Unknown(String)
                     
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1827,7 +1901,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => DeregisterTaskDefinitionError::Client(String::from(error_message)),"InvalidParameterException" => DeregisterTaskDefinitionError::InvalidParameter(String::from(error_message)),"ServerException" => DeregisterTaskDefinitionError::Server(String::from(error_message)),"ValidationException" => DeregisterTaskDefinitionError::Validation(error_message.to_string()),_ => DeregisterTaskDefinitionError::Unknown(String::from(body))
+                                    "ClientException" => DeregisterTaskDefinitionError::Client(String::from(error_message)),
+"InvalidParameterException" => DeregisterTaskDefinitionError::InvalidParameter(String::from(error_message)),
+"ServerException" => DeregisterTaskDefinitionError::Server(String::from(error_message)),
+"ValidationException" => DeregisterTaskDefinitionError::Validation(error_message.to_string()),
+_ => DeregisterTaskDefinitionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeregisterTaskDefinitionError::Unknown(String::from(body))
@@ -1858,7 +1936,13 @@ Unknown(String)
                 impl Error for DeregisterTaskDefinitionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeregisterTaskDefinitionError::Server(ref cause) => cause,DeregisterTaskDefinitionError::InvalidParameter(ref cause) => cause,DeregisterTaskDefinitionError::Client(ref cause) => cause,DeregisterTaskDefinitionError::Validation(ref cause) => cause,DeregisterTaskDefinitionError::Credentials(ref err) => err.description(),DeregisterTaskDefinitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeregisterTaskDefinitionError::Unknown(ref cause) => cause
+                            DeregisterTaskDefinitionError::Client(ref cause) => cause,
+DeregisterTaskDefinitionError::InvalidParameter(ref cause) => cause,
+DeregisterTaskDefinitionError::Server(ref cause) => cause,
+DeregisterTaskDefinitionError::Validation(ref cause) => cause,
+DeregisterTaskDefinitionError::Credentials(ref err) => err.description(),
+DeregisterTaskDefinitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeregisterTaskDefinitionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1890,7 +1974,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => DescribeClustersError::Client(String::from(error_message)),"ServerException" => DescribeClustersError::Server(String::from(error_message)),"InvalidParameterException" => DescribeClustersError::InvalidParameter(String::from(error_message)),"ValidationException" => DescribeClustersError::Validation(error_message.to_string()),_ => DescribeClustersError::Unknown(String::from(body))
+                                    "ClientException" => DescribeClustersError::Client(String::from(error_message)),
+"InvalidParameterException" => DescribeClustersError::InvalidParameter(String::from(error_message)),
+"ServerException" => DescribeClustersError::Server(String::from(error_message)),
+"ValidationException" => DescribeClustersError::Validation(error_message.to_string()),
+_ => DescribeClustersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeClustersError::Unknown(String::from(body))
@@ -1921,7 +2009,13 @@ Unknown(String)
                 impl Error for DescribeClustersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeClustersError::Server(ref cause) => cause,DescribeClustersError::Client(ref cause) => cause,DescribeClustersError::InvalidParameter(ref cause) => cause,DescribeClustersError::Validation(ref cause) => cause,DescribeClustersError::Credentials(ref err) => err.description(),DescribeClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeClustersError::Unknown(ref cause) => cause
+                            DescribeClustersError::Client(ref cause) => cause,
+DescribeClustersError::InvalidParameter(ref cause) => cause,
+DescribeClustersError::Server(ref cause) => cause,
+DescribeClustersError::Validation(ref cause) => cause,
+DescribeClustersError::Credentials(ref err) => err.description(),
+DescribeClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeClustersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1929,14 +2023,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeContainerInstancesError {
                     
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
-ClusterNotFound(String),/// An error occurred dispatching the HTTP request
+ClusterNotFound(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1955,7 +2049,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClusterNotFoundException" => DescribeContainerInstancesError::ClusterNotFound(String::from(error_message)),"ServerException" => DescribeContainerInstancesError::Server(String::from(error_message)),"InvalidParameterException" => DescribeContainerInstancesError::InvalidParameter(String::from(error_message)),"ClientException" => DescribeContainerInstancesError::Client(String::from(error_message)),"ValidationException" => DescribeContainerInstancesError::Validation(error_message.to_string()),_ => DescribeContainerInstancesError::Unknown(String::from(body))
+                                    "ClientException" => DescribeContainerInstancesError::Client(String::from(error_message)),
+"ClusterNotFoundException" => DescribeContainerInstancesError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => DescribeContainerInstancesError::InvalidParameter(String::from(error_message)),
+"ServerException" => DescribeContainerInstancesError::Server(String::from(error_message)),
+"ValidationException" => DescribeContainerInstancesError::Validation(error_message.to_string()),
+_ => DescribeContainerInstancesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeContainerInstancesError::Unknown(String::from(body))
@@ -1986,7 +2085,14 @@ Unknown(String)
                 impl Error for DescribeContainerInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeContainerInstancesError::InvalidParameter(ref cause) => cause,DescribeContainerInstancesError::ClusterNotFound(ref cause) => cause,DescribeContainerInstancesError::Client(ref cause) => cause,DescribeContainerInstancesError::Server(ref cause) => cause,DescribeContainerInstancesError::Validation(ref cause) => cause,DescribeContainerInstancesError::Credentials(ref err) => err.description(),DescribeContainerInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeContainerInstancesError::Unknown(ref cause) => cause
+                            DescribeContainerInstancesError::Client(ref cause) => cause,
+DescribeContainerInstancesError::ClusterNotFound(ref cause) => cause,
+DescribeContainerInstancesError::InvalidParameter(ref cause) => cause,
+DescribeContainerInstancesError::Server(ref cause) => cause,
+DescribeContainerInstancesError::Validation(ref cause) => cause,
+DescribeContainerInstancesError::Credentials(ref err) => err.description(),
+DescribeContainerInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeContainerInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1994,14 +2100,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeServicesError {
                     
+///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
+Client(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
 ClusterNotFound(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
-///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2020,7 +2126,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => DescribeServicesError::InvalidParameter(String::from(error_message)),"ClusterNotFoundException" => DescribeServicesError::ClusterNotFound(String::from(error_message)),"ClientException" => DescribeServicesError::Client(String::from(error_message)),"ServerException" => DescribeServicesError::Server(String::from(error_message)),"ValidationException" => DescribeServicesError::Validation(error_message.to_string()),_ => DescribeServicesError::Unknown(String::from(body))
+                                    "ClientException" => DescribeServicesError::Client(String::from(error_message)),
+"ClusterNotFoundException" => DescribeServicesError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => DescribeServicesError::InvalidParameter(String::from(error_message)),
+"ServerException" => DescribeServicesError::Server(String::from(error_message)),
+"ValidationException" => DescribeServicesError::Validation(error_message.to_string()),
+_ => DescribeServicesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeServicesError::Unknown(String::from(body))
@@ -2051,7 +2162,14 @@ Unknown(String)
                 impl Error for DescribeServicesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeServicesError::Client(ref cause) => cause,DescribeServicesError::InvalidParameter(ref cause) => cause,DescribeServicesError::Server(ref cause) => cause,DescribeServicesError::ClusterNotFound(ref cause) => cause,DescribeServicesError::Validation(ref cause) => cause,DescribeServicesError::Credentials(ref err) => err.description(),DescribeServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeServicesError::Unknown(ref cause) => cause
+                            DescribeServicesError::Client(ref cause) => cause,
+DescribeServicesError::ClusterNotFound(ref cause) => cause,
+DescribeServicesError::InvalidParameter(ref cause) => cause,
+DescribeServicesError::Server(ref cause) => cause,
+DescribeServicesError::Validation(ref cause) => cause,
+DescribeServicesError::Credentials(ref err) => err.description(),
+DescribeServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeServicesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2061,10 +2179,10 @@ Unknown(String)
                     
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2083,7 +2201,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServerException" => DescribeTaskDefinitionError::Server(String::from(error_message)),"InvalidParameterException" => DescribeTaskDefinitionError::InvalidParameter(String::from(error_message)),"ClientException" => DescribeTaskDefinitionError::Client(String::from(error_message)),"ValidationException" => DescribeTaskDefinitionError::Validation(error_message.to_string()),_ => DescribeTaskDefinitionError::Unknown(String::from(body))
+                                    "ClientException" => DescribeTaskDefinitionError::Client(String::from(error_message)),
+"InvalidParameterException" => DescribeTaskDefinitionError::InvalidParameter(String::from(error_message)),
+"ServerException" => DescribeTaskDefinitionError::Server(String::from(error_message)),
+"ValidationException" => DescribeTaskDefinitionError::Validation(error_message.to_string()),
+_ => DescribeTaskDefinitionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeTaskDefinitionError::Unknown(String::from(body))
@@ -2114,7 +2236,13 @@ Unknown(String)
                 impl Error for DescribeTaskDefinitionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeTaskDefinitionError::InvalidParameter(ref cause) => cause,DescribeTaskDefinitionError::Server(ref cause) => cause,DescribeTaskDefinitionError::Client(ref cause) => cause,DescribeTaskDefinitionError::Validation(ref cause) => cause,DescribeTaskDefinitionError::Credentials(ref err) => err.description(),DescribeTaskDefinitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeTaskDefinitionError::Unknown(ref cause) => cause
+                            DescribeTaskDefinitionError::Client(ref cause) => cause,
+DescribeTaskDefinitionError::InvalidParameter(ref cause) => cause,
+DescribeTaskDefinitionError::Server(ref cause) => cause,
+DescribeTaskDefinitionError::Validation(ref cause) => cause,
+DescribeTaskDefinitionError::Credentials(ref err) => err.description(),
+DescribeTaskDefinitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeTaskDefinitionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2122,14 +2250,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeTasksError {
                     
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),
+///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
+Client(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
 ClusterNotFound(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
 ///<p>These errors are usually caused by a server issue.</p>
-Server(String),
-///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2148,7 +2276,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => DescribeTasksError::InvalidParameter(String::from(error_message)),"ClientException" => DescribeTasksError::Client(String::from(error_message)),"ServerException" => DescribeTasksError::Server(String::from(error_message)),"ClusterNotFoundException" => DescribeTasksError::ClusterNotFound(String::from(error_message)),"ValidationException" => DescribeTasksError::Validation(error_message.to_string()),_ => DescribeTasksError::Unknown(String::from(body))
+                                    "ClientException" => DescribeTasksError::Client(String::from(error_message)),
+"ClusterNotFoundException" => DescribeTasksError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => DescribeTasksError::InvalidParameter(String::from(error_message)),
+"ServerException" => DescribeTasksError::Server(String::from(error_message)),
+"ValidationException" => DescribeTasksError::Validation(error_message.to_string()),
+_ => DescribeTasksError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeTasksError::Unknown(String::from(body))
@@ -2179,7 +2312,14 @@ Unknown(String)
                 impl Error for DescribeTasksError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeTasksError::Server(ref cause) => cause,DescribeTasksError::InvalidParameter(ref cause) => cause,DescribeTasksError::Client(ref cause) => cause,DescribeTasksError::ClusterNotFound(ref cause) => cause,DescribeTasksError::Validation(ref cause) => cause,DescribeTasksError::Credentials(ref err) => err.description(),DescribeTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeTasksError::Unknown(ref cause) => cause
+                            DescribeTasksError::Client(ref cause) => cause,
+DescribeTasksError::ClusterNotFound(ref cause) => cause,
+DescribeTasksError::InvalidParameter(ref cause) => cause,
+DescribeTasksError::Server(ref cause) => cause,
+DescribeTasksError::Validation(ref cause) => cause,
+DescribeTasksError::Credentials(ref err) => err.description(),
+DescribeTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeTasksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2209,7 +2349,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => DiscoverPollEndpointError::Client(String::from(error_message)),"ServerException" => DiscoverPollEndpointError::Server(String::from(error_message)),"ValidationException" => DiscoverPollEndpointError::Validation(error_message.to_string()),_ => DiscoverPollEndpointError::Unknown(String::from(body))
+                                    "ClientException" => DiscoverPollEndpointError::Client(String::from(error_message)),
+"ServerException" => DiscoverPollEndpointError::Server(String::from(error_message)),
+"ValidationException" => DiscoverPollEndpointError::Validation(error_message.to_string()),
+_ => DiscoverPollEndpointError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DiscoverPollEndpointError::Unknown(String::from(body))
@@ -2240,7 +2383,12 @@ Unknown(String)
                 impl Error for DiscoverPollEndpointError {
                     fn description(&self) -> &str {
                         match *self {
-                            DiscoverPollEndpointError::Client(ref cause) => cause,DiscoverPollEndpointError::Server(ref cause) => cause,DiscoverPollEndpointError::Validation(ref cause) => cause,DiscoverPollEndpointError::Credentials(ref err) => err.description(),DiscoverPollEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DiscoverPollEndpointError::Unknown(ref cause) => cause
+                            DiscoverPollEndpointError::Client(ref cause) => cause,
+DiscoverPollEndpointError::Server(ref cause) => cause,
+DiscoverPollEndpointError::Validation(ref cause) => cause,
+DiscoverPollEndpointError::Credentials(ref err) => err.description(),
+DiscoverPollEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DiscoverPollEndpointError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2248,10 +2396,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListAttributesError {
                     
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
-ClusterNotFound(String),/// An error occurred dispatching the HTTP request
+ClusterNotFound(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2270,7 +2418,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => ListAttributesError::InvalidParameter(String::from(error_message)),"ClusterNotFoundException" => ListAttributesError::ClusterNotFound(String::from(error_message)),"ValidationException" => ListAttributesError::Validation(error_message.to_string()),_ => ListAttributesError::Unknown(String::from(body))
+                                    "ClusterNotFoundException" => ListAttributesError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => ListAttributesError::InvalidParameter(String::from(error_message)),
+"ValidationException" => ListAttributesError::Validation(error_message.to_string()),
+_ => ListAttributesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListAttributesError::Unknown(String::from(body))
@@ -2301,7 +2452,12 @@ Unknown(String)
                 impl Error for ListAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAttributesError::ClusterNotFound(ref cause) => cause,ListAttributesError::InvalidParameter(ref cause) => cause,ListAttributesError::Validation(ref cause) => cause,ListAttributesError::Credentials(ref err) => err.description(),ListAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAttributesError::Unknown(ref cause) => cause
+                            ListAttributesError::ClusterNotFound(ref cause) => cause,
+ListAttributesError::InvalidParameter(ref cause) => cause,
+ListAttributesError::Validation(ref cause) => cause,
+ListAttributesError::Credentials(ref err) => err.description(),
+ListAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2311,10 +2467,10 @@ Unknown(String)
                     
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2333,7 +2489,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => ListClustersError::Client(String::from(error_message)),"ServerException" => ListClustersError::Server(String::from(error_message)),"InvalidParameterException" => ListClustersError::InvalidParameter(String::from(error_message)),"ValidationException" => ListClustersError::Validation(error_message.to_string()),_ => ListClustersError::Unknown(String::from(body))
+                                    "ClientException" => ListClustersError::Client(String::from(error_message)),
+"InvalidParameterException" => ListClustersError::InvalidParameter(String::from(error_message)),
+"ServerException" => ListClustersError::Server(String::from(error_message)),
+"ValidationException" => ListClustersError::Validation(error_message.to_string()),
+_ => ListClustersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListClustersError::Unknown(String::from(body))
@@ -2364,7 +2524,13 @@ Unknown(String)
                 impl Error for ListClustersError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListClustersError::Client(ref cause) => cause,ListClustersError::Server(ref cause) => cause,ListClustersError::InvalidParameter(ref cause) => cause,ListClustersError::Validation(ref cause) => cause,ListClustersError::Credentials(ref err) => err.description(),ListClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListClustersError::Unknown(ref cause) => cause
+                            ListClustersError::Client(ref cause) => cause,
+ListClustersError::InvalidParameter(ref cause) => cause,
+ListClustersError::Server(ref cause) => cause,
+ListClustersError::Validation(ref cause) => cause,
+ListClustersError::Credentials(ref err) => err.description(),
+ListClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListClustersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2372,14 +2538,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListContainerInstancesError {
                     
-///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
-ClusterNotFound(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
+///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
+ClusterNotFound(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2398,7 +2564,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => ListContainerInstancesError::Client(String::from(error_message)),"ServerException" => ListContainerInstancesError::Server(String::from(error_message)),"ClusterNotFoundException" => ListContainerInstancesError::ClusterNotFound(String::from(error_message)),"InvalidParameterException" => ListContainerInstancesError::InvalidParameter(String::from(error_message)),"ValidationException" => ListContainerInstancesError::Validation(error_message.to_string()),_ => ListContainerInstancesError::Unknown(String::from(body))
+                                    "ClientException" => ListContainerInstancesError::Client(String::from(error_message)),
+"ClusterNotFoundException" => ListContainerInstancesError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => ListContainerInstancesError::InvalidParameter(String::from(error_message)),
+"ServerException" => ListContainerInstancesError::Server(String::from(error_message)),
+"ValidationException" => ListContainerInstancesError::Validation(error_message.to_string()),
+_ => ListContainerInstancesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListContainerInstancesError::Unknown(String::from(body))
@@ -2429,7 +2600,14 @@ Unknown(String)
                 impl Error for ListContainerInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListContainerInstancesError::ClusterNotFound(ref cause) => cause,ListContainerInstancesError::Server(ref cause) => cause,ListContainerInstancesError::Client(ref cause) => cause,ListContainerInstancesError::InvalidParameter(ref cause) => cause,ListContainerInstancesError::Validation(ref cause) => cause,ListContainerInstancesError::Credentials(ref err) => err.description(),ListContainerInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListContainerInstancesError::Unknown(ref cause) => cause
+                            ListContainerInstancesError::Client(ref cause) => cause,
+ListContainerInstancesError::ClusterNotFound(ref cause) => cause,
+ListContainerInstancesError::InvalidParameter(ref cause) => cause,
+ListContainerInstancesError::Server(ref cause) => cause,
+ListContainerInstancesError::Validation(ref cause) => cause,
+ListContainerInstancesError::Credentials(ref err) => err.description(),
+ListContainerInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListContainerInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2439,10 +2617,10 @@ Unknown(String)
                     
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
 ClusterNotFound(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
 ///<p>These errors are usually caused by a server issue.</p>
 Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2463,7 +2641,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => ListServicesError::InvalidParameter(String::from(error_message)),"ServerException" => ListServicesError::Server(String::from(error_message)),"ClientException" => ListServicesError::Client(String::from(error_message)),"ClusterNotFoundException" => ListServicesError::ClusterNotFound(String::from(error_message)),"ValidationException" => ListServicesError::Validation(error_message.to_string()),_ => ListServicesError::Unknown(String::from(body))
+                                    "ClientException" => ListServicesError::Client(String::from(error_message)),
+"ClusterNotFoundException" => ListServicesError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => ListServicesError::InvalidParameter(String::from(error_message)),
+"ServerException" => ListServicesError::Server(String::from(error_message)),
+"ValidationException" => ListServicesError::Validation(error_message.to_string()),
+_ => ListServicesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListServicesError::Unknown(String::from(body))
@@ -2494,7 +2677,14 @@ Unknown(String)
                 impl Error for ListServicesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListServicesError::Server(ref cause) => cause,ListServicesError::InvalidParameter(ref cause) => cause,ListServicesError::Client(ref cause) => cause,ListServicesError::ClusterNotFound(ref cause) => cause,ListServicesError::Validation(ref cause) => cause,ListServicesError::Credentials(ref err) => err.description(),ListServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListServicesError::Unknown(ref cause) => cause
+                            ListServicesError::Client(ref cause) => cause,
+ListServicesError::ClusterNotFound(ref cause) => cause,
+ListServicesError::InvalidParameter(ref cause) => cause,
+ListServicesError::Server(ref cause) => cause,
+ListServicesError::Validation(ref cause) => cause,
+ListServicesError::Credentials(ref err) => err.description(),
+ListServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListServicesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2502,12 +2692,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTaskDefinitionFamiliesError {
                     
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
+///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
+Client(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
-///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2526,7 +2716,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => ListTaskDefinitionFamiliesError::Client(String::from(error_message)),"InvalidParameterException" => ListTaskDefinitionFamiliesError::InvalidParameter(String::from(error_message)),"ServerException" => ListTaskDefinitionFamiliesError::Server(String::from(error_message)),"ValidationException" => ListTaskDefinitionFamiliesError::Validation(error_message.to_string()),_ => ListTaskDefinitionFamiliesError::Unknown(String::from(body))
+                                    "ClientException" => ListTaskDefinitionFamiliesError::Client(String::from(error_message)),
+"InvalidParameterException" => ListTaskDefinitionFamiliesError::InvalidParameter(String::from(error_message)),
+"ServerException" => ListTaskDefinitionFamiliesError::Server(String::from(error_message)),
+"ValidationException" => ListTaskDefinitionFamiliesError::Validation(error_message.to_string()),
+_ => ListTaskDefinitionFamiliesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListTaskDefinitionFamiliesError::Unknown(String::from(body))
@@ -2557,7 +2751,13 @@ Unknown(String)
                 impl Error for ListTaskDefinitionFamiliesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTaskDefinitionFamiliesError::Server(ref cause) => cause,ListTaskDefinitionFamiliesError::Client(ref cause) => cause,ListTaskDefinitionFamiliesError::InvalidParameter(ref cause) => cause,ListTaskDefinitionFamiliesError::Validation(ref cause) => cause,ListTaskDefinitionFamiliesError::Credentials(ref err) => err.description(),ListTaskDefinitionFamiliesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTaskDefinitionFamiliesError::Unknown(ref cause) => cause
+                            ListTaskDefinitionFamiliesError::Client(ref cause) => cause,
+ListTaskDefinitionFamiliesError::InvalidParameter(ref cause) => cause,
+ListTaskDefinitionFamiliesError::Server(ref cause) => cause,
+ListTaskDefinitionFamiliesError::Validation(ref cause) => cause,
+ListTaskDefinitionFamiliesError::Credentials(ref err) => err.description(),
+ListTaskDefinitionFamiliesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTaskDefinitionFamiliesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2565,12 +2765,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTaskDefinitionsError {
                     
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2589,7 +2789,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServerException" => ListTaskDefinitionsError::Server(String::from(error_message)),"InvalidParameterException" => ListTaskDefinitionsError::InvalidParameter(String::from(error_message)),"ClientException" => ListTaskDefinitionsError::Client(String::from(error_message)),"ValidationException" => ListTaskDefinitionsError::Validation(error_message.to_string()),_ => ListTaskDefinitionsError::Unknown(String::from(body))
+                                    "ClientException" => ListTaskDefinitionsError::Client(String::from(error_message)),
+"InvalidParameterException" => ListTaskDefinitionsError::InvalidParameter(String::from(error_message)),
+"ServerException" => ListTaskDefinitionsError::Server(String::from(error_message)),
+"ValidationException" => ListTaskDefinitionsError::Validation(error_message.to_string()),
+_ => ListTaskDefinitionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListTaskDefinitionsError::Unknown(String::from(body))
@@ -2620,7 +2824,13 @@ Unknown(String)
                 impl Error for ListTaskDefinitionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTaskDefinitionsError::Client(ref cause) => cause,ListTaskDefinitionsError::Server(ref cause) => cause,ListTaskDefinitionsError::InvalidParameter(ref cause) => cause,ListTaskDefinitionsError::Validation(ref cause) => cause,ListTaskDefinitionsError::Credentials(ref err) => err.description(),ListTaskDefinitionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTaskDefinitionsError::Unknown(ref cause) => cause
+                            ListTaskDefinitionsError::Client(ref cause) => cause,
+ListTaskDefinitionsError::InvalidParameter(ref cause) => cause,
+ListTaskDefinitionsError::Server(ref cause) => cause,
+ListTaskDefinitionsError::Validation(ref cause) => cause,
+ListTaskDefinitionsError::Credentials(ref err) => err.description(),
+ListTaskDefinitionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTaskDefinitionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2630,14 +2840,14 @@ Unknown(String)
                     
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
-///<p>The specified service could not be found. You can view your available services with <a>ListServices</a>. Amazon ECS services are cluster-specific and region-specific.</p>
-ServiceNotFound(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
 ClusterNotFound(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),
+///<p>The specified service could not be found. You can view your available services with <a>ListServices</a>. Amazon ECS services are cluster-specific and region-specific.</p>
+ServiceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2656,7 +2866,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceNotFoundException" => ListTasksError::ServiceNotFound(String::from(error_message)),"ServerException" => ListTasksError::Server(String::from(error_message)),"ClusterNotFoundException" => ListTasksError::ClusterNotFound(String::from(error_message)),"InvalidParameterException" => ListTasksError::InvalidParameter(String::from(error_message)),"ClientException" => ListTasksError::Client(String::from(error_message)),"ValidationException" => ListTasksError::Validation(error_message.to_string()),_ => ListTasksError::Unknown(String::from(body))
+                                    "ClientException" => ListTasksError::Client(String::from(error_message)),
+"ClusterNotFoundException" => ListTasksError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => ListTasksError::InvalidParameter(String::from(error_message)),
+"ServerException" => ListTasksError::Server(String::from(error_message)),
+"ServiceNotFoundException" => ListTasksError::ServiceNotFound(String::from(error_message)),
+"ValidationException" => ListTasksError::Validation(error_message.to_string()),
+_ => ListTasksError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListTasksError::Unknown(String::from(body))
@@ -2687,7 +2903,15 @@ Unknown(String)
                 impl Error for ListTasksError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTasksError::Server(ref cause) => cause,ListTasksError::ServiceNotFound(ref cause) => cause,ListTasksError::InvalidParameter(ref cause) => cause,ListTasksError::Client(ref cause) => cause,ListTasksError::ClusterNotFound(ref cause) => cause,ListTasksError::Validation(ref cause) => cause,ListTasksError::Credentials(ref err) => err.description(),ListTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTasksError::Unknown(ref cause) => cause
+                            ListTasksError::Client(ref cause) => cause,
+ListTasksError::ClusterNotFound(ref cause) => cause,
+ListTasksError::InvalidParameter(ref cause) => cause,
+ListTasksError::Server(ref cause) => cause,
+ListTasksError::ServiceNotFound(ref cause) => cause,
+ListTasksError::Validation(ref cause) => cause,
+ListTasksError::Credentials(ref err) => err.description(),
+ListTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTasksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2697,12 +2921,12 @@ Unknown(String)
                     
 ///<p>You can apply up to 10 custom attributes per resource. You can view the attributes of a resource with <a>ListAttributes</a>. You can remove existing attributes on a resource with <a>DeleteAttributes</a>.</p>
 AttributeLimitExceeded(String),
+///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
+ClusterNotFound(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
 ///<p>The specified target could not be found. You can view your available container instances with <a>ListContainerInstances</a>. Amazon ECS container instances are cluster-specific and region-specific.</p>
-TargetNotFound(String),
-///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
-ClusterNotFound(String),/// An error occurred dispatching the HTTP request
+TargetNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2721,7 +2945,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClusterNotFoundException" => PutAttributesError::ClusterNotFound(String::from(error_message)),"TargetNotFoundException" => PutAttributesError::TargetNotFound(String::from(error_message)),"InvalidParameterException" => PutAttributesError::InvalidParameter(String::from(error_message)),"AttributeLimitExceededException" => PutAttributesError::AttributeLimitExceeded(String::from(error_message)),"ValidationException" => PutAttributesError::Validation(error_message.to_string()),_ => PutAttributesError::Unknown(String::from(body))
+                                    "AttributeLimitExceededException" => PutAttributesError::AttributeLimitExceeded(String::from(error_message)),
+"ClusterNotFoundException" => PutAttributesError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => PutAttributesError::InvalidParameter(String::from(error_message)),
+"TargetNotFoundException" => PutAttributesError::TargetNotFound(String::from(error_message)),
+"ValidationException" => PutAttributesError::Validation(error_message.to_string()),
+_ => PutAttributesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutAttributesError::Unknown(String::from(body))
@@ -2752,7 +2981,14 @@ Unknown(String)
                 impl Error for PutAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutAttributesError::InvalidParameter(ref cause) => cause,PutAttributesError::AttributeLimitExceeded(ref cause) => cause,PutAttributesError::TargetNotFound(ref cause) => cause,PutAttributesError::ClusterNotFound(ref cause) => cause,PutAttributesError::Validation(ref cause) => cause,PutAttributesError::Credentials(ref err) => err.description(),PutAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutAttributesError::Unknown(ref cause) => cause
+                            PutAttributesError::AttributeLimitExceeded(ref cause) => cause,
+PutAttributesError::ClusterNotFound(ref cause) => cause,
+PutAttributesError::InvalidParameter(ref cause) => cause,
+PutAttributesError::TargetNotFound(ref cause) => cause,
+PutAttributesError::Validation(ref cause) => cause,
+PutAttributesError::Credentials(ref err) => err.description(),
+PutAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2782,7 +3018,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServerException" => RegisterContainerInstanceError::Server(String::from(error_message)),"ClientException" => RegisterContainerInstanceError::Client(String::from(error_message)),"ValidationException" => RegisterContainerInstanceError::Validation(error_message.to_string()),_ => RegisterContainerInstanceError::Unknown(String::from(body))
+                                    "ClientException" => RegisterContainerInstanceError::Client(String::from(error_message)),
+"ServerException" => RegisterContainerInstanceError::Server(String::from(error_message)),
+"ValidationException" => RegisterContainerInstanceError::Validation(error_message.to_string()),
+_ => RegisterContainerInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterContainerInstanceError::Unknown(String::from(body))
@@ -2813,7 +3052,12 @@ Unknown(String)
                 impl Error for RegisterContainerInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterContainerInstanceError::Client(ref cause) => cause,RegisterContainerInstanceError::Server(ref cause) => cause,RegisterContainerInstanceError::Validation(ref cause) => cause,RegisterContainerInstanceError::Credentials(ref err) => err.description(),RegisterContainerInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterContainerInstanceError::Unknown(ref cause) => cause
+                            RegisterContainerInstanceError::Client(ref cause) => cause,
+RegisterContainerInstanceError::Server(ref cause) => cause,
+RegisterContainerInstanceError::Validation(ref cause) => cause,
+RegisterContainerInstanceError::Credentials(ref err) => err.description(),
+RegisterContainerInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterContainerInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2821,12 +3065,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RegisterTaskDefinitionError {
                     
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
+///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
+Client(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
-///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2845,7 +3089,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServerException" => RegisterTaskDefinitionError::Server(String::from(error_message)),"ClientException" => RegisterTaskDefinitionError::Client(String::from(error_message)),"InvalidParameterException" => RegisterTaskDefinitionError::InvalidParameter(String::from(error_message)),"ValidationException" => RegisterTaskDefinitionError::Validation(error_message.to_string()),_ => RegisterTaskDefinitionError::Unknown(String::from(body))
+                                    "ClientException" => RegisterTaskDefinitionError::Client(String::from(error_message)),
+"InvalidParameterException" => RegisterTaskDefinitionError::InvalidParameter(String::from(error_message)),
+"ServerException" => RegisterTaskDefinitionError::Server(String::from(error_message)),
+"ValidationException" => RegisterTaskDefinitionError::Validation(error_message.to_string()),
+_ => RegisterTaskDefinitionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterTaskDefinitionError::Unknown(String::from(body))
@@ -2876,7 +3124,13 @@ Unknown(String)
                 impl Error for RegisterTaskDefinitionError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterTaskDefinitionError::Server(ref cause) => cause,RegisterTaskDefinitionError::Client(ref cause) => cause,RegisterTaskDefinitionError::InvalidParameter(ref cause) => cause,RegisterTaskDefinitionError::Validation(ref cause) => cause,RegisterTaskDefinitionError::Credentials(ref err) => err.description(),RegisterTaskDefinitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterTaskDefinitionError::Unknown(ref cause) => cause
+                            RegisterTaskDefinitionError::Client(ref cause) => cause,
+RegisterTaskDefinitionError::InvalidParameter(ref cause) => cause,
+RegisterTaskDefinitionError::Server(ref cause) => cause,
+RegisterTaskDefinitionError::Validation(ref cause) => cause,
+RegisterTaskDefinitionError::Credentials(ref err) => err.description(),
+RegisterTaskDefinitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterTaskDefinitionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2884,14 +3138,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RunTaskError {
                     
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
-///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
-ClusterNotFound(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
+///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
+ClusterNotFound(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2910,7 +3164,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClusterNotFoundException" => RunTaskError::ClusterNotFound(String::from(error_message)),"InvalidParameterException" => RunTaskError::InvalidParameter(String::from(error_message)),"ClientException" => RunTaskError::Client(String::from(error_message)),"ServerException" => RunTaskError::Server(String::from(error_message)),"ValidationException" => RunTaskError::Validation(error_message.to_string()),_ => RunTaskError::Unknown(String::from(body))
+                                    "ClientException" => RunTaskError::Client(String::from(error_message)),
+"ClusterNotFoundException" => RunTaskError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => RunTaskError::InvalidParameter(String::from(error_message)),
+"ServerException" => RunTaskError::Server(String::from(error_message)),
+"ValidationException" => RunTaskError::Validation(error_message.to_string()),
+_ => RunTaskError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RunTaskError::Unknown(String::from(body))
@@ -2941,7 +3200,14 @@ Unknown(String)
                 impl Error for RunTaskError {
                     fn description(&self) -> &str {
                         match *self {
-                            RunTaskError::Server(ref cause) => cause,RunTaskError::InvalidParameter(ref cause) => cause,RunTaskError::Client(ref cause) => cause,RunTaskError::ClusterNotFound(ref cause) => cause,RunTaskError::Validation(ref cause) => cause,RunTaskError::Credentials(ref err) => err.description(),RunTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RunTaskError::Unknown(ref cause) => cause
+                            RunTaskError::Client(ref cause) => cause,
+RunTaskError::ClusterNotFound(ref cause) => cause,
+RunTaskError::InvalidParameter(ref cause) => cause,
+RunTaskError::Server(ref cause) => cause,
+RunTaskError::Validation(ref cause) => cause,
+RunTaskError::Credentials(ref err) => err.description(),
+RunTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RunTaskError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2949,12 +3215,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum StartTaskError {
                     
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),
-///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
-ClusterNotFound(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
+///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
+ClusterNotFound(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
 ///<p>These errors are usually caused by a server issue.</p>
 Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2975,7 +3241,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => StartTaskError::Client(String::from(error_message)),"InvalidParameterException" => StartTaskError::InvalidParameter(String::from(error_message)),"ClusterNotFoundException" => StartTaskError::ClusterNotFound(String::from(error_message)),"ServerException" => StartTaskError::Server(String::from(error_message)),"ValidationException" => StartTaskError::Validation(error_message.to_string()),_ => StartTaskError::Unknown(String::from(body))
+                                    "ClientException" => StartTaskError::Client(String::from(error_message)),
+"ClusterNotFoundException" => StartTaskError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => StartTaskError::InvalidParameter(String::from(error_message)),
+"ServerException" => StartTaskError::Server(String::from(error_message)),
+"ValidationException" => StartTaskError::Validation(error_message.to_string()),
+_ => StartTaskError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StartTaskError::Unknown(String::from(body))
@@ -3006,7 +3277,14 @@ Unknown(String)
                 impl Error for StartTaskError {
                     fn description(&self) -> &str {
                         match *self {
-                            StartTaskError::InvalidParameter(ref cause) => cause,StartTaskError::Client(ref cause) => cause,StartTaskError::Server(ref cause) => cause,StartTaskError::ClusterNotFound(ref cause) => cause,StartTaskError::Validation(ref cause) => cause,StartTaskError::Credentials(ref err) => err.description(),StartTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StartTaskError::Unknown(ref cause) => cause
+                            StartTaskError::Client(ref cause) => cause,
+StartTaskError::ClusterNotFound(ref cause) => cause,
+StartTaskError::InvalidParameter(ref cause) => cause,
+StartTaskError::Server(ref cause) => cause,
+StartTaskError::Validation(ref cause) => cause,
+StartTaskError::Credentials(ref err) => err.description(),
+StartTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StartTaskError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3016,12 +3294,12 @@ Unknown(String)
                     
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
 ClusterNotFound(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3040,7 +3318,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClusterNotFoundException" => StopTaskError::ClusterNotFound(String::from(error_message)),"ClientException" => StopTaskError::Client(String::from(error_message)),"InvalidParameterException" => StopTaskError::InvalidParameter(String::from(error_message)),"ServerException" => StopTaskError::Server(String::from(error_message)),"ValidationException" => StopTaskError::Validation(error_message.to_string()),_ => StopTaskError::Unknown(String::from(body))
+                                    "ClientException" => StopTaskError::Client(String::from(error_message)),
+"ClusterNotFoundException" => StopTaskError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => StopTaskError::InvalidParameter(String::from(error_message)),
+"ServerException" => StopTaskError::Server(String::from(error_message)),
+"ValidationException" => StopTaskError::Validation(error_message.to_string()),
+_ => StopTaskError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StopTaskError::Unknown(String::from(body))
@@ -3071,7 +3354,14 @@ Unknown(String)
                 impl Error for StopTaskError {
                     fn description(&self) -> &str {
                         match *self {
-                            StopTaskError::ClusterNotFound(ref cause) => cause,StopTaskError::Client(ref cause) => cause,StopTaskError::Server(ref cause) => cause,StopTaskError::InvalidParameter(ref cause) => cause,StopTaskError::Validation(ref cause) => cause,StopTaskError::Credentials(ref err) => err.description(),StopTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StopTaskError::Unknown(ref cause) => cause
+                            StopTaskError::Client(ref cause) => cause,
+StopTaskError::ClusterNotFound(ref cause) => cause,
+StopTaskError::InvalidParameter(ref cause) => cause,
+StopTaskError::Server(ref cause) => cause,
+StopTaskError::Validation(ref cause) => cause,
+StopTaskError::Credentials(ref err) => err.description(),
+StopTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StopTaskError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3079,10 +3369,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SubmitContainerStateChangeError {
                     
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+Client(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3101,7 +3391,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => SubmitContainerStateChangeError::Client(String::from(error_message)),"ServerException" => SubmitContainerStateChangeError::Server(String::from(error_message)),"ValidationException" => SubmitContainerStateChangeError::Validation(error_message.to_string()),_ => SubmitContainerStateChangeError::Unknown(String::from(body))
+                                    "ClientException" => SubmitContainerStateChangeError::Client(String::from(error_message)),
+"ServerException" => SubmitContainerStateChangeError::Server(String::from(error_message)),
+"ValidationException" => SubmitContainerStateChangeError::Validation(error_message.to_string()),
+_ => SubmitContainerStateChangeError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SubmitContainerStateChangeError::Unknown(String::from(body))
@@ -3132,7 +3425,12 @@ Unknown(String)
                 impl Error for SubmitContainerStateChangeError {
                     fn description(&self) -> &str {
                         match *self {
-                            SubmitContainerStateChangeError::Server(ref cause) => cause,SubmitContainerStateChangeError::Client(ref cause) => cause,SubmitContainerStateChangeError::Validation(ref cause) => cause,SubmitContainerStateChangeError::Credentials(ref err) => err.description(),SubmitContainerStateChangeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SubmitContainerStateChangeError::Unknown(ref cause) => cause
+                            SubmitContainerStateChangeError::Client(ref cause) => cause,
+SubmitContainerStateChangeError::Server(ref cause) => cause,
+SubmitContainerStateChangeError::Validation(ref cause) => cause,
+SubmitContainerStateChangeError::Credentials(ref err) => err.description(),
+SubmitContainerStateChangeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SubmitContainerStateChangeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3140,10 +3438,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SubmitTaskStateChangeError {
                     
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+Client(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3162,7 +3460,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => SubmitTaskStateChangeError::Client(String::from(error_message)),"ServerException" => SubmitTaskStateChangeError::Server(String::from(error_message)),"ValidationException" => SubmitTaskStateChangeError::Validation(error_message.to_string()),_ => SubmitTaskStateChangeError::Unknown(String::from(body))
+                                    "ClientException" => SubmitTaskStateChangeError::Client(String::from(error_message)),
+"ServerException" => SubmitTaskStateChangeError::Server(String::from(error_message)),
+"ValidationException" => SubmitTaskStateChangeError::Validation(error_message.to_string()),
+_ => SubmitTaskStateChangeError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SubmitTaskStateChangeError::Unknown(String::from(body))
@@ -3193,7 +3494,12 @@ Unknown(String)
                 impl Error for SubmitTaskStateChangeError {
                     fn description(&self) -> &str {
                         match *self {
-                            SubmitTaskStateChangeError::Client(ref cause) => cause,SubmitTaskStateChangeError::Server(ref cause) => cause,SubmitTaskStateChangeError::Validation(ref cause) => cause,SubmitTaskStateChangeError::Credentials(ref err) => err.description(),SubmitTaskStateChangeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SubmitTaskStateChangeError::Unknown(ref cause) => cause
+                            SubmitTaskStateChangeError::Client(ref cause) => cause,
+SubmitTaskStateChangeError::Server(ref cause) => cause,
+SubmitTaskStateChangeError::Validation(ref cause) => cause,
+SubmitTaskStateChangeError::Credentials(ref err) => err.description(),
+SubmitTaskStateChangeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SubmitTaskStateChangeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3205,16 +3511,16 @@ Unknown(String)
 Client(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
 ClusterNotFound(String),
-///<p>There is already a current Amazon ECS container agent update in progress on the specified container instance. If the container agent becomes disconnected while it is in a transitional stage, such as <code>PENDING</code> or <code>STAGING</code>, the update process can get stuck in that state. However, when the agent reconnects, it resumes where it stopped previously.</p>
-UpdateInProgress(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
 ///<p>Amazon ECS is unable to determine the current version of the Amazon ECS container agent on the container instance and does not have enough information to proceed with an update. This could be because the agent running on the container instance is an older or custom version that does not use our version information.</p>
 MissingVersion(String),
+///<p>There is no update available for this Amazon ECS container agent. This could be because the agent is already running the latest version, or it is so old that there is no update path to the current version.</p>
+NoUpdateAvailable(String),
 ///<p>These errors are usually caused by a server issue.</p>
 Server(String),
-///<p>There is no update available for this Amazon ECS container agent. This could be because the agent is already running the latest version, or it is so old that there is no update path to the current version.</p>
-NoUpdateAvailable(String),/// An error occurred dispatching the HTTP request
+///<p>There is already a current Amazon ECS container agent update in progress on the specified container instance. If the container agent becomes disconnected while it is in a transitional stage, such as <code>PENDING</code> or <code>STAGING</code>, the update process can get stuck in that state. However, when the agent reconnects, it resumes where it stopped previously.</p>
+UpdateInProgress(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3233,7 +3539,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => UpdateContainerAgentError::Client(String::from(error_message)),"UpdateInProgressException" => UpdateContainerAgentError::UpdateInProgress(String::from(error_message)),"InvalidParameterException" => UpdateContainerAgentError::InvalidParameter(String::from(error_message)),"ClusterNotFoundException" => UpdateContainerAgentError::ClusterNotFound(String::from(error_message)),"NoUpdateAvailableException" => UpdateContainerAgentError::NoUpdateAvailable(String::from(error_message)),"MissingVersionException" => UpdateContainerAgentError::MissingVersion(String::from(error_message)),"ServerException" => UpdateContainerAgentError::Server(String::from(error_message)),"ValidationException" => UpdateContainerAgentError::Validation(error_message.to_string()),_ => UpdateContainerAgentError::Unknown(String::from(body))
+                                    "ClientException" => UpdateContainerAgentError::Client(String::from(error_message)),
+"ClusterNotFoundException" => UpdateContainerAgentError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => UpdateContainerAgentError::InvalidParameter(String::from(error_message)),
+"MissingVersionException" => UpdateContainerAgentError::MissingVersion(String::from(error_message)),
+"NoUpdateAvailableException" => UpdateContainerAgentError::NoUpdateAvailable(String::from(error_message)),
+"ServerException" => UpdateContainerAgentError::Server(String::from(error_message)),
+"UpdateInProgressException" => UpdateContainerAgentError::UpdateInProgress(String::from(error_message)),
+"ValidationException" => UpdateContainerAgentError::Validation(error_message.to_string()),
+_ => UpdateContainerAgentError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateContainerAgentError::Unknown(String::from(body))
@@ -3264,7 +3578,17 @@ Unknown(String)
                 impl Error for UpdateContainerAgentError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateContainerAgentError::InvalidParameter(ref cause) => cause,UpdateContainerAgentError::Client(ref cause) => cause,UpdateContainerAgentError::Server(ref cause) => cause,UpdateContainerAgentError::ClusterNotFound(ref cause) => cause,UpdateContainerAgentError::UpdateInProgress(ref cause) => cause,UpdateContainerAgentError::NoUpdateAvailable(ref cause) => cause,UpdateContainerAgentError::MissingVersion(ref cause) => cause,UpdateContainerAgentError::Validation(ref cause) => cause,UpdateContainerAgentError::Credentials(ref err) => err.description(),UpdateContainerAgentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateContainerAgentError::Unknown(ref cause) => cause
+                            UpdateContainerAgentError::Client(ref cause) => cause,
+UpdateContainerAgentError::ClusterNotFound(ref cause) => cause,
+UpdateContainerAgentError::InvalidParameter(ref cause) => cause,
+UpdateContainerAgentError::MissingVersion(ref cause) => cause,
+UpdateContainerAgentError::NoUpdateAvailable(ref cause) => cause,
+UpdateContainerAgentError::Server(ref cause) => cause,
+UpdateContainerAgentError::UpdateInProgress(ref cause) => cause,
+UpdateContainerAgentError::Validation(ref cause) => cause,
+UpdateContainerAgentError::Credentials(ref err) => err.description(),
+UpdateContainerAgentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateContainerAgentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3272,18 +3596,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateServiceError {
                     
-///<p>These errors are usually caused by a server issue.</p>
-Server(String),
 ///<p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permission to use the action or resource, or specifying an identifier that is not valid.</p>
 Client(String),
-///<p>The specified service could not be found. You can view your available services with <a>ListServices</a>. Amazon ECS services are cluster-specific and region-specific.</p>
-ServiceNotFound(String),
 ///<p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are region-specific.</p>
 ClusterNotFound(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
+///<p>These errors are usually caused by a server issue.</p>
+Server(String),
 ///<p>The specified service is not active. You cannot update a service that is not active. If you have previously deleted a service, you can re-create it with <a>CreateService</a>.</p>
 ServiceNotActive(String),
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+///<p>The specified service could not be found. You can view your available services with <a>ListServices</a>. Amazon ECS services are cluster-specific and region-specific.</p>
+ServiceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3302,7 +3626,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => UpdateServiceError::Client(String::from(error_message)),"ServerException" => UpdateServiceError::Server(String::from(error_message)),"ServiceNotFoundException" => UpdateServiceError::ServiceNotFound(String::from(error_message)),"InvalidParameterException" => UpdateServiceError::InvalidParameter(String::from(error_message)),"ClusterNotFoundException" => UpdateServiceError::ClusterNotFound(String::from(error_message)),"ServiceNotActiveException" => UpdateServiceError::ServiceNotActive(String::from(error_message)),"ValidationException" => UpdateServiceError::Validation(error_message.to_string()),_ => UpdateServiceError::Unknown(String::from(body))
+                                    "ClientException" => UpdateServiceError::Client(String::from(error_message)),
+"ClusterNotFoundException" => UpdateServiceError::ClusterNotFound(String::from(error_message)),
+"InvalidParameterException" => UpdateServiceError::InvalidParameter(String::from(error_message)),
+"ServerException" => UpdateServiceError::Server(String::from(error_message)),
+"ServiceNotActiveException" => UpdateServiceError::ServiceNotActive(String::from(error_message)),
+"ServiceNotFoundException" => UpdateServiceError::ServiceNotFound(String::from(error_message)),
+"ValidationException" => UpdateServiceError::Validation(error_message.to_string()),
+_ => UpdateServiceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateServiceError::Unknown(String::from(body))
@@ -3333,7 +3664,16 @@ Unknown(String)
                 impl Error for UpdateServiceError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateServiceError::ClusterNotFound(ref cause) => cause,UpdateServiceError::ServiceNotActive(ref cause) => cause,UpdateServiceError::Server(ref cause) => cause,UpdateServiceError::InvalidParameter(ref cause) => cause,UpdateServiceError::ServiceNotFound(ref cause) => cause,UpdateServiceError::Client(ref cause) => cause,UpdateServiceError::Validation(ref cause) => cause,UpdateServiceError::Credentials(ref err) => err.description(),UpdateServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateServiceError::Unknown(ref cause) => cause
+                            UpdateServiceError::Client(ref cause) => cause,
+UpdateServiceError::ClusterNotFound(ref cause) => cause,
+UpdateServiceError::InvalidParameter(ref cause) => cause,
+UpdateServiceError::Server(ref cause) => cause,
+UpdateServiceError::ServiceNotActive(ref cause) => cause,
+UpdateServiceError::ServiceNotFound(ref cause) => cause,
+UpdateServiceError::Validation(ref cause) => cause,
+UpdateServiceError::Credentials(ref err) => err.description(),
+UpdateServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateServiceError::Unknown(ref cause) => cause
                         }
                     }
                  }

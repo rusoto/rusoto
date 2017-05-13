@@ -10992,7 +10992,11 @@ Unknown(String)
                 impl Error for AbortMultipartUploadError {
                     fn description(&self) -> &str {
                         match *self {
-                            AbortMultipartUploadError::NoSuchUpload(ref cause) => cause,AbortMultipartUploadError::Validation(ref cause) => cause,AbortMultipartUploadError::Credentials(ref err) => err.description(),AbortMultipartUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AbortMultipartUploadError::Unknown(ref cause) => cause
+                            AbortMultipartUploadError::NoSuchUpload(ref cause) => cause,
+AbortMultipartUploadError::Validation(ref cause) => cause,
+AbortMultipartUploadError::Credentials(ref err) => err.description(),
+AbortMultipartUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AbortMultipartUploadError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11048,7 +11052,10 @@ Unknown(String)
                 impl Error for CompleteMultipartUploadError {
                     fn description(&self) -> &str {
                         match *self {
-                            CompleteMultipartUploadError::Validation(ref cause) => cause,CompleteMultipartUploadError::Credentials(ref err) => err.description(),CompleteMultipartUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CompleteMultipartUploadError::Unknown(ref cause) => cause
+                            CompleteMultipartUploadError::Validation(ref cause) => cause,
+CompleteMultipartUploadError::Credentials(ref err) => err.description(),
+CompleteMultipartUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CompleteMultipartUploadError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11106,7 +11113,11 @@ Unknown(String)
                 impl Error for CopyObjectError {
                     fn description(&self) -> &str {
                         match *self {
-                            CopyObjectError::ObjectNotInActiveTierError(ref cause) => cause,CopyObjectError::Validation(ref cause) => cause,CopyObjectError::Credentials(ref err) => err.description(),CopyObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CopyObjectError::Unknown(ref cause) => cause
+                            CopyObjectError::ObjectNotInActiveTierError(ref cause) => cause,
+CopyObjectError::Validation(ref cause) => cause,
+CopyObjectError::Credentials(ref err) => err.description(),
+CopyObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CopyObjectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11114,10 +11125,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateBucketError {
                     
-///
-BucketAlreadyOwnedByYou(String),
 ///The requested bucket name is not available. The bucket namespace is shared by all users of the system. Please select a different name and try again.
-BucketAlreadyExists(String),/// An error occurred dispatching the HTTP request
+BucketAlreadyExists(String),
+///
+BucketAlreadyOwnedByYou(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11134,7 +11145,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "BucketAlreadyOwnedByYou" => CreateBucketError::BucketAlreadyOwnedByYou(String::from(parsed_error.message)),"BucketAlreadyExists" => CreateBucketError::BucketAlreadyExists(String::from(parsed_error.message)),_ => CreateBucketError::Unknown(String::from(body))
+                                    "BucketAlreadyExists" => CreateBucketError::BucketAlreadyExists(String::from(parsed_error.message)),"BucketAlreadyOwnedByYou" => CreateBucketError::BucketAlreadyOwnedByYou(String::from(parsed_error.message)),_ => CreateBucketError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateBucketError::Unknown(body.to_string())
@@ -11166,7 +11177,12 @@ Unknown(String)
                 impl Error for CreateBucketError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateBucketError::BucketAlreadyOwnedByYou(ref cause) => cause,CreateBucketError::BucketAlreadyExists(ref cause) => cause,CreateBucketError::Validation(ref cause) => cause,CreateBucketError::Credentials(ref err) => err.description(),CreateBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateBucketError::Unknown(ref cause) => cause
+                            CreateBucketError::BucketAlreadyExists(ref cause) => cause,
+CreateBucketError::BucketAlreadyOwnedByYou(ref cause) => cause,
+CreateBucketError::Validation(ref cause) => cause,
+CreateBucketError::Credentials(ref err) => err.description(),
+CreateBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateBucketError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11222,7 +11238,10 @@ Unknown(String)
                 impl Error for CreateMultipartUploadError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateMultipartUploadError::Validation(ref cause) => cause,CreateMultipartUploadError::Credentials(ref err) => err.description(),CreateMultipartUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateMultipartUploadError::Unknown(ref cause) => cause
+                            CreateMultipartUploadError::Validation(ref cause) => cause,
+CreateMultipartUploadError::Credentials(ref err) => err.description(),
+CreateMultipartUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateMultipartUploadError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11278,7 +11297,10 @@ Unknown(String)
                 impl Error for DeleteBucketError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteBucketError::Validation(ref cause) => cause,DeleteBucketError::Credentials(ref err) => err.description(),DeleteBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteBucketError::Unknown(ref cause) => cause
+                            DeleteBucketError::Validation(ref cause) => cause,
+DeleteBucketError::Credentials(ref err) => err.description(),
+DeleteBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteBucketError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11334,7 +11356,10 @@ Unknown(String)
                 impl Error for DeleteBucketAnalyticsConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteBucketAnalyticsConfigurationError::Validation(ref cause) => cause,DeleteBucketAnalyticsConfigurationError::Credentials(ref err) => err.description(),DeleteBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteBucketAnalyticsConfigurationError::Unknown(ref cause) => cause
+                            DeleteBucketAnalyticsConfigurationError::Validation(ref cause) => cause,
+DeleteBucketAnalyticsConfigurationError::Credentials(ref err) => err.description(),
+DeleteBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteBucketAnalyticsConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11390,7 +11415,10 @@ Unknown(String)
                 impl Error for DeleteBucketCorsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteBucketCorsError::Validation(ref cause) => cause,DeleteBucketCorsError::Credentials(ref err) => err.description(),DeleteBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteBucketCorsError::Unknown(ref cause) => cause
+                            DeleteBucketCorsError::Validation(ref cause) => cause,
+DeleteBucketCorsError::Credentials(ref err) => err.description(),
+DeleteBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteBucketCorsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11446,7 +11474,10 @@ Unknown(String)
                 impl Error for DeleteBucketInventoryConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteBucketInventoryConfigurationError::Validation(ref cause) => cause,DeleteBucketInventoryConfigurationError::Credentials(ref err) => err.description(),DeleteBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteBucketInventoryConfigurationError::Unknown(ref cause) => cause
+                            DeleteBucketInventoryConfigurationError::Validation(ref cause) => cause,
+DeleteBucketInventoryConfigurationError::Credentials(ref err) => err.description(),
+DeleteBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteBucketInventoryConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11502,7 +11533,10 @@ Unknown(String)
                 impl Error for DeleteBucketLifecycleError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteBucketLifecycleError::Validation(ref cause) => cause,DeleteBucketLifecycleError::Credentials(ref err) => err.description(),DeleteBucketLifecycleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteBucketLifecycleError::Unknown(ref cause) => cause
+                            DeleteBucketLifecycleError::Validation(ref cause) => cause,
+DeleteBucketLifecycleError::Credentials(ref err) => err.description(),
+DeleteBucketLifecycleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteBucketLifecycleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11558,7 +11592,10 @@ Unknown(String)
                 impl Error for DeleteBucketMetricsConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteBucketMetricsConfigurationError::Validation(ref cause) => cause,DeleteBucketMetricsConfigurationError::Credentials(ref err) => err.description(),DeleteBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteBucketMetricsConfigurationError::Unknown(ref cause) => cause
+                            DeleteBucketMetricsConfigurationError::Validation(ref cause) => cause,
+DeleteBucketMetricsConfigurationError::Credentials(ref err) => err.description(),
+DeleteBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteBucketMetricsConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11614,7 +11651,10 @@ Unknown(String)
                 impl Error for DeleteBucketPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteBucketPolicyError::Validation(ref cause) => cause,DeleteBucketPolicyError::Credentials(ref err) => err.description(),DeleteBucketPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteBucketPolicyError::Unknown(ref cause) => cause
+                            DeleteBucketPolicyError::Validation(ref cause) => cause,
+DeleteBucketPolicyError::Credentials(ref err) => err.description(),
+DeleteBucketPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteBucketPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11670,7 +11710,10 @@ Unknown(String)
                 impl Error for DeleteBucketReplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteBucketReplicationError::Validation(ref cause) => cause,DeleteBucketReplicationError::Credentials(ref err) => err.description(),DeleteBucketReplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteBucketReplicationError::Unknown(ref cause) => cause
+                            DeleteBucketReplicationError::Validation(ref cause) => cause,
+DeleteBucketReplicationError::Credentials(ref err) => err.description(),
+DeleteBucketReplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteBucketReplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11726,7 +11769,10 @@ Unknown(String)
                 impl Error for DeleteBucketTaggingError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteBucketTaggingError::Validation(ref cause) => cause,DeleteBucketTaggingError::Credentials(ref err) => err.description(),DeleteBucketTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteBucketTaggingError::Unknown(ref cause) => cause
+                            DeleteBucketTaggingError::Validation(ref cause) => cause,
+DeleteBucketTaggingError::Credentials(ref err) => err.description(),
+DeleteBucketTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteBucketTaggingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11782,7 +11828,10 @@ Unknown(String)
                 impl Error for DeleteBucketWebsiteError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteBucketWebsiteError::Validation(ref cause) => cause,DeleteBucketWebsiteError::Credentials(ref err) => err.description(),DeleteBucketWebsiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteBucketWebsiteError::Unknown(ref cause) => cause
+                            DeleteBucketWebsiteError::Validation(ref cause) => cause,
+DeleteBucketWebsiteError::Credentials(ref err) => err.description(),
+DeleteBucketWebsiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteBucketWebsiteError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11838,7 +11887,10 @@ Unknown(String)
                 impl Error for DeleteObjectError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteObjectError::Validation(ref cause) => cause,DeleteObjectError::Credentials(ref err) => err.description(),DeleteObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteObjectError::Unknown(ref cause) => cause
+                            DeleteObjectError::Validation(ref cause) => cause,
+DeleteObjectError::Credentials(ref err) => err.description(),
+DeleteObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteObjectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11894,7 +11946,10 @@ Unknown(String)
                 impl Error for DeleteObjectTaggingError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteObjectTaggingError::Validation(ref cause) => cause,DeleteObjectTaggingError::Credentials(ref err) => err.description(),DeleteObjectTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteObjectTaggingError::Unknown(ref cause) => cause
+                            DeleteObjectTaggingError::Validation(ref cause) => cause,
+DeleteObjectTaggingError::Credentials(ref err) => err.description(),
+DeleteObjectTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteObjectTaggingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11950,7 +12005,10 @@ Unknown(String)
                 impl Error for DeleteObjectsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteObjectsError::Validation(ref cause) => cause,DeleteObjectsError::Credentials(ref err) => err.description(),DeleteObjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteObjectsError::Unknown(ref cause) => cause
+                            DeleteObjectsError::Validation(ref cause) => cause,
+DeleteObjectsError::Credentials(ref err) => err.description(),
+DeleteObjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteObjectsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12006,7 +12064,10 @@ Unknown(String)
                 impl Error for GetBucketAccelerateConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketAccelerateConfigurationError::Validation(ref cause) => cause,GetBucketAccelerateConfigurationError::Credentials(ref err) => err.description(),GetBucketAccelerateConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketAccelerateConfigurationError::Unknown(ref cause) => cause
+                            GetBucketAccelerateConfigurationError::Validation(ref cause) => cause,
+GetBucketAccelerateConfigurationError::Credentials(ref err) => err.description(),
+GetBucketAccelerateConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketAccelerateConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12062,7 +12123,10 @@ Unknown(String)
                 impl Error for GetBucketAclError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketAclError::Validation(ref cause) => cause,GetBucketAclError::Credentials(ref err) => err.description(),GetBucketAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketAclError::Unknown(ref cause) => cause
+                            GetBucketAclError::Validation(ref cause) => cause,
+GetBucketAclError::Credentials(ref err) => err.description(),
+GetBucketAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketAclError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12118,7 +12182,10 @@ Unknown(String)
                 impl Error for GetBucketAnalyticsConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketAnalyticsConfigurationError::Validation(ref cause) => cause,GetBucketAnalyticsConfigurationError::Credentials(ref err) => err.description(),GetBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketAnalyticsConfigurationError::Unknown(ref cause) => cause
+                            GetBucketAnalyticsConfigurationError::Validation(ref cause) => cause,
+GetBucketAnalyticsConfigurationError::Credentials(ref err) => err.description(),
+GetBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketAnalyticsConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12174,7 +12241,10 @@ Unknown(String)
                 impl Error for GetBucketCorsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketCorsError::Validation(ref cause) => cause,GetBucketCorsError::Credentials(ref err) => err.description(),GetBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketCorsError::Unknown(ref cause) => cause
+                            GetBucketCorsError::Validation(ref cause) => cause,
+GetBucketCorsError::Credentials(ref err) => err.description(),
+GetBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketCorsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12230,7 +12300,10 @@ Unknown(String)
                 impl Error for GetBucketInventoryConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketInventoryConfigurationError::Validation(ref cause) => cause,GetBucketInventoryConfigurationError::Credentials(ref err) => err.description(),GetBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketInventoryConfigurationError::Unknown(ref cause) => cause
+                            GetBucketInventoryConfigurationError::Validation(ref cause) => cause,
+GetBucketInventoryConfigurationError::Credentials(ref err) => err.description(),
+GetBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketInventoryConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12286,7 +12359,10 @@ Unknown(String)
                 impl Error for GetBucketLifecycleError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketLifecycleError::Validation(ref cause) => cause,GetBucketLifecycleError::Credentials(ref err) => err.description(),GetBucketLifecycleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketLifecycleError::Unknown(ref cause) => cause
+                            GetBucketLifecycleError::Validation(ref cause) => cause,
+GetBucketLifecycleError::Credentials(ref err) => err.description(),
+GetBucketLifecycleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketLifecycleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12342,7 +12418,10 @@ Unknown(String)
                 impl Error for GetBucketLifecycleConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketLifecycleConfigurationError::Validation(ref cause) => cause,GetBucketLifecycleConfigurationError::Credentials(ref err) => err.description(),GetBucketLifecycleConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketLifecycleConfigurationError::Unknown(ref cause) => cause
+                            GetBucketLifecycleConfigurationError::Validation(ref cause) => cause,
+GetBucketLifecycleConfigurationError::Credentials(ref err) => err.description(),
+GetBucketLifecycleConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketLifecycleConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12398,7 +12477,10 @@ Unknown(String)
                 impl Error for GetBucketLocationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketLocationError::Validation(ref cause) => cause,GetBucketLocationError::Credentials(ref err) => err.description(),GetBucketLocationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketLocationError::Unknown(ref cause) => cause
+                            GetBucketLocationError::Validation(ref cause) => cause,
+GetBucketLocationError::Credentials(ref err) => err.description(),
+GetBucketLocationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketLocationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12454,7 +12536,10 @@ Unknown(String)
                 impl Error for GetBucketLoggingError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketLoggingError::Validation(ref cause) => cause,GetBucketLoggingError::Credentials(ref err) => err.description(),GetBucketLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketLoggingError::Unknown(ref cause) => cause
+                            GetBucketLoggingError::Validation(ref cause) => cause,
+GetBucketLoggingError::Credentials(ref err) => err.description(),
+GetBucketLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketLoggingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12510,7 +12595,10 @@ Unknown(String)
                 impl Error for GetBucketMetricsConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketMetricsConfigurationError::Validation(ref cause) => cause,GetBucketMetricsConfigurationError::Credentials(ref err) => err.description(),GetBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketMetricsConfigurationError::Unknown(ref cause) => cause
+                            GetBucketMetricsConfigurationError::Validation(ref cause) => cause,
+GetBucketMetricsConfigurationError::Credentials(ref err) => err.description(),
+GetBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketMetricsConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12566,7 +12654,10 @@ Unknown(String)
                 impl Error for GetBucketNotificationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketNotificationError::Validation(ref cause) => cause,GetBucketNotificationError::Credentials(ref err) => err.description(),GetBucketNotificationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketNotificationError::Unknown(ref cause) => cause
+                            GetBucketNotificationError::Validation(ref cause) => cause,
+GetBucketNotificationError::Credentials(ref err) => err.description(),
+GetBucketNotificationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketNotificationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12622,7 +12713,10 @@ Unknown(String)
                 impl Error for GetBucketNotificationConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketNotificationConfigurationError::Validation(ref cause) => cause,GetBucketNotificationConfigurationError::Credentials(ref err) => err.description(),GetBucketNotificationConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketNotificationConfigurationError::Unknown(ref cause) => cause
+                            GetBucketNotificationConfigurationError::Validation(ref cause) => cause,
+GetBucketNotificationConfigurationError::Credentials(ref err) => err.description(),
+GetBucketNotificationConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketNotificationConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12678,7 +12772,10 @@ Unknown(String)
                 impl Error for GetBucketPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketPolicyError::Validation(ref cause) => cause,GetBucketPolicyError::Credentials(ref err) => err.description(),GetBucketPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketPolicyError::Unknown(ref cause) => cause
+                            GetBucketPolicyError::Validation(ref cause) => cause,
+GetBucketPolicyError::Credentials(ref err) => err.description(),
+GetBucketPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12734,7 +12831,10 @@ Unknown(String)
                 impl Error for GetBucketReplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketReplicationError::Validation(ref cause) => cause,GetBucketReplicationError::Credentials(ref err) => err.description(),GetBucketReplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketReplicationError::Unknown(ref cause) => cause
+                            GetBucketReplicationError::Validation(ref cause) => cause,
+GetBucketReplicationError::Credentials(ref err) => err.description(),
+GetBucketReplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketReplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12790,7 +12890,10 @@ Unknown(String)
                 impl Error for GetBucketRequestPaymentError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketRequestPaymentError::Validation(ref cause) => cause,GetBucketRequestPaymentError::Credentials(ref err) => err.description(),GetBucketRequestPaymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketRequestPaymentError::Unknown(ref cause) => cause
+                            GetBucketRequestPaymentError::Validation(ref cause) => cause,
+GetBucketRequestPaymentError::Credentials(ref err) => err.description(),
+GetBucketRequestPaymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketRequestPaymentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12846,7 +12949,10 @@ Unknown(String)
                 impl Error for GetBucketTaggingError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketTaggingError::Validation(ref cause) => cause,GetBucketTaggingError::Credentials(ref err) => err.description(),GetBucketTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketTaggingError::Unknown(ref cause) => cause
+                            GetBucketTaggingError::Validation(ref cause) => cause,
+GetBucketTaggingError::Credentials(ref err) => err.description(),
+GetBucketTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketTaggingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12902,7 +13008,10 @@ Unknown(String)
                 impl Error for GetBucketVersioningError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketVersioningError::Validation(ref cause) => cause,GetBucketVersioningError::Credentials(ref err) => err.description(),GetBucketVersioningError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketVersioningError::Unknown(ref cause) => cause
+                            GetBucketVersioningError::Validation(ref cause) => cause,
+GetBucketVersioningError::Credentials(ref err) => err.description(),
+GetBucketVersioningError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketVersioningError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12958,7 +13067,10 @@ Unknown(String)
                 impl Error for GetBucketWebsiteError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBucketWebsiteError::Validation(ref cause) => cause,GetBucketWebsiteError::Credentials(ref err) => err.description(),GetBucketWebsiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBucketWebsiteError::Unknown(ref cause) => cause
+                            GetBucketWebsiteError::Validation(ref cause) => cause,
+GetBucketWebsiteError::Credentials(ref err) => err.description(),
+GetBucketWebsiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBucketWebsiteError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13016,7 +13128,11 @@ Unknown(String)
                 impl Error for GetObjectError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetObjectError::NoSuchKey(ref cause) => cause,GetObjectError::Validation(ref cause) => cause,GetObjectError::Credentials(ref err) => err.description(),GetObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetObjectError::Unknown(ref cause) => cause
+                            GetObjectError::NoSuchKey(ref cause) => cause,
+GetObjectError::Validation(ref cause) => cause,
+GetObjectError::Credentials(ref err) => err.description(),
+GetObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetObjectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13074,7 +13190,11 @@ Unknown(String)
                 impl Error for GetObjectAclError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetObjectAclError::NoSuchKey(ref cause) => cause,GetObjectAclError::Validation(ref cause) => cause,GetObjectAclError::Credentials(ref err) => err.description(),GetObjectAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetObjectAclError::Unknown(ref cause) => cause
+                            GetObjectAclError::NoSuchKey(ref cause) => cause,
+GetObjectAclError::Validation(ref cause) => cause,
+GetObjectAclError::Credentials(ref err) => err.description(),
+GetObjectAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetObjectAclError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13130,7 +13250,10 @@ Unknown(String)
                 impl Error for GetObjectTaggingError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetObjectTaggingError::Validation(ref cause) => cause,GetObjectTaggingError::Credentials(ref err) => err.description(),GetObjectTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetObjectTaggingError::Unknown(ref cause) => cause
+                            GetObjectTaggingError::Validation(ref cause) => cause,
+GetObjectTaggingError::Credentials(ref err) => err.description(),
+GetObjectTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetObjectTaggingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13186,7 +13309,10 @@ Unknown(String)
                 impl Error for GetObjectTorrentError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetObjectTorrentError::Validation(ref cause) => cause,GetObjectTorrentError::Credentials(ref err) => err.description(),GetObjectTorrentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetObjectTorrentError::Unknown(ref cause) => cause
+                            GetObjectTorrentError::Validation(ref cause) => cause,
+GetObjectTorrentError::Credentials(ref err) => err.description(),
+GetObjectTorrentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetObjectTorrentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13244,7 +13370,11 @@ Unknown(String)
                 impl Error for HeadBucketError {
                     fn description(&self) -> &str {
                         match *self {
-                            HeadBucketError::NoSuchBucket(ref cause) => cause,HeadBucketError::Validation(ref cause) => cause,HeadBucketError::Credentials(ref err) => err.description(),HeadBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),HeadBucketError::Unknown(ref cause) => cause
+                            HeadBucketError::NoSuchBucket(ref cause) => cause,
+HeadBucketError::Validation(ref cause) => cause,
+HeadBucketError::Credentials(ref err) => err.description(),
+HeadBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+HeadBucketError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13302,7 +13432,11 @@ Unknown(String)
                 impl Error for HeadObjectError {
                     fn description(&self) -> &str {
                         match *self {
-                            HeadObjectError::NoSuchKey(ref cause) => cause,HeadObjectError::Validation(ref cause) => cause,HeadObjectError::Credentials(ref err) => err.description(),HeadObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),HeadObjectError::Unknown(ref cause) => cause
+                            HeadObjectError::NoSuchKey(ref cause) => cause,
+HeadObjectError::Validation(ref cause) => cause,
+HeadObjectError::Credentials(ref err) => err.description(),
+HeadObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+HeadObjectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13358,7 +13492,10 @@ Unknown(String)
                 impl Error for ListBucketAnalyticsConfigurationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListBucketAnalyticsConfigurationsError::Validation(ref cause) => cause,ListBucketAnalyticsConfigurationsError::Credentials(ref err) => err.description(),ListBucketAnalyticsConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListBucketAnalyticsConfigurationsError::Unknown(ref cause) => cause
+                            ListBucketAnalyticsConfigurationsError::Validation(ref cause) => cause,
+ListBucketAnalyticsConfigurationsError::Credentials(ref err) => err.description(),
+ListBucketAnalyticsConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListBucketAnalyticsConfigurationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13414,7 +13551,10 @@ Unknown(String)
                 impl Error for ListBucketInventoryConfigurationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListBucketInventoryConfigurationsError::Validation(ref cause) => cause,ListBucketInventoryConfigurationsError::Credentials(ref err) => err.description(),ListBucketInventoryConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListBucketInventoryConfigurationsError::Unknown(ref cause) => cause
+                            ListBucketInventoryConfigurationsError::Validation(ref cause) => cause,
+ListBucketInventoryConfigurationsError::Credentials(ref err) => err.description(),
+ListBucketInventoryConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListBucketInventoryConfigurationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13470,7 +13610,10 @@ Unknown(String)
                 impl Error for ListBucketMetricsConfigurationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListBucketMetricsConfigurationsError::Validation(ref cause) => cause,ListBucketMetricsConfigurationsError::Credentials(ref err) => err.description(),ListBucketMetricsConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListBucketMetricsConfigurationsError::Unknown(ref cause) => cause
+                            ListBucketMetricsConfigurationsError::Validation(ref cause) => cause,
+ListBucketMetricsConfigurationsError::Credentials(ref err) => err.description(),
+ListBucketMetricsConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListBucketMetricsConfigurationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13526,7 +13669,10 @@ Unknown(String)
                 impl Error for ListBucketsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListBucketsError::Validation(ref cause) => cause,ListBucketsError::Credentials(ref err) => err.description(),ListBucketsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListBucketsError::Unknown(ref cause) => cause
+                            ListBucketsError::Validation(ref cause) => cause,
+ListBucketsError::Credentials(ref err) => err.description(),
+ListBucketsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListBucketsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13582,7 +13728,10 @@ Unknown(String)
                 impl Error for ListMultipartUploadsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListMultipartUploadsError::Validation(ref cause) => cause,ListMultipartUploadsError::Credentials(ref err) => err.description(),ListMultipartUploadsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListMultipartUploadsError::Unknown(ref cause) => cause
+                            ListMultipartUploadsError::Validation(ref cause) => cause,
+ListMultipartUploadsError::Credentials(ref err) => err.description(),
+ListMultipartUploadsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListMultipartUploadsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13638,7 +13787,10 @@ Unknown(String)
                 impl Error for ListObjectVersionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListObjectVersionsError::Validation(ref cause) => cause,ListObjectVersionsError::Credentials(ref err) => err.description(),ListObjectVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListObjectVersionsError::Unknown(ref cause) => cause
+                            ListObjectVersionsError::Validation(ref cause) => cause,
+ListObjectVersionsError::Credentials(ref err) => err.description(),
+ListObjectVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListObjectVersionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13696,7 +13848,11 @@ Unknown(String)
                 impl Error for ListObjectsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListObjectsError::NoSuchBucket(ref cause) => cause,ListObjectsError::Validation(ref cause) => cause,ListObjectsError::Credentials(ref err) => err.description(),ListObjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListObjectsError::Unknown(ref cause) => cause
+                            ListObjectsError::NoSuchBucket(ref cause) => cause,
+ListObjectsError::Validation(ref cause) => cause,
+ListObjectsError::Credentials(ref err) => err.description(),
+ListObjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListObjectsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13754,7 +13910,11 @@ Unknown(String)
                 impl Error for ListObjectsV2Error {
                     fn description(&self) -> &str {
                         match *self {
-                            ListObjectsV2Error::NoSuchBucket(ref cause) => cause,ListObjectsV2Error::Validation(ref cause) => cause,ListObjectsV2Error::Credentials(ref err) => err.description(),ListObjectsV2Error::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListObjectsV2Error::Unknown(ref cause) => cause
+                            ListObjectsV2Error::NoSuchBucket(ref cause) => cause,
+ListObjectsV2Error::Validation(ref cause) => cause,
+ListObjectsV2Error::Credentials(ref err) => err.description(),
+ListObjectsV2Error::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListObjectsV2Error::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13810,7 +13970,10 @@ Unknown(String)
                 impl Error for ListPartsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListPartsError::Validation(ref cause) => cause,ListPartsError::Credentials(ref err) => err.description(),ListPartsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListPartsError::Unknown(ref cause) => cause
+                            ListPartsError::Validation(ref cause) => cause,
+ListPartsError::Credentials(ref err) => err.description(),
+ListPartsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListPartsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13866,7 +14029,10 @@ Unknown(String)
                 impl Error for PutBucketAccelerateConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketAccelerateConfigurationError::Validation(ref cause) => cause,PutBucketAccelerateConfigurationError::Credentials(ref err) => err.description(),PutBucketAccelerateConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketAccelerateConfigurationError::Unknown(ref cause) => cause
+                            PutBucketAccelerateConfigurationError::Validation(ref cause) => cause,
+PutBucketAccelerateConfigurationError::Credentials(ref err) => err.description(),
+PutBucketAccelerateConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketAccelerateConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13922,7 +14088,10 @@ Unknown(String)
                 impl Error for PutBucketAclError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketAclError::Validation(ref cause) => cause,PutBucketAclError::Credentials(ref err) => err.description(),PutBucketAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketAclError::Unknown(ref cause) => cause
+                            PutBucketAclError::Validation(ref cause) => cause,
+PutBucketAclError::Credentials(ref err) => err.description(),
+PutBucketAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketAclError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13978,7 +14147,10 @@ Unknown(String)
                 impl Error for PutBucketAnalyticsConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketAnalyticsConfigurationError::Validation(ref cause) => cause,PutBucketAnalyticsConfigurationError::Credentials(ref err) => err.description(),PutBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketAnalyticsConfigurationError::Unknown(ref cause) => cause
+                            PutBucketAnalyticsConfigurationError::Validation(ref cause) => cause,
+PutBucketAnalyticsConfigurationError::Credentials(ref err) => err.description(),
+PutBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketAnalyticsConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14034,7 +14206,10 @@ Unknown(String)
                 impl Error for PutBucketCorsError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketCorsError::Validation(ref cause) => cause,PutBucketCorsError::Credentials(ref err) => err.description(),PutBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketCorsError::Unknown(ref cause) => cause
+                            PutBucketCorsError::Validation(ref cause) => cause,
+PutBucketCorsError::Credentials(ref err) => err.description(),
+PutBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketCorsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14090,7 +14265,10 @@ Unknown(String)
                 impl Error for PutBucketInventoryConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketInventoryConfigurationError::Validation(ref cause) => cause,PutBucketInventoryConfigurationError::Credentials(ref err) => err.description(),PutBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketInventoryConfigurationError::Unknown(ref cause) => cause
+                            PutBucketInventoryConfigurationError::Validation(ref cause) => cause,
+PutBucketInventoryConfigurationError::Credentials(ref err) => err.description(),
+PutBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketInventoryConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14146,7 +14324,10 @@ Unknown(String)
                 impl Error for PutBucketLifecycleError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketLifecycleError::Validation(ref cause) => cause,PutBucketLifecycleError::Credentials(ref err) => err.description(),PutBucketLifecycleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketLifecycleError::Unknown(ref cause) => cause
+                            PutBucketLifecycleError::Validation(ref cause) => cause,
+PutBucketLifecycleError::Credentials(ref err) => err.description(),
+PutBucketLifecycleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketLifecycleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14202,7 +14383,10 @@ Unknown(String)
                 impl Error for PutBucketLifecycleConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketLifecycleConfigurationError::Validation(ref cause) => cause,PutBucketLifecycleConfigurationError::Credentials(ref err) => err.description(),PutBucketLifecycleConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketLifecycleConfigurationError::Unknown(ref cause) => cause
+                            PutBucketLifecycleConfigurationError::Validation(ref cause) => cause,
+PutBucketLifecycleConfigurationError::Credentials(ref err) => err.description(),
+PutBucketLifecycleConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketLifecycleConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14258,7 +14442,10 @@ Unknown(String)
                 impl Error for PutBucketLoggingError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketLoggingError::Validation(ref cause) => cause,PutBucketLoggingError::Credentials(ref err) => err.description(),PutBucketLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketLoggingError::Unknown(ref cause) => cause
+                            PutBucketLoggingError::Validation(ref cause) => cause,
+PutBucketLoggingError::Credentials(ref err) => err.description(),
+PutBucketLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketLoggingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14314,7 +14501,10 @@ Unknown(String)
                 impl Error for PutBucketMetricsConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketMetricsConfigurationError::Validation(ref cause) => cause,PutBucketMetricsConfigurationError::Credentials(ref err) => err.description(),PutBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketMetricsConfigurationError::Unknown(ref cause) => cause
+                            PutBucketMetricsConfigurationError::Validation(ref cause) => cause,
+PutBucketMetricsConfigurationError::Credentials(ref err) => err.description(),
+PutBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketMetricsConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14370,7 +14560,10 @@ Unknown(String)
                 impl Error for PutBucketNotificationError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketNotificationError::Validation(ref cause) => cause,PutBucketNotificationError::Credentials(ref err) => err.description(),PutBucketNotificationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketNotificationError::Unknown(ref cause) => cause
+                            PutBucketNotificationError::Validation(ref cause) => cause,
+PutBucketNotificationError::Credentials(ref err) => err.description(),
+PutBucketNotificationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketNotificationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14426,7 +14619,10 @@ Unknown(String)
                 impl Error for PutBucketNotificationConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketNotificationConfigurationError::Validation(ref cause) => cause,PutBucketNotificationConfigurationError::Credentials(ref err) => err.description(),PutBucketNotificationConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketNotificationConfigurationError::Unknown(ref cause) => cause
+                            PutBucketNotificationConfigurationError::Validation(ref cause) => cause,
+PutBucketNotificationConfigurationError::Credentials(ref err) => err.description(),
+PutBucketNotificationConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketNotificationConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14482,7 +14678,10 @@ Unknown(String)
                 impl Error for PutBucketPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketPolicyError::Validation(ref cause) => cause,PutBucketPolicyError::Credentials(ref err) => err.description(),PutBucketPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketPolicyError::Unknown(ref cause) => cause
+                            PutBucketPolicyError::Validation(ref cause) => cause,
+PutBucketPolicyError::Credentials(ref err) => err.description(),
+PutBucketPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14538,7 +14737,10 @@ Unknown(String)
                 impl Error for PutBucketReplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketReplicationError::Validation(ref cause) => cause,PutBucketReplicationError::Credentials(ref err) => err.description(),PutBucketReplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketReplicationError::Unknown(ref cause) => cause
+                            PutBucketReplicationError::Validation(ref cause) => cause,
+PutBucketReplicationError::Credentials(ref err) => err.description(),
+PutBucketReplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketReplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14594,7 +14796,10 @@ Unknown(String)
                 impl Error for PutBucketRequestPaymentError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketRequestPaymentError::Validation(ref cause) => cause,PutBucketRequestPaymentError::Credentials(ref err) => err.description(),PutBucketRequestPaymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketRequestPaymentError::Unknown(ref cause) => cause
+                            PutBucketRequestPaymentError::Validation(ref cause) => cause,
+PutBucketRequestPaymentError::Credentials(ref err) => err.description(),
+PutBucketRequestPaymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketRequestPaymentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14650,7 +14855,10 @@ Unknown(String)
                 impl Error for PutBucketTaggingError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketTaggingError::Validation(ref cause) => cause,PutBucketTaggingError::Credentials(ref err) => err.description(),PutBucketTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketTaggingError::Unknown(ref cause) => cause
+                            PutBucketTaggingError::Validation(ref cause) => cause,
+PutBucketTaggingError::Credentials(ref err) => err.description(),
+PutBucketTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketTaggingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14706,7 +14914,10 @@ Unknown(String)
                 impl Error for PutBucketVersioningError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketVersioningError::Validation(ref cause) => cause,PutBucketVersioningError::Credentials(ref err) => err.description(),PutBucketVersioningError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketVersioningError::Unknown(ref cause) => cause
+                            PutBucketVersioningError::Validation(ref cause) => cause,
+PutBucketVersioningError::Credentials(ref err) => err.description(),
+PutBucketVersioningError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketVersioningError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14762,7 +14973,10 @@ Unknown(String)
                 impl Error for PutBucketWebsiteError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutBucketWebsiteError::Validation(ref cause) => cause,PutBucketWebsiteError::Credentials(ref err) => err.description(),PutBucketWebsiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutBucketWebsiteError::Unknown(ref cause) => cause
+                            PutBucketWebsiteError::Validation(ref cause) => cause,
+PutBucketWebsiteError::Credentials(ref err) => err.description(),
+PutBucketWebsiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutBucketWebsiteError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14818,7 +15032,10 @@ Unknown(String)
                 impl Error for PutObjectError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutObjectError::Validation(ref cause) => cause,PutObjectError::Credentials(ref err) => err.description(),PutObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutObjectError::Unknown(ref cause) => cause
+                            PutObjectError::Validation(ref cause) => cause,
+PutObjectError::Credentials(ref err) => err.description(),
+PutObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutObjectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14876,7 +15093,11 @@ Unknown(String)
                 impl Error for PutObjectAclError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutObjectAclError::NoSuchKey(ref cause) => cause,PutObjectAclError::Validation(ref cause) => cause,PutObjectAclError::Credentials(ref err) => err.description(),PutObjectAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutObjectAclError::Unknown(ref cause) => cause
+                            PutObjectAclError::NoSuchKey(ref cause) => cause,
+PutObjectAclError::Validation(ref cause) => cause,
+PutObjectAclError::Credentials(ref err) => err.description(),
+PutObjectAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutObjectAclError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14932,7 +15153,10 @@ Unknown(String)
                 impl Error for PutObjectTaggingError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutObjectTaggingError::Validation(ref cause) => cause,PutObjectTaggingError::Credentials(ref err) => err.description(),PutObjectTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutObjectTaggingError::Unknown(ref cause) => cause
+                            PutObjectTaggingError::Validation(ref cause) => cause,
+PutObjectTaggingError::Credentials(ref err) => err.description(),
+PutObjectTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutObjectTaggingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14990,7 +15214,11 @@ Unknown(String)
                 impl Error for RestoreObjectError {
                     fn description(&self) -> &str {
                         match *self {
-                            RestoreObjectError::ObjectAlreadyInActiveTierError(ref cause) => cause,RestoreObjectError::Validation(ref cause) => cause,RestoreObjectError::Credentials(ref err) => err.description(),RestoreObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RestoreObjectError::Unknown(ref cause) => cause
+                            RestoreObjectError::ObjectAlreadyInActiveTierError(ref cause) => cause,
+RestoreObjectError::Validation(ref cause) => cause,
+RestoreObjectError::Credentials(ref err) => err.description(),
+RestoreObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RestoreObjectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15046,7 +15274,10 @@ Unknown(String)
                 impl Error for UploadPartError {
                     fn description(&self) -> &str {
                         match *self {
-                            UploadPartError::Validation(ref cause) => cause,UploadPartError::Credentials(ref err) => err.description(),UploadPartError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UploadPartError::Unknown(ref cause) => cause
+                            UploadPartError::Validation(ref cause) => cause,
+UploadPartError::Credentials(ref err) => err.description(),
+UploadPartError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UploadPartError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15102,7 +15333,10 @@ Unknown(String)
                 impl Error for UploadPartCopyError {
                     fn description(&self) -> &str {
                         match *self {
-                            UploadPartCopyError::Validation(ref cause) => cause,UploadPartCopyError::Credentials(ref err) => err.description(),UploadPartCopyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UploadPartCopyError::Unknown(ref cause) => cause
+                            UploadPartCopyError::Validation(ref cause) => cause,
+UploadPartCopyError::Credentials(ref err) => err.description(),
+UploadPartCopyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UploadPartCopyError::Unknown(ref cause) => cause
                         }
                     }
                  }

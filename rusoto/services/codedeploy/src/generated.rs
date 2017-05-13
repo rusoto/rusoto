@@ -1274,18 +1274,18 @@ pub type VersionId = String;
                 #[derive(Debug, PartialEq)]
                 pub enum AddTagsToOnPremisesInstancesError {
                     
-///<p>The maximum allowed number of tags was exceeded.</p>
-TagLimitExceeded(String),
 ///<p>The maximum number of allowed on-premises instances in a single call was exceeded.</p>
 InstanceLimitExceeded(String),
+///<p>An on-premises instance name was not specified.</p>
+InstanceNameRequired(String),
 ///<p>The specified on-premises instance is not registered.</p>
 InstanceNotRegistered(String),
 ///<p>The specified tag was specified in an invalid format.</p>
 InvalidTag(String),
+///<p>The maximum allowed number of tags was exceeded.</p>
+TagLimitExceeded(String),
 ///<p>A tag was not specified.</p>
-TagRequired(String),
-///<p>An on-premises instance name was not specified.</p>
-InstanceNameRequired(String),/// An error occurred dispatching the HTTP request
+TagRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1304,7 +1304,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InstanceNameRequiredException" => AddTagsToOnPremisesInstancesError::InstanceNameRequired(String::from(error_message)),"TagLimitExceededException" => AddTagsToOnPremisesInstancesError::TagLimitExceeded(String::from(error_message)),"InstanceLimitExceededException" => AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(String::from(error_message)),"TagRequiredException" => AddTagsToOnPremisesInstancesError::TagRequired(String::from(error_message)),"InstanceNotRegisteredException" => AddTagsToOnPremisesInstancesError::InstanceNotRegistered(String::from(error_message)),"InvalidTagException" => AddTagsToOnPremisesInstancesError::InvalidTag(String::from(error_message)),"ValidationException" => AddTagsToOnPremisesInstancesError::Validation(error_message.to_string()),_ => AddTagsToOnPremisesInstancesError::Unknown(String::from(body))
+                                    "InstanceLimitExceededException" => AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(String::from(error_message)),
+"InstanceNameRequiredException" => AddTagsToOnPremisesInstancesError::InstanceNameRequired(String::from(error_message)),
+"InstanceNotRegisteredException" => AddTagsToOnPremisesInstancesError::InstanceNotRegistered(String::from(error_message)),
+"InvalidTagException" => AddTagsToOnPremisesInstancesError::InvalidTag(String::from(error_message)),
+"TagLimitExceededException" => AddTagsToOnPremisesInstancesError::TagLimitExceeded(String::from(error_message)),
+"TagRequiredException" => AddTagsToOnPremisesInstancesError::TagRequired(String::from(error_message)),
+"ValidationException" => AddTagsToOnPremisesInstancesError::Validation(error_message.to_string()),
+_ => AddTagsToOnPremisesInstancesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AddTagsToOnPremisesInstancesError::Unknown(String::from(body))
@@ -1335,7 +1342,16 @@ Unknown(String)
                 impl Error for AddTagsToOnPremisesInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddTagsToOnPremisesInstancesError::InvalidTag(ref cause) => cause,AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(ref cause) => cause,AddTagsToOnPremisesInstancesError::InstanceNotRegistered(ref cause) => cause,AddTagsToOnPremisesInstancesError::TagLimitExceeded(ref cause) => cause,AddTagsToOnPremisesInstancesError::TagRequired(ref cause) => cause,AddTagsToOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,AddTagsToOnPremisesInstancesError::Validation(ref cause) => cause,AddTagsToOnPremisesInstancesError::Credentials(ref err) => err.description(),AddTagsToOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddTagsToOnPremisesInstancesError::Unknown(ref cause) => cause
+                            AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(ref cause) => cause,
+AddTagsToOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,
+AddTagsToOnPremisesInstancesError::InstanceNotRegistered(ref cause) => cause,
+AddTagsToOnPremisesInstancesError::InvalidTag(ref cause) => cause,
+AddTagsToOnPremisesInstancesError::TagLimitExceeded(ref cause) => cause,
+AddTagsToOnPremisesInstancesError::TagRequired(ref cause) => cause,
+AddTagsToOnPremisesInstancesError::Validation(ref cause) => cause,
+AddTagsToOnPremisesInstancesError::Credentials(ref err) => err.description(),
+AddTagsToOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddTagsToOnPremisesInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1343,18 +1359,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum BatchGetApplicationRevisionsError {
                     
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
-///<p>The revision ID was not specified.</p>
-RevisionRequired(String),
-///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
-BatchLimitExceeded(String),
 ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
 ApplicationDoesNotExist(String),
 ///<p>The minimum number of required application names was not specified.</p>
 ApplicationNameRequired(String),
+///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
+BatchLimitExceeded(String),
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),
 ///<p>The revision was specified in an invalid format.</p>
-InvalidRevision(String),/// An error occurred dispatching the HTTP request
+InvalidRevision(String),
+///<p>The revision ID was not specified.</p>
+RevisionRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1373,7 +1389,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ApplicationNameRequiredException" => BatchGetApplicationRevisionsError::ApplicationNameRequired(String::from(error_message)),"RevisionRequiredException" => BatchGetApplicationRevisionsError::RevisionRequired(String::from(error_message)),"InvalidRevisionException" => BatchGetApplicationRevisionsError::InvalidRevision(String::from(error_message)),"ApplicationDoesNotExistException" => BatchGetApplicationRevisionsError::ApplicationDoesNotExist(String::from(error_message)),"BatchLimitExceededException" => BatchGetApplicationRevisionsError::BatchLimitExceeded(String::from(error_message)),"InvalidApplicationNameException" => BatchGetApplicationRevisionsError::InvalidApplicationName(String::from(error_message)),"ValidationException" => BatchGetApplicationRevisionsError::Validation(error_message.to_string()),_ => BatchGetApplicationRevisionsError::Unknown(String::from(body))
+                                    "ApplicationDoesNotExistException" => BatchGetApplicationRevisionsError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => BatchGetApplicationRevisionsError::ApplicationNameRequired(String::from(error_message)),
+"BatchLimitExceededException" => BatchGetApplicationRevisionsError::BatchLimitExceeded(String::from(error_message)),
+"InvalidApplicationNameException" => BatchGetApplicationRevisionsError::InvalidApplicationName(String::from(error_message)),
+"InvalidRevisionException" => BatchGetApplicationRevisionsError::InvalidRevision(String::from(error_message)),
+"RevisionRequiredException" => BatchGetApplicationRevisionsError::RevisionRequired(String::from(error_message)),
+"ValidationException" => BatchGetApplicationRevisionsError::Validation(error_message.to_string()),
+_ => BatchGetApplicationRevisionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => BatchGetApplicationRevisionsError::Unknown(String::from(body))
@@ -1404,7 +1427,16 @@ Unknown(String)
                 impl Error for BatchGetApplicationRevisionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchGetApplicationRevisionsError::BatchLimitExceeded(ref cause) => cause,BatchGetApplicationRevisionsError::RevisionRequired(ref cause) => cause,BatchGetApplicationRevisionsError::ApplicationNameRequired(ref cause) => cause,BatchGetApplicationRevisionsError::InvalidApplicationName(ref cause) => cause,BatchGetApplicationRevisionsError::InvalidRevision(ref cause) => cause,BatchGetApplicationRevisionsError::ApplicationDoesNotExist(ref cause) => cause,BatchGetApplicationRevisionsError::Validation(ref cause) => cause,BatchGetApplicationRevisionsError::Credentials(ref err) => err.description(),BatchGetApplicationRevisionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchGetApplicationRevisionsError::Unknown(ref cause) => cause
+                            BatchGetApplicationRevisionsError::ApplicationDoesNotExist(ref cause) => cause,
+BatchGetApplicationRevisionsError::ApplicationNameRequired(ref cause) => cause,
+BatchGetApplicationRevisionsError::BatchLimitExceeded(ref cause) => cause,
+BatchGetApplicationRevisionsError::InvalidApplicationName(ref cause) => cause,
+BatchGetApplicationRevisionsError::InvalidRevision(ref cause) => cause,
+BatchGetApplicationRevisionsError::RevisionRequired(ref cause) => cause,
+BatchGetApplicationRevisionsError::Validation(ref cause) => cause,
+BatchGetApplicationRevisionsError::Credentials(ref err) => err.description(),
+BatchGetApplicationRevisionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchGetApplicationRevisionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1412,14 +1444,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum BatchGetApplicationsError {
                     
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
-///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
-BatchLimitExceeded(String),
+///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+ApplicationDoesNotExist(String),
 ///<p>The minimum number of required application names was not specified.</p>
 ApplicationNameRequired(String),
-///<p>The application does not exist with the applicable IAM user or AWS account.</p>
-ApplicationDoesNotExist(String),/// An error occurred dispatching the HTTP request
+///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
+BatchLimitExceeded(String),
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1438,7 +1470,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "BatchLimitExceededException" => BatchGetApplicationsError::BatchLimitExceeded(String::from(error_message)),"ApplicationNameRequiredException" => BatchGetApplicationsError::ApplicationNameRequired(String::from(error_message)),"ApplicationDoesNotExistException" => BatchGetApplicationsError::ApplicationDoesNotExist(String::from(error_message)),"InvalidApplicationNameException" => BatchGetApplicationsError::InvalidApplicationName(String::from(error_message)),"ValidationException" => BatchGetApplicationsError::Validation(error_message.to_string()),_ => BatchGetApplicationsError::Unknown(String::from(body))
+                                    "ApplicationDoesNotExistException" => BatchGetApplicationsError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => BatchGetApplicationsError::ApplicationNameRequired(String::from(error_message)),
+"BatchLimitExceededException" => BatchGetApplicationsError::BatchLimitExceeded(String::from(error_message)),
+"InvalidApplicationNameException" => BatchGetApplicationsError::InvalidApplicationName(String::from(error_message)),
+"ValidationException" => BatchGetApplicationsError::Validation(error_message.to_string()),
+_ => BatchGetApplicationsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => BatchGetApplicationsError::Unknown(String::from(body))
@@ -1469,7 +1506,14 @@ Unknown(String)
                 impl Error for BatchGetApplicationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchGetApplicationsError::InvalidApplicationName(ref cause) => cause,BatchGetApplicationsError::ApplicationDoesNotExist(ref cause) => cause,BatchGetApplicationsError::ApplicationNameRequired(ref cause) => cause,BatchGetApplicationsError::BatchLimitExceeded(ref cause) => cause,BatchGetApplicationsError::Validation(ref cause) => cause,BatchGetApplicationsError::Credentials(ref err) => err.description(),BatchGetApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchGetApplicationsError::Unknown(ref cause) => cause
+                            BatchGetApplicationsError::ApplicationDoesNotExist(ref cause) => cause,
+BatchGetApplicationsError::ApplicationNameRequired(ref cause) => cause,
+BatchGetApplicationsError::BatchLimitExceeded(ref cause) => cause,
+BatchGetApplicationsError::InvalidApplicationName(ref cause) => cause,
+BatchGetApplicationsError::Validation(ref cause) => cause,
+BatchGetApplicationsError::Credentials(ref err) => err.description(),
+BatchGetApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchGetApplicationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1477,18 +1521,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum BatchGetDeploymentGroupsError {
                     
+///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+ApplicationDoesNotExist(String),
 ///<p>The minimum number of required application names was not specified.</p>
 ApplicationNameRequired(String),
-///<p>The deployment group name was not specified.</p>
-DeploymentGroupNameRequired(String),
-///<p>The deployment group name was specified in an invalid format.</p>
-InvalidDeploymentGroupName(String),
 ///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
 BatchLimitExceeded(String),
+///<p>The deployment group name was not specified.</p>
+DeploymentGroupNameRequired(String),
 ///<p>The application name was specified in an invalid format.</p>
 InvalidApplicationName(String),
-///<p>The application does not exist with the applicable IAM user or AWS account.</p>
-ApplicationDoesNotExist(String),/// An error occurred dispatching the HTTP request
+///<p>The deployment group name was specified in an invalid format.</p>
+InvalidDeploymentGroupName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1507,7 +1551,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ApplicationNameRequiredException" => BatchGetDeploymentGroupsError::ApplicationNameRequired(String::from(error_message)),"InvalidApplicationNameException" => BatchGetDeploymentGroupsError::InvalidApplicationName(String::from(error_message)),"BatchLimitExceededException" => BatchGetDeploymentGroupsError::BatchLimitExceeded(String::from(error_message)),"ApplicationDoesNotExistException" => BatchGetDeploymentGroupsError::ApplicationDoesNotExist(String::from(error_message)),"InvalidDeploymentGroupNameException" => BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(String::from(error_message)),"DeploymentGroupNameRequiredException" => BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(String::from(error_message)),"ValidationException" => BatchGetDeploymentGroupsError::Validation(error_message.to_string()),_ => BatchGetDeploymentGroupsError::Unknown(String::from(body))
+                                    "ApplicationDoesNotExistException" => BatchGetDeploymentGroupsError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => BatchGetDeploymentGroupsError::ApplicationNameRequired(String::from(error_message)),
+"BatchLimitExceededException" => BatchGetDeploymentGroupsError::BatchLimitExceeded(String::from(error_message)),
+"DeploymentGroupNameRequiredException" => BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(String::from(error_message)),
+"InvalidApplicationNameException" => BatchGetDeploymentGroupsError::InvalidApplicationName(String::from(error_message)),
+"InvalidDeploymentGroupNameException" => BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(String::from(error_message)),
+"ValidationException" => BatchGetDeploymentGroupsError::Validation(error_message.to_string()),
+_ => BatchGetDeploymentGroupsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => BatchGetDeploymentGroupsError::Unknown(String::from(body))
@@ -1538,7 +1589,16 @@ Unknown(String)
                 impl Error for BatchGetDeploymentGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchGetDeploymentGroupsError::InvalidApplicationName(ref cause) => cause,BatchGetDeploymentGroupsError::ApplicationNameRequired(ref cause) => cause,BatchGetDeploymentGroupsError::ApplicationDoesNotExist(ref cause) => cause,BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(ref cause) => cause,BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(ref cause) => cause,BatchGetDeploymentGroupsError::BatchLimitExceeded(ref cause) => cause,BatchGetDeploymentGroupsError::Validation(ref cause) => cause,BatchGetDeploymentGroupsError::Credentials(ref err) => err.description(),BatchGetDeploymentGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchGetDeploymentGroupsError::Unknown(ref cause) => cause
+                            BatchGetDeploymentGroupsError::ApplicationDoesNotExist(ref cause) => cause,
+BatchGetDeploymentGroupsError::ApplicationNameRequired(ref cause) => cause,
+BatchGetDeploymentGroupsError::BatchLimitExceeded(ref cause) => cause,
+BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(ref cause) => cause,
+BatchGetDeploymentGroupsError::InvalidApplicationName(ref cause) => cause,
+BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(ref cause) => cause,
+BatchGetDeploymentGroupsError::Validation(ref cause) => cause,
+BatchGetDeploymentGroupsError::Credentials(ref err) => err.description(),
+BatchGetDeploymentGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchGetDeploymentGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1546,18 +1606,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum BatchGetDeploymentInstancesError {
                     
+///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
+BatchLimitExceeded(String),
+///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+DeploymentDoesNotExist(String),
 ///<p>At least one deployment ID must be specified.</p>
 DeploymentIdRequired(String),
 ///<p>The instance ID was not specified.</p>
 InstanceIdRequired(String),
-///<p>The specified on-premises instance name was specified in an invalid format.</p>
-InvalidInstanceName(String),
-///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
-DeploymentDoesNotExist(String),
 ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
 InvalidDeploymentId(String),
-///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
-BatchLimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>The specified on-premises instance name was specified in an invalid format.</p>
+InvalidInstanceName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1576,7 +1636,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DeploymentIdRequiredException" => BatchGetDeploymentInstancesError::DeploymentIdRequired(String::from(error_message)),"InstanceIdRequiredException" => BatchGetDeploymentInstancesError::InstanceIdRequired(String::from(error_message)),"InvalidInstanceNameException" => BatchGetDeploymentInstancesError::InvalidInstanceName(String::from(error_message)),"DeploymentDoesNotExistException" => BatchGetDeploymentInstancesError::DeploymentDoesNotExist(String::from(error_message)),"InvalidDeploymentIdException" => BatchGetDeploymentInstancesError::InvalidDeploymentId(String::from(error_message)),"BatchLimitExceededException" => BatchGetDeploymentInstancesError::BatchLimitExceeded(String::from(error_message)),"ValidationException" => BatchGetDeploymentInstancesError::Validation(error_message.to_string()),_ => BatchGetDeploymentInstancesError::Unknown(String::from(body))
+                                    "BatchLimitExceededException" => BatchGetDeploymentInstancesError::BatchLimitExceeded(String::from(error_message)),
+"DeploymentDoesNotExistException" => BatchGetDeploymentInstancesError::DeploymentDoesNotExist(String::from(error_message)),
+"DeploymentIdRequiredException" => BatchGetDeploymentInstancesError::DeploymentIdRequired(String::from(error_message)),
+"InstanceIdRequiredException" => BatchGetDeploymentInstancesError::InstanceIdRequired(String::from(error_message)),
+"InvalidDeploymentIdException" => BatchGetDeploymentInstancesError::InvalidDeploymentId(String::from(error_message)),
+"InvalidInstanceNameException" => BatchGetDeploymentInstancesError::InvalidInstanceName(String::from(error_message)),
+"ValidationException" => BatchGetDeploymentInstancesError::Validation(error_message.to_string()),
+_ => BatchGetDeploymentInstancesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => BatchGetDeploymentInstancesError::Unknown(String::from(body))
@@ -1607,7 +1674,16 @@ Unknown(String)
                 impl Error for BatchGetDeploymentInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchGetDeploymentInstancesError::BatchLimitExceeded(ref cause) => cause,BatchGetDeploymentInstancesError::InvalidDeploymentId(ref cause) => cause,BatchGetDeploymentInstancesError::InvalidInstanceName(ref cause) => cause,BatchGetDeploymentInstancesError::DeploymentDoesNotExist(ref cause) => cause,BatchGetDeploymentInstancesError::DeploymentIdRequired(ref cause) => cause,BatchGetDeploymentInstancesError::InstanceIdRequired(ref cause) => cause,BatchGetDeploymentInstancesError::Validation(ref cause) => cause,BatchGetDeploymentInstancesError::Credentials(ref err) => err.description(),BatchGetDeploymentInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchGetDeploymentInstancesError::Unknown(ref cause) => cause
+                            BatchGetDeploymentInstancesError::BatchLimitExceeded(ref cause) => cause,
+BatchGetDeploymentInstancesError::DeploymentDoesNotExist(ref cause) => cause,
+BatchGetDeploymentInstancesError::DeploymentIdRequired(ref cause) => cause,
+BatchGetDeploymentInstancesError::InstanceIdRequired(ref cause) => cause,
+BatchGetDeploymentInstancesError::InvalidDeploymentId(ref cause) => cause,
+BatchGetDeploymentInstancesError::InvalidInstanceName(ref cause) => cause,
+BatchGetDeploymentInstancesError::Validation(ref cause) => cause,
+BatchGetDeploymentInstancesError::Credentials(ref err) => err.description(),
+BatchGetDeploymentInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchGetDeploymentInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1639,7 +1715,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidDeploymentIdException" => BatchGetDeploymentsError::InvalidDeploymentId(String::from(error_message)),"BatchLimitExceededException" => BatchGetDeploymentsError::BatchLimitExceeded(String::from(error_message)),"DeploymentIdRequiredException" => BatchGetDeploymentsError::DeploymentIdRequired(String::from(error_message)),"ValidationException" => BatchGetDeploymentsError::Validation(error_message.to_string()),_ => BatchGetDeploymentsError::Unknown(String::from(body))
+                                    "BatchLimitExceededException" => BatchGetDeploymentsError::BatchLimitExceeded(String::from(error_message)),
+"DeploymentIdRequiredException" => BatchGetDeploymentsError::DeploymentIdRequired(String::from(error_message)),
+"InvalidDeploymentIdException" => BatchGetDeploymentsError::InvalidDeploymentId(String::from(error_message)),
+"ValidationException" => BatchGetDeploymentsError::Validation(error_message.to_string()),
+_ => BatchGetDeploymentsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => BatchGetDeploymentsError::Unknown(String::from(body))
@@ -1670,7 +1750,13 @@ Unknown(String)
                 impl Error for BatchGetDeploymentsError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchGetDeploymentsError::DeploymentIdRequired(ref cause) => cause,BatchGetDeploymentsError::InvalidDeploymentId(ref cause) => cause,BatchGetDeploymentsError::BatchLimitExceeded(ref cause) => cause,BatchGetDeploymentsError::Validation(ref cause) => cause,BatchGetDeploymentsError::Credentials(ref err) => err.description(),BatchGetDeploymentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchGetDeploymentsError::Unknown(ref cause) => cause
+                            BatchGetDeploymentsError::BatchLimitExceeded(ref cause) => cause,
+BatchGetDeploymentsError::DeploymentIdRequired(ref cause) => cause,
+BatchGetDeploymentsError::InvalidDeploymentId(ref cause) => cause,
+BatchGetDeploymentsError::Validation(ref cause) => cause,
+BatchGetDeploymentsError::Credentials(ref err) => err.description(),
+BatchGetDeploymentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchGetDeploymentsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1678,12 +1764,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum BatchGetOnPremisesInstancesError {
                     
-///<p>The specified on-premises instance name was specified in an invalid format.</p>
-InvalidInstanceName(String),
 ///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
 BatchLimitExceeded(String),
 ///<p>An on-premises instance name was not specified.</p>
-InstanceNameRequired(String),/// An error occurred dispatching the HTTP request
+InstanceNameRequired(String),
+///<p>The specified on-premises instance name was specified in an invalid format.</p>
+InvalidInstanceName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1702,7 +1788,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InstanceNameRequiredException" => BatchGetOnPremisesInstancesError::InstanceNameRequired(String::from(error_message)),"BatchLimitExceededException" => BatchGetOnPremisesInstancesError::BatchLimitExceeded(String::from(error_message)),"InvalidInstanceNameException" => BatchGetOnPremisesInstancesError::InvalidInstanceName(String::from(error_message)),"ValidationException" => BatchGetOnPremisesInstancesError::Validation(error_message.to_string()),_ => BatchGetOnPremisesInstancesError::Unknown(String::from(body))
+                                    "BatchLimitExceededException" => BatchGetOnPremisesInstancesError::BatchLimitExceeded(String::from(error_message)),
+"InstanceNameRequiredException" => BatchGetOnPremisesInstancesError::InstanceNameRequired(String::from(error_message)),
+"InvalidInstanceNameException" => BatchGetOnPremisesInstancesError::InvalidInstanceName(String::from(error_message)),
+"ValidationException" => BatchGetOnPremisesInstancesError::Validation(error_message.to_string()),
+_ => BatchGetOnPremisesInstancesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => BatchGetOnPremisesInstancesError::Unknown(String::from(body))
@@ -1733,7 +1823,13 @@ Unknown(String)
                 impl Error for BatchGetOnPremisesInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchGetOnPremisesInstancesError::InvalidInstanceName(ref cause) => cause,BatchGetOnPremisesInstancesError::BatchLimitExceeded(ref cause) => cause,BatchGetOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,BatchGetOnPremisesInstancesError::Validation(ref cause) => cause,BatchGetOnPremisesInstancesError::Credentials(ref err) => err.description(),BatchGetOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchGetOnPremisesInstancesError::Unknown(ref cause) => cause
+                            BatchGetOnPremisesInstancesError::BatchLimitExceeded(ref cause) => cause,
+BatchGetOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,
+BatchGetOnPremisesInstancesError::InvalidInstanceName(ref cause) => cause,
+BatchGetOnPremisesInstancesError::Validation(ref cause) => cause,
+BatchGetOnPremisesInstancesError::Credentials(ref err) => err.description(),
+BatchGetOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchGetOnPremisesInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1741,14 +1837,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateApplicationError {
                     
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
+///<p>An application with the specified name already exists with the applicable IAM user or AWS account.</p>
+ApplicationAlreadyExists(String),
 ///<p>More applications were attempted to be created than are allowed.</p>
 ApplicationLimitExceeded(String),
 ///<p>The minimum number of required application names was not specified.</p>
 ApplicationNameRequired(String),
-///<p>An application with the specified name already exists with the applicable IAM user or AWS account.</p>
-ApplicationAlreadyExists(String),/// An error occurred dispatching the HTTP request
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1767,7 +1863,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ApplicationLimitExceededException" => CreateApplicationError::ApplicationLimitExceeded(String::from(error_message)),"ApplicationAlreadyExistsException" => CreateApplicationError::ApplicationAlreadyExists(String::from(error_message)),"InvalidApplicationNameException" => CreateApplicationError::InvalidApplicationName(String::from(error_message)),"ApplicationNameRequiredException" => CreateApplicationError::ApplicationNameRequired(String::from(error_message)),"ValidationException" => CreateApplicationError::Validation(error_message.to_string()),_ => CreateApplicationError::Unknown(String::from(body))
+                                    "ApplicationAlreadyExistsException" => CreateApplicationError::ApplicationAlreadyExists(String::from(error_message)),
+"ApplicationLimitExceededException" => CreateApplicationError::ApplicationLimitExceeded(String::from(error_message)),
+"ApplicationNameRequiredException" => CreateApplicationError::ApplicationNameRequired(String::from(error_message)),
+"InvalidApplicationNameException" => CreateApplicationError::InvalidApplicationName(String::from(error_message)),
+"ValidationException" => CreateApplicationError::Validation(error_message.to_string()),
+_ => CreateApplicationError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateApplicationError::Unknown(String::from(body))
@@ -1798,7 +1899,14 @@ Unknown(String)
                 impl Error for CreateApplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateApplicationError::ApplicationLimitExceeded(ref cause) => cause,CreateApplicationError::ApplicationNameRequired(ref cause) => cause,CreateApplicationError::InvalidApplicationName(ref cause) => cause,CreateApplicationError::ApplicationAlreadyExists(ref cause) => cause,CreateApplicationError::Validation(ref cause) => cause,CreateApplicationError::Credentials(ref err) => err.description(),CreateApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateApplicationError::Unknown(ref cause) => cause
+                            CreateApplicationError::ApplicationAlreadyExists(ref cause) => cause,
+CreateApplicationError::ApplicationLimitExceeded(ref cause) => cause,
+CreateApplicationError::ApplicationNameRequired(ref cause) => cause,
+CreateApplicationError::InvalidApplicationName(ref cause) => cause,
+CreateApplicationError::Validation(ref cause) => cause,
+CreateApplicationError::Credentials(ref err) => err.description(),
+CreateApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateApplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1806,34 +1914,34 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDeploymentError {
                     
-///<p>The description is too long.</p>
-DescriptionTooLong(String),
-///<p>The deployment group name was not specified.</p>
-DeploymentGroupNameRequired(String),
-///<p>The deployment configuration name was specified in an invalid format.</p>
-InvalidDeploymentConfigName(String),
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
-///<p>The number of allowed deployments was exceeded.</p>
-DeploymentLimitExceeded(String),
-///<p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
-InvalidAutoRollbackConfig(String),
-///<p>The minimum number of required application names was not specified.</p>
-ApplicationNameRequired(String),
-///<p>The deployment group name was specified in an invalid format.</p>
-InvalidDeploymentGroupName(String),
-///<p>The named revision does not exist with the applicable IAM user or AWS account.</p>
-RevisionDoesNotExist(String),
-///<p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
-DeploymentGroupDoesNotExist(String),
-///<p>The revision ID was not specified.</p>
-RevisionRequired(String),
 ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
 ApplicationDoesNotExist(String),
+///<p>The minimum number of required application names was not specified.</p>
+ApplicationNameRequired(String),
 ///<p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
 DeploymentConfigDoesNotExist(String),
+///<p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
+DeploymentGroupDoesNotExist(String),
+///<p>The deployment group name was not specified.</p>
+DeploymentGroupNameRequired(String),
+///<p>The number of allowed deployments was exceeded.</p>
+DeploymentLimitExceeded(String),
+///<p>The description is too long.</p>
+DescriptionTooLong(String),
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),
+///<p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
+InvalidAutoRollbackConfig(String),
+///<p>The deployment configuration name was specified in an invalid format.</p>
+InvalidDeploymentConfigName(String),
+///<p>The deployment group name was specified in an invalid format.</p>
+InvalidDeploymentGroupName(String),
 ///<p>The revision was specified in an invalid format.</p>
-InvalidRevision(String),/// An error occurred dispatching the HTTP request
+InvalidRevision(String),
+///<p>The named revision does not exist with the applicable IAM user or AWS account.</p>
+RevisionDoesNotExist(String),
+///<p>The revision ID was not specified.</p>
+RevisionRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1852,7 +1960,22 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidRevisionException" => CreateDeploymentError::InvalidRevision(String::from(error_message)),"DeploymentGroupDoesNotExistException" => CreateDeploymentError::DeploymentGroupDoesNotExist(String::from(error_message)),"ApplicationNameRequiredException" => CreateDeploymentError::ApplicationNameRequired(String::from(error_message)),"ApplicationDoesNotExistException" => CreateDeploymentError::ApplicationDoesNotExist(String::from(error_message)),"RevisionRequiredException" => CreateDeploymentError::RevisionRequired(String::from(error_message)),"RevisionDoesNotExistException" => CreateDeploymentError::RevisionDoesNotExist(String::from(error_message)),"DeploymentGroupNameRequiredException" => CreateDeploymentError::DeploymentGroupNameRequired(String::from(error_message)),"InvalidDeploymentConfigNameException" => CreateDeploymentError::InvalidDeploymentConfigName(String::from(error_message)),"InvalidApplicationNameException" => CreateDeploymentError::InvalidApplicationName(String::from(error_message)),"InvalidDeploymentGroupNameException" => CreateDeploymentError::InvalidDeploymentGroupName(String::from(error_message)),"DescriptionTooLongException" => CreateDeploymentError::DescriptionTooLong(String::from(error_message)),"DeploymentLimitExceededException" => CreateDeploymentError::DeploymentLimitExceeded(String::from(error_message)),"InvalidAutoRollbackConfigException" => CreateDeploymentError::InvalidAutoRollbackConfig(String::from(error_message)),"DeploymentConfigDoesNotExistException" => CreateDeploymentError::DeploymentConfigDoesNotExist(String::from(error_message)),"ValidationException" => CreateDeploymentError::Validation(error_message.to_string()),_ => CreateDeploymentError::Unknown(String::from(body))
+                                    "ApplicationDoesNotExistException" => CreateDeploymentError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => CreateDeploymentError::ApplicationNameRequired(String::from(error_message)),
+"DeploymentConfigDoesNotExistException" => CreateDeploymentError::DeploymentConfigDoesNotExist(String::from(error_message)),
+"DeploymentGroupDoesNotExistException" => CreateDeploymentError::DeploymentGroupDoesNotExist(String::from(error_message)),
+"DeploymentGroupNameRequiredException" => CreateDeploymentError::DeploymentGroupNameRequired(String::from(error_message)),
+"DeploymentLimitExceededException" => CreateDeploymentError::DeploymentLimitExceeded(String::from(error_message)),
+"DescriptionTooLongException" => CreateDeploymentError::DescriptionTooLong(String::from(error_message)),
+"InvalidApplicationNameException" => CreateDeploymentError::InvalidApplicationName(String::from(error_message)),
+"InvalidAutoRollbackConfigException" => CreateDeploymentError::InvalidAutoRollbackConfig(String::from(error_message)),
+"InvalidDeploymentConfigNameException" => CreateDeploymentError::InvalidDeploymentConfigName(String::from(error_message)),
+"InvalidDeploymentGroupNameException" => CreateDeploymentError::InvalidDeploymentGroupName(String::from(error_message)),
+"InvalidRevisionException" => CreateDeploymentError::InvalidRevision(String::from(error_message)),
+"RevisionDoesNotExistException" => CreateDeploymentError::RevisionDoesNotExist(String::from(error_message)),
+"RevisionRequiredException" => CreateDeploymentError::RevisionRequired(String::from(error_message)),
+"ValidationException" => CreateDeploymentError::Validation(error_message.to_string()),
+_ => CreateDeploymentError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateDeploymentError::Unknown(String::from(body))
@@ -1883,7 +2006,24 @@ Unknown(String)
                 impl Error for CreateDeploymentError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDeploymentError::ApplicationDoesNotExist(ref cause) => cause,CreateDeploymentError::InvalidRevision(ref cause) => cause,CreateDeploymentError::ApplicationNameRequired(ref cause) => cause,CreateDeploymentError::DeploymentGroupDoesNotExist(ref cause) => cause,CreateDeploymentError::InvalidDeploymentGroupName(ref cause) => cause,CreateDeploymentError::DeploymentGroupNameRequired(ref cause) => cause,CreateDeploymentError::InvalidAutoRollbackConfig(ref cause) => cause,CreateDeploymentError::InvalidApplicationName(ref cause) => cause,CreateDeploymentError::DescriptionTooLong(ref cause) => cause,CreateDeploymentError::RevisionDoesNotExist(ref cause) => cause,CreateDeploymentError::InvalidDeploymentConfigName(ref cause) => cause,CreateDeploymentError::DeploymentConfigDoesNotExist(ref cause) => cause,CreateDeploymentError::DeploymentLimitExceeded(ref cause) => cause,CreateDeploymentError::RevisionRequired(ref cause) => cause,CreateDeploymentError::Validation(ref cause) => cause,CreateDeploymentError::Credentials(ref err) => err.description(),CreateDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDeploymentError::Unknown(ref cause) => cause
+                            CreateDeploymentError::ApplicationDoesNotExist(ref cause) => cause,
+CreateDeploymentError::ApplicationNameRequired(ref cause) => cause,
+CreateDeploymentError::DeploymentConfigDoesNotExist(ref cause) => cause,
+CreateDeploymentError::DeploymentGroupDoesNotExist(ref cause) => cause,
+CreateDeploymentError::DeploymentGroupNameRequired(ref cause) => cause,
+CreateDeploymentError::DeploymentLimitExceeded(ref cause) => cause,
+CreateDeploymentError::DescriptionTooLong(ref cause) => cause,
+CreateDeploymentError::InvalidApplicationName(ref cause) => cause,
+CreateDeploymentError::InvalidAutoRollbackConfig(ref cause) => cause,
+CreateDeploymentError::InvalidDeploymentConfigName(ref cause) => cause,
+CreateDeploymentError::InvalidDeploymentGroupName(ref cause) => cause,
+CreateDeploymentError::InvalidRevision(ref cause) => cause,
+CreateDeploymentError::RevisionDoesNotExist(ref cause) => cause,
+CreateDeploymentError::RevisionRequired(ref cause) => cause,
+CreateDeploymentError::Validation(ref cause) => cause,
+CreateDeploymentError::Credentials(ref err) => err.description(),
+CreateDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDeploymentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1891,16 +2031,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDeploymentConfigError {
                     
-///<p>The deployment configuration name was not specified.</p>
-DeploymentConfigNameRequired(String),
-///<p>The deployment configurations limit was exceeded.</p>
-DeploymentConfigLimitExceeded(String),
-///<p>The minimum healthy instance value was specified in an invalid format.</p>
-InvalidMinimumHealthyHostValue(String),
 ///<p>A deployment configuration with the specified name already exists with the applicable IAM user or AWS account.</p>
 DeploymentConfigAlreadyExists(String),
+///<p>The deployment configurations limit was exceeded.</p>
+DeploymentConfigLimitExceeded(String),
+///<p>The deployment configuration name was not specified.</p>
+DeploymentConfigNameRequired(String),
 ///<p>The deployment configuration name was specified in an invalid format.</p>
-InvalidDeploymentConfigName(String),/// An error occurred dispatching the HTTP request
+InvalidDeploymentConfigName(String),
+///<p>The minimum healthy instance value was specified in an invalid format.</p>
+InvalidMinimumHealthyHostValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1919,7 +2059,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidMinimumHealthyHostValueException" => CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(String::from(error_message)),"InvalidDeploymentConfigNameException" => CreateDeploymentConfigError::InvalidDeploymentConfigName(String::from(error_message)),"DeploymentConfigAlreadyExistsException" => CreateDeploymentConfigError::DeploymentConfigAlreadyExists(String::from(error_message)),"DeploymentConfigNameRequiredException" => CreateDeploymentConfigError::DeploymentConfigNameRequired(String::from(error_message)),"DeploymentConfigLimitExceededException" => CreateDeploymentConfigError::DeploymentConfigLimitExceeded(String::from(error_message)),"ValidationException" => CreateDeploymentConfigError::Validation(error_message.to_string()),_ => CreateDeploymentConfigError::Unknown(String::from(body))
+                                    "DeploymentConfigAlreadyExistsException" => CreateDeploymentConfigError::DeploymentConfigAlreadyExists(String::from(error_message)),
+"DeploymentConfigLimitExceededException" => CreateDeploymentConfigError::DeploymentConfigLimitExceeded(String::from(error_message)),
+"DeploymentConfigNameRequiredException" => CreateDeploymentConfigError::DeploymentConfigNameRequired(String::from(error_message)),
+"InvalidDeploymentConfigNameException" => CreateDeploymentConfigError::InvalidDeploymentConfigName(String::from(error_message)),
+"InvalidMinimumHealthyHostValueException" => CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(String::from(error_message)),
+"ValidationException" => CreateDeploymentConfigError::Validation(error_message.to_string()),
+_ => CreateDeploymentConfigError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateDeploymentConfigError::Unknown(String::from(body))
@@ -1950,7 +2096,15 @@ Unknown(String)
                 impl Error for CreateDeploymentConfigError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDeploymentConfigError::DeploymentConfigAlreadyExists(ref cause) => cause,CreateDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,CreateDeploymentConfigError::DeploymentConfigLimitExceeded(ref cause) => cause,CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(ref cause) => cause,CreateDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,CreateDeploymentConfigError::Validation(ref cause) => cause,CreateDeploymentConfigError::Credentials(ref err) => err.description(),CreateDeploymentConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDeploymentConfigError::Unknown(ref cause) => cause
+                            CreateDeploymentConfigError::DeploymentConfigAlreadyExists(ref cause) => cause,
+CreateDeploymentConfigError::DeploymentConfigLimitExceeded(ref cause) => cause,
+CreateDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,
+CreateDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,
+CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(ref cause) => cause,
+CreateDeploymentConfigError::Validation(ref cause) => cause,
+CreateDeploymentConfigError::Credentials(ref err) => err.description(),
+CreateDeploymentConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDeploymentConfigError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1958,46 +2112,46 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDeploymentGroupError {
                     
-///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
-InvalidRole(String),
+///<p>The maximum number of alarms for a deployment group (10) was exceeded.</p>
+AlarmsLimitExceeded(String),
 ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
 ApplicationDoesNotExist(String),
-///<p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
-InvalidAutoRollbackConfig(String),
 ///<p>The minimum number of required application names was not specified.</p>
 ApplicationNameRequired(String),
 ///<p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
 DeploymentConfigDoesNotExist(String),
-///<p>The maximum number of alarms for a deployment group (10) was exceeded.</p>
-AlarmsLimitExceeded(String),
-///<p>The deployment group name was specified in an invalid format.</p>
-InvalidDeploymentGroupName(String),
-///<p>The trigger was specified in an invalid format.</p>
-InvalidTriggerConfig(String),
-///<p>The tag was specified in an invalid format.</p>
-InvalidEC2Tag(String),
+///<p>A deployment group with the specified name already exists with the applicable IAM user or AWS account.</p>
+DeploymentGroupAlreadyExists(String),
 ///<p> The deployment groups limit was exceeded.</p>
 DeploymentGroupLimitExceeded(String),
+///<p>The deployment group name was not specified.</p>
+DeploymentGroupNameRequired(String),
 ///<p>The format of the alarm configuration is invalid. Possible causes include:</p> <ul> <li> <p>The alarm list is null.</p> </li> <li> <p>The alarm object is null.</p> </li> <li> <p>The alarm name is empty or null or exceeds the 255 character limit.</p> </li> <li> <p>Two alarms with the same name have been specified.</p> </li> <li> <p>The alarm configuration is enabled but the alarm list is empty.</p> </li> </ul>
 InvalidAlarmConfig(String),
 ///<p>The application name was specified in an invalid format.</p>
 InvalidApplicationName(String),
-///<p>The maximum allowed number of triggers was exceeded.</p>
-TriggerTargetsLimitExceeded(String),
-///<p>A deployment group with the specified name already exists with the applicable IAM user or AWS account.</p>
-DeploymentGroupAlreadyExists(String),
+///<p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
+InvalidAutoRollbackConfig(String),
 ///<p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
 InvalidAutoScalingGroup(String),
-///<p>The deployment group name was not specified.</p>
-DeploymentGroupNameRequired(String),
 ///<p>The deployment configuration name was specified in an invalid format.</p>
 InvalidDeploymentConfigName(String),
-///<p>The role ID was not specified.</p>
-RoleRequired(String),
+///<p>The deployment group name was specified in an invalid format.</p>
+InvalidDeploymentGroupName(String),
+///<p>The tag was specified in an invalid format.</p>
+InvalidEC2Tag(String),
+///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
+InvalidRole(String),
+///<p>The specified tag was specified in an invalid format.</p>
+InvalidTag(String),
+///<p>The trigger was specified in an invalid format.</p>
+InvalidTriggerConfig(String),
 ///<p>The limit for lifecycle hooks was exceeded.</p>
 LifecycleHookLimitExceeded(String),
-///<p>The specified tag was specified in an invalid format.</p>
-InvalidTag(String),/// An error occurred dispatching the HTTP request
+///<p>The role ID was not specified.</p>
+RoleRequired(String),
+///<p>The maximum allowed number of triggers was exceeded.</p>
+TriggerTargetsLimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2016,7 +2170,28 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidDeploymentConfigNameException" => CreateDeploymentGroupError::InvalidDeploymentConfigName(String::from(error_message)),"DeploymentGroupLimitExceededException" => CreateDeploymentGroupError::DeploymentGroupLimitExceeded(String::from(error_message)),"InvalidAlarmConfigException" => CreateDeploymentGroupError::InvalidAlarmConfig(String::from(error_message)),"ApplicationDoesNotExistException" => CreateDeploymentGroupError::ApplicationDoesNotExist(String::from(error_message)),"DeploymentGroupNameRequiredException" => CreateDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),"InvalidTagException" => CreateDeploymentGroupError::InvalidTag(String::from(error_message)),"InvalidRoleException" => CreateDeploymentGroupError::InvalidRole(String::from(error_message)),"InvalidDeploymentGroupNameException" => CreateDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),"ApplicationNameRequiredException" => CreateDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),"DeploymentConfigDoesNotExistException" => CreateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(error_message)),"InvalidApplicationNameException" => CreateDeploymentGroupError::InvalidApplicationName(String::from(error_message)),"InvalidAutoScalingGroupException" => CreateDeploymentGroupError::InvalidAutoScalingGroup(String::from(error_message)),"InvalidEC2TagException" => CreateDeploymentGroupError::InvalidEC2Tag(String::from(error_message)),"RoleRequiredException" => CreateDeploymentGroupError::RoleRequired(String::from(error_message)),"LifecycleHookLimitExceededException" => CreateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(error_message)),"InvalidAutoRollbackConfigException" => CreateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(error_message)),"DeploymentGroupAlreadyExistsException" => CreateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(error_message)),"TriggerTargetsLimitExceededException" => CreateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(error_message)),"InvalidTriggerConfigException" => CreateDeploymentGroupError::InvalidTriggerConfig(String::from(error_message)),"AlarmsLimitExceededException" => CreateDeploymentGroupError::AlarmsLimitExceeded(String::from(error_message)),"ValidationException" => CreateDeploymentGroupError::Validation(error_message.to_string()),_ => CreateDeploymentGroupError::Unknown(String::from(body))
+                                    "AlarmsLimitExceededException" => CreateDeploymentGroupError::AlarmsLimitExceeded(String::from(error_message)),
+"ApplicationDoesNotExistException" => CreateDeploymentGroupError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => CreateDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),
+"DeploymentConfigDoesNotExistException" => CreateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(error_message)),
+"DeploymentGroupAlreadyExistsException" => CreateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(error_message)),
+"DeploymentGroupLimitExceededException" => CreateDeploymentGroupError::DeploymentGroupLimitExceeded(String::from(error_message)),
+"DeploymentGroupNameRequiredException" => CreateDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),
+"InvalidAlarmConfigException" => CreateDeploymentGroupError::InvalidAlarmConfig(String::from(error_message)),
+"InvalidApplicationNameException" => CreateDeploymentGroupError::InvalidApplicationName(String::from(error_message)),
+"InvalidAutoRollbackConfigException" => CreateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(error_message)),
+"InvalidAutoScalingGroupException" => CreateDeploymentGroupError::InvalidAutoScalingGroup(String::from(error_message)),
+"InvalidDeploymentConfigNameException" => CreateDeploymentGroupError::InvalidDeploymentConfigName(String::from(error_message)),
+"InvalidDeploymentGroupNameException" => CreateDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
+"InvalidEC2TagException" => CreateDeploymentGroupError::InvalidEC2Tag(String::from(error_message)),
+"InvalidRoleException" => CreateDeploymentGroupError::InvalidRole(String::from(error_message)),
+"InvalidTagException" => CreateDeploymentGroupError::InvalidTag(String::from(error_message)),
+"InvalidTriggerConfigException" => CreateDeploymentGroupError::InvalidTriggerConfig(String::from(error_message)),
+"LifecycleHookLimitExceededException" => CreateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(error_message)),
+"RoleRequiredException" => CreateDeploymentGroupError::RoleRequired(String::from(error_message)),
+"TriggerTargetsLimitExceededException" => CreateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(error_message)),
+"ValidationException" => CreateDeploymentGroupError::Validation(error_message.to_string()),
+_ => CreateDeploymentGroupError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateDeploymentGroupError::Unknown(String::from(body))
@@ -2047,7 +2222,30 @@ Unknown(String)
                 impl Error for CreateDeploymentGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,CreateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,CreateDeploymentGroupError::DeploymentConfigDoesNotExist(ref cause) => cause,CreateDeploymentGroupError::DeploymentGroupLimitExceeded(ref cause) => cause,CreateDeploymentGroupError::AlarmsLimitExceeded(ref cause) => cause,CreateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => cause,CreateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => cause,CreateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,CreateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,CreateDeploymentGroupError::InvalidApplicationName(ref cause) => cause,CreateDeploymentGroupError::InvalidAutoScalingGroup(ref cause) => cause,CreateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => cause,CreateDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,CreateDeploymentGroupError::InvalidAlarmConfig(ref cause) => cause,CreateDeploymentGroupError::DeploymentGroupAlreadyExists(ref cause) => cause,CreateDeploymentGroupError::InvalidRole(ref cause) => cause,CreateDeploymentGroupError::ApplicationDoesNotExist(ref cause) => cause,CreateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,CreateDeploymentGroupError::InvalidTag(ref cause) => cause,CreateDeploymentGroupError::RoleRequired(ref cause) => cause,CreateDeploymentGroupError::Validation(ref cause) => cause,CreateDeploymentGroupError::Credentials(ref err) => err.description(),CreateDeploymentGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDeploymentGroupError::Unknown(ref cause) => cause
+                            CreateDeploymentGroupError::AlarmsLimitExceeded(ref cause) => cause,
+CreateDeploymentGroupError::ApplicationDoesNotExist(ref cause) => cause,
+CreateDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,
+CreateDeploymentGroupError::DeploymentConfigDoesNotExist(ref cause) => cause,
+CreateDeploymentGroupError::DeploymentGroupAlreadyExists(ref cause) => cause,
+CreateDeploymentGroupError::DeploymentGroupLimitExceeded(ref cause) => cause,
+CreateDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
+CreateDeploymentGroupError::InvalidAlarmConfig(ref cause) => cause,
+CreateDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
+CreateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => cause,
+CreateDeploymentGroupError::InvalidAutoScalingGroup(ref cause) => cause,
+CreateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => cause,
+CreateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
+CreateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
+CreateDeploymentGroupError::InvalidRole(ref cause) => cause,
+CreateDeploymentGroupError::InvalidTag(ref cause) => cause,
+CreateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,
+CreateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => cause,
+CreateDeploymentGroupError::RoleRequired(ref cause) => cause,
+CreateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,
+CreateDeploymentGroupError::Validation(ref cause) => cause,
+CreateDeploymentGroupError::Credentials(ref err) => err.description(),
+CreateDeploymentGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDeploymentGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2055,10 +2253,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteApplicationError {
                     
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
 ///<p>The minimum number of required application names was not specified.</p>
-ApplicationNameRequired(String),/// An error occurred dispatching the HTTP request
+ApplicationNameRequired(String),
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2077,7 +2275,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidApplicationNameException" => DeleteApplicationError::InvalidApplicationName(String::from(error_message)),"ApplicationNameRequiredException" => DeleteApplicationError::ApplicationNameRequired(String::from(error_message)),"ValidationException" => DeleteApplicationError::Validation(error_message.to_string()),_ => DeleteApplicationError::Unknown(String::from(body))
+                                    "ApplicationNameRequiredException" => DeleteApplicationError::ApplicationNameRequired(String::from(error_message)),
+"InvalidApplicationNameException" => DeleteApplicationError::InvalidApplicationName(String::from(error_message)),
+"ValidationException" => DeleteApplicationError::Validation(error_message.to_string()),
+_ => DeleteApplicationError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteApplicationError::Unknown(String::from(body))
@@ -2108,7 +2309,12 @@ Unknown(String)
                 impl Error for DeleteApplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteApplicationError::InvalidApplicationName(ref cause) => cause,DeleteApplicationError::ApplicationNameRequired(ref cause) => cause,DeleteApplicationError::Validation(ref cause) => cause,DeleteApplicationError::Credentials(ref err) => err.description(),DeleteApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteApplicationError::Unknown(ref cause) => cause
+                            DeleteApplicationError::ApplicationNameRequired(ref cause) => cause,
+DeleteApplicationError::InvalidApplicationName(ref cause) => cause,
+DeleteApplicationError::Validation(ref cause) => cause,
+DeleteApplicationError::Credentials(ref err) => err.description(),
+DeleteApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteApplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2116,14 +2322,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDeploymentConfigError {
                     
-///<p>An invalid operation was detected.</p>
-InvalidOperation(String),
-///<p>The deployment configuration name was specified in an invalid format.</p>
-InvalidDeploymentConfigName(String),
+///<p>The deployment configuration is still in use.</p>
+DeploymentConfigInUse(String),
 ///<p>The deployment configuration name was not specified.</p>
 DeploymentConfigNameRequired(String),
-///<p>The deployment configuration is still in use.</p>
-DeploymentConfigInUse(String),/// An error occurred dispatching the HTTP request
+///<p>The deployment configuration name was specified in an invalid format.</p>
+InvalidDeploymentConfigName(String),
+///<p>An invalid operation was detected.</p>
+InvalidOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2142,7 +2348,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidDeploymentConfigNameException" => DeleteDeploymentConfigError::InvalidDeploymentConfigName(String::from(error_message)),"InvalidOperationException" => DeleteDeploymentConfigError::InvalidOperation(String::from(error_message)),"DeploymentConfigInUseException" => DeleteDeploymentConfigError::DeploymentConfigInUse(String::from(error_message)),"DeploymentConfigNameRequiredException" => DeleteDeploymentConfigError::DeploymentConfigNameRequired(String::from(error_message)),"ValidationException" => DeleteDeploymentConfigError::Validation(error_message.to_string()),_ => DeleteDeploymentConfigError::Unknown(String::from(body))
+                                    "DeploymentConfigInUseException" => DeleteDeploymentConfigError::DeploymentConfigInUse(String::from(error_message)),
+"DeploymentConfigNameRequiredException" => DeleteDeploymentConfigError::DeploymentConfigNameRequired(String::from(error_message)),
+"InvalidDeploymentConfigNameException" => DeleteDeploymentConfigError::InvalidDeploymentConfigName(String::from(error_message)),
+"InvalidOperationException" => DeleteDeploymentConfigError::InvalidOperation(String::from(error_message)),
+"ValidationException" => DeleteDeploymentConfigError::Validation(error_message.to_string()),
+_ => DeleteDeploymentConfigError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteDeploymentConfigError::Unknown(String::from(body))
@@ -2173,7 +2384,14 @@ Unknown(String)
                 impl Error for DeleteDeploymentConfigError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDeploymentConfigError::DeploymentConfigInUse(ref cause) => cause,DeleteDeploymentConfigError::InvalidOperation(ref cause) => cause,DeleteDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,DeleteDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,DeleteDeploymentConfigError::Validation(ref cause) => cause,DeleteDeploymentConfigError::Credentials(ref err) => err.description(),DeleteDeploymentConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDeploymentConfigError::Unknown(ref cause) => cause
+                            DeleteDeploymentConfigError::DeploymentConfigInUse(ref cause) => cause,
+DeleteDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,
+DeleteDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,
+DeleteDeploymentConfigError::InvalidOperation(ref cause) => cause,
+DeleteDeploymentConfigError::Validation(ref cause) => cause,
+DeleteDeploymentConfigError::Credentials(ref err) => err.description(),
+DeleteDeploymentConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDeploymentConfigError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2181,16 +2399,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDeploymentGroupError {
                     
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
-///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
-InvalidRole(String),
+///<p>The minimum number of required application names was not specified.</p>
+ApplicationNameRequired(String),
 ///<p>The deployment group name was not specified.</p>
 DeploymentGroupNameRequired(String),
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),
 ///<p>The deployment group name was specified in an invalid format.</p>
 InvalidDeploymentGroupName(String),
-///<p>The minimum number of required application names was not specified.</p>
-ApplicationNameRequired(String),/// An error occurred dispatching the HTTP request
+///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
+InvalidRole(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2209,7 +2427,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DeploymentGroupNameRequiredException" => DeleteDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),"InvalidDeploymentGroupNameException" => DeleteDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),"InvalidApplicationNameException" => DeleteDeploymentGroupError::InvalidApplicationName(String::from(error_message)),"InvalidRoleException" => DeleteDeploymentGroupError::InvalidRole(String::from(error_message)),"ApplicationNameRequiredException" => DeleteDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),"ValidationException" => DeleteDeploymentGroupError::Validation(error_message.to_string()),_ => DeleteDeploymentGroupError::Unknown(String::from(body))
+                                    "ApplicationNameRequiredException" => DeleteDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),
+"DeploymentGroupNameRequiredException" => DeleteDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),
+"InvalidApplicationNameException" => DeleteDeploymentGroupError::InvalidApplicationName(String::from(error_message)),
+"InvalidDeploymentGroupNameException" => DeleteDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
+"InvalidRoleException" => DeleteDeploymentGroupError::InvalidRole(String::from(error_message)),
+"ValidationException" => DeleteDeploymentGroupError::Validation(error_message.to_string()),
+_ => DeleteDeploymentGroupError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteDeploymentGroupError::Unknown(String::from(body))
@@ -2240,7 +2464,15 @@ Unknown(String)
                 impl Error for DeleteDeploymentGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDeploymentGroupError::InvalidApplicationName(ref cause) => cause,DeleteDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,DeleteDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,DeleteDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,DeleteDeploymentGroupError::InvalidRole(ref cause) => cause,DeleteDeploymentGroupError::Validation(ref cause) => cause,DeleteDeploymentGroupError::Credentials(ref err) => err.description(),DeleteDeploymentGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDeploymentGroupError::Unknown(ref cause) => cause
+                            DeleteDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,
+DeleteDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
+DeleteDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
+DeleteDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
+DeleteDeploymentGroupError::InvalidRole(ref cause) => cause,
+DeleteDeploymentGroupError::Validation(ref cause) => cause,
+DeleteDeploymentGroupError::Credentials(ref err) => err.description(),
+DeleteDeploymentGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDeploymentGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2270,7 +2502,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInstanceNameException" => DeregisterOnPremisesInstanceError::InvalidInstanceName(String::from(error_message)),"InstanceNameRequiredException" => DeregisterOnPremisesInstanceError::InstanceNameRequired(String::from(error_message)),"ValidationException" => DeregisterOnPremisesInstanceError::Validation(error_message.to_string()),_ => DeregisterOnPremisesInstanceError::Unknown(String::from(body))
+                                    "InstanceNameRequiredException" => DeregisterOnPremisesInstanceError::InstanceNameRequired(String::from(error_message)),
+"InvalidInstanceNameException" => DeregisterOnPremisesInstanceError::InvalidInstanceName(String::from(error_message)),
+"ValidationException" => DeregisterOnPremisesInstanceError::Validation(error_message.to_string()),
+_ => DeregisterOnPremisesInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeregisterOnPremisesInstanceError::Unknown(String::from(body))
@@ -2301,7 +2536,12 @@ Unknown(String)
                 impl Error for DeregisterOnPremisesInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeregisterOnPremisesInstanceError::InstanceNameRequired(ref cause) => cause,DeregisterOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,DeregisterOnPremisesInstanceError::Validation(ref cause) => cause,DeregisterOnPremisesInstanceError::Credentials(ref err) => err.description(),DeregisterOnPremisesInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeregisterOnPremisesInstanceError::Unknown(ref cause) => cause
+                            DeregisterOnPremisesInstanceError::InstanceNameRequired(ref cause) => cause,
+DeregisterOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,
+DeregisterOnPremisesInstanceError::Validation(ref cause) => cause,
+DeregisterOnPremisesInstanceError::Credentials(ref err) => err.description(),
+DeregisterOnPremisesInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeregisterOnPremisesInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2309,12 +2549,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetApplicationError {
                     
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
+///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+ApplicationDoesNotExist(String),
 ///<p>The minimum number of required application names was not specified.</p>
 ApplicationNameRequired(String),
-///<p>The application does not exist with the applicable IAM user or AWS account.</p>
-ApplicationDoesNotExist(String),/// An error occurred dispatching the HTTP request
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2333,7 +2573,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidApplicationNameException" => GetApplicationError::InvalidApplicationName(String::from(error_message)),"ApplicationNameRequiredException" => GetApplicationError::ApplicationNameRequired(String::from(error_message)),"ApplicationDoesNotExistException" => GetApplicationError::ApplicationDoesNotExist(String::from(error_message)),"ValidationException" => GetApplicationError::Validation(error_message.to_string()),_ => GetApplicationError::Unknown(String::from(body))
+                                    "ApplicationDoesNotExistException" => GetApplicationError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => GetApplicationError::ApplicationNameRequired(String::from(error_message)),
+"InvalidApplicationNameException" => GetApplicationError::InvalidApplicationName(String::from(error_message)),
+"ValidationException" => GetApplicationError::Validation(error_message.to_string()),
+_ => GetApplicationError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetApplicationError::Unknown(String::from(body))
@@ -2364,7 +2608,13 @@ Unknown(String)
                 impl Error for GetApplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetApplicationError::ApplicationNameRequired(ref cause) => cause,GetApplicationError::InvalidApplicationName(ref cause) => cause,GetApplicationError::ApplicationDoesNotExist(ref cause) => cause,GetApplicationError::Validation(ref cause) => cause,GetApplicationError::Credentials(ref err) => err.description(),GetApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetApplicationError::Unknown(ref cause) => cause
+                            GetApplicationError::ApplicationDoesNotExist(ref cause) => cause,
+GetApplicationError::ApplicationNameRequired(ref cause) => cause,
+GetApplicationError::InvalidApplicationName(ref cause) => cause,
+GetApplicationError::Validation(ref cause) => cause,
+GetApplicationError::Credentials(ref err) => err.description(),
+GetApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetApplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2372,18 +2622,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetApplicationRevisionError {
                     
-///<p>The revision was specified in an invalid format.</p>
-InvalidRevision(String),
-///<p>The revision ID was not specified.</p>
-RevisionRequired(String),
 ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
 ApplicationDoesNotExist(String),
-///<p>The named revision does not exist with the applicable IAM user or AWS account.</p>
-RevisionDoesNotExist(String),
 ///<p>The minimum number of required application names was not specified.</p>
 ApplicationNameRequired(String),
 ///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),/// An error occurred dispatching the HTTP request
+InvalidApplicationName(String),
+///<p>The revision was specified in an invalid format.</p>
+InvalidRevision(String),
+///<p>The named revision does not exist with the applicable IAM user or AWS account.</p>
+RevisionDoesNotExist(String),
+///<p>The revision ID was not specified.</p>
+RevisionRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2402,7 +2652,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ApplicationDoesNotExistException" => GetApplicationRevisionError::ApplicationDoesNotExist(String::from(error_message)),"InvalidApplicationNameException" => GetApplicationRevisionError::InvalidApplicationName(String::from(error_message)),"RevisionDoesNotExistException" => GetApplicationRevisionError::RevisionDoesNotExist(String::from(error_message)),"ApplicationNameRequiredException" => GetApplicationRevisionError::ApplicationNameRequired(String::from(error_message)),"RevisionRequiredException" => GetApplicationRevisionError::RevisionRequired(String::from(error_message)),"InvalidRevisionException" => GetApplicationRevisionError::InvalidRevision(String::from(error_message)),"ValidationException" => GetApplicationRevisionError::Validation(error_message.to_string()),_ => GetApplicationRevisionError::Unknown(String::from(body))
+                                    "ApplicationDoesNotExistException" => GetApplicationRevisionError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => GetApplicationRevisionError::ApplicationNameRequired(String::from(error_message)),
+"InvalidApplicationNameException" => GetApplicationRevisionError::InvalidApplicationName(String::from(error_message)),
+"InvalidRevisionException" => GetApplicationRevisionError::InvalidRevision(String::from(error_message)),
+"RevisionDoesNotExistException" => GetApplicationRevisionError::RevisionDoesNotExist(String::from(error_message)),
+"RevisionRequiredException" => GetApplicationRevisionError::RevisionRequired(String::from(error_message)),
+"ValidationException" => GetApplicationRevisionError::Validation(error_message.to_string()),
+_ => GetApplicationRevisionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetApplicationRevisionError::Unknown(String::from(body))
@@ -2433,7 +2690,16 @@ Unknown(String)
                 impl Error for GetApplicationRevisionError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetApplicationRevisionError::ApplicationDoesNotExist(ref cause) => cause,GetApplicationRevisionError::RevisionDoesNotExist(ref cause) => cause,GetApplicationRevisionError::InvalidApplicationName(ref cause) => cause,GetApplicationRevisionError::RevisionRequired(ref cause) => cause,GetApplicationRevisionError::ApplicationNameRequired(ref cause) => cause,GetApplicationRevisionError::InvalidRevision(ref cause) => cause,GetApplicationRevisionError::Validation(ref cause) => cause,GetApplicationRevisionError::Credentials(ref err) => err.description(),GetApplicationRevisionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetApplicationRevisionError::Unknown(ref cause) => cause
+                            GetApplicationRevisionError::ApplicationDoesNotExist(ref cause) => cause,
+GetApplicationRevisionError::ApplicationNameRequired(ref cause) => cause,
+GetApplicationRevisionError::InvalidApplicationName(ref cause) => cause,
+GetApplicationRevisionError::InvalidRevision(ref cause) => cause,
+GetApplicationRevisionError::RevisionDoesNotExist(ref cause) => cause,
+GetApplicationRevisionError::RevisionRequired(ref cause) => cause,
+GetApplicationRevisionError::Validation(ref cause) => cause,
+GetApplicationRevisionError::Credentials(ref err) => err.description(),
+GetApplicationRevisionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetApplicationRevisionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2441,12 +2707,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetDeploymentError {
                     
+///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+DeploymentDoesNotExist(String),
 ///<p>At least one deployment ID must be specified.</p>
 DeploymentIdRequired(String),
 ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
-InvalidDeploymentId(String),
-///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
-DeploymentDoesNotExist(String),/// An error occurred dispatching the HTTP request
+InvalidDeploymentId(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2465,7 +2731,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DeploymentDoesNotExistException" => GetDeploymentError::DeploymentDoesNotExist(String::from(error_message)),"InvalidDeploymentIdException" => GetDeploymentError::InvalidDeploymentId(String::from(error_message)),"DeploymentIdRequiredException" => GetDeploymentError::DeploymentIdRequired(String::from(error_message)),"ValidationException" => GetDeploymentError::Validation(error_message.to_string()),_ => GetDeploymentError::Unknown(String::from(body))
+                                    "DeploymentDoesNotExistException" => GetDeploymentError::DeploymentDoesNotExist(String::from(error_message)),
+"DeploymentIdRequiredException" => GetDeploymentError::DeploymentIdRequired(String::from(error_message)),
+"InvalidDeploymentIdException" => GetDeploymentError::InvalidDeploymentId(String::from(error_message)),
+"ValidationException" => GetDeploymentError::Validation(error_message.to_string()),
+_ => GetDeploymentError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetDeploymentError::Unknown(String::from(body))
@@ -2496,7 +2766,13 @@ Unknown(String)
                 impl Error for GetDeploymentError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDeploymentError::DeploymentIdRequired(ref cause) => cause,GetDeploymentError::DeploymentDoesNotExist(ref cause) => cause,GetDeploymentError::InvalidDeploymentId(ref cause) => cause,GetDeploymentError::Validation(ref cause) => cause,GetDeploymentError::Credentials(ref err) => err.description(),GetDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDeploymentError::Unknown(ref cause) => cause
+                            GetDeploymentError::DeploymentDoesNotExist(ref cause) => cause,
+GetDeploymentError::DeploymentIdRequired(ref cause) => cause,
+GetDeploymentError::InvalidDeploymentId(ref cause) => cause,
+GetDeploymentError::Validation(ref cause) => cause,
+GetDeploymentError::Credentials(ref err) => err.description(),
+GetDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDeploymentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2506,10 +2782,10 @@ Unknown(String)
                     
 ///<p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
 DeploymentConfigDoesNotExist(String),
-///<p>The deployment configuration name was specified in an invalid format.</p>
-InvalidDeploymentConfigName(String),
 ///<p>The deployment configuration name was not specified.</p>
-DeploymentConfigNameRequired(String),/// An error occurred dispatching the HTTP request
+DeploymentConfigNameRequired(String),
+///<p>The deployment configuration name was specified in an invalid format.</p>
+InvalidDeploymentConfigName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2528,7 +2804,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidDeploymentConfigNameException" => GetDeploymentConfigError::InvalidDeploymentConfigName(String::from(error_message)),"DeploymentConfigDoesNotExistException" => GetDeploymentConfigError::DeploymentConfigDoesNotExist(String::from(error_message)),"DeploymentConfigNameRequiredException" => GetDeploymentConfigError::DeploymentConfigNameRequired(String::from(error_message)),"ValidationException" => GetDeploymentConfigError::Validation(error_message.to_string()),_ => GetDeploymentConfigError::Unknown(String::from(body))
+                                    "DeploymentConfigDoesNotExistException" => GetDeploymentConfigError::DeploymentConfigDoesNotExist(String::from(error_message)),
+"DeploymentConfigNameRequiredException" => GetDeploymentConfigError::DeploymentConfigNameRequired(String::from(error_message)),
+"InvalidDeploymentConfigNameException" => GetDeploymentConfigError::InvalidDeploymentConfigName(String::from(error_message)),
+"ValidationException" => GetDeploymentConfigError::Validation(error_message.to_string()),
+_ => GetDeploymentConfigError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetDeploymentConfigError::Unknown(String::from(body))
@@ -2559,7 +2839,13 @@ Unknown(String)
                 impl Error for GetDeploymentConfigError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,GetDeploymentConfigError::DeploymentConfigDoesNotExist(ref cause) => cause,GetDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,GetDeploymentConfigError::Validation(ref cause) => cause,GetDeploymentConfigError::Credentials(ref err) => err.description(),GetDeploymentConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDeploymentConfigError::Unknown(ref cause) => cause
+                            GetDeploymentConfigError::DeploymentConfigDoesNotExist(ref cause) => cause,
+GetDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,
+GetDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,
+GetDeploymentConfigError::Validation(ref cause) => cause,
+GetDeploymentConfigError::Credentials(ref err) => err.description(),
+GetDeploymentConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDeploymentConfigError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2567,16 +2853,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetDeploymentGroupError {
                     
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
-///<p>The deployment group name was not specified.</p>
-DeploymentGroupNameRequired(String),
-///<p>The minimum number of required application names was not specified.</p>
-ApplicationNameRequired(String),
 ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
 ApplicationDoesNotExist(String),
+///<p>The minimum number of required application names was not specified.</p>
+ApplicationNameRequired(String),
 ///<p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
 DeploymentGroupDoesNotExist(String),
+///<p>The deployment group name was not specified.</p>
+DeploymentGroupNameRequired(String),
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),
 ///<p>The deployment group name was specified in an invalid format.</p>
 InvalidDeploymentGroupName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2597,7 +2883,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ApplicationDoesNotExistException" => GetDeploymentGroupError::ApplicationDoesNotExist(String::from(error_message)),"DeploymentGroupNameRequiredException" => GetDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),"DeploymentGroupDoesNotExistException" => GetDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(error_message)),"InvalidDeploymentGroupNameException" => GetDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),"InvalidApplicationNameException" => GetDeploymentGroupError::InvalidApplicationName(String::from(error_message)),"ApplicationNameRequiredException" => GetDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),"ValidationException" => GetDeploymentGroupError::Validation(error_message.to_string()),_ => GetDeploymentGroupError::Unknown(String::from(body))
+                                    "ApplicationDoesNotExistException" => GetDeploymentGroupError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => GetDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),
+"DeploymentGroupDoesNotExistException" => GetDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(error_message)),
+"DeploymentGroupNameRequiredException" => GetDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),
+"InvalidApplicationNameException" => GetDeploymentGroupError::InvalidApplicationName(String::from(error_message)),
+"InvalidDeploymentGroupNameException" => GetDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
+"ValidationException" => GetDeploymentGroupError::Validation(error_message.to_string()),
+_ => GetDeploymentGroupError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetDeploymentGroupError::Unknown(String::from(body))
@@ -2628,7 +2921,16 @@ Unknown(String)
                 impl Error for GetDeploymentGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,GetDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,GetDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,GetDeploymentGroupError::DeploymentGroupDoesNotExist(ref cause) => cause,GetDeploymentGroupError::ApplicationDoesNotExist(ref cause) => cause,GetDeploymentGroupError::InvalidApplicationName(ref cause) => cause,GetDeploymentGroupError::Validation(ref cause) => cause,GetDeploymentGroupError::Credentials(ref err) => err.description(),GetDeploymentGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDeploymentGroupError::Unknown(ref cause) => cause
+                            GetDeploymentGroupError::ApplicationDoesNotExist(ref cause) => cause,
+GetDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,
+GetDeploymentGroupError::DeploymentGroupDoesNotExist(ref cause) => cause,
+GetDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
+GetDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
+GetDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
+GetDeploymentGroupError::Validation(ref cause) => cause,
+GetDeploymentGroupError::Credentials(ref err) => err.description(),
+GetDeploymentGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDeploymentGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2638,16 +2940,16 @@ Unknown(String)
                     
 ///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
 DeploymentDoesNotExist(String),
-///<p>The specified on-premises instance name was specified in an invalid format.</p>
-InvalidInstanceName(String),
-///<p>The instance ID was not specified.</p>
-InstanceIdRequired(String),
 ///<p>At least one deployment ID must be specified.</p>
 DeploymentIdRequired(String),
+///<p>The specified instance does not exist in the deployment group.</p>
+InstanceDoesNotExist(String),
+///<p>The instance ID was not specified.</p>
+InstanceIdRequired(String),
 ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
 InvalidDeploymentId(String),
-///<p>The specified instance does not exist in the deployment group.</p>
-InstanceDoesNotExist(String),/// An error occurred dispatching the HTTP request
+///<p>The specified on-premises instance name was specified in an invalid format.</p>
+InvalidInstanceName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2666,7 +2968,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DeploymentIdRequiredException" => GetDeploymentInstanceError::DeploymentIdRequired(String::from(error_message)),"InstanceDoesNotExistException" => GetDeploymentInstanceError::InstanceDoesNotExist(String::from(error_message)),"InvalidDeploymentIdException" => GetDeploymentInstanceError::InvalidDeploymentId(String::from(error_message)),"DeploymentDoesNotExistException" => GetDeploymentInstanceError::DeploymentDoesNotExist(String::from(error_message)),"InstanceIdRequiredException" => GetDeploymentInstanceError::InstanceIdRequired(String::from(error_message)),"InvalidInstanceNameException" => GetDeploymentInstanceError::InvalidInstanceName(String::from(error_message)),"ValidationException" => GetDeploymentInstanceError::Validation(error_message.to_string()),_ => GetDeploymentInstanceError::Unknown(String::from(body))
+                                    "DeploymentDoesNotExistException" => GetDeploymentInstanceError::DeploymentDoesNotExist(String::from(error_message)),
+"DeploymentIdRequiredException" => GetDeploymentInstanceError::DeploymentIdRequired(String::from(error_message)),
+"InstanceDoesNotExistException" => GetDeploymentInstanceError::InstanceDoesNotExist(String::from(error_message)),
+"InstanceIdRequiredException" => GetDeploymentInstanceError::InstanceIdRequired(String::from(error_message)),
+"InvalidDeploymentIdException" => GetDeploymentInstanceError::InvalidDeploymentId(String::from(error_message)),
+"InvalidInstanceNameException" => GetDeploymentInstanceError::InvalidInstanceName(String::from(error_message)),
+"ValidationException" => GetDeploymentInstanceError::Validation(error_message.to_string()),
+_ => GetDeploymentInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetDeploymentInstanceError::Unknown(String::from(body))
@@ -2697,7 +3006,16 @@ Unknown(String)
                 impl Error for GetDeploymentInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDeploymentInstanceError::DeploymentDoesNotExist(ref cause) => cause,GetDeploymentInstanceError::InstanceDoesNotExist(ref cause) => cause,GetDeploymentInstanceError::InstanceIdRequired(ref cause) => cause,GetDeploymentInstanceError::DeploymentIdRequired(ref cause) => cause,GetDeploymentInstanceError::InvalidInstanceName(ref cause) => cause,GetDeploymentInstanceError::InvalidDeploymentId(ref cause) => cause,GetDeploymentInstanceError::Validation(ref cause) => cause,GetDeploymentInstanceError::Credentials(ref err) => err.description(),GetDeploymentInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDeploymentInstanceError::Unknown(ref cause) => cause
+                            GetDeploymentInstanceError::DeploymentDoesNotExist(ref cause) => cause,
+GetDeploymentInstanceError::DeploymentIdRequired(ref cause) => cause,
+GetDeploymentInstanceError::InstanceDoesNotExist(ref cause) => cause,
+GetDeploymentInstanceError::InstanceIdRequired(ref cause) => cause,
+GetDeploymentInstanceError::InvalidDeploymentId(ref cause) => cause,
+GetDeploymentInstanceError::InvalidInstanceName(ref cause) => cause,
+GetDeploymentInstanceError::Validation(ref cause) => cause,
+GetDeploymentInstanceError::Credentials(ref err) => err.description(),
+GetDeploymentInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDeploymentInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2705,12 +3023,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetOnPremisesInstanceError {
                     
+///<p>An on-premises instance name was not specified.</p>
+InstanceNameRequired(String),
 ///<p>The specified on-premises instance is not registered.</p>
 InstanceNotRegistered(String),
 ///<p>The specified on-premises instance name was specified in an invalid format.</p>
-InvalidInstanceName(String),
-///<p>An on-premises instance name was not specified.</p>
-InstanceNameRequired(String),/// An error occurred dispatching the HTTP request
+InvalidInstanceName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2729,7 +3047,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InstanceNotRegisteredException" => GetOnPremisesInstanceError::InstanceNotRegistered(String::from(error_message)),"InvalidInstanceNameException" => GetOnPremisesInstanceError::InvalidInstanceName(String::from(error_message)),"InstanceNameRequiredException" => GetOnPremisesInstanceError::InstanceNameRequired(String::from(error_message)),"ValidationException" => GetOnPremisesInstanceError::Validation(error_message.to_string()),_ => GetOnPremisesInstanceError::Unknown(String::from(body))
+                                    "InstanceNameRequiredException" => GetOnPremisesInstanceError::InstanceNameRequired(String::from(error_message)),
+"InstanceNotRegisteredException" => GetOnPremisesInstanceError::InstanceNotRegistered(String::from(error_message)),
+"InvalidInstanceNameException" => GetOnPremisesInstanceError::InvalidInstanceName(String::from(error_message)),
+"ValidationException" => GetOnPremisesInstanceError::Validation(error_message.to_string()),
+_ => GetOnPremisesInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetOnPremisesInstanceError::Unknown(String::from(body))
@@ -2760,7 +3082,13 @@ Unknown(String)
                 impl Error for GetOnPremisesInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetOnPremisesInstanceError::InstanceNotRegistered(ref cause) => cause,GetOnPremisesInstanceError::InstanceNameRequired(ref cause) => cause,GetOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,GetOnPremisesInstanceError::Validation(ref cause) => cause,GetOnPremisesInstanceError::Credentials(ref err) => err.description(),GetOnPremisesInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetOnPremisesInstanceError::Unknown(ref cause) => cause
+                            GetOnPremisesInstanceError::InstanceNameRequired(ref cause) => cause,
+GetOnPremisesInstanceError::InstanceNotRegistered(ref cause) => cause,
+GetOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,
+GetOnPremisesInstanceError::Validation(ref cause) => cause,
+GetOnPremisesInstanceError::Credentials(ref err) => err.description(),
+GetOnPremisesInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetOnPremisesInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2768,26 +3096,26 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListApplicationRevisionsError {
                     
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
-///<p>The column name to sort by is either not present or was specified in an invalid format.</p>
-InvalidSortBy(String),
-///<p>The specified key prefix filter was specified in an invalid format.</p>
-InvalidKeyPrefixFilter(String),
 ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
 ApplicationDoesNotExist(String),
-///<p>The bucket name either doesn't exist or was specified in an invalid format.</p>
-InvalidBucketNameFilter(String),
 ///<p>The minimum number of required application names was not specified.</p>
 ApplicationNameRequired(String),
-///<p>The sort order was specified in an invalid format.</p>
-InvalidSortOrder(String),
+///<p>A bucket name is required, but was not provided.</p>
+BucketNameFilterRequired(String),
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),
+///<p>The bucket name either doesn't exist or was specified in an invalid format.</p>
+InvalidBucketNameFilter(String),
 ///<p>The deployed state filter was specified in an invalid format.</p>
 InvalidDeployedStateFilter(String),
+///<p>The specified key prefix filter was specified in an invalid format.</p>
+InvalidKeyPrefixFilter(String),
 ///<p>The next token was specified in an invalid format.</p>
 InvalidNextToken(String),
-///<p>A bucket name is required, but was not provided.</p>
-BucketNameFilterRequired(String),/// An error occurred dispatching the HTTP request
+///<p>The column name to sort by is either not present or was specified in an invalid format.</p>
+InvalidSortBy(String),
+///<p>The sort order was specified in an invalid format.</p>
+InvalidSortOrder(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2806,7 +3134,18 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidDeployedStateFilterException" => ListApplicationRevisionsError::InvalidDeployedStateFilter(String::from(error_message)),"InvalidNextTokenException" => ListApplicationRevisionsError::InvalidNextToken(String::from(error_message)),"InvalidSortOrderException" => ListApplicationRevisionsError::InvalidSortOrder(String::from(error_message)),"InvalidBucketNameFilterException" => ListApplicationRevisionsError::InvalidBucketNameFilter(String::from(error_message)),"BucketNameFilterRequiredException" => ListApplicationRevisionsError::BucketNameFilterRequired(String::from(error_message)),"ApplicationDoesNotExistException" => ListApplicationRevisionsError::ApplicationDoesNotExist(String::from(error_message)),"InvalidKeyPrefixFilterException" => ListApplicationRevisionsError::InvalidKeyPrefixFilter(String::from(error_message)),"InvalidSortByException" => ListApplicationRevisionsError::InvalidSortBy(String::from(error_message)),"ApplicationNameRequiredException" => ListApplicationRevisionsError::ApplicationNameRequired(String::from(error_message)),"InvalidApplicationNameException" => ListApplicationRevisionsError::InvalidApplicationName(String::from(error_message)),"ValidationException" => ListApplicationRevisionsError::Validation(error_message.to_string()),_ => ListApplicationRevisionsError::Unknown(String::from(body))
+                                    "ApplicationDoesNotExistException" => ListApplicationRevisionsError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => ListApplicationRevisionsError::ApplicationNameRequired(String::from(error_message)),
+"BucketNameFilterRequiredException" => ListApplicationRevisionsError::BucketNameFilterRequired(String::from(error_message)),
+"InvalidApplicationNameException" => ListApplicationRevisionsError::InvalidApplicationName(String::from(error_message)),
+"InvalidBucketNameFilterException" => ListApplicationRevisionsError::InvalidBucketNameFilter(String::from(error_message)),
+"InvalidDeployedStateFilterException" => ListApplicationRevisionsError::InvalidDeployedStateFilter(String::from(error_message)),
+"InvalidKeyPrefixFilterException" => ListApplicationRevisionsError::InvalidKeyPrefixFilter(String::from(error_message)),
+"InvalidNextTokenException" => ListApplicationRevisionsError::InvalidNextToken(String::from(error_message)),
+"InvalidSortByException" => ListApplicationRevisionsError::InvalidSortBy(String::from(error_message)),
+"InvalidSortOrderException" => ListApplicationRevisionsError::InvalidSortOrder(String::from(error_message)),
+"ValidationException" => ListApplicationRevisionsError::Validation(error_message.to_string()),
+_ => ListApplicationRevisionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListApplicationRevisionsError::Unknown(String::from(body))
@@ -2837,7 +3176,20 @@ Unknown(String)
                 impl Error for ListApplicationRevisionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListApplicationRevisionsError::InvalidDeployedStateFilter(ref cause) => cause,ListApplicationRevisionsError::InvalidNextToken(ref cause) => cause,ListApplicationRevisionsError::InvalidBucketNameFilter(ref cause) => cause,ListApplicationRevisionsError::InvalidSortOrder(ref cause) => cause,ListApplicationRevisionsError::InvalidApplicationName(ref cause) => cause,ListApplicationRevisionsError::InvalidSortBy(ref cause) => cause,ListApplicationRevisionsError::BucketNameFilterRequired(ref cause) => cause,ListApplicationRevisionsError::InvalidKeyPrefixFilter(ref cause) => cause,ListApplicationRevisionsError::ApplicationNameRequired(ref cause) => cause,ListApplicationRevisionsError::ApplicationDoesNotExist(ref cause) => cause,ListApplicationRevisionsError::Validation(ref cause) => cause,ListApplicationRevisionsError::Credentials(ref err) => err.description(),ListApplicationRevisionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListApplicationRevisionsError::Unknown(ref cause) => cause
+                            ListApplicationRevisionsError::ApplicationDoesNotExist(ref cause) => cause,
+ListApplicationRevisionsError::ApplicationNameRequired(ref cause) => cause,
+ListApplicationRevisionsError::BucketNameFilterRequired(ref cause) => cause,
+ListApplicationRevisionsError::InvalidApplicationName(ref cause) => cause,
+ListApplicationRevisionsError::InvalidBucketNameFilter(ref cause) => cause,
+ListApplicationRevisionsError::InvalidDeployedStateFilter(ref cause) => cause,
+ListApplicationRevisionsError::InvalidKeyPrefixFilter(ref cause) => cause,
+ListApplicationRevisionsError::InvalidNextToken(ref cause) => cause,
+ListApplicationRevisionsError::InvalidSortBy(ref cause) => cause,
+ListApplicationRevisionsError::InvalidSortOrder(ref cause) => cause,
+ListApplicationRevisionsError::Validation(ref cause) => cause,
+ListApplicationRevisionsError::Credentials(ref err) => err.description(),
+ListApplicationRevisionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListApplicationRevisionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2865,7 +3217,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidNextTokenException" => ListApplicationsError::InvalidNextToken(String::from(error_message)),"ValidationException" => ListApplicationsError::Validation(error_message.to_string()),_ => ListApplicationsError::Unknown(String::from(body))
+                                    "InvalidNextTokenException" => ListApplicationsError::InvalidNextToken(String::from(error_message)),
+"ValidationException" => ListApplicationsError::Validation(error_message.to_string()),
+_ => ListApplicationsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListApplicationsError::Unknown(String::from(body))
@@ -2896,7 +3250,11 @@ Unknown(String)
                 impl Error for ListApplicationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListApplicationsError::InvalidNextToken(ref cause) => cause,ListApplicationsError::Validation(ref cause) => cause,ListApplicationsError::Credentials(ref err) => err.description(),ListApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListApplicationsError::Unknown(ref cause) => cause
+                            ListApplicationsError::InvalidNextToken(ref cause) => cause,
+ListApplicationsError::Validation(ref cause) => cause,
+ListApplicationsError::Credentials(ref err) => err.description(),
+ListApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListApplicationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2924,7 +3282,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidNextTokenException" => ListDeploymentConfigsError::InvalidNextToken(String::from(error_message)),"ValidationException" => ListDeploymentConfigsError::Validation(error_message.to_string()),_ => ListDeploymentConfigsError::Unknown(String::from(body))
+                                    "InvalidNextTokenException" => ListDeploymentConfigsError::InvalidNextToken(String::from(error_message)),
+"ValidationException" => ListDeploymentConfigsError::Validation(error_message.to_string()),
+_ => ListDeploymentConfigsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListDeploymentConfigsError::Unknown(String::from(body))
@@ -2955,7 +3315,11 @@ Unknown(String)
                 impl Error for ListDeploymentConfigsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDeploymentConfigsError::InvalidNextToken(ref cause) => cause,ListDeploymentConfigsError::Validation(ref cause) => cause,ListDeploymentConfigsError::Credentials(ref err) => err.description(),ListDeploymentConfigsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDeploymentConfigsError::Unknown(ref cause) => cause
+                            ListDeploymentConfigsError::InvalidNextToken(ref cause) => cause,
+ListDeploymentConfigsError::Validation(ref cause) => cause,
+ListDeploymentConfigsError::Credentials(ref err) => err.description(),
+ListDeploymentConfigsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDeploymentConfigsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2963,14 +3327,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListDeploymentGroupsError {
                     
+///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+ApplicationDoesNotExist(String),
 ///<p>The minimum number of required application names was not specified.</p>
 ApplicationNameRequired(String),
-///<p>The next token was specified in an invalid format.</p>
-InvalidNextToken(String),
 ///<p>The application name was specified in an invalid format.</p>
 InvalidApplicationName(String),
-///<p>The application does not exist with the applicable IAM user or AWS account.</p>
-ApplicationDoesNotExist(String),/// An error occurred dispatching the HTTP request
+///<p>The next token was specified in an invalid format.</p>
+InvalidNextToken(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2989,7 +3353,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ApplicationDoesNotExistException" => ListDeploymentGroupsError::ApplicationDoesNotExist(String::from(error_message)),"InvalidApplicationNameException" => ListDeploymentGroupsError::InvalidApplicationName(String::from(error_message)),"ApplicationNameRequiredException" => ListDeploymentGroupsError::ApplicationNameRequired(String::from(error_message)),"InvalidNextTokenException" => ListDeploymentGroupsError::InvalidNextToken(String::from(error_message)),"ValidationException" => ListDeploymentGroupsError::Validation(error_message.to_string()),_ => ListDeploymentGroupsError::Unknown(String::from(body))
+                                    "ApplicationDoesNotExistException" => ListDeploymentGroupsError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => ListDeploymentGroupsError::ApplicationNameRequired(String::from(error_message)),
+"InvalidApplicationNameException" => ListDeploymentGroupsError::InvalidApplicationName(String::from(error_message)),
+"InvalidNextTokenException" => ListDeploymentGroupsError::InvalidNextToken(String::from(error_message)),
+"ValidationException" => ListDeploymentGroupsError::Validation(error_message.to_string()),
+_ => ListDeploymentGroupsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListDeploymentGroupsError::Unknown(String::from(body))
@@ -3020,7 +3389,14 @@ Unknown(String)
                 impl Error for ListDeploymentGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDeploymentGroupsError::ApplicationNameRequired(ref cause) => cause,ListDeploymentGroupsError::InvalidApplicationName(ref cause) => cause,ListDeploymentGroupsError::InvalidNextToken(ref cause) => cause,ListDeploymentGroupsError::ApplicationDoesNotExist(ref cause) => cause,ListDeploymentGroupsError::Validation(ref cause) => cause,ListDeploymentGroupsError::Credentials(ref err) => err.description(),ListDeploymentGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDeploymentGroupsError::Unknown(ref cause) => cause
+                            ListDeploymentGroupsError::ApplicationDoesNotExist(ref cause) => cause,
+ListDeploymentGroupsError::ApplicationNameRequired(ref cause) => cause,
+ListDeploymentGroupsError::InvalidApplicationName(ref cause) => cause,
+ListDeploymentGroupsError::InvalidNextToken(ref cause) => cause,
+ListDeploymentGroupsError::Validation(ref cause) => cause,
+ListDeploymentGroupsError::Credentials(ref err) => err.description(),
+ListDeploymentGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDeploymentGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3028,18 +3404,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListDeploymentInstancesError {
                     
+///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+DeploymentDoesNotExist(String),
 ///<p>At least one deployment ID must be specified.</p>
 DeploymentIdRequired(String),
-///<p>The next token was specified in an invalid format.</p>
-InvalidNextToken(String),
-///<p>The specified instance status does not exist.</p>
-InvalidInstanceStatus(String),
 ///<p>The specified deployment has not started.</p>
 DeploymentNotStarted(String),
 ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
 InvalidDeploymentId(String),
-///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
-DeploymentDoesNotExist(String),/// An error occurred dispatching the HTTP request
+///<p>The specified instance status does not exist.</p>
+InvalidInstanceStatus(String),
+///<p>The next token was specified in an invalid format.</p>
+InvalidNextToken(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3058,7 +3434,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidDeploymentIdException" => ListDeploymentInstancesError::InvalidDeploymentId(String::from(error_message)),"DeploymentDoesNotExistException" => ListDeploymentInstancesError::DeploymentDoesNotExist(String::from(error_message)),"InvalidInstanceStatusException" => ListDeploymentInstancesError::InvalidInstanceStatus(String::from(error_message)),"InvalidNextTokenException" => ListDeploymentInstancesError::InvalidNextToken(String::from(error_message)),"DeploymentIdRequiredException" => ListDeploymentInstancesError::DeploymentIdRequired(String::from(error_message)),"DeploymentNotStartedException" => ListDeploymentInstancesError::DeploymentNotStarted(String::from(error_message)),"ValidationException" => ListDeploymentInstancesError::Validation(error_message.to_string()),_ => ListDeploymentInstancesError::Unknown(String::from(body))
+                                    "DeploymentDoesNotExistException" => ListDeploymentInstancesError::DeploymentDoesNotExist(String::from(error_message)),
+"DeploymentIdRequiredException" => ListDeploymentInstancesError::DeploymentIdRequired(String::from(error_message)),
+"DeploymentNotStartedException" => ListDeploymentInstancesError::DeploymentNotStarted(String::from(error_message)),
+"InvalidDeploymentIdException" => ListDeploymentInstancesError::InvalidDeploymentId(String::from(error_message)),
+"InvalidInstanceStatusException" => ListDeploymentInstancesError::InvalidInstanceStatus(String::from(error_message)),
+"InvalidNextTokenException" => ListDeploymentInstancesError::InvalidNextToken(String::from(error_message)),
+"ValidationException" => ListDeploymentInstancesError::Validation(error_message.to_string()),
+_ => ListDeploymentInstancesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListDeploymentInstancesError::Unknown(String::from(body))
@@ -3089,7 +3472,16 @@ Unknown(String)
                 impl Error for ListDeploymentInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDeploymentInstancesError::InvalidInstanceStatus(ref cause) => cause,ListDeploymentInstancesError::DeploymentDoesNotExist(ref cause) => cause,ListDeploymentInstancesError::InvalidNextToken(ref cause) => cause,ListDeploymentInstancesError::InvalidDeploymentId(ref cause) => cause,ListDeploymentInstancesError::DeploymentIdRequired(ref cause) => cause,ListDeploymentInstancesError::DeploymentNotStarted(ref cause) => cause,ListDeploymentInstancesError::Validation(ref cause) => cause,ListDeploymentInstancesError::Credentials(ref err) => err.description(),ListDeploymentInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDeploymentInstancesError::Unknown(ref cause) => cause
+                            ListDeploymentInstancesError::DeploymentDoesNotExist(ref cause) => cause,
+ListDeploymentInstancesError::DeploymentIdRequired(ref cause) => cause,
+ListDeploymentInstancesError::DeploymentNotStarted(ref cause) => cause,
+ListDeploymentInstancesError::InvalidDeploymentId(ref cause) => cause,
+ListDeploymentInstancesError::InvalidInstanceStatus(ref cause) => cause,
+ListDeploymentInstancesError::InvalidNextToken(ref cause) => cause,
+ListDeploymentInstancesError::Validation(ref cause) => cause,
+ListDeploymentInstancesError::Credentials(ref err) => err.description(),
+ListDeploymentInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDeploymentInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3099,22 +3491,22 @@ Unknown(String)
                     
 ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
 ApplicationDoesNotExist(String),
-///<p>The deployment group name was specified in an invalid format.</p>
-InvalidDeploymentGroupName(String),
-///<p>The next token was specified in an invalid format.</p>
-InvalidNextToken(String),
-///<p>The specified deployment status doesn't exist or cannot be determined.</p>
-InvalidDeploymentStatus(String),
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
+///<p>The minimum number of required application names was not specified.</p>
+ApplicationNameRequired(String),
 ///<p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
 DeploymentGroupDoesNotExist(String),
 ///<p>The deployment group name was not specified.</p>
 DeploymentGroupNameRequired(String),
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),
+///<p>The deployment group name was specified in an invalid format.</p>
+InvalidDeploymentGroupName(String),
+///<p>The specified deployment status doesn't exist or cannot be determined.</p>
+InvalidDeploymentStatus(String),
+///<p>The next token was specified in an invalid format.</p>
+InvalidNextToken(String),
 ///<p>The specified time range was specified in an invalid format.</p>
-InvalidTimeRange(String),
-///<p>The minimum number of required application names was not specified.</p>
-ApplicationNameRequired(String),/// An error occurred dispatching the HTTP request
+InvalidTimeRange(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3133,7 +3525,17 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DeploymentGroupDoesNotExistException" => ListDeploymentsError::DeploymentGroupDoesNotExist(String::from(error_message)),"InvalidNextTokenException" => ListDeploymentsError::InvalidNextToken(String::from(error_message)),"InvalidDeploymentGroupNameException" => ListDeploymentsError::InvalidDeploymentGroupName(String::from(error_message)),"DeploymentGroupNameRequiredException" => ListDeploymentsError::DeploymentGroupNameRequired(String::from(error_message)),"ApplicationDoesNotExistException" => ListDeploymentsError::ApplicationDoesNotExist(String::from(error_message)),"ApplicationNameRequiredException" => ListDeploymentsError::ApplicationNameRequired(String::from(error_message)),"InvalidDeploymentStatusException" => ListDeploymentsError::InvalidDeploymentStatus(String::from(error_message)),"InvalidApplicationNameException" => ListDeploymentsError::InvalidApplicationName(String::from(error_message)),"InvalidTimeRangeException" => ListDeploymentsError::InvalidTimeRange(String::from(error_message)),"ValidationException" => ListDeploymentsError::Validation(error_message.to_string()),_ => ListDeploymentsError::Unknown(String::from(body))
+                                    "ApplicationDoesNotExistException" => ListDeploymentsError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => ListDeploymentsError::ApplicationNameRequired(String::from(error_message)),
+"DeploymentGroupDoesNotExistException" => ListDeploymentsError::DeploymentGroupDoesNotExist(String::from(error_message)),
+"DeploymentGroupNameRequiredException" => ListDeploymentsError::DeploymentGroupNameRequired(String::from(error_message)),
+"InvalidApplicationNameException" => ListDeploymentsError::InvalidApplicationName(String::from(error_message)),
+"InvalidDeploymentGroupNameException" => ListDeploymentsError::InvalidDeploymentGroupName(String::from(error_message)),
+"InvalidDeploymentStatusException" => ListDeploymentsError::InvalidDeploymentStatus(String::from(error_message)),
+"InvalidNextTokenException" => ListDeploymentsError::InvalidNextToken(String::from(error_message)),
+"InvalidTimeRangeException" => ListDeploymentsError::InvalidTimeRange(String::from(error_message)),
+"ValidationException" => ListDeploymentsError::Validation(error_message.to_string()),
+_ => ListDeploymentsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListDeploymentsError::Unknown(String::from(body))
@@ -3164,7 +3566,19 @@ Unknown(String)
                 impl Error for ListDeploymentsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDeploymentsError::ApplicationNameRequired(ref cause) => cause,ListDeploymentsError::ApplicationDoesNotExist(ref cause) => cause,ListDeploymentsError::InvalidTimeRange(ref cause) => cause,ListDeploymentsError::InvalidDeploymentGroupName(ref cause) => cause,ListDeploymentsError::InvalidDeploymentStatus(ref cause) => cause,ListDeploymentsError::InvalidNextToken(ref cause) => cause,ListDeploymentsError::DeploymentGroupDoesNotExist(ref cause) => cause,ListDeploymentsError::DeploymentGroupNameRequired(ref cause) => cause,ListDeploymentsError::InvalidApplicationName(ref cause) => cause,ListDeploymentsError::Validation(ref cause) => cause,ListDeploymentsError::Credentials(ref err) => err.description(),ListDeploymentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDeploymentsError::Unknown(ref cause) => cause
+                            ListDeploymentsError::ApplicationDoesNotExist(ref cause) => cause,
+ListDeploymentsError::ApplicationNameRequired(ref cause) => cause,
+ListDeploymentsError::DeploymentGroupDoesNotExist(ref cause) => cause,
+ListDeploymentsError::DeploymentGroupNameRequired(ref cause) => cause,
+ListDeploymentsError::InvalidApplicationName(ref cause) => cause,
+ListDeploymentsError::InvalidDeploymentGroupName(ref cause) => cause,
+ListDeploymentsError::InvalidDeploymentStatus(ref cause) => cause,
+ListDeploymentsError::InvalidNextToken(ref cause) => cause,
+ListDeploymentsError::InvalidTimeRange(ref cause) => cause,
+ListDeploymentsError::Validation(ref cause) => cause,
+ListDeploymentsError::Credentials(ref err) => err.description(),
+ListDeploymentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDeploymentsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3174,10 +3588,10 @@ Unknown(String)
                     
 ///<p>The next token was specified in an invalid format.</p>
 InvalidNextToken(String),
-///<p>The specified tag filter was specified in an invalid format.</p>
-InvalidTagFilter(String),
 ///<p>The registration status was specified in an invalid format.</p>
-InvalidRegistrationStatus(String),/// An error occurred dispatching the HTTP request
+InvalidRegistrationStatus(String),
+///<p>The specified tag filter was specified in an invalid format.</p>
+InvalidTagFilter(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3196,7 +3610,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidTagFilterException" => ListOnPremisesInstancesError::InvalidTagFilter(String::from(error_message)),"InvalidRegistrationStatusException" => ListOnPremisesInstancesError::InvalidRegistrationStatus(String::from(error_message)),"InvalidNextTokenException" => ListOnPremisesInstancesError::InvalidNextToken(String::from(error_message)),"ValidationException" => ListOnPremisesInstancesError::Validation(error_message.to_string()),_ => ListOnPremisesInstancesError::Unknown(String::from(body))
+                                    "InvalidNextTokenException" => ListOnPremisesInstancesError::InvalidNextToken(String::from(error_message)),
+"InvalidRegistrationStatusException" => ListOnPremisesInstancesError::InvalidRegistrationStatus(String::from(error_message)),
+"InvalidTagFilterException" => ListOnPremisesInstancesError::InvalidTagFilter(String::from(error_message)),
+"ValidationException" => ListOnPremisesInstancesError::Validation(error_message.to_string()),
+_ => ListOnPremisesInstancesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListOnPremisesInstancesError::Unknown(String::from(body))
@@ -3227,7 +3645,13 @@ Unknown(String)
                 impl Error for ListOnPremisesInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListOnPremisesInstancesError::InvalidTagFilter(ref cause) => cause,ListOnPremisesInstancesError::InvalidNextToken(ref cause) => cause,ListOnPremisesInstancesError::InvalidRegistrationStatus(ref cause) => cause,ListOnPremisesInstancesError::Validation(ref cause) => cause,ListOnPremisesInstancesError::Credentials(ref err) => err.description(),ListOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListOnPremisesInstancesError::Unknown(ref cause) => cause
+                            ListOnPremisesInstancesError::InvalidNextToken(ref cause) => cause,
+ListOnPremisesInstancesError::InvalidRegistrationStatus(ref cause) => cause,
+ListOnPremisesInstancesError::InvalidTagFilter(ref cause) => cause,
+ListOnPremisesInstancesError::Validation(ref cause) => cause,
+ListOnPremisesInstancesError::Credentials(ref err) => err.description(),
+ListOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListOnPremisesInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3235,18 +3659,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RegisterApplicationRevisionError {
                     
+///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+ApplicationDoesNotExist(String),
 ///<p>The minimum number of required application names was not specified.</p>
 ApplicationNameRequired(String),
-///<p>The revision ID was not specified.</p>
-RevisionRequired(String),
+///<p>The description is too long.</p>
+DescriptionTooLong(String),
 ///<p>The application name was specified in an invalid format.</p>
 InvalidApplicationName(String),
 ///<p>The revision was specified in an invalid format.</p>
 InvalidRevision(String),
-///<p>The description is too long.</p>
-DescriptionTooLong(String),
-///<p>The application does not exist with the applicable IAM user or AWS account.</p>
-ApplicationDoesNotExist(String),/// An error occurred dispatching the HTTP request
+///<p>The revision ID was not specified.</p>
+RevisionRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3265,7 +3689,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidApplicationNameException" => RegisterApplicationRevisionError::InvalidApplicationName(String::from(error_message)),"RevisionRequiredException" => RegisterApplicationRevisionError::RevisionRequired(String::from(error_message)),"InvalidRevisionException" => RegisterApplicationRevisionError::InvalidRevision(String::from(error_message)),"DescriptionTooLongException" => RegisterApplicationRevisionError::DescriptionTooLong(String::from(error_message)),"ApplicationDoesNotExistException" => RegisterApplicationRevisionError::ApplicationDoesNotExist(String::from(error_message)),"ApplicationNameRequiredException" => RegisterApplicationRevisionError::ApplicationNameRequired(String::from(error_message)),"ValidationException" => RegisterApplicationRevisionError::Validation(error_message.to_string()),_ => RegisterApplicationRevisionError::Unknown(String::from(body))
+                                    "ApplicationDoesNotExistException" => RegisterApplicationRevisionError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => RegisterApplicationRevisionError::ApplicationNameRequired(String::from(error_message)),
+"DescriptionTooLongException" => RegisterApplicationRevisionError::DescriptionTooLong(String::from(error_message)),
+"InvalidApplicationNameException" => RegisterApplicationRevisionError::InvalidApplicationName(String::from(error_message)),
+"InvalidRevisionException" => RegisterApplicationRevisionError::InvalidRevision(String::from(error_message)),
+"RevisionRequiredException" => RegisterApplicationRevisionError::RevisionRequired(String::from(error_message)),
+"ValidationException" => RegisterApplicationRevisionError::Validation(error_message.to_string()),
+_ => RegisterApplicationRevisionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterApplicationRevisionError::Unknown(String::from(body))
@@ -3296,7 +3727,16 @@ Unknown(String)
                 impl Error for RegisterApplicationRevisionError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterApplicationRevisionError::InvalidRevision(ref cause) => cause,RegisterApplicationRevisionError::DescriptionTooLong(ref cause) => cause,RegisterApplicationRevisionError::RevisionRequired(ref cause) => cause,RegisterApplicationRevisionError::ApplicationDoesNotExist(ref cause) => cause,RegisterApplicationRevisionError::ApplicationNameRequired(ref cause) => cause,RegisterApplicationRevisionError::InvalidApplicationName(ref cause) => cause,RegisterApplicationRevisionError::Validation(ref cause) => cause,RegisterApplicationRevisionError::Credentials(ref err) => err.description(),RegisterApplicationRevisionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterApplicationRevisionError::Unknown(ref cause) => cause
+                            RegisterApplicationRevisionError::ApplicationDoesNotExist(ref cause) => cause,
+RegisterApplicationRevisionError::ApplicationNameRequired(ref cause) => cause,
+RegisterApplicationRevisionError::DescriptionTooLong(ref cause) => cause,
+RegisterApplicationRevisionError::InvalidApplicationName(ref cause) => cause,
+RegisterApplicationRevisionError::InvalidRevision(ref cause) => cause,
+RegisterApplicationRevisionError::RevisionRequired(ref cause) => cause,
+RegisterApplicationRevisionError::Validation(ref cause) => cause,
+RegisterApplicationRevisionError::Credentials(ref err) => err.description(),
+RegisterApplicationRevisionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterApplicationRevisionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3304,26 +3744,26 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RegisterOnPremisesInstanceError {
                     
-///<p>An on-premises instance name was not specified.</p>
-InstanceNameRequired(String),
-///<p>An IAM user ARN was not specified.</p>
-IamUserArnRequired(String),
-///<p>The IAM session ARN was specified in an invalid format.</p>
-InvalidIamSessionArn(String),
-///<p>The specified on-premises instance name was specified in an invalid format.</p>
-InvalidInstanceName(String),
-///<p>The specified IAM user ARN is already registered with an on-premises instance.</p>
-IamUserArnAlreadyRegistered(String),
 ///<p>No IAM ARN was included in the request. You must use an IAM session ARN or IAM user ARN in the request.</p>
 IamArnRequired(String),
 ///<p>The request included an IAM session ARN that has already been used to register a different instance.</p>
 IamSessionArnAlreadyRegistered(String),
+///<p>The specified IAM user ARN is already registered with an on-premises instance.</p>
+IamUserArnAlreadyRegistered(String),
+///<p>An IAM user ARN was not specified.</p>
+IamUserArnRequired(String),
+///<p>The specified on-premises instance name is already registered.</p>
+InstanceNameAlreadyRegistered(String),
+///<p>An on-premises instance name was not specified.</p>
+InstanceNameRequired(String),
+///<p>The IAM session ARN was specified in an invalid format.</p>
+InvalidIamSessionArn(String),
 ///<p>The IAM user ARN was specified in an invalid format.</p>
 InvalidIamUserArn(String),
+///<p>The specified on-premises instance name was specified in an invalid format.</p>
+InvalidInstanceName(String),
 ///<p>Both an IAM user ARN and an IAM session ARN were included in the request. Use only one ARN type.</p>
-MultipleIamArnsProvided(String),
-///<p>The specified on-premises instance name is already registered.</p>
-InstanceNameAlreadyRegistered(String),/// An error occurred dispatching the HTTP request
+MultipleIamArnsProvided(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3342,7 +3782,18 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "IamSessionArnAlreadyRegisteredException" => RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(String::from(error_message)),"IamUserArnRequiredException" => RegisterOnPremisesInstanceError::IamUserArnRequired(String::from(error_message)),"InvalidIamSessionArnException" => RegisterOnPremisesInstanceError::InvalidIamSessionArn(String::from(error_message)),"InvalidIamUserArnException" => RegisterOnPremisesInstanceError::InvalidIamUserArn(String::from(error_message)),"MultipleIamArnsProvidedException" => RegisterOnPremisesInstanceError::MultipleIamArnsProvided(String::from(error_message)),"InstanceNameRequiredException" => RegisterOnPremisesInstanceError::InstanceNameRequired(String::from(error_message)),"IamArnRequiredException" => RegisterOnPremisesInstanceError::IamArnRequired(String::from(error_message)),"InstanceNameAlreadyRegisteredException" => RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(String::from(error_message)),"InvalidInstanceNameException" => RegisterOnPremisesInstanceError::InvalidInstanceName(String::from(error_message)),"IamUserArnAlreadyRegisteredException" => RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(String::from(error_message)),"ValidationException" => RegisterOnPremisesInstanceError::Validation(error_message.to_string()),_ => RegisterOnPremisesInstanceError::Unknown(String::from(body))
+                                    "IamArnRequiredException" => RegisterOnPremisesInstanceError::IamArnRequired(String::from(error_message)),
+"IamSessionArnAlreadyRegisteredException" => RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(String::from(error_message)),
+"IamUserArnAlreadyRegisteredException" => RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(String::from(error_message)),
+"IamUserArnRequiredException" => RegisterOnPremisesInstanceError::IamUserArnRequired(String::from(error_message)),
+"InstanceNameAlreadyRegisteredException" => RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(String::from(error_message)),
+"InstanceNameRequiredException" => RegisterOnPremisesInstanceError::InstanceNameRequired(String::from(error_message)),
+"InvalidIamSessionArnException" => RegisterOnPremisesInstanceError::InvalidIamSessionArn(String::from(error_message)),
+"InvalidIamUserArnException" => RegisterOnPremisesInstanceError::InvalidIamUserArn(String::from(error_message)),
+"InvalidInstanceNameException" => RegisterOnPremisesInstanceError::InvalidInstanceName(String::from(error_message)),
+"MultipleIamArnsProvidedException" => RegisterOnPremisesInstanceError::MultipleIamArnsProvided(String::from(error_message)),
+"ValidationException" => RegisterOnPremisesInstanceError::Validation(error_message.to_string()),
+_ => RegisterOnPremisesInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterOnPremisesInstanceError::Unknown(String::from(body))
@@ -3373,7 +3824,20 @@ Unknown(String)
                 impl Error for RegisterOnPremisesInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterOnPremisesInstanceError::InvalidIamUserArn(ref cause) => cause,RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(ref cause) => cause,RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(ref cause) => cause,RegisterOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(ref cause) => cause,RegisterOnPremisesInstanceError::IamUserArnRequired(ref cause) => cause,RegisterOnPremisesInstanceError::InstanceNameRequired(ref cause) => cause,RegisterOnPremisesInstanceError::InvalidIamSessionArn(ref cause) => cause,RegisterOnPremisesInstanceError::IamArnRequired(ref cause) => cause,RegisterOnPremisesInstanceError::MultipleIamArnsProvided(ref cause) => cause,RegisterOnPremisesInstanceError::Validation(ref cause) => cause,RegisterOnPremisesInstanceError::Credentials(ref err) => err.description(),RegisterOnPremisesInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterOnPremisesInstanceError::Unknown(ref cause) => cause
+                            RegisterOnPremisesInstanceError::IamArnRequired(ref cause) => cause,
+RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(ref cause) => cause,
+RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(ref cause) => cause,
+RegisterOnPremisesInstanceError::IamUserArnRequired(ref cause) => cause,
+RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(ref cause) => cause,
+RegisterOnPremisesInstanceError::InstanceNameRequired(ref cause) => cause,
+RegisterOnPremisesInstanceError::InvalidIamSessionArn(ref cause) => cause,
+RegisterOnPremisesInstanceError::InvalidIamUserArn(ref cause) => cause,
+RegisterOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,
+RegisterOnPremisesInstanceError::MultipleIamArnsProvided(ref cause) => cause,
+RegisterOnPremisesInstanceError::Validation(ref cause) => cause,
+RegisterOnPremisesInstanceError::Credentials(ref err) => err.description(),
+RegisterOnPremisesInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterOnPremisesInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3381,18 +3845,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RemoveTagsFromOnPremisesInstancesError {
                     
-///<p>An on-premises instance name was not specified.</p>
-InstanceNameRequired(String),
-///<p>The specified tag was specified in an invalid format.</p>
-InvalidTag(String),
 ///<p>The maximum number of allowed on-premises instances in a single call was exceeded.</p>
 InstanceLimitExceeded(String),
-///<p>A tag was not specified.</p>
-TagRequired(String),
+///<p>An on-premises instance name was not specified.</p>
+InstanceNameRequired(String),
+///<p>The specified on-premises instance is not registered.</p>
+InstanceNotRegistered(String),
+///<p>The specified tag was specified in an invalid format.</p>
+InvalidTag(String),
 ///<p>The maximum allowed number of tags was exceeded.</p>
 TagLimitExceeded(String),
-///<p>The specified on-premises instance is not registered.</p>
-InstanceNotRegistered(String),/// An error occurred dispatching the HTTP request
+///<p>A tag was not specified.</p>
+TagRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3411,7 +3875,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidTagException" => RemoveTagsFromOnPremisesInstancesError::InvalidTag(String::from(error_message)),"InstanceNameRequiredException" => RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(String::from(error_message)),"InstanceNotRegisteredException" => RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(String::from(error_message)),"TagRequiredException" => RemoveTagsFromOnPremisesInstancesError::TagRequired(String::from(error_message)),"InstanceLimitExceededException" => RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(String::from(error_message)),"TagLimitExceededException" => RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(String::from(error_message)),"ValidationException" => RemoveTagsFromOnPremisesInstancesError::Validation(error_message.to_string()),_ => RemoveTagsFromOnPremisesInstancesError::Unknown(String::from(body))
+                                    "InstanceLimitExceededException" => RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(String::from(error_message)),
+"InstanceNameRequiredException" => RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(String::from(error_message)),
+"InstanceNotRegisteredException" => RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(String::from(error_message)),
+"InvalidTagException" => RemoveTagsFromOnPremisesInstancesError::InvalidTag(String::from(error_message)),
+"TagLimitExceededException" => RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(String::from(error_message)),
+"TagRequiredException" => RemoveTagsFromOnPremisesInstancesError::TagRequired(String::from(error_message)),
+"ValidationException" => RemoveTagsFromOnPremisesInstancesError::Validation(error_message.to_string()),
+_ => RemoveTagsFromOnPremisesInstancesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RemoveTagsFromOnPremisesInstancesError::Unknown(String::from(body))
@@ -3442,7 +3913,16 @@ Unknown(String)
                 impl Error for RemoveTagsFromOnPremisesInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(ref cause) => cause,RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(ref cause) => cause,RemoveTagsFromOnPremisesInstancesError::InvalidTag(ref cause) => cause,RemoveTagsFromOnPremisesInstancesError::TagRequired(ref cause) => cause,RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(ref cause) => cause,RemoveTagsFromOnPremisesInstancesError::Validation(ref cause) => cause,RemoveTagsFromOnPremisesInstancesError::Credentials(ref err) => err.description(),RemoveTagsFromOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveTagsFromOnPremisesInstancesError::Unknown(ref cause) => cause
+                            RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(ref cause) => cause,
+RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,
+RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(ref cause) => cause,
+RemoveTagsFromOnPremisesInstancesError::InvalidTag(ref cause) => cause,
+RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(ref cause) => cause,
+RemoveTagsFromOnPremisesInstancesError::TagRequired(ref cause) => cause,
+RemoveTagsFromOnPremisesInstancesError::Validation(ref cause) => cause,
+RemoveTagsFromOnPremisesInstancesError::Credentials(ref err) => err.description(),
+RemoveTagsFromOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveTagsFromOnPremisesInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3450,14 +3930,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum StopDeploymentError {
                     
-///<p>At least one of the deployment IDs was specified in an invalid format.</p>
-InvalidDeploymentId(String),
-///<p>At least one deployment ID must be specified.</p>
-DeploymentIdRequired(String),
 ///<p>The deployment is already complete.</p>
 DeploymentAlreadyCompleted(String),
 ///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
-DeploymentDoesNotExist(String),/// An error occurred dispatching the HTTP request
+DeploymentDoesNotExist(String),
+///<p>At least one deployment ID must be specified.</p>
+DeploymentIdRequired(String),
+///<p>At least one of the deployment IDs was specified in an invalid format.</p>
+InvalidDeploymentId(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3476,7 +3956,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DeploymentDoesNotExistException" => StopDeploymentError::DeploymentDoesNotExist(String::from(error_message)),"DeploymentIdRequiredException" => StopDeploymentError::DeploymentIdRequired(String::from(error_message)),"InvalidDeploymentIdException" => StopDeploymentError::InvalidDeploymentId(String::from(error_message)),"DeploymentAlreadyCompletedException" => StopDeploymentError::DeploymentAlreadyCompleted(String::from(error_message)),"ValidationException" => StopDeploymentError::Validation(error_message.to_string()),_ => StopDeploymentError::Unknown(String::from(body))
+                                    "DeploymentAlreadyCompletedException" => StopDeploymentError::DeploymentAlreadyCompleted(String::from(error_message)),
+"DeploymentDoesNotExistException" => StopDeploymentError::DeploymentDoesNotExist(String::from(error_message)),
+"DeploymentIdRequiredException" => StopDeploymentError::DeploymentIdRequired(String::from(error_message)),
+"InvalidDeploymentIdException" => StopDeploymentError::InvalidDeploymentId(String::from(error_message)),
+"ValidationException" => StopDeploymentError::Validation(error_message.to_string()),
+_ => StopDeploymentError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StopDeploymentError::Unknown(String::from(body))
@@ -3507,7 +3992,14 @@ Unknown(String)
                 impl Error for StopDeploymentError {
                     fn description(&self) -> &str {
                         match *self {
-                            StopDeploymentError::DeploymentDoesNotExist(ref cause) => cause,StopDeploymentError::InvalidDeploymentId(ref cause) => cause,StopDeploymentError::DeploymentIdRequired(ref cause) => cause,StopDeploymentError::DeploymentAlreadyCompleted(ref cause) => cause,StopDeploymentError::Validation(ref cause) => cause,StopDeploymentError::Credentials(ref err) => err.description(),StopDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StopDeploymentError::Unknown(ref cause) => cause
+                            StopDeploymentError::DeploymentAlreadyCompleted(ref cause) => cause,
+StopDeploymentError::DeploymentDoesNotExist(ref cause) => cause,
+StopDeploymentError::DeploymentIdRequired(ref cause) => cause,
+StopDeploymentError::InvalidDeploymentId(ref cause) => cause,
+StopDeploymentError::Validation(ref cause) => cause,
+StopDeploymentError::Credentials(ref err) => err.description(),
+StopDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StopDeploymentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3515,14 +4007,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateApplicationError {
                     
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
-///<p>The minimum number of required application names was not specified.</p>
-ApplicationNameRequired(String),
+///<p>An application with the specified name already exists with the applicable IAM user or AWS account.</p>
+ApplicationAlreadyExists(String),
 ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
 ApplicationDoesNotExist(String),
-///<p>An application with the specified name already exists with the applicable IAM user or AWS account.</p>
-ApplicationAlreadyExists(String),/// An error occurred dispatching the HTTP request
+///<p>The minimum number of required application names was not specified.</p>
+ApplicationNameRequired(String),
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3541,7 +4033,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ApplicationDoesNotExistException" => UpdateApplicationError::ApplicationDoesNotExist(String::from(error_message)),"InvalidApplicationNameException" => UpdateApplicationError::InvalidApplicationName(String::from(error_message)),"ApplicationNameRequiredException" => UpdateApplicationError::ApplicationNameRequired(String::from(error_message)),"ApplicationAlreadyExistsException" => UpdateApplicationError::ApplicationAlreadyExists(String::from(error_message)),"ValidationException" => UpdateApplicationError::Validation(error_message.to_string()),_ => UpdateApplicationError::Unknown(String::from(body))
+                                    "ApplicationAlreadyExistsException" => UpdateApplicationError::ApplicationAlreadyExists(String::from(error_message)),
+"ApplicationDoesNotExistException" => UpdateApplicationError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => UpdateApplicationError::ApplicationNameRequired(String::from(error_message)),
+"InvalidApplicationNameException" => UpdateApplicationError::InvalidApplicationName(String::from(error_message)),
+"ValidationException" => UpdateApplicationError::Validation(error_message.to_string()),
+_ => UpdateApplicationError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateApplicationError::Unknown(String::from(body))
@@ -3572,7 +4069,14 @@ Unknown(String)
                 impl Error for UpdateApplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateApplicationError::ApplicationDoesNotExist(ref cause) => cause,UpdateApplicationError::ApplicationAlreadyExists(ref cause) => cause,UpdateApplicationError::InvalidApplicationName(ref cause) => cause,UpdateApplicationError::ApplicationNameRequired(ref cause) => cause,UpdateApplicationError::Validation(ref cause) => cause,UpdateApplicationError::Credentials(ref err) => err.description(),UpdateApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateApplicationError::Unknown(ref cause) => cause
+                            UpdateApplicationError::ApplicationAlreadyExists(ref cause) => cause,
+UpdateApplicationError::ApplicationDoesNotExist(ref cause) => cause,
+UpdateApplicationError::ApplicationNameRequired(ref cause) => cause,
+UpdateApplicationError::InvalidApplicationName(ref cause) => cause,
+UpdateApplicationError::Validation(ref cause) => cause,
+UpdateApplicationError::Credentials(ref err) => err.description(),
+UpdateApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateApplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3580,44 +4084,44 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateDeploymentGroupError {
                     
-///<p>The deployment configuration name was specified in an invalid format.</p>
-InvalidDeploymentConfigName(String),
-///<p>The application name was specified in an invalid format.</p>
-InvalidApplicationName(String),
-///<p>The deployment group name was specified in an invalid format.</p>
-InvalidDeploymentGroupName(String),
+///<p>The maximum number of alarms for a deployment group (10) was exceeded.</p>
+AlarmsLimitExceeded(String),
 ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
 ApplicationDoesNotExist(String),
-///<p>The deployment group name was not specified.</p>
-DeploymentGroupNameRequired(String),
-///<p>The trigger was specified in an invalid format.</p>
-InvalidTriggerConfig(String),
 ///<p>The minimum number of required application names was not specified.</p>
 ApplicationNameRequired(String),
-///<p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
-InvalidAutoRollbackConfig(String),
+///<p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
+DeploymentConfigDoesNotExist(String),
+///<p>A deployment group with the specified name already exists with the applicable IAM user or AWS account.</p>
+DeploymentGroupAlreadyExists(String),
+///<p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
+DeploymentGroupDoesNotExist(String),
+///<p>The deployment group name was not specified.</p>
+DeploymentGroupNameRequired(String),
 ///<p>The format of the alarm configuration is invalid. Possible causes include:</p> <ul> <li> <p>The alarm list is null.</p> </li> <li> <p>The alarm object is null.</p> </li> <li> <p>The alarm name is empty or null or exceeds the 255 character limit.</p> </li> <li> <p>Two alarms with the same name have been specified.</p> </li> <li> <p>The alarm configuration is enabled but the alarm list is empty.</p> </li> </ul>
 InvalidAlarmConfig(String),
+///<p>The application name was specified in an invalid format.</p>
+InvalidApplicationName(String),
+///<p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
+InvalidAutoRollbackConfig(String),
 ///<p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
 InvalidAutoScalingGroup(String),
-///<p>The limit for lifecycle hooks was exceeded.</p>
-LifecycleHookLimitExceeded(String),
+///<p>The deployment configuration name was specified in an invalid format.</p>
+InvalidDeploymentConfigName(String),
+///<p>The deployment group name was specified in an invalid format.</p>
+InvalidDeploymentGroupName(String),
 ///<p>The tag was specified in an invalid format.</p>
 InvalidEC2Tag(String),
 ///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
 InvalidRole(String),
-///<p>A deployment group with the specified name already exists with the applicable IAM user or AWS account.</p>
-DeploymentGroupAlreadyExists(String),
 ///<p>The specified tag was specified in an invalid format.</p>
 InvalidTag(String),
-///<p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
-DeploymentConfigDoesNotExist(String),
-///<p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
-DeploymentGroupDoesNotExist(String),
+///<p>The trigger was specified in an invalid format.</p>
+InvalidTriggerConfig(String),
+///<p>The limit for lifecycle hooks was exceeded.</p>
+LifecycleHookLimitExceeded(String),
 ///<p>The maximum allowed number of triggers was exceeded.</p>
-TriggerTargetsLimitExceeded(String),
-///<p>The maximum number of alarms for a deployment group (10) was exceeded.</p>
-AlarmsLimitExceeded(String),/// An error occurred dispatching the HTTP request
+TriggerTargetsLimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3636,7 +4140,27 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidAlarmConfigException" => UpdateDeploymentGroupError::InvalidAlarmConfig(String::from(error_message)),"InvalidRoleException" => UpdateDeploymentGroupError::InvalidRole(String::from(error_message)),"ApplicationDoesNotExistException" => UpdateDeploymentGroupError::ApplicationDoesNotExist(String::from(error_message)),"DeploymentGroupNameRequiredException" => UpdateDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),"InvalidTriggerConfigException" => UpdateDeploymentGroupError::InvalidTriggerConfig(String::from(error_message)),"InvalidDeploymentConfigNameException" => UpdateDeploymentGroupError::InvalidDeploymentConfigName(String::from(error_message)),"ApplicationNameRequiredException" => UpdateDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),"InvalidEC2TagException" => UpdateDeploymentGroupError::InvalidEC2Tag(String::from(error_message)),"InvalidAutoRollbackConfigException" => UpdateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(error_message)),"InvalidApplicationNameException" => UpdateDeploymentGroupError::InvalidApplicationName(String::from(error_message)),"InvalidAutoScalingGroupException" => UpdateDeploymentGroupError::InvalidAutoScalingGroup(String::from(error_message)),"LifecycleHookLimitExceededException" => UpdateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(error_message)),"AlarmsLimitExceededException" => UpdateDeploymentGroupError::AlarmsLimitExceeded(String::from(error_message)),"InvalidDeploymentGroupNameException" => UpdateDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),"DeploymentGroupDoesNotExistException" => UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(error_message)),"DeploymentGroupAlreadyExistsException" => UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(error_message)),"DeploymentConfigDoesNotExistException" => UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(error_message)),"InvalidTagException" => UpdateDeploymentGroupError::InvalidTag(String::from(error_message)),"TriggerTargetsLimitExceededException" => UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(error_message)),"ValidationException" => UpdateDeploymentGroupError::Validation(error_message.to_string()),_ => UpdateDeploymentGroupError::Unknown(String::from(body))
+                                    "AlarmsLimitExceededException" => UpdateDeploymentGroupError::AlarmsLimitExceeded(String::from(error_message)),
+"ApplicationDoesNotExistException" => UpdateDeploymentGroupError::ApplicationDoesNotExist(String::from(error_message)),
+"ApplicationNameRequiredException" => UpdateDeploymentGroupError::ApplicationNameRequired(String::from(error_message)),
+"DeploymentConfigDoesNotExistException" => UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(error_message)),
+"DeploymentGroupAlreadyExistsException" => UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(error_message)),
+"DeploymentGroupDoesNotExistException" => UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(error_message)),
+"DeploymentGroupNameRequiredException" => UpdateDeploymentGroupError::DeploymentGroupNameRequired(String::from(error_message)),
+"InvalidAlarmConfigException" => UpdateDeploymentGroupError::InvalidAlarmConfig(String::from(error_message)),
+"InvalidApplicationNameException" => UpdateDeploymentGroupError::InvalidApplicationName(String::from(error_message)),
+"InvalidAutoRollbackConfigException" => UpdateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(error_message)),
+"InvalidAutoScalingGroupException" => UpdateDeploymentGroupError::InvalidAutoScalingGroup(String::from(error_message)),
+"InvalidDeploymentConfigNameException" => UpdateDeploymentGroupError::InvalidDeploymentConfigName(String::from(error_message)),
+"InvalidDeploymentGroupNameException" => UpdateDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
+"InvalidEC2TagException" => UpdateDeploymentGroupError::InvalidEC2Tag(String::from(error_message)),
+"InvalidRoleException" => UpdateDeploymentGroupError::InvalidRole(String::from(error_message)),
+"InvalidTagException" => UpdateDeploymentGroupError::InvalidTag(String::from(error_message)),
+"InvalidTriggerConfigException" => UpdateDeploymentGroupError::InvalidTriggerConfig(String::from(error_message)),
+"LifecycleHookLimitExceededException" => UpdateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(error_message)),
+"TriggerTargetsLimitExceededException" => UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(error_message)),
+"ValidationException" => UpdateDeploymentGroupError::Validation(error_message.to_string()),
+_ => UpdateDeploymentGroupError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateDeploymentGroupError::Unknown(String::from(body))
@@ -3667,7 +4191,29 @@ Unknown(String)
                 impl Error for UpdateDeploymentGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,UpdateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,UpdateDeploymentGroupError::InvalidTag(ref cause) => cause,UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(ref cause) => cause,UpdateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => cause,UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(ref cause) => cause,UpdateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => cause,UpdateDeploymentGroupError::ApplicationDoesNotExist(ref cause) => cause,UpdateDeploymentGroupError::InvalidAlarmConfig(ref cause) => cause,UpdateDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,UpdateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => cause,UpdateDeploymentGroupError::InvalidApplicationName(ref cause) => cause,UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(ref cause) => cause,UpdateDeploymentGroupError::InvalidAutoScalingGroup(ref cause) => cause,UpdateDeploymentGroupError::AlarmsLimitExceeded(ref cause) => cause,UpdateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,UpdateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,UpdateDeploymentGroupError::InvalidRole(ref cause) => cause,UpdateDeploymentGroupError::Validation(ref cause) => cause,UpdateDeploymentGroupError::Credentials(ref err) => err.description(),UpdateDeploymentGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateDeploymentGroupError::Unknown(ref cause) => cause
+                            UpdateDeploymentGroupError::AlarmsLimitExceeded(ref cause) => cause,
+UpdateDeploymentGroupError::ApplicationDoesNotExist(ref cause) => cause,
+UpdateDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,
+UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(ref cause) => cause,
+UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(ref cause) => cause,
+UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(ref cause) => cause,
+UpdateDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
+UpdateDeploymentGroupError::InvalidAlarmConfig(ref cause) => cause,
+UpdateDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
+UpdateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => cause,
+UpdateDeploymentGroupError::InvalidAutoScalingGroup(ref cause) => cause,
+UpdateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => cause,
+UpdateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
+UpdateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
+UpdateDeploymentGroupError::InvalidRole(ref cause) => cause,
+UpdateDeploymentGroupError::InvalidTag(ref cause) => cause,
+UpdateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,
+UpdateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => cause,
+UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,
+UpdateDeploymentGroupError::Validation(ref cause) => cause,
+UpdateDeploymentGroupError::Credentials(ref err) => err.description(),
+UpdateDeploymentGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateDeploymentGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }

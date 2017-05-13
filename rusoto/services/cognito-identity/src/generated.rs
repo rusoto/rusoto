@@ -538,18 +538,18 @@ pub type UnprocessedIdentityIdList = Vec<UnprocessedIdentityId>;
                 #[derive(Debug, PartialEq)]
                 pub enum CreateIdentityPoolError {
                     
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),
 ///<p>Thrown when the service encounters an error during processing the request.</p>
 InternalError(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
 ///<p>Thrown when the total number of user pools has exceeded a preset limit.</p>
 LimitExceeded(String),
-///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
 ///<p>Thrown when a user is not authorized to access the requested resource.</p>
 NotAuthorized(String),
 ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
-ResourceConflict(String),/// An error occurred dispatching the HTTP request
+ResourceConflict(String),
+///<p>Thrown when a request is throttled.</p>
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -568,7 +568,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "TooManyRequestsException" => CreateIdentityPoolError::TooManyRequests(String::from(error_message)),"NotAuthorizedException" => CreateIdentityPoolError::NotAuthorized(String::from(error_message)),"InternalErrorException" => CreateIdentityPoolError::InternalError(String::from(error_message)),"ResourceConflictException" => CreateIdentityPoolError::ResourceConflict(String::from(error_message)),"InvalidParameterException" => CreateIdentityPoolError::InvalidParameter(String::from(error_message)),"LimitExceededException" => CreateIdentityPoolError::LimitExceeded(String::from(error_message)),"ValidationException" => CreateIdentityPoolError::Validation(error_message.to_string()),_ => CreateIdentityPoolError::Unknown(String::from(body))
+                                    "InternalErrorException" => CreateIdentityPoolError::InternalError(String::from(error_message)),
+"InvalidParameterException" => CreateIdentityPoolError::InvalidParameter(String::from(error_message)),
+"LimitExceededException" => CreateIdentityPoolError::LimitExceeded(String::from(error_message)),
+"NotAuthorizedException" => CreateIdentityPoolError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => CreateIdentityPoolError::ResourceConflict(String::from(error_message)),
+"TooManyRequestsException" => CreateIdentityPoolError::TooManyRequests(String::from(error_message)),
+"ValidationException" => CreateIdentityPoolError::Validation(error_message.to_string()),
+_ => CreateIdentityPoolError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateIdentityPoolError::Unknown(String::from(body))
@@ -599,7 +606,16 @@ Unknown(String)
                 impl Error for CreateIdentityPoolError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateIdentityPoolError::TooManyRequests(ref cause) => cause,CreateIdentityPoolError::InvalidParameter(ref cause) => cause,CreateIdentityPoolError::ResourceConflict(ref cause) => cause,CreateIdentityPoolError::LimitExceeded(ref cause) => cause,CreateIdentityPoolError::NotAuthorized(ref cause) => cause,CreateIdentityPoolError::InternalError(ref cause) => cause,CreateIdentityPoolError::Validation(ref cause) => cause,CreateIdentityPoolError::Credentials(ref err) => err.description(),CreateIdentityPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateIdentityPoolError::Unknown(ref cause) => cause
+                            CreateIdentityPoolError::InternalError(ref cause) => cause,
+CreateIdentityPoolError::InvalidParameter(ref cause) => cause,
+CreateIdentityPoolError::LimitExceeded(ref cause) => cause,
+CreateIdentityPoolError::NotAuthorized(ref cause) => cause,
+CreateIdentityPoolError::ResourceConflict(ref cause) => cause,
+CreateIdentityPoolError::TooManyRequests(ref cause) => cause,
+CreateIdentityPoolError::Validation(ref cause) => cause,
+CreateIdentityPoolError::Credentials(ref err) => err.description(),
+CreateIdentityPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateIdentityPoolError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -631,7 +647,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "TooManyRequestsException" => DeleteIdentitiesError::TooManyRequests(String::from(error_message)),"InternalErrorException" => DeleteIdentitiesError::InternalError(String::from(error_message)),"InvalidParameterException" => DeleteIdentitiesError::InvalidParameter(String::from(error_message)),"ValidationException" => DeleteIdentitiesError::Validation(error_message.to_string()),_ => DeleteIdentitiesError::Unknown(String::from(body))
+                                    "InternalErrorException" => DeleteIdentitiesError::InternalError(String::from(error_message)),
+"InvalidParameterException" => DeleteIdentitiesError::InvalidParameter(String::from(error_message)),
+"TooManyRequestsException" => DeleteIdentitiesError::TooManyRequests(String::from(error_message)),
+"ValidationException" => DeleteIdentitiesError::Validation(error_message.to_string()),
+_ => DeleteIdentitiesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteIdentitiesError::Unknown(String::from(body))
@@ -662,7 +682,13 @@ Unknown(String)
                 impl Error for DeleteIdentitiesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteIdentitiesError::InternalError(ref cause) => cause,DeleteIdentitiesError::InvalidParameter(ref cause) => cause,DeleteIdentitiesError::TooManyRequests(ref cause) => cause,DeleteIdentitiesError::Validation(ref cause) => cause,DeleteIdentitiesError::Credentials(ref err) => err.description(),DeleteIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteIdentitiesError::Unknown(ref cause) => cause
+                            DeleteIdentitiesError::InternalError(ref cause) => cause,
+DeleteIdentitiesError::InvalidParameter(ref cause) => cause,
+DeleteIdentitiesError::TooManyRequests(ref cause) => cause,
+DeleteIdentitiesError::Validation(ref cause) => cause,
+DeleteIdentitiesError::Credentials(ref err) => err.description(),
+DeleteIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteIdentitiesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -670,14 +696,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteIdentityPoolError {
                     
-///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
-ResourceNotFound(String),
-///<p>Thrown when a user is not authorized to access the requested resource.</p>
-NotAuthorized(String),
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),
 ///<p>Thrown when the service encounters an error during processing the request.</p>
 InternalError(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
+///<p>Thrown when a user is not authorized to access the requested resource.</p>
+NotAuthorized(String),
+///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+ResourceNotFound(String),
 ///<p>Thrown when a request is throttled.</p>
 TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -698,7 +724,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotAuthorizedException" => DeleteIdentityPoolError::NotAuthorized(String::from(error_message)),"InvalidParameterException" => DeleteIdentityPoolError::InvalidParameter(String::from(error_message)),"InternalErrorException" => DeleteIdentityPoolError::InternalError(String::from(error_message)),"TooManyRequestsException" => DeleteIdentityPoolError::TooManyRequests(String::from(error_message)),"ResourceNotFoundException" => DeleteIdentityPoolError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeleteIdentityPoolError::Validation(error_message.to_string()),_ => DeleteIdentityPoolError::Unknown(String::from(body))
+                                    "InternalErrorException" => DeleteIdentityPoolError::InternalError(String::from(error_message)),
+"InvalidParameterException" => DeleteIdentityPoolError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => DeleteIdentityPoolError::NotAuthorized(String::from(error_message)),
+"ResourceNotFoundException" => DeleteIdentityPoolError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => DeleteIdentityPoolError::TooManyRequests(String::from(error_message)),
+"ValidationException" => DeleteIdentityPoolError::Validation(error_message.to_string()),
+_ => DeleteIdentityPoolError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteIdentityPoolError::Unknown(String::from(body))
@@ -729,7 +761,15 @@ Unknown(String)
                 impl Error for DeleteIdentityPoolError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteIdentityPoolError::InternalError(ref cause) => cause,DeleteIdentityPoolError::TooManyRequests(ref cause) => cause,DeleteIdentityPoolError::ResourceNotFound(ref cause) => cause,DeleteIdentityPoolError::InvalidParameter(ref cause) => cause,DeleteIdentityPoolError::NotAuthorized(ref cause) => cause,DeleteIdentityPoolError::Validation(ref cause) => cause,DeleteIdentityPoolError::Credentials(ref err) => err.description(),DeleteIdentityPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteIdentityPoolError::Unknown(ref cause) => cause
+                            DeleteIdentityPoolError::InternalError(ref cause) => cause,
+DeleteIdentityPoolError::InvalidParameter(ref cause) => cause,
+DeleteIdentityPoolError::NotAuthorized(ref cause) => cause,
+DeleteIdentityPoolError::ResourceNotFound(ref cause) => cause,
+DeleteIdentityPoolError::TooManyRequests(ref cause) => cause,
+DeleteIdentityPoolError::Validation(ref cause) => cause,
+DeleteIdentityPoolError::Credentials(ref err) => err.description(),
+DeleteIdentityPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteIdentityPoolError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -737,16 +777,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeIdentityError {
                     
+///<p>Thrown when the service encounters an error during processing the request.</p>
+InternalError(String),
 ///<p>Thrown for missing or bad input parameter(s).</p>
 InvalidParameter(String),
-///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
 ///<p>Thrown when a user is not authorized to access the requested resource.</p>
 NotAuthorized(String),
 ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
 ResourceNotFound(String),
-///<p>Thrown when the service encounters an error during processing the request.</p>
-InternalError(String),/// An error occurred dispatching the HTTP request
+///<p>Thrown when a request is throttled.</p>
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -765,7 +805,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeIdentityError::ResourceNotFound(String::from(error_message)),"InternalErrorException" => DescribeIdentityError::InternalError(String::from(error_message)),"NotAuthorizedException" => DescribeIdentityError::NotAuthorized(String::from(error_message)),"TooManyRequestsException" => DescribeIdentityError::TooManyRequests(String::from(error_message)),"InvalidParameterException" => DescribeIdentityError::InvalidParameter(String::from(error_message)),"ValidationException" => DescribeIdentityError::Validation(error_message.to_string()),_ => DescribeIdentityError::Unknown(String::from(body))
+                                    "InternalErrorException" => DescribeIdentityError::InternalError(String::from(error_message)),
+"InvalidParameterException" => DescribeIdentityError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => DescribeIdentityError::NotAuthorized(String::from(error_message)),
+"ResourceNotFoundException" => DescribeIdentityError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => DescribeIdentityError::TooManyRequests(String::from(error_message)),
+"ValidationException" => DescribeIdentityError::Validation(error_message.to_string()),
+_ => DescribeIdentityError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeIdentityError::Unknown(String::from(body))
@@ -796,7 +842,15 @@ Unknown(String)
                 impl Error for DescribeIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeIdentityError::InvalidParameter(ref cause) => cause,DescribeIdentityError::ResourceNotFound(ref cause) => cause,DescribeIdentityError::NotAuthorized(ref cause) => cause,DescribeIdentityError::InternalError(ref cause) => cause,DescribeIdentityError::TooManyRequests(ref cause) => cause,DescribeIdentityError::Validation(ref cause) => cause,DescribeIdentityError::Credentials(ref err) => err.description(),DescribeIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeIdentityError::Unknown(ref cause) => cause
+                            DescribeIdentityError::InternalError(ref cause) => cause,
+DescribeIdentityError::InvalidParameter(ref cause) => cause,
+DescribeIdentityError::NotAuthorized(ref cause) => cause,
+DescribeIdentityError::ResourceNotFound(ref cause) => cause,
+DescribeIdentityError::TooManyRequests(ref cause) => cause,
+DescribeIdentityError::Validation(ref cause) => cause,
+DescribeIdentityError::Credentials(ref err) => err.description(),
+DescribeIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -804,16 +858,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeIdentityPoolError {
                     
-///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
-///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
-ResourceNotFound(String),
 ///<p>Thrown when the service encounters an error during processing the request.</p>
 InternalError(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
 ///<p>Thrown when a user is not authorized to access the requested resource.</p>
 NotAuthorized(String),
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+ResourceNotFound(String),
+///<p>Thrown when a request is throttled.</p>
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -832,7 +886,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => DescribeIdentityPoolError::InvalidParameter(String::from(error_message)),"TooManyRequestsException" => DescribeIdentityPoolError::TooManyRequests(String::from(error_message)),"ResourceNotFoundException" => DescribeIdentityPoolError::ResourceNotFound(String::from(error_message)),"NotAuthorizedException" => DescribeIdentityPoolError::NotAuthorized(String::from(error_message)),"InternalErrorException" => DescribeIdentityPoolError::InternalError(String::from(error_message)),"ValidationException" => DescribeIdentityPoolError::Validation(error_message.to_string()),_ => DescribeIdentityPoolError::Unknown(String::from(body))
+                                    "InternalErrorException" => DescribeIdentityPoolError::InternalError(String::from(error_message)),
+"InvalidParameterException" => DescribeIdentityPoolError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => DescribeIdentityPoolError::NotAuthorized(String::from(error_message)),
+"ResourceNotFoundException" => DescribeIdentityPoolError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => DescribeIdentityPoolError::TooManyRequests(String::from(error_message)),
+"ValidationException" => DescribeIdentityPoolError::Validation(error_message.to_string()),
+_ => DescribeIdentityPoolError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeIdentityPoolError::Unknown(String::from(body))
@@ -863,7 +923,15 @@ Unknown(String)
                 impl Error for DescribeIdentityPoolError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeIdentityPoolError::ResourceNotFound(ref cause) => cause,DescribeIdentityPoolError::NotAuthorized(ref cause) => cause,DescribeIdentityPoolError::TooManyRequests(ref cause) => cause,DescribeIdentityPoolError::InvalidParameter(ref cause) => cause,DescribeIdentityPoolError::InternalError(ref cause) => cause,DescribeIdentityPoolError::Validation(ref cause) => cause,DescribeIdentityPoolError::Credentials(ref err) => err.description(),DescribeIdentityPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeIdentityPoolError::Unknown(ref cause) => cause
+                            DescribeIdentityPoolError::InternalError(ref cause) => cause,
+DescribeIdentityPoolError::InvalidParameter(ref cause) => cause,
+DescribeIdentityPoolError::NotAuthorized(ref cause) => cause,
+DescribeIdentityPoolError::ResourceNotFound(ref cause) => cause,
+DescribeIdentityPoolError::TooManyRequests(ref cause) => cause,
+DescribeIdentityPoolError::Validation(ref cause) => cause,
+DescribeIdentityPoolError::Credentials(ref err) => err.description(),
+DescribeIdentityPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeIdentityPoolError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -871,22 +939,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetCredentialsForIdentityError {
                     
-///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
 ///<p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
 ExternalService(String),
 ///<p>Thrown when the service encounters an error during processing the request.</p>
 InternalError(String),
+///<p>Thrown if the identity pool has no role associated for the given auth type (auth/unauth) or if the AssumeRole fails.</p>
+InvalidIdentityPoolConfiguration(String),
 ///<p>Thrown for missing or bad input parameter(s).</p>
 InvalidParameter(String),
+///<p>Thrown when a user is not authorized to access the requested resource.</p>
+NotAuthorized(String),
 ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
 ResourceConflict(String),
 ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
 ResourceNotFound(String),
-///<p>Thrown when a user is not authorized to access the requested resource.</p>
-NotAuthorized(String),
-///<p>Thrown if the identity pool has no role associated for the given auth type (auth/unauth) or if the AssumeRole fails.</p>
-InvalidIdentityPoolConfiguration(String),/// An error occurred dispatching the HTTP request
+///<p>Thrown when a request is throttled.</p>
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -905,7 +973,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalErrorException" => GetCredentialsForIdentityError::InternalError(String::from(error_message)),"InvalidIdentityPoolConfigurationException" => GetCredentialsForIdentityError::InvalidIdentityPoolConfiguration(String::from(error_message)),"ResourceNotFoundException" => GetCredentialsForIdentityError::ResourceNotFound(String::from(error_message)),"NotAuthorizedException" => GetCredentialsForIdentityError::NotAuthorized(String::from(error_message)),"InvalidParameterException" => GetCredentialsForIdentityError::InvalidParameter(String::from(error_message)),"ResourceConflictException" => GetCredentialsForIdentityError::ResourceConflict(String::from(error_message)),"TooManyRequestsException" => GetCredentialsForIdentityError::TooManyRequests(String::from(error_message)),"ExternalServiceException" => GetCredentialsForIdentityError::ExternalService(String::from(error_message)),"ValidationException" => GetCredentialsForIdentityError::Validation(error_message.to_string()),_ => GetCredentialsForIdentityError::Unknown(String::from(body))
+                                    "ExternalServiceException" => GetCredentialsForIdentityError::ExternalService(String::from(error_message)),
+"InternalErrorException" => GetCredentialsForIdentityError::InternalError(String::from(error_message)),
+"InvalidIdentityPoolConfigurationException" => GetCredentialsForIdentityError::InvalidIdentityPoolConfiguration(String::from(error_message)),
+"InvalidParameterException" => GetCredentialsForIdentityError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => GetCredentialsForIdentityError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => GetCredentialsForIdentityError::ResourceConflict(String::from(error_message)),
+"ResourceNotFoundException" => GetCredentialsForIdentityError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => GetCredentialsForIdentityError::TooManyRequests(String::from(error_message)),
+"ValidationException" => GetCredentialsForIdentityError::Validation(error_message.to_string()),
+_ => GetCredentialsForIdentityError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetCredentialsForIdentityError::Unknown(String::from(body))
@@ -936,7 +1013,18 @@ Unknown(String)
                 impl Error for GetCredentialsForIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetCredentialsForIdentityError::InvalidParameter(ref cause) => cause,GetCredentialsForIdentityError::ResourceConflict(ref cause) => cause,GetCredentialsForIdentityError::InvalidIdentityPoolConfiguration(ref cause) => cause,GetCredentialsForIdentityError::TooManyRequests(ref cause) => cause,GetCredentialsForIdentityError::ExternalService(ref cause) => cause,GetCredentialsForIdentityError::ResourceNotFound(ref cause) => cause,GetCredentialsForIdentityError::NotAuthorized(ref cause) => cause,GetCredentialsForIdentityError::InternalError(ref cause) => cause,GetCredentialsForIdentityError::Validation(ref cause) => cause,GetCredentialsForIdentityError::Credentials(ref err) => err.description(),GetCredentialsForIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetCredentialsForIdentityError::Unknown(ref cause) => cause
+                            GetCredentialsForIdentityError::ExternalService(ref cause) => cause,
+GetCredentialsForIdentityError::InternalError(ref cause) => cause,
+GetCredentialsForIdentityError::InvalidIdentityPoolConfiguration(ref cause) => cause,
+GetCredentialsForIdentityError::InvalidParameter(ref cause) => cause,
+GetCredentialsForIdentityError::NotAuthorized(ref cause) => cause,
+GetCredentialsForIdentityError::ResourceConflict(ref cause) => cause,
+GetCredentialsForIdentityError::ResourceNotFound(ref cause) => cause,
+GetCredentialsForIdentityError::TooManyRequests(ref cause) => cause,
+GetCredentialsForIdentityError::Validation(ref cause) => cause,
+GetCredentialsForIdentityError::Credentials(ref err) => err.description(),
+GetCredentialsForIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetCredentialsForIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -944,22 +1032,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetIdError {
                     
+///<p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
+ExternalService(String),
+///<p>Thrown when the service encounters an error during processing the request.</p>
+InternalError(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
+///<p>Thrown when the total number of user pools has exceeded a preset limit.</p>
+LimitExceeded(String),
+///<p>Thrown when a user is not authorized to access the requested resource.</p>
+NotAuthorized(String),
 ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
 ResourceConflict(String),
 ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
 ResourceNotFound(String),
 ///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
-///<p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
-ExternalService(String),
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),
-///<p>Thrown when a user is not authorized to access the requested resource.</p>
-NotAuthorized(String),
-///<p>Thrown when the total number of user pools has exceeded a preset limit.</p>
-LimitExceeded(String),
-///<p>Thrown when the service encounters an error during processing the request.</p>
-InternalError(String),/// An error occurred dispatching the HTTP request
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -978,7 +1066,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotAuthorizedException" => GetIdError::NotAuthorized(String::from(error_message)),"ResourceNotFoundException" => GetIdError::ResourceNotFound(String::from(error_message)),"InvalidParameterException" => GetIdError::InvalidParameter(String::from(error_message)),"LimitExceededException" => GetIdError::LimitExceeded(String::from(error_message)),"ExternalServiceException" => GetIdError::ExternalService(String::from(error_message)),"InternalErrorException" => GetIdError::InternalError(String::from(error_message)),"TooManyRequestsException" => GetIdError::TooManyRequests(String::from(error_message)),"ResourceConflictException" => GetIdError::ResourceConflict(String::from(error_message)),"ValidationException" => GetIdError::Validation(error_message.to_string()),_ => GetIdError::Unknown(String::from(body))
+                                    "ExternalServiceException" => GetIdError::ExternalService(String::from(error_message)),
+"InternalErrorException" => GetIdError::InternalError(String::from(error_message)),
+"InvalidParameterException" => GetIdError::InvalidParameter(String::from(error_message)),
+"LimitExceededException" => GetIdError::LimitExceeded(String::from(error_message)),
+"NotAuthorizedException" => GetIdError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => GetIdError::ResourceConflict(String::from(error_message)),
+"ResourceNotFoundException" => GetIdError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => GetIdError::TooManyRequests(String::from(error_message)),
+"ValidationException" => GetIdError::Validation(error_message.to_string()),
+_ => GetIdError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetIdError::Unknown(String::from(body))
@@ -1009,7 +1106,18 @@ Unknown(String)
                 impl Error for GetIdError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetIdError::TooManyRequests(ref cause) => cause,GetIdError::ExternalService(ref cause) => cause,GetIdError::NotAuthorized(ref cause) => cause,GetIdError::ResourceConflict(ref cause) => cause,GetIdError::InvalidParameter(ref cause) => cause,GetIdError::InternalError(ref cause) => cause,GetIdError::ResourceNotFound(ref cause) => cause,GetIdError::LimitExceeded(ref cause) => cause,GetIdError::Validation(ref cause) => cause,GetIdError::Credentials(ref err) => err.description(),GetIdError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetIdError::Unknown(ref cause) => cause
+                            GetIdError::ExternalService(ref cause) => cause,
+GetIdError::InternalError(ref cause) => cause,
+GetIdError::InvalidParameter(ref cause) => cause,
+GetIdError::LimitExceeded(ref cause) => cause,
+GetIdError::NotAuthorized(ref cause) => cause,
+GetIdError::ResourceConflict(ref cause) => cause,
+GetIdError::ResourceNotFound(ref cause) => cause,
+GetIdError::TooManyRequests(ref cause) => cause,
+GetIdError::Validation(ref cause) => cause,
+GetIdError::Credentials(ref err) => err.description(),
+GetIdError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetIdError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1017,18 +1125,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetIdentityPoolRolesError {
                     
+///<p>Thrown when the service encounters an error during processing the request.</p>
+InternalError(String),
 ///<p>Thrown for missing or bad input parameter(s).</p>
 InvalidParameter(String),
-///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
-///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
-ResourceConflict(String),
 ///<p>Thrown when a user is not authorized to access the requested resource.</p>
 NotAuthorized(String),
+///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+ResourceConflict(String),
 ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
 ResourceNotFound(String),
-///<p>Thrown when the service encounters an error during processing the request.</p>
-InternalError(String),/// An error occurred dispatching the HTTP request
+///<p>Thrown when a request is throttled.</p>
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1047,7 +1155,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => GetIdentityPoolRolesError::InvalidParameter(String::from(error_message)),"ResourceNotFoundException" => GetIdentityPoolRolesError::ResourceNotFound(String::from(error_message)),"InternalErrorException" => GetIdentityPoolRolesError::InternalError(String::from(error_message)),"NotAuthorizedException" => GetIdentityPoolRolesError::NotAuthorized(String::from(error_message)),"ResourceConflictException" => GetIdentityPoolRolesError::ResourceConflict(String::from(error_message)),"TooManyRequestsException" => GetIdentityPoolRolesError::TooManyRequests(String::from(error_message)),"ValidationException" => GetIdentityPoolRolesError::Validation(error_message.to_string()),_ => GetIdentityPoolRolesError::Unknown(String::from(body))
+                                    "InternalErrorException" => GetIdentityPoolRolesError::InternalError(String::from(error_message)),
+"InvalidParameterException" => GetIdentityPoolRolesError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => GetIdentityPoolRolesError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => GetIdentityPoolRolesError::ResourceConflict(String::from(error_message)),
+"ResourceNotFoundException" => GetIdentityPoolRolesError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => GetIdentityPoolRolesError::TooManyRequests(String::from(error_message)),
+"ValidationException" => GetIdentityPoolRolesError::Validation(error_message.to_string()),
+_ => GetIdentityPoolRolesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetIdentityPoolRolesError::Unknown(String::from(body))
@@ -1078,7 +1193,16 @@ Unknown(String)
                 impl Error for GetIdentityPoolRolesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetIdentityPoolRolesError::NotAuthorized(ref cause) => cause,GetIdentityPoolRolesError::TooManyRequests(ref cause) => cause,GetIdentityPoolRolesError::ResourceConflict(ref cause) => cause,GetIdentityPoolRolesError::InternalError(ref cause) => cause,GetIdentityPoolRolesError::ResourceNotFound(ref cause) => cause,GetIdentityPoolRolesError::InvalidParameter(ref cause) => cause,GetIdentityPoolRolesError::Validation(ref cause) => cause,GetIdentityPoolRolesError::Credentials(ref err) => err.description(),GetIdentityPoolRolesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetIdentityPoolRolesError::Unknown(ref cause) => cause
+                            GetIdentityPoolRolesError::InternalError(ref cause) => cause,
+GetIdentityPoolRolesError::InvalidParameter(ref cause) => cause,
+GetIdentityPoolRolesError::NotAuthorized(ref cause) => cause,
+GetIdentityPoolRolesError::ResourceConflict(ref cause) => cause,
+GetIdentityPoolRolesError::ResourceNotFound(ref cause) => cause,
+GetIdentityPoolRolesError::TooManyRequests(ref cause) => cause,
+GetIdentityPoolRolesError::Validation(ref cause) => cause,
+GetIdentityPoolRolesError::Credentials(ref err) => err.description(),
+GetIdentityPoolRolesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetIdentityPoolRolesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1086,20 +1210,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetOpenIdTokenError {
                     
+///<p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
+ExternalService(String),
+///<p>Thrown when the service encounters an error during processing the request.</p>
+InternalError(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
+///<p>Thrown when a user is not authorized to access the requested resource.</p>
+NotAuthorized(String),
+///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+ResourceConflict(String),
 ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
 ResourceNotFound(String),
 ///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
-///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
-ResourceConflict(String),
-///<p>Thrown when the service encounters an error during processing the request.</p>
-InternalError(String),
-///<p>Thrown when a user is not authorized to access the requested resource.</p>
-NotAuthorized(String),
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),
-///<p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
-ExternalService(String),/// An error occurred dispatching the HTTP request
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1118,7 +1242,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ExternalServiceException" => GetOpenIdTokenError::ExternalService(String::from(error_message)),"ResourceNotFoundException" => GetOpenIdTokenError::ResourceNotFound(String::from(error_message)),"NotAuthorizedException" => GetOpenIdTokenError::NotAuthorized(String::from(error_message)),"ResourceConflictException" => GetOpenIdTokenError::ResourceConflict(String::from(error_message)),"InvalidParameterException" => GetOpenIdTokenError::InvalidParameter(String::from(error_message)),"TooManyRequestsException" => GetOpenIdTokenError::TooManyRequests(String::from(error_message)),"InternalErrorException" => GetOpenIdTokenError::InternalError(String::from(error_message)),"ValidationException" => GetOpenIdTokenError::Validation(error_message.to_string()),_ => GetOpenIdTokenError::Unknown(String::from(body))
+                                    "ExternalServiceException" => GetOpenIdTokenError::ExternalService(String::from(error_message)),
+"InternalErrorException" => GetOpenIdTokenError::InternalError(String::from(error_message)),
+"InvalidParameterException" => GetOpenIdTokenError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => GetOpenIdTokenError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => GetOpenIdTokenError::ResourceConflict(String::from(error_message)),
+"ResourceNotFoundException" => GetOpenIdTokenError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => GetOpenIdTokenError::TooManyRequests(String::from(error_message)),
+"ValidationException" => GetOpenIdTokenError::Validation(error_message.to_string()),
+_ => GetOpenIdTokenError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetOpenIdTokenError::Unknown(String::from(body))
@@ -1149,7 +1281,17 @@ Unknown(String)
                 impl Error for GetOpenIdTokenError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetOpenIdTokenError::ResourceConflict(ref cause) => cause,GetOpenIdTokenError::ExternalService(ref cause) => cause,GetOpenIdTokenError::InternalError(ref cause) => cause,GetOpenIdTokenError::InvalidParameter(ref cause) => cause,GetOpenIdTokenError::ResourceNotFound(ref cause) => cause,GetOpenIdTokenError::TooManyRequests(ref cause) => cause,GetOpenIdTokenError::NotAuthorized(ref cause) => cause,GetOpenIdTokenError::Validation(ref cause) => cause,GetOpenIdTokenError::Credentials(ref err) => err.description(),GetOpenIdTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetOpenIdTokenError::Unknown(ref cause) => cause
+                            GetOpenIdTokenError::ExternalService(ref cause) => cause,
+GetOpenIdTokenError::InternalError(ref cause) => cause,
+GetOpenIdTokenError::InvalidParameter(ref cause) => cause,
+GetOpenIdTokenError::NotAuthorized(ref cause) => cause,
+GetOpenIdTokenError::ResourceConflict(ref cause) => cause,
+GetOpenIdTokenError::ResourceNotFound(ref cause) => cause,
+GetOpenIdTokenError::TooManyRequests(ref cause) => cause,
+GetOpenIdTokenError::Validation(ref cause) => cause,
+GetOpenIdTokenError::Credentials(ref err) => err.description(),
+GetOpenIdTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetOpenIdTokenError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1157,20 +1299,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetOpenIdTokenForDeveloperIdentityError {
                     
+///<p>The provided developer user identifier is already registered with Cognito under a different identity ID.</p>
+DeveloperUserAlreadyRegistered(String),
+///<p>Thrown when the service encounters an error during processing the request.</p>
+InternalError(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
 ///<p>Thrown when a user is not authorized to access the requested resource.</p>
 NotAuthorized(String),
 ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
 ResourceConflict(String),
-///<p>The provided developer user identifier is already registered with Cognito under a different identity ID.</p>
-DeveloperUserAlreadyRegistered(String),
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),
-///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
 ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
 ResourceNotFound(String),
-///<p>Thrown when the service encounters an error during processing the request.</p>
-InternalError(String),/// An error occurred dispatching the HTTP request
+///<p>Thrown when a request is throttled.</p>
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1189,7 +1331,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => GetOpenIdTokenForDeveloperIdentityError::InvalidParameter(String::from(error_message)),"ResourceConflictException" => GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(String::from(error_message)),"DeveloperUserAlreadyRegisteredException" => GetOpenIdTokenForDeveloperIdentityError::DeveloperUserAlreadyRegistered(String::from(error_message)),"ResourceNotFoundException" => GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(String::from(error_message)),"NotAuthorizedException" => GetOpenIdTokenForDeveloperIdentityError::NotAuthorized(String::from(error_message)),"InternalErrorException" => GetOpenIdTokenForDeveloperIdentityError::InternalError(String::from(error_message)),"TooManyRequestsException" => GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(String::from(error_message)),"ValidationException" => GetOpenIdTokenForDeveloperIdentityError::Validation(error_message.to_string()),_ => GetOpenIdTokenForDeveloperIdentityError::Unknown(String::from(body))
+                                    "DeveloperUserAlreadyRegisteredException" => GetOpenIdTokenForDeveloperIdentityError::DeveloperUserAlreadyRegistered(String::from(error_message)),
+"InternalErrorException" => GetOpenIdTokenForDeveloperIdentityError::InternalError(String::from(error_message)),
+"InvalidParameterException" => GetOpenIdTokenForDeveloperIdentityError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => GetOpenIdTokenForDeveloperIdentityError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(String::from(error_message)),
+"ResourceNotFoundException" => GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(String::from(error_message)),
+"ValidationException" => GetOpenIdTokenForDeveloperIdentityError::Validation(error_message.to_string()),
+_ => GetOpenIdTokenForDeveloperIdentityError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetOpenIdTokenForDeveloperIdentityError::Unknown(String::from(body))
@@ -1220,7 +1370,17 @@ Unknown(String)
                 impl Error for GetOpenIdTokenForDeveloperIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetOpenIdTokenForDeveloperIdentityError::InvalidParameter(ref cause) => cause,GetOpenIdTokenForDeveloperIdentityError::DeveloperUserAlreadyRegistered(ref cause) => cause,GetOpenIdTokenForDeveloperIdentityError::NotAuthorized(ref cause) => cause,GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(ref cause) => cause,GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(ref cause) => cause,GetOpenIdTokenForDeveloperIdentityError::InternalError(ref cause) => cause,GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(ref cause) => cause,GetOpenIdTokenForDeveloperIdentityError::Validation(ref cause) => cause,GetOpenIdTokenForDeveloperIdentityError::Credentials(ref err) => err.description(),GetOpenIdTokenForDeveloperIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetOpenIdTokenForDeveloperIdentityError::Unknown(ref cause) => cause
+                            GetOpenIdTokenForDeveloperIdentityError::DeveloperUserAlreadyRegistered(ref cause) => cause,
+GetOpenIdTokenForDeveloperIdentityError::InternalError(ref cause) => cause,
+GetOpenIdTokenForDeveloperIdentityError::InvalidParameter(ref cause) => cause,
+GetOpenIdTokenForDeveloperIdentityError::NotAuthorized(ref cause) => cause,
+GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(ref cause) => cause,
+GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(ref cause) => cause,
+GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(ref cause) => cause,
+GetOpenIdTokenForDeveloperIdentityError::Validation(ref cause) => cause,
+GetOpenIdTokenForDeveloperIdentityError::Credentials(ref err) => err.description(),
+GetOpenIdTokenForDeveloperIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetOpenIdTokenForDeveloperIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1228,16 +1388,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListIdentitiesError {
                     
-///<p>Thrown when a user is not authorized to access the requested resource.</p>
-NotAuthorized(String),
+///<p>Thrown when the service encounters an error during processing the request.</p>
+InternalError(String),
 ///<p>Thrown for missing or bad input parameter(s).</p>
 InvalidParameter(String),
+///<p>Thrown when a user is not authorized to access the requested resource.</p>
+NotAuthorized(String),
 ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
 ResourceNotFound(String),
 ///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
-///<p>Thrown when the service encounters an error during processing the request.</p>
-InternalError(String),/// An error occurred dispatching the HTTP request
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1256,7 +1416,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "TooManyRequestsException" => ListIdentitiesError::TooManyRequests(String::from(error_message)),"InvalidParameterException" => ListIdentitiesError::InvalidParameter(String::from(error_message)),"ResourceNotFoundException" => ListIdentitiesError::ResourceNotFound(String::from(error_message)),"InternalErrorException" => ListIdentitiesError::InternalError(String::from(error_message)),"NotAuthorizedException" => ListIdentitiesError::NotAuthorized(String::from(error_message)),"ValidationException" => ListIdentitiesError::Validation(error_message.to_string()),_ => ListIdentitiesError::Unknown(String::from(body))
+                                    "InternalErrorException" => ListIdentitiesError::InternalError(String::from(error_message)),
+"InvalidParameterException" => ListIdentitiesError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => ListIdentitiesError::NotAuthorized(String::from(error_message)),
+"ResourceNotFoundException" => ListIdentitiesError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => ListIdentitiesError::TooManyRequests(String::from(error_message)),
+"ValidationException" => ListIdentitiesError::Validation(error_message.to_string()),
+_ => ListIdentitiesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListIdentitiesError::Unknown(String::from(body))
@@ -1287,7 +1453,15 @@ Unknown(String)
                 impl Error for ListIdentitiesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListIdentitiesError::NotAuthorized(ref cause) => cause,ListIdentitiesError::ResourceNotFound(ref cause) => cause,ListIdentitiesError::InternalError(ref cause) => cause,ListIdentitiesError::TooManyRequests(ref cause) => cause,ListIdentitiesError::InvalidParameter(ref cause) => cause,ListIdentitiesError::Validation(ref cause) => cause,ListIdentitiesError::Credentials(ref err) => err.description(),ListIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListIdentitiesError::Unknown(ref cause) => cause
+                            ListIdentitiesError::InternalError(ref cause) => cause,
+ListIdentitiesError::InvalidParameter(ref cause) => cause,
+ListIdentitiesError::NotAuthorized(ref cause) => cause,
+ListIdentitiesError::ResourceNotFound(ref cause) => cause,
+ListIdentitiesError::TooManyRequests(ref cause) => cause,
+ListIdentitiesError::Validation(ref cause) => cause,
+ListIdentitiesError::Credentials(ref err) => err.description(),
+ListIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListIdentitiesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1295,14 +1469,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListIdentityPoolsError {
                     
-///<p>Thrown when a user is not authorized to access the requested resource.</p>
-NotAuthorized(String),
+///<p>Thrown when the service encounters an error during processing the request.</p>
+InternalError(String),
 ///<p>Thrown for missing or bad input parameter(s).</p>
 InvalidParameter(String),
+///<p>Thrown when a user is not authorized to access the requested resource.</p>
+NotAuthorized(String),
 ///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
-///<p>Thrown when the service encounters an error during processing the request.</p>
-InternalError(String),/// An error occurred dispatching the HTTP request
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1321,7 +1495,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => ListIdentityPoolsError::InvalidParameter(String::from(error_message)),"InternalErrorException" => ListIdentityPoolsError::InternalError(String::from(error_message)),"NotAuthorizedException" => ListIdentityPoolsError::NotAuthorized(String::from(error_message)),"TooManyRequestsException" => ListIdentityPoolsError::TooManyRequests(String::from(error_message)),"ValidationException" => ListIdentityPoolsError::Validation(error_message.to_string()),_ => ListIdentityPoolsError::Unknown(String::from(body))
+                                    "InternalErrorException" => ListIdentityPoolsError::InternalError(String::from(error_message)),
+"InvalidParameterException" => ListIdentityPoolsError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => ListIdentityPoolsError::NotAuthorized(String::from(error_message)),
+"TooManyRequestsException" => ListIdentityPoolsError::TooManyRequests(String::from(error_message)),
+"ValidationException" => ListIdentityPoolsError::Validation(error_message.to_string()),
+_ => ListIdentityPoolsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListIdentityPoolsError::Unknown(String::from(body))
@@ -1352,7 +1531,14 @@ Unknown(String)
                 impl Error for ListIdentityPoolsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListIdentityPoolsError::NotAuthorized(ref cause) => cause,ListIdentityPoolsError::InternalError(ref cause) => cause,ListIdentityPoolsError::InvalidParameter(ref cause) => cause,ListIdentityPoolsError::TooManyRequests(ref cause) => cause,ListIdentityPoolsError::Validation(ref cause) => cause,ListIdentityPoolsError::Credentials(ref err) => err.description(),ListIdentityPoolsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListIdentityPoolsError::Unknown(ref cause) => cause
+                            ListIdentityPoolsError::InternalError(ref cause) => cause,
+ListIdentityPoolsError::InvalidParameter(ref cause) => cause,
+ListIdentityPoolsError::NotAuthorized(ref cause) => cause,
+ListIdentityPoolsError::TooManyRequests(ref cause) => cause,
+ListIdentityPoolsError::Validation(ref cause) => cause,
+ListIdentityPoolsError::Credentials(ref err) => err.description(),
+ListIdentityPoolsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListIdentityPoolsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1360,16 +1546,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum LookupDeveloperIdentityError {
                     
-///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
-ResourceNotFound(String),
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),
-///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
-ResourceConflict(String),
-///<p>Thrown when a user is not authorized to access the requested resource.</p>
-NotAuthorized(String),
 ///<p>Thrown when the service encounters an error during processing the request.</p>
 InternalError(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
+///<p>Thrown when a user is not authorized to access the requested resource.</p>
+NotAuthorized(String),
+///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+ResourceConflict(String),
+///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+ResourceNotFound(String),
 ///<p>Thrown when a request is throttled.</p>
 TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1390,7 +1576,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalErrorException" => LookupDeveloperIdentityError::InternalError(String::from(error_message)),"NotAuthorizedException" => LookupDeveloperIdentityError::NotAuthorized(String::from(error_message)),"ResourceNotFoundException" => LookupDeveloperIdentityError::ResourceNotFound(String::from(error_message)),"InvalidParameterException" => LookupDeveloperIdentityError::InvalidParameter(String::from(error_message)),"ResourceConflictException" => LookupDeveloperIdentityError::ResourceConflict(String::from(error_message)),"TooManyRequestsException" => LookupDeveloperIdentityError::TooManyRequests(String::from(error_message)),"ValidationException" => LookupDeveloperIdentityError::Validation(error_message.to_string()),_ => LookupDeveloperIdentityError::Unknown(String::from(body))
+                                    "InternalErrorException" => LookupDeveloperIdentityError::InternalError(String::from(error_message)),
+"InvalidParameterException" => LookupDeveloperIdentityError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => LookupDeveloperIdentityError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => LookupDeveloperIdentityError::ResourceConflict(String::from(error_message)),
+"ResourceNotFoundException" => LookupDeveloperIdentityError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => LookupDeveloperIdentityError::TooManyRequests(String::from(error_message)),
+"ValidationException" => LookupDeveloperIdentityError::Validation(error_message.to_string()),
+_ => LookupDeveloperIdentityError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => LookupDeveloperIdentityError::Unknown(String::from(body))
@@ -1421,7 +1614,16 @@ Unknown(String)
                 impl Error for LookupDeveloperIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            LookupDeveloperIdentityError::InternalError(ref cause) => cause,LookupDeveloperIdentityError::InvalidParameter(ref cause) => cause,LookupDeveloperIdentityError::ResourceConflict(ref cause) => cause,LookupDeveloperIdentityError::NotAuthorized(ref cause) => cause,LookupDeveloperIdentityError::TooManyRequests(ref cause) => cause,LookupDeveloperIdentityError::ResourceNotFound(ref cause) => cause,LookupDeveloperIdentityError::Validation(ref cause) => cause,LookupDeveloperIdentityError::Credentials(ref err) => err.description(),LookupDeveloperIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),LookupDeveloperIdentityError::Unknown(ref cause) => cause
+                            LookupDeveloperIdentityError::InternalError(ref cause) => cause,
+LookupDeveloperIdentityError::InvalidParameter(ref cause) => cause,
+LookupDeveloperIdentityError::NotAuthorized(ref cause) => cause,
+LookupDeveloperIdentityError::ResourceConflict(ref cause) => cause,
+LookupDeveloperIdentityError::ResourceNotFound(ref cause) => cause,
+LookupDeveloperIdentityError::TooManyRequests(ref cause) => cause,
+LookupDeveloperIdentityError::Validation(ref cause) => cause,
+LookupDeveloperIdentityError::Credentials(ref err) => err.description(),
+LookupDeveloperIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+LookupDeveloperIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1429,18 +1631,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum MergeDeveloperIdentitiesError {
                     
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),
-///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
-ResourceNotFound(String),
 ///<p>Thrown when the service encounters an error during processing the request.</p>
 InternalError(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
+///<p>Thrown when a user is not authorized to access the requested resource.</p>
+NotAuthorized(String),
 ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
 ResourceConflict(String),
+///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+ResourceNotFound(String),
 ///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
-///<p>Thrown when a user is not authorized to access the requested resource.</p>
-NotAuthorized(String),/// An error occurred dispatching the HTTP request
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1459,7 +1661,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceConflictException" => MergeDeveloperIdentitiesError::ResourceConflict(String::from(error_message)),"NotAuthorizedException" => MergeDeveloperIdentitiesError::NotAuthorized(String::from(error_message)),"TooManyRequestsException" => MergeDeveloperIdentitiesError::TooManyRequests(String::from(error_message)),"InvalidParameterException" => MergeDeveloperIdentitiesError::InvalidParameter(String::from(error_message)),"ResourceNotFoundException" => MergeDeveloperIdentitiesError::ResourceNotFound(String::from(error_message)),"InternalErrorException" => MergeDeveloperIdentitiesError::InternalError(String::from(error_message)),"ValidationException" => MergeDeveloperIdentitiesError::Validation(error_message.to_string()),_ => MergeDeveloperIdentitiesError::Unknown(String::from(body))
+                                    "InternalErrorException" => MergeDeveloperIdentitiesError::InternalError(String::from(error_message)),
+"InvalidParameterException" => MergeDeveloperIdentitiesError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => MergeDeveloperIdentitiesError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => MergeDeveloperIdentitiesError::ResourceConflict(String::from(error_message)),
+"ResourceNotFoundException" => MergeDeveloperIdentitiesError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => MergeDeveloperIdentitiesError::TooManyRequests(String::from(error_message)),
+"ValidationException" => MergeDeveloperIdentitiesError::Validation(error_message.to_string()),
+_ => MergeDeveloperIdentitiesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => MergeDeveloperIdentitiesError::Unknown(String::from(body))
@@ -1490,7 +1699,16 @@ Unknown(String)
                 impl Error for MergeDeveloperIdentitiesError {
                     fn description(&self) -> &str {
                         match *self {
-                            MergeDeveloperIdentitiesError::ResourceConflict(ref cause) => cause,MergeDeveloperIdentitiesError::NotAuthorized(ref cause) => cause,MergeDeveloperIdentitiesError::InternalError(ref cause) => cause,MergeDeveloperIdentitiesError::ResourceNotFound(ref cause) => cause,MergeDeveloperIdentitiesError::InvalidParameter(ref cause) => cause,MergeDeveloperIdentitiesError::TooManyRequests(ref cause) => cause,MergeDeveloperIdentitiesError::Validation(ref cause) => cause,MergeDeveloperIdentitiesError::Credentials(ref err) => err.description(),MergeDeveloperIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),MergeDeveloperIdentitiesError::Unknown(ref cause) => cause
+                            MergeDeveloperIdentitiesError::InternalError(ref cause) => cause,
+MergeDeveloperIdentitiesError::InvalidParameter(ref cause) => cause,
+MergeDeveloperIdentitiesError::NotAuthorized(ref cause) => cause,
+MergeDeveloperIdentitiesError::ResourceConflict(ref cause) => cause,
+MergeDeveloperIdentitiesError::ResourceNotFound(ref cause) => cause,
+MergeDeveloperIdentitiesError::TooManyRequests(ref cause) => cause,
+MergeDeveloperIdentitiesError::Validation(ref cause) => cause,
+MergeDeveloperIdentitiesError::Credentials(ref err) => err.description(),
+MergeDeveloperIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+MergeDeveloperIdentitiesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1500,18 +1718,18 @@ Unknown(String)
                     
 ///<p>Thrown if there are parallel requests to modify a resource.</p>
 ConcurrentModification(String),
-///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
-ResourceNotFound(String),
+///<p>Thrown when the service encounters an error during processing the request.</p>
+InternalError(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
 ///<p>Thrown when a user is not authorized to access the requested resource.</p>
 NotAuthorized(String),
 ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
 ResourceConflict(String),
+///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+ResourceNotFound(String),
 ///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),
-///<p>Thrown when the service encounters an error during processing the request.</p>
-InternalError(String),/// An error occurred dispatching the HTTP request
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1530,7 +1748,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "TooManyRequestsException" => SetIdentityPoolRolesError::TooManyRequests(String::from(error_message)),"NotAuthorizedException" => SetIdentityPoolRolesError::NotAuthorized(String::from(error_message)),"InvalidParameterException" => SetIdentityPoolRolesError::InvalidParameter(String::from(error_message)),"InternalErrorException" => SetIdentityPoolRolesError::InternalError(String::from(error_message)),"ConcurrentModificationException" => SetIdentityPoolRolesError::ConcurrentModification(String::from(error_message)),"ResourceConflictException" => SetIdentityPoolRolesError::ResourceConflict(String::from(error_message)),"ResourceNotFoundException" => SetIdentityPoolRolesError::ResourceNotFound(String::from(error_message)),"ValidationException" => SetIdentityPoolRolesError::Validation(error_message.to_string()),_ => SetIdentityPoolRolesError::Unknown(String::from(body))
+                                    "ConcurrentModificationException" => SetIdentityPoolRolesError::ConcurrentModification(String::from(error_message)),
+"InternalErrorException" => SetIdentityPoolRolesError::InternalError(String::from(error_message)),
+"InvalidParameterException" => SetIdentityPoolRolesError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => SetIdentityPoolRolesError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => SetIdentityPoolRolesError::ResourceConflict(String::from(error_message)),
+"ResourceNotFoundException" => SetIdentityPoolRolesError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => SetIdentityPoolRolesError::TooManyRequests(String::from(error_message)),
+"ValidationException" => SetIdentityPoolRolesError::Validation(error_message.to_string()),
+_ => SetIdentityPoolRolesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SetIdentityPoolRolesError::Unknown(String::from(body))
@@ -1561,7 +1787,17 @@ Unknown(String)
                 impl Error for SetIdentityPoolRolesError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetIdentityPoolRolesError::ConcurrentModification(ref cause) => cause,SetIdentityPoolRolesError::ResourceNotFound(ref cause) => cause,SetIdentityPoolRolesError::NotAuthorized(ref cause) => cause,SetIdentityPoolRolesError::TooManyRequests(ref cause) => cause,SetIdentityPoolRolesError::InternalError(ref cause) => cause,SetIdentityPoolRolesError::InvalidParameter(ref cause) => cause,SetIdentityPoolRolesError::ResourceConflict(ref cause) => cause,SetIdentityPoolRolesError::Validation(ref cause) => cause,SetIdentityPoolRolesError::Credentials(ref err) => err.description(),SetIdentityPoolRolesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetIdentityPoolRolesError::Unknown(ref cause) => cause
+                            SetIdentityPoolRolesError::ConcurrentModification(ref cause) => cause,
+SetIdentityPoolRolesError::InternalError(ref cause) => cause,
+SetIdentityPoolRolesError::InvalidParameter(ref cause) => cause,
+SetIdentityPoolRolesError::NotAuthorized(ref cause) => cause,
+SetIdentityPoolRolesError::ResourceConflict(ref cause) => cause,
+SetIdentityPoolRolesError::ResourceNotFound(ref cause) => cause,
+SetIdentityPoolRolesError::TooManyRequests(ref cause) => cause,
+SetIdentityPoolRolesError::Validation(ref cause) => cause,
+SetIdentityPoolRolesError::Credentials(ref err) => err.description(),
+SetIdentityPoolRolesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetIdentityPoolRolesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1569,18 +1805,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UnlinkDeveloperIdentityError {
                     
-///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
-ResourceNotFound(String),
 ///<p>Thrown when the service encounters an error during processing the request.</p>
 InternalError(String),
-///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
-ResourceConflict(String),
-///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
 ///<p>Thrown when a user is not authorized to access the requested resource.</p>
 NotAuthorized(String),
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+ResourceConflict(String),
+///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+ResourceNotFound(String),
+///<p>Thrown when a request is throttled.</p>
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1599,7 +1835,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => UnlinkDeveloperIdentityError::ResourceNotFound(String::from(error_message)),"NotAuthorizedException" => UnlinkDeveloperIdentityError::NotAuthorized(String::from(error_message)),"ResourceConflictException" => UnlinkDeveloperIdentityError::ResourceConflict(String::from(error_message)),"TooManyRequestsException" => UnlinkDeveloperIdentityError::TooManyRequests(String::from(error_message)),"InvalidParameterException" => UnlinkDeveloperIdentityError::InvalidParameter(String::from(error_message)),"InternalErrorException" => UnlinkDeveloperIdentityError::InternalError(String::from(error_message)),"ValidationException" => UnlinkDeveloperIdentityError::Validation(error_message.to_string()),_ => UnlinkDeveloperIdentityError::Unknown(String::from(body))
+                                    "InternalErrorException" => UnlinkDeveloperIdentityError::InternalError(String::from(error_message)),
+"InvalidParameterException" => UnlinkDeveloperIdentityError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => UnlinkDeveloperIdentityError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => UnlinkDeveloperIdentityError::ResourceConflict(String::from(error_message)),
+"ResourceNotFoundException" => UnlinkDeveloperIdentityError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => UnlinkDeveloperIdentityError::TooManyRequests(String::from(error_message)),
+"ValidationException" => UnlinkDeveloperIdentityError::Validation(error_message.to_string()),
+_ => UnlinkDeveloperIdentityError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UnlinkDeveloperIdentityError::Unknown(String::from(body))
@@ -1630,7 +1873,16 @@ Unknown(String)
                 impl Error for UnlinkDeveloperIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            UnlinkDeveloperIdentityError::TooManyRequests(ref cause) => cause,UnlinkDeveloperIdentityError::ResourceNotFound(ref cause) => cause,UnlinkDeveloperIdentityError::ResourceConflict(ref cause) => cause,UnlinkDeveloperIdentityError::NotAuthorized(ref cause) => cause,UnlinkDeveloperIdentityError::InternalError(ref cause) => cause,UnlinkDeveloperIdentityError::InvalidParameter(ref cause) => cause,UnlinkDeveloperIdentityError::Validation(ref cause) => cause,UnlinkDeveloperIdentityError::Credentials(ref err) => err.description(),UnlinkDeveloperIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UnlinkDeveloperIdentityError::Unknown(ref cause) => cause
+                            UnlinkDeveloperIdentityError::InternalError(ref cause) => cause,
+UnlinkDeveloperIdentityError::InvalidParameter(ref cause) => cause,
+UnlinkDeveloperIdentityError::NotAuthorized(ref cause) => cause,
+UnlinkDeveloperIdentityError::ResourceConflict(ref cause) => cause,
+UnlinkDeveloperIdentityError::ResourceNotFound(ref cause) => cause,
+UnlinkDeveloperIdentityError::TooManyRequests(ref cause) => cause,
+UnlinkDeveloperIdentityError::Validation(ref cause) => cause,
+UnlinkDeveloperIdentityError::Credentials(ref err) => err.description(),
+UnlinkDeveloperIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UnlinkDeveloperIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1638,20 +1890,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UnlinkIdentityError {
                     
-///<p>Thrown when a user is not authorized to access the requested resource.</p>
-NotAuthorized(String),
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),
-///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
-ResourceConflict(String),
 ///<p>An exception thrown when a dependent service such as Facebook or Twitter is not responding</p>
 ExternalService(String),
-///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
 ///<p>Thrown when the service encounters an error during processing the request.</p>
 InternalError(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
+///<p>Thrown when a user is not authorized to access the requested resource.</p>
+NotAuthorized(String),
+///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
+ResourceConflict(String),
 ///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
-ResourceNotFound(String),/// An error occurred dispatching the HTTP request
+ResourceNotFound(String),
+///<p>Thrown when a request is throttled.</p>
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1670,7 +1922,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotAuthorizedException" => UnlinkIdentityError::NotAuthorized(String::from(error_message)),"ResourceConflictException" => UnlinkIdentityError::ResourceConflict(String::from(error_message)),"ExternalServiceException" => UnlinkIdentityError::ExternalService(String::from(error_message)),"InvalidParameterException" => UnlinkIdentityError::InvalidParameter(String::from(error_message)),"InternalErrorException" => UnlinkIdentityError::InternalError(String::from(error_message)),"ResourceNotFoundException" => UnlinkIdentityError::ResourceNotFound(String::from(error_message)),"TooManyRequestsException" => UnlinkIdentityError::TooManyRequests(String::from(error_message)),"ValidationException" => UnlinkIdentityError::Validation(error_message.to_string()),_ => UnlinkIdentityError::Unknown(String::from(body))
+                                    "ExternalServiceException" => UnlinkIdentityError::ExternalService(String::from(error_message)),
+"InternalErrorException" => UnlinkIdentityError::InternalError(String::from(error_message)),
+"InvalidParameterException" => UnlinkIdentityError::InvalidParameter(String::from(error_message)),
+"NotAuthorizedException" => UnlinkIdentityError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => UnlinkIdentityError::ResourceConflict(String::from(error_message)),
+"ResourceNotFoundException" => UnlinkIdentityError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => UnlinkIdentityError::TooManyRequests(String::from(error_message)),
+"ValidationException" => UnlinkIdentityError::Validation(error_message.to_string()),
+_ => UnlinkIdentityError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UnlinkIdentityError::Unknown(String::from(body))
@@ -1701,7 +1961,17 @@ Unknown(String)
                 impl Error for UnlinkIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            UnlinkIdentityError::ResourceNotFound(ref cause) => cause,UnlinkIdentityError::InvalidParameter(ref cause) => cause,UnlinkIdentityError::TooManyRequests(ref cause) => cause,UnlinkIdentityError::ResourceConflict(ref cause) => cause,UnlinkIdentityError::InternalError(ref cause) => cause,UnlinkIdentityError::NotAuthorized(ref cause) => cause,UnlinkIdentityError::ExternalService(ref cause) => cause,UnlinkIdentityError::Validation(ref cause) => cause,UnlinkIdentityError::Credentials(ref err) => err.description(),UnlinkIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UnlinkIdentityError::Unknown(ref cause) => cause
+                            UnlinkIdentityError::ExternalService(ref cause) => cause,
+UnlinkIdentityError::InternalError(ref cause) => cause,
+UnlinkIdentityError::InvalidParameter(ref cause) => cause,
+UnlinkIdentityError::NotAuthorized(ref cause) => cause,
+UnlinkIdentityError::ResourceConflict(ref cause) => cause,
+UnlinkIdentityError::ResourceNotFound(ref cause) => cause,
+UnlinkIdentityError::TooManyRequests(ref cause) => cause,
+UnlinkIdentityError::Validation(ref cause) => cause,
+UnlinkIdentityError::Credentials(ref err) => err.description(),
+UnlinkIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UnlinkIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1709,22 +1979,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateIdentityPoolError {
                     
+///<p>Thrown if there are parallel requests to modify a resource.</p>
+ConcurrentModification(String),
 ///<p>Thrown when the service encounters an error during processing the request.</p>
 InternalError(String),
+///<p>Thrown for missing or bad input parameter(s).</p>
+InvalidParameter(String),
 ///<p>Thrown when the total number of user pools has exceeded a preset limit.</p>
 LimitExceeded(String),
 ///<p>Thrown when a user is not authorized to access the requested resource.</p>
 NotAuthorized(String),
-///<p>Thrown when a request is throttled.</p>
-TooManyRequests(String),
-///<p>Thrown if there are parallel requests to modify a resource.</p>
-ConcurrentModification(String),
-///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
-ResourceNotFound(String),
 ///<p>Thrown when a user tries to use a login which is already linked to another account.</p>
 ResourceConflict(String),
-///<p>Thrown for missing or bad input parameter(s).</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+///<p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+ResourceNotFound(String),
+///<p>Thrown when a request is throttled.</p>
+TooManyRequests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1743,7 +2013,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "TooManyRequestsException" => UpdateIdentityPoolError::TooManyRequests(String::from(error_message)),"InvalidParameterException" => UpdateIdentityPoolError::InvalidParameter(String::from(error_message)),"NotAuthorizedException" => UpdateIdentityPoolError::NotAuthorized(String::from(error_message)),"ConcurrentModificationException" => UpdateIdentityPoolError::ConcurrentModification(String::from(error_message)),"ResourceNotFoundException" => UpdateIdentityPoolError::ResourceNotFound(String::from(error_message)),"ResourceConflictException" => UpdateIdentityPoolError::ResourceConflict(String::from(error_message)),"LimitExceededException" => UpdateIdentityPoolError::LimitExceeded(String::from(error_message)),"InternalErrorException" => UpdateIdentityPoolError::InternalError(String::from(error_message)),"ValidationException" => UpdateIdentityPoolError::Validation(error_message.to_string()),_ => UpdateIdentityPoolError::Unknown(String::from(body))
+                                    "ConcurrentModificationException" => UpdateIdentityPoolError::ConcurrentModification(String::from(error_message)),
+"InternalErrorException" => UpdateIdentityPoolError::InternalError(String::from(error_message)),
+"InvalidParameterException" => UpdateIdentityPoolError::InvalidParameter(String::from(error_message)),
+"LimitExceededException" => UpdateIdentityPoolError::LimitExceeded(String::from(error_message)),
+"NotAuthorizedException" => UpdateIdentityPoolError::NotAuthorized(String::from(error_message)),
+"ResourceConflictException" => UpdateIdentityPoolError::ResourceConflict(String::from(error_message)),
+"ResourceNotFoundException" => UpdateIdentityPoolError::ResourceNotFound(String::from(error_message)),
+"TooManyRequestsException" => UpdateIdentityPoolError::TooManyRequests(String::from(error_message)),
+"ValidationException" => UpdateIdentityPoolError::Validation(error_message.to_string()),
+_ => UpdateIdentityPoolError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateIdentityPoolError::Unknown(String::from(body))
@@ -1774,7 +2053,18 @@ Unknown(String)
                 impl Error for UpdateIdentityPoolError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateIdentityPoolError::ConcurrentModification(ref cause) => cause,UpdateIdentityPoolError::NotAuthorized(ref cause) => cause,UpdateIdentityPoolError::LimitExceeded(ref cause) => cause,UpdateIdentityPoolError::InternalError(ref cause) => cause,UpdateIdentityPoolError::TooManyRequests(ref cause) => cause,UpdateIdentityPoolError::InvalidParameter(ref cause) => cause,UpdateIdentityPoolError::ResourceConflict(ref cause) => cause,UpdateIdentityPoolError::ResourceNotFound(ref cause) => cause,UpdateIdentityPoolError::Validation(ref cause) => cause,UpdateIdentityPoolError::Credentials(ref err) => err.description(),UpdateIdentityPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateIdentityPoolError::Unknown(ref cause) => cause
+                            UpdateIdentityPoolError::ConcurrentModification(ref cause) => cause,
+UpdateIdentityPoolError::InternalError(ref cause) => cause,
+UpdateIdentityPoolError::InvalidParameter(ref cause) => cause,
+UpdateIdentityPoolError::LimitExceeded(ref cause) => cause,
+UpdateIdentityPoolError::NotAuthorized(ref cause) => cause,
+UpdateIdentityPoolError::ResourceConflict(ref cause) => cause,
+UpdateIdentityPoolError::ResourceNotFound(ref cause) => cause,
+UpdateIdentityPoolError::TooManyRequests(ref cause) => cause,
+UpdateIdentityPoolError::Validation(ref cause) => cause,
+UpdateIdentityPoolError::Credentials(ref err) => err.description(),
+UpdateIdentityPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateIdentityPoolError::Unknown(ref cause) => cause
                         }
                     }
                  }

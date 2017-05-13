@@ -2579,7 +2579,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => AssignInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => AssignInstanceError::Validation(error_message.to_string()),_ => AssignInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => AssignInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => AssignInstanceError::Validation(error_message.to_string()),
+_ => AssignInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AssignInstanceError::Unknown(String::from(body))
@@ -2610,7 +2612,11 @@ Unknown(String)
                 impl Error for AssignInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssignInstanceError::ResourceNotFound(ref cause) => cause,AssignInstanceError::Validation(ref cause) => cause,AssignInstanceError::Credentials(ref err) => err.description(),AssignInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssignInstanceError::Unknown(ref cause) => cause
+                            AssignInstanceError::ResourceNotFound(ref cause) => cause,
+AssignInstanceError::Validation(ref cause) => cause,
+AssignInstanceError::Credentials(ref err) => err.description(),
+AssignInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssignInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2638,7 +2644,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => AssignVolumeError::ResourceNotFound(String::from(error_message)),"ValidationException" => AssignVolumeError::Validation(error_message.to_string()),_ => AssignVolumeError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => AssignVolumeError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => AssignVolumeError::Validation(error_message.to_string()),
+_ => AssignVolumeError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AssignVolumeError::Unknown(String::from(body))
@@ -2669,7 +2677,11 @@ Unknown(String)
                 impl Error for AssignVolumeError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssignVolumeError::ResourceNotFound(ref cause) => cause,AssignVolumeError::Validation(ref cause) => cause,AssignVolumeError::Credentials(ref err) => err.description(),AssignVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssignVolumeError::Unknown(ref cause) => cause
+                            AssignVolumeError::ResourceNotFound(ref cause) => cause,
+AssignVolumeError::Validation(ref cause) => cause,
+AssignVolumeError::Credentials(ref err) => err.description(),
+AssignVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssignVolumeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2697,7 +2709,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => AssociateElasticIpError::ResourceNotFound(String::from(error_message)),"ValidationException" => AssociateElasticIpError::Validation(error_message.to_string()),_ => AssociateElasticIpError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => AssociateElasticIpError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => AssociateElasticIpError::Validation(error_message.to_string()),
+_ => AssociateElasticIpError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AssociateElasticIpError::Unknown(String::from(body))
@@ -2728,7 +2742,11 @@ Unknown(String)
                 impl Error for AssociateElasticIpError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssociateElasticIpError::ResourceNotFound(ref cause) => cause,AssociateElasticIpError::Validation(ref cause) => cause,AssociateElasticIpError::Credentials(ref err) => err.description(),AssociateElasticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssociateElasticIpError::Unknown(ref cause) => cause
+                            AssociateElasticIpError::ResourceNotFound(ref cause) => cause,
+AssociateElasticIpError::Validation(ref cause) => cause,
+AssociateElasticIpError::Credentials(ref err) => err.description(),
+AssociateElasticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssociateElasticIpError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2756,7 +2774,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => AttachElasticLoadBalancerError::ResourceNotFound(String::from(error_message)),"ValidationException" => AttachElasticLoadBalancerError::Validation(error_message.to_string()),_ => AttachElasticLoadBalancerError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => AttachElasticLoadBalancerError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => AttachElasticLoadBalancerError::Validation(error_message.to_string()),
+_ => AttachElasticLoadBalancerError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AttachElasticLoadBalancerError::Unknown(String::from(body))
@@ -2787,7 +2807,11 @@ Unknown(String)
                 impl Error for AttachElasticLoadBalancerError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachElasticLoadBalancerError::ResourceNotFound(ref cause) => cause,AttachElasticLoadBalancerError::Validation(ref cause) => cause,AttachElasticLoadBalancerError::Credentials(ref err) => err.description(),AttachElasticLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachElasticLoadBalancerError::Unknown(ref cause) => cause
+                            AttachElasticLoadBalancerError::ResourceNotFound(ref cause) => cause,
+AttachElasticLoadBalancerError::Validation(ref cause) => cause,
+AttachElasticLoadBalancerError::Credentials(ref err) => err.description(),
+AttachElasticLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachElasticLoadBalancerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2815,7 +2839,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => CloneStackError::ResourceNotFound(String::from(error_message)),"ValidationException" => CloneStackError::Validation(error_message.to_string()),_ => CloneStackError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => CloneStackError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => CloneStackError::Validation(error_message.to_string()),
+_ => CloneStackError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CloneStackError::Unknown(String::from(body))
@@ -2846,7 +2872,11 @@ Unknown(String)
                 impl Error for CloneStackError {
                     fn description(&self) -> &str {
                         match *self {
-                            CloneStackError::ResourceNotFound(ref cause) => cause,CloneStackError::Validation(ref cause) => cause,CloneStackError::Credentials(ref err) => err.description(),CloneStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CloneStackError::Unknown(ref cause) => cause
+                            CloneStackError::ResourceNotFound(ref cause) => cause,
+CloneStackError::Validation(ref cause) => cause,
+CloneStackError::Credentials(ref err) => err.description(),
+CloneStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CloneStackError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2874,7 +2904,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => CreateAppError::ResourceNotFound(String::from(error_message)),"ValidationException" => CreateAppError::Validation(error_message.to_string()),_ => CreateAppError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => CreateAppError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => CreateAppError::Validation(error_message.to_string()),
+_ => CreateAppError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateAppError::Unknown(String::from(body))
@@ -2905,7 +2937,11 @@ Unknown(String)
                 impl Error for CreateAppError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateAppError::ResourceNotFound(ref cause) => cause,CreateAppError::Validation(ref cause) => cause,CreateAppError::Credentials(ref err) => err.description(),CreateAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateAppError::Unknown(ref cause) => cause
+                            CreateAppError::ResourceNotFound(ref cause) => cause,
+CreateAppError::Validation(ref cause) => cause,
+CreateAppError::Credentials(ref err) => err.description(),
+CreateAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateAppError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2933,7 +2969,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => CreateDeploymentError::ResourceNotFound(String::from(error_message)),"ValidationException" => CreateDeploymentError::Validation(error_message.to_string()),_ => CreateDeploymentError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => CreateDeploymentError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => CreateDeploymentError::Validation(error_message.to_string()),
+_ => CreateDeploymentError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateDeploymentError::Unknown(String::from(body))
@@ -2964,7 +3002,11 @@ Unknown(String)
                 impl Error for CreateDeploymentError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDeploymentError::ResourceNotFound(ref cause) => cause,CreateDeploymentError::Validation(ref cause) => cause,CreateDeploymentError::Credentials(ref err) => err.description(),CreateDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDeploymentError::Unknown(ref cause) => cause
+                            CreateDeploymentError::ResourceNotFound(ref cause) => cause,
+CreateDeploymentError::Validation(ref cause) => cause,
+CreateDeploymentError::Credentials(ref err) => err.description(),
+CreateDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDeploymentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2992,7 +3034,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => CreateInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => CreateInstanceError::Validation(error_message.to_string()),_ => CreateInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => CreateInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => CreateInstanceError::Validation(error_message.to_string()),
+_ => CreateInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateInstanceError::Unknown(String::from(body))
@@ -3023,7 +3067,11 @@ Unknown(String)
                 impl Error for CreateInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateInstanceError::ResourceNotFound(ref cause) => cause,CreateInstanceError::Validation(ref cause) => cause,CreateInstanceError::Credentials(ref err) => err.description(),CreateInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateInstanceError::Unknown(ref cause) => cause
+                            CreateInstanceError::ResourceNotFound(ref cause) => cause,
+CreateInstanceError::Validation(ref cause) => cause,
+CreateInstanceError::Credentials(ref err) => err.description(),
+CreateInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3051,7 +3099,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => CreateLayerError::ResourceNotFound(String::from(error_message)),"ValidationException" => CreateLayerError::Validation(error_message.to_string()),_ => CreateLayerError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => CreateLayerError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => CreateLayerError::Validation(error_message.to_string()),
+_ => CreateLayerError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateLayerError::Unknown(String::from(body))
@@ -3082,7 +3132,11 @@ Unknown(String)
                 impl Error for CreateLayerError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateLayerError::ResourceNotFound(ref cause) => cause,CreateLayerError::Validation(ref cause) => cause,CreateLayerError::Credentials(ref err) => err.description(),CreateLayerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateLayerError::Unknown(ref cause) => cause
+                            CreateLayerError::ResourceNotFound(ref cause) => cause,
+CreateLayerError::Validation(ref cause) => cause,
+CreateLayerError::Credentials(ref err) => err.description(),
+CreateLayerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateLayerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3108,7 +3162,8 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ValidationException" => CreateStackError::Validation(error_message.to_string()),_ => CreateStackError::Unknown(String::from(body))
+                                    "ValidationException" => CreateStackError::Validation(error_message.to_string()),
+_ => CreateStackError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateStackError::Unknown(String::from(body))
@@ -3139,7 +3194,10 @@ Unknown(String)
                 impl Error for CreateStackError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateStackError::Validation(ref cause) => cause,CreateStackError::Credentials(ref err) => err.description(),CreateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateStackError::Unknown(ref cause) => cause
+                            CreateStackError::Validation(ref cause) => cause,
+CreateStackError::Credentials(ref err) => err.description(),
+CreateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateStackError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3165,7 +3223,8 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ValidationException" => CreateUserProfileError::Validation(error_message.to_string()),_ => CreateUserProfileError::Unknown(String::from(body))
+                                    "ValidationException" => CreateUserProfileError::Validation(error_message.to_string()),
+_ => CreateUserProfileError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateUserProfileError::Unknown(String::from(body))
@@ -3196,7 +3255,10 @@ Unknown(String)
                 impl Error for CreateUserProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateUserProfileError::Validation(ref cause) => cause,CreateUserProfileError::Credentials(ref err) => err.description(),CreateUserProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateUserProfileError::Unknown(ref cause) => cause
+                            CreateUserProfileError::Validation(ref cause) => cause,
+CreateUserProfileError::Credentials(ref err) => err.description(),
+CreateUserProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateUserProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3224,7 +3286,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DeleteAppError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeleteAppError::Validation(error_message.to_string()),_ => DeleteAppError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DeleteAppError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeleteAppError::Validation(error_message.to_string()),
+_ => DeleteAppError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteAppError::Unknown(String::from(body))
@@ -3255,7 +3319,11 @@ Unknown(String)
                 impl Error for DeleteAppError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAppError::ResourceNotFound(ref cause) => cause,DeleteAppError::Validation(ref cause) => cause,DeleteAppError::Credentials(ref err) => err.description(),DeleteAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAppError::Unknown(ref cause) => cause
+                            DeleteAppError::ResourceNotFound(ref cause) => cause,
+DeleteAppError::Validation(ref cause) => cause,
+DeleteAppError::Credentials(ref err) => err.description(),
+DeleteAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAppError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3283,7 +3351,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DeleteInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeleteInstanceError::Validation(error_message.to_string()),_ => DeleteInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DeleteInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeleteInstanceError::Validation(error_message.to_string()),
+_ => DeleteInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteInstanceError::Unknown(String::from(body))
@@ -3314,7 +3384,11 @@ Unknown(String)
                 impl Error for DeleteInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteInstanceError::ResourceNotFound(ref cause) => cause,DeleteInstanceError::Validation(ref cause) => cause,DeleteInstanceError::Credentials(ref err) => err.description(),DeleteInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteInstanceError::Unknown(ref cause) => cause
+                            DeleteInstanceError::ResourceNotFound(ref cause) => cause,
+DeleteInstanceError::Validation(ref cause) => cause,
+DeleteInstanceError::Credentials(ref err) => err.description(),
+DeleteInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3342,7 +3416,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DeleteLayerError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeleteLayerError::Validation(error_message.to_string()),_ => DeleteLayerError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DeleteLayerError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeleteLayerError::Validation(error_message.to_string()),
+_ => DeleteLayerError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteLayerError::Unknown(String::from(body))
@@ -3373,7 +3449,11 @@ Unknown(String)
                 impl Error for DeleteLayerError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteLayerError::ResourceNotFound(ref cause) => cause,DeleteLayerError::Validation(ref cause) => cause,DeleteLayerError::Credentials(ref err) => err.description(),DeleteLayerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteLayerError::Unknown(ref cause) => cause
+                            DeleteLayerError::ResourceNotFound(ref cause) => cause,
+DeleteLayerError::Validation(ref cause) => cause,
+DeleteLayerError::Credentials(ref err) => err.description(),
+DeleteLayerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteLayerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3401,7 +3481,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DeleteStackError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeleteStackError::Validation(error_message.to_string()),_ => DeleteStackError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DeleteStackError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeleteStackError::Validation(error_message.to_string()),
+_ => DeleteStackError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteStackError::Unknown(String::from(body))
@@ -3432,7 +3514,11 @@ Unknown(String)
                 impl Error for DeleteStackError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteStackError::ResourceNotFound(ref cause) => cause,DeleteStackError::Validation(ref cause) => cause,DeleteStackError::Credentials(ref err) => err.description(),DeleteStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteStackError::Unknown(ref cause) => cause
+                            DeleteStackError::ResourceNotFound(ref cause) => cause,
+DeleteStackError::Validation(ref cause) => cause,
+DeleteStackError::Credentials(ref err) => err.description(),
+DeleteStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteStackError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3460,7 +3546,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DeleteUserProfileError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeleteUserProfileError::Validation(error_message.to_string()),_ => DeleteUserProfileError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DeleteUserProfileError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeleteUserProfileError::Validation(error_message.to_string()),
+_ => DeleteUserProfileError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteUserProfileError::Unknown(String::from(body))
@@ -3491,7 +3579,11 @@ Unknown(String)
                 impl Error for DeleteUserProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteUserProfileError::ResourceNotFound(ref cause) => cause,DeleteUserProfileError::Validation(ref cause) => cause,DeleteUserProfileError::Credentials(ref err) => err.description(),DeleteUserProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteUserProfileError::Unknown(ref cause) => cause
+                            DeleteUserProfileError::ResourceNotFound(ref cause) => cause,
+DeleteUserProfileError::Validation(ref cause) => cause,
+DeleteUserProfileError::Credentials(ref err) => err.description(),
+DeleteUserProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteUserProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3519,7 +3611,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DeregisterEcsClusterError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeregisterEcsClusterError::Validation(error_message.to_string()),_ => DeregisterEcsClusterError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DeregisterEcsClusterError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeregisterEcsClusterError::Validation(error_message.to_string()),
+_ => DeregisterEcsClusterError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeregisterEcsClusterError::Unknown(String::from(body))
@@ -3550,7 +3644,11 @@ Unknown(String)
                 impl Error for DeregisterEcsClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeregisterEcsClusterError::ResourceNotFound(ref cause) => cause,DeregisterEcsClusterError::Validation(ref cause) => cause,DeregisterEcsClusterError::Credentials(ref err) => err.description(),DeregisterEcsClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeregisterEcsClusterError::Unknown(ref cause) => cause
+                            DeregisterEcsClusterError::ResourceNotFound(ref cause) => cause,
+DeregisterEcsClusterError::Validation(ref cause) => cause,
+DeregisterEcsClusterError::Credentials(ref err) => err.description(),
+DeregisterEcsClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeregisterEcsClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3578,7 +3676,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DeregisterElasticIpError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeregisterElasticIpError::Validation(error_message.to_string()),_ => DeregisterElasticIpError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DeregisterElasticIpError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeregisterElasticIpError::Validation(error_message.to_string()),
+_ => DeregisterElasticIpError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeregisterElasticIpError::Unknown(String::from(body))
@@ -3609,7 +3709,11 @@ Unknown(String)
                 impl Error for DeregisterElasticIpError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeregisterElasticIpError::ResourceNotFound(ref cause) => cause,DeregisterElasticIpError::Validation(ref cause) => cause,DeregisterElasticIpError::Credentials(ref err) => err.description(),DeregisterElasticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeregisterElasticIpError::Unknown(ref cause) => cause
+                            DeregisterElasticIpError::ResourceNotFound(ref cause) => cause,
+DeregisterElasticIpError::Validation(ref cause) => cause,
+DeregisterElasticIpError::Credentials(ref err) => err.description(),
+DeregisterElasticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeregisterElasticIpError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3637,7 +3741,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DeregisterInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeregisterInstanceError::Validation(error_message.to_string()),_ => DeregisterInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DeregisterInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeregisterInstanceError::Validation(error_message.to_string()),
+_ => DeregisterInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeregisterInstanceError::Unknown(String::from(body))
@@ -3668,7 +3774,11 @@ Unknown(String)
                 impl Error for DeregisterInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeregisterInstanceError::ResourceNotFound(ref cause) => cause,DeregisterInstanceError::Validation(ref cause) => cause,DeregisterInstanceError::Credentials(ref err) => err.description(),DeregisterInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeregisterInstanceError::Unknown(ref cause) => cause
+                            DeregisterInstanceError::ResourceNotFound(ref cause) => cause,
+DeregisterInstanceError::Validation(ref cause) => cause,
+DeregisterInstanceError::Credentials(ref err) => err.description(),
+DeregisterInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeregisterInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3696,7 +3806,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DeregisterRdsDbInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeregisterRdsDbInstanceError::Validation(error_message.to_string()),_ => DeregisterRdsDbInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DeregisterRdsDbInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeregisterRdsDbInstanceError::Validation(error_message.to_string()),
+_ => DeregisterRdsDbInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeregisterRdsDbInstanceError::Unknown(String::from(body))
@@ -3727,7 +3839,11 @@ Unknown(String)
                 impl Error for DeregisterRdsDbInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeregisterRdsDbInstanceError::ResourceNotFound(ref cause) => cause,DeregisterRdsDbInstanceError::Validation(ref cause) => cause,DeregisterRdsDbInstanceError::Credentials(ref err) => err.description(),DeregisterRdsDbInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeregisterRdsDbInstanceError::Unknown(ref cause) => cause
+                            DeregisterRdsDbInstanceError::ResourceNotFound(ref cause) => cause,
+DeregisterRdsDbInstanceError::Validation(ref cause) => cause,
+DeregisterRdsDbInstanceError::Credentials(ref err) => err.description(),
+DeregisterRdsDbInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeregisterRdsDbInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3755,7 +3871,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DeregisterVolumeError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeregisterVolumeError::Validation(error_message.to_string()),_ => DeregisterVolumeError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DeregisterVolumeError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeregisterVolumeError::Validation(error_message.to_string()),
+_ => DeregisterVolumeError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeregisterVolumeError::Unknown(String::from(body))
@@ -3786,7 +3904,11 @@ Unknown(String)
                 impl Error for DeregisterVolumeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeregisterVolumeError::ResourceNotFound(ref cause) => cause,DeregisterVolumeError::Validation(ref cause) => cause,DeregisterVolumeError::Credentials(ref err) => err.description(),DeregisterVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeregisterVolumeError::Unknown(ref cause) => cause
+                            DeregisterVolumeError::ResourceNotFound(ref cause) => cause,
+DeregisterVolumeError::Validation(ref cause) => cause,
+DeregisterVolumeError::Credentials(ref err) => err.description(),
+DeregisterVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeregisterVolumeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3814,7 +3936,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeAgentVersionsError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeAgentVersionsError::Validation(error_message.to_string()),_ => DescribeAgentVersionsError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeAgentVersionsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeAgentVersionsError::Validation(error_message.to_string()),
+_ => DescribeAgentVersionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeAgentVersionsError::Unknown(String::from(body))
@@ -3845,7 +3969,11 @@ Unknown(String)
                 impl Error for DescribeAgentVersionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAgentVersionsError::ResourceNotFound(ref cause) => cause,DescribeAgentVersionsError::Validation(ref cause) => cause,DescribeAgentVersionsError::Credentials(ref err) => err.description(),DescribeAgentVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAgentVersionsError::Unknown(ref cause) => cause
+                            DescribeAgentVersionsError::ResourceNotFound(ref cause) => cause,
+DescribeAgentVersionsError::Validation(ref cause) => cause,
+DescribeAgentVersionsError::Credentials(ref err) => err.description(),
+DescribeAgentVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAgentVersionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3873,7 +4001,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeAppsError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeAppsError::Validation(error_message.to_string()),_ => DescribeAppsError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeAppsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeAppsError::Validation(error_message.to_string()),
+_ => DescribeAppsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeAppsError::Unknown(String::from(body))
@@ -3904,7 +4034,11 @@ Unknown(String)
                 impl Error for DescribeAppsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAppsError::ResourceNotFound(ref cause) => cause,DescribeAppsError::Validation(ref cause) => cause,DescribeAppsError::Credentials(ref err) => err.description(),DescribeAppsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAppsError::Unknown(ref cause) => cause
+                            DescribeAppsError::ResourceNotFound(ref cause) => cause,
+DescribeAppsError::Validation(ref cause) => cause,
+DescribeAppsError::Credentials(ref err) => err.description(),
+DescribeAppsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAppsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3932,7 +4066,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeCommandsError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeCommandsError::Validation(error_message.to_string()),_ => DescribeCommandsError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeCommandsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeCommandsError::Validation(error_message.to_string()),
+_ => DescribeCommandsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeCommandsError::Unknown(String::from(body))
@@ -3963,7 +4099,11 @@ Unknown(String)
                 impl Error for DescribeCommandsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeCommandsError::ResourceNotFound(ref cause) => cause,DescribeCommandsError::Validation(ref cause) => cause,DescribeCommandsError::Credentials(ref err) => err.description(),DescribeCommandsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeCommandsError::Unknown(ref cause) => cause
+                            DescribeCommandsError::ResourceNotFound(ref cause) => cause,
+DescribeCommandsError::Validation(ref cause) => cause,
+DescribeCommandsError::Credentials(ref err) => err.description(),
+DescribeCommandsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeCommandsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3991,7 +4131,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeDeploymentsError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeDeploymentsError::Validation(error_message.to_string()),_ => DescribeDeploymentsError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeDeploymentsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeDeploymentsError::Validation(error_message.to_string()),
+_ => DescribeDeploymentsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeDeploymentsError::Unknown(String::from(body))
@@ -4022,7 +4164,11 @@ Unknown(String)
                 impl Error for DescribeDeploymentsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDeploymentsError::ResourceNotFound(ref cause) => cause,DescribeDeploymentsError::Validation(ref cause) => cause,DescribeDeploymentsError::Credentials(ref err) => err.description(),DescribeDeploymentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDeploymentsError::Unknown(ref cause) => cause
+                            DescribeDeploymentsError::ResourceNotFound(ref cause) => cause,
+DescribeDeploymentsError::Validation(ref cause) => cause,
+DescribeDeploymentsError::Credentials(ref err) => err.description(),
+DescribeDeploymentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDeploymentsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4050,7 +4196,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeEcsClustersError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeEcsClustersError::Validation(error_message.to_string()),_ => DescribeEcsClustersError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeEcsClustersError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeEcsClustersError::Validation(error_message.to_string()),
+_ => DescribeEcsClustersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeEcsClustersError::Unknown(String::from(body))
@@ -4081,7 +4229,11 @@ Unknown(String)
                 impl Error for DescribeEcsClustersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEcsClustersError::ResourceNotFound(ref cause) => cause,DescribeEcsClustersError::Validation(ref cause) => cause,DescribeEcsClustersError::Credentials(ref err) => err.description(),DescribeEcsClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEcsClustersError::Unknown(ref cause) => cause
+                            DescribeEcsClustersError::ResourceNotFound(ref cause) => cause,
+DescribeEcsClustersError::Validation(ref cause) => cause,
+DescribeEcsClustersError::Credentials(ref err) => err.description(),
+DescribeEcsClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEcsClustersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4109,7 +4261,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeElasticIpsError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeElasticIpsError::Validation(error_message.to_string()),_ => DescribeElasticIpsError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeElasticIpsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeElasticIpsError::Validation(error_message.to_string()),
+_ => DescribeElasticIpsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeElasticIpsError::Unknown(String::from(body))
@@ -4140,7 +4294,11 @@ Unknown(String)
                 impl Error for DescribeElasticIpsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeElasticIpsError::ResourceNotFound(ref cause) => cause,DescribeElasticIpsError::Validation(ref cause) => cause,DescribeElasticIpsError::Credentials(ref err) => err.description(),DescribeElasticIpsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeElasticIpsError::Unknown(ref cause) => cause
+                            DescribeElasticIpsError::ResourceNotFound(ref cause) => cause,
+DescribeElasticIpsError::Validation(ref cause) => cause,
+DescribeElasticIpsError::Credentials(ref err) => err.description(),
+DescribeElasticIpsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeElasticIpsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4168,7 +4326,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeElasticLoadBalancersError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeElasticLoadBalancersError::Validation(error_message.to_string()),_ => DescribeElasticLoadBalancersError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeElasticLoadBalancersError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeElasticLoadBalancersError::Validation(error_message.to_string()),
+_ => DescribeElasticLoadBalancersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeElasticLoadBalancersError::Unknown(String::from(body))
@@ -4199,7 +4359,11 @@ Unknown(String)
                 impl Error for DescribeElasticLoadBalancersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeElasticLoadBalancersError::ResourceNotFound(ref cause) => cause,DescribeElasticLoadBalancersError::Validation(ref cause) => cause,DescribeElasticLoadBalancersError::Credentials(ref err) => err.description(),DescribeElasticLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeElasticLoadBalancersError::Unknown(ref cause) => cause
+                            DescribeElasticLoadBalancersError::ResourceNotFound(ref cause) => cause,
+DescribeElasticLoadBalancersError::Validation(ref cause) => cause,
+DescribeElasticLoadBalancersError::Credentials(ref err) => err.description(),
+DescribeElasticLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeElasticLoadBalancersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4227,7 +4391,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeInstancesError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeInstancesError::Validation(error_message.to_string()),_ => DescribeInstancesError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeInstancesError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeInstancesError::Validation(error_message.to_string()),
+_ => DescribeInstancesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeInstancesError::Unknown(String::from(body))
@@ -4258,7 +4424,11 @@ Unknown(String)
                 impl Error for DescribeInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeInstancesError::ResourceNotFound(ref cause) => cause,DescribeInstancesError::Validation(ref cause) => cause,DescribeInstancesError::Credentials(ref err) => err.description(),DescribeInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeInstancesError::Unknown(ref cause) => cause
+                            DescribeInstancesError::ResourceNotFound(ref cause) => cause,
+DescribeInstancesError::Validation(ref cause) => cause,
+DescribeInstancesError::Credentials(ref err) => err.description(),
+DescribeInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4286,7 +4456,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeLayersError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeLayersError::Validation(error_message.to_string()),_ => DescribeLayersError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeLayersError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeLayersError::Validation(error_message.to_string()),
+_ => DescribeLayersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeLayersError::Unknown(String::from(body))
@@ -4317,7 +4489,11 @@ Unknown(String)
                 impl Error for DescribeLayersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLayersError::ResourceNotFound(ref cause) => cause,DescribeLayersError::Validation(ref cause) => cause,DescribeLayersError::Credentials(ref err) => err.description(),DescribeLayersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLayersError::Unknown(ref cause) => cause
+                            DescribeLayersError::ResourceNotFound(ref cause) => cause,
+DescribeLayersError::Validation(ref cause) => cause,
+DescribeLayersError::Credentials(ref err) => err.description(),
+DescribeLayersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLayersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4345,7 +4521,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeLoadBasedAutoScalingError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeLoadBasedAutoScalingError::Validation(error_message.to_string()),_ => DescribeLoadBasedAutoScalingError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeLoadBasedAutoScalingError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeLoadBasedAutoScalingError::Validation(error_message.to_string()),
+_ => DescribeLoadBasedAutoScalingError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeLoadBasedAutoScalingError::Unknown(String::from(body))
@@ -4376,7 +4554,11 @@ Unknown(String)
                 impl Error for DescribeLoadBasedAutoScalingError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLoadBasedAutoScalingError::ResourceNotFound(ref cause) => cause,DescribeLoadBasedAutoScalingError::Validation(ref cause) => cause,DescribeLoadBasedAutoScalingError::Credentials(ref err) => err.description(),DescribeLoadBasedAutoScalingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLoadBasedAutoScalingError::Unknown(ref cause) => cause
+                            DescribeLoadBasedAutoScalingError::ResourceNotFound(ref cause) => cause,
+DescribeLoadBasedAutoScalingError::Validation(ref cause) => cause,
+DescribeLoadBasedAutoScalingError::Credentials(ref err) => err.description(),
+DescribeLoadBasedAutoScalingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLoadBasedAutoScalingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4402,7 +4584,8 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ValidationException" => DescribeMyUserProfileError::Validation(error_message.to_string()),_ => DescribeMyUserProfileError::Unknown(String::from(body))
+                                    "ValidationException" => DescribeMyUserProfileError::Validation(error_message.to_string()),
+_ => DescribeMyUserProfileError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeMyUserProfileError::Unknown(String::from(body))
@@ -4433,7 +4616,10 @@ Unknown(String)
                 impl Error for DescribeMyUserProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeMyUserProfileError::Validation(ref cause) => cause,DescribeMyUserProfileError::Credentials(ref err) => err.description(),DescribeMyUserProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeMyUserProfileError::Unknown(ref cause) => cause
+                            DescribeMyUserProfileError::Validation(ref cause) => cause,
+DescribeMyUserProfileError::Credentials(ref err) => err.description(),
+DescribeMyUserProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeMyUserProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4461,7 +4647,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribePermissionsError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribePermissionsError::Validation(error_message.to_string()),_ => DescribePermissionsError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribePermissionsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribePermissionsError::Validation(error_message.to_string()),
+_ => DescribePermissionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribePermissionsError::Unknown(String::from(body))
@@ -4492,7 +4680,11 @@ Unknown(String)
                 impl Error for DescribePermissionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribePermissionsError::ResourceNotFound(ref cause) => cause,DescribePermissionsError::Validation(ref cause) => cause,DescribePermissionsError::Credentials(ref err) => err.description(),DescribePermissionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribePermissionsError::Unknown(ref cause) => cause
+                            DescribePermissionsError::ResourceNotFound(ref cause) => cause,
+DescribePermissionsError::Validation(ref cause) => cause,
+DescribePermissionsError::Credentials(ref err) => err.description(),
+DescribePermissionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribePermissionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4520,7 +4712,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeRaidArraysError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeRaidArraysError::Validation(error_message.to_string()),_ => DescribeRaidArraysError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeRaidArraysError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeRaidArraysError::Validation(error_message.to_string()),
+_ => DescribeRaidArraysError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeRaidArraysError::Unknown(String::from(body))
@@ -4551,7 +4745,11 @@ Unknown(String)
                 impl Error for DescribeRaidArraysError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeRaidArraysError::ResourceNotFound(ref cause) => cause,DescribeRaidArraysError::Validation(ref cause) => cause,DescribeRaidArraysError::Credentials(ref err) => err.description(),DescribeRaidArraysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeRaidArraysError::Unknown(ref cause) => cause
+                            DescribeRaidArraysError::ResourceNotFound(ref cause) => cause,
+DescribeRaidArraysError::Validation(ref cause) => cause,
+DescribeRaidArraysError::Credentials(ref err) => err.description(),
+DescribeRaidArraysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeRaidArraysError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4579,7 +4777,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeRdsDbInstancesError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeRdsDbInstancesError::Validation(error_message.to_string()),_ => DescribeRdsDbInstancesError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeRdsDbInstancesError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeRdsDbInstancesError::Validation(error_message.to_string()),
+_ => DescribeRdsDbInstancesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeRdsDbInstancesError::Unknown(String::from(body))
@@ -4610,7 +4810,11 @@ Unknown(String)
                 impl Error for DescribeRdsDbInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeRdsDbInstancesError::ResourceNotFound(ref cause) => cause,DescribeRdsDbInstancesError::Validation(ref cause) => cause,DescribeRdsDbInstancesError::Credentials(ref err) => err.description(),DescribeRdsDbInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeRdsDbInstancesError::Unknown(ref cause) => cause
+                            DescribeRdsDbInstancesError::ResourceNotFound(ref cause) => cause,
+DescribeRdsDbInstancesError::Validation(ref cause) => cause,
+DescribeRdsDbInstancesError::Credentials(ref err) => err.description(),
+DescribeRdsDbInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeRdsDbInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4638,7 +4842,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeServiceErrorsError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeServiceErrorsError::Validation(error_message.to_string()),_ => DescribeServiceErrorsError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeServiceErrorsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeServiceErrorsError::Validation(error_message.to_string()),
+_ => DescribeServiceErrorsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeServiceErrorsError::Unknown(String::from(body))
@@ -4669,7 +4875,11 @@ Unknown(String)
                 impl Error for DescribeServiceErrorsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeServiceErrorsError::ResourceNotFound(ref cause) => cause,DescribeServiceErrorsError::Validation(ref cause) => cause,DescribeServiceErrorsError::Credentials(ref err) => err.description(),DescribeServiceErrorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeServiceErrorsError::Unknown(ref cause) => cause
+                            DescribeServiceErrorsError::ResourceNotFound(ref cause) => cause,
+DescribeServiceErrorsError::Validation(ref cause) => cause,
+DescribeServiceErrorsError::Credentials(ref err) => err.description(),
+DescribeServiceErrorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeServiceErrorsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4697,7 +4907,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeStackProvisioningParametersError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeStackProvisioningParametersError::Validation(error_message.to_string()),_ => DescribeStackProvisioningParametersError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeStackProvisioningParametersError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeStackProvisioningParametersError::Validation(error_message.to_string()),
+_ => DescribeStackProvisioningParametersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeStackProvisioningParametersError::Unknown(String::from(body))
@@ -4728,7 +4940,11 @@ Unknown(String)
                 impl Error for DescribeStackProvisioningParametersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeStackProvisioningParametersError::ResourceNotFound(ref cause) => cause,DescribeStackProvisioningParametersError::Validation(ref cause) => cause,DescribeStackProvisioningParametersError::Credentials(ref err) => err.description(),DescribeStackProvisioningParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeStackProvisioningParametersError::Unknown(ref cause) => cause
+                            DescribeStackProvisioningParametersError::ResourceNotFound(ref cause) => cause,
+DescribeStackProvisioningParametersError::Validation(ref cause) => cause,
+DescribeStackProvisioningParametersError::Credentials(ref err) => err.description(),
+DescribeStackProvisioningParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeStackProvisioningParametersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4756,7 +4972,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeStackSummaryError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeStackSummaryError::Validation(error_message.to_string()),_ => DescribeStackSummaryError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeStackSummaryError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeStackSummaryError::Validation(error_message.to_string()),
+_ => DescribeStackSummaryError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeStackSummaryError::Unknown(String::from(body))
@@ -4787,7 +5005,11 @@ Unknown(String)
                 impl Error for DescribeStackSummaryError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeStackSummaryError::ResourceNotFound(ref cause) => cause,DescribeStackSummaryError::Validation(ref cause) => cause,DescribeStackSummaryError::Credentials(ref err) => err.description(),DescribeStackSummaryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeStackSummaryError::Unknown(ref cause) => cause
+                            DescribeStackSummaryError::ResourceNotFound(ref cause) => cause,
+DescribeStackSummaryError::Validation(ref cause) => cause,
+DescribeStackSummaryError::Credentials(ref err) => err.description(),
+DescribeStackSummaryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeStackSummaryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4815,7 +5037,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeStacksError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeStacksError::Validation(error_message.to_string()),_ => DescribeStacksError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeStacksError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeStacksError::Validation(error_message.to_string()),
+_ => DescribeStacksError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeStacksError::Unknown(String::from(body))
@@ -4846,7 +5070,11 @@ Unknown(String)
                 impl Error for DescribeStacksError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeStacksError::ResourceNotFound(ref cause) => cause,DescribeStacksError::Validation(ref cause) => cause,DescribeStacksError::Credentials(ref err) => err.description(),DescribeStacksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeStacksError::Unknown(ref cause) => cause
+                            DescribeStacksError::ResourceNotFound(ref cause) => cause,
+DescribeStacksError::Validation(ref cause) => cause,
+DescribeStacksError::Credentials(ref err) => err.description(),
+DescribeStacksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeStacksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4874,7 +5102,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeTimeBasedAutoScalingError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeTimeBasedAutoScalingError::Validation(error_message.to_string()),_ => DescribeTimeBasedAutoScalingError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeTimeBasedAutoScalingError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeTimeBasedAutoScalingError::Validation(error_message.to_string()),
+_ => DescribeTimeBasedAutoScalingError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeTimeBasedAutoScalingError::Unknown(String::from(body))
@@ -4905,7 +5135,11 @@ Unknown(String)
                 impl Error for DescribeTimeBasedAutoScalingError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeTimeBasedAutoScalingError::ResourceNotFound(ref cause) => cause,DescribeTimeBasedAutoScalingError::Validation(ref cause) => cause,DescribeTimeBasedAutoScalingError::Credentials(ref err) => err.description(),DescribeTimeBasedAutoScalingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeTimeBasedAutoScalingError::Unknown(ref cause) => cause
+                            DescribeTimeBasedAutoScalingError::ResourceNotFound(ref cause) => cause,
+DescribeTimeBasedAutoScalingError::Validation(ref cause) => cause,
+DescribeTimeBasedAutoScalingError::Credentials(ref err) => err.description(),
+DescribeTimeBasedAutoScalingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeTimeBasedAutoScalingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4933,7 +5167,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeUserProfilesError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeUserProfilesError::Validation(error_message.to_string()),_ => DescribeUserProfilesError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeUserProfilesError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeUserProfilesError::Validation(error_message.to_string()),
+_ => DescribeUserProfilesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeUserProfilesError::Unknown(String::from(body))
@@ -4964,7 +5200,11 @@ Unknown(String)
                 impl Error for DescribeUserProfilesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeUserProfilesError::ResourceNotFound(ref cause) => cause,DescribeUserProfilesError::Validation(ref cause) => cause,DescribeUserProfilesError::Credentials(ref err) => err.description(),DescribeUserProfilesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeUserProfilesError::Unknown(ref cause) => cause
+                            DescribeUserProfilesError::ResourceNotFound(ref cause) => cause,
+DescribeUserProfilesError::Validation(ref cause) => cause,
+DescribeUserProfilesError::Credentials(ref err) => err.description(),
+DescribeUserProfilesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeUserProfilesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4992,7 +5232,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeVolumesError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeVolumesError::Validation(error_message.to_string()),_ => DescribeVolumesError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeVolumesError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeVolumesError::Validation(error_message.to_string()),
+_ => DescribeVolumesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeVolumesError::Unknown(String::from(body))
@@ -5023,7 +5265,11 @@ Unknown(String)
                 impl Error for DescribeVolumesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVolumesError::ResourceNotFound(ref cause) => cause,DescribeVolumesError::Validation(ref cause) => cause,DescribeVolumesError::Credentials(ref err) => err.description(),DescribeVolumesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVolumesError::Unknown(ref cause) => cause
+                            DescribeVolumesError::ResourceNotFound(ref cause) => cause,
+DescribeVolumesError::Validation(ref cause) => cause,
+DescribeVolumesError::Credentials(ref err) => err.description(),
+DescribeVolumesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVolumesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5051,7 +5297,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DetachElasticLoadBalancerError::ResourceNotFound(String::from(error_message)),"ValidationException" => DetachElasticLoadBalancerError::Validation(error_message.to_string()),_ => DetachElasticLoadBalancerError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DetachElasticLoadBalancerError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DetachElasticLoadBalancerError::Validation(error_message.to_string()),
+_ => DetachElasticLoadBalancerError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DetachElasticLoadBalancerError::Unknown(String::from(body))
@@ -5082,7 +5330,11 @@ Unknown(String)
                 impl Error for DetachElasticLoadBalancerError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachElasticLoadBalancerError::ResourceNotFound(ref cause) => cause,DetachElasticLoadBalancerError::Validation(ref cause) => cause,DetachElasticLoadBalancerError::Credentials(ref err) => err.description(),DetachElasticLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachElasticLoadBalancerError::Unknown(ref cause) => cause
+                            DetachElasticLoadBalancerError::ResourceNotFound(ref cause) => cause,
+DetachElasticLoadBalancerError::Validation(ref cause) => cause,
+DetachElasticLoadBalancerError::Credentials(ref err) => err.description(),
+DetachElasticLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachElasticLoadBalancerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5110,7 +5362,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DisassociateElasticIpError::ResourceNotFound(String::from(error_message)),"ValidationException" => DisassociateElasticIpError::Validation(error_message.to_string()),_ => DisassociateElasticIpError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DisassociateElasticIpError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DisassociateElasticIpError::Validation(error_message.to_string()),
+_ => DisassociateElasticIpError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DisassociateElasticIpError::Unknown(String::from(body))
@@ -5141,7 +5395,11 @@ Unknown(String)
                 impl Error for DisassociateElasticIpError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisassociateElasticIpError::ResourceNotFound(ref cause) => cause,DisassociateElasticIpError::Validation(ref cause) => cause,DisassociateElasticIpError::Credentials(ref err) => err.description(),DisassociateElasticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisassociateElasticIpError::Unknown(ref cause) => cause
+                            DisassociateElasticIpError::ResourceNotFound(ref cause) => cause,
+DisassociateElasticIpError::Validation(ref cause) => cause,
+DisassociateElasticIpError::Credentials(ref err) => err.description(),
+DisassociateElasticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisassociateElasticIpError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5169,7 +5427,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => GetHostnameSuggestionError::ResourceNotFound(String::from(error_message)),"ValidationException" => GetHostnameSuggestionError::Validation(error_message.to_string()),_ => GetHostnameSuggestionError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => GetHostnameSuggestionError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => GetHostnameSuggestionError::Validation(error_message.to_string()),
+_ => GetHostnameSuggestionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetHostnameSuggestionError::Unknown(String::from(body))
@@ -5200,7 +5460,11 @@ Unknown(String)
                 impl Error for GetHostnameSuggestionError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetHostnameSuggestionError::ResourceNotFound(ref cause) => cause,GetHostnameSuggestionError::Validation(ref cause) => cause,GetHostnameSuggestionError::Credentials(ref err) => err.description(),GetHostnameSuggestionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetHostnameSuggestionError::Unknown(ref cause) => cause
+                            GetHostnameSuggestionError::ResourceNotFound(ref cause) => cause,
+GetHostnameSuggestionError::Validation(ref cause) => cause,
+GetHostnameSuggestionError::Credentials(ref err) => err.description(),
+GetHostnameSuggestionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetHostnameSuggestionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5228,7 +5492,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => GrantAccessError::ResourceNotFound(String::from(error_message)),"ValidationException" => GrantAccessError::Validation(error_message.to_string()),_ => GrantAccessError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => GrantAccessError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => GrantAccessError::Validation(error_message.to_string()),
+_ => GrantAccessError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GrantAccessError::Unknown(String::from(body))
@@ -5259,7 +5525,11 @@ Unknown(String)
                 impl Error for GrantAccessError {
                     fn description(&self) -> &str {
                         match *self {
-                            GrantAccessError::ResourceNotFound(ref cause) => cause,GrantAccessError::Validation(ref cause) => cause,GrantAccessError::Credentials(ref err) => err.description(),GrantAccessError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GrantAccessError::Unknown(ref cause) => cause
+                            GrantAccessError::ResourceNotFound(ref cause) => cause,
+GrantAccessError::Validation(ref cause) => cause,
+GrantAccessError::Credentials(ref err) => err.description(),
+GrantAccessError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GrantAccessError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5287,7 +5557,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => RebootInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => RebootInstanceError::Validation(error_message.to_string()),_ => RebootInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => RebootInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => RebootInstanceError::Validation(error_message.to_string()),
+_ => RebootInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RebootInstanceError::Unknown(String::from(body))
@@ -5318,7 +5590,11 @@ Unknown(String)
                 impl Error for RebootInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            RebootInstanceError::ResourceNotFound(ref cause) => cause,RebootInstanceError::Validation(ref cause) => cause,RebootInstanceError::Credentials(ref err) => err.description(),RebootInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RebootInstanceError::Unknown(ref cause) => cause
+                            RebootInstanceError::ResourceNotFound(ref cause) => cause,
+RebootInstanceError::Validation(ref cause) => cause,
+RebootInstanceError::Credentials(ref err) => err.description(),
+RebootInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RebootInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5346,7 +5622,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => RegisterEcsClusterError::ResourceNotFound(String::from(error_message)),"ValidationException" => RegisterEcsClusterError::Validation(error_message.to_string()),_ => RegisterEcsClusterError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => RegisterEcsClusterError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => RegisterEcsClusterError::Validation(error_message.to_string()),
+_ => RegisterEcsClusterError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterEcsClusterError::Unknown(String::from(body))
@@ -5377,7 +5655,11 @@ Unknown(String)
                 impl Error for RegisterEcsClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterEcsClusterError::ResourceNotFound(ref cause) => cause,RegisterEcsClusterError::Validation(ref cause) => cause,RegisterEcsClusterError::Credentials(ref err) => err.description(),RegisterEcsClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterEcsClusterError::Unknown(ref cause) => cause
+                            RegisterEcsClusterError::ResourceNotFound(ref cause) => cause,
+RegisterEcsClusterError::Validation(ref cause) => cause,
+RegisterEcsClusterError::Credentials(ref err) => err.description(),
+RegisterEcsClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterEcsClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5405,7 +5687,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => RegisterElasticIpError::ResourceNotFound(String::from(error_message)),"ValidationException" => RegisterElasticIpError::Validation(error_message.to_string()),_ => RegisterElasticIpError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => RegisterElasticIpError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => RegisterElasticIpError::Validation(error_message.to_string()),
+_ => RegisterElasticIpError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterElasticIpError::Unknown(String::from(body))
@@ -5436,7 +5720,11 @@ Unknown(String)
                 impl Error for RegisterElasticIpError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterElasticIpError::ResourceNotFound(ref cause) => cause,RegisterElasticIpError::Validation(ref cause) => cause,RegisterElasticIpError::Credentials(ref err) => err.description(),RegisterElasticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterElasticIpError::Unknown(ref cause) => cause
+                            RegisterElasticIpError::ResourceNotFound(ref cause) => cause,
+RegisterElasticIpError::Validation(ref cause) => cause,
+RegisterElasticIpError::Credentials(ref err) => err.description(),
+RegisterElasticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterElasticIpError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5464,7 +5752,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => RegisterInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => RegisterInstanceError::Validation(error_message.to_string()),_ => RegisterInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => RegisterInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => RegisterInstanceError::Validation(error_message.to_string()),
+_ => RegisterInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterInstanceError::Unknown(String::from(body))
@@ -5495,7 +5785,11 @@ Unknown(String)
                 impl Error for RegisterInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterInstanceError::ResourceNotFound(ref cause) => cause,RegisterInstanceError::Validation(ref cause) => cause,RegisterInstanceError::Credentials(ref err) => err.description(),RegisterInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterInstanceError::Unknown(ref cause) => cause
+                            RegisterInstanceError::ResourceNotFound(ref cause) => cause,
+RegisterInstanceError::Validation(ref cause) => cause,
+RegisterInstanceError::Credentials(ref err) => err.description(),
+RegisterInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5523,7 +5817,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => RegisterRdsDbInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => RegisterRdsDbInstanceError::Validation(error_message.to_string()),_ => RegisterRdsDbInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => RegisterRdsDbInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => RegisterRdsDbInstanceError::Validation(error_message.to_string()),
+_ => RegisterRdsDbInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterRdsDbInstanceError::Unknown(String::from(body))
@@ -5554,7 +5850,11 @@ Unknown(String)
                 impl Error for RegisterRdsDbInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterRdsDbInstanceError::ResourceNotFound(ref cause) => cause,RegisterRdsDbInstanceError::Validation(ref cause) => cause,RegisterRdsDbInstanceError::Credentials(ref err) => err.description(),RegisterRdsDbInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterRdsDbInstanceError::Unknown(ref cause) => cause
+                            RegisterRdsDbInstanceError::ResourceNotFound(ref cause) => cause,
+RegisterRdsDbInstanceError::Validation(ref cause) => cause,
+RegisterRdsDbInstanceError::Credentials(ref err) => err.description(),
+RegisterRdsDbInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterRdsDbInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5582,7 +5882,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => RegisterVolumeError::ResourceNotFound(String::from(error_message)),"ValidationException" => RegisterVolumeError::Validation(error_message.to_string()),_ => RegisterVolumeError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => RegisterVolumeError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => RegisterVolumeError::Validation(error_message.to_string()),
+_ => RegisterVolumeError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterVolumeError::Unknown(String::from(body))
@@ -5613,7 +5915,11 @@ Unknown(String)
                 impl Error for RegisterVolumeError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterVolumeError::ResourceNotFound(ref cause) => cause,RegisterVolumeError::Validation(ref cause) => cause,RegisterVolumeError::Credentials(ref err) => err.description(),RegisterVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterVolumeError::Unknown(ref cause) => cause
+                            RegisterVolumeError::ResourceNotFound(ref cause) => cause,
+RegisterVolumeError::Validation(ref cause) => cause,
+RegisterVolumeError::Credentials(ref err) => err.description(),
+RegisterVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterVolumeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5641,7 +5947,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => SetLoadBasedAutoScalingError::ResourceNotFound(String::from(error_message)),"ValidationException" => SetLoadBasedAutoScalingError::Validation(error_message.to_string()),_ => SetLoadBasedAutoScalingError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => SetLoadBasedAutoScalingError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => SetLoadBasedAutoScalingError::Validation(error_message.to_string()),
+_ => SetLoadBasedAutoScalingError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SetLoadBasedAutoScalingError::Unknown(String::from(body))
@@ -5672,7 +5980,11 @@ Unknown(String)
                 impl Error for SetLoadBasedAutoScalingError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetLoadBasedAutoScalingError::ResourceNotFound(ref cause) => cause,SetLoadBasedAutoScalingError::Validation(ref cause) => cause,SetLoadBasedAutoScalingError::Credentials(ref err) => err.description(),SetLoadBasedAutoScalingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetLoadBasedAutoScalingError::Unknown(ref cause) => cause
+                            SetLoadBasedAutoScalingError::ResourceNotFound(ref cause) => cause,
+SetLoadBasedAutoScalingError::Validation(ref cause) => cause,
+SetLoadBasedAutoScalingError::Credentials(ref err) => err.description(),
+SetLoadBasedAutoScalingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetLoadBasedAutoScalingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5700,7 +6012,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => SetPermissionError::ResourceNotFound(String::from(error_message)),"ValidationException" => SetPermissionError::Validation(error_message.to_string()),_ => SetPermissionError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => SetPermissionError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => SetPermissionError::Validation(error_message.to_string()),
+_ => SetPermissionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SetPermissionError::Unknown(String::from(body))
@@ -5731,7 +6045,11 @@ Unknown(String)
                 impl Error for SetPermissionError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetPermissionError::ResourceNotFound(ref cause) => cause,SetPermissionError::Validation(ref cause) => cause,SetPermissionError::Credentials(ref err) => err.description(),SetPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetPermissionError::Unknown(ref cause) => cause
+                            SetPermissionError::ResourceNotFound(ref cause) => cause,
+SetPermissionError::Validation(ref cause) => cause,
+SetPermissionError::Credentials(ref err) => err.description(),
+SetPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetPermissionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5759,7 +6077,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => SetTimeBasedAutoScalingError::ResourceNotFound(String::from(error_message)),"ValidationException" => SetTimeBasedAutoScalingError::Validation(error_message.to_string()),_ => SetTimeBasedAutoScalingError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => SetTimeBasedAutoScalingError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => SetTimeBasedAutoScalingError::Validation(error_message.to_string()),
+_ => SetTimeBasedAutoScalingError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SetTimeBasedAutoScalingError::Unknown(String::from(body))
@@ -5790,7 +6110,11 @@ Unknown(String)
                 impl Error for SetTimeBasedAutoScalingError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetTimeBasedAutoScalingError::ResourceNotFound(ref cause) => cause,SetTimeBasedAutoScalingError::Validation(ref cause) => cause,SetTimeBasedAutoScalingError::Credentials(ref err) => err.description(),SetTimeBasedAutoScalingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetTimeBasedAutoScalingError::Unknown(ref cause) => cause
+                            SetTimeBasedAutoScalingError::ResourceNotFound(ref cause) => cause,
+SetTimeBasedAutoScalingError::Validation(ref cause) => cause,
+SetTimeBasedAutoScalingError::Credentials(ref err) => err.description(),
+SetTimeBasedAutoScalingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetTimeBasedAutoScalingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5818,7 +6142,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => StartInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => StartInstanceError::Validation(error_message.to_string()),_ => StartInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => StartInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => StartInstanceError::Validation(error_message.to_string()),
+_ => StartInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StartInstanceError::Unknown(String::from(body))
@@ -5849,7 +6175,11 @@ Unknown(String)
                 impl Error for StartInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            StartInstanceError::ResourceNotFound(ref cause) => cause,StartInstanceError::Validation(ref cause) => cause,StartInstanceError::Credentials(ref err) => err.description(),StartInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StartInstanceError::Unknown(ref cause) => cause
+                            StartInstanceError::ResourceNotFound(ref cause) => cause,
+StartInstanceError::Validation(ref cause) => cause,
+StartInstanceError::Credentials(ref err) => err.description(),
+StartInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StartInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5877,7 +6207,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => StartStackError::ResourceNotFound(String::from(error_message)),"ValidationException" => StartStackError::Validation(error_message.to_string()),_ => StartStackError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => StartStackError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => StartStackError::Validation(error_message.to_string()),
+_ => StartStackError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StartStackError::Unknown(String::from(body))
@@ -5908,7 +6240,11 @@ Unknown(String)
                 impl Error for StartStackError {
                     fn description(&self) -> &str {
                         match *self {
-                            StartStackError::ResourceNotFound(ref cause) => cause,StartStackError::Validation(ref cause) => cause,StartStackError::Credentials(ref err) => err.description(),StartStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StartStackError::Unknown(ref cause) => cause
+                            StartStackError::ResourceNotFound(ref cause) => cause,
+StartStackError::Validation(ref cause) => cause,
+StartStackError::Credentials(ref err) => err.description(),
+StartStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StartStackError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5936,7 +6272,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => StopInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => StopInstanceError::Validation(error_message.to_string()),_ => StopInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => StopInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => StopInstanceError::Validation(error_message.to_string()),
+_ => StopInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StopInstanceError::Unknown(String::from(body))
@@ -5967,7 +6305,11 @@ Unknown(String)
                 impl Error for StopInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            StopInstanceError::ResourceNotFound(ref cause) => cause,StopInstanceError::Validation(ref cause) => cause,StopInstanceError::Credentials(ref err) => err.description(),StopInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StopInstanceError::Unknown(ref cause) => cause
+                            StopInstanceError::ResourceNotFound(ref cause) => cause,
+StopInstanceError::Validation(ref cause) => cause,
+StopInstanceError::Credentials(ref err) => err.description(),
+StopInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StopInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5995,7 +6337,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => StopStackError::ResourceNotFound(String::from(error_message)),"ValidationException" => StopStackError::Validation(error_message.to_string()),_ => StopStackError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => StopStackError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => StopStackError::Validation(error_message.to_string()),
+_ => StopStackError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StopStackError::Unknown(String::from(body))
@@ -6026,7 +6370,11 @@ Unknown(String)
                 impl Error for StopStackError {
                     fn description(&self) -> &str {
                         match *self {
-                            StopStackError::ResourceNotFound(ref cause) => cause,StopStackError::Validation(ref cause) => cause,StopStackError::Credentials(ref err) => err.description(),StopStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StopStackError::Unknown(ref cause) => cause
+                            StopStackError::ResourceNotFound(ref cause) => cause,
+StopStackError::Validation(ref cause) => cause,
+StopStackError::Credentials(ref err) => err.description(),
+StopStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StopStackError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6054,7 +6402,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => UnassignInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => UnassignInstanceError::Validation(error_message.to_string()),_ => UnassignInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => UnassignInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UnassignInstanceError::Validation(error_message.to_string()),
+_ => UnassignInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UnassignInstanceError::Unknown(String::from(body))
@@ -6085,7 +6435,11 @@ Unknown(String)
                 impl Error for UnassignInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            UnassignInstanceError::ResourceNotFound(ref cause) => cause,UnassignInstanceError::Validation(ref cause) => cause,UnassignInstanceError::Credentials(ref err) => err.description(),UnassignInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UnassignInstanceError::Unknown(ref cause) => cause
+                            UnassignInstanceError::ResourceNotFound(ref cause) => cause,
+UnassignInstanceError::Validation(ref cause) => cause,
+UnassignInstanceError::Credentials(ref err) => err.description(),
+UnassignInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UnassignInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6113,7 +6467,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => UnassignVolumeError::ResourceNotFound(String::from(error_message)),"ValidationException" => UnassignVolumeError::Validation(error_message.to_string()),_ => UnassignVolumeError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => UnassignVolumeError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UnassignVolumeError::Validation(error_message.to_string()),
+_ => UnassignVolumeError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UnassignVolumeError::Unknown(String::from(body))
@@ -6144,7 +6500,11 @@ Unknown(String)
                 impl Error for UnassignVolumeError {
                     fn description(&self) -> &str {
                         match *self {
-                            UnassignVolumeError::ResourceNotFound(ref cause) => cause,UnassignVolumeError::Validation(ref cause) => cause,UnassignVolumeError::Credentials(ref err) => err.description(),UnassignVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UnassignVolumeError::Unknown(ref cause) => cause
+                            UnassignVolumeError::ResourceNotFound(ref cause) => cause,
+UnassignVolumeError::Validation(ref cause) => cause,
+UnassignVolumeError::Credentials(ref err) => err.description(),
+UnassignVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UnassignVolumeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6172,7 +6532,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => UpdateAppError::ResourceNotFound(String::from(error_message)),"ValidationException" => UpdateAppError::Validation(error_message.to_string()),_ => UpdateAppError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => UpdateAppError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdateAppError::Validation(error_message.to_string()),
+_ => UpdateAppError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateAppError::Unknown(String::from(body))
@@ -6203,7 +6565,11 @@ Unknown(String)
                 impl Error for UpdateAppError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateAppError::ResourceNotFound(ref cause) => cause,UpdateAppError::Validation(ref cause) => cause,UpdateAppError::Credentials(ref err) => err.description(),UpdateAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateAppError::Unknown(ref cause) => cause
+                            UpdateAppError::ResourceNotFound(ref cause) => cause,
+UpdateAppError::Validation(ref cause) => cause,
+UpdateAppError::Credentials(ref err) => err.description(),
+UpdateAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateAppError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6231,7 +6597,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => UpdateElasticIpError::ResourceNotFound(String::from(error_message)),"ValidationException" => UpdateElasticIpError::Validation(error_message.to_string()),_ => UpdateElasticIpError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => UpdateElasticIpError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdateElasticIpError::Validation(error_message.to_string()),
+_ => UpdateElasticIpError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateElasticIpError::Unknown(String::from(body))
@@ -6262,7 +6630,11 @@ Unknown(String)
                 impl Error for UpdateElasticIpError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateElasticIpError::ResourceNotFound(ref cause) => cause,UpdateElasticIpError::Validation(ref cause) => cause,UpdateElasticIpError::Credentials(ref err) => err.description(),UpdateElasticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateElasticIpError::Unknown(ref cause) => cause
+                            UpdateElasticIpError::ResourceNotFound(ref cause) => cause,
+UpdateElasticIpError::Validation(ref cause) => cause,
+UpdateElasticIpError::Credentials(ref err) => err.description(),
+UpdateElasticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateElasticIpError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6290,7 +6662,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => UpdateInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => UpdateInstanceError::Validation(error_message.to_string()),_ => UpdateInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => UpdateInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdateInstanceError::Validation(error_message.to_string()),
+_ => UpdateInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateInstanceError::Unknown(String::from(body))
@@ -6321,7 +6695,11 @@ Unknown(String)
                 impl Error for UpdateInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateInstanceError::ResourceNotFound(ref cause) => cause,UpdateInstanceError::Validation(ref cause) => cause,UpdateInstanceError::Credentials(ref err) => err.description(),UpdateInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateInstanceError::Unknown(ref cause) => cause
+                            UpdateInstanceError::ResourceNotFound(ref cause) => cause,
+UpdateInstanceError::Validation(ref cause) => cause,
+UpdateInstanceError::Credentials(ref err) => err.description(),
+UpdateInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6349,7 +6727,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => UpdateLayerError::ResourceNotFound(String::from(error_message)),"ValidationException" => UpdateLayerError::Validation(error_message.to_string()),_ => UpdateLayerError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => UpdateLayerError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdateLayerError::Validation(error_message.to_string()),
+_ => UpdateLayerError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateLayerError::Unknown(String::from(body))
@@ -6380,7 +6760,11 @@ Unknown(String)
                 impl Error for UpdateLayerError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateLayerError::ResourceNotFound(ref cause) => cause,UpdateLayerError::Validation(ref cause) => cause,UpdateLayerError::Credentials(ref err) => err.description(),UpdateLayerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateLayerError::Unknown(ref cause) => cause
+                            UpdateLayerError::ResourceNotFound(ref cause) => cause,
+UpdateLayerError::Validation(ref cause) => cause,
+UpdateLayerError::Credentials(ref err) => err.description(),
+UpdateLayerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateLayerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6406,7 +6790,8 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ValidationException" => UpdateMyUserProfileError::Validation(error_message.to_string()),_ => UpdateMyUserProfileError::Unknown(String::from(body))
+                                    "ValidationException" => UpdateMyUserProfileError::Validation(error_message.to_string()),
+_ => UpdateMyUserProfileError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateMyUserProfileError::Unknown(String::from(body))
@@ -6437,7 +6822,10 @@ Unknown(String)
                 impl Error for UpdateMyUserProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateMyUserProfileError::Validation(ref cause) => cause,UpdateMyUserProfileError::Credentials(ref err) => err.description(),UpdateMyUserProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateMyUserProfileError::Unknown(ref cause) => cause
+                            UpdateMyUserProfileError::Validation(ref cause) => cause,
+UpdateMyUserProfileError::Credentials(ref err) => err.description(),
+UpdateMyUserProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateMyUserProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6465,7 +6853,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => UpdateRdsDbInstanceError::ResourceNotFound(String::from(error_message)),"ValidationException" => UpdateRdsDbInstanceError::Validation(error_message.to_string()),_ => UpdateRdsDbInstanceError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => UpdateRdsDbInstanceError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdateRdsDbInstanceError::Validation(error_message.to_string()),
+_ => UpdateRdsDbInstanceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateRdsDbInstanceError::Unknown(String::from(body))
@@ -6496,7 +6886,11 @@ Unknown(String)
                 impl Error for UpdateRdsDbInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateRdsDbInstanceError::ResourceNotFound(ref cause) => cause,UpdateRdsDbInstanceError::Validation(ref cause) => cause,UpdateRdsDbInstanceError::Credentials(ref err) => err.description(),UpdateRdsDbInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateRdsDbInstanceError::Unknown(ref cause) => cause
+                            UpdateRdsDbInstanceError::ResourceNotFound(ref cause) => cause,
+UpdateRdsDbInstanceError::Validation(ref cause) => cause,
+UpdateRdsDbInstanceError::Credentials(ref err) => err.description(),
+UpdateRdsDbInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateRdsDbInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6524,7 +6918,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => UpdateStackError::ResourceNotFound(String::from(error_message)),"ValidationException" => UpdateStackError::Validation(error_message.to_string()),_ => UpdateStackError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => UpdateStackError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdateStackError::Validation(error_message.to_string()),
+_ => UpdateStackError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateStackError::Unknown(String::from(body))
@@ -6555,7 +6951,11 @@ Unknown(String)
                 impl Error for UpdateStackError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateStackError::ResourceNotFound(ref cause) => cause,UpdateStackError::Validation(ref cause) => cause,UpdateStackError::Credentials(ref err) => err.description(),UpdateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateStackError::Unknown(ref cause) => cause
+                            UpdateStackError::ResourceNotFound(ref cause) => cause,
+UpdateStackError::Validation(ref cause) => cause,
+UpdateStackError::Credentials(ref err) => err.description(),
+UpdateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateStackError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6583,7 +6983,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => UpdateUserProfileError::ResourceNotFound(String::from(error_message)),"ValidationException" => UpdateUserProfileError::Validation(error_message.to_string()),_ => UpdateUserProfileError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => UpdateUserProfileError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdateUserProfileError::Validation(error_message.to_string()),
+_ => UpdateUserProfileError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateUserProfileError::Unknown(String::from(body))
@@ -6614,7 +7016,11 @@ Unknown(String)
                 impl Error for UpdateUserProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateUserProfileError::ResourceNotFound(ref cause) => cause,UpdateUserProfileError::Validation(ref cause) => cause,UpdateUserProfileError::Credentials(ref err) => err.description(),UpdateUserProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateUserProfileError::Unknown(ref cause) => cause
+                            UpdateUserProfileError::ResourceNotFound(ref cause) => cause,
+UpdateUserProfileError::Validation(ref cause) => cause,
+UpdateUserProfileError::Credentials(ref err) => err.description(),
+UpdateUserProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateUserProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6642,7 +7048,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => UpdateVolumeError::ResourceNotFound(String::from(error_message)),"ValidationException" => UpdateVolumeError::Validation(error_message.to_string()),_ => UpdateVolumeError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => UpdateVolumeError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdateVolumeError::Validation(error_message.to_string()),
+_ => UpdateVolumeError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateVolumeError::Unknown(String::from(body))
@@ -6673,7 +7081,11 @@ Unknown(String)
                 impl Error for UpdateVolumeError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateVolumeError::ResourceNotFound(ref cause) => cause,UpdateVolumeError::Validation(ref cause) => cause,UpdateVolumeError::Credentials(ref err) => err.description(),UpdateVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateVolumeError::Unknown(ref cause) => cause
+                            UpdateVolumeError::ResourceNotFound(ref cause) => cause,
+UpdateVolumeError::Validation(ref cause) => cause,
+UpdateVolumeError::Credentials(ref err) => err.description(),
+UpdateVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateVolumeError::Unknown(ref cause) => cause
                         }
                     }
                  }

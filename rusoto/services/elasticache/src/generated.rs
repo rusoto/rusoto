@@ -6523,12 +6523,12 @@ struct TagListMessageDeserializer;
                 #[derive(Debug, PartialEq)]
                 pub enum AddTagsToResourceError {
                     
-///<p>The requested snapshot name does not refer to an existing snapshot.</p>
-SnapshotNotFoundFault(String),
-///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
-InvalidARNFault(String),
 ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
 CacheClusterNotFoundFault(String),
+///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+InvalidARNFault(String),
+///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+SnapshotNotFoundFault(String),
 ///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 10.</p>
 TagQuotaPerResourceExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -6579,7 +6579,14 @@ Unknown(String)
                 impl Error for AddTagsToResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddTagsToResourceError::CacheClusterNotFoundFault(ref cause) => cause,AddTagsToResourceError::TagQuotaPerResourceExceeded(ref cause) => cause,AddTagsToResourceError::InvalidARNFault(ref cause) => cause,AddTagsToResourceError::SnapshotNotFoundFault(ref cause) => cause,AddTagsToResourceError::Validation(ref cause) => cause,AddTagsToResourceError::Credentials(ref err) => err.description(),AddTagsToResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddTagsToResourceError::Unknown(ref cause) => cause
+                            AddTagsToResourceError::CacheClusterNotFoundFault(ref cause) => cause,
+AddTagsToResourceError::InvalidARNFault(ref cause) => cause,
+AddTagsToResourceError::SnapshotNotFoundFault(ref cause) => cause,
+AddTagsToResourceError::TagQuotaPerResourceExceeded(ref cause) => cause,
+AddTagsToResourceError::Validation(ref cause) => cause,
+AddTagsToResourceError::Credentials(ref err) => err.description(),
+AddTagsToResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddTagsToResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6587,16 +6594,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AuthorizeCacheSecurityGroupIngressError {
                     
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
-///<p>The requested cache security group name does not refer to an existing cache security group.</p>
-CacheSecurityGroupNotFoundFault(String),
 ///<p>The specified Amazon EC2 security group is already authorized for the specified cache security group.</p>
 AuthorizationAlreadyExistsFault(String),
+///<p>The requested cache security group name does not refer to an existing cache security group.</p>
+CacheSecurityGroupNotFoundFault(String),
+///<p>The current state of the cache security group does not allow deletion.</p>
+InvalidCacheSecurityGroupStateFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
 InvalidParameterCombination(String),
-///<p>The current state of the cache security group does not allow deletion.</p>
-InvalidCacheSecurityGroupStateFault(String),/// An error occurred dispatching the HTTP request
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6613,7 +6620,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValueException" => AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidCacheSecurityGroupStateFault" => AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(String::from(parsed_error.message)),"AuthorizationAlreadyExistsFault" => AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),_ => AuthorizeCacheSecurityGroupIngressError::Unknown(String::from(body))
+                                    "AuthorizationAlreadyExistsFault" => AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidCacheSecurityGroupStateFault" => AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(parsed_error.message)),_ => AuthorizeCacheSecurityGroupIngressError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AuthorizeCacheSecurityGroupIngressError::Unknown(body.to_string())
@@ -6645,7 +6652,15 @@ Unknown(String)
                 impl Error for AuthorizeCacheSecurityGroupIngressError {
                     fn description(&self) -> &str {
                         match *self {
-                            AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(ref cause) => cause,AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(ref cause) => cause,AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(ref cause) => cause,AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(ref cause) => cause,AuthorizeCacheSecurityGroupIngressError::Validation(ref cause) => cause,AuthorizeCacheSecurityGroupIngressError::Credentials(ref err) => err.description(),AuthorizeCacheSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AuthorizeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
+                            AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(ref cause) => cause,
+AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
+AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,
+AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(ref cause) => cause,
+AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(ref cause) => cause,
+AuthorizeCacheSecurityGroupIngressError::Validation(ref cause) => cause,
+AuthorizeCacheSecurityGroupIngressError::Credentials(ref err) => err.description(),
+AuthorizeCacheSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AuthorizeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6655,16 +6670,16 @@ Unknown(String)
                     
 ///<p>Two or more incompatible parameters were specified.</p>
 InvalidParameterCombination(String),
-///<p>The requested snapshot name does not refer to an existing snapshot.</p>
-SnapshotNotFoundFault(String),
 ///<p>The value for a parameter is invalid.</p>
 InvalidParameterValue(String),
 ///<p>The current state of the snapshot does not allow the requested operation to occur.</p>
 InvalidSnapshotStateFault(String),
-///<p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
-SnapshotQuotaExceededFault(String),
 ///<p>You already have a snapshot with the given name.</p>
-SnapshotAlreadyExistsFault(String),/// An error occurred dispatching the HTTP request
+SnapshotAlreadyExistsFault(String),
+///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+SnapshotNotFoundFault(String),
+///<p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
+SnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6681,7 +6696,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "SnapshotQuotaExceededFault" => CopySnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),"SnapshotNotFoundFault" => CopySnapshotError::SnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => CopySnapshotError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => CopySnapshotError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidSnapshotStateFault" => CopySnapshotError::InvalidSnapshotStateFault(String::from(parsed_error.message)),"SnapshotAlreadyExistsFault" => CopySnapshotError::SnapshotAlreadyExistsFault(String::from(parsed_error.message)),_ => CopySnapshotError::Unknown(String::from(body))
+                                    "InvalidParameterCombinationException" => CopySnapshotError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => CopySnapshotError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidSnapshotStateFault" => CopySnapshotError::InvalidSnapshotStateFault(String::from(parsed_error.message)),"SnapshotAlreadyExistsFault" => CopySnapshotError::SnapshotAlreadyExistsFault(String::from(parsed_error.message)),"SnapshotNotFoundFault" => CopySnapshotError::SnapshotNotFoundFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => CopySnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => CopySnapshotError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CopySnapshotError::Unknown(body.to_string())
@@ -6713,7 +6728,16 @@ Unknown(String)
                 impl Error for CopySnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            CopySnapshotError::InvalidParameterValue(ref cause) => cause,CopySnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,CopySnapshotError::SnapshotAlreadyExistsFault(ref cause) => cause,CopySnapshotError::SnapshotNotFoundFault(ref cause) => cause,CopySnapshotError::InvalidSnapshotStateFault(ref cause) => cause,CopySnapshotError::InvalidParameterCombination(ref cause) => cause,CopySnapshotError::Validation(ref cause) => cause,CopySnapshotError::Credentials(ref err) => err.description(),CopySnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CopySnapshotError::Unknown(ref cause) => cause
+                            CopySnapshotError::InvalidParameterCombination(ref cause) => cause,
+CopySnapshotError::InvalidParameterValue(ref cause) => cause,
+CopySnapshotError::InvalidSnapshotStateFault(ref cause) => cause,
+CopySnapshotError::SnapshotAlreadyExistsFault(ref cause) => cause,
+CopySnapshotError::SnapshotNotFoundFault(ref cause) => cause,
+CopySnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+CopySnapshotError::Validation(ref cause) => cause,
+CopySnapshotError::Credentials(ref err) => err.description(),
+CopySnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CopySnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6721,34 +6745,34 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateCacheClusterError {
                     
-///<p>The specified replication group does not exist.</p>
-ReplicationGroupNotFoundFault(String),
-///<p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
-CacheSubnetGroupNotFoundFault(String),
-///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
-NodeQuotaForCustomerExceededFault(String),
-///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
-CacheParameterGroupNotFoundFault(String),
-///<p>The request cannot be processed because it would exceed the allowed number of cache clusters per customer.</p>
-ClusterQuotaForCustomerExceededFault(String),
-///<p>The VPC network is in an invalid state.</p>
-InvalidVPCNetworkStateFault(String),
 ///<p>You already have a cache cluster with the given identifier.</p>
 CacheClusterAlreadyExistsFault(String),
+///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+CacheParameterGroupNotFoundFault(String),
 ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
 CacheSecurityGroupNotFoundFault(String),
-///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
-NodeQuotaForClusterExceededFault(String),
-///<p>The requested replication group is not in the <code>available</code> state.</p>
-InvalidReplicationGroupStateFault(String),
+///<p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
+CacheSubnetGroupNotFoundFault(String),
+///<p>The request cannot be processed because it would exceed the allowed number of cache clusters per customer.</p>
+ClusterQuotaForCustomerExceededFault(String),
 ///<p>The requested cache node type is not available in the specified Availability Zone.</p>
 InsufficientCacheClusterCapacityFault(String),
+///<p>Two or more incompatible parameters were specified.</p>
+InvalidParameterCombination(String),
 ///<p>The value for a parameter is invalid.</p>
 InvalidParameterValue(String),
+///<p>The requested replication group is not in the <code>available</code> state.</p>
+InvalidReplicationGroupStateFault(String),
+///<p>The VPC network is in an invalid state.</p>
+InvalidVPCNetworkStateFault(String),
+///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
+NodeQuotaForClusterExceededFault(String),
+///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
+NodeQuotaForCustomerExceededFault(String),
+///<p>The specified replication group does not exist.</p>
+ReplicationGroupNotFoundFault(String),
 ///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 10.</p>
-TagQuotaPerResourceExceeded(String),
-///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+TagQuotaPerResourceExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6765,7 +6789,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TagQuotaPerResourceExceeded" => CreateCacheClusterError::TagQuotaPerResourceExceeded(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => CreateCacheClusterError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => CreateCacheClusterError::InvalidParameterCombination(String::from(parsed_error.message)),"InsufficientCacheClusterCapacityFault" => CreateCacheClusterError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidReplicationGroupStateFault" => CreateCacheClusterError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"ClusterQuotaForCustomerExceededFault" => CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceededFault" => CreateCacheClusterError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"InvalidParameterValueException" => CreateCacheClusterError::InvalidParameterValue(String::from(parsed_error.message)),"NodeQuotaForClusterExceededFault" => CreateCacheClusterError::NodeQuotaForClusterExceededFault(String::from(parsed_error.message)),"CacheParameterGroupNotFoundFault" => CreateCacheClusterError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => CreateCacheClusterError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),"CacheClusterAlreadyExistsFault" => CreateCacheClusterError::CacheClusterAlreadyExistsFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => CreateCacheClusterError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => CreateCacheClusterError::CacheSubnetGroupNotFoundFault(String::from(parsed_error.message)),_ => CreateCacheClusterError::Unknown(String::from(body))
+                                    "CacheClusterAlreadyExistsFault" => CreateCacheClusterError::CacheClusterAlreadyExistsFault(String::from(parsed_error.message)),"CacheParameterGroupNotFoundFault" => CreateCacheClusterError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => CreateCacheClusterError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => CreateCacheClusterError::CacheSubnetGroupNotFoundFault(String::from(parsed_error.message)),"ClusterQuotaForCustomerExceededFault" => CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(String::from(parsed_error.message)),"InsufficientCacheClusterCapacityFault" => CreateCacheClusterError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => CreateCacheClusterError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => CreateCacheClusterError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidReplicationGroupStateFault" => CreateCacheClusterError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => CreateCacheClusterError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"NodeQuotaForClusterExceededFault" => CreateCacheClusterError::NodeQuotaForClusterExceededFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceededFault" => CreateCacheClusterError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => CreateCacheClusterError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),"TagQuotaPerResourceExceeded" => CreateCacheClusterError::TagQuotaPerResourceExceeded(String::from(parsed_error.message)),_ => CreateCacheClusterError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateCacheClusterError::Unknown(body.to_string())
@@ -6797,7 +6821,24 @@ Unknown(String)
                 impl Error for CreateCacheClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateCacheClusterError::CacheParameterGroupNotFoundFault(ref cause) => cause,CreateCacheClusterError::InvalidParameterCombination(ref cause) => cause,CreateCacheClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,CreateCacheClusterError::InsufficientCacheClusterCapacityFault(ref cause) => cause,CreateCacheClusterError::NodeQuotaForClusterExceededFault(ref cause) => cause,CreateCacheClusterError::CacheSubnetGroupNotFoundFault(ref cause) => cause,CreateCacheClusterError::CacheClusterAlreadyExistsFault(ref cause) => cause,CreateCacheClusterError::NodeQuotaForCustomerExceededFault(ref cause) => cause,CreateCacheClusterError::CacheSecurityGroupNotFoundFault(ref cause) => cause,CreateCacheClusterError::TagQuotaPerResourceExceeded(ref cause) => cause,CreateCacheClusterError::InvalidReplicationGroupStateFault(ref cause) => cause,CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(ref cause) => cause,CreateCacheClusterError::InvalidParameterValue(ref cause) => cause,CreateCacheClusterError::ReplicationGroupNotFoundFault(ref cause) => cause,CreateCacheClusterError::Validation(ref cause) => cause,CreateCacheClusterError::Credentials(ref err) => err.description(),CreateCacheClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateCacheClusterError::Unknown(ref cause) => cause
+                            CreateCacheClusterError::CacheClusterAlreadyExistsFault(ref cause) => cause,
+CreateCacheClusterError::CacheParameterGroupNotFoundFault(ref cause) => cause,
+CreateCacheClusterError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
+CreateCacheClusterError::CacheSubnetGroupNotFoundFault(ref cause) => cause,
+CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(ref cause) => cause,
+CreateCacheClusterError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
+CreateCacheClusterError::InvalidParameterCombination(ref cause) => cause,
+CreateCacheClusterError::InvalidParameterValue(ref cause) => cause,
+CreateCacheClusterError::InvalidReplicationGroupStateFault(ref cause) => cause,
+CreateCacheClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
+CreateCacheClusterError::NodeQuotaForClusterExceededFault(ref cause) => cause,
+CreateCacheClusterError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
+CreateCacheClusterError::ReplicationGroupNotFoundFault(ref cause) => cause,
+CreateCacheClusterError::TagQuotaPerResourceExceeded(ref cause) => cause,
+CreateCacheClusterError::Validation(ref cause) => cause,
+CreateCacheClusterError::Credentials(ref err) => err.description(),
+CreateCacheClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateCacheClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6805,16 +6846,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateCacheParameterGroupError {
                     
-///<p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
-InvalidCacheParameterGroupStateFault(String),
-///<p>The request cannot be processed because it would exceed the maximum number of cache security groups.</p>
-CacheParameterGroupQuotaExceededFault(String),
 ///<p>A cache parameter group with the requested name already exists.</p>
 CacheParameterGroupAlreadyExistsFault(String),
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
+///<p>The request cannot be processed because it would exceed the maximum number of cache security groups.</p>
+CacheParameterGroupQuotaExceededFault(String),
+///<p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
+InvalidCacheParameterGroupStateFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+InvalidParameterCombination(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6831,7 +6872,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CacheParameterGroupAlreadyExistsFault" => CreateCacheParameterGroupError::CacheParameterGroupAlreadyExistsFault(String::from(parsed_error.message)),"CacheParameterGroupQuotaExceededFault" => CreateCacheParameterGroupError::CacheParameterGroupQuotaExceededFault(String::from(parsed_error.message)),"InvalidParameterValueException" => CreateCacheParameterGroupError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidCacheParameterGroupStateFault" => CreateCacheParameterGroupError::InvalidCacheParameterGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => CreateCacheParameterGroupError::InvalidParameterCombination(String::from(parsed_error.message)),_ => CreateCacheParameterGroupError::Unknown(String::from(body))
+                                    "CacheParameterGroupAlreadyExistsFault" => CreateCacheParameterGroupError::CacheParameterGroupAlreadyExistsFault(String::from(parsed_error.message)),"CacheParameterGroupQuotaExceededFault" => CreateCacheParameterGroupError::CacheParameterGroupQuotaExceededFault(String::from(parsed_error.message)),"InvalidCacheParameterGroupStateFault" => CreateCacheParameterGroupError::InvalidCacheParameterGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => CreateCacheParameterGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => CreateCacheParameterGroupError::InvalidParameterValue(String::from(parsed_error.message)),_ => CreateCacheParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateCacheParameterGroupError::Unknown(body.to_string())
@@ -6863,7 +6904,15 @@ Unknown(String)
                 impl Error for CreateCacheParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,CreateCacheParameterGroupError::CacheParameterGroupQuotaExceededFault(ref cause) => cause,CreateCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => cause,CreateCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,CreateCacheParameterGroupError::CacheParameterGroupAlreadyExistsFault(ref cause) => cause,CreateCacheParameterGroupError::Validation(ref cause) => cause,CreateCacheParameterGroupError::Credentials(ref err) => err.description(),CreateCacheParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateCacheParameterGroupError::Unknown(ref cause) => cause
+                            CreateCacheParameterGroupError::CacheParameterGroupAlreadyExistsFault(ref cause) => cause,
+CreateCacheParameterGroupError::CacheParameterGroupQuotaExceededFault(ref cause) => cause,
+CreateCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => cause,
+CreateCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,
+CreateCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,
+CreateCacheParameterGroupError::Validation(ref cause) => cause,
+CreateCacheParameterGroupError::Credentials(ref err) => err.description(),
+CreateCacheParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateCacheParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6871,14 +6920,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateCacheSecurityGroupError {
                     
+///<p>A cache security group with the specified name already exists.</p>
+CacheSecurityGroupAlreadyExistsFault(String),
+///<p>The request cannot be processed because it would exceed the allowed number of cache security groups.</p>
+CacheSecurityGroupQuotaExceededFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
 InvalidParameterCombination(String),
 ///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
-///<p>The request cannot be processed because it would exceed the allowed number of cache security groups.</p>
-CacheSecurityGroupQuotaExceededFault(String),
-///<p>A cache security group with the specified name already exists.</p>
-CacheSecurityGroupAlreadyExistsFault(String),/// An error occurred dispatching the HTTP request
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6895,7 +6944,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombinationException" => CreateCacheSecurityGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"CacheSecurityGroupQuotaExceededFault" => CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(String::from(parsed_error.message)),"InvalidParameterValueException" => CreateCacheSecurityGroupError::InvalidParameterValue(String::from(parsed_error.message)),"CacheSecurityGroupAlreadyExistsFault" => CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(String::from(parsed_error.message)),_ => CreateCacheSecurityGroupError::Unknown(String::from(body))
+                                    "CacheSecurityGroupAlreadyExistsFault" => CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(String::from(parsed_error.message)),"CacheSecurityGroupQuotaExceededFault" => CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => CreateCacheSecurityGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => CreateCacheSecurityGroupError::InvalidParameterValue(String::from(parsed_error.message)),_ => CreateCacheSecurityGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateCacheSecurityGroupError::Unknown(body.to_string())
@@ -6927,7 +6976,14 @@ Unknown(String)
                 impl Error for CreateCacheSecurityGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(ref cause) => cause,CreateCacheSecurityGroupError::InvalidParameterCombination(ref cause) => cause,CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(ref cause) => cause,CreateCacheSecurityGroupError::InvalidParameterValue(ref cause) => cause,CreateCacheSecurityGroupError::Validation(ref cause) => cause,CreateCacheSecurityGroupError::Credentials(ref err) => err.description(),CreateCacheSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateCacheSecurityGroupError::Unknown(ref cause) => cause
+                            CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(ref cause) => cause,
+CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(ref cause) => cause,
+CreateCacheSecurityGroupError::InvalidParameterCombination(ref cause) => cause,
+CreateCacheSecurityGroupError::InvalidParameterValue(ref cause) => cause,
+CreateCacheSecurityGroupError::Validation(ref cause) => cause,
+CreateCacheSecurityGroupError::Credentials(ref err) => err.description(),
+CreateCacheSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateCacheSecurityGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6939,10 +6995,10 @@ Unknown(String)
 CacheSubnetGroupAlreadyExistsFault(String),
 ///<p>The request cannot be processed because it would exceed the allowed number of cache subnet groups.</p>
 CacheSubnetGroupQuotaExceededFault(String),
-///<p>An invalid subnet identifier was specified.</p>
-InvalidSubnet(String),
 ///<p>The request cannot be processed because it would exceed the allowed number of subnets in a cache subnet group.</p>
-CacheSubnetQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
+CacheSubnetQuotaExceededFault(String),
+///<p>An invalid subnet identifier was specified.</p>
+InvalidSubnet(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6959,7 +7015,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidSubnet" => CreateCacheSubnetGroupError::InvalidSubnet(String::from(parsed_error.message)),"CacheSubnetGroupAlreadyExistsFault" => CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(String::from(parsed_error.message)),"CacheSubnetQuotaExceededFault" => CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(String::from(parsed_error.message)),"CacheSubnetGroupQuotaExceededFault" => CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(String::from(parsed_error.message)),_ => CreateCacheSubnetGroupError::Unknown(String::from(body))
+                                    "CacheSubnetGroupAlreadyExistsFault" => CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(String::from(parsed_error.message)),"CacheSubnetGroupQuotaExceededFault" => CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(String::from(parsed_error.message)),"CacheSubnetQuotaExceededFault" => CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(String::from(parsed_error.message)),"InvalidSubnet" => CreateCacheSubnetGroupError::InvalidSubnet(String::from(parsed_error.message)),_ => CreateCacheSubnetGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateCacheSubnetGroupError::Unknown(body.to_string())
@@ -6991,7 +7047,14 @@ Unknown(String)
                 impl Error for CreateCacheSubnetGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(ref cause) => cause,CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(ref cause) => cause,CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(ref cause) => cause,CreateCacheSubnetGroupError::InvalidSubnet(ref cause) => cause,CreateCacheSubnetGroupError::Validation(ref cause) => cause,CreateCacheSubnetGroupError::Credentials(ref err) => err.description(),CreateCacheSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateCacheSubnetGroupError::Unknown(ref cause) => cause
+                            CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(ref cause) => cause,
+CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(ref cause) => cause,
+CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(ref cause) => cause,
+CreateCacheSubnetGroupError::InvalidSubnet(ref cause) => cause,
+CreateCacheSubnetGroupError::Validation(ref cause) => cause,
+CreateCacheSubnetGroupError::Credentials(ref err) => err.description(),
+CreateCacheSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateCacheSubnetGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6999,36 +7062,36 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateReplicationGroupError {
                     
-///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 10.</p>
-TagQuotaPerResourceExceeded(String),
-///<p>The request cannot be processed because it would exceed the maximum of 15 node groups (shards) in a single replication group.</p>
-NodeGroupsPerReplicationGroupQuotaExceededFault(String),
+///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+CacheClusterNotFoundFault(String),
+///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+CacheParameterGroupNotFoundFault(String),
+///<p>The requested cache security group name does not refer to an existing cache security group.</p>
+CacheSecurityGroupNotFoundFault(String),
+///<p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
+CacheSubnetGroupNotFoundFault(String),
+///<p>The request cannot be processed because it would exceed the allowed number of cache clusters per customer.</p>
+ClusterQuotaForCustomerExceededFault(String),
+///<p>The requested cache node type is not available in the specified Availability Zone.</p>
+InsufficientCacheClusterCapacityFault(String),
 ///<p>The requested cache cluster is not in the <code>available</code> state.</p>
 InvalidCacheClusterStateFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
 InvalidParameterCombination(String),
-///<p>The requested cache node type is not available in the specified Availability Zone.</p>
-InsufficientCacheClusterCapacityFault(String),
-///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
-NodeQuotaForClusterExceededFault(String),
-///<p>The VPC network is in an invalid state.</p>
-InvalidVPCNetworkStateFault(String),
-///<p>The specified replication group already exists.</p>
-ReplicationGroupAlreadyExistsFault(String),
-///<p>The requested cache security group name does not refer to an existing cache security group.</p>
-CacheSecurityGroupNotFoundFault(String),
-///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
-CacheClusterNotFoundFault(String),
-///<p>The request cannot be processed because it would exceed the allowed number of cache clusters per customer.</p>
-ClusterQuotaForCustomerExceededFault(String),
-///<p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
-CacheSubnetGroupNotFoundFault(String),
-///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
-NodeQuotaForCustomerExceededFault(String),
 ///<p>The value for a parameter is invalid.</p>
 InvalidParameterValue(String),
-///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
-CacheParameterGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
+///<p>The VPC network is in an invalid state.</p>
+InvalidVPCNetworkStateFault(String),
+///<p>The request cannot be processed because it would exceed the maximum of 15 node groups (shards) in a single replication group.</p>
+NodeGroupsPerReplicationGroupQuotaExceededFault(String),
+///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
+NodeQuotaForClusterExceededFault(String),
+///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
+NodeQuotaForCustomerExceededFault(String),
+///<p>The specified replication group already exists.</p>
+ReplicationGroupAlreadyExistsFault(String),
+///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 10.</p>
+TagQuotaPerResourceExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7045,7 +7108,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CacheParameterGroupNotFoundFault" => CreateReplicationGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"TagQuotaPerResourceExceeded" => CreateReplicationGroupError::TagQuotaPerResourceExceeded(String::from(parsed_error.message)),"InsufficientCacheClusterCapacityFault" => CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => CreateReplicationGroupError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceededFault" => CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceededFault" => CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(String::from(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(String::from(parsed_error.message)),"NodeQuotaForClusterExceededFault" => CreateReplicationGroupError::NodeQuotaForClusterExceededFault(String::from(parsed_error.message)),"InvalidParameterValueException" => CreateReplicationGroupError::InvalidParameterValue(String::from(parsed_error.message)),"ReplicationGroupAlreadyExistsFault" => CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(String::from(parsed_error.message)),"InvalidCacheClusterStateFault" => CreateReplicationGroupError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"CacheClusterNotFoundFault" => CreateReplicationGroupError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"ClusterQuotaForCustomerExceededFault" => CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => CreateReplicationGroupError::InvalidParameterCombination(String::from(parsed_error.message)),_ => CreateReplicationGroupError::Unknown(String::from(body))
+                                    "CacheClusterNotFoundFault" => CreateReplicationGroupError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"CacheParameterGroupNotFoundFault" => CreateReplicationGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(String::from(parsed_error.message)),"ClusterQuotaForCustomerExceededFault" => CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(String::from(parsed_error.message)),"InsufficientCacheClusterCapacityFault" => CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidCacheClusterStateFault" => CreateReplicationGroupError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => CreateReplicationGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => CreateReplicationGroupError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => CreateReplicationGroupError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceededFault" => CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(String::from(parsed_error.message)),"NodeQuotaForClusterExceededFault" => CreateReplicationGroupError::NodeQuotaForClusterExceededFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceededFault" => CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"ReplicationGroupAlreadyExistsFault" => CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(String::from(parsed_error.message)),"TagQuotaPerResourceExceeded" => CreateReplicationGroupError::TagQuotaPerResourceExceeded(String::from(parsed_error.message)),_ => CreateReplicationGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateReplicationGroupError::Unknown(body.to_string())
@@ -7077,7 +7140,25 @@ Unknown(String)
                 impl Error for CreateReplicationGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(ref cause) => cause,CreateReplicationGroupError::InvalidParameterValue(ref cause) => cause,CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(ref cause) => cause,CreateReplicationGroupError::InvalidCacheClusterStateFault(ref cause) => cause,CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(ref cause) => cause,CreateReplicationGroupError::InvalidParameterCombination(ref cause) => cause,CreateReplicationGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,CreateReplicationGroupError::InvalidVPCNetworkStateFault(ref cause) => cause,CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(ref cause) => cause,CreateReplicationGroupError::CacheClusterNotFoundFault(ref cause) => cause,CreateReplicationGroupError::NodeQuotaForClusterExceededFault(ref cause) => cause,CreateReplicationGroupError::TagQuotaPerResourceExceeded(ref cause) => cause,CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(ref cause) => cause,CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(ref cause) => cause,CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(ref cause) => cause,CreateReplicationGroupError::Validation(ref cause) => cause,CreateReplicationGroupError::Credentials(ref err) => err.description(),CreateReplicationGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateReplicationGroupError::Unknown(ref cause) => cause
+                            CreateReplicationGroupError::CacheClusterNotFoundFault(ref cause) => cause,
+CreateReplicationGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,
+CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
+CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(ref cause) => cause,
+CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(ref cause) => cause,
+CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
+CreateReplicationGroupError::InvalidCacheClusterStateFault(ref cause) => cause,
+CreateReplicationGroupError::InvalidParameterCombination(ref cause) => cause,
+CreateReplicationGroupError::InvalidParameterValue(ref cause) => cause,
+CreateReplicationGroupError::InvalidVPCNetworkStateFault(ref cause) => cause,
+CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(ref cause) => cause,
+CreateReplicationGroupError::NodeQuotaForClusterExceededFault(ref cause) => cause,
+CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
+CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(ref cause) => cause,
+CreateReplicationGroupError::TagQuotaPerResourceExceeded(ref cause) => cause,
+CreateReplicationGroupError::Validation(ref cause) => cause,
+CreateReplicationGroupError::Credentials(ref err) => err.description(),
+CreateReplicationGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateReplicationGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7085,24 +7166,24 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateSnapshotError {
                     
+///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+CacheClusterNotFoundFault(String),
+///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+InvalidCacheClusterStateFault(String),
+///<p>Two or more incompatible parameters were specified.</p>
+InvalidParameterCombination(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),
+///<p>The requested replication group is not in the <code>available</code> state.</p>
+InvalidReplicationGroupStateFault(String),
+///<p>The specified replication group does not exist.</p>
+ReplicationGroupNotFoundFault(String),
 ///<p>You already have a snapshot with the given name.</p>
 SnapshotAlreadyExistsFault(String),
 ///<p>You attempted one of the following operations:</p> <ul> <li> <p>Creating a snapshot of a Redis cache cluster running on a <code>cache.t1.micro</code> cache node.</p> </li> <li> <p>Creating a snapshot of a cache cluster that is running Memcached rather than Redis.</p> </li> </ul> <p>Neither of these are supported by ElastiCache.</p>
 SnapshotFeatureNotSupportedFault(String),
 ///<p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
-SnapshotQuotaExceededFault(String),
-///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
-CacheClusterNotFoundFault(String),
-///<p>The requested replication group is not in the <code>available</code> state.</p>
-InvalidReplicationGroupStateFault(String),
-///<p>The requested cache cluster is not in the <code>available</code> state.</p>
-InvalidCacheClusterStateFault(String),
-///<p>The specified replication group does not exist.</p>
-ReplicationGroupNotFoundFault(String),
-///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
+SnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7119,7 +7200,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValueException" => CreateSnapshotError::InvalidParameterValue(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => CreateSnapshotError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => CreateSnapshotError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidCacheClusterStateFault" => CreateSnapshotError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => CreateSnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),"SnapshotAlreadyExistsFault" => CreateSnapshotError::SnapshotAlreadyExistsFault(String::from(parsed_error.message)),"CacheClusterNotFoundFault" => CreateSnapshotError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"SnapshotFeatureNotSupportedFault" => CreateSnapshotError::SnapshotFeatureNotSupportedFault(String::from(parsed_error.message)),"InvalidReplicationGroupStateFault" => CreateSnapshotError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),_ => CreateSnapshotError::Unknown(String::from(body))
+                                    "CacheClusterNotFoundFault" => CreateSnapshotError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"InvalidCacheClusterStateFault" => CreateSnapshotError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => CreateSnapshotError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => CreateSnapshotError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidReplicationGroupStateFault" => CreateSnapshotError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => CreateSnapshotError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),"SnapshotAlreadyExistsFault" => CreateSnapshotError::SnapshotAlreadyExistsFault(String::from(parsed_error.message)),"SnapshotFeatureNotSupportedFault" => CreateSnapshotError::SnapshotFeatureNotSupportedFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => CreateSnapshotError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => CreateSnapshotError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateSnapshotError::Unknown(body.to_string())
@@ -7151,7 +7232,19 @@ Unknown(String)
                 impl Error for CreateSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateSnapshotError::SnapshotFeatureNotSupportedFault(ref cause) => cause,CreateSnapshotError::InvalidParameterValue(ref cause) => cause,CreateSnapshotError::ReplicationGroupNotFoundFault(ref cause) => cause,CreateSnapshotError::InvalidCacheClusterStateFault(ref cause) => cause,CreateSnapshotError::CacheClusterNotFoundFault(ref cause) => cause,CreateSnapshotError::InvalidReplicationGroupStateFault(ref cause) => cause,CreateSnapshotError::SnapshotAlreadyExistsFault(ref cause) => cause,CreateSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,CreateSnapshotError::InvalidParameterCombination(ref cause) => cause,CreateSnapshotError::Validation(ref cause) => cause,CreateSnapshotError::Credentials(ref err) => err.description(),CreateSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateSnapshotError::Unknown(ref cause) => cause
+                            CreateSnapshotError::CacheClusterNotFoundFault(ref cause) => cause,
+CreateSnapshotError::InvalidCacheClusterStateFault(ref cause) => cause,
+CreateSnapshotError::InvalidParameterCombination(ref cause) => cause,
+CreateSnapshotError::InvalidParameterValue(ref cause) => cause,
+CreateSnapshotError::InvalidReplicationGroupStateFault(ref cause) => cause,
+CreateSnapshotError::ReplicationGroupNotFoundFault(ref cause) => cause,
+CreateSnapshotError::SnapshotAlreadyExistsFault(ref cause) => cause,
+CreateSnapshotError::SnapshotFeatureNotSupportedFault(ref cause) => cause,
+CreateSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
+CreateSnapshotError::Validation(ref cause) => cause,
+CreateSnapshotError::Credentials(ref err) => err.description(),
+CreateSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7159,20 +7252,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteCacheClusterError {
                     
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
+///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+CacheClusterNotFoundFault(String),
+///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+InvalidCacheClusterStateFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
 InvalidParameterCombination(String),
-///<p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
-SnapshotQuotaExceededFault(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),
 ///<p>You already have a snapshot with the given name.</p>
 SnapshotAlreadyExistsFault(String),
 ///<p>You attempted one of the following operations:</p> <ul> <li> <p>Creating a snapshot of a Redis cache cluster running on a <code>cache.t1.micro</code> cache node.</p> </li> <li> <p>Creating a snapshot of a cache cluster that is running Memcached rather than Redis.</p> </li> </ul> <p>Neither of these are supported by ElastiCache.</p>
 SnapshotFeatureNotSupportedFault(String),
-///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
-CacheClusterNotFoundFault(String),
-///<p>The requested cache cluster is not in the <code>available</code> state.</p>
-InvalidCacheClusterStateFault(String),/// An error occurred dispatching the HTTP request
+///<p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
+SnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7189,7 +7282,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CacheClusterNotFoundFault" => DeleteCacheClusterError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"SnapshotAlreadyExistsFault" => DeleteCacheClusterError::SnapshotAlreadyExistsFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DeleteCacheClusterError::InvalidParameterCombination(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => DeleteCacheClusterError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),"SnapshotFeatureNotSupportedFault" => DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(String::from(parsed_error.message)),"InvalidCacheClusterStateFault" => DeleteCacheClusterError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidParameterValueException" => DeleteCacheClusterError::InvalidParameterValue(String::from(parsed_error.message)),_ => DeleteCacheClusterError::Unknown(String::from(body))
+                                    "CacheClusterNotFoundFault" => DeleteCacheClusterError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"InvalidCacheClusterStateFault" => DeleteCacheClusterError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DeleteCacheClusterError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DeleteCacheClusterError::InvalidParameterValue(String::from(parsed_error.message)),"SnapshotAlreadyExistsFault" => DeleteCacheClusterError::SnapshotAlreadyExistsFault(String::from(parsed_error.message)),"SnapshotFeatureNotSupportedFault" => DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => DeleteCacheClusterError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => DeleteCacheClusterError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteCacheClusterError::Unknown(body.to_string())
@@ -7221,7 +7314,17 @@ Unknown(String)
                 impl Error for DeleteCacheClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteCacheClusterError::InvalidParameterCombination(ref cause) => cause,DeleteCacheClusterError::InvalidCacheClusterStateFault(ref cause) => cause,DeleteCacheClusterError::SnapshotQuotaExceededFault(ref cause) => cause,DeleteCacheClusterError::SnapshotAlreadyExistsFault(ref cause) => cause,DeleteCacheClusterError::CacheClusterNotFoundFault(ref cause) => cause,DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(ref cause) => cause,DeleteCacheClusterError::InvalidParameterValue(ref cause) => cause,DeleteCacheClusterError::Validation(ref cause) => cause,DeleteCacheClusterError::Credentials(ref err) => err.description(),DeleteCacheClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteCacheClusterError::Unknown(ref cause) => cause
+                            DeleteCacheClusterError::CacheClusterNotFoundFault(ref cause) => cause,
+DeleteCacheClusterError::InvalidCacheClusterStateFault(ref cause) => cause,
+DeleteCacheClusterError::InvalidParameterCombination(ref cause) => cause,
+DeleteCacheClusterError::InvalidParameterValue(ref cause) => cause,
+DeleteCacheClusterError::SnapshotAlreadyExistsFault(ref cause) => cause,
+DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(ref cause) => cause,
+DeleteCacheClusterError::SnapshotQuotaExceededFault(ref cause) => cause,
+DeleteCacheClusterError::Validation(ref cause) => cause,
+DeleteCacheClusterError::Credentials(ref err) => err.description(),
+DeleteCacheClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteCacheClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7229,14 +7332,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteCacheParameterGroupError {
                     
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
+///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+CacheParameterGroupNotFoundFault(String),
 ///<p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
 InvalidCacheParameterGroupStateFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
 InvalidParameterCombination(String),
-///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
-CacheParameterGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7253,7 +7356,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombinationException" => DeleteCacheParameterGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"CacheParameterGroupNotFoundFault" => DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidCacheParameterGroupStateFault" => DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(String::from(parsed_error.message)),"InvalidParameterValueException" => DeleteCacheParameterGroupError::InvalidParameterValue(String::from(parsed_error.message)),_ => DeleteCacheParameterGroupError::Unknown(String::from(body))
+                                    "CacheParameterGroupNotFoundFault" => DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidCacheParameterGroupStateFault" => DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DeleteCacheParameterGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DeleteCacheParameterGroupError::InvalidParameterValue(String::from(parsed_error.message)),_ => DeleteCacheParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteCacheParameterGroupError::Unknown(body.to_string())
@@ -7285,7 +7388,14 @@ Unknown(String)
                 impl Error for DeleteCacheParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => cause,DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,DeleteCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,DeleteCacheParameterGroupError::Validation(ref cause) => cause,DeleteCacheParameterGroupError::Credentials(ref err) => err.description(),DeleteCacheParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteCacheParameterGroupError::Unknown(ref cause) => cause
+                            DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,
+DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => cause,
+DeleteCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,
+DeleteCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,
+DeleteCacheParameterGroupError::Validation(ref cause) => cause,
+DeleteCacheParameterGroupError::Credentials(ref err) => err.description(),
+DeleteCacheParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteCacheParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7293,14 +7403,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteCacheSecurityGroupError {
                     
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
-///<p>The current state of the cache security group does not allow deletion.</p>
-InvalidCacheSecurityGroupStateFault(String),
 ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
 CacheSecurityGroupNotFoundFault(String),
+///<p>The current state of the cache security group does not allow deletion.</p>
+InvalidCacheSecurityGroupStateFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+InvalidParameterCombination(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7317,7 +7427,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CacheSecurityGroupNotFoundFault" => DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterValueException" => DeleteCacheSecurityGroupError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DeleteCacheSecurityGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidCacheSecurityGroupStateFault" => DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),_ => DeleteCacheSecurityGroupError::Unknown(String::from(body))
+                                    "CacheSecurityGroupNotFoundFault" => DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidCacheSecurityGroupStateFault" => DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DeleteCacheSecurityGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DeleteCacheSecurityGroupError::InvalidParameterValue(String::from(parsed_error.message)),_ => DeleteCacheSecurityGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteCacheSecurityGroupError::Unknown(body.to_string())
@@ -7349,7 +7459,14 @@ Unknown(String)
                 impl Error for DeleteCacheSecurityGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(ref cause) => cause,DeleteCacheSecurityGroupError::InvalidParameterValue(ref cause) => cause,DeleteCacheSecurityGroupError::InvalidParameterCombination(ref cause) => cause,DeleteCacheSecurityGroupError::Validation(ref cause) => cause,DeleteCacheSecurityGroupError::Credentials(ref err) => err.description(),DeleteCacheSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteCacheSecurityGroupError::Unknown(ref cause) => cause
+                            DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
+DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,
+DeleteCacheSecurityGroupError::InvalidParameterCombination(ref cause) => cause,
+DeleteCacheSecurityGroupError::InvalidParameterValue(ref cause) => cause,
+DeleteCacheSecurityGroupError::Validation(ref cause) => cause,
+DeleteCacheSecurityGroupError::Credentials(ref err) => err.description(),
+DeleteCacheSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteCacheSecurityGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7377,7 +7494,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CacheSubnetGroupNotFoundFault" => DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(String::from(parsed_error.message)),"CacheSubnetGroupInUse" => DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(String::from(parsed_error.message)),_ => DeleteCacheSubnetGroupError::Unknown(String::from(body))
+                                    "CacheSubnetGroupInUse" => DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(String::from(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(String::from(parsed_error.message)),_ => DeleteCacheSubnetGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteCacheSubnetGroupError::Unknown(body.to_string())
@@ -7409,7 +7526,12 @@ Unknown(String)
                 impl Error for DeleteCacheSubnetGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(ref cause) => cause,DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(ref cause) => cause,DeleteCacheSubnetGroupError::Validation(ref cause) => cause,DeleteCacheSubnetGroupError::Credentials(ref err) => err.description(),DeleteCacheSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteCacheSubnetGroupError::Unknown(ref cause) => cause
+                            DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(ref cause) => cause,
+DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(ref cause) => cause,
+DeleteCacheSubnetGroupError::Validation(ref cause) => cause,
+DeleteCacheSubnetGroupError::Credentials(ref err) => err.description(),
+DeleteCacheSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteCacheSubnetGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7417,20 +7539,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteReplicationGroupError {
                     
-///<p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
-SnapshotQuotaExceededFault(String),
-///<p>You already have a snapshot with the given name.</p>
-SnapshotAlreadyExistsFault(String),
+///<p>Two or more incompatible parameters were specified.</p>
+InvalidParameterCombination(String),
 ///<p>The value for a parameter is invalid.</p>
 InvalidParameterValue(String),
-///<p>You attempted one of the following operations:</p> <ul> <li> <p>Creating a snapshot of a Redis cache cluster running on a <code>cache.t1.micro</code> cache node.</p> </li> <li> <p>Creating a snapshot of a cache cluster that is running Memcached rather than Redis.</p> </li> </ul> <p>Neither of these are supported by ElastiCache.</p>
-SnapshotFeatureNotSupportedFault(String),
-///<p>The specified replication group does not exist.</p>
-ReplicationGroupNotFoundFault(String),
 ///<p>The requested replication group is not in the <code>available</code> state.</p>
 InvalidReplicationGroupStateFault(String),
-///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+///<p>The specified replication group does not exist.</p>
+ReplicationGroupNotFoundFault(String),
+///<p>You already have a snapshot with the given name.</p>
+SnapshotAlreadyExistsFault(String),
+///<p>You attempted one of the following operations:</p> <ul> <li> <p>Creating a snapshot of a Redis cache cluster running on a <code>cache.t1.micro</code> cache node.</p> </li> <li> <p>Creating a snapshot of a cache cluster that is running Memcached rather than Redis.</p> </li> </ul> <p>Neither of these are supported by ElastiCache.</p>
+SnapshotFeatureNotSupportedFault(String),
+///<p>The request cannot be processed because it would exceed the maximum number of snapshots.</p>
+SnapshotQuotaExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7447,7 +7569,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValueException" => DeleteReplicationGroupError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DeleteReplicationGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidReplicationGroupStateFault" => DeleteReplicationGroupError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => DeleteReplicationGroupError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),"SnapshotAlreadyExistsFault" => DeleteReplicationGroupError::SnapshotAlreadyExistsFault(String::from(parsed_error.message)),"SnapshotFeatureNotSupportedFault" => DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => DeleteReplicationGroupError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => DeleteReplicationGroupError::Unknown(String::from(body))
+                                    "InvalidParameterCombinationException" => DeleteReplicationGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DeleteReplicationGroupError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidReplicationGroupStateFault" => DeleteReplicationGroupError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => DeleteReplicationGroupError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),"SnapshotAlreadyExistsFault" => DeleteReplicationGroupError::SnapshotAlreadyExistsFault(String::from(parsed_error.message)),"SnapshotFeatureNotSupportedFault" => DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(String::from(parsed_error.message)),"SnapshotQuotaExceededFault" => DeleteReplicationGroupError::SnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => DeleteReplicationGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteReplicationGroupError::Unknown(body.to_string())
@@ -7479,7 +7601,17 @@ Unknown(String)
                 impl Error for DeleteReplicationGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(ref cause) => cause,DeleteReplicationGroupError::SnapshotAlreadyExistsFault(ref cause) => cause,DeleteReplicationGroupError::InvalidParameterValue(ref cause) => cause,DeleteReplicationGroupError::InvalidParameterCombination(ref cause) => cause,DeleteReplicationGroupError::ReplicationGroupNotFoundFault(ref cause) => cause,DeleteReplicationGroupError::SnapshotQuotaExceededFault(ref cause) => cause,DeleteReplicationGroupError::InvalidReplicationGroupStateFault(ref cause) => cause,DeleteReplicationGroupError::Validation(ref cause) => cause,DeleteReplicationGroupError::Credentials(ref err) => err.description(),DeleteReplicationGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteReplicationGroupError::Unknown(ref cause) => cause
+                            DeleteReplicationGroupError::InvalidParameterCombination(ref cause) => cause,
+DeleteReplicationGroupError::InvalidParameterValue(ref cause) => cause,
+DeleteReplicationGroupError::InvalidReplicationGroupStateFault(ref cause) => cause,
+DeleteReplicationGroupError::ReplicationGroupNotFoundFault(ref cause) => cause,
+DeleteReplicationGroupError::SnapshotAlreadyExistsFault(ref cause) => cause,
+DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(ref cause) => cause,
+DeleteReplicationGroupError::SnapshotQuotaExceededFault(ref cause) => cause,
+DeleteReplicationGroupError::Validation(ref cause) => cause,
+DeleteReplicationGroupError::Credentials(ref err) => err.description(),
+DeleteReplicationGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteReplicationGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7487,14 +7619,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteSnapshotError {
                     
-///<p>The requested snapshot name does not refer to an existing snapshot.</p>
-SnapshotNotFoundFault(String),
+///<p>Two or more incompatible parameters were specified.</p>
+InvalidParameterCombination(String),
 ///<p>The value for a parameter is invalid.</p>
 InvalidParameterValue(String),
 ///<p>The current state of the snapshot does not allow the requested operation to occur.</p>
 InvalidSnapshotStateFault(String),
-///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+SnapshotNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7511,7 +7643,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValueException" => DeleteSnapshotError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidSnapshotStateFault" => DeleteSnapshotError::InvalidSnapshotStateFault(String::from(parsed_error.message)),"SnapshotNotFoundFault" => DeleteSnapshotError::SnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DeleteSnapshotError::InvalidParameterCombination(String::from(parsed_error.message)),_ => DeleteSnapshotError::Unknown(String::from(body))
+                                    "InvalidParameterCombinationException" => DeleteSnapshotError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DeleteSnapshotError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidSnapshotStateFault" => DeleteSnapshotError::InvalidSnapshotStateFault(String::from(parsed_error.message)),"SnapshotNotFoundFault" => DeleteSnapshotError::SnapshotNotFoundFault(String::from(parsed_error.message)),_ => DeleteSnapshotError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteSnapshotError::Unknown(body.to_string())
@@ -7543,7 +7675,14 @@ Unknown(String)
                 impl Error for DeleteSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteSnapshotError::InvalidSnapshotStateFault(ref cause) => cause,DeleteSnapshotError::SnapshotNotFoundFault(ref cause) => cause,DeleteSnapshotError::InvalidParameterValue(ref cause) => cause,DeleteSnapshotError::InvalidParameterCombination(ref cause) => cause,DeleteSnapshotError::Validation(ref cause) => cause,DeleteSnapshotError::Credentials(ref err) => err.description(),DeleteSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteSnapshotError::Unknown(ref cause) => cause
+                            DeleteSnapshotError::InvalidParameterCombination(ref cause) => cause,
+DeleteSnapshotError::InvalidParameterValue(ref cause) => cause,
+DeleteSnapshotError::InvalidSnapshotStateFault(ref cause) => cause,
+DeleteSnapshotError::SnapshotNotFoundFault(ref cause) => cause,
+DeleteSnapshotError::Validation(ref cause) => cause,
+DeleteSnapshotError::Credentials(ref err) => err.description(),
+DeleteSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7605,7 +7744,13 @@ Unknown(String)
                 impl Error for DescribeCacheClustersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeCacheClustersError::CacheClusterNotFoundFault(ref cause) => cause,DescribeCacheClustersError::InvalidParameterValue(ref cause) => cause,DescribeCacheClustersError::InvalidParameterCombination(ref cause) => cause,DescribeCacheClustersError::Validation(ref cause) => cause,DescribeCacheClustersError::Credentials(ref err) => err.description(),DescribeCacheClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeCacheClustersError::Unknown(ref cause) => cause
+                            DescribeCacheClustersError::CacheClusterNotFoundFault(ref cause) => cause,
+DescribeCacheClustersError::InvalidParameterCombination(ref cause) => cause,
+DescribeCacheClustersError::InvalidParameterValue(ref cause) => cause,
+DescribeCacheClustersError::Validation(ref cause) => cause,
+DescribeCacheClustersError::Credentials(ref err) => err.description(),
+DescribeCacheClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeCacheClustersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7661,7 +7806,10 @@ Unknown(String)
                 impl Error for DescribeCacheEngineVersionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeCacheEngineVersionsError::Validation(ref cause) => cause,DescribeCacheEngineVersionsError::Credentials(ref err) => err.description(),DescribeCacheEngineVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeCacheEngineVersionsError::Unknown(ref cause) => cause
+                            DescribeCacheEngineVersionsError::Validation(ref cause) => cause,
+DescribeCacheEngineVersionsError::Credentials(ref err) => err.description(),
+DescribeCacheEngineVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeCacheEngineVersionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7671,10 +7819,10 @@ Unknown(String)
                     
 ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
 CacheParameterGroupNotFoundFault(String),
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
 ///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+InvalidParameterCombination(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7691,7 +7839,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CacheParameterGroupNotFoundFault" => DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeCacheParameterGroupsError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DescribeCacheParameterGroupsError::InvalidParameterCombination(String::from(parsed_error.message)),_ => DescribeCacheParameterGroupsError::Unknown(String::from(body))
+                                    "CacheParameterGroupNotFoundFault" => DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DescribeCacheParameterGroupsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeCacheParameterGroupsError::InvalidParameterValue(String::from(parsed_error.message)),_ => DescribeCacheParameterGroupsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeCacheParameterGroupsError::Unknown(body.to_string())
@@ -7723,7 +7871,13 @@ Unknown(String)
                 impl Error for DescribeCacheParameterGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeCacheParameterGroupsError::InvalidParameterValue(ref cause) => cause,DescribeCacheParameterGroupsError::InvalidParameterCombination(ref cause) => cause,DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(ref cause) => cause,DescribeCacheParameterGroupsError::Validation(ref cause) => cause,DescribeCacheParameterGroupsError::Credentials(ref err) => err.description(),DescribeCacheParameterGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeCacheParameterGroupsError::Unknown(ref cause) => cause
+                            DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(ref cause) => cause,
+DescribeCacheParameterGroupsError::InvalidParameterCombination(ref cause) => cause,
+DescribeCacheParameterGroupsError::InvalidParameterValue(ref cause) => cause,
+DescribeCacheParameterGroupsError::Validation(ref cause) => cause,
+DescribeCacheParameterGroupsError::Credentials(ref err) => err.description(),
+DescribeCacheParameterGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeCacheParameterGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7731,12 +7885,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeCacheParametersError {
                     
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
+///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+CacheParameterGroupNotFoundFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
 InvalidParameterCombination(String),
-///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
-CacheParameterGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7753,7 +7907,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombinationException" => DescribeCacheParametersError::InvalidParameterCombination(String::from(parsed_error.message)),"CacheParameterGroupNotFoundFault" => DescribeCacheParametersError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeCacheParametersError::InvalidParameterValue(String::from(parsed_error.message)),_ => DescribeCacheParametersError::Unknown(String::from(body))
+                                    "CacheParameterGroupNotFoundFault" => DescribeCacheParametersError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DescribeCacheParametersError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeCacheParametersError::InvalidParameterValue(String::from(parsed_error.message)),_ => DescribeCacheParametersError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeCacheParametersError::Unknown(body.to_string())
@@ -7785,7 +7939,13 @@ Unknown(String)
                 impl Error for DescribeCacheParametersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeCacheParametersError::InvalidParameterCombination(ref cause) => cause,DescribeCacheParametersError::InvalidParameterValue(ref cause) => cause,DescribeCacheParametersError::CacheParameterGroupNotFoundFault(ref cause) => cause,DescribeCacheParametersError::Validation(ref cause) => cause,DescribeCacheParametersError::Credentials(ref err) => err.description(),DescribeCacheParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeCacheParametersError::Unknown(ref cause) => cause
+                            DescribeCacheParametersError::CacheParameterGroupNotFoundFault(ref cause) => cause,
+DescribeCacheParametersError::InvalidParameterCombination(ref cause) => cause,
+DescribeCacheParametersError::InvalidParameterValue(ref cause) => cause,
+DescribeCacheParametersError::Validation(ref cause) => cause,
+DescribeCacheParametersError::Credentials(ref err) => err.description(),
+DescribeCacheParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeCacheParametersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7793,10 +7953,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeCacheSecurityGroupsError {
                     
-///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),
 ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
 CacheSecurityGroupNotFoundFault(String),
+///<p>Two or more incompatible parameters were specified.</p>
+InvalidParameterCombination(String),
 ///<p>The value for a parameter is invalid.</p>
 InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -7815,7 +7975,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValueException" => DescribeCacheSecurityGroupsError::InvalidParameterValue(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DescribeCacheSecurityGroupsError::InvalidParameterCombination(String::from(parsed_error.message)),_ => DescribeCacheSecurityGroupsError::Unknown(String::from(body))
+                                    "CacheSecurityGroupNotFoundFault" => DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DescribeCacheSecurityGroupsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeCacheSecurityGroupsError::InvalidParameterValue(String::from(parsed_error.message)),_ => DescribeCacheSecurityGroupsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeCacheSecurityGroupsError::Unknown(body.to_string())
@@ -7847,7 +8007,13 @@ Unknown(String)
                 impl Error for DescribeCacheSecurityGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeCacheSecurityGroupsError::InvalidParameterValue(ref cause) => cause,DescribeCacheSecurityGroupsError::InvalidParameterCombination(ref cause) => cause,DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(ref cause) => cause,DescribeCacheSecurityGroupsError::Validation(ref cause) => cause,DescribeCacheSecurityGroupsError::Credentials(ref err) => err.description(),DescribeCacheSecurityGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeCacheSecurityGroupsError::Unknown(ref cause) => cause
+                            DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
+DescribeCacheSecurityGroupsError::InvalidParameterCombination(ref cause) => cause,
+DescribeCacheSecurityGroupsError::InvalidParameterValue(ref cause) => cause,
+DescribeCacheSecurityGroupsError::Validation(ref cause) => cause,
+DescribeCacheSecurityGroupsError::Credentials(ref err) => err.description(),
+DescribeCacheSecurityGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeCacheSecurityGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7905,7 +8071,11 @@ Unknown(String)
                 impl Error for DescribeCacheSubnetGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeCacheSubnetGroupsError::CacheSubnetGroupNotFoundFault(ref cause) => cause,DescribeCacheSubnetGroupsError::Validation(ref cause) => cause,DescribeCacheSubnetGroupsError::Credentials(ref err) => err.description(),DescribeCacheSubnetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeCacheSubnetGroupsError::Unknown(ref cause) => cause
+                            DescribeCacheSubnetGroupsError::CacheSubnetGroupNotFoundFault(ref cause) => cause,
+DescribeCacheSubnetGroupsError::Validation(ref cause) => cause,
+DescribeCacheSubnetGroupsError::Credentials(ref err) => err.description(),
+DescribeCacheSubnetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeCacheSubnetGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7913,10 +8083,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeEngineDefaultParametersError {
                     
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
 ///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+InvalidParameterCombination(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7965,7 +8135,12 @@ Unknown(String)
                 impl Error for DescribeEngineDefaultParametersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEngineDefaultParametersError::InvalidParameterValue(ref cause) => cause,DescribeEngineDefaultParametersError::InvalidParameterCombination(ref cause) => cause,DescribeEngineDefaultParametersError::Validation(ref cause) => cause,DescribeEngineDefaultParametersError::Credentials(ref err) => err.description(),DescribeEngineDefaultParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEngineDefaultParametersError::Unknown(ref cause) => cause
+                            DescribeEngineDefaultParametersError::InvalidParameterCombination(ref cause) => cause,
+DescribeEngineDefaultParametersError::InvalidParameterValue(ref cause) => cause,
+DescribeEngineDefaultParametersError::Validation(ref cause) => cause,
+DescribeEngineDefaultParametersError::Credentials(ref err) => err.description(),
+DescribeEngineDefaultParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEngineDefaultParametersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7993,7 +8168,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValueException" => DescribeEventsError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DescribeEventsError::InvalidParameterCombination(String::from(parsed_error.message)),_ => DescribeEventsError::Unknown(String::from(body))
+                                    "InvalidParameterCombinationException" => DescribeEventsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeEventsError::InvalidParameterValue(String::from(parsed_error.message)),_ => DescribeEventsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeEventsError::Unknown(body.to_string())
@@ -8025,7 +8200,12 @@ Unknown(String)
                 impl Error for DescribeEventsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEventsError::InvalidParameterCombination(ref cause) => cause,DescribeEventsError::InvalidParameterValue(ref cause) => cause,DescribeEventsError::Validation(ref cause) => cause,DescribeEventsError::Credentials(ref err) => err.description(),DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEventsError::Unknown(ref cause) => cause
+                            DescribeEventsError::InvalidParameterCombination(ref cause) => cause,
+DescribeEventsError::InvalidParameterValue(ref cause) => cause,
+DescribeEventsError::Validation(ref cause) => cause,
+DescribeEventsError::Credentials(ref err) => err.description(),
+DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEventsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8033,12 +8213,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeReplicationGroupsError {
                     
-///<p>The specified replication group does not exist.</p>
-ReplicationGroupNotFoundFault(String),
+///<p>Two or more incompatible parameters were specified.</p>
+InvalidParameterCombination(String),
 ///<p>The value for a parameter is invalid.</p>
 InvalidParameterValue(String),
-///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+///<p>The specified replication group does not exist.</p>
+ReplicationGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8055,7 +8235,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombinationException" => DescribeReplicationGroupsError::InvalidParameterCombination(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeReplicationGroupsError::InvalidParameterValue(String::from(parsed_error.message)),_ => DescribeReplicationGroupsError::Unknown(String::from(body))
+                                    "InvalidParameterCombinationException" => DescribeReplicationGroupsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeReplicationGroupsError::InvalidParameterValue(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),_ => DescribeReplicationGroupsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeReplicationGroupsError::Unknown(body.to_string())
@@ -8087,7 +8267,13 @@ Unknown(String)
                 impl Error for DescribeReplicationGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeReplicationGroupsError::InvalidParameterCombination(ref cause) => cause,DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(ref cause) => cause,DescribeReplicationGroupsError::InvalidParameterValue(ref cause) => cause,DescribeReplicationGroupsError::Validation(ref cause) => cause,DescribeReplicationGroupsError::Credentials(ref err) => err.description(),DescribeReplicationGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeReplicationGroupsError::Unknown(ref cause) => cause
+                            DescribeReplicationGroupsError::InvalidParameterCombination(ref cause) => cause,
+DescribeReplicationGroupsError::InvalidParameterValue(ref cause) => cause,
+DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(ref cause) => cause,
+DescribeReplicationGroupsError::Validation(ref cause) => cause,
+DescribeReplicationGroupsError::Credentials(ref err) => err.description(),
+DescribeReplicationGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeReplicationGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8097,10 +8283,10 @@ Unknown(String)
                     
 ///<p>Two or more incompatible parameters were specified.</p>
 InvalidParameterCombination(String),
-///<p>The requested reserved cache node was not found.</p>
-ReservedCacheNodeNotFoundFault(String),
 ///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
+InvalidParameterValue(String),
+///<p>The requested reserved cache node was not found.</p>
+ReservedCacheNodeNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8149,7 +8335,13 @@ Unknown(String)
                 impl Error for DescribeReservedCacheNodesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeReservedCacheNodesError::InvalidParameterValue(ref cause) => cause,DescribeReservedCacheNodesError::ReservedCacheNodeNotFoundFault(ref cause) => cause,DescribeReservedCacheNodesError::InvalidParameterCombination(ref cause) => cause,DescribeReservedCacheNodesError::Validation(ref cause) => cause,DescribeReservedCacheNodesError::Credentials(ref err) => err.description(),DescribeReservedCacheNodesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeReservedCacheNodesError::Unknown(ref cause) => cause
+                            DescribeReservedCacheNodesError::InvalidParameterCombination(ref cause) => cause,
+DescribeReservedCacheNodesError::InvalidParameterValue(ref cause) => cause,
+DescribeReservedCacheNodesError::ReservedCacheNodeNotFoundFault(ref cause) => cause,
+DescribeReservedCacheNodesError::Validation(ref cause) => cause,
+DescribeReservedCacheNodesError::Credentials(ref err) => err.description(),
+DescribeReservedCacheNodesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeReservedCacheNodesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8179,7 +8371,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombinationException" => DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFoundFault" => DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(String::from(parsed_error.message)),_ => DescribeReservedCacheNodesOfferingsError::Unknown(String::from(body))
+                                    "InvalidParameterCombinationException" => DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFoundFault" => DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),_ => DescribeReservedCacheNodesOfferingsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeReservedCacheNodesOfferingsError::Unknown(body.to_string())
@@ -8211,7 +8403,13 @@ Unknown(String)
                 impl Error for DescribeReservedCacheNodesOfferingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(ref cause) => cause,DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(ref cause) => cause,DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(ref cause) => cause,DescribeReservedCacheNodesOfferingsError::Validation(ref cause) => cause,DescribeReservedCacheNodesOfferingsError::Credentials(ref err) => err.description(),DescribeReservedCacheNodesOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeReservedCacheNodesOfferingsError::Unknown(ref cause) => cause
+                            DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(ref cause) => cause,
+DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(ref cause) => cause,
+DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(ref cause) => cause,
+DescribeReservedCacheNodesOfferingsError::Validation(ref cause) => cause,
+DescribeReservedCacheNodesOfferingsError::Credentials(ref err) => err.description(),
+DescribeReservedCacheNodesOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeReservedCacheNodesOfferingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8219,14 +8417,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeSnapshotsError {
                     
-///<p>The requested snapshot name does not refer to an existing snapshot.</p>
-SnapshotNotFoundFault(String),
+///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+CacheClusterNotFoundFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
 InvalidParameterCombination(String),
 ///<p>The value for a parameter is invalid.</p>
 InvalidParameterValue(String),
-///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
-CacheClusterNotFoundFault(String),/// An error occurred dispatching the HTTP request
+///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+SnapshotNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8243,7 +8441,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValueException" => DescribeSnapshotsError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DescribeSnapshotsError::InvalidParameterCombination(String::from(parsed_error.message)),"SnapshotNotFoundFault" => DescribeSnapshotsError::SnapshotNotFoundFault(String::from(parsed_error.message)),"CacheClusterNotFoundFault" => DescribeSnapshotsError::CacheClusterNotFoundFault(String::from(parsed_error.message)),_ => DescribeSnapshotsError::Unknown(String::from(body))
+                                    "CacheClusterNotFoundFault" => DescribeSnapshotsError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => DescribeSnapshotsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeSnapshotsError::InvalidParameterValue(String::from(parsed_error.message)),"SnapshotNotFoundFault" => DescribeSnapshotsError::SnapshotNotFoundFault(String::from(parsed_error.message)),_ => DescribeSnapshotsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeSnapshotsError::Unknown(body.to_string())
@@ -8275,7 +8473,14 @@ Unknown(String)
                 impl Error for DescribeSnapshotsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSnapshotsError::CacheClusterNotFoundFault(ref cause) => cause,DescribeSnapshotsError::InvalidParameterCombination(ref cause) => cause,DescribeSnapshotsError::SnapshotNotFoundFault(ref cause) => cause,DescribeSnapshotsError::InvalidParameterValue(ref cause) => cause,DescribeSnapshotsError::Validation(ref cause) => cause,DescribeSnapshotsError::Credentials(ref err) => err.description(),DescribeSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSnapshotsError::Unknown(ref cause) => cause
+                            DescribeSnapshotsError::CacheClusterNotFoundFault(ref cause) => cause,
+DescribeSnapshotsError::InvalidParameterCombination(ref cause) => cause,
+DescribeSnapshotsError::InvalidParameterValue(ref cause) => cause,
+DescribeSnapshotsError::SnapshotNotFoundFault(ref cause) => cause,
+DescribeSnapshotsError::Validation(ref cause) => cause,
+DescribeSnapshotsError::Credentials(ref err) => err.description(),
+DescribeSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSnapshotsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8283,14 +8488,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListAllowedNodeTypeModificationsError {
                     
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
 ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
 CacheClusterNotFoundFault(String),
-///<p>The specified replication group does not exist.</p>
-ReplicationGroupNotFoundFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+InvalidParameterCombination(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),
+///<p>The specified replication group does not exist.</p>
+ReplicationGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8307,7 +8512,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombinationException" => ListAllowedNodeTypeModificationsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => ListAllowedNodeTypeModificationsError::InvalidParameterValue(String::from(parsed_error.message)),"CacheClusterNotFoundFault" => ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => ListAllowedNodeTypeModificationsError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),_ => ListAllowedNodeTypeModificationsError::Unknown(String::from(body))
+                                    "CacheClusterNotFoundFault" => ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => ListAllowedNodeTypeModificationsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => ListAllowedNodeTypeModificationsError::InvalidParameterValue(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => ListAllowedNodeTypeModificationsError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),_ => ListAllowedNodeTypeModificationsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListAllowedNodeTypeModificationsError::Unknown(body.to_string())
@@ -8339,7 +8544,14 @@ Unknown(String)
                 impl Error for ListAllowedNodeTypeModificationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAllowedNodeTypeModificationsError::InvalidParameterCombination(ref cause) => cause,ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(ref cause) => cause,ListAllowedNodeTypeModificationsError::InvalidParameterValue(ref cause) => cause,ListAllowedNodeTypeModificationsError::ReplicationGroupNotFoundFault(ref cause) => cause,ListAllowedNodeTypeModificationsError::Validation(ref cause) => cause,ListAllowedNodeTypeModificationsError::Credentials(ref err) => err.description(),ListAllowedNodeTypeModificationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAllowedNodeTypeModificationsError::Unknown(ref cause) => cause
+                            ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(ref cause) => cause,
+ListAllowedNodeTypeModificationsError::InvalidParameterCombination(ref cause) => cause,
+ListAllowedNodeTypeModificationsError::InvalidParameterValue(ref cause) => cause,
+ListAllowedNodeTypeModificationsError::ReplicationGroupNotFoundFault(ref cause) => cause,
+ListAllowedNodeTypeModificationsError::Validation(ref cause) => cause,
+ListAllowedNodeTypeModificationsError::Credentials(ref err) => err.description(),
+ListAllowedNodeTypeModificationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAllowedNodeTypeModificationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8349,10 +8561,10 @@ Unknown(String)
                     
 ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
 CacheClusterNotFoundFault(String),
-///<p>The requested snapshot name does not refer to an existing snapshot.</p>
-SnapshotNotFoundFault(String),
 ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
-InvalidARNFault(String),/// An error occurred dispatching the HTTP request
+InvalidARNFault(String),
+///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+SnapshotNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8369,7 +8581,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "SnapshotNotFoundFault" => ListTagsForResourceError::SnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidARNFault" => ListTagsForResourceError::InvalidARNFault(String::from(parsed_error.message)),"CacheClusterNotFoundFault" => ListTagsForResourceError::CacheClusterNotFoundFault(String::from(parsed_error.message)),_ => ListTagsForResourceError::Unknown(String::from(body))
+                                    "CacheClusterNotFoundFault" => ListTagsForResourceError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"InvalidARNFault" => ListTagsForResourceError::InvalidARNFault(String::from(parsed_error.message)),"SnapshotNotFoundFault" => ListTagsForResourceError::SnapshotNotFoundFault(String::from(parsed_error.message)),_ => ListTagsForResourceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListTagsForResourceError::Unknown(body.to_string())
@@ -8401,7 +8613,13 @@ Unknown(String)
                 impl Error for ListTagsForResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTagsForResourceError::CacheClusterNotFoundFault(ref cause) => cause,ListTagsForResourceError::InvalidARNFault(ref cause) => cause,ListTagsForResourceError::SnapshotNotFoundFault(ref cause) => cause,ListTagsForResourceError::Validation(ref cause) => cause,ListTagsForResourceError::Credentials(ref err) => err.description(),ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTagsForResourceError::Unknown(ref cause) => cause
+                            ListTagsForResourceError::CacheClusterNotFoundFault(ref cause) => cause,
+ListTagsForResourceError::InvalidARNFault(ref cause) => cause,
+ListTagsForResourceError::SnapshotNotFoundFault(ref cause) => cause,
+ListTagsForResourceError::Validation(ref cause) => cause,
+ListTagsForResourceError::Credentials(ref err) => err.description(),
+ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTagsForResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8411,26 +8629,26 @@ Unknown(String)
                     
 ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
 CacheClusterNotFoundFault(String),
-///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),
-///<p>The current state of the cache security group does not allow deletion.</p>
-InvalidCacheSecurityGroupStateFault(String),
-///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
-NodeQuotaForClusterExceededFault(String),
-///<p>The VPC network is in an invalid state.</p>
-InvalidVPCNetworkStateFault(String),
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
-///<p>The requested cache cluster is not in the <code>available</code> state.</p>
-InvalidCacheClusterStateFault(String),
-///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
-NodeQuotaForCustomerExceededFault(String),
+///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+CacheParameterGroupNotFoundFault(String),
 ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
 CacheSecurityGroupNotFoundFault(String),
 ///<p>The requested cache node type is not available in the specified Availability Zone.</p>
 InsufficientCacheClusterCapacityFault(String),
-///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
-CacheParameterGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
+///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+InvalidCacheClusterStateFault(String),
+///<p>The current state of the cache security group does not allow deletion.</p>
+InvalidCacheSecurityGroupStateFault(String),
+///<p>Two or more incompatible parameters were specified.</p>
+InvalidParameterCombination(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),
+///<p>The VPC network is in an invalid state.</p>
+InvalidVPCNetworkStateFault(String),
+///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
+NodeQuotaForClusterExceededFault(String),
+///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
+NodeQuotaForCustomerExceededFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8447,7 +8665,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InsufficientCacheClusterCapacityFault" => ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceededFault" => ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"InvalidParameterValueException" => ModifyCacheClusterError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidCacheClusterStateFault" => ModifyCacheClusterError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"NodeQuotaForClusterExceededFault" => ModifyCacheClusterError::NodeQuotaForClusterExceededFault(String::from(parsed_error.message)),"CacheClusterNotFoundFault" => ModifyCacheClusterError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyCacheClusterError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"CacheParameterGroupNotFoundFault" => ModifyCacheClusterError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidCacheSecurityGroupStateFault" => ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => ModifyCacheClusterError::InvalidParameterCombination(String::from(parsed_error.message)),_ => ModifyCacheClusterError::Unknown(String::from(body))
+                                    "CacheClusterNotFoundFault" => ModifyCacheClusterError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"CacheParameterGroupNotFoundFault" => ModifyCacheClusterError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InsufficientCacheClusterCapacityFault" => ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidCacheClusterStateFault" => ModifyCacheClusterError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidCacheSecurityGroupStateFault" => ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => ModifyCacheClusterError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => ModifyCacheClusterError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyCacheClusterError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"NodeQuotaForClusterExceededFault" => ModifyCacheClusterError::NodeQuotaForClusterExceededFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceededFault" => ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),_ => ModifyCacheClusterError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyCacheClusterError::Unknown(body.to_string())
@@ -8479,7 +8697,21 @@ Unknown(String)
                 impl Error for ModifyCacheClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyCacheClusterError::CacheClusterNotFoundFault(ref cause) => cause,ModifyCacheClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(ref cause) => cause,ModifyCacheClusterError::InvalidParameterValue(ref cause) => cause,ModifyCacheClusterError::CacheParameterGroupNotFoundFault(ref cause) => cause,ModifyCacheClusterError::InvalidCacheClusterStateFault(ref cause) => cause,ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(ref cause) => cause,ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(ref cause) => cause,ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,ModifyCacheClusterError::InvalidParameterCombination(ref cause) => cause,ModifyCacheClusterError::NodeQuotaForClusterExceededFault(ref cause) => cause,ModifyCacheClusterError::Validation(ref cause) => cause,ModifyCacheClusterError::Credentials(ref err) => err.description(),ModifyCacheClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyCacheClusterError::Unknown(ref cause) => cause
+                            ModifyCacheClusterError::CacheClusterNotFoundFault(ref cause) => cause,
+ModifyCacheClusterError::CacheParameterGroupNotFoundFault(ref cause) => cause,
+ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
+ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
+ModifyCacheClusterError::InvalidCacheClusterStateFault(ref cause) => cause,
+ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,
+ModifyCacheClusterError::InvalidParameterCombination(ref cause) => cause,
+ModifyCacheClusterError::InvalidParameterValue(ref cause) => cause,
+ModifyCacheClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
+ModifyCacheClusterError::NodeQuotaForClusterExceededFault(ref cause) => cause,
+ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
+ModifyCacheClusterError::Validation(ref cause) => cause,
+ModifyCacheClusterError::Credentials(ref err) => err.description(),
+ModifyCacheClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyCacheClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8487,14 +8719,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ModifyCacheParameterGroupError {
                     
-///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),
 ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
 CacheParameterGroupNotFoundFault(String),
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
 ///<p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
-InvalidCacheParameterGroupStateFault(String),/// An error occurred dispatching the HTTP request
+InvalidCacheParameterGroupStateFault(String),
+///<p>Two or more incompatible parameters were specified.</p>
+InvalidParameterCombination(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8511,7 +8743,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombinationException" => ModifyCacheParameterGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => ModifyCacheParameterGroupError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidCacheParameterGroupStateFault" => ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(String::from(parsed_error.message)),"CacheParameterGroupNotFoundFault" => ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),_ => ModifyCacheParameterGroupError::Unknown(String::from(body))
+                                    "CacheParameterGroupNotFoundFault" => ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidCacheParameterGroupStateFault" => ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => ModifyCacheParameterGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => ModifyCacheParameterGroupError::InvalidParameterValue(String::from(parsed_error.message)),_ => ModifyCacheParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyCacheParameterGroupError::Unknown(body.to_string())
@@ -8543,7 +8775,14 @@ Unknown(String)
                 impl Error for ModifyCacheParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,ModifyCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => cause,ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,ModifyCacheParameterGroupError::Validation(ref cause) => cause,ModifyCacheParameterGroupError::Credentials(ref err) => err.description(),ModifyCacheParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyCacheParameterGroupError::Unknown(ref cause) => cause
+                            ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,
+ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => cause,
+ModifyCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,
+ModifyCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,
+ModifyCacheParameterGroupError::Validation(ref cause) => cause,
+ModifyCacheParameterGroupError::Credentials(ref err) => err.description(),
+ModifyCacheParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyCacheParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8553,12 +8792,12 @@ Unknown(String)
                     
 ///<p>The requested cache subnet group name does not refer to an existing cache subnet group.</p>
 CacheSubnetGroupNotFoundFault(String),
-///<p>The requested subnet is being used by another cache subnet group.</p>
-SubnetInUse(String),
 ///<p>The request cannot be processed because it would exceed the allowed number of subnets in a cache subnet group.</p>
 CacheSubnetQuotaExceededFault(String),
 ///<p>An invalid subnet identifier was specified.</p>
-InvalidSubnet(String),/// An error occurred dispatching the HTTP request
+InvalidSubnet(String),
+///<p>The requested subnet is being used by another cache subnet group.</p>
+SubnetInUse(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8575,7 +8814,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidSubnet" => ModifyCacheSubnetGroupError::InvalidSubnet(String::from(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(String::from(parsed_error.message)),"CacheSubnetQuotaExceededFault" => ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(String::from(parsed_error.message)),"SubnetInUse" => ModifyCacheSubnetGroupError::SubnetInUse(String::from(parsed_error.message)),_ => ModifyCacheSubnetGroupError::Unknown(String::from(body))
+                                    "CacheSubnetGroupNotFoundFault" => ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(String::from(parsed_error.message)),"CacheSubnetQuotaExceededFault" => ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(String::from(parsed_error.message)),"InvalidSubnet" => ModifyCacheSubnetGroupError::InvalidSubnet(String::from(parsed_error.message)),"SubnetInUse" => ModifyCacheSubnetGroupError::SubnetInUse(String::from(parsed_error.message)),_ => ModifyCacheSubnetGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyCacheSubnetGroupError::Unknown(body.to_string())
@@ -8607,7 +8846,14 @@ Unknown(String)
                 impl Error for ModifyCacheSubnetGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyCacheSubnetGroupError::SubnetInUse(ref cause) => cause,ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(ref cause) => cause,ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(ref cause) => cause,ModifyCacheSubnetGroupError::InvalidSubnet(ref cause) => cause,ModifyCacheSubnetGroupError::Validation(ref cause) => cause,ModifyCacheSubnetGroupError::Credentials(ref err) => err.description(),ModifyCacheSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyCacheSubnetGroupError::Unknown(ref cause) => cause
+                            ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(ref cause) => cause,
+ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(ref cause) => cause,
+ModifyCacheSubnetGroupError::InvalidSubnet(ref cause) => cause,
+ModifyCacheSubnetGroupError::SubnetInUse(ref cause) => cause,
+ModifyCacheSubnetGroupError::Validation(ref cause) => cause,
+ModifyCacheSubnetGroupError::Credentials(ref err) => err.description(),
+ModifyCacheSubnetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyCacheSubnetGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8615,32 +8861,32 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ModifyReplicationGroupError {
                     
+///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+CacheClusterNotFoundFault(String),
+///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
+CacheParameterGroupNotFoundFault(String),
 ///<p>The requested cache security group name does not refer to an existing cache security group.</p>
 CacheSecurityGroupNotFoundFault(String),
 ///<p>The requested cache node type is not available in the specified Availability Zone.</p>
 InsufficientCacheClusterCapacityFault(String),
-///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
-CacheClusterNotFoundFault(String),
-///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
-NodeQuotaForCustomerExceededFault(String),
-///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
-CacheParameterGroupNotFoundFault(String),
-///<p>The VPC network is in an invalid state.</p>
-InvalidVPCNetworkStateFault(String),
-///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
-NodeQuotaForClusterExceededFault(String),
-///<p>The specified replication group does not exist.</p>
-ReplicationGroupNotFoundFault(String),
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
+///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+InvalidCacheClusterStateFault(String),
 ///<p>The current state of the cache security group does not allow deletion.</p>
 InvalidCacheSecurityGroupStateFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
 InvalidParameterCombination(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),
 ///<p>The requested replication group is not in the <code>available</code> state.</p>
 InvalidReplicationGroupStateFault(String),
-///<p>The requested cache cluster is not in the <code>available</code> state.</p>
-InvalidCacheClusterStateFault(String),/// An error occurred dispatching the HTTP request
+///<p>The VPC network is in an invalid state.</p>
+InvalidVPCNetworkStateFault(String),
+///<p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cache cluster.</p>
+NodeQuotaForClusterExceededFault(String),
+///<p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
+NodeQuotaForCustomerExceededFault(String),
+///<p>The specified replication group does not exist.</p>
+ReplicationGroupNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8657,7 +8903,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CacheSecurityGroupNotFoundFault" => ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceededFault" => ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"CacheParameterGroupNotFoundFault" => ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"InsufficientCacheClusterCapacityFault" => ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"NodeQuotaForClusterExceededFault" => ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(String::from(parsed_error.message)),"CacheClusterNotFoundFault" => ModifyReplicationGroupError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"InvalidCacheSecurityGroupStateFault" => ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidCacheClusterStateFault" => ModifyReplicationGroupError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => ModifyReplicationGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyReplicationGroupError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"InvalidReplicationGroupStateFault" => ModifyReplicationGroupError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => ModifyReplicationGroupError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterValueException" => ModifyReplicationGroupError::InvalidParameterValue(String::from(parsed_error.message)),_ => ModifyReplicationGroupError::Unknown(String::from(body))
+                                    "CacheClusterNotFoundFault" => ModifyReplicationGroupError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"CacheParameterGroupNotFoundFault" => ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InsufficientCacheClusterCapacityFault" => ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidCacheClusterStateFault" => ModifyReplicationGroupError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidCacheSecurityGroupStateFault" => ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => ModifyReplicationGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => ModifyReplicationGroupError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidReplicationGroupStateFault" => ModifyReplicationGroupError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyReplicationGroupError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"NodeQuotaForClusterExceededFault" => ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceededFault" => ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => ModifyReplicationGroupError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),_ => ModifyReplicationGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyReplicationGroupError::Unknown(body.to_string())
@@ -8689,7 +8935,23 @@ Unknown(String)
                 impl Error for ModifyReplicationGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(ref cause) => cause,ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(ref cause) => cause,ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(ref cause) => cause,ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(ref cause) => cause,ModifyReplicationGroupError::InvalidParameterValue(ref cause) => cause,ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,ModifyReplicationGroupError::InvalidParameterCombination(ref cause) => cause,ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,ModifyReplicationGroupError::InvalidCacheClusterStateFault(ref cause) => cause,ModifyReplicationGroupError::InvalidReplicationGroupStateFault(ref cause) => cause,ModifyReplicationGroupError::CacheClusterNotFoundFault(ref cause) => cause,ModifyReplicationGroupError::ReplicationGroupNotFoundFault(ref cause) => cause,ModifyReplicationGroupError::InvalidVPCNetworkStateFault(ref cause) => cause,ModifyReplicationGroupError::Validation(ref cause) => cause,ModifyReplicationGroupError::Credentials(ref err) => err.description(),ModifyReplicationGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyReplicationGroupError::Unknown(ref cause) => cause
+                            ModifyReplicationGroupError::CacheClusterNotFoundFault(ref cause) => cause,
+ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,
+ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
+ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
+ModifyReplicationGroupError::InvalidCacheClusterStateFault(ref cause) => cause,
+ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,
+ModifyReplicationGroupError::InvalidParameterCombination(ref cause) => cause,
+ModifyReplicationGroupError::InvalidParameterValue(ref cause) => cause,
+ModifyReplicationGroupError::InvalidReplicationGroupStateFault(ref cause) => cause,
+ModifyReplicationGroupError::InvalidVPCNetworkStateFault(ref cause) => cause,
+ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(ref cause) => cause,
+ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
+ModifyReplicationGroupError::ReplicationGroupNotFoundFault(ref cause) => cause,
+ModifyReplicationGroupError::Validation(ref cause) => cause,
+ModifyReplicationGroupError::Credentials(ref err) => err.description(),
+ModifyReplicationGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyReplicationGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8697,16 +8959,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PurchaseReservedCacheNodesOfferingError {
                     
+///<p>Two or more incompatible parameters were specified.</p>
+InvalidParameterCombination(String),
 ///<p>The value for a parameter is invalid.</p>
 InvalidParameterValue(String),
-///<p>The request cannot be processed because it would exceed the user's cache node quota.</p>
-ReservedCacheNodeQuotaExceededFault(String),
 ///<p>You already have a reservation with the given identifier.</p>
 ReservedCacheNodeAlreadyExistsFault(String),
+///<p>The request cannot be processed because it would exceed the user's cache node quota.</p>
+ReservedCacheNodeQuotaExceededFault(String),
 ///<p>The requested cache node offering does not exist.</p>
-ReservedCacheNodesOfferingNotFoundFault(String),
-///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+ReservedCacheNodesOfferingNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8723,7 +8985,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ReservedCacheNodesOfferingNotFoundFault" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),"ReservedCacheNodeQuotaExceededFault" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(String::from(parsed_error.message)),"ReservedCacheNodeAlreadyExistsFault" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(String::from(parsed_error.message)),"InvalidParameterValueException" => PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(String::from(parsed_error.message)),_ => PurchaseReservedCacheNodesOfferingError::Unknown(String::from(body))
+                                    "InvalidParameterCombinationException" => PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(String::from(parsed_error.message)),"ReservedCacheNodeAlreadyExistsFault" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(String::from(parsed_error.message)),"ReservedCacheNodeQuotaExceededFault" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFoundFault" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),_ => PurchaseReservedCacheNodesOfferingError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PurchaseReservedCacheNodesOfferingError::Unknown(body.to_string())
@@ -8755,7 +9017,15 @@ Unknown(String)
                 impl Error for PurchaseReservedCacheNodesOfferingError {
                     fn description(&self) -> &str {
                         match *self {
-                            PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(ref cause) => cause,PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(ref cause) => cause,PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(ref cause) => cause,PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(ref cause) => cause,PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(ref cause) => cause,PurchaseReservedCacheNodesOfferingError::Validation(ref cause) => cause,PurchaseReservedCacheNodesOfferingError::Credentials(ref err) => err.description(),PurchaseReservedCacheNodesOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PurchaseReservedCacheNodesOfferingError::Unknown(ref cause) => cause
+                            PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(ref cause) => cause,
+PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(ref cause) => cause,
+PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(ref cause) => cause,
+PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(ref cause) => cause,
+PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(ref cause) => cause,
+PurchaseReservedCacheNodesOfferingError::Validation(ref cause) => cause,
+PurchaseReservedCacheNodesOfferingError::Credentials(ref err) => err.description(),
+PurchaseReservedCacheNodesOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PurchaseReservedCacheNodesOfferingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8763,10 +9033,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RebootCacheClusterError {
                     
-///<p>The requested cache cluster is not in the <code>available</code> state.</p>
-InvalidCacheClusterStateFault(String),
 ///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
-CacheClusterNotFoundFault(String),/// An error occurred dispatching the HTTP request
+CacheClusterNotFoundFault(String),
+///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+InvalidCacheClusterStateFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8815,7 +9085,12 @@ Unknown(String)
                 impl Error for RebootCacheClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            RebootCacheClusterError::CacheClusterNotFoundFault(ref cause) => cause,RebootCacheClusterError::InvalidCacheClusterStateFault(ref cause) => cause,RebootCacheClusterError::Validation(ref cause) => cause,RebootCacheClusterError::Credentials(ref err) => err.description(),RebootCacheClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RebootCacheClusterError::Unknown(ref cause) => cause
+                            RebootCacheClusterError::CacheClusterNotFoundFault(ref cause) => cause,
+RebootCacheClusterError::InvalidCacheClusterStateFault(ref cause) => cause,
+RebootCacheClusterError::Validation(ref cause) => cause,
+RebootCacheClusterError::Credentials(ref err) => err.description(),
+RebootCacheClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RebootCacheClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8823,14 +9098,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RemoveTagsFromResourceError {
                     
-///<p>The requested tag was not found on this resource.</p>
-TagNotFoundFault(String),
-///<p>The requested snapshot name does not refer to an existing snapshot.</p>
-SnapshotNotFoundFault(String),
+///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
+CacheClusterNotFoundFault(String),
 ///<p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
 InvalidARNFault(String),
-///<p>The requested cache cluster ID does not refer to an existing cache cluster.</p>
-CacheClusterNotFoundFault(String),/// An error occurred dispatching the HTTP request
+///<p>The requested snapshot name does not refer to an existing snapshot.</p>
+SnapshotNotFoundFault(String),
+///<p>The requested tag was not found on this resource.</p>
+TagNotFoundFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8847,7 +9122,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TagNotFoundFault" => RemoveTagsFromResourceError::TagNotFoundFault(String::from(parsed_error.message)),"SnapshotNotFoundFault" => RemoveTagsFromResourceError::SnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidARNFault" => RemoveTagsFromResourceError::InvalidARNFault(String::from(parsed_error.message)),"CacheClusterNotFoundFault" => RemoveTagsFromResourceError::CacheClusterNotFoundFault(String::from(parsed_error.message)),_ => RemoveTagsFromResourceError::Unknown(String::from(body))
+                                    "CacheClusterNotFoundFault" => RemoveTagsFromResourceError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"InvalidARNFault" => RemoveTagsFromResourceError::InvalidARNFault(String::from(parsed_error.message)),"SnapshotNotFoundFault" => RemoveTagsFromResourceError::SnapshotNotFoundFault(String::from(parsed_error.message)),"TagNotFoundFault" => RemoveTagsFromResourceError::TagNotFoundFault(String::from(parsed_error.message)),_ => RemoveTagsFromResourceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RemoveTagsFromResourceError::Unknown(body.to_string())
@@ -8879,7 +9154,14 @@ Unknown(String)
                 impl Error for RemoveTagsFromResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveTagsFromResourceError::InvalidARNFault(ref cause) => cause,RemoveTagsFromResourceError::CacheClusterNotFoundFault(ref cause) => cause,RemoveTagsFromResourceError::TagNotFoundFault(ref cause) => cause,RemoveTagsFromResourceError::SnapshotNotFoundFault(ref cause) => cause,RemoveTagsFromResourceError::Validation(ref cause) => cause,RemoveTagsFromResourceError::Credentials(ref err) => err.description(),RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveTagsFromResourceError::Unknown(ref cause) => cause
+                            RemoveTagsFromResourceError::CacheClusterNotFoundFault(ref cause) => cause,
+RemoveTagsFromResourceError::InvalidARNFault(ref cause) => cause,
+RemoveTagsFromResourceError::SnapshotNotFoundFault(ref cause) => cause,
+RemoveTagsFromResourceError::TagNotFoundFault(ref cause) => cause,
+RemoveTagsFromResourceError::Validation(ref cause) => cause,
+RemoveTagsFromResourceError::Credentials(ref err) => err.description(),
+RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveTagsFromResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8887,14 +9169,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ResetCacheParameterGroupError {
                     
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
 ///<p>The requested cache parameter group name does not refer to an existing cache parameter group.</p>
 CacheParameterGroupNotFoundFault(String),
 ///<p>The current state of the cache parameter group does not allow the requested operation to occur.</p>
 InvalidCacheParameterGroupStateFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+InvalidParameterCombination(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8911,7 +9193,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombinationException" => ResetCacheParameterGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidCacheParameterGroupStateFault" => ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(String::from(parsed_error.message)),"CacheParameterGroupNotFoundFault" => ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidParameterValueException" => ResetCacheParameterGroupError::InvalidParameterValue(String::from(parsed_error.message)),_ => ResetCacheParameterGroupError::Unknown(String::from(body))
+                                    "CacheParameterGroupNotFoundFault" => ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidCacheParameterGroupStateFault" => ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => ResetCacheParameterGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => ResetCacheParameterGroupError::InvalidParameterValue(String::from(parsed_error.message)),_ => ResetCacheParameterGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ResetCacheParameterGroupError::Unknown(body.to_string())
@@ -8943,7 +9225,14 @@ Unknown(String)
                 impl Error for ResetCacheParameterGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            ResetCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,ResetCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => cause,ResetCacheParameterGroupError::Validation(ref cause) => cause,ResetCacheParameterGroupError::Credentials(ref err) => err.description(),ResetCacheParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ResetCacheParameterGroupError::Unknown(ref cause) => cause
+                            ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(ref cause) => cause,
+ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(ref cause) => cause,
+ResetCacheParameterGroupError::InvalidParameterCombination(ref cause) => cause,
+ResetCacheParameterGroupError::InvalidParameterValue(ref cause) => cause,
+ResetCacheParameterGroupError::Validation(ref cause) => cause,
+ResetCacheParameterGroupError::Credentials(ref err) => err.description(),
+ResetCacheParameterGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ResetCacheParameterGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8951,16 +9240,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RevokeCacheSecurityGroupIngressError {
                     
+///<p>The specified Amazon EC2 security group is not authorized for the specified cache security group.</p>
+AuthorizationNotFoundFault(String),
+///<p>The requested cache security group name does not refer to an existing cache security group.</p>
+CacheSecurityGroupNotFoundFault(String),
 ///<p>The current state of the cache security group does not allow deletion.</p>
 InvalidCacheSecurityGroupStateFault(String),
 ///<p>Two or more incompatible parameters were specified.</p>
 InvalidParameterCombination(String),
-///<p>The requested cache security group name does not refer to an existing cache security group.</p>
-CacheSecurityGroupNotFoundFault(String),
 ///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
-///<p>The specified Amazon EC2 security group is not authorized for the specified cache security group.</p>
-AuthorizationNotFoundFault(String),/// An error occurred dispatching the HTTP request
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8977,7 +9266,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidCacheSecurityGroupStateFault" => RevokeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidParameterValueException" => RevokeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(parsed_error.message)),"AuthorizationNotFoundFault" => RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => RevokeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),_ => RevokeCacheSecurityGroupIngressError::Unknown(String::from(body))
+                                    "AuthorizationNotFoundFault" => RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFoundFault" => RevokeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidCacheSecurityGroupStateFault" => RevokeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => RevokeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(parsed_error.message)),_ => RevokeCacheSecurityGroupIngressError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RevokeCacheSecurityGroupIngressError::Unknown(body.to_string())
@@ -9009,7 +9298,15 @@ Unknown(String)
                 impl Error for RevokeCacheSecurityGroupIngressError {
                     fn description(&self) -> &str {
                         match *self {
-                            RevokeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(ref cause) => cause,RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(ref cause) => cause,RevokeCacheSecurityGroupIngressError::InvalidParameterValue(ref cause) => cause,RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(ref cause) => cause,RevokeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,RevokeCacheSecurityGroupIngressError::Validation(ref cause) => cause,RevokeCacheSecurityGroupIngressError::Credentials(ref err) => err.description(),RevokeCacheSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
+                            RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(ref cause) => cause,
+RevokeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(ref cause) => cause,
+RevokeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,
+RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(ref cause) => cause,
+RevokeCacheSecurityGroupIngressError::InvalidParameterValue(ref cause) => cause,
+RevokeCacheSecurityGroupIngressError::Validation(ref cause) => cause,
+RevokeCacheSecurityGroupIngressError::Credentials(ref err) => err.description(),
+RevokeCacheSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause
                         }
                     }
                  }

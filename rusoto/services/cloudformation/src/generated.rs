@@ -5213,7 +5213,10 @@ Unknown(String)
                 impl Error for CancelUpdateStackError {
                     fn description(&self) -> &str {
                         match *self {
-                            CancelUpdateStackError::Validation(ref cause) => cause,CancelUpdateStackError::Credentials(ref err) => err.description(),CancelUpdateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CancelUpdateStackError::Unknown(ref cause) => cause
+                            CancelUpdateStackError::Validation(ref cause) => cause,
+CancelUpdateStackError::Credentials(ref err) => err.description(),
+CancelUpdateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CancelUpdateStackError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5269,7 +5272,10 @@ Unknown(String)
                 impl Error for ContinueUpdateRollbackError {
                     fn description(&self) -> &str {
                         match *self {
-                            ContinueUpdateRollbackError::Validation(ref cause) => cause,ContinueUpdateRollbackError::Credentials(ref err) => err.description(),ContinueUpdateRollbackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ContinueUpdateRollbackError::Unknown(ref cause) => cause
+                            ContinueUpdateRollbackError::Validation(ref cause) => cause,
+ContinueUpdateRollbackError::Credentials(ref err) => err.description(),
+ContinueUpdateRollbackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ContinueUpdateRollbackError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5277,12 +5283,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateChangeSetError {
                     
+///<p>Resource with the name requested already exists.</p>
+AlreadyExists(String),
 ///<p>The template contains resources with capabilities that were not specified in the Capabilities parameter.</p>
 InsufficientCapabilities(String),
 ///<p>Quota for the resource has already been reached.</p>
-LimitExceeded(String),
-///<p>Resource with the name requested already exists.</p>
-AlreadyExists(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5299,7 +5305,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "AlreadyExistsException" => CreateChangeSetError::AlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => CreateChangeSetError::LimitExceeded(String::from(parsed_error.message)),"InsufficientCapabilitiesException" => CreateChangeSetError::InsufficientCapabilities(String::from(parsed_error.message)),_ => CreateChangeSetError::Unknown(String::from(body))
+                                    "AlreadyExistsException" => CreateChangeSetError::AlreadyExists(String::from(parsed_error.message)),"InsufficientCapabilitiesException" => CreateChangeSetError::InsufficientCapabilities(String::from(parsed_error.message)),"LimitExceededException" => CreateChangeSetError::LimitExceeded(String::from(parsed_error.message)),_ => CreateChangeSetError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateChangeSetError::Unknown(body.to_string())
@@ -5331,7 +5337,13 @@ Unknown(String)
                 impl Error for CreateChangeSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateChangeSetError::LimitExceeded(ref cause) => cause,CreateChangeSetError::AlreadyExists(ref cause) => cause,CreateChangeSetError::InsufficientCapabilities(ref cause) => cause,CreateChangeSetError::Validation(ref cause) => cause,CreateChangeSetError::Credentials(ref err) => err.description(),CreateChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateChangeSetError::Unknown(ref cause) => cause
+                            CreateChangeSetError::AlreadyExists(ref cause) => cause,
+CreateChangeSetError::InsufficientCapabilities(ref cause) => cause,
+CreateChangeSetError::LimitExceeded(ref cause) => cause,
+CreateChangeSetError::Validation(ref cause) => cause,
+CreateChangeSetError::Credentials(ref err) => err.description(),
+CreateChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateChangeSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5339,12 +5351,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateStackError {
                     
-///<p>Quota for the resource has already been reached.</p>
-LimitExceeded(String),
 ///<p>Resource with the name requested already exists.</p>
 AlreadyExists(String),
 ///<p>The template contains resources with capabilities that were not specified in the Capabilities parameter.</p>
-InsufficientCapabilities(String),/// An error occurred dispatching the HTTP request
+InsufficientCapabilities(String),
+///<p>Quota for the resource has already been reached.</p>
+LimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5361,7 +5373,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InsufficientCapabilitiesException" => CreateStackError::InsufficientCapabilities(String::from(parsed_error.message)),"LimitExceededException" => CreateStackError::LimitExceeded(String::from(parsed_error.message)),"AlreadyExistsException" => CreateStackError::AlreadyExists(String::from(parsed_error.message)),_ => CreateStackError::Unknown(String::from(body))
+                                    "AlreadyExistsException" => CreateStackError::AlreadyExists(String::from(parsed_error.message)),"InsufficientCapabilitiesException" => CreateStackError::InsufficientCapabilities(String::from(parsed_error.message)),"LimitExceededException" => CreateStackError::LimitExceeded(String::from(parsed_error.message)),_ => CreateStackError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateStackError::Unknown(body.to_string())
@@ -5393,7 +5405,13 @@ Unknown(String)
                 impl Error for CreateStackError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateStackError::AlreadyExists(ref cause) => cause,CreateStackError::LimitExceeded(ref cause) => cause,CreateStackError::InsufficientCapabilities(ref cause) => cause,CreateStackError::Validation(ref cause) => cause,CreateStackError::Credentials(ref err) => err.description(),CreateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateStackError::Unknown(ref cause) => cause
+                            CreateStackError::AlreadyExists(ref cause) => cause,
+CreateStackError::InsufficientCapabilities(ref cause) => cause,
+CreateStackError::LimitExceeded(ref cause) => cause,
+CreateStackError::Validation(ref cause) => cause,
+CreateStackError::Credentials(ref err) => err.description(),
+CreateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateStackError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5451,7 +5469,11 @@ Unknown(String)
                 impl Error for DeleteChangeSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteChangeSetError::InvalidChangeSetStatus(ref cause) => cause,DeleteChangeSetError::Validation(ref cause) => cause,DeleteChangeSetError::Credentials(ref err) => err.description(),DeleteChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteChangeSetError::Unknown(ref cause) => cause
+                            DeleteChangeSetError::InvalidChangeSetStatus(ref cause) => cause,
+DeleteChangeSetError::Validation(ref cause) => cause,
+DeleteChangeSetError::Credentials(ref err) => err.description(),
+DeleteChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteChangeSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5507,7 +5529,10 @@ Unknown(String)
                 impl Error for DeleteStackError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteStackError::Validation(ref cause) => cause,DeleteStackError::Credentials(ref err) => err.description(),DeleteStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteStackError::Unknown(ref cause) => cause
+                            DeleteStackError::Validation(ref cause) => cause,
+DeleteStackError::Credentials(ref err) => err.description(),
+DeleteStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteStackError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5563,7 +5588,10 @@ Unknown(String)
                 impl Error for DescribeAccountLimitsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAccountLimitsError::Validation(ref cause) => cause,DescribeAccountLimitsError::Credentials(ref err) => err.description(),DescribeAccountLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAccountLimitsError::Unknown(ref cause) => cause
+                            DescribeAccountLimitsError::Validation(ref cause) => cause,
+DescribeAccountLimitsError::Credentials(ref err) => err.description(),
+DescribeAccountLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAccountLimitsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5621,7 +5649,11 @@ Unknown(String)
                 impl Error for DescribeChangeSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeChangeSetError::ChangeSetNotFound(ref cause) => cause,DescribeChangeSetError::Validation(ref cause) => cause,DescribeChangeSetError::Credentials(ref err) => err.description(),DescribeChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeChangeSetError::Unknown(ref cause) => cause
+                            DescribeChangeSetError::ChangeSetNotFound(ref cause) => cause,
+DescribeChangeSetError::Validation(ref cause) => cause,
+DescribeChangeSetError::Credentials(ref err) => err.description(),
+DescribeChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeChangeSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5677,7 +5709,10 @@ Unknown(String)
                 impl Error for DescribeStackEventsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeStackEventsError::Validation(ref cause) => cause,DescribeStackEventsError::Credentials(ref err) => err.description(),DescribeStackEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeStackEventsError::Unknown(ref cause) => cause
+                            DescribeStackEventsError::Validation(ref cause) => cause,
+DescribeStackEventsError::Credentials(ref err) => err.description(),
+DescribeStackEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeStackEventsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5733,7 +5768,10 @@ Unknown(String)
                 impl Error for DescribeStackResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeStackResourceError::Validation(ref cause) => cause,DescribeStackResourceError::Credentials(ref err) => err.description(),DescribeStackResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeStackResourceError::Unknown(ref cause) => cause
+                            DescribeStackResourceError::Validation(ref cause) => cause,
+DescribeStackResourceError::Credentials(ref err) => err.description(),
+DescribeStackResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeStackResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5789,7 +5827,10 @@ Unknown(String)
                 impl Error for DescribeStackResourcesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeStackResourcesError::Validation(ref cause) => cause,DescribeStackResourcesError::Credentials(ref err) => err.description(),DescribeStackResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeStackResourcesError::Unknown(ref cause) => cause
+                            DescribeStackResourcesError::Validation(ref cause) => cause,
+DescribeStackResourcesError::Credentials(ref err) => err.description(),
+DescribeStackResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeStackResourcesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5845,7 +5886,10 @@ Unknown(String)
                 impl Error for DescribeStacksError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeStacksError::Validation(ref cause) => cause,DescribeStacksError::Credentials(ref err) => err.description(),DescribeStacksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeStacksError::Unknown(ref cause) => cause
+                            DescribeStacksError::Validation(ref cause) => cause,
+DescribeStacksError::Credentials(ref err) => err.description(),
+DescribeStacksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeStacksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5901,7 +5945,10 @@ Unknown(String)
                 impl Error for EstimateTemplateCostError {
                     fn description(&self) -> &str {
                         match *self {
-                            EstimateTemplateCostError::Validation(ref cause) => cause,EstimateTemplateCostError::Credentials(ref err) => err.description(),EstimateTemplateCostError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EstimateTemplateCostError::Unknown(ref cause) => cause
+                            EstimateTemplateCostError::Validation(ref cause) => cause,
+EstimateTemplateCostError::Credentials(ref err) => err.description(),
+EstimateTemplateCostError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EstimateTemplateCostError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5909,12 +5956,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ExecuteChangeSetError {
                     
+///<p>The specified change set name or ID doesn't exit. To view valid change sets for a stack, use the <code>ListChangeSets</code> action.</p>
+ChangeSetNotFound(String),
 ///<p>The template contains resources with capabilities that were not specified in the Capabilities parameter.</p>
 InsufficientCapabilities(String),
 ///<p>The specified change set cannot be used to update the stack. For example, the change set status might be <code>CREATE_IN_PROGRESS</code> or the stack status might be <code>UPDATE_IN_PROGRESS</code>.</p>
-InvalidChangeSetStatus(String),
-///<p>The specified change set name or ID doesn't exit. To view valid change sets for a stack, use the <code>ListChangeSets</code> action.</p>
-ChangeSetNotFound(String),/// An error occurred dispatching the HTTP request
+InvalidChangeSetStatus(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5931,7 +5978,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidChangeSetStatusException" => ExecuteChangeSetError::InvalidChangeSetStatus(String::from(parsed_error.message)),"InsufficientCapabilitiesException" => ExecuteChangeSetError::InsufficientCapabilities(String::from(parsed_error.message)),"ChangeSetNotFoundException" => ExecuteChangeSetError::ChangeSetNotFound(String::from(parsed_error.message)),_ => ExecuteChangeSetError::Unknown(String::from(body))
+                                    "ChangeSetNotFoundException" => ExecuteChangeSetError::ChangeSetNotFound(String::from(parsed_error.message)),"InsufficientCapabilitiesException" => ExecuteChangeSetError::InsufficientCapabilities(String::from(parsed_error.message)),"InvalidChangeSetStatusException" => ExecuteChangeSetError::InvalidChangeSetStatus(String::from(parsed_error.message)),_ => ExecuteChangeSetError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ExecuteChangeSetError::Unknown(body.to_string())
@@ -5963,7 +6010,13 @@ Unknown(String)
                 impl Error for ExecuteChangeSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            ExecuteChangeSetError::InsufficientCapabilities(ref cause) => cause,ExecuteChangeSetError::ChangeSetNotFound(ref cause) => cause,ExecuteChangeSetError::InvalidChangeSetStatus(ref cause) => cause,ExecuteChangeSetError::Validation(ref cause) => cause,ExecuteChangeSetError::Credentials(ref err) => err.description(),ExecuteChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ExecuteChangeSetError::Unknown(ref cause) => cause
+                            ExecuteChangeSetError::ChangeSetNotFound(ref cause) => cause,
+ExecuteChangeSetError::InsufficientCapabilities(ref cause) => cause,
+ExecuteChangeSetError::InvalidChangeSetStatus(ref cause) => cause,
+ExecuteChangeSetError::Validation(ref cause) => cause,
+ExecuteChangeSetError::Credentials(ref err) => err.description(),
+ExecuteChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ExecuteChangeSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6019,7 +6072,10 @@ Unknown(String)
                 impl Error for GetStackPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetStackPolicyError::Validation(ref cause) => cause,GetStackPolicyError::Credentials(ref err) => err.description(),GetStackPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetStackPolicyError::Unknown(ref cause) => cause
+                            GetStackPolicyError::Validation(ref cause) => cause,
+GetStackPolicyError::Credentials(ref err) => err.description(),
+GetStackPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetStackPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6077,7 +6133,11 @@ Unknown(String)
                 impl Error for GetTemplateError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetTemplateError::ChangeSetNotFound(ref cause) => cause,GetTemplateError::Validation(ref cause) => cause,GetTemplateError::Credentials(ref err) => err.description(),GetTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetTemplateError::Unknown(ref cause) => cause
+                            GetTemplateError::ChangeSetNotFound(ref cause) => cause,
+GetTemplateError::Validation(ref cause) => cause,
+GetTemplateError::Credentials(ref err) => err.description(),
+GetTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetTemplateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6133,7 +6193,10 @@ Unknown(String)
                 impl Error for GetTemplateSummaryError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetTemplateSummaryError::Validation(ref cause) => cause,GetTemplateSummaryError::Credentials(ref err) => err.description(),GetTemplateSummaryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetTemplateSummaryError::Unknown(ref cause) => cause
+                            GetTemplateSummaryError::Validation(ref cause) => cause,
+GetTemplateSummaryError::Credentials(ref err) => err.description(),
+GetTemplateSummaryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetTemplateSummaryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6189,7 +6252,10 @@ Unknown(String)
                 impl Error for ListChangeSetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListChangeSetsError::Validation(ref cause) => cause,ListChangeSetsError::Credentials(ref err) => err.description(),ListChangeSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListChangeSetsError::Unknown(ref cause) => cause
+                            ListChangeSetsError::Validation(ref cause) => cause,
+ListChangeSetsError::Credentials(ref err) => err.description(),
+ListChangeSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListChangeSetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6245,7 +6311,10 @@ Unknown(String)
                 impl Error for ListExportsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListExportsError::Validation(ref cause) => cause,ListExportsError::Credentials(ref err) => err.description(),ListExportsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListExportsError::Unknown(ref cause) => cause
+                            ListExportsError::Validation(ref cause) => cause,
+ListExportsError::Credentials(ref err) => err.description(),
+ListExportsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListExportsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6301,7 +6370,10 @@ Unknown(String)
                 impl Error for ListImportsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListImportsError::Validation(ref cause) => cause,ListImportsError::Credentials(ref err) => err.description(),ListImportsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListImportsError::Unknown(ref cause) => cause
+                            ListImportsError::Validation(ref cause) => cause,
+ListImportsError::Credentials(ref err) => err.description(),
+ListImportsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListImportsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6357,7 +6429,10 @@ Unknown(String)
                 impl Error for ListStackResourcesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListStackResourcesError::Validation(ref cause) => cause,ListStackResourcesError::Credentials(ref err) => err.description(),ListStackResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListStackResourcesError::Unknown(ref cause) => cause
+                            ListStackResourcesError::Validation(ref cause) => cause,
+ListStackResourcesError::Credentials(ref err) => err.description(),
+ListStackResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListStackResourcesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6413,7 +6488,10 @@ Unknown(String)
                 impl Error for ListStacksError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListStacksError::Validation(ref cause) => cause,ListStacksError::Credentials(ref err) => err.description(),ListStacksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListStacksError::Unknown(ref cause) => cause
+                            ListStacksError::Validation(ref cause) => cause,
+ListStacksError::Credentials(ref err) => err.description(),
+ListStacksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListStacksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6469,7 +6547,10 @@ Unknown(String)
                 impl Error for SetStackPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetStackPolicyError::Validation(ref cause) => cause,SetStackPolicyError::Credentials(ref err) => err.description(),SetStackPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetStackPolicyError::Unknown(ref cause) => cause
+                            SetStackPolicyError::Validation(ref cause) => cause,
+SetStackPolicyError::Credentials(ref err) => err.description(),
+SetStackPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetStackPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6525,7 +6606,10 @@ Unknown(String)
                 impl Error for SignalResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            SignalResourceError::Validation(ref cause) => cause,SignalResourceError::Credentials(ref err) => err.description(),SignalResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SignalResourceError::Unknown(ref cause) => cause
+                            SignalResourceError::Validation(ref cause) => cause,
+SignalResourceError::Credentials(ref err) => err.description(),
+SignalResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SignalResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6583,7 +6667,11 @@ Unknown(String)
                 impl Error for UpdateStackError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateStackError::InsufficientCapabilities(ref cause) => cause,UpdateStackError::Validation(ref cause) => cause,UpdateStackError::Credentials(ref err) => err.description(),UpdateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateStackError::Unknown(ref cause) => cause
+                            UpdateStackError::InsufficientCapabilities(ref cause) => cause,
+UpdateStackError::Validation(ref cause) => cause,
+UpdateStackError::Credentials(ref err) => err.description(),
+UpdateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateStackError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6639,7 +6727,10 @@ Unknown(String)
                 impl Error for ValidateTemplateError {
                     fn description(&self) -> &str {
                         match *self {
-                            ValidateTemplateError::Validation(ref cause) => cause,ValidateTemplateError::Credentials(ref err) => err.description(),ValidateTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ValidateTemplateError::Unknown(ref cause) => cause
+                            ValidateTemplateError::Validation(ref cause) => cause,
+ValidateTemplateError::Credentials(ref err) => err.description(),
+ValidateTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ValidateTemplateError::Unknown(ref cause) => cause
                         }
                     }
                  }

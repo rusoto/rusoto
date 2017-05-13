@@ -118,7 +118,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "MarketplaceCommerceAnalyticsException" => GenerateDataSetError::MarketplaceCommerceAnalytics(String::from(error_message)),"ValidationException" => GenerateDataSetError::Validation(error_message.to_string()),_ => GenerateDataSetError::Unknown(String::from(body))
+                                    "MarketplaceCommerceAnalyticsException" => GenerateDataSetError::MarketplaceCommerceAnalytics(String::from(error_message)),
+"ValidationException" => GenerateDataSetError::Validation(error_message.to_string()),
+_ => GenerateDataSetError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GenerateDataSetError::Unknown(String::from(body))
@@ -149,7 +151,11 @@ Unknown(String)
                 impl Error for GenerateDataSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            GenerateDataSetError::MarketplaceCommerceAnalytics(ref cause) => cause,GenerateDataSetError::Validation(ref cause) => cause,GenerateDataSetError::Credentials(ref err) => err.description(),GenerateDataSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GenerateDataSetError::Unknown(ref cause) => cause
+                            GenerateDataSetError::MarketplaceCommerceAnalytics(ref cause) => cause,
+GenerateDataSetError::Validation(ref cause) => cause,
+GenerateDataSetError::Credentials(ref err) => err.description(),
+GenerateDataSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GenerateDataSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -177,7 +183,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "MarketplaceCommerceAnalyticsException" => StartSupportDataExportError::MarketplaceCommerceAnalytics(String::from(error_message)),"ValidationException" => StartSupportDataExportError::Validation(error_message.to_string()),_ => StartSupportDataExportError::Unknown(String::from(body))
+                                    "MarketplaceCommerceAnalyticsException" => StartSupportDataExportError::MarketplaceCommerceAnalytics(String::from(error_message)),
+"ValidationException" => StartSupportDataExportError::Validation(error_message.to_string()),
+_ => StartSupportDataExportError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StartSupportDataExportError::Unknown(String::from(body))
@@ -208,7 +216,11 @@ Unknown(String)
                 impl Error for StartSupportDataExportError {
                     fn description(&self) -> &str {
                         match *self {
-                            StartSupportDataExportError::MarketplaceCommerceAnalytics(ref cause) => cause,StartSupportDataExportError::Validation(ref cause) => cause,StartSupportDataExportError::Credentials(ref err) => err.description(),StartSupportDataExportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StartSupportDataExportError::Unknown(ref cause) => cause
+                            StartSupportDataExportError::MarketplaceCommerceAnalytics(ref cause) => cause,
+StartSupportDataExportError::Validation(ref cause) => cause,
+StartSupportDataExportError::Credentials(ref err) => err.description(),
+StartSupportDataExportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StartSupportDataExportError::Unknown(ref cause) => cause
                         }
                     }
                  }

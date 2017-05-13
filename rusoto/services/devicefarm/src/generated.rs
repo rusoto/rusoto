@@ -1576,10 +1576,10 @@ pub type Uploads = Vec<Upload>;
                     
 ///<p>An invalid argument was specified.</p>
 Argument(String),
-///<p>The specified entity was not found.</p>
-NotFound(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
 ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1600,7 +1600,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => CreateDevicePoolError::ServiceAccount(String::from(error_message)),"NotFoundException" => CreateDevicePoolError::NotFound(String::from(error_message)),"ArgumentException" => CreateDevicePoolError::Argument(String::from(error_message)),"LimitExceededException" => CreateDevicePoolError::LimitExceeded(String::from(error_message)),"ValidationException" => CreateDevicePoolError::Validation(error_message.to_string()),_ => CreateDevicePoolError::Unknown(String::from(body))
+                                    "ArgumentException" => CreateDevicePoolError::Argument(String::from(error_message)),
+"LimitExceededException" => CreateDevicePoolError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => CreateDevicePoolError::NotFound(String::from(error_message)),
+"ServiceAccountException" => CreateDevicePoolError::ServiceAccount(String::from(error_message)),
+"ValidationException" => CreateDevicePoolError::Validation(error_message.to_string()),
+_ => CreateDevicePoolError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateDevicePoolError::Unknown(String::from(body))
@@ -1631,7 +1636,14 @@ Unknown(String)
                 impl Error for CreateDevicePoolError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDevicePoolError::NotFound(ref cause) => cause,CreateDevicePoolError::Argument(ref cause) => cause,CreateDevicePoolError::LimitExceeded(ref cause) => cause,CreateDevicePoolError::ServiceAccount(ref cause) => cause,CreateDevicePoolError::Validation(ref cause) => cause,CreateDevicePoolError::Credentials(ref err) => err.description(),CreateDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDevicePoolError::Unknown(ref cause) => cause
+                            CreateDevicePoolError::Argument(ref cause) => cause,
+CreateDevicePoolError::LimitExceeded(ref cause) => cause,
+CreateDevicePoolError::NotFound(ref cause) => cause,
+CreateDevicePoolError::ServiceAccount(ref cause) => cause,
+CreateDevicePoolError::Validation(ref cause) => cause,
+CreateDevicePoolError::Credentials(ref err) => err.description(),
+CreateDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDevicePoolError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1639,12 +1651,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateProjectError {
                     
-///<p>The specified entity was not found.</p>
-NotFound(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
 ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1665,7 +1677,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => CreateProjectError::ServiceAccount(String::from(error_message)),"LimitExceededException" => CreateProjectError::LimitExceeded(String::from(error_message)),"ArgumentException" => CreateProjectError::Argument(String::from(error_message)),"NotFoundException" => CreateProjectError::NotFound(String::from(error_message)),"ValidationException" => CreateProjectError::Validation(error_message.to_string()),_ => CreateProjectError::Unknown(String::from(body))
+                                    "ArgumentException" => CreateProjectError::Argument(String::from(error_message)),
+"LimitExceededException" => CreateProjectError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => CreateProjectError::NotFound(String::from(error_message)),
+"ServiceAccountException" => CreateProjectError::ServiceAccount(String::from(error_message)),
+"ValidationException" => CreateProjectError::Validation(error_message.to_string()),
+_ => CreateProjectError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateProjectError::Unknown(String::from(body))
@@ -1696,7 +1713,14 @@ Unknown(String)
                 impl Error for CreateProjectError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateProjectError::Argument(ref cause) => cause,CreateProjectError::NotFound(ref cause) => cause,CreateProjectError::LimitExceeded(ref cause) => cause,CreateProjectError::ServiceAccount(ref cause) => cause,CreateProjectError::Validation(ref cause) => cause,CreateProjectError::Credentials(ref err) => err.description(),CreateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateProjectError::Unknown(ref cause) => cause
+                            CreateProjectError::Argument(ref cause) => cause,
+CreateProjectError::LimitExceeded(ref cause) => cause,
+CreateProjectError::NotFound(ref cause) => cause,
+CreateProjectError::ServiceAccount(ref cause) => cause,
+CreateProjectError::Validation(ref cause) => cause,
+CreateProjectError::Credentials(ref err) => err.description(),
+CreateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateProjectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1704,14 +1728,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateRemoteAccessSessionError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1730,7 +1754,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => CreateRemoteAccessSessionError::Argument(String::from(error_message)),"LimitExceededException" => CreateRemoteAccessSessionError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => CreateRemoteAccessSessionError::ServiceAccount(String::from(error_message)),"NotFoundException" => CreateRemoteAccessSessionError::NotFound(String::from(error_message)),"ValidationException" => CreateRemoteAccessSessionError::Validation(error_message.to_string()),_ => CreateRemoteAccessSessionError::Unknown(String::from(body))
+                                    "ArgumentException" => CreateRemoteAccessSessionError::Argument(String::from(error_message)),
+"LimitExceededException" => CreateRemoteAccessSessionError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => CreateRemoteAccessSessionError::NotFound(String::from(error_message)),
+"ServiceAccountException" => CreateRemoteAccessSessionError::ServiceAccount(String::from(error_message)),
+"ValidationException" => CreateRemoteAccessSessionError::Validation(error_message.to_string()),
+_ => CreateRemoteAccessSessionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateRemoteAccessSessionError::Unknown(String::from(body))
@@ -1761,7 +1790,14 @@ Unknown(String)
                 impl Error for CreateRemoteAccessSessionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateRemoteAccessSessionError::Argument(ref cause) => cause,CreateRemoteAccessSessionError::LimitExceeded(ref cause) => cause,CreateRemoteAccessSessionError::ServiceAccount(ref cause) => cause,CreateRemoteAccessSessionError::NotFound(ref cause) => cause,CreateRemoteAccessSessionError::Validation(ref cause) => cause,CreateRemoteAccessSessionError::Credentials(ref err) => err.description(),CreateRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateRemoteAccessSessionError::Unknown(ref cause) => cause
+                            CreateRemoteAccessSessionError::Argument(ref cause) => cause,
+CreateRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
+CreateRemoteAccessSessionError::NotFound(ref cause) => cause,
+CreateRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
+CreateRemoteAccessSessionError::Validation(ref cause) => cause,
+CreateRemoteAccessSessionError::Credentials(ref err) => err.description(),
+CreateRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateRemoteAccessSessionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1769,14 +1805,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateUploadError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1795,7 +1831,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => CreateUploadError::ServiceAccount(String::from(error_message)),"NotFoundException" => CreateUploadError::NotFound(String::from(error_message)),"ArgumentException" => CreateUploadError::Argument(String::from(error_message)),"LimitExceededException" => CreateUploadError::LimitExceeded(String::from(error_message)),"ValidationException" => CreateUploadError::Validation(error_message.to_string()),_ => CreateUploadError::Unknown(String::from(body))
+                                    "ArgumentException" => CreateUploadError::Argument(String::from(error_message)),
+"LimitExceededException" => CreateUploadError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => CreateUploadError::NotFound(String::from(error_message)),
+"ServiceAccountException" => CreateUploadError::ServiceAccount(String::from(error_message)),
+"ValidationException" => CreateUploadError::Validation(error_message.to_string()),
+_ => CreateUploadError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateUploadError::Unknown(String::from(body))
@@ -1826,7 +1867,14 @@ Unknown(String)
                 impl Error for CreateUploadError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateUploadError::LimitExceeded(ref cause) => cause,CreateUploadError::Argument(ref cause) => cause,CreateUploadError::ServiceAccount(ref cause) => cause,CreateUploadError::NotFound(ref cause) => cause,CreateUploadError::Validation(ref cause) => cause,CreateUploadError::Credentials(ref err) => err.description(),CreateUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateUploadError::Unknown(ref cause) => cause
+                            CreateUploadError::Argument(ref cause) => cause,
+CreateUploadError::LimitExceeded(ref cause) => cause,
+CreateUploadError::NotFound(ref cause) => cause,
+CreateUploadError::ServiceAccount(ref cause) => cause,
+CreateUploadError::Validation(ref cause) => cause,
+CreateUploadError::Credentials(ref err) => err.description(),
+CreateUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateUploadError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1834,14 +1882,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDevicePoolError {
                     
-///<p>The specified entity was not found.</p>
-NotFound(String),
+///<p>An invalid argument was specified.</p>
+Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1860,7 +1908,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => DeleteDevicePoolError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => DeleteDevicePoolError::ServiceAccount(String::from(error_message)),"ArgumentException" => DeleteDevicePoolError::Argument(String::from(error_message)),"NotFoundException" => DeleteDevicePoolError::NotFound(String::from(error_message)),"ValidationException" => DeleteDevicePoolError::Validation(error_message.to_string()),_ => DeleteDevicePoolError::Unknown(String::from(body))
+                                    "ArgumentException" => DeleteDevicePoolError::Argument(String::from(error_message)),
+"LimitExceededException" => DeleteDevicePoolError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => DeleteDevicePoolError::NotFound(String::from(error_message)),
+"ServiceAccountException" => DeleteDevicePoolError::ServiceAccount(String::from(error_message)),
+"ValidationException" => DeleteDevicePoolError::Validation(error_message.to_string()),
+_ => DeleteDevicePoolError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteDevicePoolError::Unknown(String::from(body))
@@ -1891,7 +1944,14 @@ Unknown(String)
                 impl Error for DeleteDevicePoolError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDevicePoolError::ServiceAccount(ref cause) => cause,DeleteDevicePoolError::LimitExceeded(ref cause) => cause,DeleteDevicePoolError::NotFound(ref cause) => cause,DeleteDevicePoolError::Argument(ref cause) => cause,DeleteDevicePoolError::Validation(ref cause) => cause,DeleteDevicePoolError::Credentials(ref err) => err.description(),DeleteDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDevicePoolError::Unknown(ref cause) => cause
+                            DeleteDevicePoolError::Argument(ref cause) => cause,
+DeleteDevicePoolError::LimitExceeded(ref cause) => cause,
+DeleteDevicePoolError::NotFound(ref cause) => cause,
+DeleteDevicePoolError::ServiceAccount(ref cause) => cause,
+DeleteDevicePoolError::Validation(ref cause) => cause,
+DeleteDevicePoolError::Credentials(ref err) => err.description(),
+DeleteDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDevicePoolError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1899,12 +1959,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteProjectError {
                     
-///<p>The specified entity was not found.</p>
-NotFound(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
 ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1925,7 +1985,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => DeleteProjectError::Argument(String::from(error_message)),"LimitExceededException" => DeleteProjectError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => DeleteProjectError::ServiceAccount(String::from(error_message)),"NotFoundException" => DeleteProjectError::NotFound(String::from(error_message)),"ValidationException" => DeleteProjectError::Validation(error_message.to_string()),_ => DeleteProjectError::Unknown(String::from(body))
+                                    "ArgumentException" => DeleteProjectError::Argument(String::from(error_message)),
+"LimitExceededException" => DeleteProjectError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => DeleteProjectError::NotFound(String::from(error_message)),
+"ServiceAccountException" => DeleteProjectError::ServiceAccount(String::from(error_message)),
+"ValidationException" => DeleteProjectError::Validation(error_message.to_string()),
+_ => DeleteProjectError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteProjectError::Unknown(String::from(body))
@@ -1956,7 +2021,14 @@ Unknown(String)
                 impl Error for DeleteProjectError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteProjectError::NotFound(ref cause) => cause,DeleteProjectError::Argument(ref cause) => cause,DeleteProjectError::LimitExceeded(ref cause) => cause,DeleteProjectError::ServiceAccount(ref cause) => cause,DeleteProjectError::Validation(ref cause) => cause,DeleteProjectError::Credentials(ref err) => err.description(),DeleteProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteProjectError::Unknown(ref cause) => cause
+                            DeleteProjectError::Argument(ref cause) => cause,
+DeleteProjectError::LimitExceeded(ref cause) => cause,
+DeleteProjectError::NotFound(ref cause) => cause,
+DeleteProjectError::ServiceAccount(ref cause) => cause,
+DeleteProjectError::Validation(ref cause) => cause,
+DeleteProjectError::Credentials(ref err) => err.description(),
+DeleteProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteProjectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1964,14 +2036,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteRemoteAccessSessionError {
                     
-///<p>The specified entity was not found.</p>
-NotFound(String),
+///<p>An invalid argument was specified.</p>
+Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1990,7 +2062,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => DeleteRemoteAccessSessionError::Argument(String::from(error_message)),"ServiceAccountException" => DeleteRemoteAccessSessionError::ServiceAccount(String::from(error_message)),"LimitExceededException" => DeleteRemoteAccessSessionError::LimitExceeded(String::from(error_message)),"NotFoundException" => DeleteRemoteAccessSessionError::NotFound(String::from(error_message)),"ValidationException" => DeleteRemoteAccessSessionError::Validation(error_message.to_string()),_ => DeleteRemoteAccessSessionError::Unknown(String::from(body))
+                                    "ArgumentException" => DeleteRemoteAccessSessionError::Argument(String::from(error_message)),
+"LimitExceededException" => DeleteRemoteAccessSessionError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => DeleteRemoteAccessSessionError::NotFound(String::from(error_message)),
+"ServiceAccountException" => DeleteRemoteAccessSessionError::ServiceAccount(String::from(error_message)),
+"ValidationException" => DeleteRemoteAccessSessionError::Validation(error_message.to_string()),
+_ => DeleteRemoteAccessSessionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteRemoteAccessSessionError::Unknown(String::from(body))
@@ -2021,7 +2098,14 @@ Unknown(String)
                 impl Error for DeleteRemoteAccessSessionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteRemoteAccessSessionError::LimitExceeded(ref cause) => cause,DeleteRemoteAccessSessionError::Argument(ref cause) => cause,DeleteRemoteAccessSessionError::NotFound(ref cause) => cause,DeleteRemoteAccessSessionError::ServiceAccount(ref cause) => cause,DeleteRemoteAccessSessionError::Validation(ref cause) => cause,DeleteRemoteAccessSessionError::Credentials(ref err) => err.description(),DeleteRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteRemoteAccessSessionError::Unknown(ref cause) => cause
+                            DeleteRemoteAccessSessionError::Argument(ref cause) => cause,
+DeleteRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
+DeleteRemoteAccessSessionError::NotFound(ref cause) => cause,
+DeleteRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
+DeleteRemoteAccessSessionError::Validation(ref cause) => cause,
+DeleteRemoteAccessSessionError::Credentials(ref err) => err.description(),
+DeleteRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteRemoteAccessSessionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2029,12 +2113,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteRunError {
                     
-///<p>The specified entity was not found.</p>
-NotFound(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
 ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2055,7 +2139,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => DeleteRunError::ServiceAccount(String::from(error_message)),"LimitExceededException" => DeleteRunError::LimitExceeded(String::from(error_message)),"NotFoundException" => DeleteRunError::NotFound(String::from(error_message)),"ArgumentException" => DeleteRunError::Argument(String::from(error_message)),"ValidationException" => DeleteRunError::Validation(error_message.to_string()),_ => DeleteRunError::Unknown(String::from(body))
+                                    "ArgumentException" => DeleteRunError::Argument(String::from(error_message)),
+"LimitExceededException" => DeleteRunError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => DeleteRunError::NotFound(String::from(error_message)),
+"ServiceAccountException" => DeleteRunError::ServiceAccount(String::from(error_message)),
+"ValidationException" => DeleteRunError::Validation(error_message.to_string()),
+_ => DeleteRunError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteRunError::Unknown(String::from(body))
@@ -2086,7 +2175,14 @@ Unknown(String)
                 impl Error for DeleteRunError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteRunError::ServiceAccount(ref cause) => cause,DeleteRunError::LimitExceeded(ref cause) => cause,DeleteRunError::Argument(ref cause) => cause,DeleteRunError::NotFound(ref cause) => cause,DeleteRunError::Validation(ref cause) => cause,DeleteRunError::Credentials(ref err) => err.description(),DeleteRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteRunError::Unknown(ref cause) => cause
+                            DeleteRunError::Argument(ref cause) => cause,
+DeleteRunError::LimitExceeded(ref cause) => cause,
+DeleteRunError::NotFound(ref cause) => cause,
+DeleteRunError::ServiceAccount(ref cause) => cause,
+DeleteRunError::Validation(ref cause) => cause,
+DeleteRunError::Credentials(ref err) => err.description(),
+DeleteRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteRunError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2094,14 +2190,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteUploadError {
                     
-///<p>The specified entity was not found.</p>
-NotFound(String),
+///<p>An invalid argument was specified.</p>
+Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2120,7 +2216,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => DeleteUploadError::ServiceAccount(String::from(error_message)),"LimitExceededException" => DeleteUploadError::LimitExceeded(String::from(error_message)),"NotFoundException" => DeleteUploadError::NotFound(String::from(error_message)),"ArgumentException" => DeleteUploadError::Argument(String::from(error_message)),"ValidationException" => DeleteUploadError::Validation(error_message.to_string()),_ => DeleteUploadError::Unknown(String::from(body))
+                                    "ArgumentException" => DeleteUploadError::Argument(String::from(error_message)),
+"LimitExceededException" => DeleteUploadError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => DeleteUploadError::NotFound(String::from(error_message)),
+"ServiceAccountException" => DeleteUploadError::ServiceAccount(String::from(error_message)),
+"ValidationException" => DeleteUploadError::Validation(error_message.to_string()),
+_ => DeleteUploadError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteUploadError::Unknown(String::from(body))
@@ -2151,7 +2252,14 @@ Unknown(String)
                 impl Error for DeleteUploadError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteUploadError::ServiceAccount(ref cause) => cause,DeleteUploadError::NotFound(ref cause) => cause,DeleteUploadError::Argument(ref cause) => cause,DeleteUploadError::LimitExceeded(ref cause) => cause,DeleteUploadError::Validation(ref cause) => cause,DeleteUploadError::Credentials(ref err) => err.description(),DeleteUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteUploadError::Unknown(ref cause) => cause
+                            DeleteUploadError::Argument(ref cause) => cause,
+DeleteUploadError::LimitExceeded(ref cause) => cause,
+DeleteUploadError::NotFound(ref cause) => cause,
+DeleteUploadError::ServiceAccount(ref cause) => cause,
+DeleteUploadError::Validation(ref cause) => cause,
+DeleteUploadError::Credentials(ref err) => err.description(),
+DeleteUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteUploadError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2159,14 +2267,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetAccountSettingsError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2185,7 +2293,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => GetAccountSettingsError::Argument(String::from(error_message)),"ServiceAccountException" => GetAccountSettingsError::ServiceAccount(String::from(error_message)),"LimitExceededException" => GetAccountSettingsError::LimitExceeded(String::from(error_message)),"NotFoundException" => GetAccountSettingsError::NotFound(String::from(error_message)),"ValidationException" => GetAccountSettingsError::Validation(error_message.to_string()),_ => GetAccountSettingsError::Unknown(String::from(body))
+                                    "ArgumentException" => GetAccountSettingsError::Argument(String::from(error_message)),
+"LimitExceededException" => GetAccountSettingsError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => GetAccountSettingsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetAccountSettingsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetAccountSettingsError::Validation(error_message.to_string()),
+_ => GetAccountSettingsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetAccountSettingsError::Unknown(String::from(body))
@@ -2216,7 +2329,14 @@ Unknown(String)
                 impl Error for GetAccountSettingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetAccountSettingsError::Argument(ref cause) => cause,GetAccountSettingsError::NotFound(ref cause) => cause,GetAccountSettingsError::LimitExceeded(ref cause) => cause,GetAccountSettingsError::ServiceAccount(ref cause) => cause,GetAccountSettingsError::Validation(ref cause) => cause,GetAccountSettingsError::Credentials(ref err) => err.description(),GetAccountSettingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetAccountSettingsError::Unknown(ref cause) => cause
+                            GetAccountSettingsError::Argument(ref cause) => cause,
+GetAccountSettingsError::LimitExceeded(ref cause) => cause,
+GetAccountSettingsError::NotFound(ref cause) => cause,
+GetAccountSettingsError::ServiceAccount(ref cause) => cause,
+GetAccountSettingsError::Validation(ref cause) => cause,
+GetAccountSettingsError::Credentials(ref err) => err.description(),
+GetAccountSettingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetAccountSettingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2228,10 +2348,10 @@ Unknown(String)
 Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>The specified entity was not found.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2250,7 +2370,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => GetDeviceError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => GetDeviceError::ServiceAccount(String::from(error_message)),"NotFoundException" => GetDeviceError::NotFound(String::from(error_message)),"ArgumentException" => GetDeviceError::Argument(String::from(error_message)),"ValidationException" => GetDeviceError::Validation(error_message.to_string()),_ => GetDeviceError::Unknown(String::from(body))
+                                    "ArgumentException" => GetDeviceError::Argument(String::from(error_message)),
+"LimitExceededException" => GetDeviceError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => GetDeviceError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetDeviceError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetDeviceError::Validation(error_message.to_string()),
+_ => GetDeviceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetDeviceError::Unknown(String::from(body))
@@ -2281,7 +2406,14 @@ Unknown(String)
                 impl Error for GetDeviceError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDeviceError::ServiceAccount(ref cause) => cause,GetDeviceError::NotFound(ref cause) => cause,GetDeviceError::Argument(ref cause) => cause,GetDeviceError::LimitExceeded(ref cause) => cause,GetDeviceError::Validation(ref cause) => cause,GetDeviceError::Credentials(ref err) => err.description(),GetDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDeviceError::Unknown(ref cause) => cause
+                            GetDeviceError::Argument(ref cause) => cause,
+GetDeviceError::LimitExceeded(ref cause) => cause,
+GetDeviceError::NotFound(ref cause) => cause,
+GetDeviceError::ServiceAccount(ref cause) => cause,
+GetDeviceError::Validation(ref cause) => cause,
+GetDeviceError::Credentials(ref err) => err.description(),
+GetDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDeviceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2289,10 +2421,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetDevicePoolError {
                     
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
 ///<p>There was a problem with the service account.</p>
@@ -2315,7 +2447,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => GetDevicePoolError::ServiceAccount(String::from(error_message)),"LimitExceededException" => GetDevicePoolError::LimitExceeded(String::from(error_message)),"ArgumentException" => GetDevicePoolError::Argument(String::from(error_message)),"NotFoundException" => GetDevicePoolError::NotFound(String::from(error_message)),"ValidationException" => GetDevicePoolError::Validation(error_message.to_string()),_ => GetDevicePoolError::Unknown(String::from(body))
+                                    "ArgumentException" => GetDevicePoolError::Argument(String::from(error_message)),
+"LimitExceededException" => GetDevicePoolError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => GetDevicePoolError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetDevicePoolError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetDevicePoolError::Validation(error_message.to_string()),
+_ => GetDevicePoolError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetDevicePoolError::Unknown(String::from(body))
@@ -2346,7 +2483,14 @@ Unknown(String)
                 impl Error for GetDevicePoolError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDevicePoolError::LimitExceeded(ref cause) => cause,GetDevicePoolError::ServiceAccount(ref cause) => cause,GetDevicePoolError::Argument(ref cause) => cause,GetDevicePoolError::NotFound(ref cause) => cause,GetDevicePoolError::Validation(ref cause) => cause,GetDevicePoolError::Credentials(ref err) => err.description(),GetDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDevicePoolError::Unknown(ref cause) => cause
+                            GetDevicePoolError::Argument(ref cause) => cause,
+GetDevicePoolError::LimitExceeded(ref cause) => cause,
+GetDevicePoolError::NotFound(ref cause) => cause,
+GetDevicePoolError::ServiceAccount(ref cause) => cause,
+GetDevicePoolError::Validation(ref cause) => cause,
+GetDevicePoolError::Credentials(ref err) => err.description(),
+GetDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDevicePoolError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2354,12 +2498,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetDevicePoolCompatibilityError {
                     
-///<p>The specified entity was not found.</p>
-NotFound(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
 ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2380,7 +2524,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => GetDevicePoolCompatibilityError::LimitExceeded(String::from(error_message)),"NotFoundException" => GetDevicePoolCompatibilityError::NotFound(String::from(error_message)),"ArgumentException" => GetDevicePoolCompatibilityError::Argument(String::from(error_message)),"ServiceAccountException" => GetDevicePoolCompatibilityError::ServiceAccount(String::from(error_message)),"ValidationException" => GetDevicePoolCompatibilityError::Validation(error_message.to_string()),_ => GetDevicePoolCompatibilityError::Unknown(String::from(body))
+                                    "ArgumentException" => GetDevicePoolCompatibilityError::Argument(String::from(error_message)),
+"LimitExceededException" => GetDevicePoolCompatibilityError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => GetDevicePoolCompatibilityError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetDevicePoolCompatibilityError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetDevicePoolCompatibilityError::Validation(error_message.to_string()),
+_ => GetDevicePoolCompatibilityError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetDevicePoolCompatibilityError::Unknown(String::from(body))
@@ -2411,7 +2560,14 @@ Unknown(String)
                 impl Error for GetDevicePoolCompatibilityError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDevicePoolCompatibilityError::NotFound(ref cause) => cause,GetDevicePoolCompatibilityError::ServiceAccount(ref cause) => cause,GetDevicePoolCompatibilityError::LimitExceeded(ref cause) => cause,GetDevicePoolCompatibilityError::Argument(ref cause) => cause,GetDevicePoolCompatibilityError::Validation(ref cause) => cause,GetDevicePoolCompatibilityError::Credentials(ref err) => err.description(),GetDevicePoolCompatibilityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDevicePoolCompatibilityError::Unknown(ref cause) => cause
+                            GetDevicePoolCompatibilityError::Argument(ref cause) => cause,
+GetDevicePoolCompatibilityError::LimitExceeded(ref cause) => cause,
+GetDevicePoolCompatibilityError::NotFound(ref cause) => cause,
+GetDevicePoolCompatibilityError::ServiceAccount(ref cause) => cause,
+GetDevicePoolCompatibilityError::Validation(ref cause) => cause,
+GetDevicePoolCompatibilityError::Credentials(ref err) => err.description(),
+GetDevicePoolCompatibilityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDevicePoolCompatibilityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2419,10 +2575,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetJobError {
                     
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
 ///<p>There was a problem with the service account.</p>
@@ -2445,7 +2601,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => GetJobError::LimitExceeded(String::from(error_message)),"ArgumentException" => GetJobError::Argument(String::from(error_message)),"NotFoundException" => GetJobError::NotFound(String::from(error_message)),"ServiceAccountException" => GetJobError::ServiceAccount(String::from(error_message)),"ValidationException" => GetJobError::Validation(error_message.to_string()),_ => GetJobError::Unknown(String::from(body))
+                                    "ArgumentException" => GetJobError::Argument(String::from(error_message)),
+"LimitExceededException" => GetJobError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => GetJobError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetJobError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetJobError::Validation(error_message.to_string()),
+_ => GetJobError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetJobError::Unknown(String::from(body))
@@ -2476,7 +2637,14 @@ Unknown(String)
                 impl Error for GetJobError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetJobError::ServiceAccount(ref cause) => cause,GetJobError::Argument(ref cause) => cause,GetJobError::LimitExceeded(ref cause) => cause,GetJobError::NotFound(ref cause) => cause,GetJobError::Validation(ref cause) => cause,GetJobError::Credentials(ref err) => err.description(),GetJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetJobError::Unknown(ref cause) => cause
+                            GetJobError::Argument(ref cause) => cause,
+GetJobError::LimitExceeded(ref cause) => cause,
+GetJobError::NotFound(ref cause) => cause,
+GetJobError::ServiceAccount(ref cause) => cause,
+GetJobError::Validation(ref cause) => cause,
+GetJobError::Credentials(ref err) => err.description(),
+GetJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetJobError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2484,16 +2652,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetOfferingStatusError {
                     
-///<p>The specified entity was not found.</p>
-NotFound(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
 ///<p>Exception gets thrown when a user is not eligible to perform the specified transaction.</p>
-NotEligible(String),/// An error occurred dispatching the HTTP request
+NotEligible(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2512,7 +2680,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => GetOfferingStatusError::ServiceAccount(String::from(error_message)),"LimitExceededException" => GetOfferingStatusError::LimitExceeded(String::from(error_message)),"ArgumentException" => GetOfferingStatusError::Argument(String::from(error_message)),"NotEligibleException" => GetOfferingStatusError::NotEligible(String::from(error_message)),"NotFoundException" => GetOfferingStatusError::NotFound(String::from(error_message)),"ValidationException" => GetOfferingStatusError::Validation(error_message.to_string()),_ => GetOfferingStatusError::Unknown(String::from(body))
+                                    "ArgumentException" => GetOfferingStatusError::Argument(String::from(error_message)),
+"LimitExceededException" => GetOfferingStatusError::LimitExceeded(String::from(error_message)),
+"NotEligibleException" => GetOfferingStatusError::NotEligible(String::from(error_message)),
+"NotFoundException" => GetOfferingStatusError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetOfferingStatusError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetOfferingStatusError::Validation(error_message.to_string()),
+_ => GetOfferingStatusError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetOfferingStatusError::Unknown(String::from(body))
@@ -2543,7 +2717,15 @@ Unknown(String)
                 impl Error for GetOfferingStatusError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetOfferingStatusError::NotEligible(ref cause) => cause,GetOfferingStatusError::NotFound(ref cause) => cause,GetOfferingStatusError::Argument(ref cause) => cause,GetOfferingStatusError::ServiceAccount(ref cause) => cause,GetOfferingStatusError::LimitExceeded(ref cause) => cause,GetOfferingStatusError::Validation(ref cause) => cause,GetOfferingStatusError::Credentials(ref err) => err.description(),GetOfferingStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetOfferingStatusError::Unknown(ref cause) => cause
+                            GetOfferingStatusError::Argument(ref cause) => cause,
+GetOfferingStatusError::LimitExceeded(ref cause) => cause,
+GetOfferingStatusError::NotEligible(ref cause) => cause,
+GetOfferingStatusError::NotFound(ref cause) => cause,
+GetOfferingStatusError::ServiceAccount(ref cause) => cause,
+GetOfferingStatusError::Validation(ref cause) => cause,
+GetOfferingStatusError::Credentials(ref err) => err.description(),
+GetOfferingStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetOfferingStatusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2551,14 +2733,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetProjectError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2577,7 +2759,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => GetProjectError::ServiceAccount(String::from(error_message)),"NotFoundException" => GetProjectError::NotFound(String::from(error_message)),"ArgumentException" => GetProjectError::Argument(String::from(error_message)),"LimitExceededException" => GetProjectError::LimitExceeded(String::from(error_message)),"ValidationException" => GetProjectError::Validation(error_message.to_string()),_ => GetProjectError::Unknown(String::from(body))
+                                    "ArgumentException" => GetProjectError::Argument(String::from(error_message)),
+"LimitExceededException" => GetProjectError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => GetProjectError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetProjectError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetProjectError::Validation(error_message.to_string()),
+_ => GetProjectError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetProjectError::Unknown(String::from(body))
@@ -2608,7 +2795,14 @@ Unknown(String)
                 impl Error for GetProjectError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetProjectError::ServiceAccount(ref cause) => cause,GetProjectError::NotFound(ref cause) => cause,GetProjectError::LimitExceeded(ref cause) => cause,GetProjectError::Argument(ref cause) => cause,GetProjectError::Validation(ref cause) => cause,GetProjectError::Credentials(ref err) => err.description(),GetProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetProjectError::Unknown(ref cause) => cause
+                            GetProjectError::Argument(ref cause) => cause,
+GetProjectError::LimitExceeded(ref cause) => cause,
+GetProjectError::NotFound(ref cause) => cause,
+GetProjectError::ServiceAccount(ref cause) => cause,
+GetProjectError::Validation(ref cause) => cause,
+GetProjectError::Credentials(ref err) => err.description(),
+GetProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetProjectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2616,14 +2810,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetRemoteAccessSessionError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2642,7 +2836,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => GetRemoteAccessSessionError::Argument(String::from(error_message)),"ServiceAccountException" => GetRemoteAccessSessionError::ServiceAccount(String::from(error_message)),"NotFoundException" => GetRemoteAccessSessionError::NotFound(String::from(error_message)),"LimitExceededException" => GetRemoteAccessSessionError::LimitExceeded(String::from(error_message)),"ValidationException" => GetRemoteAccessSessionError::Validation(error_message.to_string()),_ => GetRemoteAccessSessionError::Unknown(String::from(body))
+                                    "ArgumentException" => GetRemoteAccessSessionError::Argument(String::from(error_message)),
+"LimitExceededException" => GetRemoteAccessSessionError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => GetRemoteAccessSessionError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetRemoteAccessSessionError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetRemoteAccessSessionError::Validation(error_message.to_string()),
+_ => GetRemoteAccessSessionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetRemoteAccessSessionError::Unknown(String::from(body))
@@ -2673,7 +2872,14 @@ Unknown(String)
                 impl Error for GetRemoteAccessSessionError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetRemoteAccessSessionError::NotFound(ref cause) => cause,GetRemoteAccessSessionError::ServiceAccount(ref cause) => cause,GetRemoteAccessSessionError::Argument(ref cause) => cause,GetRemoteAccessSessionError::LimitExceeded(ref cause) => cause,GetRemoteAccessSessionError::Validation(ref cause) => cause,GetRemoteAccessSessionError::Credentials(ref err) => err.description(),GetRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetRemoteAccessSessionError::Unknown(ref cause) => cause
+                            GetRemoteAccessSessionError::Argument(ref cause) => cause,
+GetRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
+GetRemoteAccessSessionError::NotFound(ref cause) => cause,
+GetRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
+GetRemoteAccessSessionError::Validation(ref cause) => cause,
+GetRemoteAccessSessionError::Credentials(ref err) => err.description(),
+GetRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetRemoteAccessSessionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2681,14 +2887,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetRunError {
                     
-///<p>The specified entity was not found.</p>
-NotFound(String),
+///<p>An invalid argument was specified.</p>
+Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2707,7 +2913,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => GetRunError::Argument(String::from(error_message)),"LimitExceededException" => GetRunError::LimitExceeded(String::from(error_message)),"NotFoundException" => GetRunError::NotFound(String::from(error_message)),"ServiceAccountException" => GetRunError::ServiceAccount(String::from(error_message)),"ValidationException" => GetRunError::Validation(error_message.to_string()),_ => GetRunError::Unknown(String::from(body))
+                                    "ArgumentException" => GetRunError::Argument(String::from(error_message)),
+"LimitExceededException" => GetRunError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => GetRunError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetRunError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetRunError::Validation(error_message.to_string()),
+_ => GetRunError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetRunError::Unknown(String::from(body))
@@ -2738,7 +2949,14 @@ Unknown(String)
                 impl Error for GetRunError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetRunError::ServiceAccount(ref cause) => cause,GetRunError::Argument(ref cause) => cause,GetRunError::NotFound(ref cause) => cause,GetRunError::LimitExceeded(ref cause) => cause,GetRunError::Validation(ref cause) => cause,GetRunError::Credentials(ref err) => err.description(),GetRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetRunError::Unknown(ref cause) => cause
+                            GetRunError::Argument(ref cause) => cause,
+GetRunError::LimitExceeded(ref cause) => cause,
+GetRunError::NotFound(ref cause) => cause,
+GetRunError::ServiceAccount(ref cause) => cause,
+GetRunError::Validation(ref cause) => cause,
+GetRunError::Credentials(ref err) => err.description(),
+GetRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetRunError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2746,14 +2964,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetSuiteError {
                     
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2772,7 +2990,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => GetSuiteError::Argument(String::from(error_message)),"NotFoundException" => GetSuiteError::NotFound(String::from(error_message)),"LimitExceededException" => GetSuiteError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => GetSuiteError::ServiceAccount(String::from(error_message)),"ValidationException" => GetSuiteError::Validation(error_message.to_string()),_ => GetSuiteError::Unknown(String::from(body))
+                                    "ArgumentException" => GetSuiteError::Argument(String::from(error_message)),
+"LimitExceededException" => GetSuiteError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => GetSuiteError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetSuiteError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetSuiteError::Validation(error_message.to_string()),
+_ => GetSuiteError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetSuiteError::Unknown(String::from(body))
@@ -2803,7 +3026,14 @@ Unknown(String)
                 impl Error for GetSuiteError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetSuiteError::NotFound(ref cause) => cause,GetSuiteError::ServiceAccount(ref cause) => cause,GetSuiteError::Argument(ref cause) => cause,GetSuiteError::LimitExceeded(ref cause) => cause,GetSuiteError::Validation(ref cause) => cause,GetSuiteError::Credentials(ref err) => err.description(),GetSuiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetSuiteError::Unknown(ref cause) => cause
+                            GetSuiteError::Argument(ref cause) => cause,
+GetSuiteError::LimitExceeded(ref cause) => cause,
+GetSuiteError::NotFound(ref cause) => cause,
+GetSuiteError::ServiceAccount(ref cause) => cause,
+GetSuiteError::Validation(ref cause) => cause,
+GetSuiteError::Credentials(ref err) => err.description(),
+GetSuiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetSuiteError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2815,10 +3045,10 @@ Unknown(String)
 Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>The specified entity was not found.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2837,7 +3067,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => GetTestError::ServiceAccount(String::from(error_message)),"ArgumentException" => GetTestError::Argument(String::from(error_message)),"NotFoundException" => GetTestError::NotFound(String::from(error_message)),"LimitExceededException" => GetTestError::LimitExceeded(String::from(error_message)),"ValidationException" => GetTestError::Validation(error_message.to_string()),_ => GetTestError::Unknown(String::from(body))
+                                    "ArgumentException" => GetTestError::Argument(String::from(error_message)),
+"LimitExceededException" => GetTestError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => GetTestError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetTestError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetTestError::Validation(error_message.to_string()),
+_ => GetTestError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetTestError::Unknown(String::from(body))
@@ -2868,7 +3103,14 @@ Unknown(String)
                 impl Error for GetTestError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetTestError::ServiceAccount(ref cause) => cause,GetTestError::NotFound(ref cause) => cause,GetTestError::Argument(ref cause) => cause,GetTestError::LimitExceeded(ref cause) => cause,GetTestError::Validation(ref cause) => cause,GetTestError::Credentials(ref err) => err.description(),GetTestError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetTestError::Unknown(ref cause) => cause
+                            GetTestError::Argument(ref cause) => cause,
+GetTestError::LimitExceeded(ref cause) => cause,
+GetTestError::NotFound(ref cause) => cause,
+GetTestError::ServiceAccount(ref cause) => cause,
+GetTestError::Validation(ref cause) => cause,
+GetTestError::Credentials(ref err) => err.description(),
+GetTestError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetTestError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2876,14 +3118,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetUploadError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2902,7 +3144,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => GetUploadError::Argument(String::from(error_message)),"NotFoundException" => GetUploadError::NotFound(String::from(error_message)),"LimitExceededException" => GetUploadError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => GetUploadError::ServiceAccount(String::from(error_message)),"ValidationException" => GetUploadError::Validation(error_message.to_string()),_ => GetUploadError::Unknown(String::from(body))
+                                    "ArgumentException" => GetUploadError::Argument(String::from(error_message)),
+"LimitExceededException" => GetUploadError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => GetUploadError::NotFound(String::from(error_message)),
+"ServiceAccountException" => GetUploadError::ServiceAccount(String::from(error_message)),
+"ValidationException" => GetUploadError::Validation(error_message.to_string()),
+_ => GetUploadError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetUploadError::Unknown(String::from(body))
@@ -2933,7 +3180,14 @@ Unknown(String)
                 impl Error for GetUploadError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetUploadError::NotFound(ref cause) => cause,GetUploadError::LimitExceeded(ref cause) => cause,GetUploadError::Argument(ref cause) => cause,GetUploadError::ServiceAccount(ref cause) => cause,GetUploadError::Validation(ref cause) => cause,GetUploadError::Credentials(ref err) => err.description(),GetUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetUploadError::Unknown(ref cause) => cause
+                            GetUploadError::Argument(ref cause) => cause,
+GetUploadError::LimitExceeded(ref cause) => cause,
+GetUploadError::NotFound(ref cause) => cause,
+GetUploadError::ServiceAccount(ref cause) => cause,
+GetUploadError::Validation(ref cause) => cause,
+GetUploadError::Credentials(ref err) => err.description(),
+GetUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetUploadError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2941,12 +3195,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum InstallToRemoteAccessSessionError {
                     
-///<p>The specified entity was not found.</p>
-NotFound(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
 ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2967,7 +3221,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => InstallToRemoteAccessSessionError::ServiceAccount(String::from(error_message)),"ArgumentException" => InstallToRemoteAccessSessionError::Argument(String::from(error_message)),"LimitExceededException" => InstallToRemoteAccessSessionError::LimitExceeded(String::from(error_message)),"NotFoundException" => InstallToRemoteAccessSessionError::NotFound(String::from(error_message)),"ValidationException" => InstallToRemoteAccessSessionError::Validation(error_message.to_string()),_ => InstallToRemoteAccessSessionError::Unknown(String::from(body))
+                                    "ArgumentException" => InstallToRemoteAccessSessionError::Argument(String::from(error_message)),
+"LimitExceededException" => InstallToRemoteAccessSessionError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => InstallToRemoteAccessSessionError::NotFound(String::from(error_message)),
+"ServiceAccountException" => InstallToRemoteAccessSessionError::ServiceAccount(String::from(error_message)),
+"ValidationException" => InstallToRemoteAccessSessionError::Validation(error_message.to_string()),
+_ => InstallToRemoteAccessSessionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => InstallToRemoteAccessSessionError::Unknown(String::from(body))
@@ -2998,7 +3257,14 @@ Unknown(String)
                 impl Error for InstallToRemoteAccessSessionError {
                     fn description(&self) -> &str {
                         match *self {
-                            InstallToRemoteAccessSessionError::LimitExceeded(ref cause) => cause,InstallToRemoteAccessSessionError::ServiceAccount(ref cause) => cause,InstallToRemoteAccessSessionError::Argument(ref cause) => cause,InstallToRemoteAccessSessionError::NotFound(ref cause) => cause,InstallToRemoteAccessSessionError::Validation(ref cause) => cause,InstallToRemoteAccessSessionError::Credentials(ref err) => err.description(),InstallToRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),InstallToRemoteAccessSessionError::Unknown(ref cause) => cause
+                            InstallToRemoteAccessSessionError::Argument(ref cause) => cause,
+InstallToRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
+InstallToRemoteAccessSessionError::NotFound(ref cause) => cause,
+InstallToRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
+InstallToRemoteAccessSessionError::Validation(ref cause) => cause,
+InstallToRemoteAccessSessionError::Credentials(ref err) => err.description(),
+InstallToRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+InstallToRemoteAccessSessionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3006,14 +3272,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListArtifactsError {
                     
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>The specified entity was not found.</p>
-NotFound(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
 ///<p>A limit was exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3032,7 +3298,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => ListArtifactsError::NotFound(String::from(error_message)),"ArgumentException" => ListArtifactsError::Argument(String::from(error_message)),"LimitExceededException" => ListArtifactsError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => ListArtifactsError::ServiceAccount(String::from(error_message)),"ValidationException" => ListArtifactsError::Validation(error_message.to_string()),_ => ListArtifactsError::Unknown(String::from(body))
+                                    "ArgumentException" => ListArtifactsError::Argument(String::from(error_message)),
+"LimitExceededException" => ListArtifactsError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListArtifactsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListArtifactsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListArtifactsError::Validation(error_message.to_string()),
+_ => ListArtifactsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListArtifactsError::Unknown(String::from(body))
@@ -3063,7 +3334,14 @@ Unknown(String)
                 impl Error for ListArtifactsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListArtifactsError::Argument(ref cause) => cause,ListArtifactsError::LimitExceeded(ref cause) => cause,ListArtifactsError::ServiceAccount(ref cause) => cause,ListArtifactsError::NotFound(ref cause) => cause,ListArtifactsError::Validation(ref cause) => cause,ListArtifactsError::Credentials(ref err) => err.description(),ListArtifactsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListArtifactsError::Unknown(ref cause) => cause
+                            ListArtifactsError::Argument(ref cause) => cause,
+ListArtifactsError::LimitExceeded(ref cause) => cause,
+ListArtifactsError::NotFound(ref cause) => cause,
+ListArtifactsError::ServiceAccount(ref cause) => cause,
+ListArtifactsError::Validation(ref cause) => cause,
+ListArtifactsError::Credentials(ref err) => err.description(),
+ListArtifactsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListArtifactsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3071,14 +3349,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListDevicePoolsError {
                     
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3097,7 +3375,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => ListDevicePoolsError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => ListDevicePoolsError::ServiceAccount(String::from(error_message)),"NotFoundException" => ListDevicePoolsError::NotFound(String::from(error_message)),"ArgumentException" => ListDevicePoolsError::Argument(String::from(error_message)),"ValidationException" => ListDevicePoolsError::Validation(error_message.to_string()),_ => ListDevicePoolsError::Unknown(String::from(body))
+                                    "ArgumentException" => ListDevicePoolsError::Argument(String::from(error_message)),
+"LimitExceededException" => ListDevicePoolsError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListDevicePoolsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListDevicePoolsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListDevicePoolsError::Validation(error_message.to_string()),
+_ => ListDevicePoolsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListDevicePoolsError::Unknown(String::from(body))
@@ -3128,7 +3411,14 @@ Unknown(String)
                 impl Error for ListDevicePoolsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDevicePoolsError::LimitExceeded(ref cause) => cause,ListDevicePoolsError::ServiceAccount(ref cause) => cause,ListDevicePoolsError::Argument(ref cause) => cause,ListDevicePoolsError::NotFound(ref cause) => cause,ListDevicePoolsError::Validation(ref cause) => cause,ListDevicePoolsError::Credentials(ref err) => err.description(),ListDevicePoolsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDevicePoolsError::Unknown(ref cause) => cause
+                            ListDevicePoolsError::Argument(ref cause) => cause,
+ListDevicePoolsError::LimitExceeded(ref cause) => cause,
+ListDevicePoolsError::NotFound(ref cause) => cause,
+ListDevicePoolsError::ServiceAccount(ref cause) => cause,
+ListDevicePoolsError::Validation(ref cause) => cause,
+ListDevicePoolsError::Credentials(ref err) => err.description(),
+ListDevicePoolsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDevicePoolsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3140,10 +3430,10 @@ Unknown(String)
 Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>The specified entity was not found.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3162,7 +3452,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => ListDevicesError::LimitExceeded(String::from(error_message)),"NotFoundException" => ListDevicesError::NotFound(String::from(error_message)),"ServiceAccountException" => ListDevicesError::ServiceAccount(String::from(error_message)),"ArgumentException" => ListDevicesError::Argument(String::from(error_message)),"ValidationException" => ListDevicesError::Validation(error_message.to_string()),_ => ListDevicesError::Unknown(String::from(body))
+                                    "ArgumentException" => ListDevicesError::Argument(String::from(error_message)),
+"LimitExceededException" => ListDevicesError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListDevicesError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListDevicesError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListDevicesError::Validation(error_message.to_string()),
+_ => ListDevicesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListDevicesError::Unknown(String::from(body))
@@ -3193,7 +3488,14 @@ Unknown(String)
                 impl Error for ListDevicesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDevicesError::ServiceAccount(ref cause) => cause,ListDevicesError::LimitExceeded(ref cause) => cause,ListDevicesError::Argument(ref cause) => cause,ListDevicesError::NotFound(ref cause) => cause,ListDevicesError::Validation(ref cause) => cause,ListDevicesError::Credentials(ref err) => err.description(),ListDevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDevicesError::Unknown(ref cause) => cause
+                            ListDevicesError::Argument(ref cause) => cause,
+ListDevicesError::LimitExceeded(ref cause) => cause,
+ListDevicesError::NotFound(ref cause) => cause,
+ListDevicesError::ServiceAccount(ref cause) => cause,
+ListDevicesError::Validation(ref cause) => cause,
+ListDevicesError::Credentials(ref err) => err.description(),
+ListDevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDevicesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3201,14 +3503,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListJobsError {
                     
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3227,7 +3529,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => ListJobsError::Argument(String::from(error_message)),"ServiceAccountException" => ListJobsError::ServiceAccount(String::from(error_message)),"NotFoundException" => ListJobsError::NotFound(String::from(error_message)),"LimitExceededException" => ListJobsError::LimitExceeded(String::from(error_message)),"ValidationException" => ListJobsError::Validation(error_message.to_string()),_ => ListJobsError::Unknown(String::from(body))
+                                    "ArgumentException" => ListJobsError::Argument(String::from(error_message)),
+"LimitExceededException" => ListJobsError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListJobsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListJobsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListJobsError::Validation(error_message.to_string()),
+_ => ListJobsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListJobsError::Unknown(String::from(body))
@@ -3258,7 +3565,14 @@ Unknown(String)
                 impl Error for ListJobsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListJobsError::ServiceAccount(ref cause) => cause,ListJobsError::LimitExceeded(ref cause) => cause,ListJobsError::NotFound(ref cause) => cause,ListJobsError::Argument(ref cause) => cause,ListJobsError::Validation(ref cause) => cause,ListJobsError::Credentials(ref err) => err.description(),ListJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListJobsError::Unknown(ref cause) => cause
+                            ListJobsError::Argument(ref cause) => cause,
+ListJobsError::LimitExceeded(ref cause) => cause,
+ListJobsError::NotFound(ref cause) => cause,
+ListJobsError::ServiceAccount(ref cause) => cause,
+ListJobsError::Validation(ref cause) => cause,
+ListJobsError::Credentials(ref err) => err.description(),
+ListJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListJobsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3266,14 +3580,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListOfferingTransactionsError {
                     
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
-///<p>The specified entity was not found.</p>
-NotFound(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>Exception gets thrown when a user is not eligible to perform the specified transaction.</p>
 NotEligible(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
 ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -3294,7 +3608,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => ListOfferingTransactionsError::NotFound(String::from(error_message)),"ServiceAccountException" => ListOfferingTransactionsError::ServiceAccount(String::from(error_message)),"NotEligibleException" => ListOfferingTransactionsError::NotEligible(String::from(error_message)),"LimitExceededException" => ListOfferingTransactionsError::LimitExceeded(String::from(error_message)),"ArgumentException" => ListOfferingTransactionsError::Argument(String::from(error_message)),"ValidationException" => ListOfferingTransactionsError::Validation(error_message.to_string()),_ => ListOfferingTransactionsError::Unknown(String::from(body))
+                                    "ArgumentException" => ListOfferingTransactionsError::Argument(String::from(error_message)),
+"LimitExceededException" => ListOfferingTransactionsError::LimitExceeded(String::from(error_message)),
+"NotEligibleException" => ListOfferingTransactionsError::NotEligible(String::from(error_message)),
+"NotFoundException" => ListOfferingTransactionsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListOfferingTransactionsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListOfferingTransactionsError::Validation(error_message.to_string()),
+_ => ListOfferingTransactionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListOfferingTransactionsError::Unknown(String::from(body))
@@ -3325,7 +3645,15 @@ Unknown(String)
                 impl Error for ListOfferingTransactionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListOfferingTransactionsError::NotEligible(ref cause) => cause,ListOfferingTransactionsError::ServiceAccount(ref cause) => cause,ListOfferingTransactionsError::Argument(ref cause) => cause,ListOfferingTransactionsError::NotFound(ref cause) => cause,ListOfferingTransactionsError::LimitExceeded(ref cause) => cause,ListOfferingTransactionsError::Validation(ref cause) => cause,ListOfferingTransactionsError::Credentials(ref err) => err.description(),ListOfferingTransactionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListOfferingTransactionsError::Unknown(ref cause) => cause
+                            ListOfferingTransactionsError::Argument(ref cause) => cause,
+ListOfferingTransactionsError::LimitExceeded(ref cause) => cause,
+ListOfferingTransactionsError::NotEligible(ref cause) => cause,
+ListOfferingTransactionsError::NotFound(ref cause) => cause,
+ListOfferingTransactionsError::ServiceAccount(ref cause) => cause,
+ListOfferingTransactionsError::Validation(ref cause) => cause,
+ListOfferingTransactionsError::Credentials(ref err) => err.description(),
+ListOfferingTransactionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListOfferingTransactionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3333,16 +3661,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListOfferingsError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>Exception gets thrown when a user is not eligible to perform the specified transaction.</p>
 NotEligible(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3361,7 +3689,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => ListOfferingsError::Argument(String::from(error_message)),"LimitExceededException" => ListOfferingsError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => ListOfferingsError::ServiceAccount(String::from(error_message)),"NotEligibleException" => ListOfferingsError::NotEligible(String::from(error_message)),"NotFoundException" => ListOfferingsError::NotFound(String::from(error_message)),"ValidationException" => ListOfferingsError::Validation(error_message.to_string()),_ => ListOfferingsError::Unknown(String::from(body))
+                                    "ArgumentException" => ListOfferingsError::Argument(String::from(error_message)),
+"LimitExceededException" => ListOfferingsError::LimitExceeded(String::from(error_message)),
+"NotEligibleException" => ListOfferingsError::NotEligible(String::from(error_message)),
+"NotFoundException" => ListOfferingsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListOfferingsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListOfferingsError::Validation(error_message.to_string()),
+_ => ListOfferingsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListOfferingsError::Unknown(String::from(body))
@@ -3392,7 +3726,15 @@ Unknown(String)
                 impl Error for ListOfferingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListOfferingsError::ServiceAccount(ref cause) => cause,ListOfferingsError::LimitExceeded(ref cause) => cause,ListOfferingsError::NotFound(ref cause) => cause,ListOfferingsError::Argument(ref cause) => cause,ListOfferingsError::NotEligible(ref cause) => cause,ListOfferingsError::Validation(ref cause) => cause,ListOfferingsError::Credentials(ref err) => err.description(),ListOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListOfferingsError::Unknown(ref cause) => cause
+                            ListOfferingsError::Argument(ref cause) => cause,
+ListOfferingsError::LimitExceeded(ref cause) => cause,
+ListOfferingsError::NotEligible(ref cause) => cause,
+ListOfferingsError::NotFound(ref cause) => cause,
+ListOfferingsError::ServiceAccount(ref cause) => cause,
+ListOfferingsError::Validation(ref cause) => cause,
+ListOfferingsError::Credentials(ref err) => err.description(),
+ListOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListOfferingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3400,14 +3742,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListProjectsError {
                     
-///<p>The specified entity was not found.</p>
-NotFound(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
 ///<p>A limit was exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3426,7 +3768,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => ListProjectsError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => ListProjectsError::ServiceAccount(String::from(error_message)),"NotFoundException" => ListProjectsError::NotFound(String::from(error_message)),"ArgumentException" => ListProjectsError::Argument(String::from(error_message)),"ValidationException" => ListProjectsError::Validation(error_message.to_string()),_ => ListProjectsError::Unknown(String::from(body))
+                                    "ArgumentException" => ListProjectsError::Argument(String::from(error_message)),
+"LimitExceededException" => ListProjectsError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListProjectsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListProjectsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListProjectsError::Validation(error_message.to_string()),
+_ => ListProjectsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListProjectsError::Unknown(String::from(body))
@@ -3457,7 +3804,14 @@ Unknown(String)
                 impl Error for ListProjectsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListProjectsError::LimitExceeded(ref cause) => cause,ListProjectsError::ServiceAccount(ref cause) => cause,ListProjectsError::NotFound(ref cause) => cause,ListProjectsError::Argument(ref cause) => cause,ListProjectsError::Validation(ref cause) => cause,ListProjectsError::Credentials(ref err) => err.description(),ListProjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListProjectsError::Unknown(ref cause) => cause
+                            ListProjectsError::Argument(ref cause) => cause,
+ListProjectsError::LimitExceeded(ref cause) => cause,
+ListProjectsError::NotFound(ref cause) => cause,
+ListProjectsError::ServiceAccount(ref cause) => cause,
+ListProjectsError::Validation(ref cause) => cause,
+ListProjectsError::Credentials(ref err) => err.description(),
+ListProjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListProjectsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3467,12 +3821,12 @@ Unknown(String)
                     
 ///<p>An invalid argument was specified.</p>
 Argument(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3491,7 +3845,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => ListRemoteAccessSessionsError::Argument(String::from(error_message)),"NotFoundException" => ListRemoteAccessSessionsError::NotFound(String::from(error_message)),"LimitExceededException" => ListRemoteAccessSessionsError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => ListRemoteAccessSessionsError::ServiceAccount(String::from(error_message)),"ValidationException" => ListRemoteAccessSessionsError::Validation(error_message.to_string()),_ => ListRemoteAccessSessionsError::Unknown(String::from(body))
+                                    "ArgumentException" => ListRemoteAccessSessionsError::Argument(String::from(error_message)),
+"LimitExceededException" => ListRemoteAccessSessionsError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListRemoteAccessSessionsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListRemoteAccessSessionsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListRemoteAccessSessionsError::Validation(error_message.to_string()),
+_ => ListRemoteAccessSessionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListRemoteAccessSessionsError::Unknown(String::from(body))
@@ -3522,7 +3881,14 @@ Unknown(String)
                 impl Error for ListRemoteAccessSessionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListRemoteAccessSessionsError::ServiceAccount(ref cause) => cause,ListRemoteAccessSessionsError::NotFound(ref cause) => cause,ListRemoteAccessSessionsError::LimitExceeded(ref cause) => cause,ListRemoteAccessSessionsError::Argument(ref cause) => cause,ListRemoteAccessSessionsError::Validation(ref cause) => cause,ListRemoteAccessSessionsError::Credentials(ref err) => err.description(),ListRemoteAccessSessionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListRemoteAccessSessionsError::Unknown(ref cause) => cause
+                            ListRemoteAccessSessionsError::Argument(ref cause) => cause,
+ListRemoteAccessSessionsError::LimitExceeded(ref cause) => cause,
+ListRemoteAccessSessionsError::NotFound(ref cause) => cause,
+ListRemoteAccessSessionsError::ServiceAccount(ref cause) => cause,
+ListRemoteAccessSessionsError::Validation(ref cause) => cause,
+ListRemoteAccessSessionsError::Credentials(ref err) => err.description(),
+ListRemoteAccessSessionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListRemoteAccessSessionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3530,14 +3896,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListRunsError {
                     
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3556,7 +3922,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => ListRunsError::Argument(String::from(error_message)),"LimitExceededException" => ListRunsError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => ListRunsError::ServiceAccount(String::from(error_message)),"NotFoundException" => ListRunsError::NotFound(String::from(error_message)),"ValidationException" => ListRunsError::Validation(error_message.to_string()),_ => ListRunsError::Unknown(String::from(body))
+                                    "ArgumentException" => ListRunsError::Argument(String::from(error_message)),
+"LimitExceededException" => ListRunsError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListRunsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListRunsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListRunsError::Validation(error_message.to_string()),
+_ => ListRunsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListRunsError::Unknown(String::from(body))
@@ -3587,7 +3958,14 @@ Unknown(String)
                 impl Error for ListRunsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListRunsError::LimitExceeded(ref cause) => cause,ListRunsError::ServiceAccount(ref cause) => cause,ListRunsError::NotFound(ref cause) => cause,ListRunsError::Argument(ref cause) => cause,ListRunsError::Validation(ref cause) => cause,ListRunsError::Credentials(ref err) => err.description(),ListRunsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListRunsError::Unknown(ref cause) => cause
+                            ListRunsError::Argument(ref cause) => cause,
+ListRunsError::LimitExceeded(ref cause) => cause,
+ListRunsError::NotFound(ref cause) => cause,
+ListRunsError::ServiceAccount(ref cause) => cause,
+ListRunsError::Validation(ref cause) => cause,
+ListRunsError::Credentials(ref err) => err.description(),
+ListRunsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListRunsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3595,14 +3973,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListSamplesError {
                     
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>The specified entity was not found.</p>
-NotFound(String),
+///<p>An invalid argument was specified.</p>
+Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+///<p>The specified entity was not found.</p>
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3621,7 +3999,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => ListSamplesError::ServiceAccount(String::from(error_message)),"NotFoundException" => ListSamplesError::NotFound(String::from(error_message)),"ArgumentException" => ListSamplesError::Argument(String::from(error_message)),"LimitExceededException" => ListSamplesError::LimitExceeded(String::from(error_message)),"ValidationException" => ListSamplesError::Validation(error_message.to_string()),_ => ListSamplesError::Unknown(String::from(body))
+                                    "ArgumentException" => ListSamplesError::Argument(String::from(error_message)),
+"LimitExceededException" => ListSamplesError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListSamplesError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListSamplesError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListSamplesError::Validation(error_message.to_string()),
+_ => ListSamplesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListSamplesError::Unknown(String::from(body))
@@ -3652,7 +4035,14 @@ Unknown(String)
                 impl Error for ListSamplesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListSamplesError::LimitExceeded(ref cause) => cause,ListSamplesError::ServiceAccount(ref cause) => cause,ListSamplesError::Argument(ref cause) => cause,ListSamplesError::NotFound(ref cause) => cause,ListSamplesError::Validation(ref cause) => cause,ListSamplesError::Credentials(ref err) => err.description(),ListSamplesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListSamplesError::Unknown(ref cause) => cause
+                            ListSamplesError::Argument(ref cause) => cause,
+ListSamplesError::LimitExceeded(ref cause) => cause,
+ListSamplesError::NotFound(ref cause) => cause,
+ListSamplesError::ServiceAccount(ref cause) => cause,
+ListSamplesError::Validation(ref cause) => cause,
+ListSamplesError::Credentials(ref err) => err.description(),
+ListSamplesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListSamplesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3660,14 +4050,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListSuitesError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3686,7 +4076,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => ListSuitesError::Argument(String::from(error_message)),"ServiceAccountException" => ListSuitesError::ServiceAccount(String::from(error_message)),"LimitExceededException" => ListSuitesError::LimitExceeded(String::from(error_message)),"NotFoundException" => ListSuitesError::NotFound(String::from(error_message)),"ValidationException" => ListSuitesError::Validation(error_message.to_string()),_ => ListSuitesError::Unknown(String::from(body))
+                                    "ArgumentException" => ListSuitesError::Argument(String::from(error_message)),
+"LimitExceededException" => ListSuitesError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListSuitesError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListSuitesError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListSuitesError::Validation(error_message.to_string()),
+_ => ListSuitesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListSuitesError::Unknown(String::from(body))
@@ -3717,7 +4112,14 @@ Unknown(String)
                 impl Error for ListSuitesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListSuitesError::NotFound(ref cause) => cause,ListSuitesError::Argument(ref cause) => cause,ListSuitesError::ServiceAccount(ref cause) => cause,ListSuitesError::LimitExceeded(ref cause) => cause,ListSuitesError::Validation(ref cause) => cause,ListSuitesError::Credentials(ref err) => err.description(),ListSuitesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListSuitesError::Unknown(ref cause) => cause
+                            ListSuitesError::Argument(ref cause) => cause,
+ListSuitesError::LimitExceeded(ref cause) => cause,
+ListSuitesError::NotFound(ref cause) => cause,
+ListSuitesError::ServiceAccount(ref cause) => cause,
+ListSuitesError::Validation(ref cause) => cause,
+ListSuitesError::Credentials(ref err) => err.description(),
+ListSuitesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListSuitesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3725,14 +4127,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTestsError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3751,7 +4153,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => ListTestsError::NotFound(String::from(error_message)),"ServiceAccountException" => ListTestsError::ServiceAccount(String::from(error_message)),"ArgumentException" => ListTestsError::Argument(String::from(error_message)),"LimitExceededException" => ListTestsError::LimitExceeded(String::from(error_message)),"ValidationException" => ListTestsError::Validation(error_message.to_string()),_ => ListTestsError::Unknown(String::from(body))
+                                    "ArgumentException" => ListTestsError::Argument(String::from(error_message)),
+"LimitExceededException" => ListTestsError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListTestsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListTestsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListTestsError::Validation(error_message.to_string()),
+_ => ListTestsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListTestsError::Unknown(String::from(body))
@@ -3782,7 +4189,14 @@ Unknown(String)
                 impl Error for ListTestsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTestsError::Argument(ref cause) => cause,ListTestsError::LimitExceeded(ref cause) => cause,ListTestsError::ServiceAccount(ref cause) => cause,ListTestsError::NotFound(ref cause) => cause,ListTestsError::Validation(ref cause) => cause,ListTestsError::Credentials(ref err) => err.description(),ListTestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTestsError::Unknown(ref cause) => cause
+                            ListTestsError::Argument(ref cause) => cause,
+ListTestsError::LimitExceeded(ref cause) => cause,
+ListTestsError::NotFound(ref cause) => cause,
+ListTestsError::ServiceAccount(ref cause) => cause,
+ListTestsError::Validation(ref cause) => cause,
+ListTestsError::Credentials(ref err) => err.description(),
+ListTestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTestsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3792,10 +4206,10 @@ Unknown(String)
                     
 ///<p>An invalid argument was specified.</p>
 Argument(String),
-///<p>The specified entity was not found.</p>
-NotFound(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
 ///<p>There was a problem with the service account.</p>
 ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -3816,7 +4230,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => ListUniqueProblemsError::ServiceAccount(String::from(error_message)),"ArgumentException" => ListUniqueProblemsError::Argument(String::from(error_message)),"LimitExceededException" => ListUniqueProblemsError::LimitExceeded(String::from(error_message)),"NotFoundException" => ListUniqueProblemsError::NotFound(String::from(error_message)),"ValidationException" => ListUniqueProblemsError::Validation(error_message.to_string()),_ => ListUniqueProblemsError::Unknown(String::from(body))
+                                    "ArgumentException" => ListUniqueProblemsError::Argument(String::from(error_message)),
+"LimitExceededException" => ListUniqueProblemsError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListUniqueProblemsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListUniqueProblemsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListUniqueProblemsError::Validation(error_message.to_string()),
+_ => ListUniqueProblemsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListUniqueProblemsError::Unknown(String::from(body))
@@ -3847,7 +4266,14 @@ Unknown(String)
                 impl Error for ListUniqueProblemsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListUniqueProblemsError::LimitExceeded(ref cause) => cause,ListUniqueProblemsError::NotFound(ref cause) => cause,ListUniqueProblemsError::Argument(ref cause) => cause,ListUniqueProblemsError::ServiceAccount(ref cause) => cause,ListUniqueProblemsError::Validation(ref cause) => cause,ListUniqueProblemsError::Credentials(ref err) => err.description(),ListUniqueProblemsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListUniqueProblemsError::Unknown(ref cause) => cause
+                            ListUniqueProblemsError::Argument(ref cause) => cause,
+ListUniqueProblemsError::LimitExceeded(ref cause) => cause,
+ListUniqueProblemsError::NotFound(ref cause) => cause,
+ListUniqueProblemsError::ServiceAccount(ref cause) => cause,
+ListUniqueProblemsError::Validation(ref cause) => cause,
+ListUniqueProblemsError::Credentials(ref err) => err.description(),
+ListUniqueProblemsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListUniqueProblemsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3855,14 +4281,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListUploadsError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3881,7 +4307,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ArgumentException" => ListUploadsError::Argument(String::from(error_message)),"ServiceAccountException" => ListUploadsError::ServiceAccount(String::from(error_message)),"LimitExceededException" => ListUploadsError::LimitExceeded(String::from(error_message)),"NotFoundException" => ListUploadsError::NotFound(String::from(error_message)),"ValidationException" => ListUploadsError::Validation(error_message.to_string()),_ => ListUploadsError::Unknown(String::from(body))
+                                    "ArgumentException" => ListUploadsError::Argument(String::from(error_message)),
+"LimitExceededException" => ListUploadsError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ListUploadsError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ListUploadsError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ListUploadsError::Validation(error_message.to_string()),
+_ => ListUploadsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListUploadsError::Unknown(String::from(body))
@@ -3912,7 +4343,14 @@ Unknown(String)
                 impl Error for ListUploadsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListUploadsError::Argument(ref cause) => cause,ListUploadsError::LimitExceeded(ref cause) => cause,ListUploadsError::NotFound(ref cause) => cause,ListUploadsError::ServiceAccount(ref cause) => cause,ListUploadsError::Validation(ref cause) => cause,ListUploadsError::Credentials(ref err) => err.description(),ListUploadsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListUploadsError::Unknown(ref cause) => cause
+                            ListUploadsError::Argument(ref cause) => cause,
+ListUploadsError::LimitExceeded(ref cause) => cause,
+ListUploadsError::NotFound(ref cause) => cause,
+ListUploadsError::ServiceAccount(ref cause) => cause,
+ListUploadsError::Validation(ref cause) => cause,
+ListUploadsError::Credentials(ref err) => err.description(),
+ListUploadsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListUploadsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3920,12 +4358,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PurchaseOfferingError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
 ///<p>Exception gets thrown when a user is not eligible to perform the specified transaction.</p>
 NotEligible(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
 ///<p>There was a problem with the service account.</p>
@@ -3948,7 +4386,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotEligibleException" => PurchaseOfferingError::NotEligible(String::from(error_message)),"ArgumentException" => PurchaseOfferingError::Argument(String::from(error_message)),"NotFoundException" => PurchaseOfferingError::NotFound(String::from(error_message)),"ServiceAccountException" => PurchaseOfferingError::ServiceAccount(String::from(error_message)),"LimitExceededException" => PurchaseOfferingError::LimitExceeded(String::from(error_message)),"ValidationException" => PurchaseOfferingError::Validation(error_message.to_string()),_ => PurchaseOfferingError::Unknown(String::from(body))
+                                    "ArgumentException" => PurchaseOfferingError::Argument(String::from(error_message)),
+"LimitExceededException" => PurchaseOfferingError::LimitExceeded(String::from(error_message)),
+"NotEligibleException" => PurchaseOfferingError::NotEligible(String::from(error_message)),
+"NotFoundException" => PurchaseOfferingError::NotFound(String::from(error_message)),
+"ServiceAccountException" => PurchaseOfferingError::ServiceAccount(String::from(error_message)),
+"ValidationException" => PurchaseOfferingError::Validation(error_message.to_string()),
+_ => PurchaseOfferingError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PurchaseOfferingError::Unknown(String::from(body))
@@ -3979,7 +4423,15 @@ Unknown(String)
                 impl Error for PurchaseOfferingError {
                     fn description(&self) -> &str {
                         match *self {
-                            PurchaseOfferingError::ServiceAccount(ref cause) => cause,PurchaseOfferingError::NotEligible(ref cause) => cause,PurchaseOfferingError::Argument(ref cause) => cause,PurchaseOfferingError::LimitExceeded(ref cause) => cause,PurchaseOfferingError::NotFound(ref cause) => cause,PurchaseOfferingError::Validation(ref cause) => cause,PurchaseOfferingError::Credentials(ref err) => err.description(),PurchaseOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PurchaseOfferingError::Unknown(ref cause) => cause
+                            PurchaseOfferingError::Argument(ref cause) => cause,
+PurchaseOfferingError::LimitExceeded(ref cause) => cause,
+PurchaseOfferingError::NotEligible(ref cause) => cause,
+PurchaseOfferingError::NotFound(ref cause) => cause,
+PurchaseOfferingError::ServiceAccount(ref cause) => cause,
+PurchaseOfferingError::Validation(ref cause) => cause,
+PurchaseOfferingError::Credentials(ref err) => err.description(),
+PurchaseOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PurchaseOfferingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3987,16 +4439,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RenewOfferingError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>Exception gets thrown when a user is not eligible to perform the specified transaction.</p>
 NotEligible(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4015,7 +4467,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => RenewOfferingError::LimitExceeded(String::from(error_message)),"ArgumentException" => RenewOfferingError::Argument(String::from(error_message)),"NotFoundException" => RenewOfferingError::NotFound(String::from(error_message)),"NotEligibleException" => RenewOfferingError::NotEligible(String::from(error_message)),"ServiceAccountException" => RenewOfferingError::ServiceAccount(String::from(error_message)),"ValidationException" => RenewOfferingError::Validation(error_message.to_string()),_ => RenewOfferingError::Unknown(String::from(body))
+                                    "ArgumentException" => RenewOfferingError::Argument(String::from(error_message)),
+"LimitExceededException" => RenewOfferingError::LimitExceeded(String::from(error_message)),
+"NotEligibleException" => RenewOfferingError::NotEligible(String::from(error_message)),
+"NotFoundException" => RenewOfferingError::NotFound(String::from(error_message)),
+"ServiceAccountException" => RenewOfferingError::ServiceAccount(String::from(error_message)),
+"ValidationException" => RenewOfferingError::Validation(error_message.to_string()),
+_ => RenewOfferingError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RenewOfferingError::Unknown(String::from(body))
@@ -4046,7 +4504,15 @@ Unknown(String)
                 impl Error for RenewOfferingError {
                     fn description(&self) -> &str {
                         match *self {
-                            RenewOfferingError::NotFound(ref cause) => cause,RenewOfferingError::ServiceAccount(ref cause) => cause,RenewOfferingError::NotEligible(ref cause) => cause,RenewOfferingError::LimitExceeded(ref cause) => cause,RenewOfferingError::Argument(ref cause) => cause,RenewOfferingError::Validation(ref cause) => cause,RenewOfferingError::Credentials(ref err) => err.description(),RenewOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RenewOfferingError::Unknown(ref cause) => cause
+                            RenewOfferingError::Argument(ref cause) => cause,
+RenewOfferingError::LimitExceeded(ref cause) => cause,
+RenewOfferingError::NotEligible(ref cause) => cause,
+RenewOfferingError::NotFound(ref cause) => cause,
+RenewOfferingError::ServiceAccount(ref cause) => cause,
+RenewOfferingError::Validation(ref cause) => cause,
+RenewOfferingError::Credentials(ref err) => err.description(),
+RenewOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RenewOfferingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4054,16 +4520,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ScheduleRunError {
                     
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>An entity with the same name already exists.</p>
-Idempotency(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>An entity with the same name already exists.</p>
+Idempotency(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4082,7 +4548,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => ScheduleRunError::LimitExceeded(String::from(error_message)),"NotFoundException" => ScheduleRunError::NotFound(String::from(error_message)),"ServiceAccountException" => ScheduleRunError::ServiceAccount(String::from(error_message)),"ArgumentException" => ScheduleRunError::Argument(String::from(error_message)),"IdempotencyException" => ScheduleRunError::Idempotency(String::from(error_message)),"ValidationException" => ScheduleRunError::Validation(error_message.to_string()),_ => ScheduleRunError::Unknown(String::from(body))
+                                    "ArgumentException" => ScheduleRunError::Argument(String::from(error_message)),
+"IdempotencyException" => ScheduleRunError::Idempotency(String::from(error_message)),
+"LimitExceededException" => ScheduleRunError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => ScheduleRunError::NotFound(String::from(error_message)),
+"ServiceAccountException" => ScheduleRunError::ServiceAccount(String::from(error_message)),
+"ValidationException" => ScheduleRunError::Validation(error_message.to_string()),
+_ => ScheduleRunError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ScheduleRunError::Unknown(String::from(body))
@@ -4113,7 +4585,15 @@ Unknown(String)
                 impl Error for ScheduleRunError {
                     fn description(&self) -> &str {
                         match *self {
-                            ScheduleRunError::LimitExceeded(ref cause) => cause,ScheduleRunError::NotFound(ref cause) => cause,ScheduleRunError::Idempotency(ref cause) => cause,ScheduleRunError::ServiceAccount(ref cause) => cause,ScheduleRunError::Argument(ref cause) => cause,ScheduleRunError::Validation(ref cause) => cause,ScheduleRunError::Credentials(ref err) => err.description(),ScheduleRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ScheduleRunError::Unknown(ref cause) => cause
+                            ScheduleRunError::Argument(ref cause) => cause,
+ScheduleRunError::Idempotency(ref cause) => cause,
+ScheduleRunError::LimitExceeded(ref cause) => cause,
+ScheduleRunError::NotFound(ref cause) => cause,
+ScheduleRunError::ServiceAccount(ref cause) => cause,
+ScheduleRunError::Validation(ref cause) => cause,
+ScheduleRunError::Credentials(ref err) => err.description(),
+ScheduleRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ScheduleRunError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4121,14 +4601,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum StopRemoteAccessSessionError {
                     
+///<p>An invalid argument was specified.</p>
+Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
 NotFound(String),
 ///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
-///<p>An invalid argument was specified.</p>
-Argument(String),/// An error occurred dispatching the HTTP request
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4147,7 +4627,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => StopRemoteAccessSessionError::NotFound(String::from(error_message)),"ServiceAccountException" => StopRemoteAccessSessionError::ServiceAccount(String::from(error_message)),"LimitExceededException" => StopRemoteAccessSessionError::LimitExceeded(String::from(error_message)),"ArgumentException" => StopRemoteAccessSessionError::Argument(String::from(error_message)),"ValidationException" => StopRemoteAccessSessionError::Validation(error_message.to_string()),_ => StopRemoteAccessSessionError::Unknown(String::from(body))
+                                    "ArgumentException" => StopRemoteAccessSessionError::Argument(String::from(error_message)),
+"LimitExceededException" => StopRemoteAccessSessionError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => StopRemoteAccessSessionError::NotFound(String::from(error_message)),
+"ServiceAccountException" => StopRemoteAccessSessionError::ServiceAccount(String::from(error_message)),
+"ValidationException" => StopRemoteAccessSessionError::Validation(error_message.to_string()),
+_ => StopRemoteAccessSessionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StopRemoteAccessSessionError::Unknown(String::from(body))
@@ -4178,7 +4663,14 @@ Unknown(String)
                 impl Error for StopRemoteAccessSessionError {
                     fn description(&self) -> &str {
                         match *self {
-                            StopRemoteAccessSessionError::Argument(ref cause) => cause,StopRemoteAccessSessionError::NotFound(ref cause) => cause,StopRemoteAccessSessionError::LimitExceeded(ref cause) => cause,StopRemoteAccessSessionError::ServiceAccount(ref cause) => cause,StopRemoteAccessSessionError::Validation(ref cause) => cause,StopRemoteAccessSessionError::Credentials(ref err) => err.description(),StopRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StopRemoteAccessSessionError::Unknown(ref cause) => cause
+                            StopRemoteAccessSessionError::Argument(ref cause) => cause,
+StopRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
+StopRemoteAccessSessionError::NotFound(ref cause) => cause,
+StopRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
+StopRemoteAccessSessionError::Validation(ref cause) => cause,
+StopRemoteAccessSessionError::Credentials(ref err) => err.description(),
+StopRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StopRemoteAccessSessionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4186,14 +4678,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum StopRunError {
                     
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>The specified entity was not found.</p>
-NotFound(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
 ///<p>A limit was exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The specified entity was not found.</p>
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4212,7 +4704,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceAccountException" => StopRunError::ServiceAccount(String::from(error_message)),"ArgumentException" => StopRunError::Argument(String::from(error_message)),"NotFoundException" => StopRunError::NotFound(String::from(error_message)),"LimitExceededException" => StopRunError::LimitExceeded(String::from(error_message)),"ValidationException" => StopRunError::Validation(error_message.to_string()),_ => StopRunError::Unknown(String::from(body))
+                                    "ArgumentException" => StopRunError::Argument(String::from(error_message)),
+"LimitExceededException" => StopRunError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => StopRunError::NotFound(String::from(error_message)),
+"ServiceAccountException" => StopRunError::ServiceAccount(String::from(error_message)),
+"ValidationException" => StopRunError::Validation(error_message.to_string()),
+_ => StopRunError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StopRunError::Unknown(String::from(body))
@@ -4243,7 +4740,14 @@ Unknown(String)
                 impl Error for StopRunError {
                     fn description(&self) -> &str {
                         match *self {
-                            StopRunError::NotFound(ref cause) => cause,StopRunError::ServiceAccount(ref cause) => cause,StopRunError::Argument(ref cause) => cause,StopRunError::LimitExceeded(ref cause) => cause,StopRunError::Validation(ref cause) => cause,StopRunError::Credentials(ref err) => err.description(),StopRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StopRunError::Unknown(ref cause) => cause
+                            StopRunError::Argument(ref cause) => cause,
+StopRunError::LimitExceeded(ref cause) => cause,
+StopRunError::NotFound(ref cause) => cause,
+StopRunError::ServiceAccount(ref cause) => cause,
+StopRunError::Validation(ref cause) => cause,
+StopRunError::Credentials(ref err) => err.description(),
+StopRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StopRunError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4251,14 +4755,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateDevicePoolError {
                     
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
-///<p>A limit was exceeded.</p>
-LimitExceeded(String),
 ///<p>An invalid argument was specified.</p>
 Argument(String),
+///<p>A limit was exceeded.</p>
+LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4277,7 +4781,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => UpdateDevicePoolError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => UpdateDevicePoolError::ServiceAccount(String::from(error_message)),"NotFoundException" => UpdateDevicePoolError::NotFound(String::from(error_message)),"ArgumentException" => UpdateDevicePoolError::Argument(String::from(error_message)),"ValidationException" => UpdateDevicePoolError::Validation(error_message.to_string()),_ => UpdateDevicePoolError::Unknown(String::from(body))
+                                    "ArgumentException" => UpdateDevicePoolError::Argument(String::from(error_message)),
+"LimitExceededException" => UpdateDevicePoolError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => UpdateDevicePoolError::NotFound(String::from(error_message)),
+"ServiceAccountException" => UpdateDevicePoolError::ServiceAccount(String::from(error_message)),
+"ValidationException" => UpdateDevicePoolError::Validation(error_message.to_string()),
+_ => UpdateDevicePoolError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateDevicePoolError::Unknown(String::from(body))
@@ -4308,7 +4817,14 @@ Unknown(String)
                 impl Error for UpdateDevicePoolError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateDevicePoolError::NotFound(ref cause) => cause,UpdateDevicePoolError::ServiceAccount(ref cause) => cause,UpdateDevicePoolError::Argument(ref cause) => cause,UpdateDevicePoolError::LimitExceeded(ref cause) => cause,UpdateDevicePoolError::Validation(ref cause) => cause,UpdateDevicePoolError::Credentials(ref err) => err.description(),UpdateDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateDevicePoolError::Unknown(ref cause) => cause
+                            UpdateDevicePoolError::Argument(ref cause) => cause,
+UpdateDevicePoolError::LimitExceeded(ref cause) => cause,
+UpdateDevicePoolError::NotFound(ref cause) => cause,
+UpdateDevicePoolError::ServiceAccount(ref cause) => cause,
+UpdateDevicePoolError::Validation(ref cause) => cause,
+UpdateDevicePoolError::Credentials(ref err) => err.description(),
+UpdateDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateDevicePoolError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4318,12 +4834,12 @@ Unknown(String)
                     
 ///<p>An invalid argument was specified.</p>
 Argument(String),
-///<p>There was a problem with the service account.</p>
-ServiceAccount(String),
 ///<p>A limit was exceeded.</p>
 LimitExceeded(String),
 ///<p>The specified entity was not found.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
+NotFound(String),
+///<p>There was a problem with the service account.</p>
+ServiceAccount(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4342,7 +4858,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => UpdateProjectError::NotFound(String::from(error_message)),"LimitExceededException" => UpdateProjectError::LimitExceeded(String::from(error_message)),"ServiceAccountException" => UpdateProjectError::ServiceAccount(String::from(error_message)),"ArgumentException" => UpdateProjectError::Argument(String::from(error_message)),"ValidationException" => UpdateProjectError::Validation(error_message.to_string()),_ => UpdateProjectError::Unknown(String::from(body))
+                                    "ArgumentException" => UpdateProjectError::Argument(String::from(error_message)),
+"LimitExceededException" => UpdateProjectError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => UpdateProjectError::NotFound(String::from(error_message)),
+"ServiceAccountException" => UpdateProjectError::ServiceAccount(String::from(error_message)),
+"ValidationException" => UpdateProjectError::Validation(error_message.to_string()),
+_ => UpdateProjectError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateProjectError::Unknown(String::from(body))
@@ -4373,7 +4894,14 @@ Unknown(String)
                 impl Error for UpdateProjectError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateProjectError::ServiceAccount(ref cause) => cause,UpdateProjectError::Argument(ref cause) => cause,UpdateProjectError::LimitExceeded(ref cause) => cause,UpdateProjectError::NotFound(ref cause) => cause,UpdateProjectError::Validation(ref cause) => cause,UpdateProjectError::Credentials(ref err) => err.description(),UpdateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateProjectError::Unknown(ref cause) => cause
+                            UpdateProjectError::Argument(ref cause) => cause,
+UpdateProjectError::LimitExceeded(ref cause) => cause,
+UpdateProjectError::NotFound(ref cause) => cause,
+UpdateProjectError::ServiceAccount(ref cause) => cause,
+UpdateProjectError::Validation(ref cause) => cause,
+UpdateProjectError::Credentials(ref err) => err.description(),
+UpdateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateProjectError::Unknown(ref cause) => cause
                         }
                     }
                  }

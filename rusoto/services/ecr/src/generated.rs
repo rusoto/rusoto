@@ -634,12 +634,12 @@ pub type Url = String;
                 #[derive(Debug, PartialEq)]
                 pub enum BatchCheckLayerAvailabilityError {
                     
-///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
-RepositoryNotFound(String),/// An error occurred dispatching the HTTP request
+RepositoryNotFound(String),
+///<p>These errors are usually caused by a server-side issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -658,7 +658,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryNotFoundException" => BatchCheckLayerAvailabilityError::RepositoryNotFound(String::from(error_message)),"ServerException" => BatchCheckLayerAvailabilityError::Server(String::from(error_message)),"InvalidParameterException" => BatchCheckLayerAvailabilityError::InvalidParameter(String::from(error_message)),"ValidationException" => BatchCheckLayerAvailabilityError::Validation(error_message.to_string()),_ => BatchCheckLayerAvailabilityError::Unknown(String::from(body))
+                                    "InvalidParameterException" => BatchCheckLayerAvailabilityError::InvalidParameter(String::from(error_message)),
+"RepositoryNotFoundException" => BatchCheckLayerAvailabilityError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => BatchCheckLayerAvailabilityError::Server(String::from(error_message)),
+"ValidationException" => BatchCheckLayerAvailabilityError::Validation(error_message.to_string()),
+_ => BatchCheckLayerAvailabilityError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => BatchCheckLayerAvailabilityError::Unknown(String::from(body))
@@ -689,7 +693,13 @@ Unknown(String)
                 impl Error for BatchCheckLayerAvailabilityError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchCheckLayerAvailabilityError::RepositoryNotFound(ref cause) => cause,BatchCheckLayerAvailabilityError::InvalidParameter(ref cause) => cause,BatchCheckLayerAvailabilityError::Server(ref cause) => cause,BatchCheckLayerAvailabilityError::Validation(ref cause) => cause,BatchCheckLayerAvailabilityError::Credentials(ref err) => err.description(),BatchCheckLayerAvailabilityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchCheckLayerAvailabilityError::Unknown(ref cause) => cause
+                            BatchCheckLayerAvailabilityError::InvalidParameter(ref cause) => cause,
+BatchCheckLayerAvailabilityError::RepositoryNotFound(ref cause) => cause,
+BatchCheckLayerAvailabilityError::Server(ref cause) => cause,
+BatchCheckLayerAvailabilityError::Validation(ref cause) => cause,
+BatchCheckLayerAvailabilityError::Credentials(ref err) => err.description(),
+BatchCheckLayerAvailabilityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchCheckLayerAvailabilityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -699,10 +709,10 @@ Unknown(String)
                     
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
-///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
-RepositoryNotFound(String),/// An error occurred dispatching the HTTP request
+RepositoryNotFound(String),
+///<p>These errors are usually caused by a server-side issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -721,7 +731,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServerException" => BatchDeleteImageError::Server(String::from(error_message)),"InvalidParameterException" => BatchDeleteImageError::InvalidParameter(String::from(error_message)),"RepositoryNotFoundException" => BatchDeleteImageError::RepositoryNotFound(String::from(error_message)),"ValidationException" => BatchDeleteImageError::Validation(error_message.to_string()),_ => BatchDeleteImageError::Unknown(String::from(body))
+                                    "InvalidParameterException" => BatchDeleteImageError::InvalidParameter(String::from(error_message)),
+"RepositoryNotFoundException" => BatchDeleteImageError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => BatchDeleteImageError::Server(String::from(error_message)),
+"ValidationException" => BatchDeleteImageError::Validation(error_message.to_string()),
+_ => BatchDeleteImageError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => BatchDeleteImageError::Unknown(String::from(body))
@@ -752,7 +766,13 @@ Unknown(String)
                 impl Error for BatchDeleteImageError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchDeleteImageError::InvalidParameter(ref cause) => cause,BatchDeleteImageError::Server(ref cause) => cause,BatchDeleteImageError::RepositoryNotFound(ref cause) => cause,BatchDeleteImageError::Validation(ref cause) => cause,BatchDeleteImageError::Credentials(ref err) => err.description(),BatchDeleteImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchDeleteImageError::Unknown(ref cause) => cause
+                            BatchDeleteImageError::InvalidParameter(ref cause) => cause,
+BatchDeleteImageError::RepositoryNotFound(ref cause) => cause,
+BatchDeleteImageError::Server(ref cause) => cause,
+BatchDeleteImageError::Validation(ref cause) => cause,
+BatchDeleteImageError::Credentials(ref err) => err.description(),
+BatchDeleteImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchDeleteImageError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -760,12 +780,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum BatchGetImageError {
                     
-///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
 RepositoryNotFound(String),
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+///<p>These errors are usually caused by a server-side issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -784,7 +804,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => BatchGetImageError::InvalidParameter(String::from(error_message)),"ServerException" => BatchGetImageError::Server(String::from(error_message)),"RepositoryNotFoundException" => BatchGetImageError::RepositoryNotFound(String::from(error_message)),"ValidationException" => BatchGetImageError::Validation(error_message.to_string()),_ => BatchGetImageError::Unknown(String::from(body))
+                                    "InvalidParameterException" => BatchGetImageError::InvalidParameter(String::from(error_message)),
+"RepositoryNotFoundException" => BatchGetImageError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => BatchGetImageError::Server(String::from(error_message)),
+"ValidationException" => BatchGetImageError::Validation(error_message.to_string()),
+_ => BatchGetImageError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => BatchGetImageError::Unknown(String::from(body))
@@ -815,7 +839,13 @@ Unknown(String)
                 impl Error for BatchGetImageError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchGetImageError::Server(ref cause) => cause,BatchGetImageError::InvalidParameter(ref cause) => cause,BatchGetImageError::RepositoryNotFound(ref cause) => cause,BatchGetImageError::Validation(ref cause) => cause,BatchGetImageError::Credentials(ref err) => err.description(),BatchGetImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchGetImageError::Unknown(ref cause) => cause
+                            BatchGetImageError::InvalidParameter(ref cause) => cause,
+BatchGetImageError::RepositoryNotFound(ref cause) => cause,
+BatchGetImageError::Server(ref cause) => cause,
+BatchGetImageError::Validation(ref cause) => cause,
+BatchGetImageError::Credentials(ref err) => err.description(),
+BatchGetImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchGetImageError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -823,22 +853,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CompleteLayerUploadError {
                     
+///<p>The specified layer upload does not contain any layer parts.</p>
+EmptyUpload(String),
 ///<p>The layer digest calculation performed by Amazon ECR upon receipt of the image layer does not match the digest specified.</p>
 InvalidLayer(String),
-///<p>The image layer already exists in the associated repository.</p>
-LayerAlreadyExists(String),
-///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
+///<p>The image layer already exists in the associated repository.</p>
+LayerAlreadyExists(String),
 ///<p>Layer parts must be at least 5 MiB in size.</p>
 LayerPartTooSmall(String),
-///<p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
-UploadNotFound(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
 RepositoryNotFound(String),
-///<p>The specified layer upload does not contain any layer parts.</p>
-EmptyUpload(String),/// An error occurred dispatching the HTTP request
+///<p>These errors are usually caused by a server-side issue.</p>
+Server(String),
+///<p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
+UploadNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -857,7 +887,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServerException" => CompleteLayerUploadError::Server(String::from(error_message)),"UploadNotFoundException" => CompleteLayerUploadError::UploadNotFound(String::from(error_message)),"LayerPartTooSmallException" => CompleteLayerUploadError::LayerPartTooSmall(String::from(error_message)),"InvalidLayerException" => CompleteLayerUploadError::InvalidLayer(String::from(error_message)),"EmptyUploadException" => CompleteLayerUploadError::EmptyUpload(String::from(error_message)),"RepositoryNotFoundException" => CompleteLayerUploadError::RepositoryNotFound(String::from(error_message)),"InvalidParameterException" => CompleteLayerUploadError::InvalidParameter(String::from(error_message)),"LayerAlreadyExistsException" => CompleteLayerUploadError::LayerAlreadyExists(String::from(error_message)),"ValidationException" => CompleteLayerUploadError::Validation(error_message.to_string()),_ => CompleteLayerUploadError::Unknown(String::from(body))
+                                    "EmptyUploadException" => CompleteLayerUploadError::EmptyUpload(String::from(error_message)),
+"InvalidLayerException" => CompleteLayerUploadError::InvalidLayer(String::from(error_message)),
+"InvalidParameterException" => CompleteLayerUploadError::InvalidParameter(String::from(error_message)),
+"LayerAlreadyExistsException" => CompleteLayerUploadError::LayerAlreadyExists(String::from(error_message)),
+"LayerPartTooSmallException" => CompleteLayerUploadError::LayerPartTooSmall(String::from(error_message)),
+"RepositoryNotFoundException" => CompleteLayerUploadError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => CompleteLayerUploadError::Server(String::from(error_message)),
+"UploadNotFoundException" => CompleteLayerUploadError::UploadNotFound(String::from(error_message)),
+"ValidationException" => CompleteLayerUploadError::Validation(error_message.to_string()),
+_ => CompleteLayerUploadError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CompleteLayerUploadError::Unknown(String::from(body))
@@ -888,7 +927,18 @@ Unknown(String)
                 impl Error for CompleteLayerUploadError {
                     fn description(&self) -> &str {
                         match *self {
-                            CompleteLayerUploadError::UploadNotFound(ref cause) => cause,CompleteLayerUploadError::EmptyUpload(ref cause) => cause,CompleteLayerUploadError::Server(ref cause) => cause,CompleteLayerUploadError::RepositoryNotFound(ref cause) => cause,CompleteLayerUploadError::InvalidLayer(ref cause) => cause,CompleteLayerUploadError::LayerAlreadyExists(ref cause) => cause,CompleteLayerUploadError::LayerPartTooSmall(ref cause) => cause,CompleteLayerUploadError::InvalidParameter(ref cause) => cause,CompleteLayerUploadError::Validation(ref cause) => cause,CompleteLayerUploadError::Credentials(ref err) => err.description(),CompleteLayerUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CompleteLayerUploadError::Unknown(ref cause) => cause
+                            CompleteLayerUploadError::EmptyUpload(ref cause) => cause,
+CompleteLayerUploadError::InvalidLayer(ref cause) => cause,
+CompleteLayerUploadError::InvalidParameter(ref cause) => cause,
+CompleteLayerUploadError::LayerAlreadyExists(ref cause) => cause,
+CompleteLayerUploadError::LayerPartTooSmall(ref cause) => cause,
+CompleteLayerUploadError::RepositoryNotFound(ref cause) => cause,
+CompleteLayerUploadError::Server(ref cause) => cause,
+CompleteLayerUploadError::UploadNotFound(ref cause) => cause,
+CompleteLayerUploadError::Validation(ref cause) => cause,
+CompleteLayerUploadError::Credentials(ref err) => err.description(),
+CompleteLayerUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CompleteLayerUploadError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -896,14 +946,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateRepositoryError {
                     
-///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
+///<p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
+LimitExceeded(String),
 ///<p>The specified repository already exists in the specified registry.</p>
 RepositoryAlreadyExists(String),
-///<p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>These errors are usually caused by a server-side issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -922,7 +972,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryAlreadyExistsException" => CreateRepositoryError::RepositoryAlreadyExists(String::from(error_message)),"ServerException" => CreateRepositoryError::Server(String::from(error_message)),"InvalidParameterException" => CreateRepositoryError::InvalidParameter(String::from(error_message)),"LimitExceededException" => CreateRepositoryError::LimitExceeded(String::from(error_message)),"ValidationException" => CreateRepositoryError::Validation(error_message.to_string()),_ => CreateRepositoryError::Unknown(String::from(body))
+                                    "InvalidParameterException" => CreateRepositoryError::InvalidParameter(String::from(error_message)),
+"LimitExceededException" => CreateRepositoryError::LimitExceeded(String::from(error_message)),
+"RepositoryAlreadyExistsException" => CreateRepositoryError::RepositoryAlreadyExists(String::from(error_message)),
+"ServerException" => CreateRepositoryError::Server(String::from(error_message)),
+"ValidationException" => CreateRepositoryError::Validation(error_message.to_string()),
+_ => CreateRepositoryError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateRepositoryError::Unknown(String::from(body))
@@ -953,7 +1008,14 @@ Unknown(String)
                 impl Error for CreateRepositoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateRepositoryError::InvalidParameter(ref cause) => cause,CreateRepositoryError::Server(ref cause) => cause,CreateRepositoryError::RepositoryAlreadyExists(ref cause) => cause,CreateRepositoryError::LimitExceeded(ref cause) => cause,CreateRepositoryError::Validation(ref cause) => cause,CreateRepositoryError::Credentials(ref err) => err.description(),CreateRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateRepositoryError::Unknown(ref cause) => cause
+                            CreateRepositoryError::InvalidParameter(ref cause) => cause,
+CreateRepositoryError::LimitExceeded(ref cause) => cause,
+CreateRepositoryError::RepositoryAlreadyExists(ref cause) => cause,
+CreateRepositoryError::Server(ref cause) => cause,
+CreateRepositoryError::Validation(ref cause) => cause,
+CreateRepositoryError::Credentials(ref err) => err.description(),
+CreateRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateRepositoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -961,14 +1023,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteRepositoryError {
                     
-///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
 ///<p>The specified repository contains images. To delete a repository that contains images, you must force the deletion with the <code>force</code> parameter.</p>
 RepositoryNotEmpty(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
 RepositoryNotFound(String),
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+///<p>These errors are usually caused by a server-side issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -987,7 +1049,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryNotEmptyException" => DeleteRepositoryError::RepositoryNotEmpty(String::from(error_message)),"InvalidParameterException" => DeleteRepositoryError::InvalidParameter(String::from(error_message)),"ServerException" => DeleteRepositoryError::Server(String::from(error_message)),"RepositoryNotFoundException" => DeleteRepositoryError::RepositoryNotFound(String::from(error_message)),"ValidationException" => DeleteRepositoryError::Validation(error_message.to_string()),_ => DeleteRepositoryError::Unknown(String::from(body))
+                                    "InvalidParameterException" => DeleteRepositoryError::InvalidParameter(String::from(error_message)),
+"RepositoryNotEmptyException" => DeleteRepositoryError::RepositoryNotEmpty(String::from(error_message)),
+"RepositoryNotFoundException" => DeleteRepositoryError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => DeleteRepositoryError::Server(String::from(error_message)),
+"ValidationException" => DeleteRepositoryError::Validation(error_message.to_string()),
+_ => DeleteRepositoryError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteRepositoryError::Unknown(String::from(body))
@@ -1018,7 +1085,14 @@ Unknown(String)
                 impl Error for DeleteRepositoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteRepositoryError::RepositoryNotEmpty(ref cause) => cause,DeleteRepositoryError::InvalidParameter(ref cause) => cause,DeleteRepositoryError::Server(ref cause) => cause,DeleteRepositoryError::RepositoryNotFound(ref cause) => cause,DeleteRepositoryError::Validation(ref cause) => cause,DeleteRepositoryError::Credentials(ref err) => err.description(),DeleteRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteRepositoryError::Unknown(ref cause) => cause
+                            DeleteRepositoryError::InvalidParameter(ref cause) => cause,
+DeleteRepositoryError::RepositoryNotEmpty(ref cause) => cause,
+DeleteRepositoryError::RepositoryNotFound(ref cause) => cause,
+DeleteRepositoryError::Server(ref cause) => cause,
+DeleteRepositoryError::Validation(ref cause) => cause,
+DeleteRepositoryError::Credentials(ref err) => err.description(),
+DeleteRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteRepositoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1026,14 +1100,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteRepositoryPolicyError {
                     
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
 RepositoryNotFound(String),
 ///<p>The specified repository and registry combination does not have an associated repository policy.</p>
 RepositoryPolicyNotFound(String),
 ///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1052,7 +1126,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryNotFoundException" => DeleteRepositoryPolicyError::RepositoryNotFound(String::from(error_message)),"RepositoryPolicyNotFoundException" => DeleteRepositoryPolicyError::RepositoryPolicyNotFound(String::from(error_message)),"ServerException" => DeleteRepositoryPolicyError::Server(String::from(error_message)),"InvalidParameterException" => DeleteRepositoryPolicyError::InvalidParameter(String::from(error_message)),"ValidationException" => DeleteRepositoryPolicyError::Validation(error_message.to_string()),_ => DeleteRepositoryPolicyError::Unknown(String::from(body))
+                                    "InvalidParameterException" => DeleteRepositoryPolicyError::InvalidParameter(String::from(error_message)),
+"RepositoryNotFoundException" => DeleteRepositoryPolicyError::RepositoryNotFound(String::from(error_message)),
+"RepositoryPolicyNotFoundException" => DeleteRepositoryPolicyError::RepositoryPolicyNotFound(String::from(error_message)),
+"ServerException" => DeleteRepositoryPolicyError::Server(String::from(error_message)),
+"ValidationException" => DeleteRepositoryPolicyError::Validation(error_message.to_string()),
+_ => DeleteRepositoryPolicyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteRepositoryPolicyError::Unknown(String::from(body))
@@ -1083,7 +1162,14 @@ Unknown(String)
                 impl Error for DeleteRepositoryPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteRepositoryPolicyError::Server(ref cause) => cause,DeleteRepositoryPolicyError::InvalidParameter(ref cause) => cause,DeleteRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,DeleteRepositoryPolicyError::RepositoryPolicyNotFound(ref cause) => cause,DeleteRepositoryPolicyError::Validation(ref cause) => cause,DeleteRepositoryPolicyError::Credentials(ref err) => err.description(),DeleteRepositoryPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteRepositoryPolicyError::Unknown(ref cause) => cause
+                            DeleteRepositoryPolicyError::InvalidParameter(ref cause) => cause,
+DeleteRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
+DeleteRepositoryPolicyError::RepositoryPolicyNotFound(ref cause) => cause,
+DeleteRepositoryPolicyError::Server(ref cause) => cause,
+DeleteRepositoryPolicyError::Validation(ref cause) => cause,
+DeleteRepositoryPolicyError::Credentials(ref err) => err.description(),
+DeleteRepositoryPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteRepositoryPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1091,14 +1177,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeImagesError {
                     
-///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
 ///<p>The image requested does not exist in the specified repository.</p>
 ImageNotFound(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
-RepositoryNotFound(String),/// An error occurred dispatching the HTTP request
+RepositoryNotFound(String),
+///<p>These errors are usually caused by a server-side issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1117,7 +1203,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServerException" => DescribeImagesError::Server(String::from(error_message)),"RepositoryNotFoundException" => DescribeImagesError::RepositoryNotFound(String::from(error_message)),"ImageNotFoundException" => DescribeImagesError::ImageNotFound(String::from(error_message)),"InvalidParameterException" => DescribeImagesError::InvalidParameter(String::from(error_message)),"ValidationException" => DescribeImagesError::Validation(error_message.to_string()),_ => DescribeImagesError::Unknown(String::from(body))
+                                    "ImageNotFoundException" => DescribeImagesError::ImageNotFound(String::from(error_message)),
+"InvalidParameterException" => DescribeImagesError::InvalidParameter(String::from(error_message)),
+"RepositoryNotFoundException" => DescribeImagesError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => DescribeImagesError::Server(String::from(error_message)),
+"ValidationException" => DescribeImagesError::Validation(error_message.to_string()),
+_ => DescribeImagesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeImagesError::Unknown(String::from(body))
@@ -1148,7 +1239,14 @@ Unknown(String)
                 impl Error for DescribeImagesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeImagesError::RepositoryNotFound(ref cause) => cause,DescribeImagesError::Server(ref cause) => cause,DescribeImagesError::InvalidParameter(ref cause) => cause,DescribeImagesError::ImageNotFound(ref cause) => cause,DescribeImagesError::Validation(ref cause) => cause,DescribeImagesError::Credentials(ref err) => err.description(),DescribeImagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeImagesError::Unknown(ref cause) => cause
+                            DescribeImagesError::ImageNotFound(ref cause) => cause,
+DescribeImagesError::InvalidParameter(ref cause) => cause,
+DescribeImagesError::RepositoryNotFound(ref cause) => cause,
+DescribeImagesError::Server(ref cause) => cause,
+DescribeImagesError::Validation(ref cause) => cause,
+DescribeImagesError::Credentials(ref err) => err.description(),
+DescribeImagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeImagesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1156,12 +1254,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeRepositoriesError {
                     
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
 RepositoryNotFound(String),
 ///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1180,7 +1278,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryNotFoundException" => DescribeRepositoriesError::RepositoryNotFound(String::from(error_message)),"ServerException" => DescribeRepositoriesError::Server(String::from(error_message)),"InvalidParameterException" => DescribeRepositoriesError::InvalidParameter(String::from(error_message)),"ValidationException" => DescribeRepositoriesError::Validation(error_message.to_string()),_ => DescribeRepositoriesError::Unknown(String::from(body))
+                                    "InvalidParameterException" => DescribeRepositoriesError::InvalidParameter(String::from(error_message)),
+"RepositoryNotFoundException" => DescribeRepositoriesError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => DescribeRepositoriesError::Server(String::from(error_message)),
+"ValidationException" => DescribeRepositoriesError::Validation(error_message.to_string()),
+_ => DescribeRepositoriesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeRepositoriesError::Unknown(String::from(body))
@@ -1211,7 +1313,13 @@ Unknown(String)
                 impl Error for DescribeRepositoriesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeRepositoriesError::RepositoryNotFound(ref cause) => cause,DescribeRepositoriesError::InvalidParameter(ref cause) => cause,DescribeRepositoriesError::Server(ref cause) => cause,DescribeRepositoriesError::Validation(ref cause) => cause,DescribeRepositoriesError::Credentials(ref err) => err.description(),DescribeRepositoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeRepositoriesError::Unknown(ref cause) => cause
+                            DescribeRepositoriesError::InvalidParameter(ref cause) => cause,
+DescribeRepositoriesError::RepositoryNotFound(ref cause) => cause,
+DescribeRepositoriesError::Server(ref cause) => cause,
+DescribeRepositoriesError::Validation(ref cause) => cause,
+DescribeRepositoriesError::Credentials(ref err) => err.description(),
+DescribeRepositoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeRepositoriesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1241,7 +1349,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => GetAuthorizationTokenError::InvalidParameter(String::from(error_message)),"ServerException" => GetAuthorizationTokenError::Server(String::from(error_message)),"ValidationException" => GetAuthorizationTokenError::Validation(error_message.to_string()),_ => GetAuthorizationTokenError::Unknown(String::from(body))
+                                    "InvalidParameterException" => GetAuthorizationTokenError::InvalidParameter(String::from(error_message)),
+"ServerException" => GetAuthorizationTokenError::Server(String::from(error_message)),
+"ValidationException" => GetAuthorizationTokenError::Validation(error_message.to_string()),
+_ => GetAuthorizationTokenError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetAuthorizationTokenError::Unknown(String::from(body))
@@ -1272,7 +1383,12 @@ Unknown(String)
                 impl Error for GetAuthorizationTokenError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetAuthorizationTokenError::Server(ref cause) => cause,GetAuthorizationTokenError::InvalidParameter(ref cause) => cause,GetAuthorizationTokenError::Validation(ref cause) => cause,GetAuthorizationTokenError::Credentials(ref err) => err.description(),GetAuthorizationTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetAuthorizationTokenError::Unknown(ref cause) => cause
+                            GetAuthorizationTokenError::InvalidParameter(ref cause) => cause,
+GetAuthorizationTokenError::Server(ref cause) => cause,
+GetAuthorizationTokenError::Validation(ref cause) => cause,
+GetAuthorizationTokenError::Credentials(ref err) => err.description(),
+GetAuthorizationTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetAuthorizationTokenError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1280,16 +1396,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetDownloadUrlForLayerError {
                     
-///<p>The specified layer is not available because it is not associated with an image. Unassociated image layers may be cleaned up at any time.</p>
-LayerInaccessible(String),
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
+///<p>The specified layer is not available because it is not associated with an image. Unassociated image layers may be cleaned up at any time.</p>
+LayerInaccessible(String),
 ///<p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
 LayersNotFound(String),
-///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
-RepositoryNotFound(String),/// An error occurred dispatching the HTTP request
+RepositoryNotFound(String),
+///<p>These errors are usually caused by a server-side issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1308,7 +1424,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => GetDownloadUrlForLayerError::InvalidParameter(String::from(error_message)),"LayerInaccessibleException" => GetDownloadUrlForLayerError::LayerInaccessible(String::from(error_message)),"ServerException" => GetDownloadUrlForLayerError::Server(String::from(error_message)),"RepositoryNotFoundException" => GetDownloadUrlForLayerError::RepositoryNotFound(String::from(error_message)),"LayersNotFoundException" => GetDownloadUrlForLayerError::LayersNotFound(String::from(error_message)),"ValidationException" => GetDownloadUrlForLayerError::Validation(error_message.to_string()),_ => GetDownloadUrlForLayerError::Unknown(String::from(body))
+                                    "InvalidParameterException" => GetDownloadUrlForLayerError::InvalidParameter(String::from(error_message)),
+"LayerInaccessibleException" => GetDownloadUrlForLayerError::LayerInaccessible(String::from(error_message)),
+"LayersNotFoundException" => GetDownloadUrlForLayerError::LayersNotFound(String::from(error_message)),
+"RepositoryNotFoundException" => GetDownloadUrlForLayerError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => GetDownloadUrlForLayerError::Server(String::from(error_message)),
+"ValidationException" => GetDownloadUrlForLayerError::Validation(error_message.to_string()),
+_ => GetDownloadUrlForLayerError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetDownloadUrlForLayerError::Unknown(String::from(body))
@@ -1339,7 +1461,15 @@ Unknown(String)
                 impl Error for GetDownloadUrlForLayerError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDownloadUrlForLayerError::LayerInaccessible(ref cause) => cause,GetDownloadUrlForLayerError::InvalidParameter(ref cause) => cause,GetDownloadUrlForLayerError::RepositoryNotFound(ref cause) => cause,GetDownloadUrlForLayerError::LayersNotFound(ref cause) => cause,GetDownloadUrlForLayerError::Server(ref cause) => cause,GetDownloadUrlForLayerError::Validation(ref cause) => cause,GetDownloadUrlForLayerError::Credentials(ref err) => err.description(),GetDownloadUrlForLayerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDownloadUrlForLayerError::Unknown(ref cause) => cause
+                            GetDownloadUrlForLayerError::InvalidParameter(ref cause) => cause,
+GetDownloadUrlForLayerError::LayerInaccessible(ref cause) => cause,
+GetDownloadUrlForLayerError::LayersNotFound(ref cause) => cause,
+GetDownloadUrlForLayerError::RepositoryNotFound(ref cause) => cause,
+GetDownloadUrlForLayerError::Server(ref cause) => cause,
+GetDownloadUrlForLayerError::Validation(ref cause) => cause,
+GetDownloadUrlForLayerError::Credentials(ref err) => err.description(),
+GetDownloadUrlForLayerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDownloadUrlForLayerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1347,14 +1477,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetRepositoryPolicyError {
                     
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
 RepositoryNotFound(String),
 ///<p>The specified repository and registry combination does not have an associated repository policy.</p>
 RepositoryPolicyNotFound(String),
 ///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1373,7 +1503,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryPolicyNotFoundException" => GetRepositoryPolicyError::RepositoryPolicyNotFound(String::from(error_message)),"ServerException" => GetRepositoryPolicyError::Server(String::from(error_message)),"InvalidParameterException" => GetRepositoryPolicyError::InvalidParameter(String::from(error_message)),"RepositoryNotFoundException" => GetRepositoryPolicyError::RepositoryNotFound(String::from(error_message)),"ValidationException" => GetRepositoryPolicyError::Validation(error_message.to_string()),_ => GetRepositoryPolicyError::Unknown(String::from(body))
+                                    "InvalidParameterException" => GetRepositoryPolicyError::InvalidParameter(String::from(error_message)),
+"RepositoryNotFoundException" => GetRepositoryPolicyError::RepositoryNotFound(String::from(error_message)),
+"RepositoryPolicyNotFoundException" => GetRepositoryPolicyError::RepositoryPolicyNotFound(String::from(error_message)),
+"ServerException" => GetRepositoryPolicyError::Server(String::from(error_message)),
+"ValidationException" => GetRepositoryPolicyError::Validation(error_message.to_string()),
+_ => GetRepositoryPolicyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetRepositoryPolicyError::Unknown(String::from(body))
@@ -1404,7 +1539,14 @@ Unknown(String)
                 impl Error for GetRepositoryPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,GetRepositoryPolicyError::InvalidParameter(ref cause) => cause,GetRepositoryPolicyError::Server(ref cause) => cause,GetRepositoryPolicyError::RepositoryPolicyNotFound(ref cause) => cause,GetRepositoryPolicyError::Validation(ref cause) => cause,GetRepositoryPolicyError::Credentials(ref err) => err.description(),GetRepositoryPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetRepositoryPolicyError::Unknown(ref cause) => cause
+                            GetRepositoryPolicyError::InvalidParameter(ref cause) => cause,
+GetRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
+GetRepositoryPolicyError::RepositoryPolicyNotFound(ref cause) => cause,
+GetRepositoryPolicyError::Server(ref cause) => cause,
+GetRepositoryPolicyError::Validation(ref cause) => cause,
+GetRepositoryPolicyError::Credentials(ref err) => err.description(),
+GetRepositoryPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetRepositoryPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1412,12 +1554,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum InitiateLayerUploadError {
                     
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
 RepositoryNotFound(String),
 ///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1436,7 +1578,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryNotFoundException" => InitiateLayerUploadError::RepositoryNotFound(String::from(error_message)),"ServerException" => InitiateLayerUploadError::Server(String::from(error_message)),"InvalidParameterException" => InitiateLayerUploadError::InvalidParameter(String::from(error_message)),"ValidationException" => InitiateLayerUploadError::Validation(error_message.to_string()),_ => InitiateLayerUploadError::Unknown(String::from(body))
+                                    "InvalidParameterException" => InitiateLayerUploadError::InvalidParameter(String::from(error_message)),
+"RepositoryNotFoundException" => InitiateLayerUploadError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => InitiateLayerUploadError::Server(String::from(error_message)),
+"ValidationException" => InitiateLayerUploadError::Validation(error_message.to_string()),
+_ => InitiateLayerUploadError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => InitiateLayerUploadError::Unknown(String::from(body))
@@ -1467,7 +1613,13 @@ Unknown(String)
                 impl Error for InitiateLayerUploadError {
                     fn description(&self) -> &str {
                         match *self {
-                            InitiateLayerUploadError::Server(ref cause) => cause,InitiateLayerUploadError::InvalidParameter(ref cause) => cause,InitiateLayerUploadError::RepositoryNotFound(ref cause) => cause,InitiateLayerUploadError::Validation(ref cause) => cause,InitiateLayerUploadError::Credentials(ref err) => err.description(),InitiateLayerUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),InitiateLayerUploadError::Unknown(ref cause) => cause
+                            InitiateLayerUploadError::InvalidParameter(ref cause) => cause,
+InitiateLayerUploadError::RepositoryNotFound(ref cause) => cause,
+InitiateLayerUploadError::Server(ref cause) => cause,
+InitiateLayerUploadError::Validation(ref cause) => cause,
+InitiateLayerUploadError::Credentials(ref err) => err.description(),
+InitiateLayerUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+InitiateLayerUploadError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1477,10 +1629,10 @@ Unknown(String)
                     
 ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
 InvalidParameter(String),
-///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
-RepositoryNotFound(String),/// An error occurred dispatching the HTTP request
+RepositoryNotFound(String),
+///<p>These errors are usually caused by a server-side issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1499,7 +1651,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServerException" => ListImagesError::Server(String::from(error_message)),"InvalidParameterException" => ListImagesError::InvalidParameter(String::from(error_message)),"RepositoryNotFoundException" => ListImagesError::RepositoryNotFound(String::from(error_message)),"ValidationException" => ListImagesError::Validation(error_message.to_string()),_ => ListImagesError::Unknown(String::from(body))
+                                    "InvalidParameterException" => ListImagesError::InvalidParameter(String::from(error_message)),
+"RepositoryNotFoundException" => ListImagesError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => ListImagesError::Server(String::from(error_message)),
+"ValidationException" => ListImagesError::Validation(error_message.to_string()),
+_ => ListImagesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListImagesError::Unknown(String::from(body))
@@ -1530,7 +1686,13 @@ Unknown(String)
                 impl Error for ListImagesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListImagesError::Server(ref cause) => cause,ListImagesError::InvalidParameter(ref cause) => cause,ListImagesError::RepositoryNotFound(ref cause) => cause,ListImagesError::Validation(ref cause) => cause,ListImagesError::Credentials(ref err) => err.description(),ListImagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListImagesError::Unknown(ref cause) => cause
+                            ListImagesError::InvalidParameter(ref cause) => cause,
+ListImagesError::RepositoryNotFound(ref cause) => cause,
+ListImagesError::Server(ref cause) => cause,
+ListImagesError::Validation(ref cause) => cause,
+ListImagesError::Credentials(ref err) => err.description(),
+ListImagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListImagesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1538,18 +1700,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutImageError {
                     
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),
-///<p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
-LimitExceeded(String),
-///<p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
-LayersNotFound(String),
-///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
 ///<p>The specified image has already been pushed, and there are no changes to the manifest or image tag since the last push.</p>
 ImageAlreadyExists(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
+///<p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
+LayersNotFound(String),
+///<p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
+LimitExceeded(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
-RepositoryNotFound(String),/// An error occurred dispatching the HTTP request
+RepositoryNotFound(String),
+///<p>These errors are usually caused by a server-side issue.</p>
+Server(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1568,7 +1730,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServerException" => PutImageError::Server(String::from(error_message)),"InvalidParameterException" => PutImageError::InvalidParameter(String::from(error_message)),"LimitExceededException" => PutImageError::LimitExceeded(String::from(error_message)),"ImageAlreadyExistsException" => PutImageError::ImageAlreadyExists(String::from(error_message)),"LayersNotFoundException" => PutImageError::LayersNotFound(String::from(error_message)),"RepositoryNotFoundException" => PutImageError::RepositoryNotFound(String::from(error_message)),"ValidationException" => PutImageError::Validation(error_message.to_string()),_ => PutImageError::Unknown(String::from(body))
+                                    "ImageAlreadyExistsException" => PutImageError::ImageAlreadyExists(String::from(error_message)),
+"InvalidParameterException" => PutImageError::InvalidParameter(String::from(error_message)),
+"LayersNotFoundException" => PutImageError::LayersNotFound(String::from(error_message)),
+"LimitExceededException" => PutImageError::LimitExceeded(String::from(error_message)),
+"RepositoryNotFoundException" => PutImageError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => PutImageError::Server(String::from(error_message)),
+"ValidationException" => PutImageError::Validation(error_message.to_string()),
+_ => PutImageError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutImageError::Unknown(String::from(body))
@@ -1599,7 +1768,16 @@ Unknown(String)
                 impl Error for PutImageError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutImageError::LimitExceeded(ref cause) => cause,PutImageError::RepositoryNotFound(ref cause) => cause,PutImageError::Server(ref cause) => cause,PutImageError::InvalidParameter(ref cause) => cause,PutImageError::ImageAlreadyExists(ref cause) => cause,PutImageError::LayersNotFound(ref cause) => cause,PutImageError::Validation(ref cause) => cause,PutImageError::Credentials(ref err) => err.description(),PutImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutImageError::Unknown(ref cause) => cause
+                            PutImageError::ImageAlreadyExists(ref cause) => cause,
+PutImageError::InvalidParameter(ref cause) => cause,
+PutImageError::LayersNotFound(ref cause) => cause,
+PutImageError::LimitExceeded(ref cause) => cause,
+PutImageError::RepositoryNotFound(ref cause) => cause,
+PutImageError::Server(ref cause) => cause,
+PutImageError::Validation(ref cause) => cause,
+PutImageError::Credentials(ref err) => err.description(),
+PutImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutImageError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1631,7 +1809,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryNotFoundException" => SetRepositoryPolicyError::RepositoryNotFound(String::from(error_message)),"ServerException" => SetRepositoryPolicyError::Server(String::from(error_message)),"InvalidParameterException" => SetRepositoryPolicyError::InvalidParameter(String::from(error_message)),"ValidationException" => SetRepositoryPolicyError::Validation(error_message.to_string()),_ => SetRepositoryPolicyError::Unknown(String::from(body))
+                                    "InvalidParameterException" => SetRepositoryPolicyError::InvalidParameter(String::from(error_message)),
+"RepositoryNotFoundException" => SetRepositoryPolicyError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => SetRepositoryPolicyError::Server(String::from(error_message)),
+"ValidationException" => SetRepositoryPolicyError::Validation(error_message.to_string()),
+_ => SetRepositoryPolicyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SetRepositoryPolicyError::Unknown(String::from(body))
@@ -1662,7 +1844,13 @@ Unknown(String)
                 impl Error for SetRepositoryPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,SetRepositoryPolicyError::Server(ref cause) => cause,SetRepositoryPolicyError::InvalidParameter(ref cause) => cause,SetRepositoryPolicyError::Validation(ref cause) => cause,SetRepositoryPolicyError::Credentials(ref err) => err.description(),SetRepositoryPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetRepositoryPolicyError::Unknown(ref cause) => cause
+                            SetRepositoryPolicyError::InvalidParameter(ref cause) => cause,
+SetRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
+SetRepositoryPolicyError::Server(ref cause) => cause,
+SetRepositoryPolicyError::Validation(ref cause) => cause,
+SetRepositoryPolicyError::Credentials(ref err) => err.description(),
+SetRepositoryPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetRepositoryPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1670,18 +1858,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UploadLayerPartError {
                     
-///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
-InvalidParameter(String),
-///<p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
-UploadNotFound(String),
-///<p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
-LimitExceeded(String),
-///<p>These errors are usually caused by a server-side issue.</p>
-Server(String),
 ///<p>The layer part size is not valid, or the first byte specified is not consecutive to the last byte of a previous layer part upload.</p>
 InvalidLayerPart(String),
+///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+InvalidParameter(String),
+///<p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
+LimitExceeded(String),
 ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
-RepositoryNotFound(String),/// An error occurred dispatching the HTTP request
+RepositoryNotFound(String),
+///<p>These errors are usually caused by a server-side issue.</p>
+Server(String),
+///<p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
+UploadNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1700,7 +1888,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServerException" => UploadLayerPartError::Server(String::from(error_message)),"RepositoryNotFoundException" => UploadLayerPartError::RepositoryNotFound(String::from(error_message)),"InvalidLayerPartException" => UploadLayerPartError::InvalidLayerPart(String::from(error_message)),"UploadNotFoundException" => UploadLayerPartError::UploadNotFound(String::from(error_message)),"LimitExceededException" => UploadLayerPartError::LimitExceeded(String::from(error_message)),"InvalidParameterException" => UploadLayerPartError::InvalidParameter(String::from(error_message)),"ValidationException" => UploadLayerPartError::Validation(error_message.to_string()),_ => UploadLayerPartError::Unknown(String::from(body))
+                                    "InvalidLayerPartException" => UploadLayerPartError::InvalidLayerPart(String::from(error_message)),
+"InvalidParameterException" => UploadLayerPartError::InvalidParameter(String::from(error_message)),
+"LimitExceededException" => UploadLayerPartError::LimitExceeded(String::from(error_message)),
+"RepositoryNotFoundException" => UploadLayerPartError::RepositoryNotFound(String::from(error_message)),
+"ServerException" => UploadLayerPartError::Server(String::from(error_message)),
+"UploadNotFoundException" => UploadLayerPartError::UploadNotFound(String::from(error_message)),
+"ValidationException" => UploadLayerPartError::Validation(error_message.to_string()),
+_ => UploadLayerPartError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UploadLayerPartError::Unknown(String::from(body))
@@ -1731,7 +1926,16 @@ Unknown(String)
                 impl Error for UploadLayerPartError {
                     fn description(&self) -> &str {
                         match *self {
-                            UploadLayerPartError::Server(ref cause) => cause,UploadLayerPartError::UploadNotFound(ref cause) => cause,UploadLayerPartError::InvalidParameter(ref cause) => cause,UploadLayerPartError::LimitExceeded(ref cause) => cause,UploadLayerPartError::InvalidLayerPart(ref cause) => cause,UploadLayerPartError::RepositoryNotFound(ref cause) => cause,UploadLayerPartError::Validation(ref cause) => cause,UploadLayerPartError::Credentials(ref err) => err.description(),UploadLayerPartError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UploadLayerPartError::Unknown(ref cause) => cause
+                            UploadLayerPartError::InvalidLayerPart(ref cause) => cause,
+UploadLayerPartError::InvalidParameter(ref cause) => cause,
+UploadLayerPartError::LimitExceeded(ref cause) => cause,
+UploadLayerPartError::RepositoryNotFound(ref cause) => cause,
+UploadLayerPartError::Server(ref cause) => cause,
+UploadLayerPartError::UploadNotFound(ref cause) => cause,
+UploadLayerPartError::Validation(ref cause) => cause,
+UploadLayerPartError::Credentials(ref err) => err.description(),
+UploadLayerPartError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UploadLayerPartError::Unknown(ref cause) => cause
                         }
                     }
                  }

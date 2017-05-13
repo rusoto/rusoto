@@ -439,20 +439,20 @@ pub name: Option<Name>,
                 #[derive(Debug, PartialEq)]
                 pub enum BatchGetRepositoriesError {
                     
-///<p>The maximum number of allowed repository names was exceeded. Currently, this number is 25.</p>
-MaximumRepositoryNamesExceeded(String),
-///<p>The encryption key is disabled.</p>
-EncryptionKeyDisabled(String),
-///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
-InvalidRepositoryName(String),
-///<p>The encryption key is not available.</p>
-EncryptionKeyUnavailable(String),
-///<p>No encryption key was found.</p>
-EncryptionKeyNotFound(String),
 ///<p>An encryption integrity check failed.</p>
 EncryptionIntegrityChecksFailed(String),
 ///<p>An encryption key could not be accessed.</p>
 EncryptionKeyAccessDenied(String),
+///<p>The encryption key is disabled.</p>
+EncryptionKeyDisabled(String),
+///<p>No encryption key was found.</p>
+EncryptionKeyNotFound(String),
+///<p>The encryption key is not available.</p>
+EncryptionKeyUnavailable(String),
+///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
+InvalidRepositoryName(String),
+///<p>The maximum number of allowed repository names was exceeded. Currently, this number is 25.</p>
+MaximumRepositoryNamesExceeded(String),
 ///<p>A repository names object is required but was not specified.</p>
 RepositoryNamesRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -473,7 +473,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EncryptionKeyUnavailableException" => BatchGetRepositoriesError::EncryptionKeyUnavailable(String::from(error_message)),"EncryptionKeyDisabledException" => BatchGetRepositoriesError::EncryptionKeyDisabled(String::from(error_message)),"EncryptionKeyAccessDeniedException" => BatchGetRepositoriesError::EncryptionKeyAccessDenied(String::from(error_message)),"RepositoryNamesRequiredException" => BatchGetRepositoriesError::RepositoryNamesRequired(String::from(error_message)),"MaximumRepositoryNamesExceededException" => BatchGetRepositoriesError::MaximumRepositoryNamesExceeded(String::from(error_message)),"EncryptionIntegrityChecksFailedException" => BatchGetRepositoriesError::EncryptionIntegrityChecksFailed(String::from(error_message)),"InvalidRepositoryNameException" => BatchGetRepositoriesError::InvalidRepositoryName(String::from(error_message)),"EncryptionKeyNotFoundException" => BatchGetRepositoriesError::EncryptionKeyNotFound(String::from(error_message)),"ValidationException" => BatchGetRepositoriesError::Validation(error_message.to_string()),_ => BatchGetRepositoriesError::Unknown(String::from(body))
+                                    "EncryptionIntegrityChecksFailedException" => BatchGetRepositoriesError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => BatchGetRepositoriesError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => BatchGetRepositoriesError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => BatchGetRepositoriesError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => BatchGetRepositoriesError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidRepositoryNameException" => BatchGetRepositoriesError::InvalidRepositoryName(String::from(error_message)),
+"MaximumRepositoryNamesExceededException" => BatchGetRepositoriesError::MaximumRepositoryNamesExceeded(String::from(error_message)),
+"RepositoryNamesRequiredException" => BatchGetRepositoriesError::RepositoryNamesRequired(String::from(error_message)),
+"ValidationException" => BatchGetRepositoriesError::Validation(error_message.to_string()),
+_ => BatchGetRepositoriesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => BatchGetRepositoriesError::Unknown(String::from(body))
@@ -504,7 +513,18 @@ Unknown(String)
                 impl Error for BatchGetRepositoriesError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchGetRepositoriesError::MaximumRepositoryNamesExceeded(ref cause) => cause,BatchGetRepositoriesError::EncryptionKeyDisabled(ref cause) => cause,BatchGetRepositoriesError::EncryptionKeyUnavailable(ref cause) => cause,BatchGetRepositoriesError::EncryptionKeyNotFound(ref cause) => cause,BatchGetRepositoriesError::InvalidRepositoryName(ref cause) => cause,BatchGetRepositoriesError::EncryptionKeyAccessDenied(ref cause) => cause,BatchGetRepositoriesError::EncryptionIntegrityChecksFailed(ref cause) => cause,BatchGetRepositoriesError::RepositoryNamesRequired(ref cause) => cause,BatchGetRepositoriesError::Validation(ref cause) => cause,BatchGetRepositoriesError::Credentials(ref err) => err.description(),BatchGetRepositoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchGetRepositoriesError::Unknown(ref cause) => cause
+                            BatchGetRepositoriesError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+BatchGetRepositoriesError::EncryptionKeyAccessDenied(ref cause) => cause,
+BatchGetRepositoriesError::EncryptionKeyDisabled(ref cause) => cause,
+BatchGetRepositoriesError::EncryptionKeyNotFound(ref cause) => cause,
+BatchGetRepositoriesError::EncryptionKeyUnavailable(ref cause) => cause,
+BatchGetRepositoriesError::InvalidRepositoryName(ref cause) => cause,
+BatchGetRepositoriesError::MaximumRepositoryNamesExceeded(ref cause) => cause,
+BatchGetRepositoriesError::RepositoryNamesRequired(ref cause) => cause,
+BatchGetRepositoriesError::Validation(ref cause) => cause,
+BatchGetRepositoriesError::Credentials(ref err) => err.description(),
+BatchGetRepositoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchGetRepositoriesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -512,34 +532,34 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateBranchError {
                     
-///<p>The specified repository does not exist.</p>
-RepositoryDoesNotExist(String),
-///<p>The encryption key is not available.</p>
-EncryptionKeyUnavailable(String),
-///<p>An encryption integrity check failed.</p>
-EncryptionIntegrityChecksFailed(String),
 ///<p>The specified branch name already exists.</p>
 BranchNameExists(String),
-///<p>No encryption key was found.</p>
-EncryptionKeyNotFound(String),
-///<p>A commit ID was not specified.</p>
-CommitIdRequired(String),
-///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
-InvalidRepositoryName(String),
+///<p>A branch name is required but was not specified.</p>
+BranchNameRequired(String),
 ///<p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
 CommitDoesNotExist(String),
+///<p>A commit ID was not specified.</p>
+CommitIdRequired(String),
+///<p>An encryption integrity check failed.</p>
+EncryptionIntegrityChecksFailed(String),
 ///<p>An encryption key could not be accessed.</p>
 EncryptionKeyAccessDenied(String),
-///<p>A repository name is required but was not specified.</p>
-RepositoryNameRequired(String),
+///<p>The encryption key is disabled.</p>
+EncryptionKeyDisabled(String),
+///<p>No encryption key was found.</p>
+EncryptionKeyNotFound(String),
+///<p>The encryption key is not available.</p>
+EncryptionKeyUnavailable(String),
 ///<p>The specified branch name is not valid.</p>
 InvalidBranchName(String),
 ///<p>The specified commit ID is not valid.</p>
 InvalidCommitId(String),
-///<p>A branch name is required but was not specified.</p>
-BranchNameRequired(String),
-///<p>The encryption key is disabled.</p>
-EncryptionKeyDisabled(String),/// An error occurred dispatching the HTTP request
+///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
+InvalidRepositoryName(String),
+///<p>The specified repository does not exist.</p>
+RepositoryDoesNotExist(String),
+///<p>A repository name is required but was not specified.</p>
+RepositoryNameRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -558,7 +578,22 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidBranchNameException" => CreateBranchError::InvalidBranchName(String::from(error_message)),"InvalidRepositoryNameException" => CreateBranchError::InvalidRepositoryName(String::from(error_message)),"EncryptionKeyAccessDeniedException" => CreateBranchError::EncryptionKeyAccessDenied(String::from(error_message)),"RepositoryDoesNotExistException" => CreateBranchError::RepositoryDoesNotExist(String::from(error_message)),"BranchNameExistsException" => CreateBranchError::BranchNameExists(String::from(error_message)),"InvalidCommitIdException" => CreateBranchError::InvalidCommitId(String::from(error_message)),"RepositoryNameRequiredException" => CreateBranchError::RepositoryNameRequired(String::from(error_message)),"EncryptionKeyDisabledException" => CreateBranchError::EncryptionKeyDisabled(String::from(error_message)),"CommitDoesNotExistException" => CreateBranchError::CommitDoesNotExist(String::from(error_message)),"CommitIdRequiredException" => CreateBranchError::CommitIdRequired(String::from(error_message)),"EncryptionKeyUnavailableException" => CreateBranchError::EncryptionKeyUnavailable(String::from(error_message)),"BranchNameRequiredException" => CreateBranchError::BranchNameRequired(String::from(error_message)),"EncryptionIntegrityChecksFailedException" => CreateBranchError::EncryptionIntegrityChecksFailed(String::from(error_message)),"EncryptionKeyNotFoundException" => CreateBranchError::EncryptionKeyNotFound(String::from(error_message)),"ValidationException" => CreateBranchError::Validation(error_message.to_string()),_ => CreateBranchError::Unknown(String::from(body))
+                                    "BranchNameExistsException" => CreateBranchError::BranchNameExists(String::from(error_message)),
+"BranchNameRequiredException" => CreateBranchError::BranchNameRequired(String::from(error_message)),
+"CommitDoesNotExistException" => CreateBranchError::CommitDoesNotExist(String::from(error_message)),
+"CommitIdRequiredException" => CreateBranchError::CommitIdRequired(String::from(error_message)),
+"EncryptionIntegrityChecksFailedException" => CreateBranchError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => CreateBranchError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => CreateBranchError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => CreateBranchError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => CreateBranchError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidBranchNameException" => CreateBranchError::InvalidBranchName(String::from(error_message)),
+"InvalidCommitIdException" => CreateBranchError::InvalidCommitId(String::from(error_message)),
+"InvalidRepositoryNameException" => CreateBranchError::InvalidRepositoryName(String::from(error_message)),
+"RepositoryDoesNotExistException" => CreateBranchError::RepositoryDoesNotExist(String::from(error_message)),
+"RepositoryNameRequiredException" => CreateBranchError::RepositoryNameRequired(String::from(error_message)),
+"ValidationException" => CreateBranchError::Validation(error_message.to_string()),
+_ => CreateBranchError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateBranchError::Unknown(String::from(body))
@@ -589,7 +624,24 @@ Unknown(String)
                 impl Error for CreateBranchError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateBranchError::EncryptionKeyNotFound(ref cause) => cause,CreateBranchError::EncryptionKeyUnavailable(ref cause) => cause,CreateBranchError::EncryptionKeyDisabled(ref cause) => cause,CreateBranchError::InvalidRepositoryName(ref cause) => cause,CreateBranchError::EncryptionKeyAccessDenied(ref cause) => cause,CreateBranchError::RepositoryDoesNotExist(ref cause) => cause,CreateBranchError::BranchNameExists(ref cause) => cause,CreateBranchError::InvalidBranchName(ref cause) => cause,CreateBranchError::InvalidCommitId(ref cause) => cause,CreateBranchError::RepositoryNameRequired(ref cause) => cause,CreateBranchError::BranchNameRequired(ref cause) => cause,CreateBranchError::CommitIdRequired(ref cause) => cause,CreateBranchError::CommitDoesNotExist(ref cause) => cause,CreateBranchError::EncryptionIntegrityChecksFailed(ref cause) => cause,CreateBranchError::Validation(ref cause) => cause,CreateBranchError::Credentials(ref err) => err.description(),CreateBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateBranchError::Unknown(ref cause) => cause
+                            CreateBranchError::BranchNameExists(ref cause) => cause,
+CreateBranchError::BranchNameRequired(ref cause) => cause,
+CreateBranchError::CommitDoesNotExist(ref cause) => cause,
+CreateBranchError::CommitIdRequired(ref cause) => cause,
+CreateBranchError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+CreateBranchError::EncryptionKeyAccessDenied(ref cause) => cause,
+CreateBranchError::EncryptionKeyDisabled(ref cause) => cause,
+CreateBranchError::EncryptionKeyNotFound(ref cause) => cause,
+CreateBranchError::EncryptionKeyUnavailable(ref cause) => cause,
+CreateBranchError::InvalidBranchName(ref cause) => cause,
+CreateBranchError::InvalidCommitId(ref cause) => cause,
+CreateBranchError::InvalidRepositoryName(ref cause) => cause,
+CreateBranchError::RepositoryDoesNotExist(ref cause) => cause,
+CreateBranchError::RepositoryNameRequired(ref cause) => cause,
+CreateBranchError::Validation(ref cause) => cause,
+CreateBranchError::Credentials(ref err) => err.description(),
+CreateBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateBranchError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -597,26 +649,26 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateRepositoryError {
                     
-///<p>An encryption key could not be accessed.</p>
-EncryptionKeyAccessDenied(String),
-///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
-InvalidRepositoryName(String),
 ///<p>An encryption integrity check failed.</p>
 EncryptionIntegrityChecksFailed(String),
+///<p>An encryption key could not be accessed.</p>
+EncryptionKeyAccessDenied(String),
 ///<p>The encryption key is disabled.</p>
 EncryptionKeyDisabled(String),
 ///<p>No encryption key was found.</p>
 EncryptionKeyNotFound(String),
+///<p>The encryption key is not available.</p>
+EncryptionKeyUnavailable(String),
+///<p>The specified repository description is not valid.</p>
+InvalidRepositoryDescription(String),
+///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
+InvalidRepositoryName(String),
+///<p>A repository resource limit was exceeded.</p>
+RepositoryLimitExceeded(String),
 ///<p>The specified repository name already exists.</p>
 RepositoryNameExists(String),
 ///<p>A repository name is required but was not specified.</p>
-RepositoryNameRequired(String),
-///<p>A repository resource limit was exceeded.</p>
-RepositoryLimitExceeded(String),
-///<p>The specified repository description is not valid.</p>
-InvalidRepositoryDescription(String),
-///<p>The encryption key is not available.</p>
-EncryptionKeyUnavailable(String),/// An error occurred dispatching the HTTP request
+RepositoryNameRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -635,7 +687,18 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EncryptionIntegrityChecksFailedException" => CreateRepositoryError::EncryptionIntegrityChecksFailed(String::from(error_message)),"EncryptionKeyAccessDeniedException" => CreateRepositoryError::EncryptionKeyAccessDenied(String::from(error_message)),"RepositoryNameRequiredException" => CreateRepositoryError::RepositoryNameRequired(String::from(error_message)),"RepositoryNameExistsException" => CreateRepositoryError::RepositoryNameExists(String::from(error_message)),"RepositoryLimitExceededException" => CreateRepositoryError::RepositoryLimitExceeded(String::from(error_message)),"EncryptionKeyNotFoundException" => CreateRepositoryError::EncryptionKeyNotFound(String::from(error_message)),"EncryptionKeyUnavailableException" => CreateRepositoryError::EncryptionKeyUnavailable(String::from(error_message)),"EncryptionKeyDisabledException" => CreateRepositoryError::EncryptionKeyDisabled(String::from(error_message)),"InvalidRepositoryNameException" => CreateRepositoryError::InvalidRepositoryName(String::from(error_message)),"InvalidRepositoryDescriptionException" => CreateRepositoryError::InvalidRepositoryDescription(String::from(error_message)),"ValidationException" => CreateRepositoryError::Validation(error_message.to_string()),_ => CreateRepositoryError::Unknown(String::from(body))
+                                    "EncryptionIntegrityChecksFailedException" => CreateRepositoryError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => CreateRepositoryError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => CreateRepositoryError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => CreateRepositoryError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => CreateRepositoryError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidRepositoryDescriptionException" => CreateRepositoryError::InvalidRepositoryDescription(String::from(error_message)),
+"InvalidRepositoryNameException" => CreateRepositoryError::InvalidRepositoryName(String::from(error_message)),
+"RepositoryLimitExceededException" => CreateRepositoryError::RepositoryLimitExceeded(String::from(error_message)),
+"RepositoryNameExistsException" => CreateRepositoryError::RepositoryNameExists(String::from(error_message)),
+"RepositoryNameRequiredException" => CreateRepositoryError::RepositoryNameRequired(String::from(error_message)),
+"ValidationException" => CreateRepositoryError::Validation(error_message.to_string()),
+_ => CreateRepositoryError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateRepositoryError::Unknown(String::from(body))
@@ -666,7 +729,20 @@ Unknown(String)
                 impl Error for CreateRepositoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateRepositoryError::RepositoryNameRequired(ref cause) => cause,CreateRepositoryError::EncryptionKeyNotFound(ref cause) => cause,CreateRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,CreateRepositoryError::RepositoryLimitExceeded(ref cause) => cause,CreateRepositoryError::EncryptionKeyDisabled(ref cause) => cause,CreateRepositoryError::RepositoryNameExists(ref cause) => cause,CreateRepositoryError::InvalidRepositoryDescription(ref cause) => cause,CreateRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,CreateRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,CreateRepositoryError::InvalidRepositoryName(ref cause) => cause,CreateRepositoryError::Validation(ref cause) => cause,CreateRepositoryError::Credentials(ref err) => err.description(),CreateRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateRepositoryError::Unknown(ref cause) => cause
+                            CreateRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+CreateRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,
+CreateRepositoryError::EncryptionKeyDisabled(ref cause) => cause,
+CreateRepositoryError::EncryptionKeyNotFound(ref cause) => cause,
+CreateRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,
+CreateRepositoryError::InvalidRepositoryDescription(ref cause) => cause,
+CreateRepositoryError::InvalidRepositoryName(ref cause) => cause,
+CreateRepositoryError::RepositoryLimitExceeded(ref cause) => cause,
+CreateRepositoryError::RepositoryNameExists(ref cause) => cause,
+CreateRepositoryError::RepositoryNameRequired(ref cause) => cause,
+CreateRepositoryError::Validation(ref cause) => cause,
+CreateRepositoryError::Credentials(ref err) => err.description(),
+CreateRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateRepositoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -676,16 +752,16 @@ Unknown(String)
                     
 ///<p>An encryption integrity check failed.</p>
 EncryptionIntegrityChecksFailed(String),
+///<p>An encryption key could not be accessed.</p>
+EncryptionKeyAccessDenied(String),
 ///<p>The encryption key is disabled.</p>
 EncryptionKeyDisabled(String),
-///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
-InvalidRepositoryName(String),
 ///<p>No encryption key was found.</p>
 EncryptionKeyNotFound(String),
 ///<p>The encryption key is not available.</p>
 EncryptionKeyUnavailable(String),
-///<p>An encryption key could not be accessed.</p>
-EncryptionKeyAccessDenied(String),
+///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
+InvalidRepositoryName(String),
 ///<p>A repository name is required but was not specified.</p>
 RepositoryNameRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -706,7 +782,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidRepositoryNameException" => DeleteRepositoryError::InvalidRepositoryName(String::from(error_message)),"EncryptionIntegrityChecksFailedException" => DeleteRepositoryError::EncryptionIntegrityChecksFailed(String::from(error_message)),"EncryptionKeyNotFoundException" => DeleteRepositoryError::EncryptionKeyNotFound(String::from(error_message)),"EncryptionKeyUnavailableException" => DeleteRepositoryError::EncryptionKeyUnavailable(String::from(error_message)),"EncryptionKeyDisabledException" => DeleteRepositoryError::EncryptionKeyDisabled(String::from(error_message)),"EncryptionKeyAccessDeniedException" => DeleteRepositoryError::EncryptionKeyAccessDenied(String::from(error_message)),"RepositoryNameRequiredException" => DeleteRepositoryError::RepositoryNameRequired(String::from(error_message)),"ValidationException" => DeleteRepositoryError::Validation(error_message.to_string()),_ => DeleteRepositoryError::Unknown(String::from(body))
+                                    "EncryptionIntegrityChecksFailedException" => DeleteRepositoryError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => DeleteRepositoryError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => DeleteRepositoryError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => DeleteRepositoryError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => DeleteRepositoryError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidRepositoryNameException" => DeleteRepositoryError::InvalidRepositoryName(String::from(error_message)),
+"RepositoryNameRequiredException" => DeleteRepositoryError::RepositoryNameRequired(String::from(error_message)),
+"ValidationException" => DeleteRepositoryError::Validation(error_message.to_string()),
+_ => DeleteRepositoryError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteRepositoryError::Unknown(String::from(body))
@@ -737,7 +821,17 @@ Unknown(String)
                 impl Error for DeleteRepositoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteRepositoryError::RepositoryNameRequired(ref cause) => cause,DeleteRepositoryError::EncryptionKeyDisabled(ref cause) => cause,DeleteRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,DeleteRepositoryError::InvalidRepositoryName(ref cause) => cause,DeleteRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,DeleteRepositoryError::EncryptionKeyNotFound(ref cause) => cause,DeleteRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,DeleteRepositoryError::Validation(ref cause) => cause,DeleteRepositoryError::Credentials(ref err) => err.description(),DeleteRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteRepositoryError::Unknown(ref cause) => cause
+                            DeleteRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+DeleteRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,
+DeleteRepositoryError::EncryptionKeyDisabled(ref cause) => cause,
+DeleteRepositoryError::EncryptionKeyNotFound(ref cause) => cause,
+DeleteRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,
+DeleteRepositoryError::InvalidRepositoryName(ref cause) => cause,
+DeleteRepositoryError::RepositoryNameRequired(ref cause) => cause,
+DeleteRepositoryError::Validation(ref cause) => cause,
+DeleteRepositoryError::Credentials(ref err) => err.description(),
+DeleteRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteRepositoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -745,28 +839,28 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetBranchError {
                     
-///<p>The specified repository does not exist.</p>
-RepositoryDoesNotExist(String),
-///<p>A repository name is required but was not specified.</p>
-RepositoryNameRequired(String),
-///<p>No encryption key was found.</p>
-EncryptionKeyNotFound(String),
-///<p>The encryption key is disabled.</p>
-EncryptionKeyDisabled(String),
 ///<p>The specified branch does not exist.</p>
 BranchDoesNotExist(String),
-///<p>The specified branch name is not valid.</p>
-InvalidBranchName(String),
-///<p>The encryption key is not available.</p>
-EncryptionKeyUnavailable(String),
 ///<p>A branch name is required but was not specified.</p>
 BranchNameRequired(String),
-///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
-InvalidRepositoryName(String),
 ///<p>An encryption integrity check failed.</p>
 EncryptionIntegrityChecksFailed(String),
 ///<p>An encryption key could not be accessed.</p>
-EncryptionKeyAccessDenied(String),/// An error occurred dispatching the HTTP request
+EncryptionKeyAccessDenied(String),
+///<p>The encryption key is disabled.</p>
+EncryptionKeyDisabled(String),
+///<p>No encryption key was found.</p>
+EncryptionKeyNotFound(String),
+///<p>The encryption key is not available.</p>
+EncryptionKeyUnavailable(String),
+///<p>The specified branch name is not valid.</p>
+InvalidBranchName(String),
+///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
+InvalidRepositoryName(String),
+///<p>The specified repository does not exist.</p>
+RepositoryDoesNotExist(String),
+///<p>A repository name is required but was not specified.</p>
+RepositoryNameRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -785,7 +879,19 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EncryptionKeyAccessDeniedException" => GetBranchError::EncryptionKeyAccessDenied(String::from(error_message)),"InvalidRepositoryNameException" => GetBranchError::InvalidRepositoryName(String::from(error_message)),"EncryptionIntegrityChecksFailedException" => GetBranchError::EncryptionIntegrityChecksFailed(String::from(error_message)),"EncryptionKeyDisabledException" => GetBranchError::EncryptionKeyDisabled(String::from(error_message)),"InvalidBranchNameException" => GetBranchError::InvalidBranchName(String::from(error_message)),"BranchNameRequiredException" => GetBranchError::BranchNameRequired(String::from(error_message)),"RepositoryNameRequiredException" => GetBranchError::RepositoryNameRequired(String::from(error_message)),"BranchDoesNotExistException" => GetBranchError::BranchDoesNotExist(String::from(error_message)),"EncryptionKeyUnavailableException" => GetBranchError::EncryptionKeyUnavailable(String::from(error_message)),"RepositoryDoesNotExistException" => GetBranchError::RepositoryDoesNotExist(String::from(error_message)),"EncryptionKeyNotFoundException" => GetBranchError::EncryptionKeyNotFound(String::from(error_message)),"ValidationException" => GetBranchError::Validation(error_message.to_string()),_ => GetBranchError::Unknown(String::from(body))
+                                    "BranchDoesNotExistException" => GetBranchError::BranchDoesNotExist(String::from(error_message)),
+"BranchNameRequiredException" => GetBranchError::BranchNameRequired(String::from(error_message)),
+"EncryptionIntegrityChecksFailedException" => GetBranchError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => GetBranchError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => GetBranchError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => GetBranchError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => GetBranchError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidBranchNameException" => GetBranchError::InvalidBranchName(String::from(error_message)),
+"InvalidRepositoryNameException" => GetBranchError::InvalidRepositoryName(String::from(error_message)),
+"RepositoryDoesNotExistException" => GetBranchError::RepositoryDoesNotExist(String::from(error_message)),
+"RepositoryNameRequiredException" => GetBranchError::RepositoryNameRequired(String::from(error_message)),
+"ValidationException" => GetBranchError::Validation(error_message.to_string()),
+_ => GetBranchError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetBranchError::Unknown(String::from(body))
@@ -816,7 +922,21 @@ Unknown(String)
                 impl Error for GetBranchError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetBranchError::EncryptionKeyDisabled(ref cause) => cause,GetBranchError::EncryptionKeyNotFound(ref cause) => cause,GetBranchError::EncryptionKeyAccessDenied(ref cause) => cause,GetBranchError::BranchNameRequired(ref cause) => cause,GetBranchError::EncryptionIntegrityChecksFailed(ref cause) => cause,GetBranchError::InvalidBranchName(ref cause) => cause,GetBranchError::RepositoryDoesNotExist(ref cause) => cause,GetBranchError::InvalidRepositoryName(ref cause) => cause,GetBranchError::RepositoryNameRequired(ref cause) => cause,GetBranchError::BranchDoesNotExist(ref cause) => cause,GetBranchError::EncryptionKeyUnavailable(ref cause) => cause,GetBranchError::Validation(ref cause) => cause,GetBranchError::Credentials(ref err) => err.description(),GetBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetBranchError::Unknown(ref cause) => cause
+                            GetBranchError::BranchDoesNotExist(ref cause) => cause,
+GetBranchError::BranchNameRequired(ref cause) => cause,
+GetBranchError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+GetBranchError::EncryptionKeyAccessDenied(ref cause) => cause,
+GetBranchError::EncryptionKeyDisabled(ref cause) => cause,
+GetBranchError::EncryptionKeyNotFound(ref cause) => cause,
+GetBranchError::EncryptionKeyUnavailable(ref cause) => cause,
+GetBranchError::InvalidBranchName(ref cause) => cause,
+GetBranchError::InvalidRepositoryName(ref cause) => cause,
+GetBranchError::RepositoryDoesNotExist(ref cause) => cause,
+GetBranchError::RepositoryNameRequired(ref cause) => cause,
+GetBranchError::Validation(ref cause) => cause,
+GetBranchError::Credentials(ref err) => err.description(),
+GetBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetBranchError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -824,28 +944,28 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetCommitError {
                     
-///<p>The encryption key is not available.</p>
-EncryptionKeyUnavailable(String),
-///<p>An encryption integrity check failed.</p>
-EncryptionIntegrityChecksFailed(String),
-///<p>The specified commit ID is not valid.</p>
-InvalidCommitId(String),
-///<p>No encryption key was found.</p>
-EncryptionKeyNotFound(String),
 ///<p>The specified commit ID does not exist.</p>
 CommitIdDoesNotExist(String),
+///<p>A commit ID was not specified.</p>
+CommitIdRequired(String),
+///<p>An encryption integrity check failed.</p>
+EncryptionIntegrityChecksFailed(String),
+///<p>An encryption key could not be accessed.</p>
+EncryptionKeyAccessDenied(String),
+///<p>The encryption key is disabled.</p>
+EncryptionKeyDisabled(String),
+///<p>No encryption key was found.</p>
+EncryptionKeyNotFound(String),
+///<p>The encryption key is not available.</p>
+EncryptionKeyUnavailable(String),
+///<p>The specified commit ID is not valid.</p>
+InvalidCommitId(String),
 ///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
 InvalidRepositoryName(String),
 ///<p>The specified repository does not exist.</p>
 RepositoryDoesNotExist(String),
-///<p>A commit ID was not specified.</p>
-CommitIdRequired(String),
 ///<p>A repository name is required but was not specified.</p>
-RepositoryNameRequired(String),
-///<p>An encryption key could not be accessed.</p>
-EncryptionKeyAccessDenied(String),
-///<p>The encryption key is disabled.</p>
-EncryptionKeyDisabled(String),/// An error occurred dispatching the HTTP request
+RepositoryNameRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -864,7 +984,19 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryDoesNotExistException" => GetCommitError::RepositoryDoesNotExist(String::from(error_message)),"CommitIdRequiredException" => GetCommitError::CommitIdRequired(String::from(error_message)),"InvalidRepositoryNameException" => GetCommitError::InvalidRepositoryName(String::from(error_message)),"EncryptionKeyDisabledException" => GetCommitError::EncryptionKeyDisabled(String::from(error_message)),"InvalidCommitIdException" => GetCommitError::InvalidCommitId(String::from(error_message)),"EncryptionKeyUnavailableException" => GetCommitError::EncryptionKeyUnavailable(String::from(error_message)),"CommitIdDoesNotExistException" => GetCommitError::CommitIdDoesNotExist(String::from(error_message)),"EncryptionKeyAccessDeniedException" => GetCommitError::EncryptionKeyAccessDenied(String::from(error_message)),"EncryptionIntegrityChecksFailedException" => GetCommitError::EncryptionIntegrityChecksFailed(String::from(error_message)),"RepositoryNameRequiredException" => GetCommitError::RepositoryNameRequired(String::from(error_message)),"EncryptionKeyNotFoundException" => GetCommitError::EncryptionKeyNotFound(String::from(error_message)),"ValidationException" => GetCommitError::Validation(error_message.to_string()),_ => GetCommitError::Unknown(String::from(body))
+                                    "CommitIdDoesNotExistException" => GetCommitError::CommitIdDoesNotExist(String::from(error_message)),
+"CommitIdRequiredException" => GetCommitError::CommitIdRequired(String::from(error_message)),
+"EncryptionIntegrityChecksFailedException" => GetCommitError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => GetCommitError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => GetCommitError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => GetCommitError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => GetCommitError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidCommitIdException" => GetCommitError::InvalidCommitId(String::from(error_message)),
+"InvalidRepositoryNameException" => GetCommitError::InvalidRepositoryName(String::from(error_message)),
+"RepositoryDoesNotExistException" => GetCommitError::RepositoryDoesNotExist(String::from(error_message)),
+"RepositoryNameRequiredException" => GetCommitError::RepositoryNameRequired(String::from(error_message)),
+"ValidationException" => GetCommitError::Validation(error_message.to_string()),
+_ => GetCommitError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetCommitError::Unknown(String::from(body))
@@ -895,7 +1027,21 @@ Unknown(String)
                 impl Error for GetCommitError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,GetCommitError::EncryptionKeyDisabled(ref cause) => cause,GetCommitError::EncryptionKeyUnavailable(ref cause) => cause,GetCommitError::CommitIdRequired(ref cause) => cause,GetCommitError::InvalidCommitId(ref cause) => cause,GetCommitError::RepositoryNameRequired(ref cause) => cause,GetCommitError::EncryptionKeyNotFound(ref cause) => cause,GetCommitError::InvalidRepositoryName(ref cause) => cause,GetCommitError::RepositoryDoesNotExist(ref cause) => cause,GetCommitError::CommitIdDoesNotExist(ref cause) => cause,GetCommitError::EncryptionKeyAccessDenied(ref cause) => cause,GetCommitError::Validation(ref cause) => cause,GetCommitError::Credentials(ref err) => err.description(),GetCommitError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetCommitError::Unknown(ref cause) => cause
+                            GetCommitError::CommitIdDoesNotExist(ref cause) => cause,
+GetCommitError::CommitIdRequired(ref cause) => cause,
+GetCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+GetCommitError::EncryptionKeyAccessDenied(ref cause) => cause,
+GetCommitError::EncryptionKeyDisabled(ref cause) => cause,
+GetCommitError::EncryptionKeyNotFound(ref cause) => cause,
+GetCommitError::EncryptionKeyUnavailable(ref cause) => cause,
+GetCommitError::InvalidCommitId(ref cause) => cause,
+GetCommitError::InvalidRepositoryName(ref cause) => cause,
+GetCommitError::RepositoryDoesNotExist(ref cause) => cause,
+GetCommitError::RepositoryNameRequired(ref cause) => cause,
+GetCommitError::Validation(ref cause) => cause,
+GetCommitError::Credentials(ref err) => err.description(),
+GetCommitError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetCommitError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -903,22 +1049,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetRepositoryError {
                     
-///<p>The encryption key is not available.</p>
-EncryptionKeyUnavailable(String),
 ///<p>An encryption integrity check failed.</p>
 EncryptionIntegrityChecksFailed(String),
-///<p>The encryption key is disabled.</p>
-EncryptionKeyDisabled(String),
 ///<p>An encryption key could not be accessed.</p>
 EncryptionKeyAccessDenied(String),
-///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
-InvalidRepositoryName(String),
+///<p>The encryption key is disabled.</p>
+EncryptionKeyDisabled(String),
 ///<p>No encryption key was found.</p>
 EncryptionKeyNotFound(String),
-///<p>A repository name is required but was not specified.</p>
-RepositoryNameRequired(String),
+///<p>The encryption key is not available.</p>
+EncryptionKeyUnavailable(String),
+///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
+InvalidRepositoryName(String),
 ///<p>The specified repository does not exist.</p>
-RepositoryDoesNotExist(String),/// An error occurred dispatching the HTTP request
+RepositoryDoesNotExist(String),
+///<p>A repository name is required but was not specified.</p>
+RepositoryNameRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -937,7 +1083,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryNameRequiredException" => GetRepositoryError::RepositoryNameRequired(String::from(error_message)),"EncryptionIntegrityChecksFailedException" => GetRepositoryError::EncryptionIntegrityChecksFailed(String::from(error_message)),"InvalidRepositoryNameException" => GetRepositoryError::InvalidRepositoryName(String::from(error_message)),"RepositoryDoesNotExistException" => GetRepositoryError::RepositoryDoesNotExist(String::from(error_message)),"EncryptionKeyUnavailableException" => GetRepositoryError::EncryptionKeyUnavailable(String::from(error_message)),"EncryptionKeyAccessDeniedException" => GetRepositoryError::EncryptionKeyAccessDenied(String::from(error_message)),"EncryptionKeyNotFoundException" => GetRepositoryError::EncryptionKeyNotFound(String::from(error_message)),"EncryptionKeyDisabledException" => GetRepositoryError::EncryptionKeyDisabled(String::from(error_message)),"ValidationException" => GetRepositoryError::Validation(error_message.to_string()),_ => GetRepositoryError::Unknown(String::from(body))
+                                    "EncryptionIntegrityChecksFailedException" => GetRepositoryError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => GetRepositoryError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => GetRepositoryError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => GetRepositoryError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => GetRepositoryError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidRepositoryNameException" => GetRepositoryError::InvalidRepositoryName(String::from(error_message)),
+"RepositoryDoesNotExistException" => GetRepositoryError::RepositoryDoesNotExist(String::from(error_message)),
+"RepositoryNameRequiredException" => GetRepositoryError::RepositoryNameRequired(String::from(error_message)),
+"ValidationException" => GetRepositoryError::Validation(error_message.to_string()),
+_ => GetRepositoryError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetRepositoryError::Unknown(String::from(body))
@@ -968,7 +1123,18 @@ Unknown(String)
                 impl Error for GetRepositoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetRepositoryError::EncryptionKeyDisabled(ref cause) => cause,GetRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,GetRepositoryError::EncryptionKeyNotFound(ref cause) => cause,GetRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,GetRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,GetRepositoryError::InvalidRepositoryName(ref cause) => cause,GetRepositoryError::RepositoryNameRequired(ref cause) => cause,GetRepositoryError::RepositoryDoesNotExist(ref cause) => cause,GetRepositoryError::Validation(ref cause) => cause,GetRepositoryError::Credentials(ref err) => err.description(),GetRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetRepositoryError::Unknown(ref cause) => cause
+                            GetRepositoryError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+GetRepositoryError::EncryptionKeyAccessDenied(ref cause) => cause,
+GetRepositoryError::EncryptionKeyDisabled(ref cause) => cause,
+GetRepositoryError::EncryptionKeyNotFound(ref cause) => cause,
+GetRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,
+GetRepositoryError::InvalidRepositoryName(ref cause) => cause,
+GetRepositoryError::RepositoryDoesNotExist(ref cause) => cause,
+GetRepositoryError::RepositoryNameRequired(ref cause) => cause,
+GetRepositoryError::Validation(ref cause) => cause,
+GetRepositoryError::Credentials(ref err) => err.description(),
+GetRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetRepositoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -976,22 +1142,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetRepositoryTriggersError {
                     
-///<p>The specified repository does not exist.</p>
-RepositoryDoesNotExist(String),
-///<p>The encryption key is disabled.</p>
-EncryptionKeyDisabled(String),
-///<p>An encryption key could not be accessed.</p>
-EncryptionKeyAccessDenied(String),
 ///<p>An encryption integrity check failed.</p>
 EncryptionIntegrityChecksFailed(String),
-///<p>A repository name is required but was not specified.</p>
-RepositoryNameRequired(String),
-///<p>The encryption key is not available.</p>
-EncryptionKeyUnavailable(String),
+///<p>An encryption key could not be accessed.</p>
+EncryptionKeyAccessDenied(String),
+///<p>The encryption key is disabled.</p>
+EncryptionKeyDisabled(String),
 ///<p>No encryption key was found.</p>
 EncryptionKeyNotFound(String),
+///<p>The encryption key is not available.</p>
+EncryptionKeyUnavailable(String),
 ///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
-InvalidRepositoryName(String),/// An error occurred dispatching the HTTP request
+InvalidRepositoryName(String),
+///<p>The specified repository does not exist.</p>
+RepositoryDoesNotExist(String),
+///<p>A repository name is required but was not specified.</p>
+RepositoryNameRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1010,7 +1176,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EncryptionIntegrityChecksFailedException" => GetRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(error_message)),"RepositoryDoesNotExistException" => GetRepositoryTriggersError::RepositoryDoesNotExist(String::from(error_message)),"EncryptionKeyUnavailableException" => GetRepositoryTriggersError::EncryptionKeyUnavailable(String::from(error_message)),"EncryptionKeyAccessDeniedException" => GetRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(error_message)),"EncryptionKeyDisabledException" => GetRepositoryTriggersError::EncryptionKeyDisabled(String::from(error_message)),"RepositoryNameRequiredException" => GetRepositoryTriggersError::RepositoryNameRequired(String::from(error_message)),"InvalidRepositoryNameException" => GetRepositoryTriggersError::InvalidRepositoryName(String::from(error_message)),"EncryptionKeyNotFoundException" => GetRepositoryTriggersError::EncryptionKeyNotFound(String::from(error_message)),"ValidationException" => GetRepositoryTriggersError::Validation(error_message.to_string()),_ => GetRepositoryTriggersError::Unknown(String::from(body))
+                                    "EncryptionIntegrityChecksFailedException" => GetRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => GetRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => GetRepositoryTriggersError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => GetRepositoryTriggersError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => GetRepositoryTriggersError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidRepositoryNameException" => GetRepositoryTriggersError::InvalidRepositoryName(String::from(error_message)),
+"RepositoryDoesNotExistException" => GetRepositoryTriggersError::RepositoryDoesNotExist(String::from(error_message)),
+"RepositoryNameRequiredException" => GetRepositoryTriggersError::RepositoryNameRequired(String::from(error_message)),
+"ValidationException" => GetRepositoryTriggersError::Validation(error_message.to_string()),
+_ => GetRepositoryTriggersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetRepositoryTriggersError::Unknown(String::from(body))
@@ -1041,7 +1216,18 @@ Unknown(String)
                 impl Error for GetRepositoryTriggersError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => cause,GetRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => cause,GetRepositoryTriggersError::RepositoryNameRequired(ref cause) => cause,GetRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => cause,GetRepositoryTriggersError::InvalidRepositoryName(ref cause) => cause,GetRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => cause,GetRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => cause,GetRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => cause,GetRepositoryTriggersError::Validation(ref cause) => cause,GetRepositoryTriggersError::Credentials(ref err) => err.description(),GetRepositoryTriggersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetRepositoryTriggersError::Unknown(ref cause) => cause
+                            GetRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+GetRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => cause,
+GetRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => cause,
+GetRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => cause,
+GetRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => cause,
+GetRepositoryTriggersError::InvalidRepositoryName(ref cause) => cause,
+GetRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => cause,
+GetRepositoryTriggersError::RepositoryNameRequired(ref cause) => cause,
+GetRepositoryTriggersError::Validation(ref cause) => cause,
+GetRepositoryTriggersError::Credentials(ref err) => err.description(),
+GetRepositoryTriggersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetRepositoryTriggersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1049,24 +1235,24 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListBranchesError {
                     
-///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
-InvalidRepositoryName(String),
-///<p>The encryption key is not available.</p>
-EncryptionKeyUnavailable(String),
-///<p>The encryption key is disabled.</p>
-EncryptionKeyDisabled(String),
-///<p>The specified repository does not exist.</p>
-RepositoryDoesNotExist(String),
-///<p>No encryption key was found.</p>
-EncryptionKeyNotFound(String),
-///<p>An encryption key could not be accessed.</p>
-EncryptionKeyAccessDenied(String),
 ///<p>An encryption integrity check failed.</p>
 EncryptionIntegrityChecksFailed(String),
-///<p>A repository name is required but was not specified.</p>
-RepositoryNameRequired(String),
+///<p>An encryption key could not be accessed.</p>
+EncryptionKeyAccessDenied(String),
+///<p>The encryption key is disabled.</p>
+EncryptionKeyDisabled(String),
+///<p>No encryption key was found.</p>
+EncryptionKeyNotFound(String),
+///<p>The encryption key is not available.</p>
+EncryptionKeyUnavailable(String),
 ///<p>The specified continuation token is not valid.</p>
-InvalidContinuationToken(String),/// An error occurred dispatching the HTTP request
+InvalidContinuationToken(String),
+///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
+InvalidRepositoryName(String),
+///<p>The specified repository does not exist.</p>
+RepositoryDoesNotExist(String),
+///<p>A repository name is required but was not specified.</p>
+RepositoryNameRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1085,7 +1271,17 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryDoesNotExistException" => ListBranchesError::RepositoryDoesNotExist(String::from(error_message)),"EncryptionKeyDisabledException" => ListBranchesError::EncryptionKeyDisabled(String::from(error_message)),"EncryptionIntegrityChecksFailedException" => ListBranchesError::EncryptionIntegrityChecksFailed(String::from(error_message)),"InvalidRepositoryNameException" => ListBranchesError::InvalidRepositoryName(String::from(error_message)),"EncryptionKeyUnavailableException" => ListBranchesError::EncryptionKeyUnavailable(String::from(error_message)),"RepositoryNameRequiredException" => ListBranchesError::RepositoryNameRequired(String::from(error_message)),"EncryptionKeyAccessDeniedException" => ListBranchesError::EncryptionKeyAccessDenied(String::from(error_message)),"InvalidContinuationTokenException" => ListBranchesError::InvalidContinuationToken(String::from(error_message)),"EncryptionKeyNotFoundException" => ListBranchesError::EncryptionKeyNotFound(String::from(error_message)),"ValidationException" => ListBranchesError::Validation(error_message.to_string()),_ => ListBranchesError::Unknown(String::from(body))
+                                    "EncryptionIntegrityChecksFailedException" => ListBranchesError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => ListBranchesError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => ListBranchesError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => ListBranchesError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => ListBranchesError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidContinuationTokenException" => ListBranchesError::InvalidContinuationToken(String::from(error_message)),
+"InvalidRepositoryNameException" => ListBranchesError::InvalidRepositoryName(String::from(error_message)),
+"RepositoryDoesNotExistException" => ListBranchesError::RepositoryDoesNotExist(String::from(error_message)),
+"RepositoryNameRequiredException" => ListBranchesError::RepositoryNameRequired(String::from(error_message)),
+"ValidationException" => ListBranchesError::Validation(error_message.to_string()),
+_ => ListBranchesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListBranchesError::Unknown(String::from(body))
@@ -1116,7 +1312,19 @@ Unknown(String)
                 impl Error for ListBranchesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListBranchesError::RepositoryNameRequired(ref cause) => cause,ListBranchesError::EncryptionKeyDisabled(ref cause) => cause,ListBranchesError::RepositoryDoesNotExist(ref cause) => cause,ListBranchesError::EncryptionKeyUnavailable(ref cause) => cause,ListBranchesError::EncryptionIntegrityChecksFailed(ref cause) => cause,ListBranchesError::InvalidContinuationToken(ref cause) => cause,ListBranchesError::InvalidRepositoryName(ref cause) => cause,ListBranchesError::EncryptionKeyAccessDenied(ref cause) => cause,ListBranchesError::EncryptionKeyNotFound(ref cause) => cause,ListBranchesError::Validation(ref cause) => cause,ListBranchesError::Credentials(ref err) => err.description(),ListBranchesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListBranchesError::Unknown(ref cause) => cause
+                            ListBranchesError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+ListBranchesError::EncryptionKeyAccessDenied(ref cause) => cause,
+ListBranchesError::EncryptionKeyDisabled(ref cause) => cause,
+ListBranchesError::EncryptionKeyNotFound(ref cause) => cause,
+ListBranchesError::EncryptionKeyUnavailable(ref cause) => cause,
+ListBranchesError::InvalidContinuationToken(ref cause) => cause,
+ListBranchesError::InvalidRepositoryName(ref cause) => cause,
+ListBranchesError::RepositoryDoesNotExist(ref cause) => cause,
+ListBranchesError::RepositoryNameRequired(ref cause) => cause,
+ListBranchesError::Validation(ref cause) => cause,
+ListBranchesError::Credentials(ref err) => err.description(),
+ListBranchesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListBranchesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1124,10 +1332,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListRepositoriesError {
                     
-///<p>The specified sort order is not valid.</p>
-InvalidOrder(String),
 ///<p>The specified continuation token is not valid.</p>
 InvalidContinuationToken(String),
+///<p>The specified sort order is not valid.</p>
+InvalidOrder(String),
 ///<p>The specified sort by value is not valid.</p>
 InvalidSortBy(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1148,7 +1356,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidSortByException" => ListRepositoriesError::InvalidSortBy(String::from(error_message)),"InvalidContinuationTokenException" => ListRepositoriesError::InvalidContinuationToken(String::from(error_message)),"InvalidOrderException" => ListRepositoriesError::InvalidOrder(String::from(error_message)),"ValidationException" => ListRepositoriesError::Validation(error_message.to_string()),_ => ListRepositoriesError::Unknown(String::from(body))
+                                    "InvalidContinuationTokenException" => ListRepositoriesError::InvalidContinuationToken(String::from(error_message)),
+"InvalidOrderException" => ListRepositoriesError::InvalidOrder(String::from(error_message)),
+"InvalidSortByException" => ListRepositoriesError::InvalidSortBy(String::from(error_message)),
+"ValidationException" => ListRepositoriesError::Validation(error_message.to_string()),
+_ => ListRepositoriesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListRepositoriesError::Unknown(String::from(body))
@@ -1179,7 +1391,13 @@ Unknown(String)
                 impl Error for ListRepositoriesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListRepositoriesError::InvalidOrder(ref cause) => cause,ListRepositoriesError::InvalidSortBy(ref cause) => cause,ListRepositoriesError::InvalidContinuationToken(ref cause) => cause,ListRepositoriesError::Validation(ref cause) => cause,ListRepositoriesError::Credentials(ref err) => err.description(),ListRepositoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListRepositoriesError::Unknown(ref cause) => cause
+                            ListRepositoriesError::InvalidContinuationToken(ref cause) => cause,
+ListRepositoriesError::InvalidOrder(ref cause) => cause,
+ListRepositoriesError::InvalidSortBy(ref cause) => cause,
+ListRepositoriesError::Validation(ref cause) => cause,
+ListRepositoriesError::Credentials(ref err) => err.description(),
+ListRepositoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListRepositoriesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1187,48 +1405,48 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutRepositoryTriggersError {
                     
-///<p>No encryption key was found.</p>
-EncryptionKeyNotFound(String),
-///<p>The number of triggers allowed for the repository was exceeded.</p>
-MaximumRepositoryTriggersExceeded(String),
-///<p>A name for the trigger is required but was not specified.</p>
-RepositoryTriggerNameRequired(String),
-///<p>The number of branches for the trigger was exceeded. </p>
-MaximumBranchesExceeded(String),
-///<p>The region for the trigger target does not match the region for the repository. Triggers must be created in the same region as the target for the trigger.</p>
-InvalidRepositoryTriggerRegion(String),
-///<p>The specified repository does not exist.</p>
-RepositoryDoesNotExist(String),
-///<p>One or more branch names specified for the trigger is not valid.</p>
-InvalidRepositoryTriggerBranchName(String),
-///<p>The encryption key is disabled.</p>
-EncryptionKeyDisabled(String),
-///<p>At least one branch name is required but was not specified in the trigger configuration.</p>
-RepositoryTriggerBranchNameListRequired(String),
-///<p>The Amazon Resource Name (ARN) for the trigger is not valid for the specified destination. The most common reason for this error is that the ARN does not meet the requirements for the service type.</p>
-InvalidRepositoryTriggerDestinationArn(String),
-///<p>The encryption key is not available.</p>
-EncryptionKeyUnavailable(String),
-///<p>The custom data provided for the trigger is not valid.</p>
-InvalidRepositoryTriggerCustomData(String),
-///<p>At least one event for the trigger is required but was not specified.</p>
-RepositoryTriggerEventsListRequired(String),
-///<p>An encryption key could not be accessed.</p>
-EncryptionKeyAccessDenied(String),
 ///<p>An encryption integrity check failed.</p>
 EncryptionIntegrityChecksFailed(String),
+///<p>An encryption key could not be accessed.</p>
+EncryptionKeyAccessDenied(String),
+///<p>The encryption key is disabled.</p>
+EncryptionKeyDisabled(String),
+///<p>No encryption key was found.</p>
+EncryptionKeyNotFound(String),
+///<p>The encryption key is not available.</p>
+EncryptionKeyUnavailable(String),
 ///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
 InvalidRepositoryName(String),
-///<p>The list of triggers for the repository is required but was not specified.</p>
-RepositoryTriggersListRequired(String),
-///<p>The name of the trigger is not valid.</p>
-InvalidRepositoryTriggerName(String),
+///<p>One or more branch names specified for the trigger is not valid.</p>
+InvalidRepositoryTriggerBranchName(String),
+///<p>The custom data provided for the trigger is not valid.</p>
+InvalidRepositoryTriggerCustomData(String),
+///<p>The Amazon Resource Name (ARN) for the trigger is not valid for the specified destination. The most common reason for this error is that the ARN does not meet the requirements for the service type.</p>
+InvalidRepositoryTriggerDestinationArn(String),
 ///<p>One or more events specified for the trigger is not valid. Check to make sure that all events specified match the requirements for allowed events.</p>
 InvalidRepositoryTriggerEvents(String),
+///<p>The name of the trigger is not valid.</p>
+InvalidRepositoryTriggerName(String),
+///<p>The region for the trigger target does not match the region for the repository. Triggers must be created in the same region as the target for the trigger.</p>
+InvalidRepositoryTriggerRegion(String),
+///<p>The number of branches for the trigger was exceeded. </p>
+MaximumBranchesExceeded(String),
+///<p>The number of triggers allowed for the repository was exceeded.</p>
+MaximumRepositoryTriggersExceeded(String),
+///<p>The specified repository does not exist.</p>
+RepositoryDoesNotExist(String),
 ///<p>A repository name is required but was not specified.</p>
 RepositoryNameRequired(String),
+///<p>At least one branch name is required but was not specified in the trigger configuration.</p>
+RepositoryTriggerBranchNameListRequired(String),
 ///<p>A destination ARN for the target service for the trigger is required but was not specified. </p>
-RepositoryTriggerDestinationArnRequired(String),/// An error occurred dispatching the HTTP request
+RepositoryTriggerDestinationArnRequired(String),
+///<p>At least one event for the trigger is required but was not specified.</p>
+RepositoryTriggerEventsListRequired(String),
+///<p>A name for the trigger is required but was not specified.</p>
+RepositoryTriggerNameRequired(String),
+///<p>The list of triggers for the repository is required but was not specified.</p>
+RepositoryTriggersListRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1247,7 +1465,29 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EncryptionKeyUnavailableException" => PutRepositoryTriggersError::EncryptionKeyUnavailable(String::from(error_message)),"EncryptionKeyAccessDeniedException" => PutRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(error_message)),"InvalidRepositoryTriggerRegionException" => PutRepositoryTriggersError::InvalidRepositoryTriggerRegion(String::from(error_message)),"RepositoryTriggerBranchNameListRequiredException" => PutRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(String::from(error_message)),"RepositoryNameRequiredException" => PutRepositoryTriggersError::RepositoryNameRequired(String::from(error_message)),"MaximumRepositoryTriggersExceededException" => PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(String::from(error_message)),"EncryptionIntegrityChecksFailedException" => PutRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(error_message)),"InvalidRepositoryTriggerDestinationArnException" => PutRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(String::from(error_message)),"RepositoryTriggerEventsListRequiredException" => PutRepositoryTriggersError::RepositoryTriggerEventsListRequired(String::from(error_message)),"MaximumBranchesExceededException" => PutRepositoryTriggersError::MaximumBranchesExceeded(String::from(error_message)),"EncryptionKeyNotFoundException" => PutRepositoryTriggersError::EncryptionKeyNotFound(String::from(error_message)),"RepositoryTriggerDestinationArnRequiredException" => PutRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(String::from(error_message)),"InvalidRepositoryTriggerEventsException" => PutRepositoryTriggersError::InvalidRepositoryTriggerEvents(String::from(error_message)),"InvalidRepositoryTriggerNameException" => PutRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(error_message)),"InvalidRepositoryNameException" => PutRepositoryTriggersError::InvalidRepositoryName(String::from(error_message)),"RepositoryTriggersListRequiredException" => PutRepositoryTriggersError::RepositoryTriggersListRequired(String::from(error_message)),"InvalidRepositoryTriggerBranchNameException" => PutRepositoryTriggersError::InvalidRepositoryTriggerBranchName(String::from(error_message)),"EncryptionKeyDisabledException" => PutRepositoryTriggersError::EncryptionKeyDisabled(String::from(error_message)),"InvalidRepositoryTriggerCustomDataException" => PutRepositoryTriggersError::InvalidRepositoryTriggerCustomData(String::from(error_message)),"RepositoryTriggerNameRequiredException" => PutRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(error_message)),"RepositoryDoesNotExistException" => PutRepositoryTriggersError::RepositoryDoesNotExist(String::from(error_message)),"ValidationException" => PutRepositoryTriggersError::Validation(error_message.to_string()),_ => PutRepositoryTriggersError::Unknown(String::from(body))
+                                    "EncryptionIntegrityChecksFailedException" => PutRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => PutRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => PutRepositoryTriggersError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => PutRepositoryTriggersError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => PutRepositoryTriggersError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidRepositoryNameException" => PutRepositoryTriggersError::InvalidRepositoryName(String::from(error_message)),
+"InvalidRepositoryTriggerBranchNameException" => PutRepositoryTriggersError::InvalidRepositoryTriggerBranchName(String::from(error_message)),
+"InvalidRepositoryTriggerCustomDataException" => PutRepositoryTriggersError::InvalidRepositoryTriggerCustomData(String::from(error_message)),
+"InvalidRepositoryTriggerDestinationArnException" => PutRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(String::from(error_message)),
+"InvalidRepositoryTriggerEventsException" => PutRepositoryTriggersError::InvalidRepositoryTriggerEvents(String::from(error_message)),
+"InvalidRepositoryTriggerNameException" => PutRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(error_message)),
+"InvalidRepositoryTriggerRegionException" => PutRepositoryTriggersError::InvalidRepositoryTriggerRegion(String::from(error_message)),
+"MaximumBranchesExceededException" => PutRepositoryTriggersError::MaximumBranchesExceeded(String::from(error_message)),
+"MaximumRepositoryTriggersExceededException" => PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(String::from(error_message)),
+"RepositoryDoesNotExistException" => PutRepositoryTriggersError::RepositoryDoesNotExist(String::from(error_message)),
+"RepositoryNameRequiredException" => PutRepositoryTriggersError::RepositoryNameRequired(String::from(error_message)),
+"RepositoryTriggerBranchNameListRequiredException" => PutRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(String::from(error_message)),
+"RepositoryTriggerDestinationArnRequiredException" => PutRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(String::from(error_message)),
+"RepositoryTriggerEventsListRequiredException" => PutRepositoryTriggersError::RepositoryTriggerEventsListRequired(String::from(error_message)),
+"RepositoryTriggerNameRequiredException" => PutRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(error_message)),
+"RepositoryTriggersListRequiredException" => PutRepositoryTriggersError::RepositoryTriggersListRequired(String::from(error_message)),
+"ValidationException" => PutRepositoryTriggersError::Validation(error_message.to_string()),
+_ => PutRepositoryTriggersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutRepositoryTriggersError::Unknown(String::from(body))
@@ -1278,7 +1518,31 @@ Unknown(String)
                 impl Error for PutRepositoryTriggersError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => cause,PutRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => cause,PutRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(ref cause) => cause,PutRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(ref cause) => cause,PutRepositoryTriggersError::InvalidRepositoryTriggerBranchName(ref cause) => cause,PutRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => cause,PutRepositoryTriggersError::RepositoryTriggersListRequired(ref cause) => cause,PutRepositoryTriggersError::RepositoryNameRequired(ref cause) => cause,PutRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(ref cause) => cause,PutRepositoryTriggersError::RepositoryTriggerNameRequired(ref cause) => cause,PutRepositoryTriggersError::RepositoryTriggerEventsListRequired(ref cause) => cause,PutRepositoryTriggersError::InvalidRepositoryTriggerName(ref cause) => cause,PutRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => cause,PutRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => cause,PutRepositoryTriggersError::MaximumBranchesExceeded(ref cause) => cause,PutRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => cause,PutRepositoryTriggersError::InvalidRepositoryTriggerEvents(ref cause) => cause,PutRepositoryTriggersError::InvalidRepositoryName(ref cause) => cause,PutRepositoryTriggersError::InvalidRepositoryTriggerRegion(ref cause) => cause,PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(ref cause) => cause,PutRepositoryTriggersError::InvalidRepositoryTriggerCustomData(ref cause) => cause,PutRepositoryTriggersError::Validation(ref cause) => cause,PutRepositoryTriggersError::Credentials(ref err) => err.description(),PutRepositoryTriggersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutRepositoryTriggersError::Unknown(ref cause) => cause
+                            PutRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+PutRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => cause,
+PutRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => cause,
+PutRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => cause,
+PutRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => cause,
+PutRepositoryTriggersError::InvalidRepositoryName(ref cause) => cause,
+PutRepositoryTriggersError::InvalidRepositoryTriggerBranchName(ref cause) => cause,
+PutRepositoryTriggersError::InvalidRepositoryTriggerCustomData(ref cause) => cause,
+PutRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(ref cause) => cause,
+PutRepositoryTriggersError::InvalidRepositoryTriggerEvents(ref cause) => cause,
+PutRepositoryTriggersError::InvalidRepositoryTriggerName(ref cause) => cause,
+PutRepositoryTriggersError::InvalidRepositoryTriggerRegion(ref cause) => cause,
+PutRepositoryTriggersError::MaximumBranchesExceeded(ref cause) => cause,
+PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(ref cause) => cause,
+PutRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => cause,
+PutRepositoryTriggersError::RepositoryNameRequired(ref cause) => cause,
+PutRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(ref cause) => cause,
+PutRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(ref cause) => cause,
+PutRepositoryTriggersError::RepositoryTriggerEventsListRequired(ref cause) => cause,
+PutRepositoryTriggersError::RepositoryTriggerNameRequired(ref cause) => cause,
+PutRepositoryTriggersError::RepositoryTriggersListRequired(ref cause) => cause,
+PutRepositoryTriggersError::Validation(ref cause) => cause,
+PutRepositoryTriggersError::Credentials(ref err) => err.description(),
+PutRepositoryTriggersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutRepositoryTriggersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1286,48 +1550,48 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum TestRepositoryTriggersError {
                     
-///<p>The region for the trigger target does not match the region for the repository. Triggers must be created in the same region as the target for the trigger.</p>
-InvalidRepositoryTriggerRegion(String),
-///<p>The custom data provided for the trigger is not valid.</p>
-InvalidRepositoryTriggerCustomData(String),
-///<p>The specified repository does not exist.</p>
-RepositoryDoesNotExist(String),
-///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
-InvalidRepositoryName(String),
-///<p>The name of the trigger is not valid.</p>
-InvalidRepositoryTriggerName(String),
 ///<p>An encryption integrity check failed.</p>
 EncryptionIntegrityChecksFailed(String),
-///<p>The list of triggers for the repository is required but was not specified.</p>
-RepositoryTriggersListRequired(String),
-///<p>The number of triggers allowed for the repository was exceeded.</p>
-MaximumRepositoryTriggersExceeded(String),
-///<p>A repository name is required but was not specified.</p>
-RepositoryNameRequired(String),
-///<p>The encryption key is disabled.</p>
-EncryptionKeyDisabled(String),
-///<p>The encryption key is not available.</p>
-EncryptionKeyUnavailable(String),
-///<p>At least one branch name is required but was not specified in the trigger configuration.</p>
-RepositoryTriggerBranchNameListRequired(String),
 ///<p>An encryption key could not be accessed.</p>
 EncryptionKeyAccessDenied(String),
+///<p>The encryption key is disabled.</p>
+EncryptionKeyDisabled(String),
 ///<p>No encryption key was found.</p>
 EncryptionKeyNotFound(String),
-///<p>The Amazon Resource Name (ARN) for the trigger is not valid for the specified destination. The most common reason for this error is that the ARN does not meet the requirements for the service type.</p>
-InvalidRepositoryTriggerDestinationArn(String),
+///<p>The encryption key is not available.</p>
+EncryptionKeyUnavailable(String),
+///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
+InvalidRepositoryName(String),
 ///<p>One or more branch names specified for the trigger is not valid.</p>
 InvalidRepositoryTriggerBranchName(String),
+///<p>The custom data provided for the trigger is not valid.</p>
+InvalidRepositoryTriggerCustomData(String),
+///<p>The Amazon Resource Name (ARN) for the trigger is not valid for the specified destination. The most common reason for this error is that the ARN does not meet the requirements for the service type.</p>
+InvalidRepositoryTriggerDestinationArn(String),
+///<p>One or more events specified for the trigger is not valid. Check to make sure that all events specified match the requirements for allowed events.</p>
+InvalidRepositoryTriggerEvents(String),
+///<p>The name of the trigger is not valid.</p>
+InvalidRepositoryTriggerName(String),
+///<p>The region for the trigger target does not match the region for the repository. Triggers must be created in the same region as the target for the trigger.</p>
+InvalidRepositoryTriggerRegion(String),
 ///<p>The number of branches for the trigger was exceeded. </p>
 MaximumBranchesExceeded(String),
+///<p>The number of triggers allowed for the repository was exceeded.</p>
+MaximumRepositoryTriggersExceeded(String),
+///<p>The specified repository does not exist.</p>
+RepositoryDoesNotExist(String),
+///<p>A repository name is required but was not specified.</p>
+RepositoryNameRequired(String),
+///<p>At least one branch name is required but was not specified in the trigger configuration.</p>
+RepositoryTriggerBranchNameListRequired(String),
+///<p>A destination ARN for the target service for the trigger is required but was not specified. </p>
+RepositoryTriggerDestinationArnRequired(String),
 ///<p>At least one event for the trigger is required but was not specified.</p>
 RepositoryTriggerEventsListRequired(String),
 ///<p>A name for the trigger is required but was not specified.</p>
 RepositoryTriggerNameRequired(String),
-///<p>One or more events specified for the trigger is not valid. Check to make sure that all events specified match the requirements for allowed events.</p>
-InvalidRepositoryTriggerEvents(String),
-///<p>A destination ARN for the target service for the trigger is required but was not specified. </p>
-RepositoryTriggerDestinationArnRequired(String),/// An error occurred dispatching the HTTP request
+///<p>The list of triggers for the repository is required but was not specified.</p>
+RepositoryTriggersListRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1346,7 +1610,29 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "RepositoryTriggerEventsListRequiredException" => TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(String::from(error_message)),"EncryptionKeyUnavailableException" => TestRepositoryTriggersError::EncryptionKeyUnavailable(String::from(error_message)),"RepositoryTriggerNameRequiredException" => TestRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(error_message)),"EncryptionKeyDisabledException" => TestRepositoryTriggersError::EncryptionKeyDisabled(String::from(error_message)),"EncryptionKeyAccessDeniedException" => TestRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(error_message)),"InvalidRepositoryNameException" => TestRepositoryTriggersError::InvalidRepositoryName(String::from(error_message)),"RepositoryDoesNotExistException" => TestRepositoryTriggersError::RepositoryDoesNotExist(String::from(error_message)),"InvalidRepositoryTriggerDestinationArnException" => TestRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(String::from(error_message)),"InvalidRepositoryTriggerBranchNameException" => TestRepositoryTriggersError::InvalidRepositoryTriggerBranchName(String::from(error_message)),"EncryptionIntegrityChecksFailedException" => TestRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(error_message)),"InvalidRepositoryTriggerCustomDataException" => TestRepositoryTriggersError::InvalidRepositoryTriggerCustomData(String::from(error_message)),"RepositoryTriggerDestinationArnRequiredException" => TestRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(String::from(error_message)),"RepositoryNameRequiredException" => TestRepositoryTriggersError::RepositoryNameRequired(String::from(error_message)),"RepositoryTriggersListRequiredException" => TestRepositoryTriggersError::RepositoryTriggersListRequired(String::from(error_message)),"InvalidRepositoryTriggerNameException" => TestRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(error_message)),"RepositoryTriggerBranchNameListRequiredException" => TestRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(String::from(error_message)),"EncryptionKeyNotFoundException" => TestRepositoryTriggersError::EncryptionKeyNotFound(String::from(error_message)),"MaximumBranchesExceededException" => TestRepositoryTriggersError::MaximumBranchesExceeded(String::from(error_message)),"MaximumRepositoryTriggersExceededException" => TestRepositoryTriggersError::MaximumRepositoryTriggersExceeded(String::from(error_message)),"InvalidRepositoryTriggerRegionException" => TestRepositoryTriggersError::InvalidRepositoryTriggerRegion(String::from(error_message)),"InvalidRepositoryTriggerEventsException" => TestRepositoryTriggersError::InvalidRepositoryTriggerEvents(String::from(error_message)),"ValidationException" => TestRepositoryTriggersError::Validation(error_message.to_string()),_ => TestRepositoryTriggersError::Unknown(String::from(body))
+                                    "EncryptionIntegrityChecksFailedException" => TestRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => TestRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => TestRepositoryTriggersError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => TestRepositoryTriggersError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => TestRepositoryTriggersError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidRepositoryNameException" => TestRepositoryTriggersError::InvalidRepositoryName(String::from(error_message)),
+"InvalidRepositoryTriggerBranchNameException" => TestRepositoryTriggersError::InvalidRepositoryTriggerBranchName(String::from(error_message)),
+"InvalidRepositoryTriggerCustomDataException" => TestRepositoryTriggersError::InvalidRepositoryTriggerCustomData(String::from(error_message)),
+"InvalidRepositoryTriggerDestinationArnException" => TestRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(String::from(error_message)),
+"InvalidRepositoryTriggerEventsException" => TestRepositoryTriggersError::InvalidRepositoryTriggerEvents(String::from(error_message)),
+"InvalidRepositoryTriggerNameException" => TestRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(error_message)),
+"InvalidRepositoryTriggerRegionException" => TestRepositoryTriggersError::InvalidRepositoryTriggerRegion(String::from(error_message)),
+"MaximumBranchesExceededException" => TestRepositoryTriggersError::MaximumBranchesExceeded(String::from(error_message)),
+"MaximumRepositoryTriggersExceededException" => TestRepositoryTriggersError::MaximumRepositoryTriggersExceeded(String::from(error_message)),
+"RepositoryDoesNotExistException" => TestRepositoryTriggersError::RepositoryDoesNotExist(String::from(error_message)),
+"RepositoryNameRequiredException" => TestRepositoryTriggersError::RepositoryNameRequired(String::from(error_message)),
+"RepositoryTriggerBranchNameListRequiredException" => TestRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(String::from(error_message)),
+"RepositoryTriggerDestinationArnRequiredException" => TestRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(String::from(error_message)),
+"RepositoryTriggerEventsListRequiredException" => TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(String::from(error_message)),
+"RepositoryTriggerNameRequiredException" => TestRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(error_message)),
+"RepositoryTriggersListRequiredException" => TestRepositoryTriggersError::RepositoryTriggersListRequired(String::from(error_message)),
+"ValidationException" => TestRepositoryTriggersError::Validation(error_message.to_string()),
+_ => TestRepositoryTriggersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => TestRepositoryTriggersError::Unknown(String::from(body))
@@ -1377,7 +1663,31 @@ Unknown(String)
                 impl Error for TestRepositoryTriggersError {
                     fn description(&self) -> &str {
                         match *self {
-                            TestRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(ref cause) => cause,TestRepositoryTriggersError::MaximumBranchesExceeded(ref cause) => cause,TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(ref cause) => cause,TestRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => cause,TestRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => cause,TestRepositoryTriggersError::InvalidRepositoryTriggerRegion(ref cause) => cause,TestRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(ref cause) => cause,TestRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => cause,TestRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => cause,TestRepositoryTriggersError::RepositoryNameRequired(ref cause) => cause,TestRepositoryTriggersError::InvalidRepositoryTriggerEvents(ref cause) => cause,TestRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => cause,TestRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(ref cause) => cause,TestRepositoryTriggersError::InvalidRepositoryTriggerBranchName(ref cause) => cause,TestRepositoryTriggersError::InvalidRepositoryTriggerName(ref cause) => cause,TestRepositoryTriggersError::InvalidRepositoryName(ref cause) => cause,TestRepositoryTriggersError::RepositoryTriggerNameRequired(ref cause) => cause,TestRepositoryTriggersError::InvalidRepositoryTriggerCustomData(ref cause) => cause,TestRepositoryTriggersError::MaximumRepositoryTriggersExceeded(ref cause) => cause,TestRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => cause,TestRepositoryTriggersError::RepositoryTriggersListRequired(ref cause) => cause,TestRepositoryTriggersError::Validation(ref cause) => cause,TestRepositoryTriggersError::Credentials(ref err) => err.description(),TestRepositoryTriggersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),TestRepositoryTriggersError::Unknown(ref cause) => cause
+                            TestRepositoryTriggersError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+TestRepositoryTriggersError::EncryptionKeyAccessDenied(ref cause) => cause,
+TestRepositoryTriggersError::EncryptionKeyDisabled(ref cause) => cause,
+TestRepositoryTriggersError::EncryptionKeyNotFound(ref cause) => cause,
+TestRepositoryTriggersError::EncryptionKeyUnavailable(ref cause) => cause,
+TestRepositoryTriggersError::InvalidRepositoryName(ref cause) => cause,
+TestRepositoryTriggersError::InvalidRepositoryTriggerBranchName(ref cause) => cause,
+TestRepositoryTriggersError::InvalidRepositoryTriggerCustomData(ref cause) => cause,
+TestRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(ref cause) => cause,
+TestRepositoryTriggersError::InvalidRepositoryTriggerEvents(ref cause) => cause,
+TestRepositoryTriggersError::InvalidRepositoryTriggerName(ref cause) => cause,
+TestRepositoryTriggersError::InvalidRepositoryTriggerRegion(ref cause) => cause,
+TestRepositoryTriggersError::MaximumBranchesExceeded(ref cause) => cause,
+TestRepositoryTriggersError::MaximumRepositoryTriggersExceeded(ref cause) => cause,
+TestRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => cause,
+TestRepositoryTriggersError::RepositoryNameRequired(ref cause) => cause,
+TestRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(ref cause) => cause,
+TestRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(ref cause) => cause,
+TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(ref cause) => cause,
+TestRepositoryTriggersError::RepositoryTriggerNameRequired(ref cause) => cause,
+TestRepositoryTriggersError::RepositoryTriggersListRequired(ref cause) => cause,
+TestRepositoryTriggersError::Validation(ref cause) => cause,
+TestRepositoryTriggersError::Credentials(ref err) => err.description(),
+TestRepositoryTriggersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+TestRepositoryTriggersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1385,28 +1695,28 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateDefaultBranchError {
                     
-///<p>The specified repository does not exist.</p>
-RepositoryDoesNotExist(String),
-///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
-InvalidRepositoryName(String),
-///<p>A repository name is required but was not specified.</p>
-RepositoryNameRequired(String),
+///<p>The specified branch does not exist.</p>
+BranchDoesNotExist(String),
+///<p>A branch name is required but was not specified.</p>
+BranchNameRequired(String),
+///<p>An encryption integrity check failed.</p>
+EncryptionIntegrityChecksFailed(String),
 ///<p>An encryption key could not be accessed.</p>
 EncryptionKeyAccessDenied(String),
 ///<p>The encryption key is disabled.</p>
 EncryptionKeyDisabled(String),
-///<p>A branch name is required but was not specified.</p>
-BranchNameRequired(String),
-///<p>The specified branch name is not valid.</p>
-InvalidBranchName(String),
-///<p>The specified branch does not exist.</p>
-BranchDoesNotExist(String),
-///<p>An encryption integrity check failed.</p>
-EncryptionIntegrityChecksFailed(String),
 ///<p>No encryption key was found.</p>
 EncryptionKeyNotFound(String),
 ///<p>The encryption key is not available.</p>
-EncryptionKeyUnavailable(String),/// An error occurred dispatching the HTTP request
+EncryptionKeyUnavailable(String),
+///<p>The specified branch name is not valid.</p>
+InvalidBranchName(String),
+///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
+InvalidRepositoryName(String),
+///<p>The specified repository does not exist.</p>
+RepositoryDoesNotExist(String),
+///<p>A repository name is required but was not specified.</p>
+RepositoryNameRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1425,7 +1735,19 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EncryptionKeyNotFoundException" => UpdateDefaultBranchError::EncryptionKeyNotFound(String::from(error_message)),"BranchDoesNotExistException" => UpdateDefaultBranchError::BranchDoesNotExist(String::from(error_message)),"RepositoryDoesNotExistException" => UpdateDefaultBranchError::RepositoryDoesNotExist(String::from(error_message)),"EncryptionIntegrityChecksFailedException" => UpdateDefaultBranchError::EncryptionIntegrityChecksFailed(String::from(error_message)),"InvalidRepositoryNameException" => UpdateDefaultBranchError::InvalidRepositoryName(String::from(error_message)),"InvalidBranchNameException" => UpdateDefaultBranchError::InvalidBranchName(String::from(error_message)),"BranchNameRequiredException" => UpdateDefaultBranchError::BranchNameRequired(String::from(error_message)),"RepositoryNameRequiredException" => UpdateDefaultBranchError::RepositoryNameRequired(String::from(error_message)),"EncryptionKeyUnavailableException" => UpdateDefaultBranchError::EncryptionKeyUnavailable(String::from(error_message)),"EncryptionKeyAccessDeniedException" => UpdateDefaultBranchError::EncryptionKeyAccessDenied(String::from(error_message)),"EncryptionKeyDisabledException" => UpdateDefaultBranchError::EncryptionKeyDisabled(String::from(error_message)),"ValidationException" => UpdateDefaultBranchError::Validation(error_message.to_string()),_ => UpdateDefaultBranchError::Unknown(String::from(body))
+                                    "BranchDoesNotExistException" => UpdateDefaultBranchError::BranchDoesNotExist(String::from(error_message)),
+"BranchNameRequiredException" => UpdateDefaultBranchError::BranchNameRequired(String::from(error_message)),
+"EncryptionIntegrityChecksFailedException" => UpdateDefaultBranchError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => UpdateDefaultBranchError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => UpdateDefaultBranchError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => UpdateDefaultBranchError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => UpdateDefaultBranchError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidBranchNameException" => UpdateDefaultBranchError::InvalidBranchName(String::from(error_message)),
+"InvalidRepositoryNameException" => UpdateDefaultBranchError::InvalidRepositoryName(String::from(error_message)),
+"RepositoryDoesNotExistException" => UpdateDefaultBranchError::RepositoryDoesNotExist(String::from(error_message)),
+"RepositoryNameRequiredException" => UpdateDefaultBranchError::RepositoryNameRequired(String::from(error_message)),
+"ValidationException" => UpdateDefaultBranchError::Validation(error_message.to_string()),
+_ => UpdateDefaultBranchError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateDefaultBranchError::Unknown(String::from(body))
@@ -1456,7 +1778,21 @@ Unknown(String)
                 impl Error for UpdateDefaultBranchError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateDefaultBranchError::BranchNameRequired(ref cause) => cause,UpdateDefaultBranchError::BranchDoesNotExist(ref cause) => cause,UpdateDefaultBranchError::EncryptionKeyAccessDenied(ref cause) => cause,UpdateDefaultBranchError::RepositoryDoesNotExist(ref cause) => cause,UpdateDefaultBranchError::RepositoryNameRequired(ref cause) => cause,UpdateDefaultBranchError::InvalidRepositoryName(ref cause) => cause,UpdateDefaultBranchError::EncryptionKeyUnavailable(ref cause) => cause,UpdateDefaultBranchError::EncryptionKeyDisabled(ref cause) => cause,UpdateDefaultBranchError::EncryptionIntegrityChecksFailed(ref cause) => cause,UpdateDefaultBranchError::EncryptionKeyNotFound(ref cause) => cause,UpdateDefaultBranchError::InvalidBranchName(ref cause) => cause,UpdateDefaultBranchError::Validation(ref cause) => cause,UpdateDefaultBranchError::Credentials(ref err) => err.description(),UpdateDefaultBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateDefaultBranchError::Unknown(ref cause) => cause
+                            UpdateDefaultBranchError::BranchDoesNotExist(ref cause) => cause,
+UpdateDefaultBranchError::BranchNameRequired(ref cause) => cause,
+UpdateDefaultBranchError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+UpdateDefaultBranchError::EncryptionKeyAccessDenied(ref cause) => cause,
+UpdateDefaultBranchError::EncryptionKeyDisabled(ref cause) => cause,
+UpdateDefaultBranchError::EncryptionKeyNotFound(ref cause) => cause,
+UpdateDefaultBranchError::EncryptionKeyUnavailable(ref cause) => cause,
+UpdateDefaultBranchError::InvalidBranchName(ref cause) => cause,
+UpdateDefaultBranchError::InvalidRepositoryName(ref cause) => cause,
+UpdateDefaultBranchError::RepositoryDoesNotExist(ref cause) => cause,
+UpdateDefaultBranchError::RepositoryNameRequired(ref cause) => cause,
+UpdateDefaultBranchError::Validation(ref cause) => cause,
+UpdateDefaultBranchError::Credentials(ref err) => err.description(),
+UpdateDefaultBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateDefaultBranchError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1464,24 +1800,24 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateRepositoryDescriptionError {
                     
-///<p>A repository name is required but was not specified.</p>
-RepositoryNameRequired(String),
-///<p>The specified repository does not exist.</p>
-RepositoryDoesNotExist(String),
+///<p>An encryption integrity check failed.</p>
+EncryptionIntegrityChecksFailed(String),
 ///<p>An encryption key could not be accessed.</p>
 EncryptionKeyAccessDenied(String),
+///<p>The encryption key is disabled.</p>
+EncryptionKeyDisabled(String),
+///<p>No encryption key was found.</p>
+EncryptionKeyNotFound(String),
 ///<p>The encryption key is not available.</p>
 EncryptionKeyUnavailable(String),
 ///<p>The specified repository description is not valid.</p>
 InvalidRepositoryDescription(String),
-///<p>The encryption key is disabled.</p>
-EncryptionKeyDisabled(String),
-///<p>An encryption integrity check failed.</p>
-EncryptionIntegrityChecksFailed(String),
 ///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
 InvalidRepositoryName(String),
-///<p>No encryption key was found.</p>
-EncryptionKeyNotFound(String),/// An error occurred dispatching the HTTP request
+///<p>The specified repository does not exist.</p>
+RepositoryDoesNotExist(String),
+///<p>A repository name is required but was not specified.</p>
+RepositoryNameRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1500,7 +1836,17 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EncryptionKeyAccessDeniedException" => UpdateRepositoryDescriptionError::EncryptionKeyAccessDenied(String::from(error_message)),"EncryptionKeyUnavailableException" => UpdateRepositoryDescriptionError::EncryptionKeyUnavailable(String::from(error_message)),"RepositoryDoesNotExistException" => UpdateRepositoryDescriptionError::RepositoryDoesNotExist(String::from(error_message)),"InvalidRepositoryNameException" => UpdateRepositoryDescriptionError::InvalidRepositoryName(String::from(error_message)),"InvalidRepositoryDescriptionException" => UpdateRepositoryDescriptionError::InvalidRepositoryDescription(String::from(error_message)),"EncryptionIntegrityChecksFailedException" => UpdateRepositoryDescriptionError::EncryptionIntegrityChecksFailed(String::from(error_message)),"EncryptionKeyDisabledException" => UpdateRepositoryDescriptionError::EncryptionKeyDisabled(String::from(error_message)),"EncryptionKeyNotFoundException" => UpdateRepositoryDescriptionError::EncryptionKeyNotFound(String::from(error_message)),"RepositoryNameRequiredException" => UpdateRepositoryDescriptionError::RepositoryNameRequired(String::from(error_message)),"ValidationException" => UpdateRepositoryDescriptionError::Validation(error_message.to_string()),_ => UpdateRepositoryDescriptionError::Unknown(String::from(body))
+                                    "EncryptionIntegrityChecksFailedException" => UpdateRepositoryDescriptionError::EncryptionIntegrityChecksFailed(String::from(error_message)),
+"EncryptionKeyAccessDeniedException" => UpdateRepositoryDescriptionError::EncryptionKeyAccessDenied(String::from(error_message)),
+"EncryptionKeyDisabledException" => UpdateRepositoryDescriptionError::EncryptionKeyDisabled(String::from(error_message)),
+"EncryptionKeyNotFoundException" => UpdateRepositoryDescriptionError::EncryptionKeyNotFound(String::from(error_message)),
+"EncryptionKeyUnavailableException" => UpdateRepositoryDescriptionError::EncryptionKeyUnavailable(String::from(error_message)),
+"InvalidRepositoryDescriptionException" => UpdateRepositoryDescriptionError::InvalidRepositoryDescription(String::from(error_message)),
+"InvalidRepositoryNameException" => UpdateRepositoryDescriptionError::InvalidRepositoryName(String::from(error_message)),
+"RepositoryDoesNotExistException" => UpdateRepositoryDescriptionError::RepositoryDoesNotExist(String::from(error_message)),
+"RepositoryNameRequiredException" => UpdateRepositoryDescriptionError::RepositoryNameRequired(String::from(error_message)),
+"ValidationException" => UpdateRepositoryDescriptionError::Validation(error_message.to_string()),
+_ => UpdateRepositoryDescriptionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateRepositoryDescriptionError::Unknown(String::from(body))
@@ -1531,7 +1877,19 @@ Unknown(String)
                 impl Error for UpdateRepositoryDescriptionError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateRepositoryDescriptionError::EncryptionKeyNotFound(ref cause) => cause,UpdateRepositoryDescriptionError::InvalidRepositoryName(ref cause) => cause,UpdateRepositoryDescriptionError::EncryptionKeyUnavailable(ref cause) => cause,UpdateRepositoryDescriptionError::RepositoryDoesNotExist(ref cause) => cause,UpdateRepositoryDescriptionError::RepositoryNameRequired(ref cause) => cause,UpdateRepositoryDescriptionError::EncryptionIntegrityChecksFailed(ref cause) => cause,UpdateRepositoryDescriptionError::EncryptionKeyDisabled(ref cause) => cause,UpdateRepositoryDescriptionError::InvalidRepositoryDescription(ref cause) => cause,UpdateRepositoryDescriptionError::EncryptionKeyAccessDenied(ref cause) => cause,UpdateRepositoryDescriptionError::Validation(ref cause) => cause,UpdateRepositoryDescriptionError::Credentials(ref err) => err.description(),UpdateRepositoryDescriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateRepositoryDescriptionError::Unknown(ref cause) => cause
+                            UpdateRepositoryDescriptionError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+UpdateRepositoryDescriptionError::EncryptionKeyAccessDenied(ref cause) => cause,
+UpdateRepositoryDescriptionError::EncryptionKeyDisabled(ref cause) => cause,
+UpdateRepositoryDescriptionError::EncryptionKeyNotFound(ref cause) => cause,
+UpdateRepositoryDescriptionError::EncryptionKeyUnavailable(ref cause) => cause,
+UpdateRepositoryDescriptionError::InvalidRepositoryDescription(ref cause) => cause,
+UpdateRepositoryDescriptionError::InvalidRepositoryName(ref cause) => cause,
+UpdateRepositoryDescriptionError::RepositoryDoesNotExist(ref cause) => cause,
+UpdateRepositoryDescriptionError::RepositoryNameRequired(ref cause) => cause,
+UpdateRepositoryDescriptionError::Validation(ref cause) => cause,
+UpdateRepositoryDescriptionError::Credentials(ref err) => err.description(),
+UpdateRepositoryDescriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateRepositoryDescriptionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1539,14 +1897,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateRepositoryNameError {
                     
+///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
+InvalidRepositoryName(String),
+///<p>The specified repository does not exist.</p>
+RepositoryDoesNotExist(String),
 ///<p>The specified repository name already exists.</p>
 RepositoryNameExists(String),
 ///<p>A repository name is required but was not specified.</p>
-RepositoryNameRequired(String),
-///<p>The specified repository does not exist.</p>
-RepositoryDoesNotExist(String),
-///<p>At least one specified repository name is not valid.</p> <note><p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p></note>
-InvalidRepositoryName(String),/// An error occurred dispatching the HTTP request
+RepositoryNameRequired(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1565,7 +1923,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidRepositoryNameException" => UpdateRepositoryNameError::InvalidRepositoryName(String::from(error_message)),"RepositoryNameExistsException" => UpdateRepositoryNameError::RepositoryNameExists(String::from(error_message)),"RepositoryDoesNotExistException" => UpdateRepositoryNameError::RepositoryDoesNotExist(String::from(error_message)),"RepositoryNameRequiredException" => UpdateRepositoryNameError::RepositoryNameRequired(String::from(error_message)),"ValidationException" => UpdateRepositoryNameError::Validation(error_message.to_string()),_ => UpdateRepositoryNameError::Unknown(String::from(body))
+                                    "InvalidRepositoryNameException" => UpdateRepositoryNameError::InvalidRepositoryName(String::from(error_message)),
+"RepositoryDoesNotExistException" => UpdateRepositoryNameError::RepositoryDoesNotExist(String::from(error_message)),
+"RepositoryNameExistsException" => UpdateRepositoryNameError::RepositoryNameExists(String::from(error_message)),
+"RepositoryNameRequiredException" => UpdateRepositoryNameError::RepositoryNameRequired(String::from(error_message)),
+"ValidationException" => UpdateRepositoryNameError::Validation(error_message.to_string()),
+_ => UpdateRepositoryNameError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateRepositoryNameError::Unknown(String::from(body))
@@ -1596,7 +1959,14 @@ Unknown(String)
                 impl Error for UpdateRepositoryNameError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateRepositoryNameError::RepositoryNameExists(ref cause) => cause,UpdateRepositoryNameError::RepositoryDoesNotExist(ref cause) => cause,UpdateRepositoryNameError::RepositoryNameRequired(ref cause) => cause,UpdateRepositoryNameError::InvalidRepositoryName(ref cause) => cause,UpdateRepositoryNameError::Validation(ref cause) => cause,UpdateRepositoryNameError::Credentials(ref err) => err.description(),UpdateRepositoryNameError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateRepositoryNameError::Unknown(ref cause) => cause
+                            UpdateRepositoryNameError::InvalidRepositoryName(ref cause) => cause,
+UpdateRepositoryNameError::RepositoryDoesNotExist(ref cause) => cause,
+UpdateRepositoryNameError::RepositoryNameExists(ref cause) => cause,
+UpdateRepositoryNameError::RepositoryNameRequired(ref cause) => cause,
+UpdateRepositoryNameError::Validation(ref cause) => cause,
+UpdateRepositoryNameError::Credentials(ref err) => err.description(),
+UpdateRepositoryNameError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateRepositoryNameError::Unknown(ref cause) => cause
                         }
                     }
                  }

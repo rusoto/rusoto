@@ -6765,7 +6765,11 @@ Unknown(String)
                 impl Error for AttachInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachInstancesError::ResourceContentionFault(ref cause) => cause,AttachInstancesError::Validation(ref cause) => cause,AttachInstancesError::Credentials(ref err) => err.description(),AttachInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachInstancesError::Unknown(ref cause) => cause
+                            AttachInstancesError::ResourceContentionFault(ref cause) => cause,
+AttachInstancesError::Validation(ref cause) => cause,
+AttachInstancesError::Credentials(ref err) => err.description(),
+AttachInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6823,7 +6827,11 @@ Unknown(String)
                 impl Error for AttachLoadBalancerTargetGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => cause,AttachLoadBalancerTargetGroupsError::Validation(ref cause) => cause,AttachLoadBalancerTargetGroupsError::Credentials(ref err) => err.description(),AttachLoadBalancerTargetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachLoadBalancerTargetGroupsError::Unknown(ref cause) => cause
+                            AttachLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => cause,
+AttachLoadBalancerTargetGroupsError::Validation(ref cause) => cause,
+AttachLoadBalancerTargetGroupsError::Credentials(ref err) => err.description(),
+AttachLoadBalancerTargetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachLoadBalancerTargetGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6881,7 +6889,11 @@ Unknown(String)
                 impl Error for AttachLoadBalancersError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachLoadBalancersError::ResourceContentionFault(ref cause) => cause,AttachLoadBalancersError::Validation(ref cause) => cause,AttachLoadBalancersError::Credentials(ref err) => err.description(),AttachLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachLoadBalancersError::Unknown(ref cause) => cause
+                            AttachLoadBalancersError::ResourceContentionFault(ref cause) => cause,
+AttachLoadBalancersError::Validation(ref cause) => cause,
+AttachLoadBalancersError::Credentials(ref err) => err.description(),
+AttachLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachLoadBalancersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6939,7 +6951,11 @@ Unknown(String)
                 impl Error for CompleteLifecycleActionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CompleteLifecycleActionError::ResourceContentionFault(ref cause) => cause,CompleteLifecycleActionError::Validation(ref cause) => cause,CompleteLifecycleActionError::Credentials(ref err) => err.description(),CompleteLifecycleActionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CompleteLifecycleActionError::Unknown(ref cause) => cause
+                            CompleteLifecycleActionError::ResourceContentionFault(ref cause) => cause,
+CompleteLifecycleActionError::Validation(ref cause) => cause,
+CompleteLifecycleActionError::Credentials(ref err) => err.description(),
+CompleteLifecycleActionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CompleteLifecycleActionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6947,12 +6963,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateAutoScalingGroupError {
                     
-///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
-ResourceContentionFault(String),
 ///<p>You already have an Auto Scaling group or launch configuration with this name.</p>
 AlreadyExistsFault(String),
 ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
-LimitExceededFault(String),/// An error occurred dispatching the HTTP request
+LimitExceededFault(String),
+///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+ResourceContentionFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6969,7 +6985,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ResourceContentionFault" => CreateAutoScalingGroupError::ResourceContentionFault(String::from(parsed_error.message)),"LimitExceededFault" => CreateAutoScalingGroupError::LimitExceededFault(String::from(parsed_error.message)),"AlreadyExistsFault" => CreateAutoScalingGroupError::AlreadyExistsFault(String::from(parsed_error.message)),_ => CreateAutoScalingGroupError::Unknown(String::from(body))
+                                    "AlreadyExistsFault" => CreateAutoScalingGroupError::AlreadyExistsFault(String::from(parsed_error.message)),"LimitExceededFault" => CreateAutoScalingGroupError::LimitExceededFault(String::from(parsed_error.message)),"ResourceContentionFault" => CreateAutoScalingGroupError::ResourceContentionFault(String::from(parsed_error.message)),_ => CreateAutoScalingGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateAutoScalingGroupError::Unknown(body.to_string())
@@ -7001,7 +7017,13 @@ Unknown(String)
                 impl Error for CreateAutoScalingGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateAutoScalingGroupError::AlreadyExistsFault(ref cause) => cause,CreateAutoScalingGroupError::LimitExceededFault(ref cause) => cause,CreateAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,CreateAutoScalingGroupError::Validation(ref cause) => cause,CreateAutoScalingGroupError::Credentials(ref err) => err.description(),CreateAutoScalingGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateAutoScalingGroupError::Unknown(ref cause) => cause
+                            CreateAutoScalingGroupError::AlreadyExistsFault(ref cause) => cause,
+CreateAutoScalingGroupError::LimitExceededFault(ref cause) => cause,
+CreateAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,
+CreateAutoScalingGroupError::Validation(ref cause) => cause,
+CreateAutoScalingGroupError::Credentials(ref err) => err.description(),
+CreateAutoScalingGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateAutoScalingGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7031,7 +7053,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededFault" => CreateLaunchConfigurationError::LimitExceededFault(String::from(parsed_error.message)),"AlreadyExistsFault" => CreateLaunchConfigurationError::AlreadyExistsFault(String::from(parsed_error.message)),"ResourceContentionFault" => CreateLaunchConfigurationError::ResourceContentionFault(String::from(parsed_error.message)),_ => CreateLaunchConfigurationError::Unknown(String::from(body))
+                                    "AlreadyExistsFault" => CreateLaunchConfigurationError::AlreadyExistsFault(String::from(parsed_error.message)),"LimitExceededFault" => CreateLaunchConfigurationError::LimitExceededFault(String::from(parsed_error.message)),"ResourceContentionFault" => CreateLaunchConfigurationError::ResourceContentionFault(String::from(parsed_error.message)),_ => CreateLaunchConfigurationError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateLaunchConfigurationError::Unknown(body.to_string())
@@ -7063,7 +7085,13 @@ Unknown(String)
                 impl Error for CreateLaunchConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateLaunchConfigurationError::AlreadyExistsFault(ref cause) => cause,CreateLaunchConfigurationError::LimitExceededFault(ref cause) => cause,CreateLaunchConfigurationError::ResourceContentionFault(ref cause) => cause,CreateLaunchConfigurationError::Validation(ref cause) => cause,CreateLaunchConfigurationError::Credentials(ref err) => err.description(),CreateLaunchConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateLaunchConfigurationError::Unknown(ref cause) => cause
+                            CreateLaunchConfigurationError::AlreadyExistsFault(ref cause) => cause,
+CreateLaunchConfigurationError::LimitExceededFault(ref cause) => cause,
+CreateLaunchConfigurationError::ResourceContentionFault(ref cause) => cause,
+CreateLaunchConfigurationError::Validation(ref cause) => cause,
+CreateLaunchConfigurationError::Credentials(ref err) => err.description(),
+CreateLaunchConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateLaunchConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7071,10 +7099,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateOrUpdateTagsError {
                     
-///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
-LimitExceededFault(String),
 ///<p>You already have an Auto Scaling group or launch configuration with this name.</p>
 AlreadyExistsFault(String),
+///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+LimitExceededFault(String),
 ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
 ResourceContentionFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -7093,7 +7121,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ResourceContentionFault" => CreateOrUpdateTagsError::ResourceContentionFault(String::from(parsed_error.message)),"LimitExceededFault" => CreateOrUpdateTagsError::LimitExceededFault(String::from(parsed_error.message)),"AlreadyExistsFault" => CreateOrUpdateTagsError::AlreadyExistsFault(String::from(parsed_error.message)),_ => CreateOrUpdateTagsError::Unknown(String::from(body))
+                                    "AlreadyExistsFault" => CreateOrUpdateTagsError::AlreadyExistsFault(String::from(parsed_error.message)),"LimitExceededFault" => CreateOrUpdateTagsError::LimitExceededFault(String::from(parsed_error.message)),"ResourceContentionFault" => CreateOrUpdateTagsError::ResourceContentionFault(String::from(parsed_error.message)),_ => CreateOrUpdateTagsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateOrUpdateTagsError::Unknown(body.to_string())
@@ -7125,7 +7153,13 @@ Unknown(String)
                 impl Error for CreateOrUpdateTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateOrUpdateTagsError::AlreadyExistsFault(ref cause) => cause,CreateOrUpdateTagsError::LimitExceededFault(ref cause) => cause,CreateOrUpdateTagsError::ResourceContentionFault(ref cause) => cause,CreateOrUpdateTagsError::Validation(ref cause) => cause,CreateOrUpdateTagsError::Credentials(ref err) => err.description(),CreateOrUpdateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateOrUpdateTagsError::Unknown(ref cause) => cause
+                            CreateOrUpdateTagsError::AlreadyExistsFault(ref cause) => cause,
+CreateOrUpdateTagsError::LimitExceededFault(ref cause) => cause,
+CreateOrUpdateTagsError::ResourceContentionFault(ref cause) => cause,
+CreateOrUpdateTagsError::Validation(ref cause) => cause,
+CreateOrUpdateTagsError::Credentials(ref err) => err.description(),
+CreateOrUpdateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateOrUpdateTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7133,12 +7167,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteAutoScalingGroupError {
                     
-///<p>The operation can't be performed because there are scaling activities in progress.</p>
-ScalingActivityInProgressFault(String),
 ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
 ResourceContentionFault(String),
 ///<p>The operation can't be performed because the resource is in use.</p>
-ResourceInUseFault(String),/// An error occurred dispatching the HTTP request
+ResourceInUseFault(String),
+///<p>The operation can't be performed because there are scaling activities in progress.</p>
+ScalingActivityInProgressFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7155,7 +7189,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ResourceInUseFault" => DeleteAutoScalingGroupError::ResourceInUseFault(String::from(parsed_error.message)),"ScalingActivityInProgressFault" => DeleteAutoScalingGroupError::ScalingActivityInProgressFault(String::from(parsed_error.message)),"ResourceContentionFault" => DeleteAutoScalingGroupError::ResourceContentionFault(String::from(parsed_error.message)),_ => DeleteAutoScalingGroupError::Unknown(String::from(body))
+                                    "ResourceContentionFault" => DeleteAutoScalingGroupError::ResourceContentionFault(String::from(parsed_error.message)),"ResourceInUseFault" => DeleteAutoScalingGroupError::ResourceInUseFault(String::from(parsed_error.message)),"ScalingActivityInProgressFault" => DeleteAutoScalingGroupError::ScalingActivityInProgressFault(String::from(parsed_error.message)),_ => DeleteAutoScalingGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteAutoScalingGroupError::Unknown(body.to_string())
@@ -7187,7 +7221,13 @@ Unknown(String)
                 impl Error for DeleteAutoScalingGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,DeleteAutoScalingGroupError::ResourceInUseFault(ref cause) => cause,DeleteAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => cause,DeleteAutoScalingGroupError::Validation(ref cause) => cause,DeleteAutoScalingGroupError::Credentials(ref err) => err.description(),DeleteAutoScalingGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAutoScalingGroupError::Unknown(ref cause) => cause
+                            DeleteAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,
+DeleteAutoScalingGroupError::ResourceInUseFault(ref cause) => cause,
+DeleteAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => cause,
+DeleteAutoScalingGroupError::Validation(ref cause) => cause,
+DeleteAutoScalingGroupError::Credentials(ref err) => err.description(),
+DeleteAutoScalingGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAutoScalingGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7195,10 +7235,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteLaunchConfigurationError {
                     
-///<p>The operation can't be performed because the resource is in use.</p>
-ResourceInUseFault(String),
 ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
-ResourceContentionFault(String),/// An error occurred dispatching the HTTP request
+ResourceContentionFault(String),
+///<p>The operation can't be performed because the resource is in use.</p>
+ResourceInUseFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7247,7 +7287,12 @@ Unknown(String)
                 impl Error for DeleteLaunchConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteLaunchConfigurationError::ResourceInUseFault(ref cause) => cause,DeleteLaunchConfigurationError::ResourceContentionFault(ref cause) => cause,DeleteLaunchConfigurationError::Validation(ref cause) => cause,DeleteLaunchConfigurationError::Credentials(ref err) => err.description(),DeleteLaunchConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteLaunchConfigurationError::Unknown(ref cause) => cause
+                            DeleteLaunchConfigurationError::ResourceContentionFault(ref cause) => cause,
+DeleteLaunchConfigurationError::ResourceInUseFault(ref cause) => cause,
+DeleteLaunchConfigurationError::Validation(ref cause) => cause,
+DeleteLaunchConfigurationError::Credentials(ref err) => err.description(),
+DeleteLaunchConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteLaunchConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7305,7 +7350,11 @@ Unknown(String)
                 impl Error for DeleteLifecycleHookError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteLifecycleHookError::ResourceContentionFault(ref cause) => cause,DeleteLifecycleHookError::Validation(ref cause) => cause,DeleteLifecycleHookError::Credentials(ref err) => err.description(),DeleteLifecycleHookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteLifecycleHookError::Unknown(ref cause) => cause
+                            DeleteLifecycleHookError::ResourceContentionFault(ref cause) => cause,
+DeleteLifecycleHookError::Validation(ref cause) => cause,
+DeleteLifecycleHookError::Credentials(ref err) => err.description(),
+DeleteLifecycleHookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteLifecycleHookError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7363,7 +7412,11 @@ Unknown(String)
                 impl Error for DeleteNotificationConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteNotificationConfigurationError::ResourceContentionFault(ref cause) => cause,DeleteNotificationConfigurationError::Validation(ref cause) => cause,DeleteNotificationConfigurationError::Credentials(ref err) => err.description(),DeleteNotificationConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteNotificationConfigurationError::Unknown(ref cause) => cause
+                            DeleteNotificationConfigurationError::ResourceContentionFault(ref cause) => cause,
+DeleteNotificationConfigurationError::Validation(ref cause) => cause,
+DeleteNotificationConfigurationError::Credentials(ref err) => err.description(),
+DeleteNotificationConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteNotificationConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7421,7 +7474,11 @@ Unknown(String)
                 impl Error for DeletePolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeletePolicyError::ResourceContentionFault(ref cause) => cause,DeletePolicyError::Validation(ref cause) => cause,DeletePolicyError::Credentials(ref err) => err.description(),DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeletePolicyError::Unknown(ref cause) => cause
+                            DeletePolicyError::ResourceContentionFault(ref cause) => cause,
+DeletePolicyError::Validation(ref cause) => cause,
+DeletePolicyError::Credentials(ref err) => err.description(),
+DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeletePolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7479,7 +7536,11 @@ Unknown(String)
                 impl Error for DeleteScheduledActionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteScheduledActionError::ResourceContentionFault(ref cause) => cause,DeleteScheduledActionError::Validation(ref cause) => cause,DeleteScheduledActionError::Credentials(ref err) => err.description(),DeleteScheduledActionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteScheduledActionError::Unknown(ref cause) => cause
+                            DeleteScheduledActionError::ResourceContentionFault(ref cause) => cause,
+DeleteScheduledActionError::Validation(ref cause) => cause,
+DeleteScheduledActionError::Credentials(ref err) => err.description(),
+DeleteScheduledActionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteScheduledActionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7537,7 +7598,11 @@ Unknown(String)
                 impl Error for DeleteTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteTagsError::ResourceContentionFault(ref cause) => cause,DeleteTagsError::Validation(ref cause) => cause,DeleteTagsError::Credentials(ref err) => err.description(),DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteTagsError::Unknown(ref cause) => cause
+                            DeleteTagsError::ResourceContentionFault(ref cause) => cause,
+DeleteTagsError::Validation(ref cause) => cause,
+DeleteTagsError::Credentials(ref err) => err.description(),
+DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7595,7 +7660,11 @@ Unknown(String)
                 impl Error for DescribeAccountLimitsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAccountLimitsError::ResourceContentionFault(ref cause) => cause,DescribeAccountLimitsError::Validation(ref cause) => cause,DescribeAccountLimitsError::Credentials(ref err) => err.description(),DescribeAccountLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAccountLimitsError::Unknown(ref cause) => cause
+                            DescribeAccountLimitsError::ResourceContentionFault(ref cause) => cause,
+DescribeAccountLimitsError::Validation(ref cause) => cause,
+DescribeAccountLimitsError::Credentials(ref err) => err.description(),
+DescribeAccountLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAccountLimitsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7653,7 +7722,11 @@ Unknown(String)
                 impl Error for DescribeAdjustmentTypesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAdjustmentTypesError::ResourceContentionFault(ref cause) => cause,DescribeAdjustmentTypesError::Validation(ref cause) => cause,DescribeAdjustmentTypesError::Credentials(ref err) => err.description(),DescribeAdjustmentTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAdjustmentTypesError::Unknown(ref cause) => cause
+                            DescribeAdjustmentTypesError::ResourceContentionFault(ref cause) => cause,
+DescribeAdjustmentTypesError::Validation(ref cause) => cause,
+DescribeAdjustmentTypesError::Credentials(ref err) => err.description(),
+DescribeAdjustmentTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAdjustmentTypesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7713,7 +7786,12 @@ Unknown(String)
                 impl Error for DescribeAutoScalingGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAutoScalingGroupsError::InvalidNextToken(ref cause) => cause,DescribeAutoScalingGroupsError::ResourceContentionFault(ref cause) => cause,DescribeAutoScalingGroupsError::Validation(ref cause) => cause,DescribeAutoScalingGroupsError::Credentials(ref err) => err.description(),DescribeAutoScalingGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAutoScalingGroupsError::Unknown(ref cause) => cause
+                            DescribeAutoScalingGroupsError::InvalidNextToken(ref cause) => cause,
+DescribeAutoScalingGroupsError::ResourceContentionFault(ref cause) => cause,
+DescribeAutoScalingGroupsError::Validation(ref cause) => cause,
+DescribeAutoScalingGroupsError::Credentials(ref err) => err.description(),
+DescribeAutoScalingGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAutoScalingGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7741,7 +7819,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ResourceContentionFault" => DescribeAutoScalingInstancesError::ResourceContentionFault(String::from(parsed_error.message)),"InvalidNextToken" => DescribeAutoScalingInstancesError::InvalidNextToken(String::from(parsed_error.message)),_ => DescribeAutoScalingInstancesError::Unknown(String::from(body))
+                                    "InvalidNextToken" => DescribeAutoScalingInstancesError::InvalidNextToken(String::from(parsed_error.message)),"ResourceContentionFault" => DescribeAutoScalingInstancesError::ResourceContentionFault(String::from(parsed_error.message)),_ => DescribeAutoScalingInstancesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeAutoScalingInstancesError::Unknown(body.to_string())
@@ -7773,7 +7851,12 @@ Unknown(String)
                 impl Error for DescribeAutoScalingInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAutoScalingInstancesError::ResourceContentionFault(ref cause) => cause,DescribeAutoScalingInstancesError::InvalidNextToken(ref cause) => cause,DescribeAutoScalingInstancesError::Validation(ref cause) => cause,DescribeAutoScalingInstancesError::Credentials(ref err) => err.description(),DescribeAutoScalingInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAutoScalingInstancesError::Unknown(ref cause) => cause
+                            DescribeAutoScalingInstancesError::InvalidNextToken(ref cause) => cause,
+DescribeAutoScalingInstancesError::ResourceContentionFault(ref cause) => cause,
+DescribeAutoScalingInstancesError::Validation(ref cause) => cause,
+DescribeAutoScalingInstancesError::Credentials(ref err) => err.description(),
+DescribeAutoScalingInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAutoScalingInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7831,7 +7914,11 @@ Unknown(String)
                 impl Error for DescribeAutoScalingNotificationTypesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAutoScalingNotificationTypesError::ResourceContentionFault(ref cause) => cause,DescribeAutoScalingNotificationTypesError::Validation(ref cause) => cause,DescribeAutoScalingNotificationTypesError::Credentials(ref err) => err.description(),DescribeAutoScalingNotificationTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAutoScalingNotificationTypesError::Unknown(ref cause) => cause
+                            DescribeAutoScalingNotificationTypesError::ResourceContentionFault(ref cause) => cause,
+DescribeAutoScalingNotificationTypesError::Validation(ref cause) => cause,
+DescribeAutoScalingNotificationTypesError::Credentials(ref err) => err.description(),
+DescribeAutoScalingNotificationTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAutoScalingNotificationTypesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7839,10 +7926,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeLaunchConfigurationsError {
                     
-///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
-ResourceContentionFault(String),
 ///<p>The <code>NextToken</code> value is not valid.</p>
-InvalidNextToken(String),/// An error occurred dispatching the HTTP request
+InvalidNextToken(String),
+///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+ResourceContentionFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7891,7 +7978,12 @@ Unknown(String)
                 impl Error for DescribeLaunchConfigurationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLaunchConfigurationsError::InvalidNextToken(ref cause) => cause,DescribeLaunchConfigurationsError::ResourceContentionFault(ref cause) => cause,DescribeLaunchConfigurationsError::Validation(ref cause) => cause,DescribeLaunchConfigurationsError::Credentials(ref err) => err.description(),DescribeLaunchConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLaunchConfigurationsError::Unknown(ref cause) => cause
+                            DescribeLaunchConfigurationsError::InvalidNextToken(ref cause) => cause,
+DescribeLaunchConfigurationsError::ResourceContentionFault(ref cause) => cause,
+DescribeLaunchConfigurationsError::Validation(ref cause) => cause,
+DescribeLaunchConfigurationsError::Credentials(ref err) => err.description(),
+DescribeLaunchConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLaunchConfigurationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7949,7 +8041,11 @@ Unknown(String)
                 impl Error for DescribeLifecycleHookTypesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLifecycleHookTypesError::ResourceContentionFault(ref cause) => cause,DescribeLifecycleHookTypesError::Validation(ref cause) => cause,DescribeLifecycleHookTypesError::Credentials(ref err) => err.description(),DescribeLifecycleHookTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLifecycleHookTypesError::Unknown(ref cause) => cause
+                            DescribeLifecycleHookTypesError::ResourceContentionFault(ref cause) => cause,
+DescribeLifecycleHookTypesError::Validation(ref cause) => cause,
+DescribeLifecycleHookTypesError::Credentials(ref err) => err.description(),
+DescribeLifecycleHookTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLifecycleHookTypesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8007,7 +8103,11 @@ Unknown(String)
                 impl Error for DescribeLifecycleHooksError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLifecycleHooksError::ResourceContentionFault(ref cause) => cause,DescribeLifecycleHooksError::Validation(ref cause) => cause,DescribeLifecycleHooksError::Credentials(ref err) => err.description(),DescribeLifecycleHooksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLifecycleHooksError::Unknown(ref cause) => cause
+                            DescribeLifecycleHooksError::ResourceContentionFault(ref cause) => cause,
+DescribeLifecycleHooksError::Validation(ref cause) => cause,
+DescribeLifecycleHooksError::Credentials(ref err) => err.description(),
+DescribeLifecycleHooksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLifecycleHooksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8065,7 +8165,11 @@ Unknown(String)
                 impl Error for DescribeLoadBalancerTargetGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => cause,DescribeLoadBalancerTargetGroupsError::Validation(ref cause) => cause,DescribeLoadBalancerTargetGroupsError::Credentials(ref err) => err.description(),DescribeLoadBalancerTargetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLoadBalancerTargetGroupsError::Unknown(ref cause) => cause
+                            DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => cause,
+DescribeLoadBalancerTargetGroupsError::Validation(ref cause) => cause,
+DescribeLoadBalancerTargetGroupsError::Credentials(ref err) => err.description(),
+DescribeLoadBalancerTargetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLoadBalancerTargetGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8123,7 +8227,11 @@ Unknown(String)
                 impl Error for DescribeLoadBalancersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLoadBalancersError::ResourceContentionFault(ref cause) => cause,DescribeLoadBalancersError::Validation(ref cause) => cause,DescribeLoadBalancersError::Credentials(ref err) => err.description(),DescribeLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLoadBalancersError::Unknown(ref cause) => cause
+                            DescribeLoadBalancersError::ResourceContentionFault(ref cause) => cause,
+DescribeLoadBalancersError::Validation(ref cause) => cause,
+DescribeLoadBalancersError::Credentials(ref err) => err.description(),
+DescribeLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLoadBalancersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8181,7 +8289,11 @@ Unknown(String)
                 impl Error for DescribeMetricCollectionTypesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeMetricCollectionTypesError::ResourceContentionFault(ref cause) => cause,DescribeMetricCollectionTypesError::Validation(ref cause) => cause,DescribeMetricCollectionTypesError::Credentials(ref err) => err.description(),DescribeMetricCollectionTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeMetricCollectionTypesError::Unknown(ref cause) => cause
+                            DescribeMetricCollectionTypesError::ResourceContentionFault(ref cause) => cause,
+DescribeMetricCollectionTypesError::Validation(ref cause) => cause,
+DescribeMetricCollectionTypesError::Credentials(ref err) => err.description(),
+DescribeMetricCollectionTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeMetricCollectionTypesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8189,10 +8301,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeNotificationConfigurationsError {
                     
-///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
-ResourceContentionFault(String),
 ///<p>The <code>NextToken</code> value is not valid.</p>
-InvalidNextToken(String),/// An error occurred dispatching the HTTP request
+InvalidNextToken(String),
+///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+ResourceContentionFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8209,7 +8321,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ResourceContentionFault" => DescribeNotificationConfigurationsError::ResourceContentionFault(String::from(parsed_error.message)),"InvalidNextToken" => DescribeNotificationConfigurationsError::InvalidNextToken(String::from(parsed_error.message)),_ => DescribeNotificationConfigurationsError::Unknown(String::from(body))
+                                    "InvalidNextToken" => DescribeNotificationConfigurationsError::InvalidNextToken(String::from(parsed_error.message)),"ResourceContentionFault" => DescribeNotificationConfigurationsError::ResourceContentionFault(String::from(parsed_error.message)),_ => DescribeNotificationConfigurationsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeNotificationConfigurationsError::Unknown(body.to_string())
@@ -8241,7 +8353,12 @@ Unknown(String)
                 impl Error for DescribeNotificationConfigurationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeNotificationConfigurationsError::InvalidNextToken(ref cause) => cause,DescribeNotificationConfigurationsError::ResourceContentionFault(ref cause) => cause,DescribeNotificationConfigurationsError::Validation(ref cause) => cause,DescribeNotificationConfigurationsError::Credentials(ref err) => err.description(),DescribeNotificationConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeNotificationConfigurationsError::Unknown(ref cause) => cause
+                            DescribeNotificationConfigurationsError::InvalidNextToken(ref cause) => cause,
+DescribeNotificationConfigurationsError::ResourceContentionFault(ref cause) => cause,
+DescribeNotificationConfigurationsError::Validation(ref cause) => cause,
+DescribeNotificationConfigurationsError::Credentials(ref err) => err.description(),
+DescribeNotificationConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeNotificationConfigurationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8249,10 +8366,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribePoliciesError {
                     
-///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
-ResourceContentionFault(String),
 ///<p>The <code>NextToken</code> value is not valid.</p>
-InvalidNextToken(String),/// An error occurred dispatching the HTTP request
+InvalidNextToken(String),
+///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+ResourceContentionFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8301,7 +8418,12 @@ Unknown(String)
                 impl Error for DescribePoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribePoliciesError::ResourceContentionFault(ref cause) => cause,DescribePoliciesError::InvalidNextToken(ref cause) => cause,DescribePoliciesError::Validation(ref cause) => cause,DescribePoliciesError::Credentials(ref err) => err.description(),DescribePoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribePoliciesError::Unknown(ref cause) => cause
+                            DescribePoliciesError::InvalidNextToken(ref cause) => cause,
+DescribePoliciesError::ResourceContentionFault(ref cause) => cause,
+DescribePoliciesError::Validation(ref cause) => cause,
+DescribePoliciesError::Credentials(ref err) => err.description(),
+DescribePoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribePoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8361,7 +8483,12 @@ Unknown(String)
                 impl Error for DescribeScalingActivitiesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeScalingActivitiesError::ResourceContentionFault(ref cause) => cause,DescribeScalingActivitiesError::InvalidNextToken(ref cause) => cause,DescribeScalingActivitiesError::Validation(ref cause) => cause,DescribeScalingActivitiesError::Credentials(ref err) => err.description(),DescribeScalingActivitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeScalingActivitiesError::Unknown(ref cause) => cause
+                            DescribeScalingActivitiesError::InvalidNextToken(ref cause) => cause,
+DescribeScalingActivitiesError::ResourceContentionFault(ref cause) => cause,
+DescribeScalingActivitiesError::Validation(ref cause) => cause,
+DescribeScalingActivitiesError::Credentials(ref err) => err.description(),
+DescribeScalingActivitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeScalingActivitiesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8419,7 +8546,11 @@ Unknown(String)
                 impl Error for DescribeScalingProcessTypesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeScalingProcessTypesError::ResourceContentionFault(ref cause) => cause,DescribeScalingProcessTypesError::Validation(ref cause) => cause,DescribeScalingProcessTypesError::Credentials(ref err) => err.description(),DescribeScalingProcessTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeScalingProcessTypesError::Unknown(ref cause) => cause
+                            DescribeScalingProcessTypesError::ResourceContentionFault(ref cause) => cause,
+DescribeScalingProcessTypesError::Validation(ref cause) => cause,
+DescribeScalingProcessTypesError::Credentials(ref err) => err.description(),
+DescribeScalingProcessTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeScalingProcessTypesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8479,7 +8610,12 @@ Unknown(String)
                 impl Error for DescribeScheduledActionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeScheduledActionsError::InvalidNextToken(ref cause) => cause,DescribeScheduledActionsError::ResourceContentionFault(ref cause) => cause,DescribeScheduledActionsError::Validation(ref cause) => cause,DescribeScheduledActionsError::Credentials(ref err) => err.description(),DescribeScheduledActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeScheduledActionsError::Unknown(ref cause) => cause
+                            DescribeScheduledActionsError::InvalidNextToken(ref cause) => cause,
+DescribeScheduledActionsError::ResourceContentionFault(ref cause) => cause,
+DescribeScheduledActionsError::Validation(ref cause) => cause,
+DescribeScheduledActionsError::Credentials(ref err) => err.description(),
+DescribeScheduledActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeScheduledActionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8539,7 +8675,12 @@ Unknown(String)
                 impl Error for DescribeTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeTagsError::ResourceContentionFault(ref cause) => cause,DescribeTagsError::InvalidNextToken(ref cause) => cause,DescribeTagsError::Validation(ref cause) => cause,DescribeTagsError::Credentials(ref err) => err.description(),DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeTagsError::Unknown(ref cause) => cause
+                            DescribeTagsError::InvalidNextToken(ref cause) => cause,
+DescribeTagsError::ResourceContentionFault(ref cause) => cause,
+DescribeTagsError::Validation(ref cause) => cause,
+DescribeTagsError::Credentials(ref err) => err.description(),
+DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8597,7 +8738,11 @@ Unknown(String)
                 impl Error for DescribeTerminationPolicyTypesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeTerminationPolicyTypesError::ResourceContentionFault(ref cause) => cause,DescribeTerminationPolicyTypesError::Validation(ref cause) => cause,DescribeTerminationPolicyTypesError::Credentials(ref err) => err.description(),DescribeTerminationPolicyTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeTerminationPolicyTypesError::Unknown(ref cause) => cause
+                            DescribeTerminationPolicyTypesError::ResourceContentionFault(ref cause) => cause,
+DescribeTerminationPolicyTypesError::Validation(ref cause) => cause,
+DescribeTerminationPolicyTypesError::Credentials(ref err) => err.description(),
+DescribeTerminationPolicyTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeTerminationPolicyTypesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8655,7 +8800,11 @@ Unknown(String)
                 impl Error for DetachInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachInstancesError::ResourceContentionFault(ref cause) => cause,DetachInstancesError::Validation(ref cause) => cause,DetachInstancesError::Credentials(ref err) => err.description(),DetachInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachInstancesError::Unknown(ref cause) => cause
+                            DetachInstancesError::ResourceContentionFault(ref cause) => cause,
+DetachInstancesError::Validation(ref cause) => cause,
+DetachInstancesError::Credentials(ref err) => err.description(),
+DetachInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8713,7 +8862,11 @@ Unknown(String)
                 impl Error for DetachLoadBalancerTargetGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => cause,DetachLoadBalancerTargetGroupsError::Validation(ref cause) => cause,DetachLoadBalancerTargetGroupsError::Credentials(ref err) => err.description(),DetachLoadBalancerTargetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachLoadBalancerTargetGroupsError::Unknown(ref cause) => cause
+                            DetachLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => cause,
+DetachLoadBalancerTargetGroupsError::Validation(ref cause) => cause,
+DetachLoadBalancerTargetGroupsError::Credentials(ref err) => err.description(),
+DetachLoadBalancerTargetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachLoadBalancerTargetGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8771,7 +8924,11 @@ Unknown(String)
                 impl Error for DetachLoadBalancersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachLoadBalancersError::ResourceContentionFault(ref cause) => cause,DetachLoadBalancersError::Validation(ref cause) => cause,DetachLoadBalancersError::Credentials(ref err) => err.description(),DetachLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachLoadBalancersError::Unknown(ref cause) => cause
+                            DetachLoadBalancersError::ResourceContentionFault(ref cause) => cause,
+DetachLoadBalancersError::Validation(ref cause) => cause,
+DetachLoadBalancersError::Credentials(ref err) => err.description(),
+DetachLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachLoadBalancersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8829,7 +8986,11 @@ Unknown(String)
                 impl Error for DisableMetricsCollectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableMetricsCollectionError::ResourceContentionFault(ref cause) => cause,DisableMetricsCollectionError::Validation(ref cause) => cause,DisableMetricsCollectionError::Credentials(ref err) => err.description(),DisableMetricsCollectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableMetricsCollectionError::Unknown(ref cause) => cause
+                            DisableMetricsCollectionError::ResourceContentionFault(ref cause) => cause,
+DisableMetricsCollectionError::Validation(ref cause) => cause,
+DisableMetricsCollectionError::Credentials(ref err) => err.description(),
+DisableMetricsCollectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableMetricsCollectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8887,7 +9048,11 @@ Unknown(String)
                 impl Error for EnableMetricsCollectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableMetricsCollectionError::ResourceContentionFault(ref cause) => cause,EnableMetricsCollectionError::Validation(ref cause) => cause,EnableMetricsCollectionError::Credentials(ref err) => err.description(),EnableMetricsCollectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableMetricsCollectionError::Unknown(ref cause) => cause
+                            EnableMetricsCollectionError::ResourceContentionFault(ref cause) => cause,
+EnableMetricsCollectionError::Validation(ref cause) => cause,
+EnableMetricsCollectionError::Credentials(ref err) => err.description(),
+EnableMetricsCollectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableMetricsCollectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8945,7 +9110,11 @@ Unknown(String)
                 impl Error for EnterStandbyError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnterStandbyError::ResourceContentionFault(ref cause) => cause,EnterStandbyError::Validation(ref cause) => cause,EnterStandbyError::Credentials(ref err) => err.description(),EnterStandbyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnterStandbyError::Unknown(ref cause) => cause
+                            EnterStandbyError::ResourceContentionFault(ref cause) => cause,
+EnterStandbyError::Validation(ref cause) => cause,
+EnterStandbyError::Credentials(ref err) => err.description(),
+EnterStandbyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnterStandbyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8973,7 +9142,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ScalingActivityInProgressFault" => ExecutePolicyError::ScalingActivityInProgressFault(String::from(parsed_error.message)),"ResourceContentionFault" => ExecutePolicyError::ResourceContentionFault(String::from(parsed_error.message)),_ => ExecutePolicyError::Unknown(String::from(body))
+                                    "ResourceContentionFault" => ExecutePolicyError::ResourceContentionFault(String::from(parsed_error.message)),"ScalingActivityInProgressFault" => ExecutePolicyError::ScalingActivityInProgressFault(String::from(parsed_error.message)),_ => ExecutePolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ExecutePolicyError::Unknown(body.to_string())
@@ -9005,7 +9174,12 @@ Unknown(String)
                 impl Error for ExecutePolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            ExecutePolicyError::ScalingActivityInProgressFault(ref cause) => cause,ExecutePolicyError::ResourceContentionFault(ref cause) => cause,ExecutePolicyError::Validation(ref cause) => cause,ExecutePolicyError::Credentials(ref err) => err.description(),ExecutePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ExecutePolicyError::Unknown(ref cause) => cause
+                            ExecutePolicyError::ResourceContentionFault(ref cause) => cause,
+ExecutePolicyError::ScalingActivityInProgressFault(ref cause) => cause,
+ExecutePolicyError::Validation(ref cause) => cause,
+ExecutePolicyError::Credentials(ref err) => err.description(),
+ExecutePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ExecutePolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9063,7 +9237,11 @@ Unknown(String)
                 impl Error for ExitStandbyError {
                     fn description(&self) -> &str {
                         match *self {
-                            ExitStandbyError::ResourceContentionFault(ref cause) => cause,ExitStandbyError::Validation(ref cause) => cause,ExitStandbyError::Credentials(ref err) => err.description(),ExitStandbyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ExitStandbyError::Unknown(ref cause) => cause
+                            ExitStandbyError::ResourceContentionFault(ref cause) => cause,
+ExitStandbyError::Validation(ref cause) => cause,
+ExitStandbyError::Credentials(ref err) => err.description(),
+ExitStandbyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ExitStandbyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9071,10 +9249,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutLifecycleHookError {
                     
-///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
-ResourceContentionFault(String),
 ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
-LimitExceededFault(String),/// An error occurred dispatching the HTTP request
+LimitExceededFault(String),
+///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+ResourceContentionFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9123,7 +9301,12 @@ Unknown(String)
                 impl Error for PutLifecycleHookError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutLifecycleHookError::LimitExceededFault(ref cause) => cause,PutLifecycleHookError::ResourceContentionFault(ref cause) => cause,PutLifecycleHookError::Validation(ref cause) => cause,PutLifecycleHookError::Credentials(ref err) => err.description(),PutLifecycleHookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutLifecycleHookError::Unknown(ref cause) => cause
+                            PutLifecycleHookError::LimitExceededFault(ref cause) => cause,
+PutLifecycleHookError::ResourceContentionFault(ref cause) => cause,
+PutLifecycleHookError::Validation(ref cause) => cause,
+PutLifecycleHookError::Credentials(ref err) => err.description(),
+PutLifecycleHookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutLifecycleHookError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9131,10 +9314,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutNotificationConfigurationError {
                     
-///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
-ResourceContentionFault(String),
 ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
-LimitExceededFault(String),/// An error occurred dispatching the HTTP request
+LimitExceededFault(String),
+///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+ResourceContentionFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9183,7 +9366,12 @@ Unknown(String)
                 impl Error for PutNotificationConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutNotificationConfigurationError::ResourceContentionFault(ref cause) => cause,PutNotificationConfigurationError::LimitExceededFault(ref cause) => cause,PutNotificationConfigurationError::Validation(ref cause) => cause,PutNotificationConfigurationError::Credentials(ref err) => err.description(),PutNotificationConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutNotificationConfigurationError::Unknown(ref cause) => cause
+                            PutNotificationConfigurationError::LimitExceededFault(ref cause) => cause,
+PutNotificationConfigurationError::ResourceContentionFault(ref cause) => cause,
+PutNotificationConfigurationError::Validation(ref cause) => cause,
+PutNotificationConfigurationError::Credentials(ref err) => err.description(),
+PutNotificationConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutNotificationConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9191,10 +9379,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutScalingPolicyError {
                     
-///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
-ResourceContentionFault(String),
 ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
-LimitExceededFault(String),/// An error occurred dispatching the HTTP request
+LimitExceededFault(String),
+///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+ResourceContentionFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9211,7 +9399,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ResourceContentionFault" => PutScalingPolicyError::ResourceContentionFault(String::from(parsed_error.message)),"LimitExceededFault" => PutScalingPolicyError::LimitExceededFault(String::from(parsed_error.message)),_ => PutScalingPolicyError::Unknown(String::from(body))
+                                    "LimitExceededFault" => PutScalingPolicyError::LimitExceededFault(String::from(parsed_error.message)),"ResourceContentionFault" => PutScalingPolicyError::ResourceContentionFault(String::from(parsed_error.message)),_ => PutScalingPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PutScalingPolicyError::Unknown(body.to_string())
@@ -9243,7 +9431,12 @@ Unknown(String)
                 impl Error for PutScalingPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutScalingPolicyError::ResourceContentionFault(ref cause) => cause,PutScalingPolicyError::LimitExceededFault(ref cause) => cause,PutScalingPolicyError::Validation(ref cause) => cause,PutScalingPolicyError::Credentials(ref err) => err.description(),PutScalingPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutScalingPolicyError::Unknown(ref cause) => cause
+                            PutScalingPolicyError::LimitExceededFault(ref cause) => cause,
+PutScalingPolicyError::ResourceContentionFault(ref cause) => cause,
+PutScalingPolicyError::Validation(ref cause) => cause,
+PutScalingPolicyError::Credentials(ref err) => err.description(),
+PutScalingPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutScalingPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9273,7 +9466,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededFault" => PutScheduledUpdateGroupActionError::LimitExceededFault(String::from(parsed_error.message)),"ResourceContentionFault" => PutScheduledUpdateGroupActionError::ResourceContentionFault(String::from(parsed_error.message)),"AlreadyExistsFault" => PutScheduledUpdateGroupActionError::AlreadyExistsFault(String::from(parsed_error.message)),_ => PutScheduledUpdateGroupActionError::Unknown(String::from(body))
+                                    "AlreadyExistsFault" => PutScheduledUpdateGroupActionError::AlreadyExistsFault(String::from(parsed_error.message)),"LimitExceededFault" => PutScheduledUpdateGroupActionError::LimitExceededFault(String::from(parsed_error.message)),"ResourceContentionFault" => PutScheduledUpdateGroupActionError::ResourceContentionFault(String::from(parsed_error.message)),_ => PutScheduledUpdateGroupActionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PutScheduledUpdateGroupActionError::Unknown(body.to_string())
@@ -9305,7 +9498,13 @@ Unknown(String)
                 impl Error for PutScheduledUpdateGroupActionError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutScheduledUpdateGroupActionError::AlreadyExistsFault(ref cause) => cause,PutScheduledUpdateGroupActionError::LimitExceededFault(ref cause) => cause,PutScheduledUpdateGroupActionError::ResourceContentionFault(ref cause) => cause,PutScheduledUpdateGroupActionError::Validation(ref cause) => cause,PutScheduledUpdateGroupActionError::Credentials(ref err) => err.description(),PutScheduledUpdateGroupActionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutScheduledUpdateGroupActionError::Unknown(ref cause) => cause
+                            PutScheduledUpdateGroupActionError::AlreadyExistsFault(ref cause) => cause,
+PutScheduledUpdateGroupActionError::LimitExceededFault(ref cause) => cause,
+PutScheduledUpdateGroupActionError::ResourceContentionFault(ref cause) => cause,
+PutScheduledUpdateGroupActionError::Validation(ref cause) => cause,
+PutScheduledUpdateGroupActionError::Credentials(ref err) => err.description(),
+PutScheduledUpdateGroupActionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutScheduledUpdateGroupActionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9363,7 +9562,11 @@ Unknown(String)
                 impl Error for RecordLifecycleActionHeartbeatError {
                     fn description(&self) -> &str {
                         match *self {
-                            RecordLifecycleActionHeartbeatError::ResourceContentionFault(ref cause) => cause,RecordLifecycleActionHeartbeatError::Validation(ref cause) => cause,RecordLifecycleActionHeartbeatError::Credentials(ref err) => err.description(),RecordLifecycleActionHeartbeatError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RecordLifecycleActionHeartbeatError::Unknown(ref cause) => cause
+                            RecordLifecycleActionHeartbeatError::ResourceContentionFault(ref cause) => cause,
+RecordLifecycleActionHeartbeatError::Validation(ref cause) => cause,
+RecordLifecycleActionHeartbeatError::Credentials(ref err) => err.description(),
+RecordLifecycleActionHeartbeatError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RecordLifecycleActionHeartbeatError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9423,7 +9626,12 @@ Unknown(String)
                 impl Error for ResumeProcessesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ResumeProcessesError::ResourceContentionFault(ref cause) => cause,ResumeProcessesError::ResourceInUseFault(ref cause) => cause,ResumeProcessesError::Validation(ref cause) => cause,ResumeProcessesError::Credentials(ref err) => err.description(),ResumeProcessesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ResumeProcessesError::Unknown(ref cause) => cause
+                            ResumeProcessesError::ResourceContentionFault(ref cause) => cause,
+ResumeProcessesError::ResourceInUseFault(ref cause) => cause,
+ResumeProcessesError::Validation(ref cause) => cause,
+ResumeProcessesError::Credentials(ref err) => err.description(),
+ResumeProcessesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ResumeProcessesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9483,7 +9691,12 @@ Unknown(String)
                 impl Error for SetDesiredCapacityError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetDesiredCapacityError::ScalingActivityInProgressFault(ref cause) => cause,SetDesiredCapacityError::ResourceContentionFault(ref cause) => cause,SetDesiredCapacityError::Validation(ref cause) => cause,SetDesiredCapacityError::Credentials(ref err) => err.description(),SetDesiredCapacityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetDesiredCapacityError::Unknown(ref cause) => cause
+                            SetDesiredCapacityError::ResourceContentionFault(ref cause) => cause,
+SetDesiredCapacityError::ScalingActivityInProgressFault(ref cause) => cause,
+SetDesiredCapacityError::Validation(ref cause) => cause,
+SetDesiredCapacityError::Credentials(ref err) => err.description(),
+SetDesiredCapacityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetDesiredCapacityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9541,7 +9754,11 @@ Unknown(String)
                 impl Error for SetInstanceHealthError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetInstanceHealthError::ResourceContentionFault(ref cause) => cause,SetInstanceHealthError::Validation(ref cause) => cause,SetInstanceHealthError::Credentials(ref err) => err.description(),SetInstanceHealthError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetInstanceHealthError::Unknown(ref cause) => cause
+                            SetInstanceHealthError::ResourceContentionFault(ref cause) => cause,
+SetInstanceHealthError::Validation(ref cause) => cause,
+SetInstanceHealthError::Credentials(ref err) => err.description(),
+SetInstanceHealthError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetInstanceHealthError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9601,7 +9818,12 @@ Unknown(String)
                 impl Error for SetInstanceProtectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetInstanceProtectionError::ResourceContentionFault(ref cause) => cause,SetInstanceProtectionError::LimitExceededFault(ref cause) => cause,SetInstanceProtectionError::Validation(ref cause) => cause,SetInstanceProtectionError::Credentials(ref err) => err.description(),SetInstanceProtectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetInstanceProtectionError::Unknown(ref cause) => cause
+                            SetInstanceProtectionError::LimitExceededFault(ref cause) => cause,
+SetInstanceProtectionError::ResourceContentionFault(ref cause) => cause,
+SetInstanceProtectionError::Validation(ref cause) => cause,
+SetInstanceProtectionError::Credentials(ref err) => err.description(),
+SetInstanceProtectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetInstanceProtectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9661,7 +9883,12 @@ Unknown(String)
                 impl Error for SuspendProcessesError {
                     fn description(&self) -> &str {
                         match *self {
-                            SuspendProcessesError::ResourceContentionFault(ref cause) => cause,SuspendProcessesError::ResourceInUseFault(ref cause) => cause,SuspendProcessesError::Validation(ref cause) => cause,SuspendProcessesError::Credentials(ref err) => err.description(),SuspendProcessesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SuspendProcessesError::Unknown(ref cause) => cause
+                            SuspendProcessesError::ResourceContentionFault(ref cause) => cause,
+SuspendProcessesError::ResourceInUseFault(ref cause) => cause,
+SuspendProcessesError::Validation(ref cause) => cause,
+SuspendProcessesError::Credentials(ref err) => err.description(),
+SuspendProcessesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SuspendProcessesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9689,7 +9916,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ScalingActivityInProgressFault" => TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(String::from(parsed_error.message)),"ResourceContentionFault" => TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(String::from(parsed_error.message)),_ => TerminateInstanceInAutoScalingGroupError::Unknown(String::from(body))
+                                    "ResourceContentionFault" => TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(String::from(parsed_error.message)),"ScalingActivityInProgressFault" => TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(String::from(parsed_error.message)),_ => TerminateInstanceInAutoScalingGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => TerminateInstanceInAutoScalingGroupError::Unknown(body.to_string())
@@ -9721,7 +9948,12 @@ Unknown(String)
                 impl Error for TerminateInstanceInAutoScalingGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => cause,TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,TerminateInstanceInAutoScalingGroupError::Validation(ref cause) => cause,TerminateInstanceInAutoScalingGroupError::Credentials(ref err) => err.description(),TerminateInstanceInAutoScalingGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),TerminateInstanceInAutoScalingGroupError::Unknown(ref cause) => cause
+                            TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,
+TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => cause,
+TerminateInstanceInAutoScalingGroupError::Validation(ref cause) => cause,
+TerminateInstanceInAutoScalingGroupError::Credentials(ref err) => err.description(),
+TerminateInstanceInAutoScalingGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+TerminateInstanceInAutoScalingGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9729,10 +9961,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateAutoScalingGroupError {
                     
-///<p>The operation can't be performed because there are scaling activities in progress.</p>
-ScalingActivityInProgressFault(String),
 ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
-ResourceContentionFault(String),/// An error occurred dispatching the HTTP request
+ResourceContentionFault(String),
+///<p>The operation can't be performed because there are scaling activities in progress.</p>
+ScalingActivityInProgressFault(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9781,7 +10013,12 @@ Unknown(String)
                 impl Error for UpdateAutoScalingGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => cause,UpdateAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,UpdateAutoScalingGroupError::Validation(ref cause) => cause,UpdateAutoScalingGroupError::Credentials(ref err) => err.description(),UpdateAutoScalingGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateAutoScalingGroupError::Unknown(ref cause) => cause
+                            UpdateAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,
+UpdateAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => cause,
+UpdateAutoScalingGroupError::Validation(ref cause) => cause,
+UpdateAutoScalingGroupError::Credentials(ref err) => err.description(),
+UpdateAutoScalingGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateAutoScalingGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }

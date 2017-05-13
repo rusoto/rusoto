@@ -7284,7 +7284,11 @@ Unknown(String)
                 impl Error for AbortEnvironmentUpdateError {
                     fn description(&self) -> &str {
                         match *self {
-                            AbortEnvironmentUpdateError::InsufficientPrivileges(ref cause) => cause,AbortEnvironmentUpdateError::Validation(ref cause) => cause,AbortEnvironmentUpdateError::Credentials(ref err) => err.description(),AbortEnvironmentUpdateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AbortEnvironmentUpdateError::Unknown(ref cause) => cause
+                            AbortEnvironmentUpdateError::InsufficientPrivileges(ref cause) => cause,
+AbortEnvironmentUpdateError::Validation(ref cause) => cause,
+AbortEnvironmentUpdateError::Credentials(ref err) => err.description(),
+AbortEnvironmentUpdateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AbortEnvironmentUpdateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7292,10 +7296,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ApplyEnvironmentManagedActionError {
                     
-///<p>Cannot modify the managed action in its current state.</p>
-ManagedActionInvalidState(String),
 ///<p>A generic service exception has occurred.</p>
-ElasticBeanstalkService(String),/// An error occurred dispatching the HTTP request
+ElasticBeanstalkService(String),
+///<p>Cannot modify the managed action in its current state.</p>
+ManagedActionInvalidState(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7312,7 +7316,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ManagedActionInvalidStateException" => ApplyEnvironmentManagedActionError::ManagedActionInvalidState(String::from(parsed_error.message)),"ElasticBeanstalkServiceException" => ApplyEnvironmentManagedActionError::ElasticBeanstalkService(String::from(parsed_error.message)),_ => ApplyEnvironmentManagedActionError::Unknown(String::from(body))
+                                    "ElasticBeanstalkServiceException" => ApplyEnvironmentManagedActionError::ElasticBeanstalkService(String::from(parsed_error.message)),"ManagedActionInvalidStateException" => ApplyEnvironmentManagedActionError::ManagedActionInvalidState(String::from(parsed_error.message)),_ => ApplyEnvironmentManagedActionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ApplyEnvironmentManagedActionError::Unknown(body.to_string())
@@ -7344,7 +7348,12 @@ Unknown(String)
                 impl Error for ApplyEnvironmentManagedActionError {
                     fn description(&self) -> &str {
                         match *self {
-                            ApplyEnvironmentManagedActionError::ElasticBeanstalkService(ref cause) => cause,ApplyEnvironmentManagedActionError::ManagedActionInvalidState(ref cause) => cause,ApplyEnvironmentManagedActionError::Validation(ref cause) => cause,ApplyEnvironmentManagedActionError::Credentials(ref err) => err.description(),ApplyEnvironmentManagedActionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ApplyEnvironmentManagedActionError::Unknown(ref cause) => cause
+                            ApplyEnvironmentManagedActionError::ElasticBeanstalkService(ref cause) => cause,
+ApplyEnvironmentManagedActionError::ManagedActionInvalidState(ref cause) => cause,
+ApplyEnvironmentManagedActionError::Validation(ref cause) => cause,
+ApplyEnvironmentManagedActionError::Credentials(ref err) => err.description(),
+ApplyEnvironmentManagedActionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ApplyEnvironmentManagedActionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7400,7 +7409,10 @@ Unknown(String)
                 impl Error for CheckDNSAvailabilityError {
                     fn description(&self) -> &str {
                         match *self {
-                            CheckDNSAvailabilityError::Validation(ref cause) => cause,CheckDNSAvailabilityError::Credentials(ref err) => err.description(),CheckDNSAvailabilityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CheckDNSAvailabilityError::Unknown(ref cause) => cause
+                            CheckDNSAvailabilityError::Validation(ref cause) => cause,
+CheckDNSAvailabilityError::Credentials(ref err) => err.description(),
+CheckDNSAvailabilityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CheckDNSAvailabilityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7460,7 +7472,12 @@ Unknown(String)
                 impl Error for ComposeEnvironmentsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ComposeEnvironmentsError::TooManyEnvironments(ref cause) => cause,ComposeEnvironmentsError::InsufficientPrivileges(ref cause) => cause,ComposeEnvironmentsError::Validation(ref cause) => cause,ComposeEnvironmentsError::Credentials(ref err) => err.description(),ComposeEnvironmentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ComposeEnvironmentsError::Unknown(ref cause) => cause
+                            ComposeEnvironmentsError::InsufficientPrivileges(ref cause) => cause,
+ComposeEnvironmentsError::TooManyEnvironments(ref cause) => cause,
+ComposeEnvironmentsError::Validation(ref cause) => cause,
+ComposeEnvironmentsError::Credentials(ref err) => err.description(),
+ComposeEnvironmentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ComposeEnvironmentsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7518,7 +7535,11 @@ Unknown(String)
                 impl Error for CreateApplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateApplicationError::TooManyApplications(ref cause) => cause,CreateApplicationError::Validation(ref cause) => cause,CreateApplicationError::Credentials(ref err) => err.description(),CreateApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateApplicationError::Unknown(ref cause) => cause
+                            CreateApplicationError::TooManyApplications(ref cause) => cause,
+CreateApplicationError::Validation(ref cause) => cause,
+CreateApplicationError::Credentials(ref err) => err.description(),
+CreateApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateApplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7526,12 +7547,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateApplicationVersionError {
                     
+///<p>AWS CodeBuild is not available in the specified region.</p>
+CodeBuildNotInServiceRegion(String),
 ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
 InsufficientPrivileges(String),
 ///<p>The specified S3 bucket does not belong to the S3 region in which the service is running. The following regions are supported:</p> <ul> <li> <p>IAD/us-east-1</p> </li> <li> <p>PDX/us-west-2</p> </li> <li> <p>DUB/eu-west-1</p> </li> </ul>
 S3LocationNotInServiceRegion(String),
-///<p>AWS CodeBuild is not available in the specified region.</p>
-CodeBuildNotInServiceRegion(String),
 ///<p>The specified account has reached its limit of application versions.</p>
 TooManyApplicationVersions(String),
 ///<p>The specified account has reached its limit of applications.</p>
@@ -7552,7 +7573,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TooManyApplicationsException" => CreateApplicationVersionError::TooManyApplications(String::from(parsed_error.message)),"InsufficientPrivilegesException" => CreateApplicationVersionError::InsufficientPrivileges(String::from(parsed_error.message)),"S3LocationNotInServiceRegionException" => CreateApplicationVersionError::S3LocationNotInServiceRegion(String::from(parsed_error.message)),"TooManyApplicationVersionsException" => CreateApplicationVersionError::TooManyApplicationVersions(String::from(parsed_error.message)),"CodeBuildNotInServiceRegionException" => CreateApplicationVersionError::CodeBuildNotInServiceRegion(String::from(parsed_error.message)),_ => CreateApplicationVersionError::Unknown(String::from(body))
+                                    "CodeBuildNotInServiceRegionException" => CreateApplicationVersionError::CodeBuildNotInServiceRegion(String::from(parsed_error.message)),"InsufficientPrivilegesException" => CreateApplicationVersionError::InsufficientPrivileges(String::from(parsed_error.message)),"S3LocationNotInServiceRegionException" => CreateApplicationVersionError::S3LocationNotInServiceRegion(String::from(parsed_error.message)),"TooManyApplicationVersionsException" => CreateApplicationVersionError::TooManyApplicationVersions(String::from(parsed_error.message)),"TooManyApplicationsException" => CreateApplicationVersionError::TooManyApplications(String::from(parsed_error.message)),_ => CreateApplicationVersionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateApplicationVersionError::Unknown(body.to_string())
@@ -7584,7 +7605,15 @@ Unknown(String)
                 impl Error for CreateApplicationVersionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateApplicationVersionError::InsufficientPrivileges(ref cause) => cause,CreateApplicationVersionError::CodeBuildNotInServiceRegion(ref cause) => cause,CreateApplicationVersionError::TooManyApplications(ref cause) => cause,CreateApplicationVersionError::S3LocationNotInServiceRegion(ref cause) => cause,CreateApplicationVersionError::TooManyApplicationVersions(ref cause) => cause,CreateApplicationVersionError::Validation(ref cause) => cause,CreateApplicationVersionError::Credentials(ref err) => err.description(),CreateApplicationVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateApplicationVersionError::Unknown(ref cause) => cause
+                            CreateApplicationVersionError::CodeBuildNotInServiceRegion(ref cause) => cause,
+CreateApplicationVersionError::InsufficientPrivileges(ref cause) => cause,
+CreateApplicationVersionError::S3LocationNotInServiceRegion(ref cause) => cause,
+CreateApplicationVersionError::TooManyApplicationVersions(ref cause) => cause,
+CreateApplicationVersionError::TooManyApplications(ref cause) => cause,
+CreateApplicationVersionError::Validation(ref cause) => cause,
+CreateApplicationVersionError::Credentials(ref err) => err.description(),
+CreateApplicationVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateApplicationVersionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7592,12 +7621,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateConfigurationTemplateError {
                     
-///<p>The specified account has reached its limit of configuration templates.</p>
-TooManyConfigurationTemplates(String),
 ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
 InsufficientPrivileges(String),
 ///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
-TooManyBuckets(String),/// An error occurred dispatching the HTTP request
+TooManyBuckets(String),
+///<p>The specified account has reached its limit of configuration templates.</p>
+TooManyConfigurationTemplates(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7614,7 +7643,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TooManyConfigurationTemplatesException" => CreateConfigurationTemplateError::TooManyConfigurationTemplates(String::from(parsed_error.message)),"TooManyBucketsException" => CreateConfigurationTemplateError::TooManyBuckets(String::from(parsed_error.message)),"InsufficientPrivilegesException" => CreateConfigurationTemplateError::InsufficientPrivileges(String::from(parsed_error.message)),_ => CreateConfigurationTemplateError::Unknown(String::from(body))
+                                    "InsufficientPrivilegesException" => CreateConfigurationTemplateError::InsufficientPrivileges(String::from(parsed_error.message)),"TooManyBucketsException" => CreateConfigurationTemplateError::TooManyBuckets(String::from(parsed_error.message)),"TooManyConfigurationTemplatesException" => CreateConfigurationTemplateError::TooManyConfigurationTemplates(String::from(parsed_error.message)),_ => CreateConfigurationTemplateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateConfigurationTemplateError::Unknown(body.to_string())
@@ -7646,7 +7675,13 @@ Unknown(String)
                 impl Error for CreateConfigurationTemplateError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateConfigurationTemplateError::TooManyConfigurationTemplates(ref cause) => cause,CreateConfigurationTemplateError::InsufficientPrivileges(ref cause) => cause,CreateConfigurationTemplateError::TooManyBuckets(ref cause) => cause,CreateConfigurationTemplateError::Validation(ref cause) => cause,CreateConfigurationTemplateError::Credentials(ref err) => err.description(),CreateConfigurationTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateConfigurationTemplateError::Unknown(ref cause) => cause
+                            CreateConfigurationTemplateError::InsufficientPrivileges(ref cause) => cause,
+CreateConfigurationTemplateError::TooManyBuckets(ref cause) => cause,
+CreateConfigurationTemplateError::TooManyConfigurationTemplates(ref cause) => cause,
+CreateConfigurationTemplateError::Validation(ref cause) => cause,
+CreateConfigurationTemplateError::Credentials(ref err) => err.description(),
+CreateConfigurationTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateConfigurationTemplateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7706,7 +7741,12 @@ Unknown(String)
                 impl Error for CreateEnvironmentError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateEnvironmentError::InsufficientPrivileges(ref cause) => cause,CreateEnvironmentError::TooManyEnvironments(ref cause) => cause,CreateEnvironmentError::Validation(ref cause) => cause,CreateEnvironmentError::Credentials(ref err) => err.description(),CreateEnvironmentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateEnvironmentError::Unknown(ref cause) => cause
+                            CreateEnvironmentError::InsufficientPrivileges(ref cause) => cause,
+CreateEnvironmentError::TooManyEnvironments(ref cause) => cause,
+CreateEnvironmentError::Validation(ref cause) => cause,
+CreateEnvironmentError::Credentials(ref err) => err.description(),
+CreateEnvironmentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateEnvironmentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7716,10 +7756,10 @@ Unknown(String)
                     
 ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
 InsufficientPrivileges(String),
-///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
-TooManyBuckets(String),
 ///<p>The specified account does not have a subscription to Amazon S3.</p>
-S3SubscriptionRequired(String),/// An error occurred dispatching the HTTP request
+S3SubscriptionRequired(String),
+///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
+TooManyBuckets(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7768,7 +7808,13 @@ Unknown(String)
                 impl Error for CreateStorageLocationError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateStorageLocationError::InsufficientPrivileges(ref cause) => cause,CreateStorageLocationError::TooManyBuckets(ref cause) => cause,CreateStorageLocationError::S3SubscriptionRequired(ref cause) => cause,CreateStorageLocationError::Validation(ref cause) => cause,CreateStorageLocationError::Credentials(ref err) => err.description(),CreateStorageLocationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateStorageLocationError::Unknown(ref cause) => cause
+                            CreateStorageLocationError::InsufficientPrivileges(ref cause) => cause,
+CreateStorageLocationError::S3SubscriptionRequired(ref cause) => cause,
+CreateStorageLocationError::TooManyBuckets(ref cause) => cause,
+CreateStorageLocationError::Validation(ref cause) => cause,
+CreateStorageLocationError::Credentials(ref err) => err.description(),
+CreateStorageLocationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateStorageLocationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7826,7 +7872,11 @@ Unknown(String)
                 impl Error for DeleteApplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteApplicationError::OperationInProgress(ref cause) => cause,DeleteApplicationError::Validation(ref cause) => cause,DeleteApplicationError::Credentials(ref err) => err.description(),DeleteApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteApplicationError::Unknown(ref cause) => cause
+                            DeleteApplicationError::OperationInProgress(ref cause) => cause,
+DeleteApplicationError::Validation(ref cause) => cause,
+DeleteApplicationError::Credentials(ref err) => err.description(),
+DeleteApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteApplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7834,12 +7884,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteApplicationVersionError {
                     
+///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+InsufficientPrivileges(String),
 ///<p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
 OperationInProgress(String),
 ///<p>The specified S3 bucket does not belong to the S3 region in which the service is running. The following regions are supported:</p> <ul> <li> <p>IAD/us-east-1</p> </li> <li> <p>PDX/us-west-2</p> </li> <li> <p>DUB/eu-west-1</p> </li> </ul>
 S3LocationNotInServiceRegion(String),
-///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
-InsufficientPrivileges(String),
 ///<p>Unable to delete the Amazon S3 source bundle associated with the application version. The application version was deleted successfully.</p>
 SourceBundleDeletion(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -7858,7 +7908,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InsufficientPrivilegesException" => DeleteApplicationVersionError::InsufficientPrivileges(String::from(parsed_error.message)),"S3LocationNotInServiceRegionException" => DeleteApplicationVersionError::S3LocationNotInServiceRegion(String::from(parsed_error.message)),"OperationInProgressException" => DeleteApplicationVersionError::OperationInProgress(String::from(parsed_error.message)),"SourceBundleDeletionException" => DeleteApplicationVersionError::SourceBundleDeletion(String::from(parsed_error.message)),_ => DeleteApplicationVersionError::Unknown(String::from(body))
+                                    "InsufficientPrivilegesException" => DeleteApplicationVersionError::InsufficientPrivileges(String::from(parsed_error.message)),"OperationInProgressException" => DeleteApplicationVersionError::OperationInProgress(String::from(parsed_error.message)),"S3LocationNotInServiceRegionException" => DeleteApplicationVersionError::S3LocationNotInServiceRegion(String::from(parsed_error.message)),"SourceBundleDeletionException" => DeleteApplicationVersionError::SourceBundleDeletion(String::from(parsed_error.message)),_ => DeleteApplicationVersionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteApplicationVersionError::Unknown(body.to_string())
@@ -7890,7 +7940,14 @@ Unknown(String)
                 impl Error for DeleteApplicationVersionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteApplicationVersionError::S3LocationNotInServiceRegion(ref cause) => cause,DeleteApplicationVersionError::InsufficientPrivileges(ref cause) => cause,DeleteApplicationVersionError::OperationInProgress(ref cause) => cause,DeleteApplicationVersionError::SourceBundleDeletion(ref cause) => cause,DeleteApplicationVersionError::Validation(ref cause) => cause,DeleteApplicationVersionError::Credentials(ref err) => err.description(),DeleteApplicationVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteApplicationVersionError::Unknown(ref cause) => cause
+                            DeleteApplicationVersionError::InsufficientPrivileges(ref cause) => cause,
+DeleteApplicationVersionError::OperationInProgress(ref cause) => cause,
+DeleteApplicationVersionError::S3LocationNotInServiceRegion(ref cause) => cause,
+DeleteApplicationVersionError::SourceBundleDeletion(ref cause) => cause,
+DeleteApplicationVersionError::Validation(ref cause) => cause,
+DeleteApplicationVersionError::Credentials(ref err) => err.description(),
+DeleteApplicationVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteApplicationVersionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7948,7 +8005,11 @@ Unknown(String)
                 impl Error for DeleteConfigurationTemplateError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteConfigurationTemplateError::OperationInProgress(ref cause) => cause,DeleteConfigurationTemplateError::Validation(ref cause) => cause,DeleteConfigurationTemplateError::Credentials(ref err) => err.description(),DeleteConfigurationTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteConfigurationTemplateError::Unknown(ref cause) => cause
+                            DeleteConfigurationTemplateError::OperationInProgress(ref cause) => cause,
+DeleteConfigurationTemplateError::Validation(ref cause) => cause,
+DeleteConfigurationTemplateError::Credentials(ref err) => err.description(),
+DeleteConfigurationTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteConfigurationTemplateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8004,7 +8065,10 @@ Unknown(String)
                 impl Error for DeleteEnvironmentConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteEnvironmentConfigurationError::Validation(ref cause) => cause,DeleteEnvironmentConfigurationError::Credentials(ref err) => err.description(),DeleteEnvironmentConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteEnvironmentConfigurationError::Unknown(ref cause) => cause
+                            DeleteEnvironmentConfigurationError::Validation(ref cause) => cause,
+DeleteEnvironmentConfigurationError::Credentials(ref err) => err.description(),
+DeleteEnvironmentConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteEnvironmentConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8060,7 +8124,10 @@ Unknown(String)
                 impl Error for DescribeApplicationVersionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeApplicationVersionsError::Validation(ref cause) => cause,DescribeApplicationVersionsError::Credentials(ref err) => err.description(),DescribeApplicationVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeApplicationVersionsError::Unknown(ref cause) => cause
+                            DescribeApplicationVersionsError::Validation(ref cause) => cause,
+DescribeApplicationVersionsError::Credentials(ref err) => err.description(),
+DescribeApplicationVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeApplicationVersionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8116,7 +8183,10 @@ Unknown(String)
                 impl Error for DescribeApplicationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeApplicationsError::Validation(ref cause) => cause,DescribeApplicationsError::Credentials(ref err) => err.description(),DescribeApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeApplicationsError::Unknown(ref cause) => cause
+                            DescribeApplicationsError::Validation(ref cause) => cause,
+DescribeApplicationsError::Credentials(ref err) => err.description(),
+DescribeApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeApplicationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8174,7 +8244,11 @@ Unknown(String)
                 impl Error for DescribeConfigurationOptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeConfigurationOptionsError::TooManyBuckets(ref cause) => cause,DescribeConfigurationOptionsError::Validation(ref cause) => cause,DescribeConfigurationOptionsError::Credentials(ref err) => err.description(),DescribeConfigurationOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeConfigurationOptionsError::Unknown(ref cause) => cause
+                            DescribeConfigurationOptionsError::TooManyBuckets(ref cause) => cause,
+DescribeConfigurationOptionsError::Validation(ref cause) => cause,
+DescribeConfigurationOptionsError::Credentials(ref err) => err.description(),
+DescribeConfigurationOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeConfigurationOptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8232,7 +8306,11 @@ Unknown(String)
                 impl Error for DescribeConfigurationSettingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeConfigurationSettingsError::TooManyBuckets(ref cause) => cause,DescribeConfigurationSettingsError::Validation(ref cause) => cause,DescribeConfigurationSettingsError::Credentials(ref err) => err.description(),DescribeConfigurationSettingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeConfigurationSettingsError::Unknown(ref cause) => cause
+                            DescribeConfigurationSettingsError::TooManyBuckets(ref cause) => cause,
+DescribeConfigurationSettingsError::Validation(ref cause) => cause,
+DescribeConfigurationSettingsError::Credentials(ref err) => err.description(),
+DescribeConfigurationSettingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeConfigurationSettingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8260,7 +8338,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidRequestException" => DescribeEnvironmentHealthError::InvalidRequest(String::from(parsed_error.message)),"ElasticBeanstalkServiceException" => DescribeEnvironmentHealthError::ElasticBeanstalkService(String::from(parsed_error.message)),_ => DescribeEnvironmentHealthError::Unknown(String::from(body))
+                                    "ElasticBeanstalkServiceException" => DescribeEnvironmentHealthError::ElasticBeanstalkService(String::from(parsed_error.message)),"InvalidRequestException" => DescribeEnvironmentHealthError::InvalidRequest(String::from(parsed_error.message)),_ => DescribeEnvironmentHealthError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeEnvironmentHealthError::Unknown(body.to_string())
@@ -8292,7 +8370,12 @@ Unknown(String)
                 impl Error for DescribeEnvironmentHealthError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEnvironmentHealthError::ElasticBeanstalkService(ref cause) => cause,DescribeEnvironmentHealthError::InvalidRequest(ref cause) => cause,DescribeEnvironmentHealthError::Validation(ref cause) => cause,DescribeEnvironmentHealthError::Credentials(ref err) => err.description(),DescribeEnvironmentHealthError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEnvironmentHealthError::Unknown(ref cause) => cause
+                            DescribeEnvironmentHealthError::ElasticBeanstalkService(ref cause) => cause,
+DescribeEnvironmentHealthError::InvalidRequest(ref cause) => cause,
+DescribeEnvironmentHealthError::Validation(ref cause) => cause,
+DescribeEnvironmentHealthError::Credentials(ref err) => err.description(),
+DescribeEnvironmentHealthError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEnvironmentHealthError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8350,7 +8433,11 @@ Unknown(String)
                 impl Error for DescribeEnvironmentManagedActionHistoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEnvironmentManagedActionHistoryError::ElasticBeanstalkService(ref cause) => cause,DescribeEnvironmentManagedActionHistoryError::Validation(ref cause) => cause,DescribeEnvironmentManagedActionHistoryError::Credentials(ref err) => err.description(),DescribeEnvironmentManagedActionHistoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEnvironmentManagedActionHistoryError::Unknown(ref cause) => cause
+                            DescribeEnvironmentManagedActionHistoryError::ElasticBeanstalkService(ref cause) => cause,
+DescribeEnvironmentManagedActionHistoryError::Validation(ref cause) => cause,
+DescribeEnvironmentManagedActionHistoryError::Credentials(ref err) => err.description(),
+DescribeEnvironmentManagedActionHistoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEnvironmentManagedActionHistoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8408,7 +8495,11 @@ Unknown(String)
                 impl Error for DescribeEnvironmentManagedActionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEnvironmentManagedActionsError::ElasticBeanstalkService(ref cause) => cause,DescribeEnvironmentManagedActionsError::Validation(ref cause) => cause,DescribeEnvironmentManagedActionsError::Credentials(ref err) => err.description(),DescribeEnvironmentManagedActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEnvironmentManagedActionsError::Unknown(ref cause) => cause
+                            DescribeEnvironmentManagedActionsError::ElasticBeanstalkService(ref cause) => cause,
+DescribeEnvironmentManagedActionsError::Validation(ref cause) => cause,
+DescribeEnvironmentManagedActionsError::Credentials(ref err) => err.description(),
+DescribeEnvironmentManagedActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEnvironmentManagedActionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8466,7 +8557,11 @@ Unknown(String)
                 impl Error for DescribeEnvironmentResourcesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEnvironmentResourcesError::InsufficientPrivileges(ref cause) => cause,DescribeEnvironmentResourcesError::Validation(ref cause) => cause,DescribeEnvironmentResourcesError::Credentials(ref err) => err.description(),DescribeEnvironmentResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEnvironmentResourcesError::Unknown(ref cause) => cause
+                            DescribeEnvironmentResourcesError::InsufficientPrivileges(ref cause) => cause,
+DescribeEnvironmentResourcesError::Validation(ref cause) => cause,
+DescribeEnvironmentResourcesError::Credentials(ref err) => err.description(),
+DescribeEnvironmentResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEnvironmentResourcesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8522,7 +8617,10 @@ Unknown(String)
                 impl Error for DescribeEnvironmentsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEnvironmentsError::Validation(ref cause) => cause,DescribeEnvironmentsError::Credentials(ref err) => err.description(),DescribeEnvironmentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEnvironmentsError::Unknown(ref cause) => cause
+                            DescribeEnvironmentsError::Validation(ref cause) => cause,
+DescribeEnvironmentsError::Credentials(ref err) => err.description(),
+DescribeEnvironmentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEnvironmentsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8578,7 +8676,10 @@ Unknown(String)
                 impl Error for DescribeEventsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEventsError::Validation(ref cause) => cause,DescribeEventsError::Credentials(ref err) => err.description(),DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEventsError::Unknown(ref cause) => cause
+                            DescribeEventsError::Validation(ref cause) => cause,
+DescribeEventsError::Credentials(ref err) => err.description(),
+DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEventsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8638,7 +8739,12 @@ Unknown(String)
                 impl Error for DescribeInstancesHealthError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeInstancesHealthError::ElasticBeanstalkService(ref cause) => cause,DescribeInstancesHealthError::InvalidRequest(ref cause) => cause,DescribeInstancesHealthError::Validation(ref cause) => cause,DescribeInstancesHealthError::Credentials(ref err) => err.description(),DescribeInstancesHealthError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeInstancesHealthError::Unknown(ref cause) => cause
+                            DescribeInstancesHealthError::ElasticBeanstalkService(ref cause) => cause,
+DescribeInstancesHealthError::InvalidRequest(ref cause) => cause,
+DescribeInstancesHealthError::Validation(ref cause) => cause,
+DescribeInstancesHealthError::Credentials(ref err) => err.description(),
+DescribeInstancesHealthError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeInstancesHealthError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8694,7 +8800,10 @@ Unknown(String)
                 impl Error for ListAvailableSolutionStacksError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAvailableSolutionStacksError::Validation(ref cause) => cause,ListAvailableSolutionStacksError::Credentials(ref err) => err.description(),ListAvailableSolutionStacksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAvailableSolutionStacksError::Unknown(ref cause) => cause
+                            ListAvailableSolutionStacksError::Validation(ref cause) => cause,
+ListAvailableSolutionStacksError::Credentials(ref err) => err.description(),
+ListAvailableSolutionStacksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAvailableSolutionStacksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8752,7 +8861,11 @@ Unknown(String)
                 impl Error for RebuildEnvironmentError {
                     fn description(&self) -> &str {
                         match *self {
-                            RebuildEnvironmentError::InsufficientPrivileges(ref cause) => cause,RebuildEnvironmentError::Validation(ref cause) => cause,RebuildEnvironmentError::Credentials(ref err) => err.description(),RebuildEnvironmentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RebuildEnvironmentError::Unknown(ref cause) => cause
+                            RebuildEnvironmentError::InsufficientPrivileges(ref cause) => cause,
+RebuildEnvironmentError::Validation(ref cause) => cause,
+RebuildEnvironmentError::Credentials(ref err) => err.description(),
+RebuildEnvironmentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RebuildEnvironmentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8808,7 +8921,10 @@ Unknown(String)
                 impl Error for RequestEnvironmentInfoError {
                     fn description(&self) -> &str {
                         match *self {
-                            RequestEnvironmentInfoError::Validation(ref cause) => cause,RequestEnvironmentInfoError::Credentials(ref err) => err.description(),RequestEnvironmentInfoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RequestEnvironmentInfoError::Unknown(ref cause) => cause
+                            RequestEnvironmentInfoError::Validation(ref cause) => cause,
+RequestEnvironmentInfoError::Credentials(ref err) => err.description(),
+RequestEnvironmentInfoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RequestEnvironmentInfoError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8864,7 +8980,10 @@ Unknown(String)
                 impl Error for RestartAppServerError {
                     fn description(&self) -> &str {
                         match *self {
-                            RestartAppServerError::Validation(ref cause) => cause,RestartAppServerError::Credentials(ref err) => err.description(),RestartAppServerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RestartAppServerError::Unknown(ref cause) => cause
+                            RestartAppServerError::Validation(ref cause) => cause,
+RestartAppServerError::Credentials(ref err) => err.description(),
+RestartAppServerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RestartAppServerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8920,7 +9039,10 @@ Unknown(String)
                 impl Error for RetrieveEnvironmentInfoError {
                     fn description(&self) -> &str {
                         match *self {
-                            RetrieveEnvironmentInfoError::Validation(ref cause) => cause,RetrieveEnvironmentInfoError::Credentials(ref err) => err.description(),RetrieveEnvironmentInfoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RetrieveEnvironmentInfoError::Unknown(ref cause) => cause
+                            RetrieveEnvironmentInfoError::Validation(ref cause) => cause,
+RetrieveEnvironmentInfoError::Credentials(ref err) => err.description(),
+RetrieveEnvironmentInfoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RetrieveEnvironmentInfoError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8976,7 +9098,10 @@ Unknown(String)
                 impl Error for SwapEnvironmentCNAMEsError {
                     fn description(&self) -> &str {
                         match *self {
-                            SwapEnvironmentCNAMEsError::Validation(ref cause) => cause,SwapEnvironmentCNAMEsError::Credentials(ref err) => err.description(),SwapEnvironmentCNAMEsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SwapEnvironmentCNAMEsError::Unknown(ref cause) => cause
+                            SwapEnvironmentCNAMEsError::Validation(ref cause) => cause,
+SwapEnvironmentCNAMEsError::Credentials(ref err) => err.description(),
+SwapEnvironmentCNAMEsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SwapEnvironmentCNAMEsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9034,7 +9159,11 @@ Unknown(String)
                 impl Error for TerminateEnvironmentError {
                     fn description(&self) -> &str {
                         match *self {
-                            TerminateEnvironmentError::InsufficientPrivileges(ref cause) => cause,TerminateEnvironmentError::Validation(ref cause) => cause,TerminateEnvironmentError::Credentials(ref err) => err.description(),TerminateEnvironmentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),TerminateEnvironmentError::Unknown(ref cause) => cause
+                            TerminateEnvironmentError::InsufficientPrivileges(ref cause) => cause,
+TerminateEnvironmentError::Validation(ref cause) => cause,
+TerminateEnvironmentError::Credentials(ref err) => err.description(),
+TerminateEnvironmentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+TerminateEnvironmentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9090,7 +9219,10 @@ Unknown(String)
                 impl Error for UpdateApplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateApplicationError::Validation(ref cause) => cause,UpdateApplicationError::Credentials(ref err) => err.description(),UpdateApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateApplicationError::Unknown(ref cause) => cause
+                            UpdateApplicationError::Validation(ref cause) => cause,
+UpdateApplicationError::Credentials(ref err) => err.description(),
+UpdateApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateApplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9148,7 +9280,11 @@ Unknown(String)
                 impl Error for UpdateApplicationResourceLifecycleError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateApplicationResourceLifecycleError::InsufficientPrivileges(ref cause) => cause,UpdateApplicationResourceLifecycleError::Validation(ref cause) => cause,UpdateApplicationResourceLifecycleError::Credentials(ref err) => err.description(),UpdateApplicationResourceLifecycleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateApplicationResourceLifecycleError::Unknown(ref cause) => cause
+                            UpdateApplicationResourceLifecycleError::InsufficientPrivileges(ref cause) => cause,
+UpdateApplicationResourceLifecycleError::Validation(ref cause) => cause,
+UpdateApplicationResourceLifecycleError::Credentials(ref err) => err.description(),
+UpdateApplicationResourceLifecycleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateApplicationResourceLifecycleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9204,7 +9340,10 @@ Unknown(String)
                 impl Error for UpdateApplicationVersionError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateApplicationVersionError::Validation(ref cause) => cause,UpdateApplicationVersionError::Credentials(ref err) => err.description(),UpdateApplicationVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateApplicationVersionError::Unknown(ref cause) => cause
+                            UpdateApplicationVersionError::Validation(ref cause) => cause,
+UpdateApplicationVersionError::Credentials(ref err) => err.description(),
+UpdateApplicationVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateApplicationVersionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9232,7 +9371,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TooManyBucketsException" => UpdateConfigurationTemplateError::TooManyBuckets(String::from(parsed_error.message)),"InsufficientPrivilegesException" => UpdateConfigurationTemplateError::InsufficientPrivileges(String::from(parsed_error.message)),_ => UpdateConfigurationTemplateError::Unknown(String::from(body))
+                                    "InsufficientPrivilegesException" => UpdateConfigurationTemplateError::InsufficientPrivileges(String::from(parsed_error.message)),"TooManyBucketsException" => UpdateConfigurationTemplateError::TooManyBuckets(String::from(parsed_error.message)),_ => UpdateConfigurationTemplateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateConfigurationTemplateError::Unknown(body.to_string())
@@ -9264,7 +9403,12 @@ Unknown(String)
                 impl Error for UpdateConfigurationTemplateError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateConfigurationTemplateError::InsufficientPrivileges(ref cause) => cause,UpdateConfigurationTemplateError::TooManyBuckets(ref cause) => cause,UpdateConfigurationTemplateError::Validation(ref cause) => cause,UpdateConfigurationTemplateError::Credentials(ref err) => err.description(),UpdateConfigurationTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateConfigurationTemplateError::Unknown(ref cause) => cause
+                            UpdateConfigurationTemplateError::InsufficientPrivileges(ref cause) => cause,
+UpdateConfigurationTemplateError::TooManyBuckets(ref cause) => cause,
+UpdateConfigurationTemplateError::Validation(ref cause) => cause,
+UpdateConfigurationTemplateError::Credentials(ref err) => err.description(),
+UpdateConfigurationTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateConfigurationTemplateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9272,10 +9416,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateEnvironmentError {
                     
-///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
-TooManyBuckets(String),
 ///<p>The specified account does not have sufficient privileges for one of more AWS services.</p>
-InsufficientPrivileges(String),/// An error occurred dispatching the HTTP request
+InsufficientPrivileges(String),
+///<p>The specified account has reached its limit of Amazon S3 buckets.</p>
+TooManyBuckets(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9292,7 +9436,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TooManyBucketsException" => UpdateEnvironmentError::TooManyBuckets(String::from(parsed_error.message)),"InsufficientPrivilegesException" => UpdateEnvironmentError::InsufficientPrivileges(String::from(parsed_error.message)),_ => UpdateEnvironmentError::Unknown(String::from(body))
+                                    "InsufficientPrivilegesException" => UpdateEnvironmentError::InsufficientPrivileges(String::from(parsed_error.message)),"TooManyBucketsException" => UpdateEnvironmentError::TooManyBuckets(String::from(parsed_error.message)),_ => UpdateEnvironmentError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateEnvironmentError::Unknown(body.to_string())
@@ -9324,7 +9468,12 @@ Unknown(String)
                 impl Error for UpdateEnvironmentError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateEnvironmentError::InsufficientPrivileges(ref cause) => cause,UpdateEnvironmentError::TooManyBuckets(ref cause) => cause,UpdateEnvironmentError::Validation(ref cause) => cause,UpdateEnvironmentError::Credentials(ref err) => err.description(),UpdateEnvironmentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateEnvironmentError::Unknown(ref cause) => cause
+                            UpdateEnvironmentError::InsufficientPrivileges(ref cause) => cause,
+UpdateEnvironmentError::TooManyBuckets(ref cause) => cause,
+UpdateEnvironmentError::Validation(ref cause) => cause,
+UpdateEnvironmentError::Credentials(ref err) => err.description(),
+UpdateEnvironmentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateEnvironmentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9384,7 +9533,12 @@ Unknown(String)
                 impl Error for ValidateConfigurationSettingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ValidateConfigurationSettingsError::TooManyBuckets(ref cause) => cause,ValidateConfigurationSettingsError::InsufficientPrivileges(ref cause) => cause,ValidateConfigurationSettingsError::Validation(ref cause) => cause,ValidateConfigurationSettingsError::Credentials(ref err) => err.description(),ValidateConfigurationSettingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ValidateConfigurationSettingsError::Unknown(ref cause) => cause
+                            ValidateConfigurationSettingsError::InsufficientPrivileges(ref cause) => cause,
+ValidateConfigurationSettingsError::TooManyBuckets(ref cause) => cause,
+ValidateConfigurationSettingsError::Validation(ref cause) => cause,
+ValidateConfigurationSettingsError::Credentials(ref err) => err.description(),
+ValidateConfigurationSettingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ValidateConfigurationSettingsError::Unknown(ref cause) => cause
                         }
                     }
                  }

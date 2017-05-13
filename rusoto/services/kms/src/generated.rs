@@ -819,10 +819,10 @@ DependencyTimeout(String),
 InvalidArn(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
 KMSInternal(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),/// An error occurred dispatching the HTTP request
+KMSInvalidState(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -841,7 +841,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => CancelKeyDeletionError::NotFound(String::from(error_message)),"InvalidArnException" => CancelKeyDeletionError::InvalidArn(String::from(error_message)),"KMSInvalidStateException" => CancelKeyDeletionError::KMSInvalidState(String::from(error_message)),"DependencyTimeoutException" => CancelKeyDeletionError::DependencyTimeout(String::from(error_message)),"KMSInternalException" => CancelKeyDeletionError::KMSInternal(String::from(error_message)),"ValidationException" => CancelKeyDeletionError::Validation(error_message.to_string()),_ => CancelKeyDeletionError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => CancelKeyDeletionError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => CancelKeyDeletionError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => CancelKeyDeletionError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => CancelKeyDeletionError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => CancelKeyDeletionError::NotFound(String::from(error_message)),
+"ValidationException" => CancelKeyDeletionError::Validation(error_message.to_string()),
+_ => CancelKeyDeletionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CancelKeyDeletionError::Unknown(String::from(body))
@@ -872,7 +878,15 @@ Unknown(String)
                 impl Error for CancelKeyDeletionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CancelKeyDeletionError::KMSInternal(ref cause) => cause,CancelKeyDeletionError::DependencyTimeout(ref cause) => cause,CancelKeyDeletionError::KMSInvalidState(ref cause) => cause,CancelKeyDeletionError::NotFound(ref cause) => cause,CancelKeyDeletionError::InvalidArn(ref cause) => cause,CancelKeyDeletionError::Validation(ref cause) => cause,CancelKeyDeletionError::Credentials(ref err) => err.description(),CancelKeyDeletionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CancelKeyDeletionError::Unknown(ref cause) => cause
+                            CancelKeyDeletionError::DependencyTimeout(ref cause) => cause,
+CancelKeyDeletionError::InvalidArn(ref cause) => cause,
+CancelKeyDeletionError::KMSInternal(ref cause) => cause,
+CancelKeyDeletionError::KMSInvalidState(ref cause) => cause,
+CancelKeyDeletionError::NotFound(ref cause) => cause,
+CancelKeyDeletionError::Validation(ref cause) => cause,
+CancelKeyDeletionError::Credentials(ref err) => err.description(),
+CancelKeyDeletionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CancelKeyDeletionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -880,20 +894,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateAliasError {
                     
-///<p>The request was rejected because the specified alias name is not valid.</p>
-InvalidAliasName(String),
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
-///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-LimitExceeded(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 AlreadyExists(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),/// An error occurred dispatching the HTTP request
+DependencyTimeout(String),
+///<p>The request was rejected because the specified alias name is not valid.</p>
+InvalidAliasName(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
+///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+LimitExceeded(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -912,7 +926,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DependencyTimeoutException" => CreateAliasError::DependencyTimeout(String::from(error_message)),"InvalidAliasNameException" => CreateAliasError::InvalidAliasName(String::from(error_message)),"KMSInternalException" => CreateAliasError::KMSInternal(String::from(error_message)),"KMSInvalidStateException" => CreateAliasError::KMSInvalidState(String::from(error_message)),"AlreadyExistsException" => CreateAliasError::AlreadyExists(String::from(error_message)),"NotFoundException" => CreateAliasError::NotFound(String::from(error_message)),"LimitExceededException" => CreateAliasError::LimitExceeded(String::from(error_message)),"ValidationException" => CreateAliasError::Validation(error_message.to_string()),_ => CreateAliasError::Unknown(String::from(body))
+                                    "AlreadyExistsException" => CreateAliasError::AlreadyExists(String::from(error_message)),
+"DependencyTimeoutException" => CreateAliasError::DependencyTimeout(String::from(error_message)),
+"InvalidAliasNameException" => CreateAliasError::InvalidAliasName(String::from(error_message)),
+"KMSInternalException" => CreateAliasError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => CreateAliasError::KMSInvalidState(String::from(error_message)),
+"LimitExceededException" => CreateAliasError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => CreateAliasError::NotFound(String::from(error_message)),
+"ValidationException" => CreateAliasError::Validation(error_message.to_string()),
+_ => CreateAliasError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateAliasError::Unknown(String::from(body))
@@ -943,7 +965,17 @@ Unknown(String)
                 impl Error for CreateAliasError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateAliasError::InvalidAliasName(ref cause) => cause,CreateAliasError::NotFound(ref cause) => cause,CreateAliasError::LimitExceeded(ref cause) => cause,CreateAliasError::KMSInvalidState(ref cause) => cause,CreateAliasError::DependencyTimeout(ref cause) => cause,CreateAliasError::AlreadyExists(ref cause) => cause,CreateAliasError::KMSInternal(ref cause) => cause,CreateAliasError::Validation(ref cause) => cause,CreateAliasError::Credentials(ref err) => err.description(),CreateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateAliasError::Unknown(ref cause) => cause
+                            CreateAliasError::AlreadyExists(ref cause) => cause,
+CreateAliasError::DependencyTimeout(ref cause) => cause,
+CreateAliasError::InvalidAliasName(ref cause) => cause,
+CreateAliasError::KMSInternal(ref cause) => cause,
+CreateAliasError::KMSInvalidState(ref cause) => cause,
+CreateAliasError::LimitExceeded(ref cause) => cause,
+CreateAliasError::NotFound(ref cause) => cause,
+CreateAliasError::Validation(ref cause) => cause,
+CreateAliasError::Credentials(ref err) => err.description(),
+CreateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateAliasError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -951,22 +983,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateGrantError {
                     
-///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-LimitExceeded(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
-///<p>The request was rejected because the specified grant token is not valid.</p>
-InvalidGrantToken(String),
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
+///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+DependencyTimeout(String),
 ///<p>The request was rejected because the specified CMK is not enabled.</p>
 Disabled(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
-///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because the specified grant token is not valid.</p>
+InvalidGrantToken(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
+///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+LimitExceeded(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -985,7 +1017,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DisabledException" => CreateGrantError::Disabled(String::from(error_message)),"KMSInternalException" => CreateGrantError::KMSInternal(String::from(error_message)),"LimitExceededException" => CreateGrantError::LimitExceeded(String::from(error_message)),"KMSInvalidStateException" => CreateGrantError::KMSInvalidState(String::from(error_message)),"NotFoundException" => CreateGrantError::NotFound(String::from(error_message)),"InvalidArnException" => CreateGrantError::InvalidArn(String::from(error_message)),"DependencyTimeoutException" => CreateGrantError::DependencyTimeout(String::from(error_message)),"InvalidGrantTokenException" => CreateGrantError::InvalidGrantToken(String::from(error_message)),"ValidationException" => CreateGrantError::Validation(error_message.to_string()),_ => CreateGrantError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => CreateGrantError::DependencyTimeout(String::from(error_message)),
+"DisabledException" => CreateGrantError::Disabled(String::from(error_message)),
+"InvalidArnException" => CreateGrantError::InvalidArn(String::from(error_message)),
+"InvalidGrantTokenException" => CreateGrantError::InvalidGrantToken(String::from(error_message)),
+"KMSInternalException" => CreateGrantError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => CreateGrantError::KMSInvalidState(String::from(error_message)),
+"LimitExceededException" => CreateGrantError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => CreateGrantError::NotFound(String::from(error_message)),
+"ValidationException" => CreateGrantError::Validation(error_message.to_string()),
+_ => CreateGrantError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateGrantError::Unknown(String::from(body))
@@ -1016,7 +1057,18 @@ Unknown(String)
                 impl Error for CreateGrantError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateGrantError::NotFound(ref cause) => cause,CreateGrantError::KMSInternal(ref cause) => cause,CreateGrantError::KMSInvalidState(ref cause) => cause,CreateGrantError::DependencyTimeout(ref cause) => cause,CreateGrantError::Disabled(ref cause) => cause,CreateGrantError::LimitExceeded(ref cause) => cause,CreateGrantError::InvalidArn(ref cause) => cause,CreateGrantError::InvalidGrantToken(ref cause) => cause,CreateGrantError::Validation(ref cause) => cause,CreateGrantError::Credentials(ref err) => err.description(),CreateGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateGrantError::Unknown(ref cause) => cause
+                            CreateGrantError::DependencyTimeout(ref cause) => cause,
+CreateGrantError::Disabled(ref cause) => cause,
+CreateGrantError::InvalidArn(ref cause) => cause,
+CreateGrantError::InvalidGrantToken(ref cause) => cause,
+CreateGrantError::KMSInternal(ref cause) => cause,
+CreateGrantError::KMSInvalidState(ref cause) => cause,
+CreateGrantError::LimitExceeded(ref cause) => cause,
+CreateGrantError::NotFound(ref cause) => cause,
+CreateGrantError::Validation(ref cause) => cause,
+CreateGrantError::Credentials(ref err) => err.description(),
+CreateGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateGrantError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1024,18 +1076,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateKeyError {
                     
-///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
-UnsupportedOperation(String),
+///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+DependencyTimeout(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
 KMSInternal(String),
-///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),
+///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because the specified policy is not syntactically or semantically correct.</p>
 MalformedPolicyDocument(String),
-///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1054,7 +1106,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "UnsupportedOperationException" => CreateKeyError::UnsupportedOperation(String::from(error_message)),"DependencyTimeoutException" => CreateKeyError::DependencyTimeout(String::from(error_message)),"InvalidArnException" => CreateKeyError::InvalidArn(String::from(error_message)),"MalformedPolicyDocumentException" => CreateKeyError::MalformedPolicyDocument(String::from(error_message)),"LimitExceededException" => CreateKeyError::LimitExceeded(String::from(error_message)),"KMSInternalException" => CreateKeyError::KMSInternal(String::from(error_message)),"ValidationException" => CreateKeyError::Validation(error_message.to_string()),_ => CreateKeyError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => CreateKeyError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => CreateKeyError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => CreateKeyError::KMSInternal(String::from(error_message)),
+"LimitExceededException" => CreateKeyError::LimitExceeded(String::from(error_message)),
+"MalformedPolicyDocumentException" => CreateKeyError::MalformedPolicyDocument(String::from(error_message)),
+"UnsupportedOperationException" => CreateKeyError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => CreateKeyError::Validation(error_message.to_string()),
+_ => CreateKeyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateKeyError::Unknown(String::from(body))
@@ -1085,7 +1144,16 @@ Unknown(String)
                 impl Error for CreateKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateKeyError::InvalidArn(ref cause) => cause,CreateKeyError::UnsupportedOperation(ref cause) => cause,CreateKeyError::LimitExceeded(ref cause) => cause,CreateKeyError::MalformedPolicyDocument(ref cause) => cause,CreateKeyError::DependencyTimeout(ref cause) => cause,CreateKeyError::KMSInternal(ref cause) => cause,CreateKeyError::Validation(ref cause) => cause,CreateKeyError::Credentials(ref err) => err.description(),CreateKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateKeyError::Unknown(ref cause) => cause
+                            CreateKeyError::DependencyTimeout(ref cause) => cause,
+CreateKeyError::InvalidArn(ref cause) => cause,
+CreateKeyError::KMSInternal(ref cause) => cause,
+CreateKeyError::LimitExceeded(ref cause) => cause,
+CreateKeyError::MalformedPolicyDocument(ref cause) => cause,
+CreateKeyError::UnsupportedOperation(ref cause) => cause,
+CreateKeyError::Validation(ref cause) => cause,
+CreateKeyError::Credentials(ref err) => err.description(),
+CreateKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1093,22 +1161,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DecryptError {
                     
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
+///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+DependencyTimeout(String),
+///<p>The request was rejected because the specified CMK is not enabled.</p>
+Disabled(String),
 ///<p>The request was rejected because the specified ciphertext has been corrupted or is otherwise invalid.</p>
 InvalidCiphertext(String),
+///<p>The request was rejected because the specified grant token is not valid.</p>
+InvalidGrantToken(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
 KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 KMSInvalidState(String),
-///<p>The request was rejected because the specified CMK is not enabled.</p>
-Disabled(String),
 ///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
 KeyUnavailable(String),
-///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),
-///<p>The request was rejected because the specified grant token is not valid.</p>
-InvalidGrantToken(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1127,7 +1195,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "KeyUnavailableException" => DecryptError::KeyUnavailable(String::from(error_message)),"KMSInvalidStateException" => DecryptError::KMSInvalidState(String::from(error_message)),"NotFoundException" => DecryptError::NotFound(String::from(error_message)),"InvalidCiphertextException" => DecryptError::InvalidCiphertext(String::from(error_message)),"KMSInternalException" => DecryptError::KMSInternal(String::from(error_message)),"DependencyTimeoutException" => DecryptError::DependencyTimeout(String::from(error_message)),"DisabledException" => DecryptError::Disabled(String::from(error_message)),"InvalidGrantTokenException" => DecryptError::InvalidGrantToken(String::from(error_message)),"ValidationException" => DecryptError::Validation(error_message.to_string()),_ => DecryptError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => DecryptError::DependencyTimeout(String::from(error_message)),
+"DisabledException" => DecryptError::Disabled(String::from(error_message)),
+"InvalidCiphertextException" => DecryptError::InvalidCiphertext(String::from(error_message)),
+"InvalidGrantTokenException" => DecryptError::InvalidGrantToken(String::from(error_message)),
+"KMSInternalException" => DecryptError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => DecryptError::KMSInvalidState(String::from(error_message)),
+"KeyUnavailableException" => DecryptError::KeyUnavailable(String::from(error_message)),
+"NotFoundException" => DecryptError::NotFound(String::from(error_message)),
+"ValidationException" => DecryptError::Validation(error_message.to_string()),
+_ => DecryptError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DecryptError::Unknown(String::from(body))
@@ -1158,7 +1235,18 @@ Unknown(String)
                 impl Error for DecryptError {
                     fn description(&self) -> &str {
                         match *self {
-                            DecryptError::KeyUnavailable(ref cause) => cause,DecryptError::InvalidCiphertext(ref cause) => cause,DecryptError::Disabled(ref cause) => cause,DecryptError::NotFound(ref cause) => cause,DecryptError::InvalidGrantToken(ref cause) => cause,DecryptError::KMSInternal(ref cause) => cause,DecryptError::DependencyTimeout(ref cause) => cause,DecryptError::KMSInvalidState(ref cause) => cause,DecryptError::Validation(ref cause) => cause,DecryptError::Credentials(ref err) => err.description(),DecryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DecryptError::Unknown(ref cause) => cause
+                            DecryptError::DependencyTimeout(ref cause) => cause,
+DecryptError::Disabled(ref cause) => cause,
+DecryptError::InvalidCiphertext(ref cause) => cause,
+DecryptError::InvalidGrantToken(ref cause) => cause,
+DecryptError::KMSInternal(ref cause) => cause,
+DecryptError::KMSInvalidState(ref cause) => cause,
+DecryptError::KeyUnavailable(ref cause) => cause,
+DecryptError::NotFound(ref cause) => cause,
+DecryptError::Validation(ref cause) => cause,
+DecryptError::Credentials(ref err) => err.description(),
+DecryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DecryptError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1166,14 +1254,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteAliasError {
                     
+///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+DependencyTimeout(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 KMSInvalidState(String),
 ///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
-///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),/// An error occurred dispatching the HTTP request
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1192,7 +1280,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => DeleteAliasError::NotFound(String::from(error_message)),"DependencyTimeoutException" => DeleteAliasError::DependencyTimeout(String::from(error_message)),"KMSInvalidStateException" => DeleteAliasError::KMSInvalidState(String::from(error_message)),"KMSInternalException" => DeleteAliasError::KMSInternal(String::from(error_message)),"ValidationException" => DeleteAliasError::Validation(error_message.to_string()),_ => DeleteAliasError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => DeleteAliasError::DependencyTimeout(String::from(error_message)),
+"KMSInternalException" => DeleteAliasError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => DeleteAliasError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => DeleteAliasError::NotFound(String::from(error_message)),
+"ValidationException" => DeleteAliasError::Validation(error_message.to_string()),
+_ => DeleteAliasError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteAliasError::Unknown(String::from(body))
@@ -1223,7 +1316,14 @@ Unknown(String)
                 impl Error for DeleteAliasError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAliasError::NotFound(ref cause) => cause,DeleteAliasError::KMSInternal(ref cause) => cause,DeleteAliasError::KMSInvalidState(ref cause) => cause,DeleteAliasError::DependencyTimeout(ref cause) => cause,DeleteAliasError::Validation(ref cause) => cause,DeleteAliasError::Credentials(ref err) => err.description(),DeleteAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAliasError::Unknown(ref cause) => cause
+                            DeleteAliasError::DependencyTimeout(ref cause) => cause,
+DeleteAliasError::KMSInternal(ref cause) => cause,
+DeleteAliasError::KMSInvalidState(ref cause) => cause,
+DeleteAliasError::NotFound(ref cause) => cause,
+DeleteAliasError::Validation(ref cause) => cause,
+DeleteAliasError::Credentials(ref err) => err.description(),
+DeleteAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAliasError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1231,18 +1331,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteImportedKeyMaterialError {
                     
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
+///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+DependencyTimeout(String),
+///<p>The request was rejected because a specified ARN was not valid.</p>
+InvalidArn(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
 KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 KMSInvalidState(String),
-///<p>The request was rejected because a specified ARN was not valid.</p>
-InvalidArn(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),
 ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
-UnsupportedOperation(String),
-///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),/// An error occurred dispatching the HTTP request
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1261,7 +1361,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "KMSInternalException" => DeleteImportedKeyMaterialError::KMSInternal(String::from(error_message)),"InvalidArnException" => DeleteImportedKeyMaterialError::InvalidArn(String::from(error_message)),"DependencyTimeoutException" => DeleteImportedKeyMaterialError::DependencyTimeout(String::from(error_message)),"UnsupportedOperationException" => DeleteImportedKeyMaterialError::UnsupportedOperation(String::from(error_message)),"KMSInvalidStateException" => DeleteImportedKeyMaterialError::KMSInvalidState(String::from(error_message)),"NotFoundException" => DeleteImportedKeyMaterialError::NotFound(String::from(error_message)),"ValidationException" => DeleteImportedKeyMaterialError::Validation(error_message.to_string()),_ => DeleteImportedKeyMaterialError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => DeleteImportedKeyMaterialError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => DeleteImportedKeyMaterialError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => DeleteImportedKeyMaterialError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => DeleteImportedKeyMaterialError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => DeleteImportedKeyMaterialError::NotFound(String::from(error_message)),
+"UnsupportedOperationException" => DeleteImportedKeyMaterialError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => DeleteImportedKeyMaterialError::Validation(error_message.to_string()),
+_ => DeleteImportedKeyMaterialError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteImportedKeyMaterialError::Unknown(String::from(body))
@@ -1292,7 +1399,16 @@ Unknown(String)
                 impl Error for DeleteImportedKeyMaterialError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteImportedKeyMaterialError::NotFound(ref cause) => cause,DeleteImportedKeyMaterialError::DependencyTimeout(ref cause) => cause,DeleteImportedKeyMaterialError::KMSInvalidState(ref cause) => cause,DeleteImportedKeyMaterialError::InvalidArn(ref cause) => cause,DeleteImportedKeyMaterialError::KMSInternal(ref cause) => cause,DeleteImportedKeyMaterialError::UnsupportedOperation(ref cause) => cause,DeleteImportedKeyMaterialError::Validation(ref cause) => cause,DeleteImportedKeyMaterialError::Credentials(ref err) => err.description(),DeleteImportedKeyMaterialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteImportedKeyMaterialError::Unknown(ref cause) => cause
+                            DeleteImportedKeyMaterialError::DependencyTimeout(ref cause) => cause,
+DeleteImportedKeyMaterialError::InvalidArn(ref cause) => cause,
+DeleteImportedKeyMaterialError::KMSInternal(ref cause) => cause,
+DeleteImportedKeyMaterialError::KMSInvalidState(ref cause) => cause,
+DeleteImportedKeyMaterialError::NotFound(ref cause) => cause,
+DeleteImportedKeyMaterialError::UnsupportedOperation(ref cause) => cause,
+DeleteImportedKeyMaterialError::Validation(ref cause) => cause,
+DeleteImportedKeyMaterialError::Credentials(ref err) => err.description(),
+DeleteImportedKeyMaterialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteImportedKeyMaterialError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1304,10 +1420,10 @@ Unknown(String)
 DependencyTimeout(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),/// An error occurred dispatching the HTTP request
+KMSInternal(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1326,7 +1442,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidArnException" => DescribeKeyError::InvalidArn(String::from(error_message)),"DependencyTimeoutException" => DescribeKeyError::DependencyTimeout(String::from(error_message)),"KMSInternalException" => DescribeKeyError::KMSInternal(String::from(error_message)),"NotFoundException" => DescribeKeyError::NotFound(String::from(error_message)),"ValidationException" => DescribeKeyError::Validation(error_message.to_string()),_ => DescribeKeyError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => DescribeKeyError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => DescribeKeyError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => DescribeKeyError::KMSInternal(String::from(error_message)),
+"NotFoundException" => DescribeKeyError::NotFound(String::from(error_message)),
+"ValidationException" => DescribeKeyError::Validation(error_message.to_string()),
+_ => DescribeKeyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeKeyError::Unknown(String::from(body))
@@ -1357,7 +1478,14 @@ Unknown(String)
                 impl Error for DescribeKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeKeyError::NotFound(ref cause) => cause,DescribeKeyError::KMSInternal(ref cause) => cause,DescribeKeyError::DependencyTimeout(ref cause) => cause,DescribeKeyError::InvalidArn(ref cause) => cause,DescribeKeyError::Validation(ref cause) => cause,DescribeKeyError::Credentials(ref err) => err.description(),DescribeKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeKeyError::Unknown(ref cause) => cause
+                            DescribeKeyError::DependencyTimeout(ref cause) => cause,
+DescribeKeyError::InvalidArn(ref cause) => cause,
+DescribeKeyError::KMSInternal(ref cause) => cause,
+DescribeKeyError::NotFound(ref cause) => cause,
+DescribeKeyError::Validation(ref cause) => cause,
+DescribeKeyError::Credentials(ref err) => err.description(),
+DescribeKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1367,10 +1495,10 @@ Unknown(String)
                     
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 KMSInvalidState(String),
 ///<p>The request was rejected because the specified entity or resource could not be found.</p>
@@ -1393,7 +1521,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DependencyTimeoutException" => DisableKeyError::DependencyTimeout(String::from(error_message)),"KMSInvalidStateException" => DisableKeyError::KMSInvalidState(String::from(error_message)),"InvalidArnException" => DisableKeyError::InvalidArn(String::from(error_message)),"KMSInternalException" => DisableKeyError::KMSInternal(String::from(error_message)),"NotFoundException" => DisableKeyError::NotFound(String::from(error_message)),"ValidationException" => DisableKeyError::Validation(error_message.to_string()),_ => DisableKeyError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => DisableKeyError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => DisableKeyError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => DisableKeyError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => DisableKeyError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => DisableKeyError::NotFound(String::from(error_message)),
+"ValidationException" => DisableKeyError::Validation(error_message.to_string()),
+_ => DisableKeyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DisableKeyError::Unknown(String::from(body))
@@ -1424,7 +1558,15 @@ Unknown(String)
                 impl Error for DisableKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableKeyError::DependencyTimeout(ref cause) => cause,DisableKeyError::KMSInternal(ref cause) => cause,DisableKeyError::KMSInvalidState(ref cause) => cause,DisableKeyError::NotFound(ref cause) => cause,DisableKeyError::InvalidArn(ref cause) => cause,DisableKeyError::Validation(ref cause) => cause,DisableKeyError::Credentials(ref err) => err.description(),DisableKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableKeyError::Unknown(ref cause) => cause
+                            DisableKeyError::DependencyTimeout(ref cause) => cause,
+DisableKeyError::InvalidArn(ref cause) => cause,
+DisableKeyError::KMSInternal(ref cause) => cause,
+DisableKeyError::KMSInvalidState(ref cause) => cause,
+DisableKeyError::NotFound(ref cause) => cause,
+DisableKeyError::Validation(ref cause) => cause,
+DisableKeyError::Credentials(ref err) => err.description(),
+DisableKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1434,18 +1576,18 @@ Unknown(String)
                     
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
+///<p>The request was rejected because the specified CMK is not enabled.</p>
+Disabled(String),
+///<p>The request was rejected because a specified ARN was not valid.</p>
+InvalidArn(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
 KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 KMSInvalidState(String),
 ///<p>The request was rejected because the specified entity or resource could not be found.</p>
 NotFound(String),
-///<p>The request was rejected because the specified CMK is not enabled.</p>
-Disabled(String),
 ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
-UnsupportedOperation(String),
-///<p>The request was rejected because a specified ARN was not valid.</p>
-InvalidArn(String),/// An error occurred dispatching the HTTP request
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1464,7 +1606,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DisabledException" => DisableKeyRotationError::Disabled(String::from(error_message)),"DependencyTimeoutException" => DisableKeyRotationError::DependencyTimeout(String::from(error_message)),"KMSInvalidStateException" => DisableKeyRotationError::KMSInvalidState(String::from(error_message)),"InvalidArnException" => DisableKeyRotationError::InvalidArn(String::from(error_message)),"NotFoundException" => DisableKeyRotationError::NotFound(String::from(error_message)),"UnsupportedOperationException" => DisableKeyRotationError::UnsupportedOperation(String::from(error_message)),"KMSInternalException" => DisableKeyRotationError::KMSInternal(String::from(error_message)),"ValidationException" => DisableKeyRotationError::Validation(error_message.to_string()),_ => DisableKeyRotationError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => DisableKeyRotationError::DependencyTimeout(String::from(error_message)),
+"DisabledException" => DisableKeyRotationError::Disabled(String::from(error_message)),
+"InvalidArnException" => DisableKeyRotationError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => DisableKeyRotationError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => DisableKeyRotationError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => DisableKeyRotationError::NotFound(String::from(error_message)),
+"UnsupportedOperationException" => DisableKeyRotationError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => DisableKeyRotationError::Validation(error_message.to_string()),
+_ => DisableKeyRotationError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DisableKeyRotationError::Unknown(String::from(body))
@@ -1495,7 +1645,17 @@ Unknown(String)
                 impl Error for DisableKeyRotationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableKeyRotationError::UnsupportedOperation(ref cause) => cause,DisableKeyRotationError::NotFound(ref cause) => cause,DisableKeyRotationError::KMSInvalidState(ref cause) => cause,DisableKeyRotationError::Disabled(ref cause) => cause,DisableKeyRotationError::InvalidArn(ref cause) => cause,DisableKeyRotationError::DependencyTimeout(ref cause) => cause,DisableKeyRotationError::KMSInternal(ref cause) => cause,DisableKeyRotationError::Validation(ref cause) => cause,DisableKeyRotationError::Credentials(ref err) => err.description(),DisableKeyRotationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableKeyRotationError::Unknown(ref cause) => cause
+                            DisableKeyRotationError::DependencyTimeout(ref cause) => cause,
+DisableKeyRotationError::Disabled(ref cause) => cause,
+DisableKeyRotationError::InvalidArn(ref cause) => cause,
+DisableKeyRotationError::KMSInternal(ref cause) => cause,
+DisableKeyRotationError::KMSInvalidState(ref cause) => cause,
+DisableKeyRotationError::NotFound(ref cause) => cause,
+DisableKeyRotationError::UnsupportedOperation(ref cause) => cause,
+DisableKeyRotationError::Validation(ref cause) => cause,
+DisableKeyRotationError::Credentials(ref err) => err.description(),
+DisableKeyRotationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableKeyRotationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1505,16 +1665,16 @@ Unknown(String)
                     
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
 ///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 LimitExceeded(String),
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1533,7 +1693,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "KMSInternalException" => EnableKeyError::KMSInternal(String::from(error_message)),"LimitExceededException" => EnableKeyError::LimitExceeded(String::from(error_message)),"KMSInvalidStateException" => EnableKeyError::KMSInvalidState(String::from(error_message)),"NotFoundException" => EnableKeyError::NotFound(String::from(error_message)),"InvalidArnException" => EnableKeyError::InvalidArn(String::from(error_message)),"DependencyTimeoutException" => EnableKeyError::DependencyTimeout(String::from(error_message)),"ValidationException" => EnableKeyError::Validation(error_message.to_string()),_ => EnableKeyError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => EnableKeyError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => EnableKeyError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => EnableKeyError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => EnableKeyError::KMSInvalidState(String::from(error_message)),
+"LimitExceededException" => EnableKeyError::LimitExceeded(String::from(error_message)),
+"NotFoundException" => EnableKeyError::NotFound(String::from(error_message)),
+"ValidationException" => EnableKeyError::Validation(error_message.to_string()),
+_ => EnableKeyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => EnableKeyError::Unknown(String::from(body))
@@ -1564,7 +1731,16 @@ Unknown(String)
                 impl Error for EnableKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableKeyError::KMSInternal(ref cause) => cause,EnableKeyError::KMSInvalidState(ref cause) => cause,EnableKeyError::LimitExceeded(ref cause) => cause,EnableKeyError::DependencyTimeout(ref cause) => cause,EnableKeyError::InvalidArn(ref cause) => cause,EnableKeyError::NotFound(ref cause) => cause,EnableKeyError::Validation(ref cause) => cause,EnableKeyError::Credentials(ref err) => err.description(),EnableKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableKeyError::Unknown(ref cause) => cause
+                            EnableKeyError::DependencyTimeout(ref cause) => cause,
+EnableKeyError::InvalidArn(ref cause) => cause,
+EnableKeyError::KMSInternal(ref cause) => cause,
+EnableKeyError::KMSInvalidState(ref cause) => cause,
+EnableKeyError::LimitExceeded(ref cause) => cause,
+EnableKeyError::NotFound(ref cause) => cause,
+EnableKeyError::Validation(ref cause) => cause,
+EnableKeyError::Credentials(ref err) => err.description(),
+EnableKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1572,20 +1748,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum EnableKeyRotationError {
                     
-///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
-UnsupportedOperation(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
+///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+DependencyTimeout(String),
 ///<p>The request was rejected because the specified CMK is not enabled.</p>
 Disabled(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
-///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
 ///<p>The request was rejected because the specified entity or resource could not be found.</p>
 NotFound(String),
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1604,7 +1780,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DisabledException" => EnableKeyRotationError::Disabled(String::from(error_message)),"InvalidArnException" => EnableKeyRotationError::InvalidArn(String::from(error_message)),"UnsupportedOperationException" => EnableKeyRotationError::UnsupportedOperation(String::from(error_message)),"DependencyTimeoutException" => EnableKeyRotationError::DependencyTimeout(String::from(error_message)),"NotFoundException" => EnableKeyRotationError::NotFound(String::from(error_message)),"KMSInternalException" => EnableKeyRotationError::KMSInternal(String::from(error_message)),"KMSInvalidStateException" => EnableKeyRotationError::KMSInvalidState(String::from(error_message)),"ValidationException" => EnableKeyRotationError::Validation(error_message.to_string()),_ => EnableKeyRotationError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => EnableKeyRotationError::DependencyTimeout(String::from(error_message)),
+"DisabledException" => EnableKeyRotationError::Disabled(String::from(error_message)),
+"InvalidArnException" => EnableKeyRotationError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => EnableKeyRotationError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => EnableKeyRotationError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => EnableKeyRotationError::NotFound(String::from(error_message)),
+"UnsupportedOperationException" => EnableKeyRotationError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => EnableKeyRotationError::Validation(error_message.to_string()),
+_ => EnableKeyRotationError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => EnableKeyRotationError::Unknown(String::from(body))
@@ -1635,7 +1819,17 @@ Unknown(String)
                 impl Error for EnableKeyRotationError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableKeyRotationError::KMSInvalidState(ref cause) => cause,EnableKeyRotationError::InvalidArn(ref cause) => cause,EnableKeyRotationError::NotFound(ref cause) => cause,EnableKeyRotationError::KMSInternal(ref cause) => cause,EnableKeyRotationError::Disabled(ref cause) => cause,EnableKeyRotationError::DependencyTimeout(ref cause) => cause,EnableKeyRotationError::UnsupportedOperation(ref cause) => cause,EnableKeyRotationError::Validation(ref cause) => cause,EnableKeyRotationError::Credentials(ref err) => err.description(),EnableKeyRotationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableKeyRotationError::Unknown(ref cause) => cause
+                            EnableKeyRotationError::DependencyTimeout(ref cause) => cause,
+EnableKeyRotationError::Disabled(ref cause) => cause,
+EnableKeyRotationError::InvalidArn(ref cause) => cause,
+EnableKeyRotationError::KMSInternal(ref cause) => cause,
+EnableKeyRotationError::KMSInvalidState(ref cause) => cause,
+EnableKeyRotationError::NotFound(ref cause) => cause,
+EnableKeyRotationError::UnsupportedOperation(ref cause) => cause,
+EnableKeyRotationError::Validation(ref cause) => cause,
+EnableKeyRotationError::Credentials(ref err) => err.description(),
+EnableKeyRotationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableKeyRotationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1645,18 +1839,18 @@ Unknown(String)
                     
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),
 ///<p>The request was rejected because the specified CMK is not enabled.</p>
 Disabled(String),
-///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
-KeyUnavailable(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
-///<p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
-InvalidKeyUsage(String),
 ///<p>The request was rejected because the specified grant token is not valid.</p>
 InvalidGrantToken(String),
+///<p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
+InvalidKeyUsage(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
+///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
+KeyUnavailable(String),
 ///<p>The request was rejected because the specified entity or resource could not be found.</p>
 NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1677,7 +1871,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "KeyUnavailableException" => EncryptError::KeyUnavailable(String::from(error_message)),"KMSInvalidStateException" => EncryptError::KMSInvalidState(String::from(error_message)),"DisabledException" => EncryptError::Disabled(String::from(error_message)),"KMSInternalException" => EncryptError::KMSInternal(String::from(error_message)),"InvalidKeyUsageException" => EncryptError::InvalidKeyUsage(String::from(error_message)),"NotFoundException" => EncryptError::NotFound(String::from(error_message)),"DependencyTimeoutException" => EncryptError::DependencyTimeout(String::from(error_message)),"InvalidGrantTokenException" => EncryptError::InvalidGrantToken(String::from(error_message)),"ValidationException" => EncryptError::Validation(error_message.to_string()),_ => EncryptError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => EncryptError::DependencyTimeout(String::from(error_message)),
+"DisabledException" => EncryptError::Disabled(String::from(error_message)),
+"InvalidGrantTokenException" => EncryptError::InvalidGrantToken(String::from(error_message)),
+"InvalidKeyUsageException" => EncryptError::InvalidKeyUsage(String::from(error_message)),
+"KMSInternalException" => EncryptError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => EncryptError::KMSInvalidState(String::from(error_message)),
+"KeyUnavailableException" => EncryptError::KeyUnavailable(String::from(error_message)),
+"NotFoundException" => EncryptError::NotFound(String::from(error_message)),
+"ValidationException" => EncryptError::Validation(error_message.to_string()),
+_ => EncryptError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => EncryptError::Unknown(String::from(body))
@@ -1708,7 +1911,18 @@ Unknown(String)
                 impl Error for EncryptError {
                     fn description(&self) -> &str {
                         match *self {
-                            EncryptError::DependencyTimeout(ref cause) => cause,EncryptError::KMSInternal(ref cause) => cause,EncryptError::NotFound(ref cause) => cause,EncryptError::InvalidKeyUsage(ref cause) => cause,EncryptError::Disabled(ref cause) => cause,EncryptError::KeyUnavailable(ref cause) => cause,EncryptError::InvalidGrantToken(ref cause) => cause,EncryptError::KMSInvalidState(ref cause) => cause,EncryptError::Validation(ref cause) => cause,EncryptError::Credentials(ref err) => err.description(),EncryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EncryptError::Unknown(ref cause) => cause
+                            EncryptError::DependencyTimeout(ref cause) => cause,
+EncryptError::Disabled(ref cause) => cause,
+EncryptError::InvalidGrantToken(ref cause) => cause,
+EncryptError::InvalidKeyUsage(ref cause) => cause,
+EncryptError::KMSInternal(ref cause) => cause,
+EncryptError::KMSInvalidState(ref cause) => cause,
+EncryptError::KeyUnavailable(ref cause) => cause,
+EncryptError::NotFound(ref cause) => cause,
+EncryptError::Validation(ref cause) => cause,
+EncryptError::Credentials(ref err) => err.description(),
+EncryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EncryptError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1716,22 +1930,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GenerateDataKeyError {
                     
-///<p>The request was rejected because the specified grant token is not valid.</p>
-InvalidGrantToken(String),
-///<p>The request was rejected because the specified CMK is not enabled.</p>
-Disabled(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
+///<p>The request was rejected because the specified CMK is not enabled.</p>
+Disabled(String),
+///<p>The request was rejected because the specified grant token is not valid.</p>
+InvalidGrantToken(String),
 ///<p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
 InvalidKeyUsage(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
 ///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
-KeyUnavailable(String),/// An error occurred dispatching the HTTP request
+KeyUnavailable(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1750,7 +1964,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "KMSInternalException" => GenerateDataKeyError::KMSInternal(String::from(error_message)),"KeyUnavailableException" => GenerateDataKeyError::KeyUnavailable(String::from(error_message)),"InvalidKeyUsageException" => GenerateDataKeyError::InvalidKeyUsage(String::from(error_message)),"InvalidGrantTokenException" => GenerateDataKeyError::InvalidGrantToken(String::from(error_message)),"NotFoundException" => GenerateDataKeyError::NotFound(String::from(error_message)),"DisabledException" => GenerateDataKeyError::Disabled(String::from(error_message)),"KMSInvalidStateException" => GenerateDataKeyError::KMSInvalidState(String::from(error_message)),"DependencyTimeoutException" => GenerateDataKeyError::DependencyTimeout(String::from(error_message)),"ValidationException" => GenerateDataKeyError::Validation(error_message.to_string()),_ => GenerateDataKeyError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => GenerateDataKeyError::DependencyTimeout(String::from(error_message)),
+"DisabledException" => GenerateDataKeyError::Disabled(String::from(error_message)),
+"InvalidGrantTokenException" => GenerateDataKeyError::InvalidGrantToken(String::from(error_message)),
+"InvalidKeyUsageException" => GenerateDataKeyError::InvalidKeyUsage(String::from(error_message)),
+"KMSInternalException" => GenerateDataKeyError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => GenerateDataKeyError::KMSInvalidState(String::from(error_message)),
+"KeyUnavailableException" => GenerateDataKeyError::KeyUnavailable(String::from(error_message)),
+"NotFoundException" => GenerateDataKeyError::NotFound(String::from(error_message)),
+"ValidationException" => GenerateDataKeyError::Validation(error_message.to_string()),
+_ => GenerateDataKeyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GenerateDataKeyError::Unknown(String::from(body))
@@ -1781,7 +2004,18 @@ Unknown(String)
                 impl Error for GenerateDataKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GenerateDataKeyError::KMSInvalidState(ref cause) => cause,GenerateDataKeyError::Disabled(ref cause) => cause,GenerateDataKeyError::InvalidGrantToken(ref cause) => cause,GenerateDataKeyError::DependencyTimeout(ref cause) => cause,GenerateDataKeyError::InvalidKeyUsage(ref cause) => cause,GenerateDataKeyError::KMSInternal(ref cause) => cause,GenerateDataKeyError::KeyUnavailable(ref cause) => cause,GenerateDataKeyError::NotFound(ref cause) => cause,GenerateDataKeyError::Validation(ref cause) => cause,GenerateDataKeyError::Credentials(ref err) => err.description(),GenerateDataKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GenerateDataKeyError::Unknown(ref cause) => cause
+                            GenerateDataKeyError::DependencyTimeout(ref cause) => cause,
+GenerateDataKeyError::Disabled(ref cause) => cause,
+GenerateDataKeyError::InvalidGrantToken(ref cause) => cause,
+GenerateDataKeyError::InvalidKeyUsage(ref cause) => cause,
+GenerateDataKeyError::KMSInternal(ref cause) => cause,
+GenerateDataKeyError::KMSInvalidState(ref cause) => cause,
+GenerateDataKeyError::KeyUnavailable(ref cause) => cause,
+GenerateDataKeyError::NotFound(ref cause) => cause,
+GenerateDataKeyError::Validation(ref cause) => cause,
+GenerateDataKeyError::Credentials(ref err) => err.description(),
+GenerateDataKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GenerateDataKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1789,22 +2023,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GenerateDataKeyWithoutPlaintextError {
                     
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),
+///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+DependencyTimeout(String),
+///<p>The request was rejected because the specified CMK is not enabled.</p>
+Disabled(String),
+///<p>The request was rejected because the specified grant token is not valid.</p>
+InvalidGrantToken(String),
 ///<p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
 InvalidKeyUsage(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
 KMSInternal(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
 ///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
 KeyUnavailable(String),
-///<p>The request was rejected because the specified grant token is not valid.</p>
-InvalidGrantToken(String),
-///<p>The request was rejected because the specified CMK is not enabled.</p>
-Disabled(String),
-///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1823,7 +2057,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "KMSInvalidStateException" => GenerateDataKeyWithoutPlaintextError::KMSInvalidState(String::from(error_message)),"DependencyTimeoutException" => GenerateDataKeyWithoutPlaintextError::DependencyTimeout(String::from(error_message)),"InvalidKeyUsageException" => GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(String::from(error_message)),"NotFoundException" => GenerateDataKeyWithoutPlaintextError::NotFound(String::from(error_message)),"KeyUnavailableException" => GenerateDataKeyWithoutPlaintextError::KeyUnavailable(String::from(error_message)),"DisabledException" => GenerateDataKeyWithoutPlaintextError::Disabled(String::from(error_message)),"KMSInternalException" => GenerateDataKeyWithoutPlaintextError::KMSInternal(String::from(error_message)),"InvalidGrantTokenException" => GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(String::from(error_message)),"ValidationException" => GenerateDataKeyWithoutPlaintextError::Validation(error_message.to_string()),_ => GenerateDataKeyWithoutPlaintextError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => GenerateDataKeyWithoutPlaintextError::DependencyTimeout(String::from(error_message)),
+"DisabledException" => GenerateDataKeyWithoutPlaintextError::Disabled(String::from(error_message)),
+"InvalidGrantTokenException" => GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(String::from(error_message)),
+"InvalidKeyUsageException" => GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(String::from(error_message)),
+"KMSInternalException" => GenerateDataKeyWithoutPlaintextError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => GenerateDataKeyWithoutPlaintextError::KMSInvalidState(String::from(error_message)),
+"KeyUnavailableException" => GenerateDataKeyWithoutPlaintextError::KeyUnavailable(String::from(error_message)),
+"NotFoundException" => GenerateDataKeyWithoutPlaintextError::NotFound(String::from(error_message)),
+"ValidationException" => GenerateDataKeyWithoutPlaintextError::Validation(error_message.to_string()),
+_ => GenerateDataKeyWithoutPlaintextError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GenerateDataKeyWithoutPlaintextError::Unknown(String::from(body))
@@ -1854,7 +2097,18 @@ Unknown(String)
                 impl Error for GenerateDataKeyWithoutPlaintextError {
                     fn description(&self) -> &str {
                         match *self {
-                            GenerateDataKeyWithoutPlaintextError::KeyUnavailable(ref cause) => cause,GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(ref cause) => cause,GenerateDataKeyWithoutPlaintextError::DependencyTimeout(ref cause) => cause,GenerateDataKeyWithoutPlaintextError::NotFound(ref cause) => cause,GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(ref cause) => cause,GenerateDataKeyWithoutPlaintextError::KMSInternal(ref cause) => cause,GenerateDataKeyWithoutPlaintextError::Disabled(ref cause) => cause,GenerateDataKeyWithoutPlaintextError::KMSInvalidState(ref cause) => cause,GenerateDataKeyWithoutPlaintextError::Validation(ref cause) => cause,GenerateDataKeyWithoutPlaintextError::Credentials(ref err) => err.description(),GenerateDataKeyWithoutPlaintextError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GenerateDataKeyWithoutPlaintextError::Unknown(ref cause) => cause
+                            GenerateDataKeyWithoutPlaintextError::DependencyTimeout(ref cause) => cause,
+GenerateDataKeyWithoutPlaintextError::Disabled(ref cause) => cause,
+GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(ref cause) => cause,
+GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(ref cause) => cause,
+GenerateDataKeyWithoutPlaintextError::KMSInternal(ref cause) => cause,
+GenerateDataKeyWithoutPlaintextError::KMSInvalidState(ref cause) => cause,
+GenerateDataKeyWithoutPlaintextError::KeyUnavailable(ref cause) => cause,
+GenerateDataKeyWithoutPlaintextError::NotFound(ref cause) => cause,
+GenerateDataKeyWithoutPlaintextError::Validation(ref cause) => cause,
+GenerateDataKeyWithoutPlaintextError::Credentials(ref err) => err.description(),
+GenerateDataKeyWithoutPlaintextError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GenerateDataKeyWithoutPlaintextError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1884,7 +2138,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DependencyTimeoutException" => GenerateRandomError::DependencyTimeout(String::from(error_message)),"KMSInternalException" => GenerateRandomError::KMSInternal(String::from(error_message)),"ValidationException" => GenerateRandomError::Validation(error_message.to_string()),_ => GenerateRandomError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => GenerateRandomError::DependencyTimeout(String::from(error_message)),
+"KMSInternalException" => GenerateRandomError::KMSInternal(String::from(error_message)),
+"ValidationException" => GenerateRandomError::Validation(error_message.to_string()),
+_ => GenerateRandomError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GenerateRandomError::Unknown(String::from(body))
@@ -1915,7 +2172,12 @@ Unknown(String)
                 impl Error for GenerateRandomError {
                     fn description(&self) -> &str {
                         match *self {
-                            GenerateRandomError::KMSInternal(ref cause) => cause,GenerateRandomError::DependencyTimeout(ref cause) => cause,GenerateRandomError::Validation(ref cause) => cause,GenerateRandomError::Credentials(ref err) => err.description(),GenerateRandomError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GenerateRandomError::Unknown(ref cause) => cause
+                            GenerateRandomError::DependencyTimeout(ref cause) => cause,
+GenerateRandomError::KMSInternal(ref cause) => cause,
+GenerateRandomError::Validation(ref cause) => cause,
+GenerateRandomError::Credentials(ref err) => err.description(),
+GenerateRandomError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GenerateRandomError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1923,16 +2185,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetKeyPolicyError {
                     
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
-InvalidArn(String),/// An error occurred dispatching the HTTP request
+InvalidArn(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1951,7 +2213,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "KMSInternalException" => GetKeyPolicyError::KMSInternal(String::from(error_message)),"NotFoundException" => GetKeyPolicyError::NotFound(String::from(error_message)),"DependencyTimeoutException" => GetKeyPolicyError::DependencyTimeout(String::from(error_message)),"InvalidArnException" => GetKeyPolicyError::InvalidArn(String::from(error_message)),"KMSInvalidStateException" => GetKeyPolicyError::KMSInvalidState(String::from(error_message)),"ValidationException" => GetKeyPolicyError::Validation(error_message.to_string()),_ => GetKeyPolicyError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => GetKeyPolicyError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => GetKeyPolicyError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => GetKeyPolicyError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => GetKeyPolicyError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => GetKeyPolicyError::NotFound(String::from(error_message)),
+"ValidationException" => GetKeyPolicyError::Validation(error_message.to_string()),
+_ => GetKeyPolicyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetKeyPolicyError::Unknown(String::from(body))
@@ -1982,7 +2250,15 @@ Unknown(String)
                 impl Error for GetKeyPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetKeyPolicyError::KMSInternal(ref cause) => cause,GetKeyPolicyError::KMSInvalidState(ref cause) => cause,GetKeyPolicyError::NotFound(ref cause) => cause,GetKeyPolicyError::DependencyTimeout(ref cause) => cause,GetKeyPolicyError::InvalidArn(ref cause) => cause,GetKeyPolicyError::Validation(ref cause) => cause,GetKeyPolicyError::Credentials(ref err) => err.description(),GetKeyPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetKeyPolicyError::Unknown(ref cause) => cause
+                            GetKeyPolicyError::DependencyTimeout(ref cause) => cause,
+GetKeyPolicyError::InvalidArn(ref cause) => cause,
+GetKeyPolicyError::KMSInternal(ref cause) => cause,
+GetKeyPolicyError::KMSInvalidState(ref cause) => cause,
+GetKeyPolicyError::NotFound(ref cause) => cause,
+GetKeyPolicyError::Validation(ref cause) => cause,
+GetKeyPolicyError::Credentials(ref err) => err.description(),
+GetKeyPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetKeyPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1990,18 +2266,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetKeyRotationStatusError {
                     
-///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
-UnsupportedOperation(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 KMSInvalidState(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),
+///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2020,7 +2296,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => GetKeyRotationStatusError::NotFound(String::from(error_message)),"DependencyTimeoutException" => GetKeyRotationStatusError::DependencyTimeout(String::from(error_message)),"UnsupportedOperationException" => GetKeyRotationStatusError::UnsupportedOperation(String::from(error_message)),"KMSInvalidStateException" => GetKeyRotationStatusError::KMSInvalidState(String::from(error_message)),"KMSInternalException" => GetKeyRotationStatusError::KMSInternal(String::from(error_message)),"InvalidArnException" => GetKeyRotationStatusError::InvalidArn(String::from(error_message)),"ValidationException" => GetKeyRotationStatusError::Validation(error_message.to_string()),_ => GetKeyRotationStatusError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => GetKeyRotationStatusError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => GetKeyRotationStatusError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => GetKeyRotationStatusError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => GetKeyRotationStatusError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => GetKeyRotationStatusError::NotFound(String::from(error_message)),
+"UnsupportedOperationException" => GetKeyRotationStatusError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => GetKeyRotationStatusError::Validation(error_message.to_string()),
+_ => GetKeyRotationStatusError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetKeyRotationStatusError::Unknown(String::from(body))
@@ -2051,7 +2334,16 @@ Unknown(String)
                 impl Error for GetKeyRotationStatusError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetKeyRotationStatusError::UnsupportedOperation(ref cause) => cause,GetKeyRotationStatusError::NotFound(ref cause) => cause,GetKeyRotationStatusError::KMSInvalidState(ref cause) => cause,GetKeyRotationStatusError::InvalidArn(ref cause) => cause,GetKeyRotationStatusError::DependencyTimeout(ref cause) => cause,GetKeyRotationStatusError::KMSInternal(ref cause) => cause,GetKeyRotationStatusError::Validation(ref cause) => cause,GetKeyRotationStatusError::Credentials(ref err) => err.description(),GetKeyRotationStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetKeyRotationStatusError::Unknown(ref cause) => cause
+                            GetKeyRotationStatusError::DependencyTimeout(ref cause) => cause,
+GetKeyRotationStatusError::InvalidArn(ref cause) => cause,
+GetKeyRotationStatusError::KMSInternal(ref cause) => cause,
+GetKeyRotationStatusError::KMSInvalidState(ref cause) => cause,
+GetKeyRotationStatusError::NotFound(ref cause) => cause,
+GetKeyRotationStatusError::UnsupportedOperation(ref cause) => cause,
+GetKeyRotationStatusError::Validation(ref cause) => cause,
+GetKeyRotationStatusError::Credentials(ref err) => err.description(),
+GetKeyRotationStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetKeyRotationStatusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2059,18 +2351,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetParametersForImportError {
                     
+///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+DependencyTimeout(String),
+///<p>The request was rejected because a specified ARN was not valid.</p>
+InvalidArn(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 KMSInvalidState(String),
 ///<p>The request was rejected because the specified entity or resource could not be found.</p>
 NotFound(String),
 ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
-UnsupportedOperation(String),
-///<p>The request was rejected because a specified ARN was not valid.</p>
-InvalidArn(String),
-///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),/// An error occurred dispatching the HTTP request
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2089,7 +2381,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => GetParametersForImportError::NotFound(String::from(error_message)),"KMSInvalidStateException" => GetParametersForImportError::KMSInvalidState(String::from(error_message)),"KMSInternalException" => GetParametersForImportError::KMSInternal(String::from(error_message)),"DependencyTimeoutException" => GetParametersForImportError::DependencyTimeout(String::from(error_message)),"InvalidArnException" => GetParametersForImportError::InvalidArn(String::from(error_message)),"UnsupportedOperationException" => GetParametersForImportError::UnsupportedOperation(String::from(error_message)),"ValidationException" => GetParametersForImportError::Validation(error_message.to_string()),_ => GetParametersForImportError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => GetParametersForImportError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => GetParametersForImportError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => GetParametersForImportError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => GetParametersForImportError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => GetParametersForImportError::NotFound(String::from(error_message)),
+"UnsupportedOperationException" => GetParametersForImportError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => GetParametersForImportError::Validation(error_message.to_string()),
+_ => GetParametersForImportError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetParametersForImportError::Unknown(String::from(body))
@@ -2120,7 +2419,16 @@ Unknown(String)
                 impl Error for GetParametersForImportError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetParametersForImportError::DependencyTimeout(ref cause) => cause,GetParametersForImportError::KMSInvalidState(ref cause) => cause,GetParametersForImportError::NotFound(ref cause) => cause,GetParametersForImportError::InvalidArn(ref cause) => cause,GetParametersForImportError::UnsupportedOperation(ref cause) => cause,GetParametersForImportError::KMSInternal(ref cause) => cause,GetParametersForImportError::Validation(ref cause) => cause,GetParametersForImportError::Credentials(ref err) => err.description(),GetParametersForImportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetParametersForImportError::Unknown(ref cause) => cause
+                            GetParametersForImportError::DependencyTimeout(ref cause) => cause,
+GetParametersForImportError::InvalidArn(ref cause) => cause,
+GetParametersForImportError::KMSInternal(ref cause) => cause,
+GetParametersForImportError::KMSInvalidState(ref cause) => cause,
+GetParametersForImportError::NotFound(ref cause) => cause,
+GetParametersForImportError::UnsupportedOperation(ref cause) => cause,
+GetParametersForImportError::Validation(ref cause) => cause,
+GetParametersForImportError::Credentials(ref err) => err.description(),
+GetParametersForImportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetParametersForImportError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2128,26 +2436,26 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ImportKeyMaterialError {
                     
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
-///<p>The request was rejected because the specified ciphertext has been corrupted or is otherwise invalid.</p>
-InvalidCiphertext(String),
-///<p>The request was rejected because the provided key material is invalid or is not the same key material that was previously imported into this customer master key (CMK).</p>
-IncorrectKeyMaterial(String),
-///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
-UnsupportedOperation(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
+///<p>The request was rejected because the provided import token is expired. Use <a>GetParametersForImport</a> to retrieve a new import token and public key, use the new public key to encrypt the key material, and then try the request again.</p>
+ExpiredImportToken(String),
+///<p>The request was rejected because the provided key material is invalid or is not the same key material that was previously imported into this customer master key (CMK).</p>
+IncorrectKeyMaterial(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),
+///<p>The request was rejected because the specified ciphertext has been corrupted or is otherwise invalid.</p>
+InvalidCiphertext(String),
 ///<p>The request was rejected because the provided import token is invalid or is associated with a different customer master key (CMK).</p>
 InvalidImportToken(String),
-///<p>The request was rejected because the provided import token is expired. Use <a>GetParametersForImport</a> to retrieve a new import token and public key, use the new public key to encrypt the key material, and then try the request again.</p>
-ExpiredImportToken(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),
+///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2166,7 +2474,18 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidArnException" => ImportKeyMaterialError::InvalidArn(String::from(error_message)),"KMSInternalException" => ImportKeyMaterialError::KMSInternal(String::from(error_message)),"KMSInvalidStateException" => ImportKeyMaterialError::KMSInvalidState(String::from(error_message)),"UnsupportedOperationException" => ImportKeyMaterialError::UnsupportedOperation(String::from(error_message)),"InvalidCiphertextException" => ImportKeyMaterialError::InvalidCiphertext(String::from(error_message)),"DependencyTimeoutException" => ImportKeyMaterialError::DependencyTimeout(String::from(error_message)),"IncorrectKeyMaterialException" => ImportKeyMaterialError::IncorrectKeyMaterial(String::from(error_message)),"InvalidImportTokenException" => ImportKeyMaterialError::InvalidImportToken(String::from(error_message)),"NotFoundException" => ImportKeyMaterialError::NotFound(String::from(error_message)),"ExpiredImportTokenException" => ImportKeyMaterialError::ExpiredImportToken(String::from(error_message)),"ValidationException" => ImportKeyMaterialError::Validation(error_message.to_string()),_ => ImportKeyMaterialError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => ImportKeyMaterialError::DependencyTimeout(String::from(error_message)),
+"ExpiredImportTokenException" => ImportKeyMaterialError::ExpiredImportToken(String::from(error_message)),
+"IncorrectKeyMaterialException" => ImportKeyMaterialError::IncorrectKeyMaterial(String::from(error_message)),
+"InvalidArnException" => ImportKeyMaterialError::InvalidArn(String::from(error_message)),
+"InvalidCiphertextException" => ImportKeyMaterialError::InvalidCiphertext(String::from(error_message)),
+"InvalidImportTokenException" => ImportKeyMaterialError::InvalidImportToken(String::from(error_message)),
+"KMSInternalException" => ImportKeyMaterialError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => ImportKeyMaterialError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => ImportKeyMaterialError::NotFound(String::from(error_message)),
+"UnsupportedOperationException" => ImportKeyMaterialError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => ImportKeyMaterialError::Validation(error_message.to_string()),
+_ => ImportKeyMaterialError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ImportKeyMaterialError::Unknown(String::from(body))
@@ -2197,7 +2516,20 @@ Unknown(String)
                 impl Error for ImportKeyMaterialError {
                     fn description(&self) -> &str {
                         match *self {
-                            ImportKeyMaterialError::KMSInternal(ref cause) => cause,ImportKeyMaterialError::DependencyTimeout(ref cause) => cause,ImportKeyMaterialError::KMSInvalidState(ref cause) => cause,ImportKeyMaterialError::InvalidArn(ref cause) => cause,ImportKeyMaterialError::InvalidCiphertext(ref cause) => cause,ImportKeyMaterialError::IncorrectKeyMaterial(ref cause) => cause,ImportKeyMaterialError::ExpiredImportToken(ref cause) => cause,ImportKeyMaterialError::NotFound(ref cause) => cause,ImportKeyMaterialError::InvalidImportToken(ref cause) => cause,ImportKeyMaterialError::UnsupportedOperation(ref cause) => cause,ImportKeyMaterialError::Validation(ref cause) => cause,ImportKeyMaterialError::Credentials(ref err) => err.description(),ImportKeyMaterialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ImportKeyMaterialError::Unknown(ref cause) => cause
+                            ImportKeyMaterialError::DependencyTimeout(ref cause) => cause,
+ImportKeyMaterialError::ExpiredImportToken(ref cause) => cause,
+ImportKeyMaterialError::IncorrectKeyMaterial(ref cause) => cause,
+ImportKeyMaterialError::InvalidArn(ref cause) => cause,
+ImportKeyMaterialError::InvalidCiphertext(ref cause) => cause,
+ImportKeyMaterialError::InvalidImportToken(ref cause) => cause,
+ImportKeyMaterialError::KMSInternal(ref cause) => cause,
+ImportKeyMaterialError::KMSInvalidState(ref cause) => cause,
+ImportKeyMaterialError::NotFound(ref cause) => cause,
+ImportKeyMaterialError::UnsupportedOperation(ref cause) => cause,
+ImportKeyMaterialError::Validation(ref cause) => cause,
+ImportKeyMaterialError::Credentials(ref err) => err.description(),
+ImportKeyMaterialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ImportKeyMaterialError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2205,12 +2537,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListAliasesError {
                     
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
 ///<p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
-InvalidMarker(String),/// An error occurred dispatching the HTTP request
+InvalidMarker(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2229,7 +2561,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DependencyTimeoutException" => ListAliasesError::DependencyTimeout(String::from(error_message)),"InvalidMarkerException" => ListAliasesError::InvalidMarker(String::from(error_message)),"KMSInternalException" => ListAliasesError::KMSInternal(String::from(error_message)),"ValidationException" => ListAliasesError::Validation(error_message.to_string()),_ => ListAliasesError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => ListAliasesError::DependencyTimeout(String::from(error_message)),
+"InvalidMarkerException" => ListAliasesError::InvalidMarker(String::from(error_message)),
+"KMSInternalException" => ListAliasesError::KMSInternal(String::from(error_message)),
+"ValidationException" => ListAliasesError::Validation(error_message.to_string()),
+_ => ListAliasesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListAliasesError::Unknown(String::from(body))
@@ -2260,7 +2596,13 @@ Unknown(String)
                 impl Error for ListAliasesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAliasesError::DependencyTimeout(ref cause) => cause,ListAliasesError::InvalidMarker(ref cause) => cause,ListAliasesError::KMSInternal(ref cause) => cause,ListAliasesError::Validation(ref cause) => cause,ListAliasesError::Credentials(ref err) => err.description(),ListAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAliasesError::Unknown(ref cause) => cause
+                            ListAliasesError::DependencyTimeout(ref cause) => cause,
+ListAliasesError::InvalidMarker(ref cause) => cause,
+ListAliasesError::KMSInternal(ref cause) => cause,
+ListAliasesError::Validation(ref cause) => cause,
+ListAliasesError::Credentials(ref err) => err.description(),
+ListAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAliasesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2268,8 +2610,6 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListGrantsError {
                     
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
@@ -2279,7 +2619,9 @@ InvalidMarker(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
 KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),/// An error occurred dispatching the HTTP request
+KMSInvalidState(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2298,7 +2640,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => ListGrantsError::NotFound(String::from(error_message)),"DependencyTimeoutException" => ListGrantsError::DependencyTimeout(String::from(error_message)),"InvalidMarkerException" => ListGrantsError::InvalidMarker(String::from(error_message)),"KMSInternalException" => ListGrantsError::KMSInternal(String::from(error_message)),"KMSInvalidStateException" => ListGrantsError::KMSInvalidState(String::from(error_message)),"InvalidArnException" => ListGrantsError::InvalidArn(String::from(error_message)),"ValidationException" => ListGrantsError::Validation(error_message.to_string()),_ => ListGrantsError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => ListGrantsError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => ListGrantsError::InvalidArn(String::from(error_message)),
+"InvalidMarkerException" => ListGrantsError::InvalidMarker(String::from(error_message)),
+"KMSInternalException" => ListGrantsError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => ListGrantsError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => ListGrantsError::NotFound(String::from(error_message)),
+"ValidationException" => ListGrantsError::Validation(error_message.to_string()),
+_ => ListGrantsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListGrantsError::Unknown(String::from(body))
@@ -2329,7 +2678,16 @@ Unknown(String)
                 impl Error for ListGrantsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListGrantsError::NotFound(ref cause) => cause,ListGrantsError::InvalidMarker(ref cause) => cause,ListGrantsError::InvalidArn(ref cause) => cause,ListGrantsError::DependencyTimeout(ref cause) => cause,ListGrantsError::KMSInvalidState(ref cause) => cause,ListGrantsError::KMSInternal(ref cause) => cause,ListGrantsError::Validation(ref cause) => cause,ListGrantsError::Credentials(ref err) => err.description(),ListGrantsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListGrantsError::Unknown(ref cause) => cause
+                            ListGrantsError::DependencyTimeout(ref cause) => cause,
+ListGrantsError::InvalidArn(ref cause) => cause,
+ListGrantsError::InvalidMarker(ref cause) => cause,
+ListGrantsError::KMSInternal(ref cause) => cause,
+ListGrantsError::KMSInvalidState(ref cause) => cause,
+ListGrantsError::NotFound(ref cause) => cause,
+ListGrantsError::Validation(ref cause) => cause,
+ListGrantsError::Credentials(ref err) => err.description(),
+ListGrantsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListGrantsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2341,12 +2699,12 @@ Unknown(String)
 DependencyTimeout(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 KMSInvalidState(String),
 ///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),/// An error occurred dispatching the HTTP request
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2365,7 +2723,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "KMSInvalidStateException" => ListKeyPoliciesError::KMSInvalidState(String::from(error_message)),"DependencyTimeoutException" => ListKeyPoliciesError::DependencyTimeout(String::from(error_message)),"KMSInternalException" => ListKeyPoliciesError::KMSInternal(String::from(error_message)),"NotFoundException" => ListKeyPoliciesError::NotFound(String::from(error_message)),"InvalidArnException" => ListKeyPoliciesError::InvalidArn(String::from(error_message)),"ValidationException" => ListKeyPoliciesError::Validation(error_message.to_string()),_ => ListKeyPoliciesError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => ListKeyPoliciesError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => ListKeyPoliciesError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => ListKeyPoliciesError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => ListKeyPoliciesError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => ListKeyPoliciesError::NotFound(String::from(error_message)),
+"ValidationException" => ListKeyPoliciesError::Validation(error_message.to_string()),
+_ => ListKeyPoliciesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListKeyPoliciesError::Unknown(String::from(body))
@@ -2396,7 +2760,15 @@ Unknown(String)
                 impl Error for ListKeyPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListKeyPoliciesError::DependencyTimeout(ref cause) => cause,ListKeyPoliciesError::InvalidArn(ref cause) => cause,ListKeyPoliciesError::KMSInternal(ref cause) => cause,ListKeyPoliciesError::KMSInvalidState(ref cause) => cause,ListKeyPoliciesError::NotFound(ref cause) => cause,ListKeyPoliciesError::Validation(ref cause) => cause,ListKeyPoliciesError::Credentials(ref err) => err.description(),ListKeyPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListKeyPoliciesError::Unknown(ref cause) => cause
+                            ListKeyPoliciesError::DependencyTimeout(ref cause) => cause,
+ListKeyPoliciesError::InvalidArn(ref cause) => cause,
+ListKeyPoliciesError::KMSInternal(ref cause) => cause,
+ListKeyPoliciesError::KMSInvalidState(ref cause) => cause,
+ListKeyPoliciesError::NotFound(ref cause) => cause,
+ListKeyPoliciesError::Validation(ref cause) => cause,
+ListKeyPoliciesError::Credentials(ref err) => err.description(),
+ListKeyPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListKeyPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2404,12 +2776,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListKeysError {
                     
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
+///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+DependencyTimeout(String),
 ///<p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
 InvalidMarker(String),
-///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2428,7 +2800,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidMarkerException" => ListKeysError::InvalidMarker(String::from(error_message)),"DependencyTimeoutException" => ListKeysError::DependencyTimeout(String::from(error_message)),"KMSInternalException" => ListKeysError::KMSInternal(String::from(error_message)),"ValidationException" => ListKeysError::Validation(error_message.to_string()),_ => ListKeysError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => ListKeysError::DependencyTimeout(String::from(error_message)),
+"InvalidMarkerException" => ListKeysError::InvalidMarker(String::from(error_message)),
+"KMSInternalException" => ListKeysError::KMSInternal(String::from(error_message)),
+"ValidationException" => ListKeysError::Validation(error_message.to_string()),
+_ => ListKeysError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListKeysError::Unknown(String::from(body))
@@ -2459,7 +2835,13 @@ Unknown(String)
                 impl Error for ListKeysError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListKeysError::KMSInternal(ref cause) => cause,ListKeysError::DependencyTimeout(ref cause) => cause,ListKeysError::InvalidMarker(ref cause) => cause,ListKeysError::Validation(ref cause) => cause,ListKeysError::Credentials(ref err) => err.description(),ListKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListKeysError::Unknown(ref cause) => cause
+                            ListKeysError::DependencyTimeout(ref cause) => cause,
+ListKeysError::InvalidMarker(ref cause) => cause,
+ListKeysError::KMSInternal(ref cause) => cause,
+ListKeysError::Validation(ref cause) => cause,
+ListKeysError::Credentials(ref err) => err.description(),
+ListKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListKeysError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2467,16 +2849,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListRetirableGrantsError {
                     
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
-///<p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
-InvalidMarker(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
+///<p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
+InvalidMarker(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),/// An error occurred dispatching the HTTP request
+KMSInternal(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2495,7 +2877,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DependencyTimeoutException" => ListRetirableGrantsError::DependencyTimeout(String::from(error_message)),"KMSInternalException" => ListRetirableGrantsError::KMSInternal(String::from(error_message)),"NotFoundException" => ListRetirableGrantsError::NotFound(String::from(error_message)),"InvalidArnException" => ListRetirableGrantsError::InvalidArn(String::from(error_message)),"InvalidMarkerException" => ListRetirableGrantsError::InvalidMarker(String::from(error_message)),"ValidationException" => ListRetirableGrantsError::Validation(error_message.to_string()),_ => ListRetirableGrantsError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => ListRetirableGrantsError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => ListRetirableGrantsError::InvalidArn(String::from(error_message)),
+"InvalidMarkerException" => ListRetirableGrantsError::InvalidMarker(String::from(error_message)),
+"KMSInternalException" => ListRetirableGrantsError::KMSInternal(String::from(error_message)),
+"NotFoundException" => ListRetirableGrantsError::NotFound(String::from(error_message)),
+"ValidationException" => ListRetirableGrantsError::Validation(error_message.to_string()),
+_ => ListRetirableGrantsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListRetirableGrantsError::Unknown(String::from(body))
@@ -2526,7 +2914,15 @@ Unknown(String)
                 impl Error for ListRetirableGrantsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListRetirableGrantsError::KMSInternal(ref cause) => cause,ListRetirableGrantsError::DependencyTimeout(ref cause) => cause,ListRetirableGrantsError::NotFound(ref cause) => cause,ListRetirableGrantsError::InvalidMarker(ref cause) => cause,ListRetirableGrantsError::InvalidArn(ref cause) => cause,ListRetirableGrantsError::Validation(ref cause) => cause,ListRetirableGrantsError::Credentials(ref err) => err.description(),ListRetirableGrantsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListRetirableGrantsError::Unknown(ref cause) => cause
+                            ListRetirableGrantsError::DependencyTimeout(ref cause) => cause,
+ListRetirableGrantsError::InvalidArn(ref cause) => cause,
+ListRetirableGrantsError::InvalidMarker(ref cause) => cause,
+ListRetirableGrantsError::KMSInternal(ref cause) => cause,
+ListRetirableGrantsError::NotFound(ref cause) => cause,
+ListRetirableGrantsError::Validation(ref cause) => cause,
+ListRetirableGrantsError::Credentials(ref err) => err.description(),
+ListRetirableGrantsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListRetirableGrantsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2534,22 +2930,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutKeyPolicyError {
                     
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
-///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
-UnsupportedOperation(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
-///<p>The request was rejected because the specified policy is not syntactically or semantically correct.</p>
-MalformedPolicyDocument(String),
+///<p>The request was rejected because a specified ARN was not valid.</p>
+InvalidArn(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 KMSInvalidState(String),
 ///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 LimitExceeded(String),
-///<p>The request was rejected because a specified ARN was not valid.</p>
-InvalidArn(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because the specified policy is not syntactically or semantically correct.</p>
+MalformedPolicyDocument(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),
+///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2568,7 +2964,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DependencyTimeoutException" => PutKeyPolicyError::DependencyTimeout(String::from(error_message)),"UnsupportedOperationException" => PutKeyPolicyError::UnsupportedOperation(String::from(error_message)),"LimitExceededException" => PutKeyPolicyError::LimitExceeded(String::from(error_message)),"InvalidArnException" => PutKeyPolicyError::InvalidArn(String::from(error_message)),"MalformedPolicyDocumentException" => PutKeyPolicyError::MalformedPolicyDocument(String::from(error_message)),"NotFoundException" => PutKeyPolicyError::NotFound(String::from(error_message)),"KMSInvalidStateException" => PutKeyPolicyError::KMSInvalidState(String::from(error_message)),"KMSInternalException" => PutKeyPolicyError::KMSInternal(String::from(error_message)),"ValidationException" => PutKeyPolicyError::Validation(error_message.to_string()),_ => PutKeyPolicyError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => PutKeyPolicyError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => PutKeyPolicyError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => PutKeyPolicyError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => PutKeyPolicyError::KMSInvalidState(String::from(error_message)),
+"LimitExceededException" => PutKeyPolicyError::LimitExceeded(String::from(error_message)),
+"MalformedPolicyDocumentException" => PutKeyPolicyError::MalformedPolicyDocument(String::from(error_message)),
+"NotFoundException" => PutKeyPolicyError::NotFound(String::from(error_message)),
+"UnsupportedOperationException" => PutKeyPolicyError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => PutKeyPolicyError::Validation(error_message.to_string()),
+_ => PutKeyPolicyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutKeyPolicyError::Unknown(String::from(body))
@@ -2599,7 +3004,18 @@ Unknown(String)
                 impl Error for PutKeyPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutKeyPolicyError::InvalidArn(ref cause) => cause,PutKeyPolicyError::LimitExceeded(ref cause) => cause,PutKeyPolicyError::NotFound(ref cause) => cause,PutKeyPolicyError::MalformedPolicyDocument(ref cause) => cause,PutKeyPolicyError::UnsupportedOperation(ref cause) => cause,PutKeyPolicyError::KMSInvalidState(ref cause) => cause,PutKeyPolicyError::KMSInternal(ref cause) => cause,PutKeyPolicyError::DependencyTimeout(ref cause) => cause,PutKeyPolicyError::Validation(ref cause) => cause,PutKeyPolicyError::Credentials(ref err) => err.description(),PutKeyPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutKeyPolicyError::Unknown(ref cause) => cause
+                            PutKeyPolicyError::DependencyTimeout(ref cause) => cause,
+PutKeyPolicyError::InvalidArn(ref cause) => cause,
+PutKeyPolicyError::KMSInternal(ref cause) => cause,
+PutKeyPolicyError::KMSInvalidState(ref cause) => cause,
+PutKeyPolicyError::LimitExceeded(ref cause) => cause,
+PutKeyPolicyError::MalformedPolicyDocument(ref cause) => cause,
+PutKeyPolicyError::NotFound(ref cause) => cause,
+PutKeyPolicyError::UnsupportedOperation(ref cause) => cause,
+PutKeyPolicyError::Validation(ref cause) => cause,
+PutKeyPolicyError::Credentials(ref err) => err.description(),
+PutKeyPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutKeyPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2607,24 +3023,24 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ReEncryptError {
                     
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),
-///<p>The request was rejected because the specified CMK is not enabled.</p>
-Disabled(String),
-///<p>The request was rejected because the specified grant token is not valid.</p>
-InvalidGrantToken(String),
-///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
-KeyUnavailable(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
+///<p>The request was rejected because the specified CMK is not enabled.</p>
+Disabled(String),
 ///<p>The request was rejected because the specified ciphertext has been corrupted or is otherwise invalid.</p>
 InvalidCiphertext(String),
+///<p>The request was rejected because the specified grant token is not valid.</p>
+InvalidGrantToken(String),
+///<p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
+InvalidKeyUsage(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
 KMSInternal(String),
-///<p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
-InvalidKeyUsage(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
+///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
+KeyUnavailable(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2643,7 +3059,17 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "KMSInvalidStateException" => ReEncryptError::KMSInvalidState(String::from(error_message)),"DisabledException" => ReEncryptError::Disabled(String::from(error_message)),"InvalidGrantTokenException" => ReEncryptError::InvalidGrantToken(String::from(error_message)),"InvalidCiphertextException" => ReEncryptError::InvalidCiphertext(String::from(error_message)),"DependencyTimeoutException" => ReEncryptError::DependencyTimeout(String::from(error_message)),"KMSInternalException" => ReEncryptError::KMSInternal(String::from(error_message)),"NotFoundException" => ReEncryptError::NotFound(String::from(error_message)),"KeyUnavailableException" => ReEncryptError::KeyUnavailable(String::from(error_message)),"InvalidKeyUsageException" => ReEncryptError::InvalidKeyUsage(String::from(error_message)),"ValidationException" => ReEncryptError::Validation(error_message.to_string()),_ => ReEncryptError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => ReEncryptError::DependencyTimeout(String::from(error_message)),
+"DisabledException" => ReEncryptError::Disabled(String::from(error_message)),
+"InvalidCiphertextException" => ReEncryptError::InvalidCiphertext(String::from(error_message)),
+"InvalidGrantTokenException" => ReEncryptError::InvalidGrantToken(String::from(error_message)),
+"InvalidKeyUsageException" => ReEncryptError::InvalidKeyUsage(String::from(error_message)),
+"KMSInternalException" => ReEncryptError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => ReEncryptError::KMSInvalidState(String::from(error_message)),
+"KeyUnavailableException" => ReEncryptError::KeyUnavailable(String::from(error_message)),
+"NotFoundException" => ReEncryptError::NotFound(String::from(error_message)),
+"ValidationException" => ReEncryptError::Validation(error_message.to_string()),
+_ => ReEncryptError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ReEncryptError::Unknown(String::from(body))
@@ -2674,7 +3100,19 @@ Unknown(String)
                 impl Error for ReEncryptError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReEncryptError::KeyUnavailable(ref cause) => cause,ReEncryptError::InvalidKeyUsage(ref cause) => cause,ReEncryptError::NotFound(ref cause) => cause,ReEncryptError::KMSInvalidState(ref cause) => cause,ReEncryptError::KMSInternal(ref cause) => cause,ReEncryptError::InvalidGrantToken(ref cause) => cause,ReEncryptError::InvalidCiphertext(ref cause) => cause,ReEncryptError::DependencyTimeout(ref cause) => cause,ReEncryptError::Disabled(ref cause) => cause,ReEncryptError::Validation(ref cause) => cause,ReEncryptError::Credentials(ref err) => err.description(),ReEncryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReEncryptError::Unknown(ref cause) => cause
+                            ReEncryptError::DependencyTimeout(ref cause) => cause,
+ReEncryptError::Disabled(ref cause) => cause,
+ReEncryptError::InvalidCiphertext(ref cause) => cause,
+ReEncryptError::InvalidGrantToken(ref cause) => cause,
+ReEncryptError::InvalidKeyUsage(ref cause) => cause,
+ReEncryptError::KMSInternal(ref cause) => cause,
+ReEncryptError::KMSInvalidState(ref cause) => cause,
+ReEncryptError::KeyUnavailable(ref cause) => cause,
+ReEncryptError::NotFound(ref cause) => cause,
+ReEncryptError::Validation(ref cause) => cause,
+ReEncryptError::Credentials(ref err) => err.description(),
+ReEncryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReEncryptError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2682,18 +3120,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RetireGrantError {
                     
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
-///<p>The request was rejected because the specified <code>GrantId</code> is not valid.</p>
-InvalidGrantId(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
+///<p>The request was rejected because the specified <code>GrantId</code> is not valid.</p>
+InvalidGrantId(String),
 ///<p>The request was rejected because the specified grant token is not valid.</p>
 InvalidGrantToken(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),/// An error occurred dispatching the HTTP request
+KMSInvalidState(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2712,7 +3150,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DependencyTimeoutException" => RetireGrantError::DependencyTimeout(String::from(error_message)),"InvalidGrantIdException" => RetireGrantError::InvalidGrantId(String::from(error_message)),"NotFoundException" => RetireGrantError::NotFound(String::from(error_message)),"InvalidGrantTokenException" => RetireGrantError::InvalidGrantToken(String::from(error_message)),"KMSInternalException" => RetireGrantError::KMSInternal(String::from(error_message)),"KMSInvalidStateException" => RetireGrantError::KMSInvalidState(String::from(error_message)),"ValidationException" => RetireGrantError::Validation(error_message.to_string()),_ => RetireGrantError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => RetireGrantError::DependencyTimeout(String::from(error_message)),
+"InvalidGrantIdException" => RetireGrantError::InvalidGrantId(String::from(error_message)),
+"InvalidGrantTokenException" => RetireGrantError::InvalidGrantToken(String::from(error_message)),
+"KMSInternalException" => RetireGrantError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => RetireGrantError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => RetireGrantError::NotFound(String::from(error_message)),
+"ValidationException" => RetireGrantError::Validation(error_message.to_string()),
+_ => RetireGrantError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RetireGrantError::Unknown(String::from(body))
@@ -2743,7 +3188,16 @@ Unknown(String)
                 impl Error for RetireGrantError {
                     fn description(&self) -> &str {
                         match *self {
-                            RetireGrantError::KMSInternal(ref cause) => cause,RetireGrantError::InvalidGrantToken(ref cause) => cause,RetireGrantError::KMSInvalidState(ref cause) => cause,RetireGrantError::NotFound(ref cause) => cause,RetireGrantError::InvalidGrantId(ref cause) => cause,RetireGrantError::DependencyTimeout(ref cause) => cause,RetireGrantError::Validation(ref cause) => cause,RetireGrantError::Credentials(ref err) => err.description(),RetireGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RetireGrantError::Unknown(ref cause) => cause
+                            RetireGrantError::DependencyTimeout(ref cause) => cause,
+RetireGrantError::InvalidGrantId(ref cause) => cause,
+RetireGrantError::InvalidGrantToken(ref cause) => cause,
+RetireGrantError::KMSInternal(ref cause) => cause,
+RetireGrantError::KMSInvalidState(ref cause) => cause,
+RetireGrantError::NotFound(ref cause) => cause,
+RetireGrantError::Validation(ref cause) => cause,
+RetireGrantError::Credentials(ref err) => err.description(),
+RetireGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RetireGrantError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2751,18 +3205,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RevokeGrantError {
                     
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
-///<p>The request was rejected because a specified ARN was not valid.</p>
-InvalidArn(String),
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
+///<p>The request was rejected because a specified ARN was not valid.</p>
+InvalidArn(String),
 ///<p>The request was rejected because the specified <code>GrantId</code> is not valid.</p>
-InvalidGrantId(String),/// An error occurred dispatching the HTTP request
+InvalidGrantId(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2781,7 +3235,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => RevokeGrantError::NotFound(String::from(error_message)),"DependencyTimeoutException" => RevokeGrantError::DependencyTimeout(String::from(error_message)),"KMSInvalidStateException" => RevokeGrantError::KMSInvalidState(String::from(error_message)),"InvalidArnException" => RevokeGrantError::InvalidArn(String::from(error_message)),"KMSInternalException" => RevokeGrantError::KMSInternal(String::from(error_message)),"InvalidGrantIdException" => RevokeGrantError::InvalidGrantId(String::from(error_message)),"ValidationException" => RevokeGrantError::Validation(error_message.to_string()),_ => RevokeGrantError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => RevokeGrantError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => RevokeGrantError::InvalidArn(String::from(error_message)),
+"InvalidGrantIdException" => RevokeGrantError::InvalidGrantId(String::from(error_message)),
+"KMSInternalException" => RevokeGrantError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => RevokeGrantError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => RevokeGrantError::NotFound(String::from(error_message)),
+"ValidationException" => RevokeGrantError::Validation(error_message.to_string()),
+_ => RevokeGrantError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RevokeGrantError::Unknown(String::from(body))
@@ -2812,7 +3273,16 @@ Unknown(String)
                 impl Error for RevokeGrantError {
                     fn description(&self) -> &str {
                         match *self {
-                            RevokeGrantError::DependencyTimeout(ref cause) => cause,RevokeGrantError::KMSInvalidState(ref cause) => cause,RevokeGrantError::InvalidGrantId(ref cause) => cause,RevokeGrantError::NotFound(ref cause) => cause,RevokeGrantError::InvalidArn(ref cause) => cause,RevokeGrantError::KMSInternal(ref cause) => cause,RevokeGrantError::Validation(ref cause) => cause,RevokeGrantError::Credentials(ref err) => err.description(),RevokeGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RevokeGrantError::Unknown(ref cause) => cause
+                            RevokeGrantError::DependencyTimeout(ref cause) => cause,
+RevokeGrantError::InvalidArn(ref cause) => cause,
+RevokeGrantError::InvalidGrantId(ref cause) => cause,
+RevokeGrantError::KMSInternal(ref cause) => cause,
+RevokeGrantError::KMSInvalidState(ref cause) => cause,
+RevokeGrantError::NotFound(ref cause) => cause,
+RevokeGrantError::Validation(ref cause) => cause,
+RevokeGrantError::Credentials(ref err) => err.description(),
+RevokeGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RevokeGrantError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2820,16 +3290,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ScheduleKeyDeletionError {
                     
-///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
+///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+DependencyTimeout(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
 KMSInternal(String),
-///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+KMSInvalidState(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2848,7 +3318,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "KMSInternalException" => ScheduleKeyDeletionError::KMSInternal(String::from(error_message)),"NotFoundException" => ScheduleKeyDeletionError::NotFound(String::from(error_message)),"KMSInvalidStateException" => ScheduleKeyDeletionError::KMSInvalidState(String::from(error_message)),"DependencyTimeoutException" => ScheduleKeyDeletionError::DependencyTimeout(String::from(error_message)),"InvalidArnException" => ScheduleKeyDeletionError::InvalidArn(String::from(error_message)),"ValidationException" => ScheduleKeyDeletionError::Validation(error_message.to_string()),_ => ScheduleKeyDeletionError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => ScheduleKeyDeletionError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => ScheduleKeyDeletionError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => ScheduleKeyDeletionError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => ScheduleKeyDeletionError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => ScheduleKeyDeletionError::NotFound(String::from(error_message)),
+"ValidationException" => ScheduleKeyDeletionError::Validation(error_message.to_string()),
+_ => ScheduleKeyDeletionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ScheduleKeyDeletionError::Unknown(String::from(body))
@@ -2879,7 +3355,15 @@ Unknown(String)
                 impl Error for ScheduleKeyDeletionError {
                     fn description(&self) -> &str {
                         match *self {
-                            ScheduleKeyDeletionError::NotFound(ref cause) => cause,ScheduleKeyDeletionError::DependencyTimeout(ref cause) => cause,ScheduleKeyDeletionError::KMSInvalidState(ref cause) => cause,ScheduleKeyDeletionError::InvalidArn(ref cause) => cause,ScheduleKeyDeletionError::KMSInternal(ref cause) => cause,ScheduleKeyDeletionError::Validation(ref cause) => cause,ScheduleKeyDeletionError::Credentials(ref err) => err.description(),ScheduleKeyDeletionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ScheduleKeyDeletionError::Unknown(ref cause) => cause
+                            ScheduleKeyDeletionError::DependencyTimeout(ref cause) => cause,
+ScheduleKeyDeletionError::InvalidArn(ref cause) => cause,
+ScheduleKeyDeletionError::KMSInternal(ref cause) => cause,
+ScheduleKeyDeletionError::KMSInvalidState(ref cause) => cause,
+ScheduleKeyDeletionError::NotFound(ref cause) => cause,
+ScheduleKeyDeletionError::Validation(ref cause) => cause,
+ScheduleKeyDeletionError::Credentials(ref err) => err.description(),
+ScheduleKeyDeletionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ScheduleKeyDeletionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2889,12 +3373,12 @@ Unknown(String)
                     
 ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
 DependencyTimeout(String),
-///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
 ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
 KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-KMSInvalidState(String),/// An error occurred dispatching the HTTP request
+KMSInvalidState(String),
+///<p>The request was rejected because the specified entity or resource could not be found.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2913,7 +3397,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NotFoundException" => UpdateAliasError::NotFound(String::from(error_message)),"KMSInvalidStateException" => UpdateAliasError::KMSInvalidState(String::from(error_message)),"KMSInternalException" => UpdateAliasError::KMSInternal(String::from(error_message)),"DependencyTimeoutException" => UpdateAliasError::DependencyTimeout(String::from(error_message)),"ValidationException" => UpdateAliasError::Validation(error_message.to_string()),_ => UpdateAliasError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => UpdateAliasError::DependencyTimeout(String::from(error_message)),
+"KMSInternalException" => UpdateAliasError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => UpdateAliasError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => UpdateAliasError::NotFound(String::from(error_message)),
+"ValidationException" => UpdateAliasError::Validation(error_message.to_string()),
+_ => UpdateAliasError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateAliasError::Unknown(String::from(body))
@@ -2944,7 +3433,14 @@ Unknown(String)
                 impl Error for UpdateAliasError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateAliasError::NotFound(ref cause) => cause,UpdateAliasError::KMSInvalidState(ref cause) => cause,UpdateAliasError::DependencyTimeout(ref cause) => cause,UpdateAliasError::KMSInternal(ref cause) => cause,UpdateAliasError::Validation(ref cause) => cause,UpdateAliasError::Credentials(ref err) => err.description(),UpdateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateAliasError::Unknown(ref cause) => cause
+                            UpdateAliasError::DependencyTimeout(ref cause) => cause,
+UpdateAliasError::KMSInternal(ref cause) => cause,
+UpdateAliasError::KMSInvalidState(ref cause) => cause,
+UpdateAliasError::NotFound(ref cause) => cause,
+UpdateAliasError::Validation(ref cause) => cause,
+UpdateAliasError::Credentials(ref err) => err.description(),
+UpdateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateAliasError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2952,16 +3448,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateKeyDescriptionError {
                     
+///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+DependencyTimeout(String),
 ///<p>The request was rejected because a specified ARN was not valid.</p>
 InvalidArn(String),
+///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+KMSInternal(String),
 ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
 KMSInvalidState(String),
 ///<p>The request was rejected because the specified entity or resource could not be found.</p>
-NotFound(String),
-///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
-KMSInternal(String),
-///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
-DependencyTimeout(String),/// An error occurred dispatching the HTTP request
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2980,7 +3476,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "KMSInternalException" => UpdateKeyDescriptionError::KMSInternal(String::from(error_message)),"KMSInvalidStateException" => UpdateKeyDescriptionError::KMSInvalidState(String::from(error_message)),"InvalidArnException" => UpdateKeyDescriptionError::InvalidArn(String::from(error_message)),"NotFoundException" => UpdateKeyDescriptionError::NotFound(String::from(error_message)),"DependencyTimeoutException" => UpdateKeyDescriptionError::DependencyTimeout(String::from(error_message)),"ValidationException" => UpdateKeyDescriptionError::Validation(error_message.to_string()),_ => UpdateKeyDescriptionError::Unknown(String::from(body))
+                                    "DependencyTimeoutException" => UpdateKeyDescriptionError::DependencyTimeout(String::from(error_message)),
+"InvalidArnException" => UpdateKeyDescriptionError::InvalidArn(String::from(error_message)),
+"KMSInternalException" => UpdateKeyDescriptionError::KMSInternal(String::from(error_message)),
+"KMSInvalidStateException" => UpdateKeyDescriptionError::KMSInvalidState(String::from(error_message)),
+"NotFoundException" => UpdateKeyDescriptionError::NotFound(String::from(error_message)),
+"ValidationException" => UpdateKeyDescriptionError::Validation(error_message.to_string()),
+_ => UpdateKeyDescriptionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateKeyDescriptionError::Unknown(String::from(body))
@@ -3011,7 +3513,15 @@ Unknown(String)
                 impl Error for UpdateKeyDescriptionError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateKeyDescriptionError::NotFound(ref cause) => cause,UpdateKeyDescriptionError::KMSInvalidState(ref cause) => cause,UpdateKeyDescriptionError::InvalidArn(ref cause) => cause,UpdateKeyDescriptionError::KMSInternal(ref cause) => cause,UpdateKeyDescriptionError::DependencyTimeout(ref cause) => cause,UpdateKeyDescriptionError::Validation(ref cause) => cause,UpdateKeyDescriptionError::Credentials(ref err) => err.description(),UpdateKeyDescriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateKeyDescriptionError::Unknown(ref cause) => cause
+                            UpdateKeyDescriptionError::DependencyTimeout(ref cause) => cause,
+UpdateKeyDescriptionError::InvalidArn(ref cause) => cause,
+UpdateKeyDescriptionError::KMSInternal(ref cause) => cause,
+UpdateKeyDescriptionError::KMSInvalidState(ref cause) => cause,
+UpdateKeyDescriptionError::NotFound(ref cause) => cause,
+UpdateKeyDescriptionError::Validation(ref cause) => cause,
+UpdateKeyDescriptionError::Credentials(ref err) => err.description(),
+UpdateKeyDescriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateKeyDescriptionError::Unknown(ref cause) => cause
                         }
                     }
                  }

@@ -4664,12 +4664,12 @@ struct WordDeserializer;
                 #[derive(Debug, PartialEq)]
                 pub enum BuildSuggestersError {
                     
-///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
 ///<p>An error occurred while processing the request.</p>
 Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
-Internal(String),/// An error occurred dispatching the HTTP request
+Internal(String),
+///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4718,7 +4718,13 @@ Unknown(String)
                 impl Error for BuildSuggestersError {
                     fn description(&self) -> &str {
                         match *self {
-                            BuildSuggestersError::ResourceNotFound(ref cause) => cause,BuildSuggestersError::Internal(ref cause) => cause,BuildSuggestersError::Base(ref cause) => cause,BuildSuggestersError::Validation(ref cause) => cause,BuildSuggestersError::Credentials(ref err) => err.description(),BuildSuggestersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BuildSuggestersError::Unknown(ref cause) => cause
+                            BuildSuggestersError::Base(ref cause) => cause,
+BuildSuggestersError::Internal(ref cause) => cause,
+BuildSuggestersError::ResourceNotFound(ref cause) => cause,
+BuildSuggestersError::Validation(ref cause) => cause,
+BuildSuggestersError::Credentials(ref err) => err.description(),
+BuildSuggestersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BuildSuggestersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4728,10 +4734,10 @@ Unknown(String)
                     
 ///<p>An error occurred while processing the request.</p>
 Base(String),
-///<p>The request was rejected because a resource limit has already been met.</p>
-LimitExceeded(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
-Internal(String),/// An error occurred dispatching the HTTP request
+Internal(String),
+///<p>The request was rejected because a resource limit has already been met.</p>
+LimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4748,7 +4754,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalException" => CreateDomainError::Internal(String::from(parsed_error.message)),"BaseException" => CreateDomainError::Base(String::from(parsed_error.message)),"LimitExceededException" => CreateDomainError::LimitExceeded(String::from(parsed_error.message)),_ => CreateDomainError::Unknown(String::from(body))
+                                    "BaseException" => CreateDomainError::Base(String::from(parsed_error.message)),"InternalException" => CreateDomainError::Internal(String::from(parsed_error.message)),"LimitExceededException" => CreateDomainError::LimitExceeded(String::from(parsed_error.message)),_ => CreateDomainError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDomainError::Unknown(body.to_string())
@@ -4780,7 +4786,13 @@ Unknown(String)
                 impl Error for CreateDomainError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDomainError::Base(ref cause) => cause,CreateDomainError::Internal(ref cause) => cause,CreateDomainError::LimitExceeded(ref cause) => cause,CreateDomainError::Validation(ref cause) => cause,CreateDomainError::Credentials(ref err) => err.description(),CreateDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDomainError::Unknown(ref cause) => cause
+                            CreateDomainError::Base(ref cause) => cause,
+CreateDomainError::Internal(ref cause) => cause,
+CreateDomainError::LimitExceeded(ref cause) => cause,
+CreateDomainError::Validation(ref cause) => cause,
+CreateDomainError::Credentials(ref err) => err.description(),
+CreateDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDomainError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4788,16 +4800,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DefineAnalysisSchemeError {
                     
-///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
-Internal(String),
-///<p>The request was rejected because it specified an invalid type definition.</p>
-InvalidType(String),
-///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
 ///<p>An error occurred while processing the request.</p>
 Base(String),
+///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+Internal(String),
 ///<p>The request was rejected because a resource limit has already been met.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+ResourceNotFound(String),
+///<p>The request was rejected because it specified an invalid type definition.</p>
+InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4814,7 +4826,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => DefineAnalysisSchemeError::LimitExceeded(String::from(parsed_error.message)),"BaseException" => DefineAnalysisSchemeError::Base(String::from(parsed_error.message)),"InvalidTypeException" => DefineAnalysisSchemeError::InvalidType(String::from(parsed_error.message)),"InternalException" => DefineAnalysisSchemeError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => DefineAnalysisSchemeError::ResourceNotFound(String::from(parsed_error.message)),_ => DefineAnalysisSchemeError::Unknown(String::from(body))
+                                    "BaseException" => DefineAnalysisSchemeError::Base(String::from(parsed_error.message)),"InternalException" => DefineAnalysisSchemeError::Internal(String::from(parsed_error.message)),"LimitExceededException" => DefineAnalysisSchemeError::LimitExceeded(String::from(parsed_error.message)),"ResourceNotFoundException" => DefineAnalysisSchemeError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => DefineAnalysisSchemeError::InvalidType(String::from(parsed_error.message)),_ => DefineAnalysisSchemeError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DefineAnalysisSchemeError::Unknown(body.to_string())
@@ -4846,7 +4858,15 @@ Unknown(String)
                 impl Error for DefineAnalysisSchemeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DefineAnalysisSchemeError::LimitExceeded(ref cause) => cause,DefineAnalysisSchemeError::Base(ref cause) => cause,DefineAnalysisSchemeError::Internal(ref cause) => cause,DefineAnalysisSchemeError::InvalidType(ref cause) => cause,DefineAnalysisSchemeError::ResourceNotFound(ref cause) => cause,DefineAnalysisSchemeError::Validation(ref cause) => cause,DefineAnalysisSchemeError::Credentials(ref err) => err.description(),DefineAnalysisSchemeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DefineAnalysisSchemeError::Unknown(ref cause) => cause
+                            DefineAnalysisSchemeError::Base(ref cause) => cause,
+DefineAnalysisSchemeError::Internal(ref cause) => cause,
+DefineAnalysisSchemeError::LimitExceeded(ref cause) => cause,
+DefineAnalysisSchemeError::ResourceNotFound(ref cause) => cause,
+DefineAnalysisSchemeError::InvalidType(ref cause) => cause,
+DefineAnalysisSchemeError::Validation(ref cause) => cause,
+DefineAnalysisSchemeError::Credentials(ref err) => err.description(),
+DefineAnalysisSchemeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DefineAnalysisSchemeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4854,16 +4874,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DefineExpressionError {
                     
-///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
-///<p>The request was rejected because it specified an invalid type definition.</p>
-InvalidType(String),
 ///<p>An error occurred while processing the request.</p>
 Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
 Internal(String),
 ///<p>The request was rejected because a resource limit has already been met.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+ResourceNotFound(String),
+///<p>The request was rejected because it specified an invalid type definition.</p>
+InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4880,7 +4900,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => DefineExpressionError::LimitExceeded(String::from(parsed_error.message)),"InternalException" => DefineExpressionError::Internal(String::from(parsed_error.message)),"BaseException" => DefineExpressionError::Base(String::from(parsed_error.message)),"ResourceNotFoundException" => DefineExpressionError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => DefineExpressionError::InvalidType(String::from(parsed_error.message)),_ => DefineExpressionError::Unknown(String::from(body))
+                                    "BaseException" => DefineExpressionError::Base(String::from(parsed_error.message)),"InternalException" => DefineExpressionError::Internal(String::from(parsed_error.message)),"LimitExceededException" => DefineExpressionError::LimitExceeded(String::from(parsed_error.message)),"ResourceNotFoundException" => DefineExpressionError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => DefineExpressionError::InvalidType(String::from(parsed_error.message)),_ => DefineExpressionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DefineExpressionError::Unknown(body.to_string())
@@ -4912,7 +4932,15 @@ Unknown(String)
                 impl Error for DefineExpressionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DefineExpressionError::LimitExceeded(ref cause) => cause,DefineExpressionError::Base(ref cause) => cause,DefineExpressionError::InvalidType(ref cause) => cause,DefineExpressionError::Internal(ref cause) => cause,DefineExpressionError::ResourceNotFound(ref cause) => cause,DefineExpressionError::Validation(ref cause) => cause,DefineExpressionError::Credentials(ref err) => err.description(),DefineExpressionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DefineExpressionError::Unknown(ref cause) => cause
+                            DefineExpressionError::Base(ref cause) => cause,
+DefineExpressionError::Internal(ref cause) => cause,
+DefineExpressionError::LimitExceeded(ref cause) => cause,
+DefineExpressionError::ResourceNotFound(ref cause) => cause,
+DefineExpressionError::InvalidType(ref cause) => cause,
+DefineExpressionError::Validation(ref cause) => cause,
+DefineExpressionError::Credentials(ref err) => err.description(),
+DefineExpressionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DefineExpressionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4920,16 +4948,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DefineIndexFieldError {
                     
-///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
 ///<p>An error occurred while processing the request.</p>
 Base(String),
-///<p>The request was rejected because it specified an invalid type definition.</p>
-InvalidType(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
 Internal(String),
 ///<p>The request was rejected because a resource limit has already been met.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+ResourceNotFound(String),
+///<p>The request was rejected because it specified an invalid type definition.</p>
+InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4946,7 +4974,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => DefineIndexFieldError::LimitExceeded(String::from(parsed_error.message)),"BaseException" => DefineIndexFieldError::Base(String::from(parsed_error.message)),"ResourceNotFoundException" => DefineIndexFieldError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => DefineIndexFieldError::InvalidType(String::from(parsed_error.message)),"InternalException" => DefineIndexFieldError::Internal(String::from(parsed_error.message)),_ => DefineIndexFieldError::Unknown(String::from(body))
+                                    "BaseException" => DefineIndexFieldError::Base(String::from(parsed_error.message)),"InternalException" => DefineIndexFieldError::Internal(String::from(parsed_error.message)),"LimitExceededException" => DefineIndexFieldError::LimitExceeded(String::from(parsed_error.message)),"ResourceNotFoundException" => DefineIndexFieldError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => DefineIndexFieldError::InvalidType(String::from(parsed_error.message)),_ => DefineIndexFieldError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DefineIndexFieldError::Unknown(body.to_string())
@@ -4978,7 +5006,15 @@ Unknown(String)
                 impl Error for DefineIndexFieldError {
                     fn description(&self) -> &str {
                         match *self {
-                            DefineIndexFieldError::InvalidType(ref cause) => cause,DefineIndexFieldError::ResourceNotFound(ref cause) => cause,DefineIndexFieldError::Internal(ref cause) => cause,DefineIndexFieldError::Base(ref cause) => cause,DefineIndexFieldError::LimitExceeded(ref cause) => cause,DefineIndexFieldError::Validation(ref cause) => cause,DefineIndexFieldError::Credentials(ref err) => err.description(),DefineIndexFieldError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DefineIndexFieldError::Unknown(ref cause) => cause
+                            DefineIndexFieldError::Base(ref cause) => cause,
+DefineIndexFieldError::Internal(ref cause) => cause,
+DefineIndexFieldError::LimitExceeded(ref cause) => cause,
+DefineIndexFieldError::ResourceNotFound(ref cause) => cause,
+DefineIndexFieldError::InvalidType(ref cause) => cause,
+DefineIndexFieldError::Validation(ref cause) => cause,
+DefineIndexFieldError::Credentials(ref err) => err.description(),
+DefineIndexFieldError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DefineIndexFieldError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4988,12 +5024,12 @@ Unknown(String)
                     
 ///<p>An error occurred while processing the request.</p>
 Base(String),
+///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+Internal(String),
 ///<p>The request was rejected because a resource limit has already been met.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
 ResourceNotFound(String),
-///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
-Internal(String),
 ///<p>The request was rejected because it specified an invalid type definition.</p>
 InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -5012,7 +5048,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalException" => DefineSuggesterError::Internal(String::from(parsed_error.message)),"InvalidTypeException" => DefineSuggesterError::InvalidType(String::from(parsed_error.message)),"ResourceNotFoundException" => DefineSuggesterError::ResourceNotFound(String::from(parsed_error.message)),"BaseException" => DefineSuggesterError::Base(String::from(parsed_error.message)),"LimitExceededException" => DefineSuggesterError::LimitExceeded(String::from(parsed_error.message)),_ => DefineSuggesterError::Unknown(String::from(body))
+                                    "BaseException" => DefineSuggesterError::Base(String::from(parsed_error.message)),"InternalException" => DefineSuggesterError::Internal(String::from(parsed_error.message)),"LimitExceededException" => DefineSuggesterError::LimitExceeded(String::from(parsed_error.message)),"ResourceNotFoundException" => DefineSuggesterError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => DefineSuggesterError::InvalidType(String::from(parsed_error.message)),_ => DefineSuggesterError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DefineSuggesterError::Unknown(body.to_string())
@@ -5044,7 +5080,15 @@ Unknown(String)
                 impl Error for DefineSuggesterError {
                     fn description(&self) -> &str {
                         match *self {
-                            DefineSuggesterError::Internal(ref cause) => cause,DefineSuggesterError::ResourceNotFound(ref cause) => cause,DefineSuggesterError::LimitExceeded(ref cause) => cause,DefineSuggesterError::InvalidType(ref cause) => cause,DefineSuggesterError::Base(ref cause) => cause,DefineSuggesterError::Validation(ref cause) => cause,DefineSuggesterError::Credentials(ref err) => err.description(),DefineSuggesterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DefineSuggesterError::Unknown(ref cause) => cause
+                            DefineSuggesterError::Base(ref cause) => cause,
+DefineSuggesterError::Internal(ref cause) => cause,
+DefineSuggesterError::LimitExceeded(ref cause) => cause,
+DefineSuggesterError::ResourceNotFound(ref cause) => cause,
+DefineSuggesterError::InvalidType(ref cause) => cause,
+DefineSuggesterError::Validation(ref cause) => cause,
+DefineSuggesterError::Credentials(ref err) => err.description(),
+DefineSuggesterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DefineSuggesterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5052,14 +5096,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteAnalysisSchemeError {
                     
-///<p>The request was rejected because it specified an invalid type definition.</p>
-InvalidType(String),
-///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
+///<p>An error occurred while processing the request.</p>
+Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
 Internal(String),
-///<p>An error occurred while processing the request.</p>
-Base(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+ResourceNotFound(String),
+///<p>The request was rejected because it specified an invalid type definition.</p>
+InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5076,7 +5120,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "BaseException" => DeleteAnalysisSchemeError::Base(String::from(parsed_error.message)),"InternalException" => DeleteAnalysisSchemeError::Internal(String::from(parsed_error.message)),"InvalidTypeException" => DeleteAnalysisSchemeError::InvalidType(String::from(parsed_error.message)),"ResourceNotFoundException" => DeleteAnalysisSchemeError::ResourceNotFound(String::from(parsed_error.message)),_ => DeleteAnalysisSchemeError::Unknown(String::from(body))
+                                    "BaseException" => DeleteAnalysisSchemeError::Base(String::from(parsed_error.message)),"InternalException" => DeleteAnalysisSchemeError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => DeleteAnalysisSchemeError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => DeleteAnalysisSchemeError::InvalidType(String::from(parsed_error.message)),_ => DeleteAnalysisSchemeError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteAnalysisSchemeError::Unknown(body.to_string())
@@ -5108,7 +5152,14 @@ Unknown(String)
                 impl Error for DeleteAnalysisSchemeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAnalysisSchemeError::Base(ref cause) => cause,DeleteAnalysisSchemeError::InvalidType(ref cause) => cause,DeleteAnalysisSchemeError::Internal(ref cause) => cause,DeleteAnalysisSchemeError::ResourceNotFound(ref cause) => cause,DeleteAnalysisSchemeError::Validation(ref cause) => cause,DeleteAnalysisSchemeError::Credentials(ref err) => err.description(),DeleteAnalysisSchemeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAnalysisSchemeError::Unknown(ref cause) => cause
+                            DeleteAnalysisSchemeError::Base(ref cause) => cause,
+DeleteAnalysisSchemeError::Internal(ref cause) => cause,
+DeleteAnalysisSchemeError::ResourceNotFound(ref cause) => cause,
+DeleteAnalysisSchemeError::InvalidType(ref cause) => cause,
+DeleteAnalysisSchemeError::Validation(ref cause) => cause,
+DeleteAnalysisSchemeError::Credentials(ref err) => err.description(),
+DeleteAnalysisSchemeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAnalysisSchemeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5116,10 +5167,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDomainError {
                     
-///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
-Internal(String),
 ///<p>An error occurred while processing the request.</p>
-Base(String),/// An error occurred dispatching the HTTP request
+Base(String),
+///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+Internal(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5136,7 +5187,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalException" => DeleteDomainError::Internal(String::from(parsed_error.message)),"BaseException" => DeleteDomainError::Base(String::from(parsed_error.message)),_ => DeleteDomainError::Unknown(String::from(body))
+                                    "BaseException" => DeleteDomainError::Base(String::from(parsed_error.message)),"InternalException" => DeleteDomainError::Internal(String::from(parsed_error.message)),_ => DeleteDomainError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteDomainError::Unknown(body.to_string())
@@ -5168,7 +5219,12 @@ Unknown(String)
                 impl Error for DeleteDomainError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDomainError::Base(ref cause) => cause,DeleteDomainError::Internal(ref cause) => cause,DeleteDomainError::Validation(ref cause) => cause,DeleteDomainError::Credentials(ref err) => err.description(),DeleteDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDomainError::Unknown(ref cause) => cause
+                            DeleteDomainError::Base(ref cause) => cause,
+DeleteDomainError::Internal(ref cause) => cause,
+DeleteDomainError::Validation(ref cause) => cause,
+DeleteDomainError::Credentials(ref err) => err.description(),
+DeleteDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDomainError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5176,14 +5232,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteExpressionError {
                     
+///<p>An error occurred while processing the request.</p>
+Base(String),
+///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+Internal(String),
 ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
 ResourceNotFound(String),
 ///<p>The request was rejected because it specified an invalid type definition.</p>
-InvalidType(String),
-///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
-Internal(String),
-///<p>An error occurred while processing the request.</p>
-Base(String),/// An error occurred dispatching the HTTP request
+InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5200,7 +5256,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ResourceNotFoundException" => DeleteExpressionError::ResourceNotFound(String::from(parsed_error.message)),"BaseException" => DeleteExpressionError::Base(String::from(parsed_error.message)),"InternalException" => DeleteExpressionError::Internal(String::from(parsed_error.message)),"InvalidTypeException" => DeleteExpressionError::InvalidType(String::from(parsed_error.message)),_ => DeleteExpressionError::Unknown(String::from(body))
+                                    "BaseException" => DeleteExpressionError::Base(String::from(parsed_error.message)),"InternalException" => DeleteExpressionError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => DeleteExpressionError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => DeleteExpressionError::InvalidType(String::from(parsed_error.message)),_ => DeleteExpressionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteExpressionError::Unknown(body.to_string())
@@ -5232,7 +5288,14 @@ Unknown(String)
                 impl Error for DeleteExpressionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteExpressionError::Base(ref cause) => cause,DeleteExpressionError::Internal(ref cause) => cause,DeleteExpressionError::ResourceNotFound(ref cause) => cause,DeleteExpressionError::InvalidType(ref cause) => cause,DeleteExpressionError::Validation(ref cause) => cause,DeleteExpressionError::Credentials(ref err) => err.description(),DeleteExpressionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteExpressionError::Unknown(ref cause) => cause
+                            DeleteExpressionError::Base(ref cause) => cause,
+DeleteExpressionError::Internal(ref cause) => cause,
+DeleteExpressionError::ResourceNotFound(ref cause) => cause,
+DeleteExpressionError::InvalidType(ref cause) => cause,
+DeleteExpressionError::Validation(ref cause) => cause,
+DeleteExpressionError::Credentials(ref err) => err.description(),
+DeleteExpressionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteExpressionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5240,12 +5303,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteIndexFieldError {
                     
+///<p>An error occurred while processing the request.</p>
+Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
 Internal(String),
 ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
 ResourceNotFound(String),
-///<p>An error occurred while processing the request.</p>
-Base(String),
 ///<p>The request was rejected because it specified an invalid type definition.</p>
 InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -5264,7 +5327,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ResourceNotFoundException" => DeleteIndexFieldError::ResourceNotFound(String::from(parsed_error.message)),"InternalException" => DeleteIndexFieldError::Internal(String::from(parsed_error.message)),"BaseException" => DeleteIndexFieldError::Base(String::from(parsed_error.message)),"InvalidTypeException" => DeleteIndexFieldError::InvalidType(String::from(parsed_error.message)),_ => DeleteIndexFieldError::Unknown(String::from(body))
+                                    "BaseException" => DeleteIndexFieldError::Base(String::from(parsed_error.message)),"InternalException" => DeleteIndexFieldError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => DeleteIndexFieldError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => DeleteIndexFieldError::InvalidType(String::from(parsed_error.message)),_ => DeleteIndexFieldError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteIndexFieldError::Unknown(body.to_string())
@@ -5296,7 +5359,14 @@ Unknown(String)
                 impl Error for DeleteIndexFieldError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteIndexFieldError::ResourceNotFound(ref cause) => cause,DeleteIndexFieldError::InvalidType(ref cause) => cause,DeleteIndexFieldError::Base(ref cause) => cause,DeleteIndexFieldError::Internal(ref cause) => cause,DeleteIndexFieldError::Validation(ref cause) => cause,DeleteIndexFieldError::Credentials(ref err) => err.description(),DeleteIndexFieldError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteIndexFieldError::Unknown(ref cause) => cause
+                            DeleteIndexFieldError::Base(ref cause) => cause,
+DeleteIndexFieldError::Internal(ref cause) => cause,
+DeleteIndexFieldError::ResourceNotFound(ref cause) => cause,
+DeleteIndexFieldError::InvalidType(ref cause) => cause,
+DeleteIndexFieldError::Validation(ref cause) => cause,
+DeleteIndexFieldError::Credentials(ref err) => err.description(),
+DeleteIndexFieldError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteIndexFieldError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5304,14 +5374,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteSuggesterError {
                     
+///<p>An error occurred while processing the request.</p>
+Base(String),
+///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+Internal(String),
 ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
 ResourceNotFound(String),
 ///<p>The request was rejected because it specified an invalid type definition.</p>
-InvalidType(String),
-///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
-Internal(String),
-///<p>An error occurred while processing the request.</p>
-Base(String),/// An error occurred dispatching the HTTP request
+InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5328,7 +5398,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "BaseException" => DeleteSuggesterError::Base(String::from(parsed_error.message)),"InvalidTypeException" => DeleteSuggesterError::InvalidType(String::from(parsed_error.message)),"InternalException" => DeleteSuggesterError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => DeleteSuggesterError::ResourceNotFound(String::from(parsed_error.message)),_ => DeleteSuggesterError::Unknown(String::from(body))
+                                    "BaseException" => DeleteSuggesterError::Base(String::from(parsed_error.message)),"InternalException" => DeleteSuggesterError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => DeleteSuggesterError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => DeleteSuggesterError::InvalidType(String::from(parsed_error.message)),_ => DeleteSuggesterError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteSuggesterError::Unknown(body.to_string())
@@ -5360,7 +5430,14 @@ Unknown(String)
                 impl Error for DeleteSuggesterError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteSuggesterError::InvalidType(ref cause) => cause,DeleteSuggesterError::ResourceNotFound(ref cause) => cause,DeleteSuggesterError::Internal(ref cause) => cause,DeleteSuggesterError::Base(ref cause) => cause,DeleteSuggesterError::Validation(ref cause) => cause,DeleteSuggesterError::Credentials(ref err) => err.description(),DeleteSuggesterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteSuggesterError::Unknown(ref cause) => cause
+                            DeleteSuggesterError::Base(ref cause) => cause,
+DeleteSuggesterError::Internal(ref cause) => cause,
+DeleteSuggesterError::ResourceNotFound(ref cause) => cause,
+DeleteSuggesterError::InvalidType(ref cause) => cause,
+DeleteSuggesterError::Validation(ref cause) => cause,
+DeleteSuggesterError::Credentials(ref err) => err.description(),
+DeleteSuggesterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteSuggesterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5368,12 +5445,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeAnalysisSchemesError {
                     
-///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
 ///<p>An error occurred while processing the request.</p>
 Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
-Internal(String),/// An error occurred dispatching the HTTP request
+Internal(String),
+///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5390,7 +5467,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalException" => DescribeAnalysisSchemesError::Internal(String::from(parsed_error.message)),"BaseException" => DescribeAnalysisSchemesError::Base(String::from(parsed_error.message)),"ResourceNotFoundException" => DescribeAnalysisSchemesError::ResourceNotFound(String::from(parsed_error.message)),_ => DescribeAnalysisSchemesError::Unknown(String::from(body))
+                                    "BaseException" => DescribeAnalysisSchemesError::Base(String::from(parsed_error.message)),"InternalException" => DescribeAnalysisSchemesError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => DescribeAnalysisSchemesError::ResourceNotFound(String::from(parsed_error.message)),_ => DescribeAnalysisSchemesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeAnalysisSchemesError::Unknown(body.to_string())
@@ -5422,7 +5499,13 @@ Unknown(String)
                 impl Error for DescribeAnalysisSchemesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAnalysisSchemesError::Internal(ref cause) => cause,DescribeAnalysisSchemesError::Base(ref cause) => cause,DescribeAnalysisSchemesError::ResourceNotFound(ref cause) => cause,DescribeAnalysisSchemesError::Validation(ref cause) => cause,DescribeAnalysisSchemesError::Credentials(ref err) => err.description(),DescribeAnalysisSchemesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAnalysisSchemesError::Unknown(ref cause) => cause
+                            DescribeAnalysisSchemesError::Base(ref cause) => cause,
+DescribeAnalysisSchemesError::Internal(ref cause) => cause,
+DescribeAnalysisSchemesError::ResourceNotFound(ref cause) => cause,
+DescribeAnalysisSchemesError::Validation(ref cause) => cause,
+DescribeAnalysisSchemesError::Credentials(ref err) => err.description(),
+DescribeAnalysisSchemesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAnalysisSchemesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5430,18 +5513,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeAvailabilityOptionsError {
                     
-///<p>The request was rejected because it attempted an operation which is not enabled.</p>
-DisabledOperation(String),
-///<p>The request was rejected because it specified an invalid type definition.</p>
-InvalidType(String),
-///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
-Internal(String),
 ///<p>An error occurred while processing the request.</p>
 Base(String),
+///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+Internal(String),
+///<p>The request was rejected because a resource limit has already been met.</p>
+LimitExceeded(String),
+///<p>The request was rejected because it attempted an operation which is not enabled.</p>
+DisabledOperation(String),
 ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
 ResourceNotFound(String),
-///<p>The request was rejected because a resource limit has already been met.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because it specified an invalid type definition.</p>
+InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5458,7 +5541,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalException" => DescribeAvailabilityOptionsError::Internal(String::from(parsed_error.message)),"LimitExceededException" => DescribeAvailabilityOptionsError::LimitExceeded(String::from(parsed_error.message)),"ResourceNotFoundException" => DescribeAvailabilityOptionsError::ResourceNotFound(String::from(parsed_error.message)),"DisabledOperationException" => DescribeAvailabilityOptionsError::DisabledOperation(String::from(parsed_error.message)),"InvalidTypeException" => DescribeAvailabilityOptionsError::InvalidType(String::from(parsed_error.message)),"BaseException" => DescribeAvailabilityOptionsError::Base(String::from(parsed_error.message)),_ => DescribeAvailabilityOptionsError::Unknown(String::from(body))
+                                    "BaseException" => DescribeAvailabilityOptionsError::Base(String::from(parsed_error.message)),"InternalException" => DescribeAvailabilityOptionsError::Internal(String::from(parsed_error.message)),"LimitExceededException" => DescribeAvailabilityOptionsError::LimitExceeded(String::from(parsed_error.message)),"DisabledOperationException" => DescribeAvailabilityOptionsError::DisabledOperation(String::from(parsed_error.message)),"ResourceNotFoundException" => DescribeAvailabilityOptionsError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => DescribeAvailabilityOptionsError::InvalidType(String::from(parsed_error.message)),_ => DescribeAvailabilityOptionsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeAvailabilityOptionsError::Unknown(body.to_string())
@@ -5490,7 +5573,16 @@ Unknown(String)
                 impl Error for DescribeAvailabilityOptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAvailabilityOptionsError::LimitExceeded(ref cause) => cause,DescribeAvailabilityOptionsError::DisabledOperation(ref cause) => cause,DescribeAvailabilityOptionsError::Base(ref cause) => cause,DescribeAvailabilityOptionsError::ResourceNotFound(ref cause) => cause,DescribeAvailabilityOptionsError::Internal(ref cause) => cause,DescribeAvailabilityOptionsError::InvalidType(ref cause) => cause,DescribeAvailabilityOptionsError::Validation(ref cause) => cause,DescribeAvailabilityOptionsError::Credentials(ref err) => err.description(),DescribeAvailabilityOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAvailabilityOptionsError::Unknown(ref cause) => cause
+                            DescribeAvailabilityOptionsError::Base(ref cause) => cause,
+DescribeAvailabilityOptionsError::Internal(ref cause) => cause,
+DescribeAvailabilityOptionsError::LimitExceeded(ref cause) => cause,
+DescribeAvailabilityOptionsError::DisabledOperation(ref cause) => cause,
+DescribeAvailabilityOptionsError::ResourceNotFound(ref cause) => cause,
+DescribeAvailabilityOptionsError::InvalidType(ref cause) => cause,
+DescribeAvailabilityOptionsError::Validation(ref cause) => cause,
+DescribeAvailabilityOptionsError::Credentials(ref err) => err.description(),
+DescribeAvailabilityOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAvailabilityOptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5550,7 +5642,12 @@ Unknown(String)
                 impl Error for DescribeDomainsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDomainsError::Internal(ref cause) => cause,DescribeDomainsError::Base(ref cause) => cause,DescribeDomainsError::Validation(ref cause) => cause,DescribeDomainsError::Credentials(ref err) => err.description(),DescribeDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDomainsError::Unknown(ref cause) => cause
+                            DescribeDomainsError::Base(ref cause) => cause,
+DescribeDomainsError::Internal(ref cause) => cause,
+DescribeDomainsError::Validation(ref cause) => cause,
+DescribeDomainsError::Credentials(ref err) => err.description(),
+DescribeDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDomainsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5558,10 +5655,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeExpressionsError {
                     
-///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
-Internal(String),
 ///<p>An error occurred while processing the request.</p>
 Base(String),
+///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
+Internal(String),
 ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
 ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -5580,7 +5677,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "BaseException" => DescribeExpressionsError::Base(String::from(parsed_error.message)),"ResourceNotFoundException" => DescribeExpressionsError::ResourceNotFound(String::from(parsed_error.message)),"InternalException" => DescribeExpressionsError::Internal(String::from(parsed_error.message)),_ => DescribeExpressionsError::Unknown(String::from(body))
+                                    "BaseException" => DescribeExpressionsError::Base(String::from(parsed_error.message)),"InternalException" => DescribeExpressionsError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => DescribeExpressionsError::ResourceNotFound(String::from(parsed_error.message)),_ => DescribeExpressionsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeExpressionsError::Unknown(body.to_string())
@@ -5612,7 +5709,13 @@ Unknown(String)
                 impl Error for DescribeExpressionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeExpressionsError::Base(ref cause) => cause,DescribeExpressionsError::ResourceNotFound(ref cause) => cause,DescribeExpressionsError::Internal(ref cause) => cause,DescribeExpressionsError::Validation(ref cause) => cause,DescribeExpressionsError::Credentials(ref err) => err.description(),DescribeExpressionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeExpressionsError::Unknown(ref cause) => cause
+                            DescribeExpressionsError::Base(ref cause) => cause,
+DescribeExpressionsError::Internal(ref cause) => cause,
+DescribeExpressionsError::ResourceNotFound(ref cause) => cause,
+DescribeExpressionsError::Validation(ref cause) => cause,
+DescribeExpressionsError::Credentials(ref err) => err.description(),
+DescribeExpressionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeExpressionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5620,12 +5723,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeIndexFieldsError {
                     
-///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
 ///<p>An error occurred while processing the request.</p>
 Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
-Internal(String),/// An error occurred dispatching the HTTP request
+Internal(String),
+///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5642,7 +5745,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ResourceNotFoundException" => DescribeIndexFieldsError::ResourceNotFound(String::from(parsed_error.message)),"BaseException" => DescribeIndexFieldsError::Base(String::from(parsed_error.message)),"InternalException" => DescribeIndexFieldsError::Internal(String::from(parsed_error.message)),_ => DescribeIndexFieldsError::Unknown(String::from(body))
+                                    "BaseException" => DescribeIndexFieldsError::Base(String::from(parsed_error.message)),"InternalException" => DescribeIndexFieldsError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => DescribeIndexFieldsError::ResourceNotFound(String::from(parsed_error.message)),_ => DescribeIndexFieldsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeIndexFieldsError::Unknown(body.to_string())
@@ -5674,7 +5777,13 @@ Unknown(String)
                 impl Error for DescribeIndexFieldsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeIndexFieldsError::Base(ref cause) => cause,DescribeIndexFieldsError::Internal(ref cause) => cause,DescribeIndexFieldsError::ResourceNotFound(ref cause) => cause,DescribeIndexFieldsError::Validation(ref cause) => cause,DescribeIndexFieldsError::Credentials(ref err) => err.description(),DescribeIndexFieldsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeIndexFieldsError::Unknown(ref cause) => cause
+                            DescribeIndexFieldsError::Base(ref cause) => cause,
+DescribeIndexFieldsError::Internal(ref cause) => cause,
+DescribeIndexFieldsError::ResourceNotFound(ref cause) => cause,
+DescribeIndexFieldsError::Validation(ref cause) => cause,
+DescribeIndexFieldsError::Credentials(ref err) => err.description(),
+DescribeIndexFieldsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeIndexFieldsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5704,7 +5813,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalException" => DescribeScalingParametersError::Internal(String::from(parsed_error.message)),"BaseException" => DescribeScalingParametersError::Base(String::from(parsed_error.message)),"ResourceNotFoundException" => DescribeScalingParametersError::ResourceNotFound(String::from(parsed_error.message)),_ => DescribeScalingParametersError::Unknown(String::from(body))
+                                    "BaseException" => DescribeScalingParametersError::Base(String::from(parsed_error.message)),"InternalException" => DescribeScalingParametersError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => DescribeScalingParametersError::ResourceNotFound(String::from(parsed_error.message)),_ => DescribeScalingParametersError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeScalingParametersError::Unknown(body.to_string())
@@ -5736,7 +5845,13 @@ Unknown(String)
                 impl Error for DescribeScalingParametersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeScalingParametersError::Base(ref cause) => cause,DescribeScalingParametersError::ResourceNotFound(ref cause) => cause,DescribeScalingParametersError::Internal(ref cause) => cause,DescribeScalingParametersError::Validation(ref cause) => cause,DescribeScalingParametersError::Credentials(ref err) => err.description(),DescribeScalingParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeScalingParametersError::Unknown(ref cause) => cause
+                            DescribeScalingParametersError::Base(ref cause) => cause,
+DescribeScalingParametersError::Internal(ref cause) => cause,
+DescribeScalingParametersError::ResourceNotFound(ref cause) => cause,
+DescribeScalingParametersError::Validation(ref cause) => cause,
+DescribeScalingParametersError::Credentials(ref err) => err.description(),
+DescribeScalingParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeScalingParametersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5744,12 +5859,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeServiceAccessPoliciesError {
                     
+///<p>An error occurred while processing the request.</p>
+Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
 Internal(String),
 ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
-///<p>An error occurred while processing the request.</p>
-Base(String),/// An error occurred dispatching the HTTP request
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5798,7 +5913,13 @@ Unknown(String)
                 impl Error for DescribeServiceAccessPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeServiceAccessPoliciesError::Base(ref cause) => cause,DescribeServiceAccessPoliciesError::Internal(ref cause) => cause,DescribeServiceAccessPoliciesError::ResourceNotFound(ref cause) => cause,DescribeServiceAccessPoliciesError::Validation(ref cause) => cause,DescribeServiceAccessPoliciesError::Credentials(ref err) => err.description(),DescribeServiceAccessPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeServiceAccessPoliciesError::Unknown(ref cause) => cause
+                            DescribeServiceAccessPoliciesError::Base(ref cause) => cause,
+DescribeServiceAccessPoliciesError::Internal(ref cause) => cause,
+DescribeServiceAccessPoliciesError::ResourceNotFound(ref cause) => cause,
+DescribeServiceAccessPoliciesError::Validation(ref cause) => cause,
+DescribeServiceAccessPoliciesError::Credentials(ref err) => err.description(),
+DescribeServiceAccessPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeServiceAccessPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5806,12 +5927,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeSuggestersError {
                     
+///<p>An error occurred while processing the request.</p>
+Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
 Internal(String),
 ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
-///<p>An error occurred while processing the request.</p>
-Base(String),/// An error occurred dispatching the HTTP request
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5828,7 +5949,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ResourceNotFoundException" => DescribeSuggestersError::ResourceNotFound(String::from(parsed_error.message)),"BaseException" => DescribeSuggestersError::Base(String::from(parsed_error.message)),"InternalException" => DescribeSuggestersError::Internal(String::from(parsed_error.message)),_ => DescribeSuggestersError::Unknown(String::from(body))
+                                    "BaseException" => DescribeSuggestersError::Base(String::from(parsed_error.message)),"InternalException" => DescribeSuggestersError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => DescribeSuggestersError::ResourceNotFound(String::from(parsed_error.message)),_ => DescribeSuggestersError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeSuggestersError::Unknown(body.to_string())
@@ -5860,7 +5981,13 @@ Unknown(String)
                 impl Error for DescribeSuggestersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSuggestersError::ResourceNotFound(ref cause) => cause,DescribeSuggestersError::Internal(ref cause) => cause,DescribeSuggestersError::Base(ref cause) => cause,DescribeSuggestersError::Validation(ref cause) => cause,DescribeSuggestersError::Credentials(ref err) => err.description(),DescribeSuggestersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSuggestersError::Unknown(ref cause) => cause
+                            DescribeSuggestersError::Base(ref cause) => cause,
+DescribeSuggestersError::Internal(ref cause) => cause,
+DescribeSuggestersError::ResourceNotFound(ref cause) => cause,
+DescribeSuggestersError::Validation(ref cause) => cause,
+DescribeSuggestersError::Credentials(ref err) => err.description(),
+DescribeSuggestersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSuggestersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5868,12 +5995,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum IndexDocumentsError {
                     
-///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
+///<p>An error occurred while processing the request.</p>
+Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
 Internal(String),
-///<p>An error occurred while processing the request.</p>
-Base(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5890,7 +6017,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ResourceNotFoundException" => IndexDocumentsError::ResourceNotFound(String::from(parsed_error.message)),"BaseException" => IndexDocumentsError::Base(String::from(parsed_error.message)),"InternalException" => IndexDocumentsError::Internal(String::from(parsed_error.message)),_ => IndexDocumentsError::Unknown(String::from(body))
+                                    "BaseException" => IndexDocumentsError::Base(String::from(parsed_error.message)),"InternalException" => IndexDocumentsError::Internal(String::from(parsed_error.message)),"ResourceNotFoundException" => IndexDocumentsError::ResourceNotFound(String::from(parsed_error.message)),_ => IndexDocumentsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => IndexDocumentsError::Unknown(body.to_string())
@@ -5922,7 +6049,13 @@ Unknown(String)
                 impl Error for IndexDocumentsError {
                     fn description(&self) -> &str {
                         match *self {
-                            IndexDocumentsError::Base(ref cause) => cause,IndexDocumentsError::ResourceNotFound(ref cause) => cause,IndexDocumentsError::Internal(ref cause) => cause,IndexDocumentsError::Validation(ref cause) => cause,IndexDocumentsError::Credentials(ref err) => err.description(),IndexDocumentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),IndexDocumentsError::Unknown(ref cause) => cause
+                            IndexDocumentsError::Base(ref cause) => cause,
+IndexDocumentsError::Internal(ref cause) => cause,
+IndexDocumentsError::ResourceNotFound(ref cause) => cause,
+IndexDocumentsError::Validation(ref cause) => cause,
+IndexDocumentsError::Credentials(ref err) => err.description(),
+IndexDocumentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+IndexDocumentsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5980,7 +6113,11 @@ Unknown(String)
                 impl Error for ListDomainNamesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDomainNamesError::Base(ref cause) => cause,ListDomainNamesError::Validation(ref cause) => cause,ListDomainNamesError::Credentials(ref err) => err.description(),ListDomainNamesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDomainNamesError::Unknown(ref cause) => cause
+                            ListDomainNamesError::Base(ref cause) => cause,
+ListDomainNamesError::Validation(ref cause) => cause,
+ListDomainNamesError::Credentials(ref err) => err.description(),
+ListDomainNamesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDomainNamesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5992,14 +6129,14 @@ Unknown(String)
 Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
 Internal(String),
+///<p>The request was rejected because a resource limit has already been met.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it attempted an operation which is not enabled.</p>
 DisabledOperation(String),
 ///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
 ResourceNotFound(String),
 ///<p>The request was rejected because it specified an invalid type definition.</p>
-InvalidType(String),
-///<p>The request was rejected because a resource limit has already been met.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6016,7 +6153,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "BaseException" => UpdateAvailabilityOptionsError::Base(String::from(parsed_error.message)),"InvalidTypeException" => UpdateAvailabilityOptionsError::InvalidType(String::from(parsed_error.message)),"DisabledOperationException" => UpdateAvailabilityOptionsError::DisabledOperation(String::from(parsed_error.message)),"LimitExceededException" => UpdateAvailabilityOptionsError::LimitExceeded(String::from(parsed_error.message)),"ResourceNotFoundException" => UpdateAvailabilityOptionsError::ResourceNotFound(String::from(parsed_error.message)),"InternalException" => UpdateAvailabilityOptionsError::Internal(String::from(parsed_error.message)),_ => UpdateAvailabilityOptionsError::Unknown(String::from(body))
+                                    "BaseException" => UpdateAvailabilityOptionsError::Base(String::from(parsed_error.message)),"InternalException" => UpdateAvailabilityOptionsError::Internal(String::from(parsed_error.message)),"LimitExceededException" => UpdateAvailabilityOptionsError::LimitExceeded(String::from(parsed_error.message)),"DisabledOperationException" => UpdateAvailabilityOptionsError::DisabledOperation(String::from(parsed_error.message)),"ResourceNotFoundException" => UpdateAvailabilityOptionsError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => UpdateAvailabilityOptionsError::InvalidType(String::from(parsed_error.message)),_ => UpdateAvailabilityOptionsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateAvailabilityOptionsError::Unknown(body.to_string())
@@ -6048,7 +6185,16 @@ Unknown(String)
                 impl Error for UpdateAvailabilityOptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateAvailabilityOptionsError::DisabledOperation(ref cause) => cause,UpdateAvailabilityOptionsError::LimitExceeded(ref cause) => cause,UpdateAvailabilityOptionsError::ResourceNotFound(ref cause) => cause,UpdateAvailabilityOptionsError::Internal(ref cause) => cause,UpdateAvailabilityOptionsError::InvalidType(ref cause) => cause,UpdateAvailabilityOptionsError::Base(ref cause) => cause,UpdateAvailabilityOptionsError::Validation(ref cause) => cause,UpdateAvailabilityOptionsError::Credentials(ref err) => err.description(),UpdateAvailabilityOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateAvailabilityOptionsError::Unknown(ref cause) => cause
+                            UpdateAvailabilityOptionsError::Base(ref cause) => cause,
+UpdateAvailabilityOptionsError::Internal(ref cause) => cause,
+UpdateAvailabilityOptionsError::LimitExceeded(ref cause) => cause,
+UpdateAvailabilityOptionsError::DisabledOperation(ref cause) => cause,
+UpdateAvailabilityOptionsError::ResourceNotFound(ref cause) => cause,
+UpdateAvailabilityOptionsError::InvalidType(ref cause) => cause,
+UpdateAvailabilityOptionsError::Validation(ref cause) => cause,
+UpdateAvailabilityOptionsError::Credentials(ref err) => err.description(),
+UpdateAvailabilityOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateAvailabilityOptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6056,16 +6202,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateScalingParametersError {
                     
-///<p>The request was rejected because it specified an invalid type definition.</p>
-InvalidType(String),
+///<p>An error occurred while processing the request.</p>
+Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
 Internal(String),
-///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
 ///<p>The request was rejected because a resource limit has already been met.</p>
 LimitExceeded(String),
-///<p>An error occurred while processing the request.</p>
-Base(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+ResourceNotFound(String),
+///<p>The request was rejected because it specified an invalid type definition.</p>
+InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6082,7 +6228,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalException" => UpdateScalingParametersError::Internal(String::from(parsed_error.message)),"BaseException" => UpdateScalingParametersError::Base(String::from(parsed_error.message)),"ResourceNotFoundException" => UpdateScalingParametersError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => UpdateScalingParametersError::InvalidType(String::from(parsed_error.message)),"LimitExceededException" => UpdateScalingParametersError::LimitExceeded(String::from(parsed_error.message)),_ => UpdateScalingParametersError::Unknown(String::from(body))
+                                    "BaseException" => UpdateScalingParametersError::Base(String::from(parsed_error.message)),"InternalException" => UpdateScalingParametersError::Internal(String::from(parsed_error.message)),"LimitExceededException" => UpdateScalingParametersError::LimitExceeded(String::from(parsed_error.message)),"ResourceNotFoundException" => UpdateScalingParametersError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => UpdateScalingParametersError::InvalidType(String::from(parsed_error.message)),_ => UpdateScalingParametersError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateScalingParametersError::Unknown(body.to_string())
@@ -6114,7 +6260,15 @@ Unknown(String)
                 impl Error for UpdateScalingParametersError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateScalingParametersError::Base(ref cause) => cause,UpdateScalingParametersError::LimitExceeded(ref cause) => cause,UpdateScalingParametersError::InvalidType(ref cause) => cause,UpdateScalingParametersError::ResourceNotFound(ref cause) => cause,UpdateScalingParametersError::Internal(ref cause) => cause,UpdateScalingParametersError::Validation(ref cause) => cause,UpdateScalingParametersError::Credentials(ref err) => err.description(),UpdateScalingParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateScalingParametersError::Unknown(ref cause) => cause
+                            UpdateScalingParametersError::Base(ref cause) => cause,
+UpdateScalingParametersError::Internal(ref cause) => cause,
+UpdateScalingParametersError::LimitExceeded(ref cause) => cause,
+UpdateScalingParametersError::ResourceNotFound(ref cause) => cause,
+UpdateScalingParametersError::InvalidType(ref cause) => cause,
+UpdateScalingParametersError::Validation(ref cause) => cause,
+UpdateScalingParametersError::Credentials(ref err) => err.description(),
+UpdateScalingParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateScalingParametersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6122,14 +6276,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateServiceAccessPoliciesError {
                     
-///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
-ResourceNotFound(String),
-///<p>The request was rejected because a resource limit has already been met.</p>
-LimitExceeded(String),
 ///<p>An error occurred while processing the request.</p>
 Base(String),
 ///<p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
 Internal(String),
+///<p>The request was rejected because a resource limit has already been met.</p>
+LimitExceeded(String),
+///<p>The request was rejected because it attempted to reference a resource that does not exist.</p>
+ResourceNotFound(String),
 ///<p>The request was rejected because it specified an invalid type definition.</p>
 InvalidType(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -6148,7 +6302,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => UpdateServiceAccessPoliciesError::LimitExceeded(String::from(parsed_error.message)),"BaseException" => UpdateServiceAccessPoliciesError::Base(String::from(parsed_error.message)),"InternalException" => UpdateServiceAccessPoliciesError::Internal(String::from(parsed_error.message)),"InvalidTypeException" => UpdateServiceAccessPoliciesError::InvalidType(String::from(parsed_error.message)),"ResourceNotFoundException" => UpdateServiceAccessPoliciesError::ResourceNotFound(String::from(parsed_error.message)),_ => UpdateServiceAccessPoliciesError::Unknown(String::from(body))
+                                    "BaseException" => UpdateServiceAccessPoliciesError::Base(String::from(parsed_error.message)),"InternalException" => UpdateServiceAccessPoliciesError::Internal(String::from(parsed_error.message)),"LimitExceededException" => UpdateServiceAccessPoliciesError::LimitExceeded(String::from(parsed_error.message)),"ResourceNotFoundException" => UpdateServiceAccessPoliciesError::ResourceNotFound(String::from(parsed_error.message)),"InvalidTypeException" => UpdateServiceAccessPoliciesError::InvalidType(String::from(parsed_error.message)),_ => UpdateServiceAccessPoliciesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateServiceAccessPoliciesError::Unknown(body.to_string())
@@ -6180,7 +6334,15 @@ Unknown(String)
                 impl Error for UpdateServiceAccessPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateServiceAccessPoliciesError::Base(ref cause) => cause,UpdateServiceAccessPoliciesError::InvalidType(ref cause) => cause,UpdateServiceAccessPoliciesError::Internal(ref cause) => cause,UpdateServiceAccessPoliciesError::ResourceNotFound(ref cause) => cause,UpdateServiceAccessPoliciesError::LimitExceeded(ref cause) => cause,UpdateServiceAccessPoliciesError::Validation(ref cause) => cause,UpdateServiceAccessPoliciesError::Credentials(ref err) => err.description(),UpdateServiceAccessPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
+                            UpdateServiceAccessPoliciesError::Base(ref cause) => cause,
+UpdateServiceAccessPoliciesError::Internal(ref cause) => cause,
+UpdateServiceAccessPoliciesError::LimitExceeded(ref cause) => cause,
+UpdateServiceAccessPoliciesError::ResourceNotFound(ref cause) => cause,
+UpdateServiceAccessPoliciesError::InvalidType(ref cause) => cause,
+UpdateServiceAccessPoliciesError::Validation(ref cause) => cause,
+UpdateServiceAccessPoliciesError::Credentials(ref err) => err.description(),
+UpdateServiceAccessPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }

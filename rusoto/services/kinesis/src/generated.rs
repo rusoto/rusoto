@@ -548,12 +548,12 @@ pub target_shard_count: Option<PositiveIntegerObject>,
                     
 ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
 InvalidArgument(String),
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
+///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
+LimitExceeded(String),
 ///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
 ResourceInUse(String),
-///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -572,7 +572,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => AddTagsToStreamError::ResourceNotFound(String::from(error_message)),"ResourceInUseException" => AddTagsToStreamError::ResourceInUse(String::from(error_message)),"InvalidArgumentException" => AddTagsToStreamError::InvalidArgument(String::from(error_message)),"LimitExceededException" => AddTagsToStreamError::LimitExceeded(String::from(error_message)),"ValidationException" => AddTagsToStreamError::Validation(error_message.to_string()),_ => AddTagsToStreamError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => AddTagsToStreamError::InvalidArgument(String::from(error_message)),
+"LimitExceededException" => AddTagsToStreamError::LimitExceeded(String::from(error_message)),
+"ResourceInUseException" => AddTagsToStreamError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => AddTagsToStreamError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => AddTagsToStreamError::Validation(error_message.to_string()),
+_ => AddTagsToStreamError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AddTagsToStreamError::Unknown(String::from(body))
@@ -603,7 +608,14 @@ Unknown(String)
                 impl Error for AddTagsToStreamError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddTagsToStreamError::InvalidArgument(ref cause) => cause,AddTagsToStreamError::ResourceNotFound(ref cause) => cause,AddTagsToStreamError::LimitExceeded(ref cause) => cause,AddTagsToStreamError::ResourceInUse(ref cause) => cause,AddTagsToStreamError::Validation(ref cause) => cause,AddTagsToStreamError::Credentials(ref err) => err.description(),AddTagsToStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddTagsToStreamError::Unknown(ref cause) => cause
+                            AddTagsToStreamError::InvalidArgument(ref cause) => cause,
+AddTagsToStreamError::LimitExceeded(ref cause) => cause,
+AddTagsToStreamError::ResourceInUse(ref cause) => cause,
+AddTagsToStreamError::ResourceNotFound(ref cause) => cause,
+AddTagsToStreamError::Validation(ref cause) => cause,
+AddTagsToStreamError::Credentials(ref err) => err.description(),
+AddTagsToStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddTagsToStreamError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -635,7 +647,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidArgumentException" => CreateStreamError::InvalidArgument(String::from(error_message)),"ResourceInUseException" => CreateStreamError::ResourceInUse(String::from(error_message)),"LimitExceededException" => CreateStreamError::LimitExceeded(String::from(error_message)),"ValidationException" => CreateStreamError::Validation(error_message.to_string()),_ => CreateStreamError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => CreateStreamError::InvalidArgument(String::from(error_message)),
+"LimitExceededException" => CreateStreamError::LimitExceeded(String::from(error_message)),
+"ResourceInUseException" => CreateStreamError::ResourceInUse(String::from(error_message)),
+"ValidationException" => CreateStreamError::Validation(error_message.to_string()),
+_ => CreateStreamError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateStreamError::Unknown(String::from(body))
@@ -666,7 +682,13 @@ Unknown(String)
                 impl Error for CreateStreamError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateStreamError::LimitExceeded(ref cause) => cause,CreateStreamError::ResourceInUse(ref cause) => cause,CreateStreamError::InvalidArgument(ref cause) => cause,CreateStreamError::Validation(ref cause) => cause,CreateStreamError::Credentials(ref err) => err.description(),CreateStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateStreamError::Unknown(ref cause) => cause
+                            CreateStreamError::InvalidArgument(ref cause) => cause,
+CreateStreamError::LimitExceeded(ref cause) => cause,
+CreateStreamError::ResourceInUse(ref cause) => cause,
+CreateStreamError::Validation(ref cause) => cause,
+CreateStreamError::Credentials(ref err) => err.description(),
+CreateStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateStreamError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -676,10 +698,10 @@ Unknown(String)
                     
 ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
 InvalidArgument(String),
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
 ///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
-ResourceInUse(String),/// An error occurred dispatching the HTTP request
+ResourceInUse(String),
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -698,7 +720,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceInUseException" => DecreaseStreamRetentionPeriodError::ResourceInUse(String::from(error_message)),"ResourceNotFoundException" => DecreaseStreamRetentionPeriodError::ResourceNotFound(String::from(error_message)),"InvalidArgumentException" => DecreaseStreamRetentionPeriodError::InvalidArgument(String::from(error_message)),"ValidationException" => DecreaseStreamRetentionPeriodError::Validation(error_message.to_string()),_ => DecreaseStreamRetentionPeriodError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => DecreaseStreamRetentionPeriodError::InvalidArgument(String::from(error_message)),
+"ResourceInUseException" => DecreaseStreamRetentionPeriodError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => DecreaseStreamRetentionPeriodError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DecreaseStreamRetentionPeriodError::Validation(error_message.to_string()),
+_ => DecreaseStreamRetentionPeriodError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DecreaseStreamRetentionPeriodError::Unknown(String::from(body))
@@ -729,7 +755,13 @@ Unknown(String)
                 impl Error for DecreaseStreamRetentionPeriodError {
                     fn description(&self) -> &str {
                         match *self {
-                            DecreaseStreamRetentionPeriodError::ResourceInUse(ref cause) => cause,DecreaseStreamRetentionPeriodError::InvalidArgument(ref cause) => cause,DecreaseStreamRetentionPeriodError::ResourceNotFound(ref cause) => cause,DecreaseStreamRetentionPeriodError::Validation(ref cause) => cause,DecreaseStreamRetentionPeriodError::Credentials(ref err) => err.description(),DecreaseStreamRetentionPeriodError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DecreaseStreamRetentionPeriodError::Unknown(ref cause) => cause
+                            DecreaseStreamRetentionPeriodError::InvalidArgument(ref cause) => cause,
+DecreaseStreamRetentionPeriodError::ResourceInUse(ref cause) => cause,
+DecreaseStreamRetentionPeriodError::ResourceNotFound(ref cause) => cause,
+DecreaseStreamRetentionPeriodError::Validation(ref cause) => cause,
+DecreaseStreamRetentionPeriodError::Credentials(ref err) => err.description(),
+DecreaseStreamRetentionPeriodError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DecreaseStreamRetentionPeriodError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -737,10 +769,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteStreamError {
                     
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
 ///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -759,7 +791,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => DeleteStreamError::LimitExceeded(String::from(error_message)),"ResourceNotFoundException" => DeleteStreamError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeleteStreamError::Validation(error_message.to_string()),_ => DeleteStreamError::Unknown(String::from(body))
+                                    "LimitExceededException" => DeleteStreamError::LimitExceeded(String::from(error_message)),
+"ResourceNotFoundException" => DeleteStreamError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeleteStreamError::Validation(error_message.to_string()),
+_ => DeleteStreamError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteStreamError::Unknown(String::from(body))
@@ -790,7 +825,12 @@ Unknown(String)
                 impl Error for DeleteStreamError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteStreamError::LimitExceeded(ref cause) => cause,DeleteStreamError::ResourceNotFound(ref cause) => cause,DeleteStreamError::Validation(ref cause) => cause,DeleteStreamError::Credentials(ref err) => err.description(),DeleteStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteStreamError::Unknown(ref cause) => cause
+                            DeleteStreamError::LimitExceeded(ref cause) => cause,
+DeleteStreamError::ResourceNotFound(ref cause) => cause,
+DeleteStreamError::Validation(ref cause) => cause,
+DeleteStreamError::Credentials(ref err) => err.description(),
+DeleteStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteStreamError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -818,7 +858,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => DescribeLimitsError::LimitExceeded(String::from(error_message)),"ValidationException" => DescribeLimitsError::Validation(error_message.to_string()),_ => DescribeLimitsError::Unknown(String::from(body))
+                                    "LimitExceededException" => DescribeLimitsError::LimitExceeded(String::from(error_message)),
+"ValidationException" => DescribeLimitsError::Validation(error_message.to_string()),
+_ => DescribeLimitsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeLimitsError::Unknown(String::from(body))
@@ -849,7 +891,11 @@ Unknown(String)
                 impl Error for DescribeLimitsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLimitsError::LimitExceeded(ref cause) => cause,DescribeLimitsError::Validation(ref cause) => cause,DescribeLimitsError::Credentials(ref err) => err.description(),DescribeLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLimitsError::Unknown(ref cause) => cause
+                            DescribeLimitsError::LimitExceeded(ref cause) => cause,
+DescribeLimitsError::Validation(ref cause) => cause,
+DescribeLimitsError::Credentials(ref err) => err.description(),
+DescribeLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLimitsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -857,10 +903,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeStreamError {
                     
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
 ///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -879,7 +925,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeStreamError::ResourceNotFound(String::from(error_message)),"LimitExceededException" => DescribeStreamError::LimitExceeded(String::from(error_message)),"ValidationException" => DescribeStreamError::Validation(error_message.to_string()),_ => DescribeStreamError::Unknown(String::from(body))
+                                    "LimitExceededException" => DescribeStreamError::LimitExceeded(String::from(error_message)),
+"ResourceNotFoundException" => DescribeStreamError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeStreamError::Validation(error_message.to_string()),
+_ => DescribeStreamError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeStreamError::Unknown(String::from(body))
@@ -910,7 +959,12 @@ Unknown(String)
                 impl Error for DescribeStreamError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeStreamError::LimitExceeded(ref cause) => cause,DescribeStreamError::ResourceNotFound(ref cause) => cause,DescribeStreamError::Validation(ref cause) => cause,DescribeStreamError::Credentials(ref err) => err.description(),DescribeStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeStreamError::Unknown(ref cause) => cause
+                            DescribeStreamError::LimitExceeded(ref cause) => cause,
+DescribeStreamError::ResourceNotFound(ref cause) => cause,
+DescribeStreamError::Validation(ref cause) => cause,
+DescribeStreamError::Credentials(ref err) => err.description(),
+DescribeStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeStreamError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -918,14 +972,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DisableEnhancedMonitoringError {
                     
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
 ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
 InvalidArgument(String),
 ///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
 LimitExceeded(String),
 ///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
-ResourceInUse(String),/// An error occurred dispatching the HTTP request
+ResourceInUse(String),
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -944,7 +998,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => DisableEnhancedMonitoringError::LimitExceeded(String::from(error_message)),"InvalidArgumentException" => DisableEnhancedMonitoringError::InvalidArgument(String::from(error_message)),"ResourceNotFoundException" => DisableEnhancedMonitoringError::ResourceNotFound(String::from(error_message)),"ResourceInUseException" => DisableEnhancedMonitoringError::ResourceInUse(String::from(error_message)),"ValidationException" => DisableEnhancedMonitoringError::Validation(error_message.to_string()),_ => DisableEnhancedMonitoringError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => DisableEnhancedMonitoringError::InvalidArgument(String::from(error_message)),
+"LimitExceededException" => DisableEnhancedMonitoringError::LimitExceeded(String::from(error_message)),
+"ResourceInUseException" => DisableEnhancedMonitoringError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => DisableEnhancedMonitoringError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DisableEnhancedMonitoringError::Validation(error_message.to_string()),
+_ => DisableEnhancedMonitoringError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DisableEnhancedMonitoringError::Unknown(String::from(body))
@@ -975,7 +1034,14 @@ Unknown(String)
                 impl Error for DisableEnhancedMonitoringError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableEnhancedMonitoringError::InvalidArgument(ref cause) => cause,DisableEnhancedMonitoringError::ResourceNotFound(ref cause) => cause,DisableEnhancedMonitoringError::ResourceInUse(ref cause) => cause,DisableEnhancedMonitoringError::LimitExceeded(ref cause) => cause,DisableEnhancedMonitoringError::Validation(ref cause) => cause,DisableEnhancedMonitoringError::Credentials(ref err) => err.description(),DisableEnhancedMonitoringError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableEnhancedMonitoringError::Unknown(ref cause) => cause
+                            DisableEnhancedMonitoringError::InvalidArgument(ref cause) => cause,
+DisableEnhancedMonitoringError::LimitExceeded(ref cause) => cause,
+DisableEnhancedMonitoringError::ResourceInUse(ref cause) => cause,
+DisableEnhancedMonitoringError::ResourceNotFound(ref cause) => cause,
+DisableEnhancedMonitoringError::Validation(ref cause) => cause,
+DisableEnhancedMonitoringError::Credentials(ref err) => err.description(),
+DisableEnhancedMonitoringError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableEnhancedMonitoringError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -983,14 +1049,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum EnableEnhancedMonitoringError {
                     
-///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
-ResourceInUse(String),
+///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+InvalidArgument(String),
 ///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
 LimitExceeded(String),
+///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
+ResourceInUse(String),
 ///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
-///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
-InvalidArgument(String),/// An error occurred dispatching the HTTP request
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1009,7 +1075,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => EnableEnhancedMonitoringError::LimitExceeded(String::from(error_message)),"ResourceInUseException" => EnableEnhancedMonitoringError::ResourceInUse(String::from(error_message)),"ResourceNotFoundException" => EnableEnhancedMonitoringError::ResourceNotFound(String::from(error_message)),"InvalidArgumentException" => EnableEnhancedMonitoringError::InvalidArgument(String::from(error_message)),"ValidationException" => EnableEnhancedMonitoringError::Validation(error_message.to_string()),_ => EnableEnhancedMonitoringError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => EnableEnhancedMonitoringError::InvalidArgument(String::from(error_message)),
+"LimitExceededException" => EnableEnhancedMonitoringError::LimitExceeded(String::from(error_message)),
+"ResourceInUseException" => EnableEnhancedMonitoringError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => EnableEnhancedMonitoringError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => EnableEnhancedMonitoringError::Validation(error_message.to_string()),
+_ => EnableEnhancedMonitoringError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => EnableEnhancedMonitoringError::Unknown(String::from(body))
@@ -1040,7 +1111,14 @@ Unknown(String)
                 impl Error for EnableEnhancedMonitoringError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableEnhancedMonitoringError::ResourceNotFound(ref cause) => cause,EnableEnhancedMonitoringError::InvalidArgument(ref cause) => cause,EnableEnhancedMonitoringError::LimitExceeded(ref cause) => cause,EnableEnhancedMonitoringError::ResourceInUse(ref cause) => cause,EnableEnhancedMonitoringError::Validation(ref cause) => cause,EnableEnhancedMonitoringError::Credentials(ref err) => err.description(),EnableEnhancedMonitoringError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableEnhancedMonitoringError::Unknown(ref cause) => cause
+                            EnableEnhancedMonitoringError::InvalidArgument(ref cause) => cause,
+EnableEnhancedMonitoringError::LimitExceeded(ref cause) => cause,
+EnableEnhancedMonitoringError::ResourceInUse(ref cause) => cause,
+EnableEnhancedMonitoringError::ResourceNotFound(ref cause) => cause,
+EnableEnhancedMonitoringError::Validation(ref cause) => cause,
+EnableEnhancedMonitoringError::Credentials(ref err) => err.description(),
+EnableEnhancedMonitoringError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableEnhancedMonitoringError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1048,14 +1126,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetRecordsError {
                     
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
-///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
-InvalidArgument(String),
 ///<p>The provided iterator exceeds the maximum age allowed.</p>
 ExpiredIterator(String),
+///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+InvalidArgument(String),
 ///<p>The request rate for the stream is too high, or the requested data is too large for the available throughput. Reduce the frequency or size of your requests. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>, and <a href="http://docs.aws.amazon.com/general/latest/gr/api-retries.html">Error Retries and Exponential Backoff in AWS</a> in the <i>AWS General Reference</i>.</p>
-ProvisionedThroughputExceeded(String),/// An error occurred dispatching the HTTP request
+ProvisionedThroughputExceeded(String),
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1074,7 +1152,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ExpiredIteratorException" => GetRecordsError::ExpiredIterator(String::from(error_message)),"ProvisionedThroughputExceededException" => GetRecordsError::ProvisionedThroughputExceeded(String::from(error_message)),"ResourceNotFoundException" => GetRecordsError::ResourceNotFound(String::from(error_message)),"InvalidArgumentException" => GetRecordsError::InvalidArgument(String::from(error_message)),"ValidationException" => GetRecordsError::Validation(error_message.to_string()),_ => GetRecordsError::Unknown(String::from(body))
+                                    "ExpiredIteratorException" => GetRecordsError::ExpiredIterator(String::from(error_message)),
+"InvalidArgumentException" => GetRecordsError::InvalidArgument(String::from(error_message)),
+"ProvisionedThroughputExceededException" => GetRecordsError::ProvisionedThroughputExceeded(String::from(error_message)),
+"ResourceNotFoundException" => GetRecordsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => GetRecordsError::Validation(error_message.to_string()),
+_ => GetRecordsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetRecordsError::Unknown(String::from(body))
@@ -1105,7 +1188,14 @@ Unknown(String)
                 impl Error for GetRecordsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetRecordsError::ExpiredIterator(ref cause) => cause,GetRecordsError::ResourceNotFound(ref cause) => cause,GetRecordsError::ProvisionedThroughputExceeded(ref cause) => cause,GetRecordsError::InvalidArgument(ref cause) => cause,GetRecordsError::Validation(ref cause) => cause,GetRecordsError::Credentials(ref err) => err.description(),GetRecordsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetRecordsError::Unknown(ref cause) => cause
+                            GetRecordsError::ExpiredIterator(ref cause) => cause,
+GetRecordsError::InvalidArgument(ref cause) => cause,
+GetRecordsError::ProvisionedThroughputExceeded(ref cause) => cause,
+GetRecordsError::ResourceNotFound(ref cause) => cause,
+GetRecordsError::Validation(ref cause) => cause,
+GetRecordsError::Credentials(ref err) => err.description(),
+GetRecordsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetRecordsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1113,12 +1203,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetShardIteratorError {
                     
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
+///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+InvalidArgument(String),
 ///<p>The request rate for the stream is too high, or the requested data is too large for the available throughput. Reduce the frequency or size of your requests. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>, and <a href="http://docs.aws.amazon.com/general/latest/gr/api-retries.html">Error Retries and Exponential Backoff in AWS</a> in the <i>AWS General Reference</i>.</p>
 ProvisionedThroughputExceeded(String),
-///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
-InvalidArgument(String),/// An error occurred dispatching the HTTP request
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1137,7 +1227,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ProvisionedThroughputExceededException" => GetShardIteratorError::ProvisionedThroughputExceeded(String::from(error_message)),"InvalidArgumentException" => GetShardIteratorError::InvalidArgument(String::from(error_message)),"ResourceNotFoundException" => GetShardIteratorError::ResourceNotFound(String::from(error_message)),"ValidationException" => GetShardIteratorError::Validation(error_message.to_string()),_ => GetShardIteratorError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => GetShardIteratorError::InvalidArgument(String::from(error_message)),
+"ProvisionedThroughputExceededException" => GetShardIteratorError::ProvisionedThroughputExceeded(String::from(error_message)),
+"ResourceNotFoundException" => GetShardIteratorError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => GetShardIteratorError::Validation(error_message.to_string()),
+_ => GetShardIteratorError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetShardIteratorError::Unknown(String::from(body))
@@ -1168,7 +1262,13 @@ Unknown(String)
                 impl Error for GetShardIteratorError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetShardIteratorError::ProvisionedThroughputExceeded(ref cause) => cause,GetShardIteratorError::InvalidArgument(ref cause) => cause,GetShardIteratorError::ResourceNotFound(ref cause) => cause,GetShardIteratorError::Validation(ref cause) => cause,GetShardIteratorError::Credentials(ref err) => err.description(),GetShardIteratorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetShardIteratorError::Unknown(ref cause) => cause
+                            GetShardIteratorError::InvalidArgument(ref cause) => cause,
+GetShardIteratorError::ProvisionedThroughputExceeded(ref cause) => cause,
+GetShardIteratorError::ResourceNotFound(ref cause) => cause,
+GetShardIteratorError::Validation(ref cause) => cause,
+GetShardIteratorError::Credentials(ref err) => err.description(),
+GetShardIteratorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetShardIteratorError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1176,12 +1276,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum IncreaseStreamRetentionPeriodError {
                     
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
 ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
 InvalidArgument(String),
 ///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
-ResourceInUse(String),/// An error occurred dispatching the HTTP request
+ResourceInUse(String),
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1200,7 +1300,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => IncreaseStreamRetentionPeriodError::ResourceNotFound(String::from(error_message)),"ResourceInUseException" => IncreaseStreamRetentionPeriodError::ResourceInUse(String::from(error_message)),"InvalidArgumentException" => IncreaseStreamRetentionPeriodError::InvalidArgument(String::from(error_message)),"ValidationException" => IncreaseStreamRetentionPeriodError::Validation(error_message.to_string()),_ => IncreaseStreamRetentionPeriodError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => IncreaseStreamRetentionPeriodError::InvalidArgument(String::from(error_message)),
+"ResourceInUseException" => IncreaseStreamRetentionPeriodError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => IncreaseStreamRetentionPeriodError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => IncreaseStreamRetentionPeriodError::Validation(error_message.to_string()),
+_ => IncreaseStreamRetentionPeriodError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => IncreaseStreamRetentionPeriodError::Unknown(String::from(body))
@@ -1231,7 +1335,13 @@ Unknown(String)
                 impl Error for IncreaseStreamRetentionPeriodError {
                     fn description(&self) -> &str {
                         match *self {
-                            IncreaseStreamRetentionPeriodError::ResourceInUse(ref cause) => cause,IncreaseStreamRetentionPeriodError::ResourceNotFound(ref cause) => cause,IncreaseStreamRetentionPeriodError::InvalidArgument(ref cause) => cause,IncreaseStreamRetentionPeriodError::Validation(ref cause) => cause,IncreaseStreamRetentionPeriodError::Credentials(ref err) => err.description(),IncreaseStreamRetentionPeriodError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),IncreaseStreamRetentionPeriodError::Unknown(ref cause) => cause
+                            IncreaseStreamRetentionPeriodError::InvalidArgument(ref cause) => cause,
+IncreaseStreamRetentionPeriodError::ResourceInUse(ref cause) => cause,
+IncreaseStreamRetentionPeriodError::ResourceNotFound(ref cause) => cause,
+IncreaseStreamRetentionPeriodError::Validation(ref cause) => cause,
+IncreaseStreamRetentionPeriodError::Credentials(ref err) => err.description(),
+IncreaseStreamRetentionPeriodError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+IncreaseStreamRetentionPeriodError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1259,7 +1369,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => ListStreamsError::LimitExceeded(String::from(error_message)),"ValidationException" => ListStreamsError::Validation(error_message.to_string()),_ => ListStreamsError::Unknown(String::from(body))
+                                    "LimitExceededException" => ListStreamsError::LimitExceeded(String::from(error_message)),
+"ValidationException" => ListStreamsError::Validation(error_message.to_string()),
+_ => ListStreamsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListStreamsError::Unknown(String::from(body))
@@ -1290,7 +1402,11 @@ Unknown(String)
                 impl Error for ListStreamsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListStreamsError::LimitExceeded(ref cause) => cause,ListStreamsError::Validation(ref cause) => cause,ListStreamsError::Credentials(ref err) => err.description(),ListStreamsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListStreamsError::Unknown(ref cause) => cause
+                            ListStreamsError::LimitExceeded(ref cause) => cause,
+ListStreamsError::Validation(ref cause) => cause,
+ListStreamsError::Credentials(ref err) => err.description(),
+ListStreamsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListStreamsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1298,12 +1414,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTagsForStreamError {
                     
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
+///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+InvalidArgument(String),
 ///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
 LimitExceeded(String),
-///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
-InvalidArgument(String),/// An error occurred dispatching the HTTP request
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1322,7 +1438,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidArgumentException" => ListTagsForStreamError::InvalidArgument(String::from(error_message)),"LimitExceededException" => ListTagsForStreamError::LimitExceeded(String::from(error_message)),"ResourceNotFoundException" => ListTagsForStreamError::ResourceNotFound(String::from(error_message)),"ValidationException" => ListTagsForStreamError::Validation(error_message.to_string()),_ => ListTagsForStreamError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => ListTagsForStreamError::InvalidArgument(String::from(error_message)),
+"LimitExceededException" => ListTagsForStreamError::LimitExceeded(String::from(error_message)),
+"ResourceNotFoundException" => ListTagsForStreamError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => ListTagsForStreamError::Validation(error_message.to_string()),
+_ => ListTagsForStreamError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListTagsForStreamError::Unknown(String::from(body))
@@ -1353,7 +1473,13 @@ Unknown(String)
                 impl Error for ListTagsForStreamError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTagsForStreamError::LimitExceeded(ref cause) => cause,ListTagsForStreamError::ResourceNotFound(ref cause) => cause,ListTagsForStreamError::InvalidArgument(ref cause) => cause,ListTagsForStreamError::Validation(ref cause) => cause,ListTagsForStreamError::Credentials(ref err) => err.description(),ListTagsForStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTagsForStreamError::Unknown(ref cause) => cause
+                            ListTagsForStreamError::InvalidArgument(ref cause) => cause,
+ListTagsForStreamError::LimitExceeded(ref cause) => cause,
+ListTagsForStreamError::ResourceNotFound(ref cause) => cause,
+ListTagsForStreamError::Validation(ref cause) => cause,
+ListTagsForStreamError::Credentials(ref err) => err.description(),
+ListTagsForStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTagsForStreamError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1361,14 +1487,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum MergeShardsError {
                     
-///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
-ResourceInUse(String),
 ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
 InvalidArgument(String),
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
 ///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
+ResourceInUse(String),
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1387,7 +1513,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidArgumentException" => MergeShardsError::InvalidArgument(String::from(error_message)),"ResourceNotFoundException" => MergeShardsError::ResourceNotFound(String::from(error_message)),"LimitExceededException" => MergeShardsError::LimitExceeded(String::from(error_message)),"ResourceInUseException" => MergeShardsError::ResourceInUse(String::from(error_message)),"ValidationException" => MergeShardsError::Validation(error_message.to_string()),_ => MergeShardsError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => MergeShardsError::InvalidArgument(String::from(error_message)),
+"LimitExceededException" => MergeShardsError::LimitExceeded(String::from(error_message)),
+"ResourceInUseException" => MergeShardsError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => MergeShardsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => MergeShardsError::Validation(error_message.to_string()),
+_ => MergeShardsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => MergeShardsError::Unknown(String::from(body))
@@ -1418,7 +1549,14 @@ Unknown(String)
                 impl Error for MergeShardsError {
                     fn description(&self) -> &str {
                         match *self {
-                            MergeShardsError::ResourceInUse(ref cause) => cause,MergeShardsError::LimitExceeded(ref cause) => cause,MergeShardsError::InvalidArgument(ref cause) => cause,MergeShardsError::ResourceNotFound(ref cause) => cause,MergeShardsError::Validation(ref cause) => cause,MergeShardsError::Credentials(ref err) => err.description(),MergeShardsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),MergeShardsError::Unknown(ref cause) => cause
+                            MergeShardsError::InvalidArgument(ref cause) => cause,
+MergeShardsError::LimitExceeded(ref cause) => cause,
+MergeShardsError::ResourceInUse(ref cause) => cause,
+MergeShardsError::ResourceNotFound(ref cause) => cause,
+MergeShardsError::Validation(ref cause) => cause,
+MergeShardsError::Credentials(ref err) => err.description(),
+MergeShardsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+MergeShardsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1426,12 +1564,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutRecordError {
                     
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
+///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+InvalidArgument(String),
 ///<p>The request rate for the stream is too high, or the requested data is too large for the available throughput. Reduce the frequency or size of your requests. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>, and <a href="http://docs.aws.amazon.com/general/latest/gr/api-retries.html">Error Retries and Exponential Backoff in AWS</a> in the <i>AWS General Reference</i>.</p>
 ProvisionedThroughputExceeded(String),
-///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
-InvalidArgument(String),/// An error occurred dispatching the HTTP request
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1450,7 +1588,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidArgumentException" => PutRecordError::InvalidArgument(String::from(error_message)),"ProvisionedThroughputExceededException" => PutRecordError::ProvisionedThroughputExceeded(String::from(error_message)),"ResourceNotFoundException" => PutRecordError::ResourceNotFound(String::from(error_message)),"ValidationException" => PutRecordError::Validation(error_message.to_string()),_ => PutRecordError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => PutRecordError::InvalidArgument(String::from(error_message)),
+"ProvisionedThroughputExceededException" => PutRecordError::ProvisionedThroughputExceeded(String::from(error_message)),
+"ResourceNotFoundException" => PutRecordError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => PutRecordError::Validation(error_message.to_string()),
+_ => PutRecordError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutRecordError::Unknown(String::from(body))
@@ -1481,7 +1623,13 @@ Unknown(String)
                 impl Error for PutRecordError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutRecordError::InvalidArgument(ref cause) => cause,PutRecordError::ResourceNotFound(ref cause) => cause,PutRecordError::ProvisionedThroughputExceeded(ref cause) => cause,PutRecordError::Validation(ref cause) => cause,PutRecordError::Credentials(ref err) => err.description(),PutRecordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutRecordError::Unknown(ref cause) => cause
+                            PutRecordError::InvalidArgument(ref cause) => cause,
+PutRecordError::ProvisionedThroughputExceeded(ref cause) => cause,
+PutRecordError::ResourceNotFound(ref cause) => cause,
+PutRecordError::Validation(ref cause) => cause,
+PutRecordError::Credentials(ref err) => err.description(),
+PutRecordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutRecordError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1489,10 +1637,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutRecordsError {
                     
-///<p>The request rate for the stream is too high, or the requested data is too large for the available throughput. Reduce the frequency or size of your requests. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>, and <a href="http://docs.aws.amazon.com/general/latest/gr/api-retries.html">Error Retries and Exponential Backoff in AWS</a> in the <i>AWS General Reference</i>.</p>
-ProvisionedThroughputExceeded(String),
 ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
 InvalidArgument(String),
+///<p>The request rate for the stream is too high, or the requested data is too large for the available throughput. Reduce the frequency or size of your requests. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Streams Developer Guide</i>, and <a href="http://docs.aws.amazon.com/general/latest/gr/api-retries.html">Error Retries and Exponential Backoff in AWS</a> in the <i>AWS General Reference</i>.</p>
+ProvisionedThroughputExceeded(String),
 ///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
 ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1513,7 +1661,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ProvisionedThroughputExceededException" => PutRecordsError::ProvisionedThroughputExceeded(String::from(error_message)),"ResourceNotFoundException" => PutRecordsError::ResourceNotFound(String::from(error_message)),"InvalidArgumentException" => PutRecordsError::InvalidArgument(String::from(error_message)),"ValidationException" => PutRecordsError::Validation(error_message.to_string()),_ => PutRecordsError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => PutRecordsError::InvalidArgument(String::from(error_message)),
+"ProvisionedThroughputExceededException" => PutRecordsError::ProvisionedThroughputExceeded(String::from(error_message)),
+"ResourceNotFoundException" => PutRecordsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => PutRecordsError::Validation(error_message.to_string()),
+_ => PutRecordsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutRecordsError::Unknown(String::from(body))
@@ -1544,7 +1696,13 @@ Unknown(String)
                 impl Error for PutRecordsError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutRecordsError::InvalidArgument(ref cause) => cause,PutRecordsError::ResourceNotFound(ref cause) => cause,PutRecordsError::ProvisionedThroughputExceeded(ref cause) => cause,PutRecordsError::Validation(ref cause) => cause,PutRecordsError::Credentials(ref err) => err.description(),PutRecordsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutRecordsError::Unknown(ref cause) => cause
+                            PutRecordsError::InvalidArgument(ref cause) => cause,
+PutRecordsError::ProvisionedThroughputExceeded(ref cause) => cause,
+PutRecordsError::ResourceNotFound(ref cause) => cause,
+PutRecordsError::Validation(ref cause) => cause,
+PutRecordsError::Credentials(ref err) => err.description(),
+PutRecordsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutRecordsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1556,10 +1714,10 @@ Unknown(String)
 InvalidArgument(String),
 ///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
 LimitExceeded(String),
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
 ///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
-ResourceInUse(String),/// An error occurred dispatching the HTTP request
+ResourceInUse(String),
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1578,7 +1736,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => RemoveTagsFromStreamError::LimitExceeded(String::from(error_message)),"InvalidArgumentException" => RemoveTagsFromStreamError::InvalidArgument(String::from(error_message)),"ResourceNotFoundException" => RemoveTagsFromStreamError::ResourceNotFound(String::from(error_message)),"ResourceInUseException" => RemoveTagsFromStreamError::ResourceInUse(String::from(error_message)),"ValidationException" => RemoveTagsFromStreamError::Validation(error_message.to_string()),_ => RemoveTagsFromStreamError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => RemoveTagsFromStreamError::InvalidArgument(String::from(error_message)),
+"LimitExceededException" => RemoveTagsFromStreamError::LimitExceeded(String::from(error_message)),
+"ResourceInUseException" => RemoveTagsFromStreamError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => RemoveTagsFromStreamError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => RemoveTagsFromStreamError::Validation(error_message.to_string()),
+_ => RemoveTagsFromStreamError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RemoveTagsFromStreamError::Unknown(String::from(body))
@@ -1609,7 +1772,14 @@ Unknown(String)
                 impl Error for RemoveTagsFromStreamError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveTagsFromStreamError::ResourceNotFound(ref cause) => cause,RemoveTagsFromStreamError::ResourceInUse(ref cause) => cause,RemoveTagsFromStreamError::LimitExceeded(ref cause) => cause,RemoveTagsFromStreamError::InvalidArgument(ref cause) => cause,RemoveTagsFromStreamError::Validation(ref cause) => cause,RemoveTagsFromStreamError::Credentials(ref err) => err.description(),RemoveTagsFromStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveTagsFromStreamError::Unknown(ref cause) => cause
+                            RemoveTagsFromStreamError::InvalidArgument(ref cause) => cause,
+RemoveTagsFromStreamError::LimitExceeded(ref cause) => cause,
+RemoveTagsFromStreamError::ResourceInUse(ref cause) => cause,
+RemoveTagsFromStreamError::ResourceNotFound(ref cause) => cause,
+RemoveTagsFromStreamError::Validation(ref cause) => cause,
+RemoveTagsFromStreamError::Credentials(ref err) => err.description(),
+RemoveTagsFromStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveTagsFromStreamError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1617,14 +1787,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SplitShardError {
                     
-///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
-ResourceInUse(String),
-///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
-ResourceNotFound(String),
 ///<p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
 InvalidArgument(String),
 ///<p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed (5).</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The resource is not available for this operation. For successful operation, the resource needs to be in the <code>ACTIVE</code> state.</p>
+ResourceInUse(String),
+///<p>The requested resource could not be found. The stream might not be specified correctly.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1643,7 +1813,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => SplitShardError::LimitExceeded(String::from(error_message)),"InvalidArgumentException" => SplitShardError::InvalidArgument(String::from(error_message)),"ResourceNotFoundException" => SplitShardError::ResourceNotFound(String::from(error_message)),"ResourceInUseException" => SplitShardError::ResourceInUse(String::from(error_message)),"ValidationException" => SplitShardError::Validation(error_message.to_string()),_ => SplitShardError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => SplitShardError::InvalidArgument(String::from(error_message)),
+"LimitExceededException" => SplitShardError::LimitExceeded(String::from(error_message)),
+"ResourceInUseException" => SplitShardError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => SplitShardError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => SplitShardError::Validation(error_message.to_string()),
+_ => SplitShardError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SplitShardError::Unknown(String::from(body))
@@ -1674,7 +1849,14 @@ Unknown(String)
                 impl Error for SplitShardError {
                     fn description(&self) -> &str {
                         match *self {
-                            SplitShardError::InvalidArgument(ref cause) => cause,SplitShardError::ResourceInUse(ref cause) => cause,SplitShardError::ResourceNotFound(ref cause) => cause,SplitShardError::LimitExceeded(ref cause) => cause,SplitShardError::Validation(ref cause) => cause,SplitShardError::Credentials(ref err) => err.description(),SplitShardError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SplitShardError::Unknown(ref cause) => cause
+                            SplitShardError::InvalidArgument(ref cause) => cause,
+SplitShardError::LimitExceeded(ref cause) => cause,
+SplitShardError::ResourceInUse(ref cause) => cause,
+SplitShardError::ResourceNotFound(ref cause) => cause,
+SplitShardError::Validation(ref cause) => cause,
+SplitShardError::Credentials(ref err) => err.description(),
+SplitShardError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SplitShardError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1708,7 +1890,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => UpdateShardCountError::LimitExceeded(String::from(error_message)),"ResourceInUseException" => UpdateShardCountError::ResourceInUse(String::from(error_message)),"InvalidArgumentException" => UpdateShardCountError::InvalidArgument(String::from(error_message)),"ResourceNotFoundException" => UpdateShardCountError::ResourceNotFound(String::from(error_message)),"ValidationException" => UpdateShardCountError::Validation(error_message.to_string()),_ => UpdateShardCountError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => UpdateShardCountError::InvalidArgument(String::from(error_message)),
+"LimitExceededException" => UpdateShardCountError::LimitExceeded(String::from(error_message)),
+"ResourceInUseException" => UpdateShardCountError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => UpdateShardCountError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdateShardCountError::Validation(error_message.to_string()),
+_ => UpdateShardCountError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateShardCountError::Unknown(String::from(body))
@@ -1739,7 +1926,14 @@ Unknown(String)
                 impl Error for UpdateShardCountError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateShardCountError::InvalidArgument(ref cause) => cause,UpdateShardCountError::LimitExceeded(ref cause) => cause,UpdateShardCountError::ResourceNotFound(ref cause) => cause,UpdateShardCountError::ResourceInUse(ref cause) => cause,UpdateShardCountError::Validation(ref cause) => cause,UpdateShardCountError::Credentials(ref err) => err.description(),UpdateShardCountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateShardCountError::Unknown(ref cause) => cause
+                            UpdateShardCountError::InvalidArgument(ref cause) => cause,
+UpdateShardCountError::LimitExceeded(ref cause) => cause,
+UpdateShardCountError::ResourceInUse(ref cause) => cause,
+UpdateShardCountError::ResourceNotFound(ref cause) => cause,
+UpdateShardCountError::Validation(ref cause) => cause,
+UpdateShardCountError::Credentials(ref err) => err.description(),
+UpdateShardCountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateShardCountError::Unknown(ref cause) => cause
                         }
                     }
                  }

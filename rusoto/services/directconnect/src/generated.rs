@@ -752,7 +752,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => AllocateConnectionOnInterconnectError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => AllocateConnectionOnInterconnectError::DirectConnectClient(String::from(error_message)),"ValidationException" => AllocateConnectionOnInterconnectError::Validation(error_message.to_string()),_ => AllocateConnectionOnInterconnectError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => AllocateConnectionOnInterconnectError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => AllocateConnectionOnInterconnectError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => AllocateConnectionOnInterconnectError::Validation(error_message.to_string()),
+_ => AllocateConnectionOnInterconnectError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AllocateConnectionOnInterconnectError::Unknown(String::from(body))
@@ -783,7 +786,12 @@ Unknown(String)
                 impl Error for AllocateConnectionOnInterconnectError {
                     fn description(&self) -> &str {
                         match *self {
-                            AllocateConnectionOnInterconnectError::DirectConnectClient(ref cause) => cause,AllocateConnectionOnInterconnectError::DirectConnectServer(ref cause) => cause,AllocateConnectionOnInterconnectError::Validation(ref cause) => cause,AllocateConnectionOnInterconnectError::Credentials(ref err) => err.description(),AllocateConnectionOnInterconnectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AllocateConnectionOnInterconnectError::Unknown(ref cause) => cause
+                            AllocateConnectionOnInterconnectError::DirectConnectClient(ref cause) => cause,
+AllocateConnectionOnInterconnectError::DirectConnectServer(ref cause) => cause,
+AllocateConnectionOnInterconnectError::Validation(ref cause) => cause,
+AllocateConnectionOnInterconnectError::Credentials(ref err) => err.description(),
+AllocateConnectionOnInterconnectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AllocateConnectionOnInterconnectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -791,10 +799,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AllocatePrivateVirtualInterfaceError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -813,7 +821,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectClientException" => AllocatePrivateVirtualInterfaceError::DirectConnectClient(String::from(error_message)),"DirectConnectServerException" => AllocatePrivateVirtualInterfaceError::DirectConnectServer(String::from(error_message)),"ValidationException" => AllocatePrivateVirtualInterfaceError::Validation(error_message.to_string()),_ => AllocatePrivateVirtualInterfaceError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => AllocatePrivateVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => AllocatePrivateVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => AllocatePrivateVirtualInterfaceError::Validation(error_message.to_string()),
+_ => AllocatePrivateVirtualInterfaceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AllocatePrivateVirtualInterfaceError::Unknown(String::from(body))
@@ -844,7 +855,12 @@ Unknown(String)
                 impl Error for AllocatePrivateVirtualInterfaceError {
                     fn description(&self) -> &str {
                         match *self {
-                            AllocatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,AllocatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,AllocatePrivateVirtualInterfaceError::Validation(ref cause) => cause,AllocatePrivateVirtualInterfaceError::Credentials(ref err) => err.description(),AllocatePrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AllocatePrivateVirtualInterfaceError::Unknown(ref cause) => cause
+                            AllocatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
+AllocatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+AllocatePrivateVirtualInterfaceError::Validation(ref cause) => cause,
+AllocatePrivateVirtualInterfaceError::Credentials(ref err) => err.description(),
+AllocatePrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AllocatePrivateVirtualInterfaceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -852,10 +868,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AllocatePublicVirtualInterfaceError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -874,7 +890,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => AllocatePublicVirtualInterfaceError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => AllocatePublicVirtualInterfaceError::DirectConnectClient(String::from(error_message)),"ValidationException" => AllocatePublicVirtualInterfaceError::Validation(error_message.to_string()),_ => AllocatePublicVirtualInterfaceError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => AllocatePublicVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => AllocatePublicVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => AllocatePublicVirtualInterfaceError::Validation(error_message.to_string()),
+_ => AllocatePublicVirtualInterfaceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AllocatePublicVirtualInterfaceError::Unknown(String::from(body))
@@ -905,7 +924,12 @@ Unknown(String)
                 impl Error for AllocatePublicVirtualInterfaceError {
                     fn description(&self) -> &str {
                         match *self {
-                            AllocatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,AllocatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,AllocatePublicVirtualInterfaceError::Validation(ref cause) => cause,AllocatePublicVirtualInterfaceError::Credentials(ref err) => err.description(),AllocatePublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AllocatePublicVirtualInterfaceError::Unknown(ref cause) => cause
+                            AllocatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
+AllocatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+AllocatePublicVirtualInterfaceError::Validation(ref cause) => cause,
+AllocatePublicVirtualInterfaceError::Credentials(ref err) => err.description(),
+AllocatePublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AllocatePublicVirtualInterfaceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -935,7 +959,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectClientException" => ConfirmConnectionError::DirectConnectClient(String::from(error_message)),"DirectConnectServerException" => ConfirmConnectionError::DirectConnectServer(String::from(error_message)),"ValidationException" => ConfirmConnectionError::Validation(error_message.to_string()),_ => ConfirmConnectionError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => ConfirmConnectionError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => ConfirmConnectionError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => ConfirmConnectionError::Validation(error_message.to_string()),
+_ => ConfirmConnectionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ConfirmConnectionError::Unknown(String::from(body))
@@ -966,7 +993,12 @@ Unknown(String)
                 impl Error for ConfirmConnectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            ConfirmConnectionError::DirectConnectServer(ref cause) => cause,ConfirmConnectionError::DirectConnectClient(ref cause) => cause,ConfirmConnectionError::Validation(ref cause) => cause,ConfirmConnectionError::Credentials(ref err) => err.description(),ConfirmConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ConfirmConnectionError::Unknown(ref cause) => cause
+                            ConfirmConnectionError::DirectConnectClient(ref cause) => cause,
+ConfirmConnectionError::DirectConnectServer(ref cause) => cause,
+ConfirmConnectionError::Validation(ref cause) => cause,
+ConfirmConnectionError::Credentials(ref err) => err.description(),
+ConfirmConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ConfirmConnectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -974,10 +1006,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ConfirmPrivateVirtualInterfaceError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -996,7 +1028,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => ConfirmPrivateVirtualInterfaceError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => ConfirmPrivateVirtualInterfaceError::DirectConnectClient(String::from(error_message)),"ValidationException" => ConfirmPrivateVirtualInterfaceError::Validation(error_message.to_string()),_ => ConfirmPrivateVirtualInterfaceError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => ConfirmPrivateVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => ConfirmPrivateVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => ConfirmPrivateVirtualInterfaceError::Validation(error_message.to_string()),
+_ => ConfirmPrivateVirtualInterfaceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ConfirmPrivateVirtualInterfaceError::Unknown(String::from(body))
@@ -1027,7 +1062,12 @@ Unknown(String)
                 impl Error for ConfirmPrivateVirtualInterfaceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ConfirmPrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,ConfirmPrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,ConfirmPrivateVirtualInterfaceError::Validation(ref cause) => cause,ConfirmPrivateVirtualInterfaceError::Credentials(ref err) => err.description(),ConfirmPrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ConfirmPrivateVirtualInterfaceError::Unknown(ref cause) => cause
+                            ConfirmPrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
+ConfirmPrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+ConfirmPrivateVirtualInterfaceError::Validation(ref cause) => cause,
+ConfirmPrivateVirtualInterfaceError::Credentials(ref err) => err.description(),
+ConfirmPrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ConfirmPrivateVirtualInterfaceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1057,7 +1097,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectClientException" => ConfirmPublicVirtualInterfaceError::DirectConnectClient(String::from(error_message)),"DirectConnectServerException" => ConfirmPublicVirtualInterfaceError::DirectConnectServer(String::from(error_message)),"ValidationException" => ConfirmPublicVirtualInterfaceError::Validation(error_message.to_string()),_ => ConfirmPublicVirtualInterfaceError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => ConfirmPublicVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => ConfirmPublicVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => ConfirmPublicVirtualInterfaceError::Validation(error_message.to_string()),
+_ => ConfirmPublicVirtualInterfaceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ConfirmPublicVirtualInterfaceError::Unknown(String::from(body))
@@ -1088,7 +1131,12 @@ Unknown(String)
                 impl Error for ConfirmPublicVirtualInterfaceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ConfirmPublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,ConfirmPublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,ConfirmPublicVirtualInterfaceError::Validation(ref cause) => cause,ConfirmPublicVirtualInterfaceError::Credentials(ref err) => err.description(),ConfirmPublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ConfirmPublicVirtualInterfaceError::Unknown(ref cause) => cause
+                            ConfirmPublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
+ConfirmPublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+ConfirmPublicVirtualInterfaceError::Validation(ref cause) => cause,
+ConfirmPublicVirtualInterfaceError::Credentials(ref err) => err.description(),
+ConfirmPublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ConfirmPublicVirtualInterfaceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1096,10 +1144,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateBGPPeerError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1118,7 +1166,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectClientException" => CreateBGPPeerError::DirectConnectClient(String::from(error_message)),"DirectConnectServerException" => CreateBGPPeerError::DirectConnectServer(String::from(error_message)),"ValidationException" => CreateBGPPeerError::Validation(error_message.to_string()),_ => CreateBGPPeerError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => CreateBGPPeerError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => CreateBGPPeerError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => CreateBGPPeerError::Validation(error_message.to_string()),
+_ => CreateBGPPeerError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateBGPPeerError::Unknown(String::from(body))
@@ -1149,7 +1200,12 @@ Unknown(String)
                 impl Error for CreateBGPPeerError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateBGPPeerError::DirectConnectServer(ref cause) => cause,CreateBGPPeerError::DirectConnectClient(ref cause) => cause,CreateBGPPeerError::Validation(ref cause) => cause,CreateBGPPeerError::Credentials(ref err) => err.description(),CreateBGPPeerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateBGPPeerError::Unknown(ref cause) => cause
+                            CreateBGPPeerError::DirectConnectClient(ref cause) => cause,
+CreateBGPPeerError::DirectConnectServer(ref cause) => cause,
+CreateBGPPeerError::Validation(ref cause) => cause,
+CreateBGPPeerError::Credentials(ref err) => err.description(),
+CreateBGPPeerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateBGPPeerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1157,10 +1213,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateConnectionError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1179,7 +1235,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => CreateConnectionError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => CreateConnectionError::DirectConnectClient(String::from(error_message)),"ValidationException" => CreateConnectionError::Validation(error_message.to_string()),_ => CreateConnectionError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => CreateConnectionError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => CreateConnectionError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => CreateConnectionError::Validation(error_message.to_string()),
+_ => CreateConnectionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateConnectionError::Unknown(String::from(body))
@@ -1210,7 +1269,12 @@ Unknown(String)
                 impl Error for CreateConnectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateConnectionError::DirectConnectClient(ref cause) => cause,CreateConnectionError::DirectConnectServer(ref cause) => cause,CreateConnectionError::Validation(ref cause) => cause,CreateConnectionError::Credentials(ref err) => err.description(),CreateConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateConnectionError::Unknown(ref cause) => cause
+                            CreateConnectionError::DirectConnectClient(ref cause) => cause,
+CreateConnectionError::DirectConnectServer(ref cause) => cause,
+CreateConnectionError::Validation(ref cause) => cause,
+CreateConnectionError::Credentials(ref err) => err.description(),
+CreateConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateConnectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1218,10 +1282,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateInterconnectError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1240,7 +1304,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => CreateInterconnectError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => CreateInterconnectError::DirectConnectClient(String::from(error_message)),"ValidationException" => CreateInterconnectError::Validation(error_message.to_string()),_ => CreateInterconnectError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => CreateInterconnectError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => CreateInterconnectError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => CreateInterconnectError::Validation(error_message.to_string()),
+_ => CreateInterconnectError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateInterconnectError::Unknown(String::from(body))
@@ -1271,7 +1338,12 @@ Unknown(String)
                 impl Error for CreateInterconnectError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateInterconnectError::DirectConnectClient(ref cause) => cause,CreateInterconnectError::DirectConnectServer(ref cause) => cause,CreateInterconnectError::Validation(ref cause) => cause,CreateInterconnectError::Credentials(ref err) => err.description(),CreateInterconnectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateInterconnectError::Unknown(ref cause) => cause
+                            CreateInterconnectError::DirectConnectClient(ref cause) => cause,
+CreateInterconnectError::DirectConnectServer(ref cause) => cause,
+CreateInterconnectError::Validation(ref cause) => cause,
+CreateInterconnectError::Credentials(ref err) => err.description(),
+CreateInterconnectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateInterconnectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1301,7 +1373,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => CreatePrivateVirtualInterfaceError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => CreatePrivateVirtualInterfaceError::DirectConnectClient(String::from(error_message)),"ValidationException" => CreatePrivateVirtualInterfaceError::Validation(error_message.to_string()),_ => CreatePrivateVirtualInterfaceError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => CreatePrivateVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => CreatePrivateVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => CreatePrivateVirtualInterfaceError::Validation(error_message.to_string()),
+_ => CreatePrivateVirtualInterfaceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreatePrivateVirtualInterfaceError::Unknown(String::from(body))
@@ -1332,7 +1407,12 @@ Unknown(String)
                 impl Error for CreatePrivateVirtualInterfaceError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,CreatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,CreatePrivateVirtualInterfaceError::Validation(ref cause) => cause,CreatePrivateVirtualInterfaceError::Credentials(ref err) => err.description(),CreatePrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreatePrivateVirtualInterfaceError::Unknown(ref cause) => cause
+                            CreatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
+CreatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+CreatePrivateVirtualInterfaceError::Validation(ref cause) => cause,
+CreatePrivateVirtualInterfaceError::Credentials(ref err) => err.description(),
+CreatePrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreatePrivateVirtualInterfaceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1362,7 +1442,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => CreatePublicVirtualInterfaceError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => CreatePublicVirtualInterfaceError::DirectConnectClient(String::from(error_message)),"ValidationException" => CreatePublicVirtualInterfaceError::Validation(error_message.to_string()),_ => CreatePublicVirtualInterfaceError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => CreatePublicVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => CreatePublicVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => CreatePublicVirtualInterfaceError::Validation(error_message.to_string()),
+_ => CreatePublicVirtualInterfaceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreatePublicVirtualInterfaceError::Unknown(String::from(body))
@@ -1393,7 +1476,12 @@ Unknown(String)
                 impl Error for CreatePublicVirtualInterfaceError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,CreatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,CreatePublicVirtualInterfaceError::Validation(ref cause) => cause,CreatePublicVirtualInterfaceError::Credentials(ref err) => err.description(),CreatePublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreatePublicVirtualInterfaceError::Unknown(ref cause) => cause
+                            CreatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
+CreatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+CreatePublicVirtualInterfaceError::Validation(ref cause) => cause,
+CreatePublicVirtualInterfaceError::Credentials(ref err) => err.description(),
+CreatePublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreatePublicVirtualInterfaceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1401,10 +1489,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteBGPPeerError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1423,7 +1511,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => DeleteBGPPeerError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => DeleteBGPPeerError::DirectConnectClient(String::from(error_message)),"ValidationException" => DeleteBGPPeerError::Validation(error_message.to_string()),_ => DeleteBGPPeerError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DeleteBGPPeerError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DeleteBGPPeerError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DeleteBGPPeerError::Validation(error_message.to_string()),
+_ => DeleteBGPPeerError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteBGPPeerError::Unknown(String::from(body))
@@ -1454,7 +1545,12 @@ Unknown(String)
                 impl Error for DeleteBGPPeerError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteBGPPeerError::DirectConnectClient(ref cause) => cause,DeleteBGPPeerError::DirectConnectServer(ref cause) => cause,DeleteBGPPeerError::Validation(ref cause) => cause,DeleteBGPPeerError::Credentials(ref err) => err.description(),DeleteBGPPeerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteBGPPeerError::Unknown(ref cause) => cause
+                            DeleteBGPPeerError::DirectConnectClient(ref cause) => cause,
+DeleteBGPPeerError::DirectConnectServer(ref cause) => cause,
+DeleteBGPPeerError::Validation(ref cause) => cause,
+DeleteBGPPeerError::Credentials(ref err) => err.description(),
+DeleteBGPPeerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteBGPPeerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1484,7 +1580,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => DeleteConnectionError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => DeleteConnectionError::DirectConnectClient(String::from(error_message)),"ValidationException" => DeleteConnectionError::Validation(error_message.to_string()),_ => DeleteConnectionError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DeleteConnectionError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DeleteConnectionError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DeleteConnectionError::Validation(error_message.to_string()),
+_ => DeleteConnectionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteConnectionError::Unknown(String::from(body))
@@ -1515,7 +1614,12 @@ Unknown(String)
                 impl Error for DeleteConnectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteConnectionError::DirectConnectClient(ref cause) => cause,DeleteConnectionError::DirectConnectServer(ref cause) => cause,DeleteConnectionError::Validation(ref cause) => cause,DeleteConnectionError::Credentials(ref err) => err.description(),DeleteConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteConnectionError::Unknown(ref cause) => cause
+                            DeleteConnectionError::DirectConnectClient(ref cause) => cause,
+DeleteConnectionError::DirectConnectServer(ref cause) => cause,
+DeleteConnectionError::Validation(ref cause) => cause,
+DeleteConnectionError::Credentials(ref err) => err.description(),
+DeleteConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteConnectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1523,10 +1627,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteInterconnectError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1545,7 +1649,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => DeleteInterconnectError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => DeleteInterconnectError::DirectConnectClient(String::from(error_message)),"ValidationException" => DeleteInterconnectError::Validation(error_message.to_string()),_ => DeleteInterconnectError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DeleteInterconnectError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DeleteInterconnectError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DeleteInterconnectError::Validation(error_message.to_string()),
+_ => DeleteInterconnectError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteInterconnectError::Unknown(String::from(body))
@@ -1576,7 +1683,12 @@ Unknown(String)
                 impl Error for DeleteInterconnectError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteInterconnectError::DirectConnectServer(ref cause) => cause,DeleteInterconnectError::DirectConnectClient(ref cause) => cause,DeleteInterconnectError::Validation(ref cause) => cause,DeleteInterconnectError::Credentials(ref err) => err.description(),DeleteInterconnectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteInterconnectError::Unknown(ref cause) => cause
+                            DeleteInterconnectError::DirectConnectClient(ref cause) => cause,
+DeleteInterconnectError::DirectConnectServer(ref cause) => cause,
+DeleteInterconnectError::Validation(ref cause) => cause,
+DeleteInterconnectError::Credentials(ref err) => err.description(),
+DeleteInterconnectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteInterconnectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1606,7 +1718,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectClientException" => DeleteVirtualInterfaceError::DirectConnectClient(String::from(error_message)),"DirectConnectServerException" => DeleteVirtualInterfaceError::DirectConnectServer(String::from(error_message)),"ValidationException" => DeleteVirtualInterfaceError::Validation(error_message.to_string()),_ => DeleteVirtualInterfaceError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DeleteVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DeleteVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DeleteVirtualInterfaceError::Validation(error_message.to_string()),
+_ => DeleteVirtualInterfaceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteVirtualInterfaceError::Unknown(String::from(body))
@@ -1637,7 +1752,12 @@ Unknown(String)
                 impl Error for DeleteVirtualInterfaceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteVirtualInterfaceError::DirectConnectClient(ref cause) => cause,DeleteVirtualInterfaceError::DirectConnectServer(ref cause) => cause,DeleteVirtualInterfaceError::Validation(ref cause) => cause,DeleteVirtualInterfaceError::Credentials(ref err) => err.description(),DeleteVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteVirtualInterfaceError::Unknown(ref cause) => cause
+                            DeleteVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
+DeleteVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+DeleteVirtualInterfaceError::Validation(ref cause) => cause,
+DeleteVirtualInterfaceError::Credentials(ref err) => err.description(),
+DeleteVirtualInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteVirtualInterfaceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1645,10 +1765,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeConnectionLoaError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1667,7 +1787,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectClientException" => DescribeConnectionLoaError::DirectConnectClient(String::from(error_message)),"DirectConnectServerException" => DescribeConnectionLoaError::DirectConnectServer(String::from(error_message)),"ValidationException" => DescribeConnectionLoaError::Validation(error_message.to_string()),_ => DescribeConnectionLoaError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DescribeConnectionLoaError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DescribeConnectionLoaError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DescribeConnectionLoaError::Validation(error_message.to_string()),
+_ => DescribeConnectionLoaError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeConnectionLoaError::Unknown(String::from(body))
@@ -1698,7 +1821,12 @@ Unknown(String)
                 impl Error for DescribeConnectionLoaError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeConnectionLoaError::DirectConnectServer(ref cause) => cause,DescribeConnectionLoaError::DirectConnectClient(ref cause) => cause,DescribeConnectionLoaError::Validation(ref cause) => cause,DescribeConnectionLoaError::Credentials(ref err) => err.description(),DescribeConnectionLoaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeConnectionLoaError::Unknown(ref cause) => cause
+                            DescribeConnectionLoaError::DirectConnectClient(ref cause) => cause,
+DescribeConnectionLoaError::DirectConnectServer(ref cause) => cause,
+DescribeConnectionLoaError::Validation(ref cause) => cause,
+DescribeConnectionLoaError::Credentials(ref err) => err.description(),
+DescribeConnectionLoaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeConnectionLoaError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1706,10 +1834,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeConnectionsError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1728,7 +1856,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectClientException" => DescribeConnectionsError::DirectConnectClient(String::from(error_message)),"DirectConnectServerException" => DescribeConnectionsError::DirectConnectServer(String::from(error_message)),"ValidationException" => DescribeConnectionsError::Validation(error_message.to_string()),_ => DescribeConnectionsError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DescribeConnectionsError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DescribeConnectionsError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DescribeConnectionsError::Validation(error_message.to_string()),
+_ => DescribeConnectionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeConnectionsError::Unknown(String::from(body))
@@ -1759,7 +1890,12 @@ Unknown(String)
                 impl Error for DescribeConnectionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeConnectionsError::DirectConnectClient(ref cause) => cause,DescribeConnectionsError::DirectConnectServer(ref cause) => cause,DescribeConnectionsError::Validation(ref cause) => cause,DescribeConnectionsError::Credentials(ref err) => err.description(),DescribeConnectionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeConnectionsError::Unknown(ref cause) => cause
+                            DescribeConnectionsError::DirectConnectClient(ref cause) => cause,
+DescribeConnectionsError::DirectConnectServer(ref cause) => cause,
+DescribeConnectionsError::Validation(ref cause) => cause,
+DescribeConnectionsError::Credentials(ref err) => err.description(),
+DescribeConnectionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeConnectionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1767,10 +1903,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeConnectionsOnInterconnectError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1789,7 +1925,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => DescribeConnectionsOnInterconnectError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => DescribeConnectionsOnInterconnectError::DirectConnectClient(String::from(error_message)),"ValidationException" => DescribeConnectionsOnInterconnectError::Validation(error_message.to_string()),_ => DescribeConnectionsOnInterconnectError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DescribeConnectionsOnInterconnectError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DescribeConnectionsOnInterconnectError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DescribeConnectionsOnInterconnectError::Validation(error_message.to_string()),
+_ => DescribeConnectionsOnInterconnectError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeConnectionsOnInterconnectError::Unknown(String::from(body))
@@ -1820,7 +1959,12 @@ Unknown(String)
                 impl Error for DescribeConnectionsOnInterconnectError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeConnectionsOnInterconnectError::DirectConnectServer(ref cause) => cause,DescribeConnectionsOnInterconnectError::DirectConnectClient(ref cause) => cause,DescribeConnectionsOnInterconnectError::Validation(ref cause) => cause,DescribeConnectionsOnInterconnectError::Credentials(ref err) => err.description(),DescribeConnectionsOnInterconnectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeConnectionsOnInterconnectError::Unknown(ref cause) => cause
+                            DescribeConnectionsOnInterconnectError::DirectConnectClient(ref cause) => cause,
+DescribeConnectionsOnInterconnectError::DirectConnectServer(ref cause) => cause,
+DescribeConnectionsOnInterconnectError::Validation(ref cause) => cause,
+DescribeConnectionsOnInterconnectError::Credentials(ref err) => err.description(),
+DescribeConnectionsOnInterconnectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeConnectionsOnInterconnectError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1850,7 +1994,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => DescribeInterconnectLoaError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => DescribeInterconnectLoaError::DirectConnectClient(String::from(error_message)),"ValidationException" => DescribeInterconnectLoaError::Validation(error_message.to_string()),_ => DescribeInterconnectLoaError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DescribeInterconnectLoaError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DescribeInterconnectLoaError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DescribeInterconnectLoaError::Validation(error_message.to_string()),
+_ => DescribeInterconnectLoaError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeInterconnectLoaError::Unknown(String::from(body))
@@ -1881,7 +2028,12 @@ Unknown(String)
                 impl Error for DescribeInterconnectLoaError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeInterconnectLoaError::DirectConnectClient(ref cause) => cause,DescribeInterconnectLoaError::DirectConnectServer(ref cause) => cause,DescribeInterconnectLoaError::Validation(ref cause) => cause,DescribeInterconnectLoaError::Credentials(ref err) => err.description(),DescribeInterconnectLoaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeInterconnectLoaError::Unknown(ref cause) => cause
+                            DescribeInterconnectLoaError::DirectConnectClient(ref cause) => cause,
+DescribeInterconnectLoaError::DirectConnectServer(ref cause) => cause,
+DescribeInterconnectLoaError::Validation(ref cause) => cause,
+DescribeInterconnectLoaError::Credentials(ref err) => err.description(),
+DescribeInterconnectLoaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeInterconnectLoaError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1889,10 +2041,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeInterconnectsError {
                     
-///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
-DirectConnectServer(String),
 ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
-DirectConnectClient(String),/// An error occurred dispatching the HTTP request
+DirectConnectClient(String),
+///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+DirectConnectServer(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1911,7 +2063,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => DescribeInterconnectsError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => DescribeInterconnectsError::DirectConnectClient(String::from(error_message)),"ValidationException" => DescribeInterconnectsError::Validation(error_message.to_string()),_ => DescribeInterconnectsError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DescribeInterconnectsError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DescribeInterconnectsError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DescribeInterconnectsError::Validation(error_message.to_string()),
+_ => DescribeInterconnectsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeInterconnectsError::Unknown(String::from(body))
@@ -1942,7 +2097,12 @@ Unknown(String)
                 impl Error for DescribeInterconnectsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeInterconnectsError::DirectConnectServer(ref cause) => cause,DescribeInterconnectsError::DirectConnectClient(ref cause) => cause,DescribeInterconnectsError::Validation(ref cause) => cause,DescribeInterconnectsError::Credentials(ref err) => err.description(),DescribeInterconnectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeInterconnectsError::Unknown(ref cause) => cause
+                            DescribeInterconnectsError::DirectConnectClient(ref cause) => cause,
+DescribeInterconnectsError::DirectConnectServer(ref cause) => cause,
+DescribeInterconnectsError::Validation(ref cause) => cause,
+DescribeInterconnectsError::Credentials(ref err) => err.description(),
+DescribeInterconnectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeInterconnectsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1972,7 +2132,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => DescribeLocationsError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => DescribeLocationsError::DirectConnectClient(String::from(error_message)),"ValidationException" => DescribeLocationsError::Validation(error_message.to_string()),_ => DescribeLocationsError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DescribeLocationsError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DescribeLocationsError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DescribeLocationsError::Validation(error_message.to_string()),
+_ => DescribeLocationsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeLocationsError::Unknown(String::from(body))
@@ -2003,7 +2166,12 @@ Unknown(String)
                 impl Error for DescribeLocationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLocationsError::DirectConnectClient(ref cause) => cause,DescribeLocationsError::DirectConnectServer(ref cause) => cause,DescribeLocationsError::Validation(ref cause) => cause,DescribeLocationsError::Credentials(ref err) => err.description(),DescribeLocationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLocationsError::Unknown(ref cause) => cause
+                            DescribeLocationsError::DirectConnectClient(ref cause) => cause,
+DescribeLocationsError::DirectConnectServer(ref cause) => cause,
+DescribeLocationsError::Validation(ref cause) => cause,
+DescribeLocationsError::Credentials(ref err) => err.description(),
+DescribeLocationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLocationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2033,7 +2201,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectClientException" => DescribeTagsError::DirectConnectClient(String::from(error_message)),"DirectConnectServerException" => DescribeTagsError::DirectConnectServer(String::from(error_message)),"ValidationException" => DescribeTagsError::Validation(error_message.to_string()),_ => DescribeTagsError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DescribeTagsError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DescribeTagsError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DescribeTagsError::Validation(error_message.to_string()),
+_ => DescribeTagsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeTagsError::Unknown(String::from(body))
@@ -2064,7 +2235,12 @@ Unknown(String)
                 impl Error for DescribeTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeTagsError::DirectConnectClient(ref cause) => cause,DescribeTagsError::DirectConnectServer(ref cause) => cause,DescribeTagsError::Validation(ref cause) => cause,DescribeTagsError::Credentials(ref err) => err.description(),DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeTagsError::Unknown(ref cause) => cause
+                            DescribeTagsError::DirectConnectClient(ref cause) => cause,
+DescribeTagsError::DirectConnectServer(ref cause) => cause,
+DescribeTagsError::Validation(ref cause) => cause,
+DescribeTagsError::Credentials(ref err) => err.description(),
+DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2094,7 +2270,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectClientException" => DescribeVirtualGatewaysError::DirectConnectClient(String::from(error_message)),"DirectConnectServerException" => DescribeVirtualGatewaysError::DirectConnectServer(String::from(error_message)),"ValidationException" => DescribeVirtualGatewaysError::Validation(error_message.to_string()),_ => DescribeVirtualGatewaysError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DescribeVirtualGatewaysError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DescribeVirtualGatewaysError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DescribeVirtualGatewaysError::Validation(error_message.to_string()),
+_ => DescribeVirtualGatewaysError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeVirtualGatewaysError::Unknown(String::from(body))
@@ -2125,7 +2304,12 @@ Unknown(String)
                 impl Error for DescribeVirtualGatewaysError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVirtualGatewaysError::DirectConnectServer(ref cause) => cause,DescribeVirtualGatewaysError::DirectConnectClient(ref cause) => cause,DescribeVirtualGatewaysError::Validation(ref cause) => cause,DescribeVirtualGatewaysError::Credentials(ref err) => err.description(),DescribeVirtualGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVirtualGatewaysError::Unknown(ref cause) => cause
+                            DescribeVirtualGatewaysError::DirectConnectClient(ref cause) => cause,
+DescribeVirtualGatewaysError::DirectConnectServer(ref cause) => cause,
+DescribeVirtualGatewaysError::Validation(ref cause) => cause,
+DescribeVirtualGatewaysError::Credentials(ref err) => err.description(),
+DescribeVirtualGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVirtualGatewaysError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2155,7 +2339,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectClientException" => DescribeVirtualInterfacesError::DirectConnectClient(String::from(error_message)),"DirectConnectServerException" => DescribeVirtualInterfacesError::DirectConnectServer(String::from(error_message)),"ValidationException" => DescribeVirtualInterfacesError::Validation(error_message.to_string()),_ => DescribeVirtualInterfacesError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => DescribeVirtualInterfacesError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => DescribeVirtualInterfacesError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => DescribeVirtualInterfacesError::Validation(error_message.to_string()),
+_ => DescribeVirtualInterfacesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeVirtualInterfacesError::Unknown(String::from(body))
@@ -2186,7 +2373,12 @@ Unknown(String)
                 impl Error for DescribeVirtualInterfacesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVirtualInterfacesError::DirectConnectServer(ref cause) => cause,DescribeVirtualInterfacesError::DirectConnectClient(ref cause) => cause,DescribeVirtualInterfacesError::Validation(ref cause) => cause,DescribeVirtualInterfacesError::Credentials(ref err) => err.description(),DescribeVirtualInterfacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVirtualInterfacesError::Unknown(ref cause) => cause
+                            DescribeVirtualInterfacesError::DirectConnectClient(ref cause) => cause,
+DescribeVirtualInterfacesError::DirectConnectServer(ref cause) => cause,
+DescribeVirtualInterfacesError::Validation(ref cause) => cause,
+DescribeVirtualInterfacesError::Credentials(ref err) => err.description(),
+DescribeVirtualInterfacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVirtualInterfacesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2198,10 +2390,10 @@ Unknown(String)
 DirectConnectClient(String),
 ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
 DirectConnectServer(String),
-///<p>You have reached the limit on the number of tags that can be assigned to a Direct Connect resource.</p>
-TooManyTags(String),
 ///<p>A tag key was specified more than once.</p>
-DuplicateTagKeys(String),/// An error occurred dispatching the HTTP request
+DuplicateTagKeys(String),
+///<p>You have reached the limit on the number of tags that can be assigned to a Direct Connect resource.</p>
+TooManyTags(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2220,7 +2412,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "TooManyTagsException" => TagResourceError::TooManyTags(String::from(error_message)),"DuplicateTagKeysException" => TagResourceError::DuplicateTagKeys(String::from(error_message)),"DirectConnectServerException" => TagResourceError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => TagResourceError::DirectConnectClient(String::from(error_message)),"ValidationException" => TagResourceError::Validation(error_message.to_string()),_ => TagResourceError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => TagResourceError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => TagResourceError::DirectConnectServer(String::from(error_message)),
+"DuplicateTagKeysException" => TagResourceError::DuplicateTagKeys(String::from(error_message)),
+"TooManyTagsException" => TagResourceError::TooManyTags(String::from(error_message)),
+"ValidationException" => TagResourceError::Validation(error_message.to_string()),
+_ => TagResourceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => TagResourceError::Unknown(String::from(body))
@@ -2251,7 +2448,14 @@ Unknown(String)
                 impl Error for TagResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            TagResourceError::DuplicateTagKeys(ref cause) => cause,TagResourceError::TooManyTags(ref cause) => cause,TagResourceError::DirectConnectClient(ref cause) => cause,TagResourceError::DirectConnectServer(ref cause) => cause,TagResourceError::Validation(ref cause) => cause,TagResourceError::Credentials(ref err) => err.description(),TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),TagResourceError::Unknown(ref cause) => cause
+                            TagResourceError::DirectConnectClient(ref cause) => cause,
+TagResourceError::DirectConnectServer(ref cause) => cause,
+TagResourceError::DuplicateTagKeys(ref cause) => cause,
+TagResourceError::TooManyTags(ref cause) => cause,
+TagResourceError::Validation(ref cause) => cause,
+TagResourceError::Credentials(ref err) => err.description(),
+TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+TagResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2281,7 +2485,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectConnectServerException" => UntagResourceError::DirectConnectServer(String::from(error_message)),"DirectConnectClientException" => UntagResourceError::DirectConnectClient(String::from(error_message)),"ValidationException" => UntagResourceError::Validation(error_message.to_string()),_ => UntagResourceError::Unknown(String::from(body))
+                                    "DirectConnectClientException" => UntagResourceError::DirectConnectClient(String::from(error_message)),
+"DirectConnectServerException" => UntagResourceError::DirectConnectServer(String::from(error_message)),
+"ValidationException" => UntagResourceError::Validation(error_message.to_string()),
+_ => UntagResourceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UntagResourceError::Unknown(String::from(body))
@@ -2312,7 +2519,12 @@ Unknown(String)
                 impl Error for UntagResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            UntagResourceError::DirectConnectServer(ref cause) => cause,UntagResourceError::DirectConnectClient(ref cause) => cause,UntagResourceError::Validation(ref cause) => cause,UntagResourceError::Credentials(ref err) => err.description(),UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UntagResourceError::Unknown(ref cause) => cause
+                            UntagResourceError::DirectConnectClient(ref cause) => cause,
+UntagResourceError::DirectConnectServer(ref cause) => cause,
+UntagResourceError::Validation(ref cause) => cause,
+UntagResourceError::Credentials(ref err) => err.description(),
+UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UntagResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }

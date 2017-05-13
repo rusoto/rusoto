@@ -2026,7 +2026,11 @@ Unknown(String)
                 impl Error for DeleteAlarmsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAlarmsError::ResourceNotFound(ref cause) => cause,DeleteAlarmsError::Validation(ref cause) => cause,DeleteAlarmsError::Credentials(ref err) => err.description(),DeleteAlarmsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAlarmsError::Unknown(ref cause) => cause
+                            DeleteAlarmsError::ResourceNotFound(ref cause) => cause,
+DeleteAlarmsError::Validation(ref cause) => cause,
+DeleteAlarmsError::Credentials(ref err) => err.description(),
+DeleteAlarmsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAlarmsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2084,7 +2088,11 @@ Unknown(String)
                 impl Error for DescribeAlarmHistoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAlarmHistoryError::InvalidNextToken(ref cause) => cause,DescribeAlarmHistoryError::Validation(ref cause) => cause,DescribeAlarmHistoryError::Credentials(ref err) => err.description(),DescribeAlarmHistoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAlarmHistoryError::Unknown(ref cause) => cause
+                            DescribeAlarmHistoryError::InvalidNextToken(ref cause) => cause,
+DescribeAlarmHistoryError::Validation(ref cause) => cause,
+DescribeAlarmHistoryError::Credentials(ref err) => err.description(),
+DescribeAlarmHistoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAlarmHistoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2142,7 +2150,11 @@ Unknown(String)
                 impl Error for DescribeAlarmsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAlarmsError::InvalidNextToken(ref cause) => cause,DescribeAlarmsError::Validation(ref cause) => cause,DescribeAlarmsError::Credentials(ref err) => err.description(),DescribeAlarmsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAlarmsError::Unknown(ref cause) => cause
+                            DescribeAlarmsError::InvalidNextToken(ref cause) => cause,
+DescribeAlarmsError::Validation(ref cause) => cause,
+DescribeAlarmsError::Credentials(ref err) => err.description(),
+DescribeAlarmsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAlarmsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2198,7 +2210,10 @@ Unknown(String)
                 impl Error for DescribeAlarmsForMetricError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAlarmsForMetricError::Validation(ref cause) => cause,DescribeAlarmsForMetricError::Credentials(ref err) => err.description(),DescribeAlarmsForMetricError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAlarmsForMetricError::Unknown(ref cause) => cause
+                            DescribeAlarmsForMetricError::Validation(ref cause) => cause,
+DescribeAlarmsForMetricError::Credentials(ref err) => err.description(),
+DescribeAlarmsForMetricError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAlarmsForMetricError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2254,7 +2269,10 @@ Unknown(String)
                 impl Error for DisableAlarmActionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableAlarmActionsError::Validation(ref cause) => cause,DisableAlarmActionsError::Credentials(ref err) => err.description(),DisableAlarmActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableAlarmActionsError::Unknown(ref cause) => cause
+                            DisableAlarmActionsError::Validation(ref cause) => cause,
+DisableAlarmActionsError::Credentials(ref err) => err.description(),
+DisableAlarmActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableAlarmActionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2310,7 +2328,10 @@ Unknown(String)
                 impl Error for EnableAlarmActionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableAlarmActionsError::Validation(ref cause) => cause,EnableAlarmActionsError::Credentials(ref err) => err.description(),EnableAlarmActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableAlarmActionsError::Unknown(ref cause) => cause
+                            EnableAlarmActionsError::Validation(ref cause) => cause,
+EnableAlarmActionsError::Credentials(ref err) => err.description(),
+EnableAlarmActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableAlarmActionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2318,10 +2339,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetMetricStatisticsError {
                     
-///<p>Parameters that cannot be used together were used together.</p>
-InvalidParameterCombination(String),
 ///<p>Request processing has failed due to some unknown error, exception, or failure.</p>
 InternalServiceFault(String),
+///<p>Parameters that cannot be used together were used together.</p>
+InvalidParameterCombination(String),
 ///<p>The value of an input parameter is bad or out-of-range.</p>
 InvalidParameterValue(String),
 ///<p>An input parameter that is required is missing.</p>
@@ -2342,7 +2363,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValueException" => GetMetricStatisticsError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidParameterCombinationException" => GetMetricStatisticsError::InvalidParameterCombination(String::from(parsed_error.message)),"InternalServiceFault" => GetMetricStatisticsError::InternalServiceFault(String::from(parsed_error.message)),"MissingRequiredParameterException" => GetMetricStatisticsError::MissingRequiredParameter(String::from(parsed_error.message)),_ => GetMetricStatisticsError::Unknown(String::from(body))
+                                    "InternalServiceFault" => GetMetricStatisticsError::InternalServiceFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => GetMetricStatisticsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => GetMetricStatisticsError::InvalidParameterValue(String::from(parsed_error.message)),"MissingRequiredParameterException" => GetMetricStatisticsError::MissingRequiredParameter(String::from(parsed_error.message)),_ => GetMetricStatisticsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetMetricStatisticsError::Unknown(body.to_string())
@@ -2374,7 +2395,14 @@ Unknown(String)
                 impl Error for GetMetricStatisticsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetMetricStatisticsError::InvalidParameterValue(ref cause) => cause,GetMetricStatisticsError::InvalidParameterCombination(ref cause) => cause,GetMetricStatisticsError::MissingRequiredParameter(ref cause) => cause,GetMetricStatisticsError::InternalServiceFault(ref cause) => cause,GetMetricStatisticsError::Validation(ref cause) => cause,GetMetricStatisticsError::Credentials(ref err) => err.description(),GetMetricStatisticsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetMetricStatisticsError::Unknown(ref cause) => cause
+                            GetMetricStatisticsError::InternalServiceFault(ref cause) => cause,
+GetMetricStatisticsError::InvalidParameterCombination(ref cause) => cause,
+GetMetricStatisticsError::InvalidParameterValue(ref cause) => cause,
+GetMetricStatisticsError::MissingRequiredParameter(ref cause) => cause,
+GetMetricStatisticsError::Validation(ref cause) => cause,
+GetMetricStatisticsError::Credentials(ref err) => err.description(),
+GetMetricStatisticsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetMetricStatisticsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2402,7 +2430,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValueException" => ListMetricsError::InvalidParameterValue(String::from(parsed_error.message)),"InternalServiceFault" => ListMetricsError::InternalServiceFault(String::from(parsed_error.message)),_ => ListMetricsError::Unknown(String::from(body))
+                                    "InternalServiceFault" => ListMetricsError::InternalServiceFault(String::from(parsed_error.message)),"InvalidParameterValueException" => ListMetricsError::InvalidParameterValue(String::from(parsed_error.message)),_ => ListMetricsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListMetricsError::Unknown(body.to_string())
@@ -2434,7 +2462,12 @@ Unknown(String)
                 impl Error for ListMetricsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListMetricsError::InternalServiceFault(ref cause) => cause,ListMetricsError::InvalidParameterValue(ref cause) => cause,ListMetricsError::Validation(ref cause) => cause,ListMetricsError::Credentials(ref err) => err.description(),ListMetricsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListMetricsError::Unknown(ref cause) => cause
+                            ListMetricsError::InternalServiceFault(ref cause) => cause,
+ListMetricsError::InvalidParameterValue(ref cause) => cause,
+ListMetricsError::Validation(ref cause) => cause,
+ListMetricsError::Credentials(ref err) => err.description(),
+ListMetricsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListMetricsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2492,7 +2525,11 @@ Unknown(String)
                 impl Error for PutMetricAlarmError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutMetricAlarmError::LimitExceededFault(ref cause) => cause,PutMetricAlarmError::Validation(ref cause) => cause,PutMetricAlarmError::Credentials(ref err) => err.description(),PutMetricAlarmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutMetricAlarmError::Unknown(ref cause) => cause
+                            PutMetricAlarmError::LimitExceededFault(ref cause) => cause,
+PutMetricAlarmError::Validation(ref cause) => cause,
+PutMetricAlarmError::Credentials(ref err) => err.description(),
+PutMetricAlarmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutMetricAlarmError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2500,14 +2537,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutMetricDataError {
                     
-///<p>Parameters that cannot be used together were used together.</p>
-InvalidParameterCombination(String),
 ///<p>Request processing has failed due to some unknown error, exception, or failure.</p>
 InternalServiceFault(String),
-///<p>An input parameter that is required is missing.</p>
-MissingRequiredParameter(String),
+///<p>Parameters that cannot be used together were used together.</p>
+InvalidParameterCombination(String),
 ///<p>The value of an input parameter is bad or out-of-range.</p>
-InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
+InvalidParameterValue(String),
+///<p>An input parameter that is required is missing.</p>
+MissingRequiredParameter(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2524,7 +2561,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValueException" => PutMetricDataError::InvalidParameterValue(String::from(parsed_error.message)),"MissingRequiredParameterException" => PutMetricDataError::MissingRequiredParameter(String::from(parsed_error.message)),"InvalidParameterCombinationException" => PutMetricDataError::InvalidParameterCombination(String::from(parsed_error.message)),"InternalServiceFault" => PutMetricDataError::InternalServiceFault(String::from(parsed_error.message)),_ => PutMetricDataError::Unknown(String::from(body))
+                                    "InternalServiceFault" => PutMetricDataError::InternalServiceFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => PutMetricDataError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => PutMetricDataError::InvalidParameterValue(String::from(parsed_error.message)),"MissingRequiredParameterException" => PutMetricDataError::MissingRequiredParameter(String::from(parsed_error.message)),_ => PutMetricDataError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PutMetricDataError::Unknown(body.to_string())
@@ -2556,7 +2593,14 @@ Unknown(String)
                 impl Error for PutMetricDataError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutMetricDataError::InvalidParameterValue(ref cause) => cause,PutMetricDataError::InternalServiceFault(ref cause) => cause,PutMetricDataError::InvalidParameterCombination(ref cause) => cause,PutMetricDataError::MissingRequiredParameter(ref cause) => cause,PutMetricDataError::Validation(ref cause) => cause,PutMetricDataError::Credentials(ref err) => err.description(),PutMetricDataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutMetricDataError::Unknown(ref cause) => cause
+                            PutMetricDataError::InternalServiceFault(ref cause) => cause,
+PutMetricDataError::InvalidParameterCombination(ref cause) => cause,
+PutMetricDataError::InvalidParameterValue(ref cause) => cause,
+PutMetricDataError::MissingRequiredParameter(ref cause) => cause,
+PutMetricDataError::Validation(ref cause) => cause,
+PutMetricDataError::Credentials(ref err) => err.description(),
+PutMetricDataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutMetricDataError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2616,7 +2660,12 @@ Unknown(String)
                 impl Error for SetAlarmStateError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetAlarmStateError::ResourceNotFound(ref cause) => cause,SetAlarmStateError::InvalidFormatFault(ref cause) => cause,SetAlarmStateError::Validation(ref cause) => cause,SetAlarmStateError::Credentials(ref err) => err.description(),SetAlarmStateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetAlarmStateError::Unknown(ref cause) => cause
+                            SetAlarmStateError::InvalidFormatFault(ref cause) => cause,
+SetAlarmStateError::ResourceNotFound(ref cause) => cause,
+SetAlarmStateError::Validation(ref cause) => cause,
+SetAlarmStateError::Credentials(ref err) => err.description(),
+SetAlarmStateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetAlarmStateError::Unknown(ref cause) => cause
                         }
                     }
                  }

@@ -4819,10 +4819,10 @@ struct VPCIdDeserializer;
                     
 ///<p>The specified load balancer does not exist.</p>
 AccessPointNotFound(String),
-///<p>The quota for the number of tags that can be assigned to a load balancer has been reached.</p>
-TooManyTags(String),
 ///<p>A tag key was specified more than once.</p>
-DuplicateTagKeys(String),/// An error occurred dispatching the HTTP request
+DuplicateTagKeys(String),
+///<p>The quota for the number of tags that can be assigned to a load balancer has been reached.</p>
+TooManyTags(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4871,7 +4871,13 @@ Unknown(String)
                 impl Error for AddTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddTagsError::DuplicateTagKeys(ref cause) => cause,AddTagsError::TooManyTags(ref cause) => cause,AddTagsError::AccessPointNotFound(ref cause) => cause,AddTagsError::Validation(ref cause) => cause,AddTagsError::Credentials(ref err) => err.description(),AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddTagsError::Unknown(ref cause) => cause
+                            AddTagsError::AccessPointNotFound(ref cause) => cause,
+AddTagsError::DuplicateTagKeys(ref cause) => cause,
+AddTagsError::TooManyTags(ref cause) => cause,
+AddTagsError::Validation(ref cause) => cause,
+AddTagsError::Credentials(ref err) => err.description(),
+AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4879,12 +4885,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ApplySecurityGroupsToLoadBalancerError {
                     
-///<p>One or more of the specified security groups do not exist.</p>
-InvalidSecurityGroup(String),
+///<p>The specified load balancer does not exist.</p>
+AccessPointNotFound(String),
 ///<p>The requested configuration change is not valid.</p>
 InvalidConfigurationRequest(String),
-///<p>The specified load balancer does not exist.</p>
-AccessPointNotFound(String),/// An error occurred dispatching the HTTP request
+///<p>One or more of the specified security groups do not exist.</p>
+InvalidSecurityGroup(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4901,7 +4907,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "AccessPointNotFoundException" => ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidSecurityGroupException" => ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(String::from(parsed_error.message)),_ => ApplySecurityGroupsToLoadBalancerError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(String::from(parsed_error.message)),"InvalidSecurityGroupException" => ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(String::from(parsed_error.message)),_ => ApplySecurityGroupsToLoadBalancerError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ApplySecurityGroupsToLoadBalancerError::Unknown(body.to_string())
@@ -4933,7 +4939,13 @@ Unknown(String)
                 impl Error for ApplySecurityGroupsToLoadBalancerError {
                     fn description(&self) -> &str {
                         match *self {
-                            ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(ref cause) => cause,ApplySecurityGroupsToLoadBalancerError::Validation(ref cause) => cause,ApplySecurityGroupsToLoadBalancerError::Credentials(ref err) => err.description(),ApplySecurityGroupsToLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ApplySecurityGroupsToLoadBalancerError::Unknown(ref cause) => cause
+                            ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(ref cause) => cause,
+ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
+ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
+ApplySecurityGroupsToLoadBalancerError::Validation(ref cause) => cause,
+ApplySecurityGroupsToLoadBalancerError::Credentials(ref err) => err.description(),
+ApplySecurityGroupsToLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ApplySecurityGroupsToLoadBalancerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4941,14 +4953,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AttachLoadBalancerToSubnetsError {
                     
-///<p>The specified VPC has no associated Internet gateway.</p>
-InvalidSubnet(String),
 ///<p>The specified load balancer does not exist.</p>
 AccessPointNotFound(String),
-///<p>One or more of the specified subnets do not exist.</p>
-SubnetNotFound(String),
 ///<p>The requested configuration change is not valid.</p>
-InvalidConfigurationRequest(String),/// An error occurred dispatching the HTTP request
+InvalidConfigurationRequest(String),
+///<p>The specified VPC has no associated Internet gateway.</p>
+InvalidSubnet(String),
+///<p>One or more of the specified subnets do not exist.</p>
+SubnetNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4997,7 +5009,14 @@ Unknown(String)
                 impl Error for AttachLoadBalancerToSubnetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachLoadBalancerToSubnetsError::AccessPointNotFound(ref cause) => cause,AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(ref cause) => cause,AttachLoadBalancerToSubnetsError::SubnetNotFound(ref cause) => cause,AttachLoadBalancerToSubnetsError::InvalidSubnet(ref cause) => cause,AttachLoadBalancerToSubnetsError::Validation(ref cause) => cause,AttachLoadBalancerToSubnetsError::Credentials(ref err) => err.description(),AttachLoadBalancerToSubnetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachLoadBalancerToSubnetsError::Unknown(ref cause) => cause
+                            AttachLoadBalancerToSubnetsError::AccessPointNotFound(ref cause) => cause,
+AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(ref cause) => cause,
+AttachLoadBalancerToSubnetsError::InvalidSubnet(ref cause) => cause,
+AttachLoadBalancerToSubnetsError::SubnetNotFound(ref cause) => cause,
+AttachLoadBalancerToSubnetsError::Validation(ref cause) => cause,
+AttachLoadBalancerToSubnetsError::Credentials(ref err) => err.description(),
+AttachLoadBalancerToSubnetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachLoadBalancerToSubnetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5055,7 +5074,11 @@ Unknown(String)
                 impl Error for ConfigureHealthCheckError {
                     fn description(&self) -> &str {
                         match *self {
-                            ConfigureHealthCheckError::AccessPointNotFound(ref cause) => cause,ConfigureHealthCheckError::Validation(ref cause) => cause,ConfigureHealthCheckError::Credentials(ref err) => err.description(),ConfigureHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ConfigureHealthCheckError::Unknown(ref cause) => cause
+                            ConfigureHealthCheckError::AccessPointNotFound(ref cause) => cause,
+ConfigureHealthCheckError::Validation(ref cause) => cause,
+ConfigureHealthCheckError::Credentials(ref err) => err.description(),
+ConfigureHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ConfigureHealthCheckError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5063,14 +5086,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateAppCookieStickinessPolicyError {
                     
-///<p>The quota for the number of policies for this load balancer has been reached.</p>
-TooManyPolicies(String),
-///<p>The requested configuration change is not valid.</p>
-InvalidConfigurationRequest(String),
+///<p>The specified load balancer does not exist.</p>
+AccessPointNotFound(String),
 ///<p>A policy with the specified name already exists for this load balancer.</p>
 DuplicatePolicyName(String),
-///<p>The specified load balancer does not exist.</p>
-AccessPointNotFound(String),/// An error occurred dispatching the HTTP request
+///<p>The requested configuration change is not valid.</p>
+InvalidConfigurationRequest(String),
+///<p>The quota for the number of policies for this load balancer has been reached.</p>
+TooManyPolicies(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5087,7 +5110,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DuplicatePolicyNameException" => CreateAppCookieStickinessPolicyError::DuplicatePolicyName(String::from(parsed_error.message)),"AccessPointNotFoundException" => CreateAppCookieStickinessPolicyError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(String::from(parsed_error.message)),"TooManyPoliciesException" => CreateAppCookieStickinessPolicyError::TooManyPolicies(String::from(parsed_error.message)),_ => CreateAppCookieStickinessPolicyError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => CreateAppCookieStickinessPolicyError::AccessPointNotFound(String::from(parsed_error.message)),"DuplicatePolicyNameException" => CreateAppCookieStickinessPolicyError::DuplicatePolicyName(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(String::from(parsed_error.message)),"TooManyPoliciesException" => CreateAppCookieStickinessPolicyError::TooManyPolicies(String::from(parsed_error.message)),_ => CreateAppCookieStickinessPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateAppCookieStickinessPolicyError::Unknown(body.to_string())
@@ -5119,7 +5142,14 @@ Unknown(String)
                 impl Error for CreateAppCookieStickinessPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateAppCookieStickinessPolicyError::AccessPointNotFound(ref cause) => cause,CreateAppCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => cause,CreateAppCookieStickinessPolicyError::TooManyPolicies(ref cause) => cause,CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => cause,CreateAppCookieStickinessPolicyError::Validation(ref cause) => cause,CreateAppCookieStickinessPolicyError::Credentials(ref err) => err.description(),CreateAppCookieStickinessPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateAppCookieStickinessPolicyError::Unknown(ref cause) => cause
+                            CreateAppCookieStickinessPolicyError::AccessPointNotFound(ref cause) => cause,
+CreateAppCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => cause,
+CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => cause,
+CreateAppCookieStickinessPolicyError::TooManyPolicies(ref cause) => cause,
+CreateAppCookieStickinessPolicyError::Validation(ref cause) => cause,
+CreateAppCookieStickinessPolicyError::Credentials(ref err) => err.description(),
+CreateAppCookieStickinessPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateAppCookieStickinessPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5131,10 +5161,10 @@ Unknown(String)
 AccessPointNotFound(String),
 ///<p>A policy with the specified name already exists for this load balancer.</p>
 DuplicatePolicyName(String),
-///<p>The quota for the number of policies for this load balancer has been reached.</p>
-TooManyPolicies(String),
 ///<p>The requested configuration change is not valid.</p>
-InvalidConfigurationRequest(String),/// An error occurred dispatching the HTTP request
+InvalidConfigurationRequest(String),
+///<p>The quota for the number of policies for this load balancer has been reached.</p>
+TooManyPolicies(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5151,7 +5181,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DuplicatePolicyNameException" => CreateLBCookieStickinessPolicyError::DuplicatePolicyName(String::from(parsed_error.message)),"AccessPointNotFoundException" => CreateLBCookieStickinessPolicyError::AccessPointNotFound(String::from(parsed_error.message)),"TooManyPoliciesException" => CreateLBCookieStickinessPolicyError::TooManyPolicies(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(String::from(parsed_error.message)),_ => CreateLBCookieStickinessPolicyError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => CreateLBCookieStickinessPolicyError::AccessPointNotFound(String::from(parsed_error.message)),"DuplicatePolicyNameException" => CreateLBCookieStickinessPolicyError::DuplicatePolicyName(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(String::from(parsed_error.message)),"TooManyPoliciesException" => CreateLBCookieStickinessPolicyError::TooManyPolicies(String::from(parsed_error.message)),_ => CreateLBCookieStickinessPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateLBCookieStickinessPolicyError::Unknown(body.to_string())
@@ -5183,7 +5213,14 @@ Unknown(String)
                 impl Error for CreateLBCookieStickinessPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateLBCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => cause,CreateLBCookieStickinessPolicyError::TooManyPolicies(ref cause) => cause,CreateLBCookieStickinessPolicyError::AccessPointNotFound(ref cause) => cause,CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => cause,CreateLBCookieStickinessPolicyError::Validation(ref cause) => cause,CreateLBCookieStickinessPolicyError::Credentials(ref err) => err.description(),CreateLBCookieStickinessPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateLBCookieStickinessPolicyError::Unknown(ref cause) => cause
+                            CreateLBCookieStickinessPolicyError::AccessPointNotFound(ref cause) => cause,
+CreateLBCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => cause,
+CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => cause,
+CreateLBCookieStickinessPolicyError::TooManyPolicies(ref cause) => cause,
+CreateLBCookieStickinessPolicyError::Validation(ref cause) => cause,
+CreateLBCookieStickinessPolicyError::Credentials(ref err) => err.description(),
+CreateLBCookieStickinessPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateLBCookieStickinessPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5191,24 +5228,24 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateLoadBalancerError {
                     
-///<p>One or more of the specified security groups do not exist.</p>
-InvalidSecurityGroup(String),
-///<p>The specified value for the schema is not valid. You can only specify a scheme for load balancers in a VPC.</p>
-InvalidScheme(String),
-///<p>The specified load balancer name already exists for this account.</p>
-DuplicateAccessPointName(String),
-///<p>One or more of the specified subnets do not exist.</p>
-SubnetNotFound(String),
-///<p>The specified VPC has no associated Internet gateway.</p>
-InvalidSubnet(String),
-///<p>The requested configuration change is not valid.</p>
-InvalidConfigurationRequest(String),
-///<p>A tag key was specified more than once.</p>
-DuplicateTagKeys(String),
-///<p>The quota for the number of load balancers has been reached.</p>
-TooManyAccessPoints(String),
 ///<p>The specified ARN does not refer to a valid SSL certificate in AWS Identity and Access Management (IAM) or AWS Certificate Manager (ACM). Note that if you recently uploaded the certificate to IAM, this error might indicate that the certificate is not fully available yet.</p>
 CertificateNotFound(String),
+///<p>The specified load balancer name already exists for this account.</p>
+DuplicateAccessPointName(String),
+///<p>A tag key was specified more than once.</p>
+DuplicateTagKeys(String),
+///<p>The requested configuration change is not valid.</p>
+InvalidConfigurationRequest(String),
+///<p>The specified value for the schema is not valid. You can only specify a scheme for load balancers in a VPC.</p>
+InvalidScheme(String),
+///<p>One or more of the specified security groups do not exist.</p>
+InvalidSecurityGroup(String),
+///<p>The specified VPC has no associated Internet gateway.</p>
+InvalidSubnet(String),
+///<p>One or more of the specified subnets do not exist.</p>
+SubnetNotFound(String),
+///<p>The quota for the number of load balancers has been reached.</p>
+TooManyAccessPoints(String),
 ///<p>The quota for the number of tags that can be assigned to a load balancer has been reached.</p>
 TooManyTags(String),
 ///
@@ -5229,7 +5266,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidSubnetException" => CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message)),"UnsupportedProtocolException" => CreateLoadBalancerError::UnsupportedProtocol(String::from(parsed_error.message)),"DuplicateTagKeysException" => CreateLoadBalancerError::DuplicateTagKeys(String::from(parsed_error.message)),"InvalidSecurityGroupException" => CreateLoadBalancerError::InvalidSecurityGroup(String::from(parsed_error.message)),"InvalidSchemeException" => CreateLoadBalancerError::InvalidScheme(String::from(parsed_error.message)),"TooManyAccessPointsException" => CreateLoadBalancerError::TooManyAccessPoints(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => CreateLoadBalancerError::InvalidConfigurationRequest(String::from(parsed_error.message)),"SubnetNotFoundException" => CreateLoadBalancerError::SubnetNotFound(String::from(parsed_error.message)),"TooManyTagsException" => CreateLoadBalancerError::TooManyTags(String::from(parsed_error.message)),"DuplicateAccessPointNameException" => CreateLoadBalancerError::DuplicateAccessPointName(String::from(parsed_error.message)),"CertificateNotFoundException" => CreateLoadBalancerError::CertificateNotFound(String::from(parsed_error.message)),_ => CreateLoadBalancerError::Unknown(String::from(body))
+                                    "CertificateNotFoundException" => CreateLoadBalancerError::CertificateNotFound(String::from(parsed_error.message)),"DuplicateAccessPointNameException" => CreateLoadBalancerError::DuplicateAccessPointName(String::from(parsed_error.message)),"DuplicateTagKeysException" => CreateLoadBalancerError::DuplicateTagKeys(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => CreateLoadBalancerError::InvalidConfigurationRequest(String::from(parsed_error.message)),"InvalidSchemeException" => CreateLoadBalancerError::InvalidScheme(String::from(parsed_error.message)),"InvalidSecurityGroupException" => CreateLoadBalancerError::InvalidSecurityGroup(String::from(parsed_error.message)),"InvalidSubnetException" => CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message)),"SubnetNotFoundException" => CreateLoadBalancerError::SubnetNotFound(String::from(parsed_error.message)),"TooManyAccessPointsException" => CreateLoadBalancerError::TooManyAccessPoints(String::from(parsed_error.message)),"TooManyTagsException" => CreateLoadBalancerError::TooManyTags(String::from(parsed_error.message)),"UnsupportedProtocolException" => CreateLoadBalancerError::UnsupportedProtocol(String::from(parsed_error.message)),_ => CreateLoadBalancerError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateLoadBalancerError::Unknown(body.to_string())
@@ -5261,7 +5298,21 @@ Unknown(String)
                 impl Error for CreateLoadBalancerError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,CreateLoadBalancerError::DuplicateTagKeys(ref cause) => cause,CreateLoadBalancerError::TooManyTags(ref cause) => cause,CreateLoadBalancerError::InvalidSubnet(ref cause) => cause,CreateLoadBalancerError::CertificateNotFound(ref cause) => cause,CreateLoadBalancerError::TooManyAccessPoints(ref cause) => cause,CreateLoadBalancerError::InvalidScheme(ref cause) => cause,CreateLoadBalancerError::UnsupportedProtocol(ref cause) => cause,CreateLoadBalancerError::SubnetNotFound(ref cause) => cause,CreateLoadBalancerError::DuplicateAccessPointName(ref cause) => cause,CreateLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,CreateLoadBalancerError::Validation(ref cause) => cause,CreateLoadBalancerError::Credentials(ref err) => err.description(),CreateLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateLoadBalancerError::Unknown(ref cause) => cause
+                            CreateLoadBalancerError::CertificateNotFound(ref cause) => cause,
+CreateLoadBalancerError::DuplicateAccessPointName(ref cause) => cause,
+CreateLoadBalancerError::DuplicateTagKeys(ref cause) => cause,
+CreateLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
+CreateLoadBalancerError::InvalidScheme(ref cause) => cause,
+CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
+CreateLoadBalancerError::InvalidSubnet(ref cause) => cause,
+CreateLoadBalancerError::SubnetNotFound(ref cause) => cause,
+CreateLoadBalancerError::TooManyAccessPoints(ref cause) => cause,
+CreateLoadBalancerError::TooManyTags(ref cause) => cause,
+CreateLoadBalancerError::UnsupportedProtocol(ref cause) => cause,
+CreateLoadBalancerError::Validation(ref cause) => cause,
+CreateLoadBalancerError::Credentials(ref err) => err.description(),
+CreateLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateLoadBalancerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5269,12 +5320,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateLoadBalancerListenersError {
                     
-///<p>A listener already exists for the specified load balancer name and port, but with a different instance port, protocol, or SSL certificate.</p>
-DuplicateListener(String),
 ///<p>The specified load balancer does not exist.</p>
 AccessPointNotFound(String),
 ///<p>The specified ARN does not refer to a valid SSL certificate in AWS Identity and Access Management (IAM) or AWS Certificate Manager (ACM). Note that if you recently uploaded the certificate to IAM, this error might indicate that the certificate is not fully available yet.</p>
 CertificateNotFound(String),
+///<p>A listener already exists for the specified load balancer name and port, but with a different instance port, protocol, or SSL certificate.</p>
+DuplicateListener(String),
 ///<p>The requested configuration change is not valid.</p>
 InvalidConfigurationRequest(String),
 ///
@@ -5295,7 +5346,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CertificateNotFoundException" => CreateLoadBalancerListenersError::CertificateNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => CreateLoadBalancerListenersError::InvalidConfigurationRequest(String::from(parsed_error.message)),"DuplicateListenerException" => CreateLoadBalancerListenersError::DuplicateListener(String::from(parsed_error.message)),"AccessPointNotFoundException" => CreateLoadBalancerListenersError::AccessPointNotFound(String::from(parsed_error.message)),"UnsupportedProtocolException" => CreateLoadBalancerListenersError::UnsupportedProtocol(String::from(parsed_error.message)),_ => CreateLoadBalancerListenersError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => CreateLoadBalancerListenersError::AccessPointNotFound(String::from(parsed_error.message)),"CertificateNotFoundException" => CreateLoadBalancerListenersError::CertificateNotFound(String::from(parsed_error.message)),"DuplicateListenerException" => CreateLoadBalancerListenersError::DuplicateListener(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => CreateLoadBalancerListenersError::InvalidConfigurationRequest(String::from(parsed_error.message)),"UnsupportedProtocolException" => CreateLoadBalancerListenersError::UnsupportedProtocol(String::from(parsed_error.message)),_ => CreateLoadBalancerListenersError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateLoadBalancerListenersError::Unknown(body.to_string())
@@ -5327,7 +5378,15 @@ Unknown(String)
                 impl Error for CreateLoadBalancerListenersError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateLoadBalancerListenersError::CertificateNotFound(ref cause) => cause,CreateLoadBalancerListenersError::AccessPointNotFound(ref cause) => cause,CreateLoadBalancerListenersError::UnsupportedProtocol(ref cause) => cause,CreateLoadBalancerListenersError::DuplicateListener(ref cause) => cause,CreateLoadBalancerListenersError::InvalidConfigurationRequest(ref cause) => cause,CreateLoadBalancerListenersError::Validation(ref cause) => cause,CreateLoadBalancerListenersError::Credentials(ref err) => err.description(),CreateLoadBalancerListenersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateLoadBalancerListenersError::Unknown(ref cause) => cause
+                            CreateLoadBalancerListenersError::AccessPointNotFound(ref cause) => cause,
+CreateLoadBalancerListenersError::CertificateNotFound(ref cause) => cause,
+CreateLoadBalancerListenersError::DuplicateListener(ref cause) => cause,
+CreateLoadBalancerListenersError::InvalidConfigurationRequest(ref cause) => cause,
+CreateLoadBalancerListenersError::UnsupportedProtocol(ref cause) => cause,
+CreateLoadBalancerListenersError::Validation(ref cause) => cause,
+CreateLoadBalancerListenersError::Credentials(ref err) => err.description(),
+CreateLoadBalancerListenersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateLoadBalancerListenersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5335,16 +5394,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateLoadBalancerPolicyError {
                     
+///<p>The specified load balancer does not exist.</p>
+AccessPointNotFound(String),
+///<p>A policy with the specified name already exists for this load balancer.</p>
+DuplicatePolicyName(String),
 ///<p>The requested configuration change is not valid.</p>
 InvalidConfigurationRequest(String),
 ///<p>One or more of the specified policy types do not exist.</p>
 PolicyTypeNotFound(String),
-///<p>The specified load balancer does not exist.</p>
-AccessPointNotFound(String),
 ///<p>The quota for the number of policies for this load balancer has been reached.</p>
-TooManyPolicies(String),
-///<p>A policy with the specified name already exists for this load balancer.</p>
-DuplicatePolicyName(String),/// An error occurred dispatching the HTTP request
+TooManyPolicies(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5361,7 +5420,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DuplicatePolicyNameException" => CreateLoadBalancerPolicyError::DuplicatePolicyName(String::from(parsed_error.message)),"TooManyPoliciesException" => CreateLoadBalancerPolicyError::TooManyPolicies(String::from(parsed_error.message)),"PolicyTypeNotFoundException" => CreateLoadBalancerPolicyError::PolicyTypeNotFound(String::from(parsed_error.message)),"AccessPointNotFoundException" => CreateLoadBalancerPolicyError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => CreateLoadBalancerPolicyError::InvalidConfigurationRequest(String::from(parsed_error.message)),_ => CreateLoadBalancerPolicyError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => CreateLoadBalancerPolicyError::AccessPointNotFound(String::from(parsed_error.message)),"DuplicatePolicyNameException" => CreateLoadBalancerPolicyError::DuplicatePolicyName(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => CreateLoadBalancerPolicyError::InvalidConfigurationRequest(String::from(parsed_error.message)),"PolicyTypeNotFoundException" => CreateLoadBalancerPolicyError::PolicyTypeNotFound(String::from(parsed_error.message)),"TooManyPoliciesException" => CreateLoadBalancerPolicyError::TooManyPolicies(String::from(parsed_error.message)),_ => CreateLoadBalancerPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateLoadBalancerPolicyError::Unknown(body.to_string())
@@ -5393,7 +5452,15 @@ Unknown(String)
                 impl Error for CreateLoadBalancerPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => cause,CreateLoadBalancerPolicyError::PolicyTypeNotFound(ref cause) => cause,CreateLoadBalancerPolicyError::TooManyPolicies(ref cause) => cause,CreateLoadBalancerPolicyError::DuplicatePolicyName(ref cause) => cause,CreateLoadBalancerPolicyError::AccessPointNotFound(ref cause) => cause,CreateLoadBalancerPolicyError::Validation(ref cause) => cause,CreateLoadBalancerPolicyError::Credentials(ref err) => err.description(),CreateLoadBalancerPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateLoadBalancerPolicyError::Unknown(ref cause) => cause
+                            CreateLoadBalancerPolicyError::AccessPointNotFound(ref cause) => cause,
+CreateLoadBalancerPolicyError::DuplicatePolicyName(ref cause) => cause,
+CreateLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => cause,
+CreateLoadBalancerPolicyError::PolicyTypeNotFound(ref cause) => cause,
+CreateLoadBalancerPolicyError::TooManyPolicies(ref cause) => cause,
+CreateLoadBalancerPolicyError::Validation(ref cause) => cause,
+CreateLoadBalancerPolicyError::Credentials(ref err) => err.description(),
+CreateLoadBalancerPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateLoadBalancerPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5449,7 +5516,10 @@ Unknown(String)
                 impl Error for DeleteLoadBalancerError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteLoadBalancerError::Validation(ref cause) => cause,DeleteLoadBalancerError::Credentials(ref err) => err.description(),DeleteLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteLoadBalancerError::Unknown(ref cause) => cause
+                            DeleteLoadBalancerError::Validation(ref cause) => cause,
+DeleteLoadBalancerError::Credentials(ref err) => err.description(),
+DeleteLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteLoadBalancerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5507,7 +5577,11 @@ Unknown(String)
                 impl Error for DeleteLoadBalancerListenersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteLoadBalancerListenersError::AccessPointNotFound(ref cause) => cause,DeleteLoadBalancerListenersError::Validation(ref cause) => cause,DeleteLoadBalancerListenersError::Credentials(ref err) => err.description(),DeleteLoadBalancerListenersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteLoadBalancerListenersError::Unknown(ref cause) => cause
+                            DeleteLoadBalancerListenersError::AccessPointNotFound(ref cause) => cause,
+DeleteLoadBalancerListenersError::Validation(ref cause) => cause,
+DeleteLoadBalancerListenersError::Credentials(ref err) => err.description(),
+DeleteLoadBalancerListenersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteLoadBalancerListenersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5515,10 +5589,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteLoadBalancerPolicyError {
                     
-///<p>The requested configuration change is not valid.</p>
-InvalidConfigurationRequest(String),
 ///<p>The specified load balancer does not exist.</p>
-AccessPointNotFound(String),/// An error occurred dispatching the HTTP request
+AccessPointNotFound(String),
+///<p>The requested configuration change is not valid.</p>
+InvalidConfigurationRequest(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5567,7 +5641,12 @@ Unknown(String)
                 impl Error for DeleteLoadBalancerPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => cause,DeleteLoadBalancerPolicyError::AccessPointNotFound(ref cause) => cause,DeleteLoadBalancerPolicyError::Validation(ref cause) => cause,DeleteLoadBalancerPolicyError::Credentials(ref err) => err.description(),DeleteLoadBalancerPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteLoadBalancerPolicyError::Unknown(ref cause) => cause
+                            DeleteLoadBalancerPolicyError::AccessPointNotFound(ref cause) => cause,
+DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => cause,
+DeleteLoadBalancerPolicyError::Validation(ref cause) => cause,
+DeleteLoadBalancerPolicyError::Credentials(ref err) => err.description(),
+DeleteLoadBalancerPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteLoadBalancerPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5627,7 +5706,12 @@ Unknown(String)
                 impl Error for DeregisterInstancesFromLoadBalancerError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(ref cause) => cause,DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(ref cause) => cause,DeregisterInstancesFromLoadBalancerError::Validation(ref cause) => cause,DeregisterInstancesFromLoadBalancerError::Credentials(ref err) => err.description(),DeregisterInstancesFromLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeregisterInstancesFromLoadBalancerError::Unknown(ref cause) => cause
+                            DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(ref cause) => cause,
+DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(ref cause) => cause,
+DeregisterInstancesFromLoadBalancerError::Validation(ref cause) => cause,
+DeregisterInstancesFromLoadBalancerError::Credentials(ref err) => err.description(),
+DeregisterInstancesFromLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeregisterInstancesFromLoadBalancerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5655,7 +5739,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidEndPointException" => DescribeInstanceHealthError::InvalidEndPoint(String::from(parsed_error.message)),"AccessPointNotFoundException" => DescribeInstanceHealthError::AccessPointNotFound(String::from(parsed_error.message)),_ => DescribeInstanceHealthError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => DescribeInstanceHealthError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidEndPointException" => DescribeInstanceHealthError::InvalidEndPoint(String::from(parsed_error.message)),_ => DescribeInstanceHealthError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeInstanceHealthError::Unknown(body.to_string())
@@ -5687,7 +5771,12 @@ Unknown(String)
                 impl Error for DescribeInstanceHealthError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeInstanceHealthError::AccessPointNotFound(ref cause) => cause,DescribeInstanceHealthError::InvalidEndPoint(ref cause) => cause,DescribeInstanceHealthError::Validation(ref cause) => cause,DescribeInstanceHealthError::Credentials(ref err) => err.description(),DescribeInstanceHealthError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeInstanceHealthError::Unknown(ref cause) => cause
+                            DescribeInstanceHealthError::AccessPointNotFound(ref cause) => cause,
+DescribeInstanceHealthError::InvalidEndPoint(ref cause) => cause,
+DescribeInstanceHealthError::Validation(ref cause) => cause,
+DescribeInstanceHealthError::Credentials(ref err) => err.description(),
+DescribeInstanceHealthError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeInstanceHealthError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5695,10 +5784,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeLoadBalancerAttributesError {
                     
-///<p>The specified load balancer attribute does not exist.</p>
-LoadBalancerAttributeNotFound(String),
 ///<p>The specified load balancer does not exist.</p>
-AccessPointNotFound(String),/// An error occurred dispatching the HTTP request
+AccessPointNotFound(String),
+///<p>The specified load balancer attribute does not exist.</p>
+LoadBalancerAttributeNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5715,7 +5804,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LoadBalancerAttributeNotFoundException" => DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(String::from(parsed_error.message)),"AccessPointNotFoundException" => DescribeLoadBalancerAttributesError::AccessPointNotFound(String::from(parsed_error.message)),_ => DescribeLoadBalancerAttributesError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => DescribeLoadBalancerAttributesError::AccessPointNotFound(String::from(parsed_error.message)),"LoadBalancerAttributeNotFoundException" => DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(String::from(parsed_error.message)),_ => DescribeLoadBalancerAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeLoadBalancerAttributesError::Unknown(body.to_string())
@@ -5747,7 +5836,12 @@ Unknown(String)
                 impl Error for DescribeLoadBalancerAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLoadBalancerAttributesError::AccessPointNotFound(ref cause) => cause,DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => cause,DescribeLoadBalancerAttributesError::Validation(ref cause) => cause,DescribeLoadBalancerAttributesError::Credentials(ref err) => err.description(),DescribeLoadBalancerAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLoadBalancerAttributesError::Unknown(ref cause) => cause
+                            DescribeLoadBalancerAttributesError::AccessPointNotFound(ref cause) => cause,
+DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => cause,
+DescribeLoadBalancerAttributesError::Validation(ref cause) => cause,
+DescribeLoadBalancerAttributesError::Credentials(ref err) => err.description(),
+DescribeLoadBalancerAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLoadBalancerAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5775,7 +5869,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "PolicyNotFoundException" => DescribeLoadBalancerPoliciesError::PolicyNotFound(String::from(parsed_error.message)),"AccessPointNotFoundException" => DescribeLoadBalancerPoliciesError::AccessPointNotFound(String::from(parsed_error.message)),_ => DescribeLoadBalancerPoliciesError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => DescribeLoadBalancerPoliciesError::AccessPointNotFound(String::from(parsed_error.message)),"PolicyNotFoundException" => DescribeLoadBalancerPoliciesError::PolicyNotFound(String::from(parsed_error.message)),_ => DescribeLoadBalancerPoliciesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeLoadBalancerPoliciesError::Unknown(body.to_string())
@@ -5807,7 +5901,12 @@ Unknown(String)
                 impl Error for DescribeLoadBalancerPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLoadBalancerPoliciesError::PolicyNotFound(ref cause) => cause,DescribeLoadBalancerPoliciesError::AccessPointNotFound(ref cause) => cause,DescribeLoadBalancerPoliciesError::Validation(ref cause) => cause,DescribeLoadBalancerPoliciesError::Credentials(ref err) => err.description(),DescribeLoadBalancerPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLoadBalancerPoliciesError::Unknown(ref cause) => cause
+                            DescribeLoadBalancerPoliciesError::AccessPointNotFound(ref cause) => cause,
+DescribeLoadBalancerPoliciesError::PolicyNotFound(ref cause) => cause,
+DescribeLoadBalancerPoliciesError::Validation(ref cause) => cause,
+DescribeLoadBalancerPoliciesError::Credentials(ref err) => err.description(),
+DescribeLoadBalancerPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLoadBalancerPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5865,7 +5964,11 @@ Unknown(String)
                 impl Error for DescribeLoadBalancerPolicyTypesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(ref cause) => cause,DescribeLoadBalancerPolicyTypesError::Validation(ref cause) => cause,DescribeLoadBalancerPolicyTypesError::Credentials(ref err) => err.description(),DescribeLoadBalancerPolicyTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLoadBalancerPolicyTypesError::Unknown(ref cause) => cause
+                            DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(ref cause) => cause,
+DescribeLoadBalancerPolicyTypesError::Validation(ref cause) => cause,
+DescribeLoadBalancerPolicyTypesError::Credentials(ref err) => err.description(),
+DescribeLoadBalancerPolicyTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLoadBalancerPolicyTypesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5873,10 +5976,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeLoadBalancersError {
                     
-///
-DependencyThrottle(String),
 ///<p>The specified load balancer does not exist.</p>
-AccessPointNotFound(String),/// An error occurred dispatching the HTTP request
+AccessPointNotFound(String),
+///
+DependencyThrottle(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -5925,7 +6028,12 @@ Unknown(String)
                 impl Error for DescribeLoadBalancersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeLoadBalancersError::DependencyThrottle(ref cause) => cause,DescribeLoadBalancersError::AccessPointNotFound(ref cause) => cause,DescribeLoadBalancersError::Validation(ref cause) => cause,DescribeLoadBalancersError::Credentials(ref err) => err.description(),DescribeLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeLoadBalancersError::Unknown(ref cause) => cause
+                            DescribeLoadBalancersError::AccessPointNotFound(ref cause) => cause,
+DescribeLoadBalancersError::DependencyThrottle(ref cause) => cause,
+DescribeLoadBalancersError::Validation(ref cause) => cause,
+DescribeLoadBalancersError::Credentials(ref err) => err.description(),
+DescribeLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeLoadBalancersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -5983,7 +6091,11 @@ Unknown(String)
                 impl Error for DescribeTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeTagsError::AccessPointNotFound(ref cause) => cause,DescribeTagsError::Validation(ref cause) => cause,DescribeTagsError::Credentials(ref err) => err.description(),DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeTagsError::Unknown(ref cause) => cause
+                            DescribeTagsError::AccessPointNotFound(ref cause) => cause,
+DescribeTagsError::Validation(ref cause) => cause,
+DescribeTagsError::Credentials(ref err) => err.description(),
+DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6011,7 +6123,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidConfigurationRequestException" => DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(String::from(parsed_error.message)),"AccessPointNotFoundException" => DetachLoadBalancerFromSubnetsError::AccessPointNotFound(String::from(parsed_error.message)),_ => DetachLoadBalancerFromSubnetsError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => DetachLoadBalancerFromSubnetsError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(String::from(parsed_error.message)),_ => DetachLoadBalancerFromSubnetsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DetachLoadBalancerFromSubnetsError::Unknown(body.to_string())
@@ -6043,7 +6155,12 @@ Unknown(String)
                 impl Error for DetachLoadBalancerFromSubnetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(ref cause) => cause,DetachLoadBalancerFromSubnetsError::AccessPointNotFound(ref cause) => cause,DetachLoadBalancerFromSubnetsError::Validation(ref cause) => cause,DetachLoadBalancerFromSubnetsError::Credentials(ref err) => err.description(),DetachLoadBalancerFromSubnetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachLoadBalancerFromSubnetsError::Unknown(ref cause) => cause
+                            DetachLoadBalancerFromSubnetsError::AccessPointNotFound(ref cause) => cause,
+DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(ref cause) => cause,
+DetachLoadBalancerFromSubnetsError::Validation(ref cause) => cause,
+DetachLoadBalancerFromSubnetsError::Credentials(ref err) => err.description(),
+DetachLoadBalancerFromSubnetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachLoadBalancerFromSubnetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6051,10 +6168,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DisableAvailabilityZonesForLoadBalancerError {
                     
-///<p>The requested configuration change is not valid.</p>
-InvalidConfigurationRequest(String),
 ///<p>The specified load balancer does not exist.</p>
-AccessPointNotFound(String),/// An error occurred dispatching the HTTP request
+AccessPointNotFound(String),
+///<p>The requested configuration change is not valid.</p>
+InvalidConfigurationRequest(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6071,7 +6188,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidConfigurationRequestException" => DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(String::from(parsed_error.message)),"AccessPointNotFoundException" => DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),_ => DisableAvailabilityZonesForLoadBalancerError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(String::from(parsed_error.message)),_ => DisableAvailabilityZonesForLoadBalancerError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DisableAvailabilityZonesForLoadBalancerError::Unknown(body.to_string())
@@ -6103,7 +6220,12 @@ Unknown(String)
                 impl Error for DisableAvailabilityZonesForLoadBalancerError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => cause,DisableAvailabilityZonesForLoadBalancerError::Validation(ref cause) => cause,DisableAvailabilityZonesForLoadBalancerError::Credentials(ref err) => err.description(),DisableAvailabilityZonesForLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableAvailabilityZonesForLoadBalancerError::Unknown(ref cause) => cause
+                            DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => cause,
+DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
+DisableAvailabilityZonesForLoadBalancerError::Validation(ref cause) => cause,
+DisableAvailabilityZonesForLoadBalancerError::Credentials(ref err) => err.description(),
+DisableAvailabilityZonesForLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableAvailabilityZonesForLoadBalancerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6161,7 +6283,11 @@ Unknown(String)
                 impl Error for EnableAvailabilityZonesForLoadBalancerError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => cause,EnableAvailabilityZonesForLoadBalancerError::Validation(ref cause) => cause,EnableAvailabilityZonesForLoadBalancerError::Credentials(ref err) => err.description(),EnableAvailabilityZonesForLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableAvailabilityZonesForLoadBalancerError::Unknown(ref cause) => cause
+                            EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => cause,
+EnableAvailabilityZonesForLoadBalancerError::Validation(ref cause) => cause,
+EnableAvailabilityZonesForLoadBalancerError::Credentials(ref err) => err.description(),
+EnableAvailabilityZonesForLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableAvailabilityZonesForLoadBalancerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6169,12 +6295,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ModifyLoadBalancerAttributesError {
                     
-///<p>The specified load balancer attribute does not exist.</p>
-LoadBalancerAttributeNotFound(String),
 ///<p>The specified load balancer does not exist.</p>
 AccessPointNotFound(String),
 ///<p>The requested configuration change is not valid.</p>
-InvalidConfigurationRequest(String),/// An error occurred dispatching the HTTP request
+InvalidConfigurationRequest(String),
+///<p>The specified load balancer attribute does not exist.</p>
+LoadBalancerAttributeNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6191,7 +6317,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LoadBalancerAttributeNotFoundException" => ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(String::from(parsed_error.message)),"AccessPointNotFoundException" => ModifyLoadBalancerAttributesError::AccessPointNotFound(String::from(parsed_error.message)),_ => ModifyLoadBalancerAttributesError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => ModifyLoadBalancerAttributesError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(String::from(parsed_error.message)),"LoadBalancerAttributeNotFoundException" => ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(String::from(parsed_error.message)),_ => ModifyLoadBalancerAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyLoadBalancerAttributesError::Unknown(body.to_string())
@@ -6223,7 +6349,13 @@ Unknown(String)
                 impl Error for ModifyLoadBalancerAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => cause,ModifyLoadBalancerAttributesError::AccessPointNotFound(ref cause) => cause,ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => cause,ModifyLoadBalancerAttributesError::Validation(ref cause) => cause,ModifyLoadBalancerAttributesError::Credentials(ref err) => err.description(),ModifyLoadBalancerAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyLoadBalancerAttributesError::Unknown(ref cause) => cause
+                            ModifyLoadBalancerAttributesError::AccessPointNotFound(ref cause) => cause,
+ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => cause,
+ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => cause,
+ModifyLoadBalancerAttributesError::Validation(ref cause) => cause,
+ModifyLoadBalancerAttributesError::Credentials(ref err) => err.description(),
+ModifyLoadBalancerAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyLoadBalancerAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6231,10 +6363,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RegisterInstancesWithLoadBalancerError {
                     
-///<p>The specified endpoint is not valid.</p>
-InvalidEndPoint(String),
 ///<p>The specified load balancer does not exist.</p>
-AccessPointNotFound(String),/// An error occurred dispatching the HTTP request
+AccessPointNotFound(String),
+///<p>The specified endpoint is not valid.</p>
+InvalidEndPoint(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6251,7 +6383,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidEndPointException" => RegisterInstancesWithLoadBalancerError::InvalidEndPoint(String::from(parsed_error.message)),"AccessPointNotFoundException" => RegisterInstancesWithLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),_ => RegisterInstancesWithLoadBalancerError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => RegisterInstancesWithLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidEndPointException" => RegisterInstancesWithLoadBalancerError::InvalidEndPoint(String::from(parsed_error.message)),_ => RegisterInstancesWithLoadBalancerError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RegisterInstancesWithLoadBalancerError::Unknown(body.to_string())
@@ -6283,7 +6415,12 @@ Unknown(String)
                 impl Error for RegisterInstancesWithLoadBalancerError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterInstancesWithLoadBalancerError::AccessPointNotFound(ref cause) => cause,RegisterInstancesWithLoadBalancerError::InvalidEndPoint(ref cause) => cause,RegisterInstancesWithLoadBalancerError::Validation(ref cause) => cause,RegisterInstancesWithLoadBalancerError::Credentials(ref err) => err.description(),RegisterInstancesWithLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterInstancesWithLoadBalancerError::Unknown(ref cause) => cause
+                            RegisterInstancesWithLoadBalancerError::AccessPointNotFound(ref cause) => cause,
+RegisterInstancesWithLoadBalancerError::InvalidEndPoint(ref cause) => cause,
+RegisterInstancesWithLoadBalancerError::Validation(ref cause) => cause,
+RegisterInstancesWithLoadBalancerError::Credentials(ref err) => err.description(),
+RegisterInstancesWithLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterInstancesWithLoadBalancerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6341,7 +6478,11 @@ Unknown(String)
                 impl Error for RemoveTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveTagsError::AccessPointNotFound(ref cause) => cause,RemoveTagsError::Validation(ref cause) => cause,RemoveTagsError::Credentials(ref err) => err.description(),RemoveTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveTagsError::Unknown(ref cause) => cause
+                            RemoveTagsError::AccessPointNotFound(ref cause) => cause,
+RemoveTagsError::Validation(ref cause) => cause,
+RemoveTagsError::Credentials(ref err) => err.description(),
+RemoveTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6349,16 +6490,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SetLoadBalancerListenerSSLCertificateError {
                     
+///<p>The specified load balancer does not exist.</p>
+AccessPointNotFound(String),
+///<p>The specified ARN does not refer to a valid SSL certificate in AWS Identity and Access Management (IAM) or AWS Certificate Manager (ACM). Note that if you recently uploaded the certificate to IAM, this error might indicate that the certificate is not fully available yet.</p>
+CertificateNotFound(String),
 ///<p>The requested configuration change is not valid.</p>
 InvalidConfigurationRequest(String),
 ///<p>The load balancer does not have a listener configured at the specified port.</p>
 ListenerNotFound(String),
 ///
-UnsupportedProtocol(String),
-///<p>The specified load balancer does not exist.</p>
-AccessPointNotFound(String),
-///<p>The specified ARN does not refer to a valid SSL certificate in AWS Identity and Access Management (IAM) or AWS Certificate Manager (ACM). Note that if you recently uploaded the certificate to IAM, this error might indicate that the certificate is not fully available yet.</p>
-CertificateNotFound(String),/// An error occurred dispatching the HTTP request
+UnsupportedProtocol(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6375,7 +6516,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "AccessPointNotFoundException" => SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(String::from(parsed_error.message)),"CertificateNotFoundException" => SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(String::from(parsed_error.message)),"UnsupportedProtocolException" => SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(String::from(parsed_error.message)),"ListenerNotFoundException" => SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(String::from(parsed_error.message)),_ => SetLoadBalancerListenerSSLCertificateError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(String::from(parsed_error.message)),"CertificateNotFoundException" => SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(String::from(parsed_error.message)),"ListenerNotFoundException" => SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(String::from(parsed_error.message)),"UnsupportedProtocolException" => SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(String::from(parsed_error.message)),_ => SetLoadBalancerListenerSSLCertificateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SetLoadBalancerListenerSSLCertificateError::Unknown(body.to_string())
@@ -6407,7 +6548,15 @@ Unknown(String)
                 impl Error for SetLoadBalancerListenerSSLCertificateError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(ref cause) => cause,SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(ref cause) => cause,SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(ref cause) => cause,SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(ref cause) => cause,SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(ref cause) => cause,SetLoadBalancerListenerSSLCertificateError::Validation(ref cause) => cause,SetLoadBalancerListenerSSLCertificateError::Credentials(ref err) => err.description(),SetLoadBalancerListenerSSLCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetLoadBalancerListenerSSLCertificateError::Unknown(ref cause) => cause
+                            SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(ref cause) => cause,
+SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(ref cause) => cause,
+SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(ref cause) => cause,
+SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(ref cause) => cause,
+SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(ref cause) => cause,
+SetLoadBalancerListenerSSLCertificateError::Validation(ref cause) => cause,
+SetLoadBalancerListenerSSLCertificateError::Credentials(ref err) => err.description(),
+SetLoadBalancerListenerSSLCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetLoadBalancerListenerSSLCertificateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6415,12 +6564,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SetLoadBalancerPoliciesForBackendServerError {
                     
+///<p>The specified load balancer does not exist.</p>
+AccessPointNotFound(String),
 ///<p>The requested configuration change is not valid.</p>
 InvalidConfigurationRequest(String),
 ///<p>One or more of the specified policies do not exist.</p>
-PolicyNotFound(String),
-///<p>The specified load balancer does not exist.</p>
-AccessPointNotFound(String),/// An error occurred dispatching the HTTP request
+PolicyNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6437,7 +6586,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "AccessPointNotFoundException" => SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(String::from(parsed_error.message)),"PolicyNotFoundException" => SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(String::from(parsed_error.message)),_ => SetLoadBalancerPoliciesForBackendServerError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(String::from(parsed_error.message)),"PolicyNotFoundException" => SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(String::from(parsed_error.message)),_ => SetLoadBalancerPoliciesForBackendServerError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SetLoadBalancerPoliciesForBackendServerError::Unknown(body.to_string())
@@ -6469,7 +6618,13 @@ Unknown(String)
                 impl Error for SetLoadBalancerPoliciesForBackendServerError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(ref cause) => cause,SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(ref cause) => cause,SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(ref cause) => cause,SetLoadBalancerPoliciesForBackendServerError::Validation(ref cause) => cause,SetLoadBalancerPoliciesForBackendServerError::Credentials(ref err) => err.description(),SetLoadBalancerPoliciesForBackendServerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetLoadBalancerPoliciesForBackendServerError::Unknown(ref cause) => cause
+                            SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(ref cause) => cause,
+SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(ref cause) => cause,
+SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(ref cause) => cause,
+SetLoadBalancerPoliciesForBackendServerError::Validation(ref cause) => cause,
+SetLoadBalancerPoliciesForBackendServerError::Credentials(ref err) => err.description(),
+SetLoadBalancerPoliciesForBackendServerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetLoadBalancerPoliciesForBackendServerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6479,12 +6634,12 @@ Unknown(String)
                     
 ///<p>The specified load balancer does not exist.</p>
 AccessPointNotFound(String),
+///<p>The requested configuration change is not valid.</p>
+InvalidConfigurationRequest(String),
 ///<p>The load balancer does not have a listener configured at the specified port.</p>
 ListenerNotFound(String),
 ///<p>One or more of the specified policies do not exist.</p>
-PolicyNotFound(String),
-///<p>The requested configuration change is not valid.</p>
-InvalidConfigurationRequest(String),/// An error occurred dispatching the HTTP request
+PolicyNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6501,7 +6656,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidConfigurationRequestException" => SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(String::from(parsed_error.message)),"PolicyNotFoundException" => SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(String::from(parsed_error.message)),"ListenerNotFoundException" => SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(String::from(parsed_error.message)),"AccessPointNotFoundException" => SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(String::from(parsed_error.message)),_ => SetLoadBalancerPoliciesOfListenerError::Unknown(String::from(body))
+                                    "AccessPointNotFoundException" => SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequestException" => SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(String::from(parsed_error.message)),"ListenerNotFoundException" => SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(String::from(parsed_error.message)),"PolicyNotFoundException" => SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(String::from(parsed_error.message)),_ => SetLoadBalancerPoliciesOfListenerError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SetLoadBalancerPoliciesOfListenerError::Unknown(body.to_string())
@@ -6533,7 +6688,14 @@ Unknown(String)
                 impl Error for SetLoadBalancerPoliciesOfListenerError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(ref cause) => cause,SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(ref cause) => cause,SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(ref cause) => cause,SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(ref cause) => cause,SetLoadBalancerPoliciesOfListenerError::Validation(ref cause) => cause,SetLoadBalancerPoliciesOfListenerError::Credentials(ref err) => err.description(),SetLoadBalancerPoliciesOfListenerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetLoadBalancerPoliciesOfListenerError::Unknown(ref cause) => cause
+                            SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(ref cause) => cause,
+SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(ref cause) => cause,
+SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(ref cause) => cause,
+SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(ref cause) => cause,
+SetLoadBalancerPoliciesOfListenerError::Validation(ref cause) => cause,
+SetLoadBalancerPoliciesOfListenerError::Credentials(ref err) => err.description(),
+SetLoadBalancerPoliciesOfListenerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetLoadBalancerPoliciesOfListenerError::Unknown(ref cause) => cause
                         }
                     }
                  }

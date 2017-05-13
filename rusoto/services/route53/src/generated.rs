@@ -6918,20 +6918,20 @@ struct VPCsDeserializer;
                 #[derive(Debug, PartialEq)]
                 pub enum AssociateVPCWithHostedZoneError {
                     
-///<p>You're trying to associate a VPC with a public hosted zone. Amazon Route 53 doesn't support associating a VPC with a public hosted zone.</p>
-PublicZoneVPCAssociation(String),
-///<p>The limits specified for a resource have been exceeded.</p>
-LimitsExceeded(String),
+///<p>You specified an Amazon VPC that you're already using for another hosted zone, and the domain that you specified for one of the hosted zones is a subdomain of the domain that you specified for the other hosted zone. For example, you can't use the same Amazon VPC for the hosted zones for example.com and test.example.com.</p>
+ConflictingDomainExists(String),
 ///<p>The input is not valid.</p>
 InvalidInput(String),
-///<p>Associating the specified VPC with the specified hosted zone has not been authorized.</p>
-NotAuthorized(String),
 ///<p>The VPC ID that you specified either isn't a valid ID or the current account is not authorized to access this VPC.</p>
 InvalidVPCId(String),
+///<p>The limits specified for a resource have been exceeded.</p>
+LimitsExceeded(String),
 ///<p>No hosted zone exists with the ID that you specified.</p>
 NoSuchHostedZone(String),
-///<p>You specified an Amazon VPC that you're already using for another hosted zone, and the domain that you specified for one of the hosted zones is a subdomain of the domain that you specified for the other hosted zone. For example, you can't use the same Amazon VPC for the hosted zones for example.com and test.example.com.</p>
-ConflictingDomainExists(String),/// An error occurred dispatching the HTTP request
+///<p>Associating the specified VPC with the specified hosted zone has not been authorized.</p>
+NotAuthorized(String),
+///<p>You're trying to associate a VPC with a public hosted zone. Amazon Route 53 doesn't support associating a VPC with a public hosted zone.</p>
+PublicZoneVPCAssociation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6948,7 +6948,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchHostedZone" => AssociateVPCWithHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),"PublicZoneVPCAssociation" => AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(String::from(parsed_error.message)),"NotAuthorizedException" => AssociateVPCWithHostedZoneError::NotAuthorized(String::from(parsed_error.message)),"InvalidInput" => AssociateVPCWithHostedZoneError::InvalidInput(String::from(parsed_error.message)),"ConflictingDomainExists" => AssociateVPCWithHostedZoneError::ConflictingDomainExists(String::from(parsed_error.message)),"InvalidVPCId" => AssociateVPCWithHostedZoneError::InvalidVPCId(String::from(parsed_error.message)),"LimitsExceeded" => AssociateVPCWithHostedZoneError::LimitsExceeded(String::from(parsed_error.message)),_ => AssociateVPCWithHostedZoneError::Unknown(String::from(body))
+                                    "ConflictingDomainExists" => AssociateVPCWithHostedZoneError::ConflictingDomainExists(String::from(parsed_error.message)),"InvalidInput" => AssociateVPCWithHostedZoneError::InvalidInput(String::from(parsed_error.message)),"InvalidVPCId" => AssociateVPCWithHostedZoneError::InvalidVPCId(String::from(parsed_error.message)),"LimitsExceeded" => AssociateVPCWithHostedZoneError::LimitsExceeded(String::from(parsed_error.message)),"NoSuchHostedZone" => AssociateVPCWithHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),"NotAuthorizedException" => AssociateVPCWithHostedZoneError::NotAuthorized(String::from(parsed_error.message)),"PublicZoneVPCAssociation" => AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(String::from(parsed_error.message)),_ => AssociateVPCWithHostedZoneError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AssociateVPCWithHostedZoneError::Unknown(body.to_string())
@@ -6980,7 +6980,17 @@ Unknown(String)
                 impl Error for AssociateVPCWithHostedZoneError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssociateVPCWithHostedZoneError::InvalidVPCId(ref cause) => cause,AssociateVPCWithHostedZoneError::InvalidInput(ref cause) => cause,AssociateVPCWithHostedZoneError::ConflictingDomainExists(ref cause) => cause,AssociateVPCWithHostedZoneError::LimitsExceeded(ref cause) => cause,AssociateVPCWithHostedZoneError::NotAuthorized(ref cause) => cause,AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(ref cause) => cause,AssociateVPCWithHostedZoneError::NoSuchHostedZone(ref cause) => cause,AssociateVPCWithHostedZoneError::Validation(ref cause) => cause,AssociateVPCWithHostedZoneError::Credentials(ref err) => err.description(),AssociateVPCWithHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssociateVPCWithHostedZoneError::Unknown(ref cause) => cause
+                            AssociateVPCWithHostedZoneError::ConflictingDomainExists(ref cause) => cause,
+AssociateVPCWithHostedZoneError::InvalidInput(ref cause) => cause,
+AssociateVPCWithHostedZoneError::InvalidVPCId(ref cause) => cause,
+AssociateVPCWithHostedZoneError::LimitsExceeded(ref cause) => cause,
+AssociateVPCWithHostedZoneError::NoSuchHostedZone(ref cause) => cause,
+AssociateVPCWithHostedZoneError::NotAuthorized(ref cause) => cause,
+AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(ref cause) => cause,
+AssociateVPCWithHostedZoneError::Validation(ref cause) => cause,
+AssociateVPCWithHostedZoneError::Credentials(ref err) => err.description(),
+AssociateVPCWithHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssociateVPCWithHostedZoneError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6988,16 +6998,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ChangeResourceRecordSetsError {
                     
-///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
-PriorRequestNotComplete(String),
-///<p>No hosted zone exists with the ID that you specified.</p>
-NoSuchHostedZone(String),
-///<p>The input is not valid.</p>
-InvalidInput(String),
 ///<p>This exception contains a list of messages that might contain one or more error messages. Each error message indicates one error in the change batch.</p>
 InvalidChangeBatch(String),
+///<p>The input is not valid.</p>
+InvalidInput(String),
 ///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
-NoSuchHealthCheck(String),/// An error occurred dispatching the HTTP request
+NoSuchHealthCheck(String),
+///<p>No hosted zone exists with the ID that you specified.</p>
+NoSuchHostedZone(String),
+///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
+PriorRequestNotComplete(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7014,7 +7024,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidChangeBatch" => ChangeResourceRecordSetsError::InvalidChangeBatch(String::from(parsed_error.message)),"NoSuchHealthCheck" => ChangeResourceRecordSetsError::NoSuchHealthCheck(String::from(parsed_error.message)),"NoSuchHostedZone" => ChangeResourceRecordSetsError::NoSuchHostedZone(String::from(parsed_error.message)),"InvalidInput" => ChangeResourceRecordSetsError::InvalidInput(String::from(parsed_error.message)),"PriorRequestNotComplete" => ChangeResourceRecordSetsError::PriorRequestNotComplete(String::from(parsed_error.message)),_ => ChangeResourceRecordSetsError::Unknown(String::from(body))
+                                    "InvalidChangeBatch" => ChangeResourceRecordSetsError::InvalidChangeBatch(String::from(parsed_error.message)),"InvalidInput" => ChangeResourceRecordSetsError::InvalidInput(String::from(parsed_error.message)),"NoSuchHealthCheck" => ChangeResourceRecordSetsError::NoSuchHealthCheck(String::from(parsed_error.message)),"NoSuchHostedZone" => ChangeResourceRecordSetsError::NoSuchHostedZone(String::from(parsed_error.message)),"PriorRequestNotComplete" => ChangeResourceRecordSetsError::PriorRequestNotComplete(String::from(parsed_error.message)),_ => ChangeResourceRecordSetsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ChangeResourceRecordSetsError::Unknown(body.to_string())
@@ -7046,7 +7056,15 @@ Unknown(String)
                 impl Error for ChangeResourceRecordSetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ChangeResourceRecordSetsError::InvalidInput(ref cause) => cause,ChangeResourceRecordSetsError::NoSuchHostedZone(ref cause) => cause,ChangeResourceRecordSetsError::PriorRequestNotComplete(ref cause) => cause,ChangeResourceRecordSetsError::NoSuchHealthCheck(ref cause) => cause,ChangeResourceRecordSetsError::InvalidChangeBatch(ref cause) => cause,ChangeResourceRecordSetsError::Validation(ref cause) => cause,ChangeResourceRecordSetsError::Credentials(ref err) => err.description(),ChangeResourceRecordSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ChangeResourceRecordSetsError::Unknown(ref cause) => cause
+                            ChangeResourceRecordSetsError::InvalidChangeBatch(ref cause) => cause,
+ChangeResourceRecordSetsError::InvalidInput(ref cause) => cause,
+ChangeResourceRecordSetsError::NoSuchHealthCheck(ref cause) => cause,
+ChangeResourceRecordSetsError::NoSuchHostedZone(ref cause) => cause,
+ChangeResourceRecordSetsError::PriorRequestNotComplete(ref cause) => cause,
+ChangeResourceRecordSetsError::Validation(ref cause) => cause,
+ChangeResourceRecordSetsError::Credentials(ref err) => err.description(),
+ChangeResourceRecordSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ChangeResourceRecordSetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7054,16 +7072,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ChangeTagsForResourceError {
                     
-///<p></p>
-Throttling(String),
-///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
-NoSuchHealthCheck(String),
 ///<p>The input is not valid.</p>
 InvalidInput(String),
+///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
+NoSuchHealthCheck(String),
 ///<p>No hosted zone exists with the ID that you specified.</p>
 NoSuchHostedZone(String),
 ///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
-PriorRequestNotComplete(String),/// An error occurred dispatching the HTTP request
+PriorRequestNotComplete(String),
+///<p></p>
+Throttling(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7080,7 +7098,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchHealthCheck" => ChangeTagsForResourceError::NoSuchHealthCheck(String::from(parsed_error.message)),"PriorRequestNotComplete" => ChangeTagsForResourceError::PriorRequestNotComplete(String::from(parsed_error.message)),"NoSuchHostedZone" => ChangeTagsForResourceError::NoSuchHostedZone(String::from(parsed_error.message)),"InvalidInput" => ChangeTagsForResourceError::InvalidInput(String::from(parsed_error.message)),"ThrottlingException" => ChangeTagsForResourceError::Throttling(String::from(parsed_error.message)),_ => ChangeTagsForResourceError::Unknown(String::from(body))
+                                    "InvalidInput" => ChangeTagsForResourceError::InvalidInput(String::from(parsed_error.message)),"NoSuchHealthCheck" => ChangeTagsForResourceError::NoSuchHealthCheck(String::from(parsed_error.message)),"NoSuchHostedZone" => ChangeTagsForResourceError::NoSuchHostedZone(String::from(parsed_error.message)),"PriorRequestNotComplete" => ChangeTagsForResourceError::PriorRequestNotComplete(String::from(parsed_error.message)),"ThrottlingException" => ChangeTagsForResourceError::Throttling(String::from(parsed_error.message)),_ => ChangeTagsForResourceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ChangeTagsForResourceError::Unknown(body.to_string())
@@ -7112,7 +7130,15 @@ Unknown(String)
                 impl Error for ChangeTagsForResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ChangeTagsForResourceError::NoSuchHostedZone(ref cause) => cause,ChangeTagsForResourceError::NoSuchHealthCheck(ref cause) => cause,ChangeTagsForResourceError::InvalidInput(ref cause) => cause,ChangeTagsForResourceError::PriorRequestNotComplete(ref cause) => cause,ChangeTagsForResourceError::Throttling(ref cause) => cause,ChangeTagsForResourceError::Validation(ref cause) => cause,ChangeTagsForResourceError::Credentials(ref err) => err.description(),ChangeTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ChangeTagsForResourceError::Unknown(ref cause) => cause
+                            ChangeTagsForResourceError::InvalidInput(ref cause) => cause,
+ChangeTagsForResourceError::NoSuchHealthCheck(ref cause) => cause,
+ChangeTagsForResourceError::NoSuchHostedZone(ref cause) => cause,
+ChangeTagsForResourceError::PriorRequestNotComplete(ref cause) => cause,
+ChangeTagsForResourceError::Throttling(ref cause) => cause,
+ChangeTagsForResourceError::Validation(ref cause) => cause,
+ChangeTagsForResourceError::Credentials(ref err) => err.description(),
+ChangeTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ChangeTagsForResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7120,12 +7146,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateHealthCheckError {
                     
-///<p>You have reached the maximum number of active health checks for an AWS account. The default limit is 100. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
-TooManyHealthChecks(String),
 ///<p> The health check you're attempting to create already exists.</p> <p>Amazon Route 53 returns this error when a health check has already been created with the specified value for <code>CallerReference</code>.</p>
 HealthCheckAlreadyExists(String),
 ///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>You have reached the maximum number of active health checks for an AWS account. The default limit is 100. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
+TooManyHealthChecks(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7174,7 +7200,13 @@ Unknown(String)
                 impl Error for CreateHealthCheckError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateHealthCheckError::InvalidInput(ref cause) => cause,CreateHealthCheckError::TooManyHealthChecks(ref cause) => cause,CreateHealthCheckError::HealthCheckAlreadyExists(ref cause) => cause,CreateHealthCheckError::Validation(ref cause) => cause,CreateHealthCheckError::Credentials(ref err) => err.description(),CreateHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateHealthCheckError::Unknown(ref cause) => cause
+                            CreateHealthCheckError::HealthCheckAlreadyExists(ref cause) => cause,
+CreateHealthCheckError::InvalidInput(ref cause) => cause,
+CreateHealthCheckError::TooManyHealthChecks(ref cause) => cause,
+CreateHealthCheckError::Validation(ref cause) => cause,
+CreateHealthCheckError::Credentials(ref err) => err.description(),
+CreateHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateHealthCheckError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7182,22 +7214,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateHostedZoneError {
                     
-///<p>The VPC ID that you specified either isn't a valid ID or the current account is not authorized to access this VPC.</p>
-InvalidVPCId(String),
-///<p>A reusable delegation set with the specified ID does not exist.</p>
-NoSuchDelegationSet(String),
-///<p>The specified domain name is not valid.</p>
-InvalidDomainName(String),
-///<p>The input is not valid.</p>
-InvalidInput(String),
-///<p>The hosted zone you are trying to create already exists. Amazon Route 53 returns this error when a hosted zone has already been created with the specified <code>CallerReference</code>.</p>
-HostedZoneAlreadyExists(String),
-///<p>A reusable delegation set with the specified ID does not exist.</p>
-DelegationSetNotReusable(String),
 ///<p>You specified an Amazon VPC that you're already using for another hosted zone, and the domain that you specified for one of the hosted zones is a subdomain of the domain that you specified for the other hosted zone. For example, you can't use the same Amazon VPC for the hosted zones for example.com and test.example.com.</p>
 ConflictingDomainExists(String),
 ///<p>You can create a hosted zone that has the same name as an existing hosted zone (example.com is common), but there is a limit to the number of hosted zones that have the same name. If you get this error, Amazon Route 53 has reached that limit. If you own the domain name and Amazon Route 53 generates this error, contact Customer Support.</p>
 DelegationSetNotAvailable(String),
+///<p>A reusable delegation set with the specified ID does not exist.</p>
+DelegationSetNotReusable(String),
+///<p>The hosted zone you are trying to create already exists. Amazon Route 53 returns this error when a hosted zone has already been created with the specified <code>CallerReference</code>.</p>
+HostedZoneAlreadyExists(String),
+///<p>The specified domain name is not valid.</p>
+InvalidDomainName(String),
+///<p>The input is not valid.</p>
+InvalidInput(String),
+///<p>The VPC ID that you specified either isn't a valid ID or the current account is not authorized to access this VPC.</p>
+InvalidVPCId(String),
+///<p>A reusable delegation set with the specified ID does not exist.</p>
+NoSuchDelegationSet(String),
 ///<p>This hosted zone can't be created because the hosted zone limit is exceeded. To request a limit increase, go to the Amazon Route 53 <a href="http://aws.amazon.com/route53-request/">Contact Us</a> page.</p>
 TooManyHostedZones(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -7216,7 +7248,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidVPCId" => CreateHostedZoneError::InvalidVPCId(String::from(parsed_error.message)),"DelegationSetNotReusable" => CreateHostedZoneError::DelegationSetNotReusable(String::from(parsed_error.message)),"InvalidInput" => CreateHostedZoneError::InvalidInput(String::from(parsed_error.message)),"TooManyHostedZones" => CreateHostedZoneError::TooManyHostedZones(String::from(parsed_error.message)),"HostedZoneAlreadyExists" => CreateHostedZoneError::HostedZoneAlreadyExists(String::from(parsed_error.message)),"DelegationSetNotAvailable" => CreateHostedZoneError::DelegationSetNotAvailable(String::from(parsed_error.message)),"ConflictingDomainExists" => CreateHostedZoneError::ConflictingDomainExists(String::from(parsed_error.message)),"InvalidDomainName" => CreateHostedZoneError::InvalidDomainName(String::from(parsed_error.message)),"NoSuchDelegationSet" => CreateHostedZoneError::NoSuchDelegationSet(String::from(parsed_error.message)),_ => CreateHostedZoneError::Unknown(String::from(body))
+                                    "ConflictingDomainExists" => CreateHostedZoneError::ConflictingDomainExists(String::from(parsed_error.message)),"DelegationSetNotAvailable" => CreateHostedZoneError::DelegationSetNotAvailable(String::from(parsed_error.message)),"DelegationSetNotReusable" => CreateHostedZoneError::DelegationSetNotReusable(String::from(parsed_error.message)),"HostedZoneAlreadyExists" => CreateHostedZoneError::HostedZoneAlreadyExists(String::from(parsed_error.message)),"InvalidDomainName" => CreateHostedZoneError::InvalidDomainName(String::from(parsed_error.message)),"InvalidInput" => CreateHostedZoneError::InvalidInput(String::from(parsed_error.message)),"InvalidVPCId" => CreateHostedZoneError::InvalidVPCId(String::from(parsed_error.message)),"NoSuchDelegationSet" => CreateHostedZoneError::NoSuchDelegationSet(String::from(parsed_error.message)),"TooManyHostedZones" => CreateHostedZoneError::TooManyHostedZones(String::from(parsed_error.message)),_ => CreateHostedZoneError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateHostedZoneError::Unknown(body.to_string())
@@ -7248,7 +7280,19 @@ Unknown(String)
                 impl Error for CreateHostedZoneError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateHostedZoneError::InvalidDomainName(ref cause) => cause,CreateHostedZoneError::NoSuchDelegationSet(ref cause) => cause,CreateHostedZoneError::HostedZoneAlreadyExists(ref cause) => cause,CreateHostedZoneError::TooManyHostedZones(ref cause) => cause,CreateHostedZoneError::InvalidInput(ref cause) => cause,CreateHostedZoneError::DelegationSetNotAvailable(ref cause) => cause,CreateHostedZoneError::ConflictingDomainExists(ref cause) => cause,CreateHostedZoneError::DelegationSetNotReusable(ref cause) => cause,CreateHostedZoneError::InvalidVPCId(ref cause) => cause,CreateHostedZoneError::Validation(ref cause) => cause,CreateHostedZoneError::Credentials(ref err) => err.description(),CreateHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateHostedZoneError::Unknown(ref cause) => cause
+                            CreateHostedZoneError::ConflictingDomainExists(ref cause) => cause,
+CreateHostedZoneError::DelegationSetNotAvailable(ref cause) => cause,
+CreateHostedZoneError::DelegationSetNotReusable(ref cause) => cause,
+CreateHostedZoneError::HostedZoneAlreadyExists(ref cause) => cause,
+CreateHostedZoneError::InvalidDomainName(ref cause) => cause,
+CreateHostedZoneError::InvalidInput(ref cause) => cause,
+CreateHostedZoneError::InvalidVPCId(ref cause) => cause,
+CreateHostedZoneError::NoSuchDelegationSet(ref cause) => cause,
+CreateHostedZoneError::TooManyHostedZones(ref cause) => cause,
+CreateHostedZoneError::Validation(ref cause) => cause,
+CreateHostedZoneError::Credentials(ref err) => err.description(),
+CreateHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateHostedZoneError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7256,20 +7300,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateReusableDelegationSetError {
                     
-///<p>The limits specified for a resource have been exceeded.</p>
-LimitsExceeded(String),
-///<p>The input is not valid.</p>
-InvalidInput(String),
-///<p>You can create a hosted zone that has the same name as an existing hosted zone (example.com is common), but there is a limit to the number of hosted zones that have the same name. If you get this error, Amazon Route 53 has reached that limit. If you own the domain name and Amazon Route 53 generates this error, contact Customer Support.</p>
-DelegationSetNotAvailable(String),
-///<p>Parameter name and problem.</p>
-InvalidArgument(String),
 ///<p>A delegation set with the same owner and caller reference combination has already been created.</p>
 DelegationSetAlreadyCreated(String),
+///<p>The specified delegation set has already been marked as reusable.</p>
+DelegationSetAlreadyReusable(String),
+///<p>You can create a hosted zone that has the same name as an existing hosted zone (example.com is common), but there is a limit to the number of hosted zones that have the same name. If you get this error, Amazon Route 53 has reached that limit. If you own the domain name and Amazon Route 53 generates this error, contact Customer Support.</p>
+DelegationSetNotAvailable(String),
 ///<p>The specified HostedZone can't be found.</p>
 HostedZoneNotFound(String),
-///<p>The specified delegation set has already been marked as reusable.</p>
-DelegationSetAlreadyReusable(String),/// An error occurred dispatching the HTTP request
+///<p>Parameter name and problem.</p>
+InvalidArgument(String),
+///<p>The input is not valid.</p>
+InvalidInput(String),
+///<p>The limits specified for a resource have been exceeded.</p>
+LimitsExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7286,7 +7330,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DelegationSetNotAvailable" => CreateReusableDelegationSetError::DelegationSetNotAvailable(String::from(parsed_error.message)),"LimitsExceeded" => CreateReusableDelegationSetError::LimitsExceeded(String::from(parsed_error.message)),"InvalidArgument" => CreateReusableDelegationSetError::InvalidArgument(String::from(parsed_error.message)),"DelegationSetAlreadyCreated" => CreateReusableDelegationSetError::DelegationSetAlreadyCreated(String::from(parsed_error.message)),"DelegationSetAlreadyReusable" => CreateReusableDelegationSetError::DelegationSetAlreadyReusable(String::from(parsed_error.message)),"HostedZoneNotFound" => CreateReusableDelegationSetError::HostedZoneNotFound(String::from(parsed_error.message)),"InvalidInput" => CreateReusableDelegationSetError::InvalidInput(String::from(parsed_error.message)),_ => CreateReusableDelegationSetError::Unknown(String::from(body))
+                                    "DelegationSetAlreadyCreated" => CreateReusableDelegationSetError::DelegationSetAlreadyCreated(String::from(parsed_error.message)),"DelegationSetAlreadyReusable" => CreateReusableDelegationSetError::DelegationSetAlreadyReusable(String::from(parsed_error.message)),"DelegationSetNotAvailable" => CreateReusableDelegationSetError::DelegationSetNotAvailable(String::from(parsed_error.message)),"HostedZoneNotFound" => CreateReusableDelegationSetError::HostedZoneNotFound(String::from(parsed_error.message)),"InvalidArgument" => CreateReusableDelegationSetError::InvalidArgument(String::from(parsed_error.message)),"InvalidInput" => CreateReusableDelegationSetError::InvalidInput(String::from(parsed_error.message)),"LimitsExceeded" => CreateReusableDelegationSetError::LimitsExceeded(String::from(parsed_error.message)),_ => CreateReusableDelegationSetError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateReusableDelegationSetError::Unknown(body.to_string())
@@ -7318,7 +7362,17 @@ Unknown(String)
                 impl Error for CreateReusableDelegationSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateReusableDelegationSetError::DelegationSetNotAvailable(ref cause) => cause,CreateReusableDelegationSetError::LimitsExceeded(ref cause) => cause,CreateReusableDelegationSetError::DelegationSetAlreadyReusable(ref cause) => cause,CreateReusableDelegationSetError::InvalidInput(ref cause) => cause,CreateReusableDelegationSetError::InvalidArgument(ref cause) => cause,CreateReusableDelegationSetError::DelegationSetAlreadyCreated(ref cause) => cause,CreateReusableDelegationSetError::HostedZoneNotFound(ref cause) => cause,CreateReusableDelegationSetError::Validation(ref cause) => cause,CreateReusableDelegationSetError::Credentials(ref err) => err.description(),CreateReusableDelegationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateReusableDelegationSetError::Unknown(ref cause) => cause
+                            CreateReusableDelegationSetError::DelegationSetAlreadyCreated(ref cause) => cause,
+CreateReusableDelegationSetError::DelegationSetAlreadyReusable(ref cause) => cause,
+CreateReusableDelegationSetError::DelegationSetNotAvailable(ref cause) => cause,
+CreateReusableDelegationSetError::HostedZoneNotFound(ref cause) => cause,
+CreateReusableDelegationSetError::InvalidArgument(ref cause) => cause,
+CreateReusableDelegationSetError::InvalidInput(ref cause) => cause,
+CreateReusableDelegationSetError::LimitsExceeded(ref cause) => cause,
+CreateReusableDelegationSetError::Validation(ref cause) => cause,
+CreateReusableDelegationSetError::Credentials(ref err) => err.description(),
+CreateReusableDelegationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateReusableDelegationSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7326,14 +7380,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateTrafficPolicyError {
                     
-///<p>A traffic policy that has the same value for <code>Name</code> already exists.</p>
-TrafficPolicyAlreadyExists(String),
-///<p>The format of the traffic policy document that you specified in the <code>Document</code> element is invalid.</p>
-InvalidTrafficPolicyDocument(String),
 ///<p>The input is not valid.</p>
 InvalidInput(String),
+///<p>The format of the traffic policy document that you specified in the <code>Document</code> element is invalid.</p>
+InvalidTrafficPolicyDocument(String),
 ///<p>You've created the maximum number of traffic policies that can be created for the current AWS account. You can request an increase to the limit on the <a href="http://aws.amazon.com/route53-request/">Contact Us</a> page.</p>
-TooManyTrafficPolicies(String),/// An error occurred dispatching the HTTP request
+TooManyTrafficPolicies(String),
+///<p>A traffic policy that has the same value for <code>Name</code> already exists.</p>
+TrafficPolicyAlreadyExists(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7350,7 +7404,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TooManyTrafficPolicies" => CreateTrafficPolicyError::TooManyTrafficPolicies(String::from(parsed_error.message)),"InvalidInput" => CreateTrafficPolicyError::InvalidInput(String::from(parsed_error.message)),"TrafficPolicyAlreadyExists" => CreateTrafficPolicyError::TrafficPolicyAlreadyExists(String::from(parsed_error.message)),"InvalidTrafficPolicyDocument" => CreateTrafficPolicyError::InvalidTrafficPolicyDocument(String::from(parsed_error.message)),_ => CreateTrafficPolicyError::Unknown(String::from(body))
+                                    "InvalidInput" => CreateTrafficPolicyError::InvalidInput(String::from(parsed_error.message)),"InvalidTrafficPolicyDocument" => CreateTrafficPolicyError::InvalidTrafficPolicyDocument(String::from(parsed_error.message)),"TooManyTrafficPolicies" => CreateTrafficPolicyError::TooManyTrafficPolicies(String::from(parsed_error.message)),"TrafficPolicyAlreadyExists" => CreateTrafficPolicyError::TrafficPolicyAlreadyExists(String::from(parsed_error.message)),_ => CreateTrafficPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateTrafficPolicyError::Unknown(body.to_string())
@@ -7382,7 +7436,14 @@ Unknown(String)
                 impl Error for CreateTrafficPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateTrafficPolicyError::TrafficPolicyAlreadyExists(ref cause) => cause,CreateTrafficPolicyError::InvalidInput(ref cause) => cause,CreateTrafficPolicyError::InvalidTrafficPolicyDocument(ref cause) => cause,CreateTrafficPolicyError::TooManyTrafficPolicies(ref cause) => cause,CreateTrafficPolicyError::Validation(ref cause) => cause,CreateTrafficPolicyError::Credentials(ref err) => err.description(),CreateTrafficPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateTrafficPolicyError::Unknown(ref cause) => cause
+                            CreateTrafficPolicyError::InvalidInput(ref cause) => cause,
+CreateTrafficPolicyError::InvalidTrafficPolicyDocument(ref cause) => cause,
+CreateTrafficPolicyError::TooManyTrafficPolicies(ref cause) => cause,
+CreateTrafficPolicyError::TrafficPolicyAlreadyExists(ref cause) => cause,
+CreateTrafficPolicyError::Validation(ref cause) => cause,
+CreateTrafficPolicyError::Credentials(ref err) => err.description(),
+CreateTrafficPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateTrafficPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7390,16 +7451,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateTrafficPolicyInstanceError {
                     
-///<p>Traffic policy instance with given Id already exists.</p>
-TrafficPolicyInstanceAlreadyExists(String),
-///<p>No hosted zone exists with the ID that you specified.</p>
-NoSuchHostedZone(String),
 ///<p>The input is not valid.</p>
 InvalidInput(String),
+///<p>No hosted zone exists with the ID that you specified.</p>
+NoSuchHostedZone(String),
+///<p>No traffic policy exists with the specified ID.</p>
+NoSuchTrafficPolicy(String),
 ///<p>You've created the maximum number of traffic policy instances that can be created for the current AWS account. You can request an increase to the limit on the <a href="http://aws.amazon.com/route53-request/">Contact Us</a> page.</p>
 TooManyTrafficPolicyInstances(String),
-///<p>No traffic policy exists with the specified ID.</p>
-NoSuchTrafficPolicy(String),/// An error occurred dispatching the HTTP request
+///<p>Traffic policy instance with given Id already exists.</p>
+TrafficPolicyInstanceAlreadyExists(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7416,7 +7477,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TooManyTrafficPolicyInstances" => CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(String::from(parsed_error.message)),"NoSuchTrafficPolicy" => CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(parsed_error.message)),"InvalidInput" => CreateTrafficPolicyInstanceError::InvalidInput(String::from(parsed_error.message)),"NoSuchHostedZone" => CreateTrafficPolicyInstanceError::NoSuchHostedZone(String::from(parsed_error.message)),"TrafficPolicyInstanceAlreadyExists" => CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(String::from(parsed_error.message)),_ => CreateTrafficPolicyInstanceError::Unknown(String::from(body))
+                                    "InvalidInput" => CreateTrafficPolicyInstanceError::InvalidInput(String::from(parsed_error.message)),"NoSuchHostedZone" => CreateTrafficPolicyInstanceError::NoSuchHostedZone(String::from(parsed_error.message)),"NoSuchTrafficPolicy" => CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(parsed_error.message)),"TooManyTrafficPolicyInstances" => CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(String::from(parsed_error.message)),"TrafficPolicyInstanceAlreadyExists" => CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(String::from(parsed_error.message)),_ => CreateTrafficPolicyInstanceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateTrafficPolicyInstanceError::Unknown(body.to_string())
@@ -7448,7 +7509,15 @@ Unknown(String)
                 impl Error for CreateTrafficPolicyInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(ref cause) => cause,CreateTrafficPolicyInstanceError::NoSuchHostedZone(ref cause) => cause,CreateTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(ref cause) => cause,CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(ref cause) => cause,CreateTrafficPolicyInstanceError::Validation(ref cause) => cause,CreateTrafficPolicyInstanceError::Credentials(ref err) => err.description(),CreateTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateTrafficPolicyInstanceError::Unknown(ref cause) => cause
+                            CreateTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,
+CreateTrafficPolicyInstanceError::NoSuchHostedZone(ref cause) => cause,
+CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(ref cause) => cause,
+CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(ref cause) => cause,
+CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(ref cause) => cause,
+CreateTrafficPolicyInstanceError::Validation(ref cause) => cause,
+CreateTrafficPolicyInstanceError::Credentials(ref err) => err.description(),
+CreateTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateTrafficPolicyInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7458,12 +7527,12 @@ Unknown(String)
                     
 ///<p>Another user submitted a request to update the object at the same time that you did. Retry the request. </p>
 ConcurrentModification(String),
-///<p>No traffic policy exists with the specified ID.</p>
-NoSuchTrafficPolicy(String),
 ///<p>The input is not valid.</p>
 InvalidInput(String),
 ///<p>The format of the traffic policy document that you specified in the <code>Document</code> element is invalid.</p>
-InvalidTrafficPolicyDocument(String),/// An error occurred dispatching the HTTP request
+InvalidTrafficPolicyDocument(String),
+///<p>No traffic policy exists with the specified ID.</p>
+NoSuchTrafficPolicy(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7480,7 +7549,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchTrafficPolicy" => CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(String::from(parsed_error.message)),"InvalidInput" => CreateTrafficPolicyVersionError::InvalidInput(String::from(parsed_error.message)),"ConcurrentModification" => CreateTrafficPolicyVersionError::ConcurrentModification(String::from(parsed_error.message)),"InvalidTrafficPolicyDocument" => CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(String::from(parsed_error.message)),_ => CreateTrafficPolicyVersionError::Unknown(String::from(body))
+                                    "ConcurrentModification" => CreateTrafficPolicyVersionError::ConcurrentModification(String::from(parsed_error.message)),"InvalidInput" => CreateTrafficPolicyVersionError::InvalidInput(String::from(parsed_error.message)),"InvalidTrafficPolicyDocument" => CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(String::from(parsed_error.message)),"NoSuchTrafficPolicy" => CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(String::from(parsed_error.message)),_ => CreateTrafficPolicyVersionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateTrafficPolicyVersionError::Unknown(body.to_string())
@@ -7512,7 +7581,14 @@ Unknown(String)
                 impl Error for CreateTrafficPolicyVersionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateTrafficPolicyVersionError::InvalidInput(ref cause) => cause,CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(ref cause) => cause,CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(ref cause) => cause,CreateTrafficPolicyVersionError::ConcurrentModification(ref cause) => cause,CreateTrafficPolicyVersionError::Validation(ref cause) => cause,CreateTrafficPolicyVersionError::Credentials(ref err) => err.description(),CreateTrafficPolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateTrafficPolicyVersionError::Unknown(ref cause) => cause
+                            CreateTrafficPolicyVersionError::ConcurrentModification(ref cause) => cause,
+CreateTrafficPolicyVersionError::InvalidInput(ref cause) => cause,
+CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(ref cause) => cause,
+CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(ref cause) => cause,
+CreateTrafficPolicyVersionError::Validation(ref cause) => cause,
+CreateTrafficPolicyVersionError::Credentials(ref err) => err.description(),
+CreateTrafficPolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateTrafficPolicyVersionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7520,14 +7596,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateVPCAssociationAuthorizationError {
                     
-///<p>You've created the maximum number of authorizations that can be created for the specified hosted zone. To authorize another VPC to be associated with the hosted zone, submit a <code>DeleteVPCAssociationAuthorization</code> request to remove an existing authorization. To get a list of existing authorizations, submit a <code>ListVPCAssociationAuthorizations</code> request.</p>
-TooManyVPCAssociationAuthorizations(String),
-///<p>No hosted zone exists with the ID that you specified.</p>
-NoSuchHostedZone(String),
+///<p>The input is not valid.</p>
+InvalidInput(String),
 ///<p>The VPC ID that you specified either isn't a valid ID or the current account is not authorized to access this VPC.</p>
 InvalidVPCId(String),
-///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+///<p>No hosted zone exists with the ID that you specified.</p>
+NoSuchHostedZone(String),
+///<p>You've created the maximum number of authorizations that can be created for the specified hosted zone. To authorize another VPC to be associated with the hosted zone, submit a <code>DeleteVPCAssociationAuthorization</code> request to remove an existing authorization. To get a list of existing authorizations, submit a <code>ListVPCAssociationAuthorizations</code> request.</p>
+TooManyVPCAssociationAuthorizations(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7544,7 +7620,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchHostedZone" => CreateVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(parsed_error.message)),"InvalidInput" => CreateVPCAssociationAuthorizationError::InvalidInput(String::from(parsed_error.message)),"TooManyVPCAssociationAuthorizations" => CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(String::from(parsed_error.message)),"InvalidVPCId" => CreateVPCAssociationAuthorizationError::InvalidVPCId(String::from(parsed_error.message)),_ => CreateVPCAssociationAuthorizationError::Unknown(String::from(body))
+                                    "InvalidInput" => CreateVPCAssociationAuthorizationError::InvalidInput(String::from(parsed_error.message)),"InvalidVPCId" => CreateVPCAssociationAuthorizationError::InvalidVPCId(String::from(parsed_error.message)),"NoSuchHostedZone" => CreateVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(parsed_error.message)),"TooManyVPCAssociationAuthorizations" => CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(String::from(parsed_error.message)),_ => CreateVPCAssociationAuthorizationError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateVPCAssociationAuthorizationError::Unknown(body.to_string())
@@ -7576,7 +7652,14 @@ Unknown(String)
                 impl Error for CreateVPCAssociationAuthorizationError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateVPCAssociationAuthorizationError::InvalidInput(ref cause) => cause,CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(ref cause) => cause,CreateVPCAssociationAuthorizationError::NoSuchHostedZone(ref cause) => cause,CreateVPCAssociationAuthorizationError::InvalidVPCId(ref cause) => cause,CreateVPCAssociationAuthorizationError::Validation(ref cause) => cause,CreateVPCAssociationAuthorizationError::Credentials(ref err) => err.description(),CreateVPCAssociationAuthorizationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateVPCAssociationAuthorizationError::Unknown(ref cause) => cause
+                            CreateVPCAssociationAuthorizationError::InvalidInput(ref cause) => cause,
+CreateVPCAssociationAuthorizationError::InvalidVPCId(ref cause) => cause,
+CreateVPCAssociationAuthorizationError::NoSuchHostedZone(ref cause) => cause,
+CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(ref cause) => cause,
+CreateVPCAssociationAuthorizationError::Validation(ref cause) => cause,
+CreateVPCAssociationAuthorizationError::Credentials(ref err) => err.description(),
+CreateVPCAssociationAuthorizationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateVPCAssociationAuthorizationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7586,10 +7669,10 @@ Unknown(String)
                     
 ///<p>The health check ID for this health check is referenced in the <code>HealthCheckId</code> element in one of the resource record sets in one of the hosted zones that are owned by the current AWS account.</p>
 HealthCheckInUse(String),
-///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
-NoSuchHealthCheck(String),
 ///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
+NoSuchHealthCheck(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7606,7 +7689,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidInput" => DeleteHealthCheckError::InvalidInput(String::from(parsed_error.message)),"HealthCheckInUse" => DeleteHealthCheckError::HealthCheckInUse(String::from(parsed_error.message)),"NoSuchHealthCheck" => DeleteHealthCheckError::NoSuchHealthCheck(String::from(parsed_error.message)),_ => DeleteHealthCheckError::Unknown(String::from(body))
+                                    "HealthCheckInUse" => DeleteHealthCheckError::HealthCheckInUse(String::from(parsed_error.message)),"InvalidInput" => DeleteHealthCheckError::InvalidInput(String::from(parsed_error.message)),"NoSuchHealthCheck" => DeleteHealthCheckError::NoSuchHealthCheck(String::from(parsed_error.message)),_ => DeleteHealthCheckError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteHealthCheckError::Unknown(body.to_string())
@@ -7638,7 +7721,13 @@ Unknown(String)
                 impl Error for DeleteHealthCheckError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteHealthCheckError::NoSuchHealthCheck(ref cause) => cause,DeleteHealthCheckError::HealthCheckInUse(ref cause) => cause,DeleteHealthCheckError::InvalidInput(ref cause) => cause,DeleteHealthCheckError::Validation(ref cause) => cause,DeleteHealthCheckError::Credentials(ref err) => err.description(),DeleteHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteHealthCheckError::Unknown(ref cause) => cause
+                            DeleteHealthCheckError::HealthCheckInUse(ref cause) => cause,
+DeleteHealthCheckError::InvalidInput(ref cause) => cause,
+DeleteHealthCheckError::NoSuchHealthCheck(ref cause) => cause,
+DeleteHealthCheckError::Validation(ref cause) => cause,
+DeleteHealthCheckError::Credentials(ref err) => err.description(),
+DeleteHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteHealthCheckError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7646,16 +7735,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteHostedZoneError {
                     
-///<p>No hosted zone exists with the ID that you specified.</p>
-NoSuchHostedZone(String),
-///<p>The input is not valid.</p>
-InvalidInput(String),
 ///<p>The hosted zone contains resource records that are not SOA or NS records.</p>
 HostedZoneNotEmpty(String),
-///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
-PriorRequestNotComplete(String),
 ///<p>The specified domain name is not valid.</p>
-InvalidDomainName(String),/// An error occurred dispatching the HTTP request
+InvalidDomainName(String),
+///<p>The input is not valid.</p>
+InvalidInput(String),
+///<p>No hosted zone exists with the ID that you specified.</p>
+NoSuchHostedZone(String),
+///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
+PriorRequestNotComplete(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7672,7 +7761,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidInput" => DeleteHostedZoneError::InvalidInput(String::from(parsed_error.message)),"HostedZoneNotEmpty" => DeleteHostedZoneError::HostedZoneNotEmpty(String::from(parsed_error.message)),"InvalidDomainName" => DeleteHostedZoneError::InvalidDomainName(String::from(parsed_error.message)),"PriorRequestNotComplete" => DeleteHostedZoneError::PriorRequestNotComplete(String::from(parsed_error.message)),"NoSuchHostedZone" => DeleteHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),_ => DeleteHostedZoneError::Unknown(String::from(body))
+                                    "HostedZoneNotEmpty" => DeleteHostedZoneError::HostedZoneNotEmpty(String::from(parsed_error.message)),"InvalidDomainName" => DeleteHostedZoneError::InvalidDomainName(String::from(parsed_error.message)),"InvalidInput" => DeleteHostedZoneError::InvalidInput(String::from(parsed_error.message)),"NoSuchHostedZone" => DeleteHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),"PriorRequestNotComplete" => DeleteHostedZoneError::PriorRequestNotComplete(String::from(parsed_error.message)),_ => DeleteHostedZoneError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteHostedZoneError::Unknown(body.to_string())
@@ -7704,7 +7793,15 @@ Unknown(String)
                 impl Error for DeleteHostedZoneError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteHostedZoneError::NoSuchHostedZone(ref cause) => cause,DeleteHostedZoneError::HostedZoneNotEmpty(ref cause) => cause,DeleteHostedZoneError::PriorRequestNotComplete(ref cause) => cause,DeleteHostedZoneError::InvalidInput(ref cause) => cause,DeleteHostedZoneError::InvalidDomainName(ref cause) => cause,DeleteHostedZoneError::Validation(ref cause) => cause,DeleteHostedZoneError::Credentials(ref err) => err.description(),DeleteHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteHostedZoneError::Unknown(ref cause) => cause
+                            DeleteHostedZoneError::HostedZoneNotEmpty(ref cause) => cause,
+DeleteHostedZoneError::InvalidDomainName(ref cause) => cause,
+DeleteHostedZoneError::InvalidInput(ref cause) => cause,
+DeleteHostedZoneError::NoSuchHostedZone(ref cause) => cause,
+DeleteHostedZoneError::PriorRequestNotComplete(ref cause) => cause,
+DeleteHostedZoneError::Validation(ref cause) => cause,
+DeleteHostedZoneError::Credentials(ref err) => err.description(),
+DeleteHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteHostedZoneError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7712,14 +7809,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteReusableDelegationSetError {
                     
-///<p>A reusable delegation set with the specified ID does not exist.</p>
-NoSuchDelegationSet(String),
-///<p>The input is not valid.</p>
-InvalidInput(String),
 ///<p>The specified delegation contains associated hosted zones which must be deleted before the reusable delegation set can be deleted.</p>
 DelegationSetInUse(String),
 ///<p>A reusable delegation set with the specified ID does not exist.</p>
-DelegationSetNotReusable(String),/// An error occurred dispatching the HTTP request
+DelegationSetNotReusable(String),
+///<p>The input is not valid.</p>
+InvalidInput(String),
+///<p>A reusable delegation set with the specified ID does not exist.</p>
+NoSuchDelegationSet(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7768,7 +7865,14 @@ Unknown(String)
                 impl Error for DeleteReusableDelegationSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteReusableDelegationSetError::DelegationSetInUse(ref cause) => cause,DeleteReusableDelegationSetError::NoSuchDelegationSet(ref cause) => cause,DeleteReusableDelegationSetError::InvalidInput(ref cause) => cause,DeleteReusableDelegationSetError::DelegationSetNotReusable(ref cause) => cause,DeleteReusableDelegationSetError::Validation(ref cause) => cause,DeleteReusableDelegationSetError::Credentials(ref err) => err.description(),DeleteReusableDelegationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteReusableDelegationSetError::Unknown(ref cause) => cause
+                            DeleteReusableDelegationSetError::DelegationSetInUse(ref cause) => cause,
+DeleteReusableDelegationSetError::DelegationSetNotReusable(ref cause) => cause,
+DeleteReusableDelegationSetError::InvalidInput(ref cause) => cause,
+DeleteReusableDelegationSetError::NoSuchDelegationSet(ref cause) => cause,
+DeleteReusableDelegationSetError::Validation(ref cause) => cause,
+DeleteReusableDelegationSetError::Credentials(ref err) => err.description(),
+DeleteReusableDelegationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteReusableDelegationSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7778,12 +7882,12 @@ Unknown(String)
                     
 ///<p>Another user submitted a request to update the object at the same time that you did. Retry the request. </p>
 ConcurrentModification(String),
-///<p>One or more traffic policy instances were created by using the specified traffic policy.</p>
-TrafficPolicyInUse(String),
+///<p>The input is not valid.</p>
+InvalidInput(String),
 ///<p>No traffic policy exists with the specified ID.</p>
 NoSuchTrafficPolicy(String),
-///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+///<p>One or more traffic policy instances were created by using the specified traffic policy.</p>
+TrafficPolicyInUse(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7800,7 +7904,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TrafficPolicyInUse" => DeleteTrafficPolicyError::TrafficPolicyInUse(String::from(parsed_error.message)),"NoSuchTrafficPolicy" => DeleteTrafficPolicyError::NoSuchTrafficPolicy(String::from(parsed_error.message)),"ConcurrentModification" => DeleteTrafficPolicyError::ConcurrentModification(String::from(parsed_error.message)),"InvalidInput" => DeleteTrafficPolicyError::InvalidInput(String::from(parsed_error.message)),_ => DeleteTrafficPolicyError::Unknown(String::from(body))
+                                    "ConcurrentModification" => DeleteTrafficPolicyError::ConcurrentModification(String::from(parsed_error.message)),"InvalidInput" => DeleteTrafficPolicyError::InvalidInput(String::from(parsed_error.message)),"NoSuchTrafficPolicy" => DeleteTrafficPolicyError::NoSuchTrafficPolicy(String::from(parsed_error.message)),"TrafficPolicyInUse" => DeleteTrafficPolicyError::TrafficPolicyInUse(String::from(parsed_error.message)),_ => DeleteTrafficPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteTrafficPolicyError::Unknown(body.to_string())
@@ -7832,7 +7936,14 @@ Unknown(String)
                 impl Error for DeleteTrafficPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteTrafficPolicyError::TrafficPolicyInUse(ref cause) => cause,DeleteTrafficPolicyError::ConcurrentModification(ref cause) => cause,DeleteTrafficPolicyError::InvalidInput(ref cause) => cause,DeleteTrafficPolicyError::NoSuchTrafficPolicy(ref cause) => cause,DeleteTrafficPolicyError::Validation(ref cause) => cause,DeleteTrafficPolicyError::Credentials(ref err) => err.description(),DeleteTrafficPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteTrafficPolicyError::Unknown(ref cause) => cause
+                            DeleteTrafficPolicyError::ConcurrentModification(ref cause) => cause,
+DeleteTrafficPolicyError::InvalidInput(ref cause) => cause,
+DeleteTrafficPolicyError::NoSuchTrafficPolicy(ref cause) => cause,
+DeleteTrafficPolicyError::TrafficPolicyInUse(ref cause) => cause,
+DeleteTrafficPolicyError::Validation(ref cause) => cause,
+DeleteTrafficPolicyError::Credentials(ref err) => err.description(),
+DeleteTrafficPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteTrafficPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7840,10 +7951,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteTrafficPolicyInstanceError {
                     
-///<p>No traffic policy instance exists with the specified ID.</p>
-NoSuchTrafficPolicyInstance(String),
 ///<p>The input is not valid.</p>
 InvalidInput(String),
+///<p>No traffic policy instance exists with the specified ID.</p>
+NoSuchTrafficPolicyInstance(String),
 ///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
 PriorRequestNotComplete(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -7894,7 +8005,13 @@ Unknown(String)
                 impl Error for DeleteTrafficPolicyInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(ref cause) => cause,DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,DeleteTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,DeleteTrafficPolicyInstanceError::Validation(ref cause) => cause,DeleteTrafficPolicyInstanceError::Credentials(ref err) => err.description(),DeleteTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteTrafficPolicyInstanceError::Unknown(ref cause) => cause
+                            DeleteTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,
+DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,
+DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(ref cause) => cause,
+DeleteTrafficPolicyInstanceError::Validation(ref cause) => cause,
+DeleteTrafficPolicyInstanceError::Credentials(ref err) => err.description(),
+DeleteTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteTrafficPolicyInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7902,10 +8019,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteVPCAssociationAuthorizationError {
                     
-///<p>The VPC ID that you specified either isn't a valid ID or the current account is not authorized to access this VPC.</p>
-InvalidVPCId(String),
 ///<p>The input is not valid.</p>
 InvalidInput(String),
+///<p>The VPC ID that you specified either isn't a valid ID or the current account is not authorized to access this VPC.</p>
+InvalidVPCId(String),
 ///<p>No hosted zone exists with the ID that you specified.</p>
 NoSuchHostedZone(String),
 ///<p>The VPC that you specified is not authorized to be associated with the hosted zone.</p>
@@ -7926,7 +8043,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "VPCAssociationAuthorizationNotFound" => DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(String::from(parsed_error.message)),"InvalidVPCId" => DeleteVPCAssociationAuthorizationError::InvalidVPCId(String::from(parsed_error.message)),"NoSuchHostedZone" => DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(parsed_error.message)),"InvalidInput" => DeleteVPCAssociationAuthorizationError::InvalidInput(String::from(parsed_error.message)),_ => DeleteVPCAssociationAuthorizationError::Unknown(String::from(body))
+                                    "InvalidInput" => DeleteVPCAssociationAuthorizationError::InvalidInput(String::from(parsed_error.message)),"InvalidVPCId" => DeleteVPCAssociationAuthorizationError::InvalidVPCId(String::from(parsed_error.message)),"NoSuchHostedZone" => DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(parsed_error.message)),"VPCAssociationAuthorizationNotFound" => DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(String::from(parsed_error.message)),_ => DeleteVPCAssociationAuthorizationError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteVPCAssociationAuthorizationError::Unknown(body.to_string())
@@ -7958,7 +8075,14 @@ Unknown(String)
                 impl Error for DeleteVPCAssociationAuthorizationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(ref cause) => cause,DeleteVPCAssociationAuthorizationError::InvalidInput(ref cause) => cause,DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(ref cause) => cause,DeleteVPCAssociationAuthorizationError::InvalidVPCId(ref cause) => cause,DeleteVPCAssociationAuthorizationError::Validation(ref cause) => cause,DeleteVPCAssociationAuthorizationError::Credentials(ref err) => err.description(),DeleteVPCAssociationAuthorizationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteVPCAssociationAuthorizationError::Unknown(ref cause) => cause
+                            DeleteVPCAssociationAuthorizationError::InvalidInput(ref cause) => cause,
+DeleteVPCAssociationAuthorizationError::InvalidVPCId(ref cause) => cause,
+DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(ref cause) => cause,
+DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(ref cause) => cause,
+DeleteVPCAssociationAuthorizationError::Validation(ref cause) => cause,
+DeleteVPCAssociationAuthorizationError::Credentials(ref err) => err.description(),
+DeleteVPCAssociationAuthorizationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteVPCAssociationAuthorizationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7966,6 +8090,8 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DisassociateVPCFromHostedZoneError {
                     
+///<p>The input is not valid.</p>
+InvalidInput(String),
 ///<p>The VPC ID that you specified either isn't a valid ID or the current account is not authorized to access this VPC.</p>
 InvalidVPCId(String),
 ///<p>The VPC that you're trying to disassociate from the private hosted zone is the last VPC that is associated with the hosted zone. Amazon Route 53 doesn't support disassociating the last VPC from a hosted zone.</p>
@@ -7973,9 +8099,7 @@ LastVPCAssociation(String),
 ///<p>No hosted zone exists with the ID that you specified.</p>
 NoSuchHostedZone(String),
 ///<p>The specified VPC and hosted zone are not currently associated.</p>
-VPCAssociationNotFound(String),
-///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+VPCAssociationNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7992,7 +8116,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LastVPCAssociation" => DisassociateVPCFromHostedZoneError::LastVPCAssociation(String::from(parsed_error.message)),"InvalidVPCId" => DisassociateVPCFromHostedZoneError::InvalidVPCId(String::from(parsed_error.message)),"VPCAssociationNotFound" => DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(String::from(parsed_error.message)),"InvalidInput" => DisassociateVPCFromHostedZoneError::InvalidInput(String::from(parsed_error.message)),"NoSuchHostedZone" => DisassociateVPCFromHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),_ => DisassociateVPCFromHostedZoneError::Unknown(String::from(body))
+                                    "InvalidInput" => DisassociateVPCFromHostedZoneError::InvalidInput(String::from(parsed_error.message)),"InvalidVPCId" => DisassociateVPCFromHostedZoneError::InvalidVPCId(String::from(parsed_error.message)),"LastVPCAssociation" => DisassociateVPCFromHostedZoneError::LastVPCAssociation(String::from(parsed_error.message)),"NoSuchHostedZone" => DisassociateVPCFromHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),"VPCAssociationNotFound" => DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(String::from(parsed_error.message)),_ => DisassociateVPCFromHostedZoneError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DisassociateVPCFromHostedZoneError::Unknown(body.to_string())
@@ -8024,7 +8148,15 @@ Unknown(String)
                 impl Error for DisassociateVPCFromHostedZoneError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisassociateVPCFromHostedZoneError::LastVPCAssociation(ref cause) => cause,DisassociateVPCFromHostedZoneError::NoSuchHostedZone(ref cause) => cause,DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(ref cause) => cause,DisassociateVPCFromHostedZoneError::InvalidVPCId(ref cause) => cause,DisassociateVPCFromHostedZoneError::InvalidInput(ref cause) => cause,DisassociateVPCFromHostedZoneError::Validation(ref cause) => cause,DisassociateVPCFromHostedZoneError::Credentials(ref err) => err.description(),DisassociateVPCFromHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisassociateVPCFromHostedZoneError::Unknown(ref cause) => cause
+                            DisassociateVPCFromHostedZoneError::InvalidInput(ref cause) => cause,
+DisassociateVPCFromHostedZoneError::InvalidVPCId(ref cause) => cause,
+DisassociateVPCFromHostedZoneError::LastVPCAssociation(ref cause) => cause,
+DisassociateVPCFromHostedZoneError::NoSuchHostedZone(ref cause) => cause,
+DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(ref cause) => cause,
+DisassociateVPCFromHostedZoneError::Validation(ref cause) => cause,
+DisassociateVPCFromHostedZoneError::Credentials(ref err) => err.description(),
+DisassociateVPCFromHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisassociateVPCFromHostedZoneError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8084,7 +8216,12 @@ Unknown(String)
                 impl Error for GetChangeError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetChangeError::NoSuchChange(ref cause) => cause,GetChangeError::InvalidInput(ref cause) => cause,GetChangeError::Validation(ref cause) => cause,GetChangeError::Credentials(ref err) => err.description(),GetChangeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetChangeError::Unknown(ref cause) => cause
+                            GetChangeError::InvalidInput(ref cause) => cause,
+GetChangeError::NoSuchChange(ref cause) => cause,
+GetChangeError::Validation(ref cause) => cause,
+GetChangeError::Credentials(ref err) => err.description(),
+GetChangeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetChangeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8140,7 +8277,10 @@ Unknown(String)
                 impl Error for GetCheckerIpRangesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetCheckerIpRangesError::Validation(ref cause) => cause,GetCheckerIpRangesError::Credentials(ref err) => err.description(),GetCheckerIpRangesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetCheckerIpRangesError::Unknown(ref cause) => cause
+                            GetCheckerIpRangesError::Validation(ref cause) => cause,
+GetCheckerIpRangesError::Credentials(ref err) => err.description(),
+GetCheckerIpRangesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetCheckerIpRangesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8148,10 +8288,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetGeoLocationError {
                     
-///<p>Amazon Route 53 doesn't support the specified geolocation.</p>
-NoSuchGeoLocation(String),
 ///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>Amazon Route 53 doesn't support the specified geolocation.</p>
+NoSuchGeoLocation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8200,7 +8340,12 @@ Unknown(String)
                 impl Error for GetGeoLocationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetGeoLocationError::NoSuchGeoLocation(ref cause) => cause,GetGeoLocationError::InvalidInput(ref cause) => cause,GetGeoLocationError::Validation(ref cause) => cause,GetGeoLocationError::Credentials(ref err) => err.description(),GetGeoLocationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetGeoLocationError::Unknown(ref cause) => cause
+                            GetGeoLocationError::InvalidInput(ref cause) => cause,
+GetGeoLocationError::NoSuchGeoLocation(ref cause) => cause,
+GetGeoLocationError::Validation(ref cause) => cause,
+GetGeoLocationError::Credentials(ref err) => err.description(),
+GetGeoLocationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetGeoLocationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8208,12 +8353,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetHealthCheckError {
                     
-///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
-NoSuchHealthCheck(String),
 ///<p>The resource you are trying to access is unsupported on this Amazon Route 53 endpoint. Please consider using a newer endpoint or a tool that does so.</p>
 IncompatibleVersion(String),
 ///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
+NoSuchHealthCheck(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8230,7 +8375,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidInput" => GetHealthCheckError::InvalidInput(String::from(parsed_error.message)),"NoSuchHealthCheck" => GetHealthCheckError::NoSuchHealthCheck(String::from(parsed_error.message)),"IncompatibleVersion" => GetHealthCheckError::IncompatibleVersion(String::from(parsed_error.message)),_ => GetHealthCheckError::Unknown(String::from(body))
+                                    "IncompatibleVersion" => GetHealthCheckError::IncompatibleVersion(String::from(parsed_error.message)),"InvalidInput" => GetHealthCheckError::InvalidInput(String::from(parsed_error.message)),"NoSuchHealthCheck" => GetHealthCheckError::NoSuchHealthCheck(String::from(parsed_error.message)),_ => GetHealthCheckError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetHealthCheckError::Unknown(body.to_string())
@@ -8262,7 +8407,13 @@ Unknown(String)
                 impl Error for GetHealthCheckError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetHealthCheckError::NoSuchHealthCheck(ref cause) => cause,GetHealthCheckError::InvalidInput(ref cause) => cause,GetHealthCheckError::IncompatibleVersion(ref cause) => cause,GetHealthCheckError::Validation(ref cause) => cause,GetHealthCheckError::Credentials(ref err) => err.description(),GetHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetHealthCheckError::Unknown(ref cause) => cause
+                            GetHealthCheckError::IncompatibleVersion(ref cause) => cause,
+GetHealthCheckError::InvalidInput(ref cause) => cause,
+GetHealthCheckError::NoSuchHealthCheck(ref cause) => cause,
+GetHealthCheckError::Validation(ref cause) => cause,
+GetHealthCheckError::Credentials(ref err) => err.description(),
+GetHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetHealthCheckError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8318,7 +8469,10 @@ Unknown(String)
                 impl Error for GetHealthCheckCountError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetHealthCheckCountError::Validation(ref cause) => cause,GetHealthCheckCountError::Credentials(ref err) => err.description(),GetHealthCheckCountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetHealthCheckCountError::Unknown(ref cause) => cause
+                            GetHealthCheckCountError::Validation(ref cause) => cause,
+GetHealthCheckCountError::Credentials(ref err) => err.description(),
+GetHealthCheckCountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetHealthCheckCountError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8326,10 +8480,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetHealthCheckLastFailureReasonError {
                     
-///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
-NoSuchHealthCheck(String),
 ///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
+NoSuchHealthCheck(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8378,7 +8532,12 @@ Unknown(String)
                 impl Error for GetHealthCheckLastFailureReasonError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(ref cause) => cause,GetHealthCheckLastFailureReasonError::InvalidInput(ref cause) => cause,GetHealthCheckLastFailureReasonError::Validation(ref cause) => cause,GetHealthCheckLastFailureReasonError::Credentials(ref err) => err.description(),GetHealthCheckLastFailureReasonError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetHealthCheckLastFailureReasonError::Unknown(ref cause) => cause
+                            GetHealthCheckLastFailureReasonError::InvalidInput(ref cause) => cause,
+GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(ref cause) => cause,
+GetHealthCheckLastFailureReasonError::Validation(ref cause) => cause,
+GetHealthCheckLastFailureReasonError::Credentials(ref err) => err.description(),
+GetHealthCheckLastFailureReasonError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetHealthCheckLastFailureReasonError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8386,10 +8545,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetHealthCheckStatusError {
                     
-///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
-NoSuchHealthCheck(String),
 ///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
+NoSuchHealthCheck(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8438,7 +8597,12 @@ Unknown(String)
                 impl Error for GetHealthCheckStatusError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetHealthCheckStatusError::NoSuchHealthCheck(ref cause) => cause,GetHealthCheckStatusError::InvalidInput(ref cause) => cause,GetHealthCheckStatusError::Validation(ref cause) => cause,GetHealthCheckStatusError::Credentials(ref err) => err.description(),GetHealthCheckStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetHealthCheckStatusError::Unknown(ref cause) => cause
+                            GetHealthCheckStatusError::InvalidInput(ref cause) => cause,
+GetHealthCheckStatusError::NoSuchHealthCheck(ref cause) => cause,
+GetHealthCheckStatusError::Validation(ref cause) => cause,
+GetHealthCheckStatusError::Credentials(ref err) => err.description(),
+GetHealthCheckStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetHealthCheckStatusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8446,10 +8610,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetHostedZoneError {
                     
-///<p>No hosted zone exists with the ID that you specified.</p>
-NoSuchHostedZone(String),
 ///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>No hosted zone exists with the ID that you specified.</p>
+NoSuchHostedZone(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8466,7 +8630,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchHostedZone" => GetHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),"InvalidInput" => GetHostedZoneError::InvalidInput(String::from(parsed_error.message)),_ => GetHostedZoneError::Unknown(String::from(body))
+                                    "InvalidInput" => GetHostedZoneError::InvalidInput(String::from(parsed_error.message)),"NoSuchHostedZone" => GetHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),_ => GetHostedZoneError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetHostedZoneError::Unknown(body.to_string())
@@ -8498,7 +8662,12 @@ Unknown(String)
                 impl Error for GetHostedZoneError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetHostedZoneError::NoSuchHostedZone(ref cause) => cause,GetHostedZoneError::InvalidInput(ref cause) => cause,GetHostedZoneError::Validation(ref cause) => cause,GetHostedZoneError::Credentials(ref err) => err.description(),GetHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetHostedZoneError::Unknown(ref cause) => cause
+                            GetHostedZoneError::InvalidInput(ref cause) => cause,
+GetHostedZoneError::NoSuchHostedZone(ref cause) => cause,
+GetHostedZoneError::Validation(ref cause) => cause,
+GetHostedZoneError::Credentials(ref err) => err.description(),
+GetHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetHostedZoneError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8556,7 +8725,11 @@ Unknown(String)
                 impl Error for GetHostedZoneCountError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetHostedZoneCountError::InvalidInput(ref cause) => cause,GetHostedZoneCountError::Validation(ref cause) => cause,GetHostedZoneCountError::Credentials(ref err) => err.description(),GetHostedZoneCountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetHostedZoneCountError::Unknown(ref cause) => cause
+                            GetHostedZoneCountError::InvalidInput(ref cause) => cause,
+GetHostedZoneCountError::Validation(ref cause) => cause,
+GetHostedZoneCountError::Credentials(ref err) => err.description(),
+GetHostedZoneCountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetHostedZoneCountError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8586,7 +8759,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchDelegationSet" => GetReusableDelegationSetError::NoSuchDelegationSet(String::from(parsed_error.message)),"InvalidInput" => GetReusableDelegationSetError::InvalidInput(String::from(parsed_error.message)),"DelegationSetNotReusable" => GetReusableDelegationSetError::DelegationSetNotReusable(String::from(parsed_error.message)),_ => GetReusableDelegationSetError::Unknown(String::from(body))
+                                    "DelegationSetNotReusable" => GetReusableDelegationSetError::DelegationSetNotReusable(String::from(parsed_error.message)),"InvalidInput" => GetReusableDelegationSetError::InvalidInput(String::from(parsed_error.message)),"NoSuchDelegationSet" => GetReusableDelegationSetError::NoSuchDelegationSet(String::from(parsed_error.message)),_ => GetReusableDelegationSetError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetReusableDelegationSetError::Unknown(body.to_string())
@@ -8618,7 +8791,13 @@ Unknown(String)
                 impl Error for GetReusableDelegationSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetReusableDelegationSetError::NoSuchDelegationSet(ref cause) => cause,GetReusableDelegationSetError::DelegationSetNotReusable(ref cause) => cause,GetReusableDelegationSetError::InvalidInput(ref cause) => cause,GetReusableDelegationSetError::Validation(ref cause) => cause,GetReusableDelegationSetError::Credentials(ref err) => err.description(),GetReusableDelegationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetReusableDelegationSetError::Unknown(ref cause) => cause
+                            GetReusableDelegationSetError::DelegationSetNotReusable(ref cause) => cause,
+GetReusableDelegationSetError::InvalidInput(ref cause) => cause,
+GetReusableDelegationSetError::NoSuchDelegationSet(ref cause) => cause,
+GetReusableDelegationSetError::Validation(ref cause) => cause,
+GetReusableDelegationSetError::Credentials(ref err) => err.description(),
+GetReusableDelegationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetReusableDelegationSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8626,10 +8805,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetTrafficPolicyError {
                     
-///<p>No traffic policy exists with the specified ID.</p>
-NoSuchTrafficPolicy(String),
 ///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>No traffic policy exists with the specified ID.</p>
+NoSuchTrafficPolicy(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8678,7 +8857,12 @@ Unknown(String)
                 impl Error for GetTrafficPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetTrafficPolicyError::NoSuchTrafficPolicy(ref cause) => cause,GetTrafficPolicyError::InvalidInput(ref cause) => cause,GetTrafficPolicyError::Validation(ref cause) => cause,GetTrafficPolicyError::Credentials(ref err) => err.description(),GetTrafficPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetTrafficPolicyError::Unknown(ref cause) => cause
+                            GetTrafficPolicyError::InvalidInput(ref cause) => cause,
+GetTrafficPolicyError::NoSuchTrafficPolicy(ref cause) => cause,
+GetTrafficPolicyError::Validation(ref cause) => cause,
+GetTrafficPolicyError::Credentials(ref err) => err.description(),
+GetTrafficPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetTrafficPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8686,10 +8870,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetTrafficPolicyInstanceError {
                     
-///<p>No traffic policy instance exists with the specified ID.</p>
-NoSuchTrafficPolicyInstance(String),
 ///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>No traffic policy instance exists with the specified ID.</p>
+NoSuchTrafficPolicyInstance(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8738,7 +8922,12 @@ Unknown(String)
                 impl Error for GetTrafficPolicyInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,GetTrafficPolicyInstanceError::Validation(ref cause) => cause,GetTrafficPolicyInstanceError::Credentials(ref err) => err.description(),GetTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetTrafficPolicyInstanceError::Unknown(ref cause) => cause
+                            GetTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,
+GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,
+GetTrafficPolicyInstanceError::Validation(ref cause) => cause,
+GetTrafficPolicyInstanceError::Credentials(ref err) => err.description(),
+GetTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetTrafficPolicyInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8794,7 +8983,10 @@ Unknown(String)
                 impl Error for GetTrafficPolicyInstanceCountError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetTrafficPolicyInstanceCountError::Validation(ref cause) => cause,GetTrafficPolicyInstanceCountError::Credentials(ref err) => err.description(),GetTrafficPolicyInstanceCountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetTrafficPolicyInstanceCountError::Unknown(ref cause) => cause
+                            GetTrafficPolicyInstanceCountError::Validation(ref cause) => cause,
+GetTrafficPolicyInstanceCountError::Credentials(ref err) => err.description(),
+GetTrafficPolicyInstanceCountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetTrafficPolicyInstanceCountError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8852,7 +9044,11 @@ Unknown(String)
                 impl Error for ListGeoLocationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListGeoLocationsError::InvalidInput(ref cause) => cause,ListGeoLocationsError::Validation(ref cause) => cause,ListGeoLocationsError::Credentials(ref err) => err.description(),ListGeoLocationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListGeoLocationsError::Unknown(ref cause) => cause
+                            ListGeoLocationsError::InvalidInput(ref cause) => cause,
+ListGeoLocationsError::Validation(ref cause) => cause,
+ListGeoLocationsError::Credentials(ref err) => err.description(),
+ListGeoLocationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListGeoLocationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8860,10 +9056,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListHealthChecksError {
                     
-///<p>The input is not valid.</p>
-InvalidInput(String),
 ///<p>The resource you are trying to access is unsupported on this Amazon Route 53 endpoint. Please consider using a newer endpoint or a tool that does so.</p>
-IncompatibleVersion(String),/// An error occurred dispatching the HTTP request
+IncompatibleVersion(String),
+///<p>The input is not valid.</p>
+InvalidInput(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8912,7 +9108,12 @@ Unknown(String)
                 impl Error for ListHealthChecksError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListHealthChecksError::IncompatibleVersion(ref cause) => cause,ListHealthChecksError::InvalidInput(ref cause) => cause,ListHealthChecksError::Validation(ref cause) => cause,ListHealthChecksError::Credentials(ref err) => err.description(),ListHealthChecksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListHealthChecksError::Unknown(ref cause) => cause
+                            ListHealthChecksError::IncompatibleVersion(ref cause) => cause,
+ListHealthChecksError::InvalidInput(ref cause) => cause,
+ListHealthChecksError::Validation(ref cause) => cause,
+ListHealthChecksError::Credentials(ref err) => err.description(),
+ListHealthChecksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListHealthChecksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8920,10 +9121,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListHostedZonesError {
                     
-///<p>The input is not valid.</p>
-InvalidInput(String),
 ///<p>A reusable delegation set with the specified ID does not exist.</p>
 DelegationSetNotReusable(String),
+///<p>The input is not valid.</p>
+InvalidInput(String),
 ///<p>A reusable delegation set with the specified ID does not exist.</p>
 NoSuchDelegationSet(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -8942,7 +9143,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidInput" => ListHostedZonesError::InvalidInput(String::from(parsed_error.message)),"DelegationSetNotReusable" => ListHostedZonesError::DelegationSetNotReusable(String::from(parsed_error.message)),"NoSuchDelegationSet" => ListHostedZonesError::NoSuchDelegationSet(String::from(parsed_error.message)),_ => ListHostedZonesError::Unknown(String::from(body))
+                                    "DelegationSetNotReusable" => ListHostedZonesError::DelegationSetNotReusable(String::from(parsed_error.message)),"InvalidInput" => ListHostedZonesError::InvalidInput(String::from(parsed_error.message)),"NoSuchDelegationSet" => ListHostedZonesError::NoSuchDelegationSet(String::from(parsed_error.message)),_ => ListHostedZonesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListHostedZonesError::Unknown(body.to_string())
@@ -8974,7 +9175,13 @@ Unknown(String)
                 impl Error for ListHostedZonesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListHostedZonesError::InvalidInput(ref cause) => cause,ListHostedZonesError::DelegationSetNotReusable(ref cause) => cause,ListHostedZonesError::NoSuchDelegationSet(ref cause) => cause,ListHostedZonesError::Validation(ref cause) => cause,ListHostedZonesError::Credentials(ref err) => err.description(),ListHostedZonesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListHostedZonesError::Unknown(ref cause) => cause
+                            ListHostedZonesError::DelegationSetNotReusable(ref cause) => cause,
+ListHostedZonesError::InvalidInput(ref cause) => cause,
+ListHostedZonesError::NoSuchDelegationSet(ref cause) => cause,
+ListHostedZonesError::Validation(ref cause) => cause,
+ListHostedZonesError::Credentials(ref err) => err.description(),
+ListHostedZonesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListHostedZonesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8982,10 +9189,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListHostedZonesByNameError {
                     
-///<p>The input is not valid.</p>
-InvalidInput(String),
 ///<p>The specified domain name is not valid.</p>
-InvalidDomainName(String),/// An error occurred dispatching the HTTP request
+InvalidDomainName(String),
+///<p>The input is not valid.</p>
+InvalidInput(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9034,7 +9241,12 @@ Unknown(String)
                 impl Error for ListHostedZonesByNameError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListHostedZonesByNameError::InvalidDomainName(ref cause) => cause,ListHostedZonesByNameError::InvalidInput(ref cause) => cause,ListHostedZonesByNameError::Validation(ref cause) => cause,ListHostedZonesByNameError::Credentials(ref err) => err.description(),ListHostedZonesByNameError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListHostedZonesByNameError::Unknown(ref cause) => cause
+                            ListHostedZonesByNameError::InvalidDomainName(ref cause) => cause,
+ListHostedZonesByNameError::InvalidInput(ref cause) => cause,
+ListHostedZonesByNameError::Validation(ref cause) => cause,
+ListHostedZonesByNameError::Credentials(ref err) => err.description(),
+ListHostedZonesByNameError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListHostedZonesByNameError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9094,7 +9306,12 @@ Unknown(String)
                 impl Error for ListResourceRecordSetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListResourceRecordSetsError::InvalidInput(ref cause) => cause,ListResourceRecordSetsError::NoSuchHostedZone(ref cause) => cause,ListResourceRecordSetsError::Validation(ref cause) => cause,ListResourceRecordSetsError::Credentials(ref err) => err.description(),ListResourceRecordSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListResourceRecordSetsError::Unknown(ref cause) => cause
+                            ListResourceRecordSetsError::InvalidInput(ref cause) => cause,
+ListResourceRecordSetsError::NoSuchHostedZone(ref cause) => cause,
+ListResourceRecordSetsError::Validation(ref cause) => cause,
+ListResourceRecordSetsError::Credentials(ref err) => err.description(),
+ListResourceRecordSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListResourceRecordSetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9152,7 +9369,11 @@ Unknown(String)
                 impl Error for ListReusableDelegationSetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListReusableDelegationSetsError::InvalidInput(ref cause) => cause,ListReusableDelegationSetsError::Validation(ref cause) => cause,ListReusableDelegationSetsError::Credentials(ref err) => err.description(),ListReusableDelegationSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListReusableDelegationSetsError::Unknown(ref cause) => cause
+                            ListReusableDelegationSetsError::InvalidInput(ref cause) => cause,
+ListReusableDelegationSetsError::Validation(ref cause) => cause,
+ListReusableDelegationSetsError::Credentials(ref err) => err.description(),
+ListReusableDelegationSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListReusableDelegationSetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9160,16 +9381,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTagsForResourceError {
                     
-///<p></p>
-Throttling(String),
 ///<p>The input is not valid.</p>
 InvalidInput(String),
-///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
-PriorRequestNotComplete(String),
 ///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
 NoSuchHealthCheck(String),
 ///<p>No hosted zone exists with the ID that you specified.</p>
-NoSuchHostedZone(String),/// An error occurred dispatching the HTTP request
+NoSuchHostedZone(String),
+///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
+PriorRequestNotComplete(String),
+///<p></p>
+Throttling(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9186,7 +9407,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchHealthCheck" => ListTagsForResourceError::NoSuchHealthCheck(String::from(parsed_error.message)),"PriorRequestNotComplete" => ListTagsForResourceError::PriorRequestNotComplete(String::from(parsed_error.message)),"NoSuchHostedZone" => ListTagsForResourceError::NoSuchHostedZone(String::from(parsed_error.message)),"ThrottlingException" => ListTagsForResourceError::Throttling(String::from(parsed_error.message)),"InvalidInput" => ListTagsForResourceError::InvalidInput(String::from(parsed_error.message)),_ => ListTagsForResourceError::Unknown(String::from(body))
+                                    "InvalidInput" => ListTagsForResourceError::InvalidInput(String::from(parsed_error.message)),"NoSuchHealthCheck" => ListTagsForResourceError::NoSuchHealthCheck(String::from(parsed_error.message)),"NoSuchHostedZone" => ListTagsForResourceError::NoSuchHostedZone(String::from(parsed_error.message)),"PriorRequestNotComplete" => ListTagsForResourceError::PriorRequestNotComplete(String::from(parsed_error.message)),"ThrottlingException" => ListTagsForResourceError::Throttling(String::from(parsed_error.message)),_ => ListTagsForResourceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListTagsForResourceError::Unknown(body.to_string())
@@ -9218,7 +9439,15 @@ Unknown(String)
                 impl Error for ListTagsForResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTagsForResourceError::Throttling(ref cause) => cause,ListTagsForResourceError::NoSuchHostedZone(ref cause) => cause,ListTagsForResourceError::NoSuchHealthCheck(ref cause) => cause,ListTagsForResourceError::PriorRequestNotComplete(ref cause) => cause,ListTagsForResourceError::InvalidInput(ref cause) => cause,ListTagsForResourceError::Validation(ref cause) => cause,ListTagsForResourceError::Credentials(ref err) => err.description(),ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTagsForResourceError::Unknown(ref cause) => cause
+                            ListTagsForResourceError::InvalidInput(ref cause) => cause,
+ListTagsForResourceError::NoSuchHealthCheck(ref cause) => cause,
+ListTagsForResourceError::NoSuchHostedZone(ref cause) => cause,
+ListTagsForResourceError::PriorRequestNotComplete(ref cause) => cause,
+ListTagsForResourceError::Throttling(ref cause) => cause,
+ListTagsForResourceError::Validation(ref cause) => cause,
+ListTagsForResourceError::Credentials(ref err) => err.description(),
+ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTagsForResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9226,16 +9455,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTagsForResourcesError {
                     
-///<p></p>
-Throttling(String),
-///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
-PriorRequestNotComplete(String),
 ///<p>The input is not valid.</p>
 InvalidInput(String),
 ///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
 NoSuchHealthCheck(String),
 ///<p>No hosted zone exists with the ID that you specified.</p>
-NoSuchHostedZone(String),/// An error occurred dispatching the HTTP request
+NoSuchHostedZone(String),
+///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
+PriorRequestNotComplete(String),
+///<p></p>
+Throttling(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9252,7 +9481,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidInput" => ListTagsForResourcesError::InvalidInput(String::from(parsed_error.message)),"PriorRequestNotComplete" => ListTagsForResourcesError::PriorRequestNotComplete(String::from(parsed_error.message)),"NoSuchHealthCheck" => ListTagsForResourcesError::NoSuchHealthCheck(String::from(parsed_error.message)),"ThrottlingException" => ListTagsForResourcesError::Throttling(String::from(parsed_error.message)),"NoSuchHostedZone" => ListTagsForResourcesError::NoSuchHostedZone(String::from(parsed_error.message)),_ => ListTagsForResourcesError::Unknown(String::from(body))
+                                    "InvalidInput" => ListTagsForResourcesError::InvalidInput(String::from(parsed_error.message)),"NoSuchHealthCheck" => ListTagsForResourcesError::NoSuchHealthCheck(String::from(parsed_error.message)),"NoSuchHostedZone" => ListTagsForResourcesError::NoSuchHostedZone(String::from(parsed_error.message)),"PriorRequestNotComplete" => ListTagsForResourcesError::PriorRequestNotComplete(String::from(parsed_error.message)),"ThrottlingException" => ListTagsForResourcesError::Throttling(String::from(parsed_error.message)),_ => ListTagsForResourcesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListTagsForResourcesError::Unknown(body.to_string())
@@ -9284,7 +9513,15 @@ Unknown(String)
                 impl Error for ListTagsForResourcesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTagsForResourcesError::InvalidInput(ref cause) => cause,ListTagsForResourcesError::NoSuchHostedZone(ref cause) => cause,ListTagsForResourcesError::Throttling(ref cause) => cause,ListTagsForResourcesError::NoSuchHealthCheck(ref cause) => cause,ListTagsForResourcesError::PriorRequestNotComplete(ref cause) => cause,ListTagsForResourcesError::Validation(ref cause) => cause,ListTagsForResourcesError::Credentials(ref err) => err.description(),ListTagsForResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTagsForResourcesError::Unknown(ref cause) => cause
+                            ListTagsForResourcesError::InvalidInput(ref cause) => cause,
+ListTagsForResourcesError::NoSuchHealthCheck(ref cause) => cause,
+ListTagsForResourcesError::NoSuchHostedZone(ref cause) => cause,
+ListTagsForResourcesError::PriorRequestNotComplete(ref cause) => cause,
+ListTagsForResourcesError::Throttling(ref cause) => cause,
+ListTagsForResourcesError::Validation(ref cause) => cause,
+ListTagsForResourcesError::Credentials(ref err) => err.description(),
+ListTagsForResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTagsForResourcesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9342,7 +9579,11 @@ Unknown(String)
                 impl Error for ListTrafficPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTrafficPoliciesError::InvalidInput(ref cause) => cause,ListTrafficPoliciesError::Validation(ref cause) => cause,ListTrafficPoliciesError::Credentials(ref err) => err.description(),ListTrafficPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTrafficPoliciesError::Unknown(ref cause) => cause
+                            ListTrafficPoliciesError::InvalidInput(ref cause) => cause,
+ListTrafficPoliciesError::Validation(ref cause) => cause,
+ListTrafficPoliciesError::Credentials(ref err) => err.description(),
+ListTrafficPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTrafficPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9402,7 +9643,12 @@ Unknown(String)
                 impl Error for ListTrafficPolicyInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTrafficPolicyInstancesError::InvalidInput(ref cause) => cause,ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(ref cause) => cause,ListTrafficPolicyInstancesError::Validation(ref cause) => cause,ListTrafficPolicyInstancesError::Credentials(ref err) => err.description(),ListTrafficPolicyInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTrafficPolicyInstancesError::Unknown(ref cause) => cause
+                            ListTrafficPolicyInstancesError::InvalidInput(ref cause) => cause,
+ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(ref cause) => cause,
+ListTrafficPolicyInstancesError::Validation(ref cause) => cause,
+ListTrafficPolicyInstancesError::Credentials(ref err) => err.description(),
+ListTrafficPolicyInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTrafficPolicyInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9410,12 +9656,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTrafficPolicyInstancesByHostedZoneError {
                     
+///<p>The input is not valid.</p>
+InvalidInput(String),
 ///<p>No hosted zone exists with the ID that you specified.</p>
 NoSuchHostedZone(String),
 ///<p>No traffic policy instance exists with the specified ID.</p>
-NoSuchTrafficPolicyInstance(String),
-///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+NoSuchTrafficPolicyInstance(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9432,7 +9678,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchTrafficPolicyInstance" => ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(String::from(parsed_error.message)),"InvalidInput" => ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(String::from(parsed_error.message)),"NoSuchHostedZone" => ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),_ => ListTrafficPolicyInstancesByHostedZoneError::Unknown(String::from(body))
+                                    "InvalidInput" => ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(String::from(parsed_error.message)),"NoSuchHostedZone" => ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),"NoSuchTrafficPolicyInstance" => ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(String::from(parsed_error.message)),_ => ListTrafficPolicyInstancesByHostedZoneError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListTrafficPolicyInstancesByHostedZoneError::Unknown(body.to_string())
@@ -9464,7 +9710,13 @@ Unknown(String)
                 impl Error for ListTrafficPolicyInstancesByHostedZoneError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(ref cause) => cause,ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(ref cause) => cause,ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(ref cause) => cause,ListTrafficPolicyInstancesByHostedZoneError::Validation(ref cause) => cause,ListTrafficPolicyInstancesByHostedZoneError::Credentials(ref err) => err.description(),ListTrafficPolicyInstancesByHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTrafficPolicyInstancesByHostedZoneError::Unknown(ref cause) => cause
+                            ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(ref cause) => cause,
+ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(ref cause) => cause,
+ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(ref cause) => cause,
+ListTrafficPolicyInstancesByHostedZoneError::Validation(ref cause) => cause,
+ListTrafficPolicyInstancesByHostedZoneError::Credentials(ref err) => err.description(),
+ListTrafficPolicyInstancesByHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTrafficPolicyInstancesByHostedZoneError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9472,10 +9724,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTrafficPolicyInstancesByPolicyError {
                     
-///<p>No traffic policy exists with the specified ID.</p>
-NoSuchTrafficPolicy(String),
 ///<p>The input is not valid.</p>
 InvalidInput(String),
+///<p>No traffic policy exists with the specified ID.</p>
+NoSuchTrafficPolicy(String),
 ///<p>No traffic policy instance exists with the specified ID.</p>
 NoSuchTrafficPolicyInstance(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -9526,7 +9778,13 @@ Unknown(String)
                 impl Error for ListTrafficPolicyInstancesByPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTrafficPolicyInstancesByPolicyError::InvalidInput(ref cause) => cause,ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(ref cause) => cause,ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(ref cause) => cause,ListTrafficPolicyInstancesByPolicyError::Validation(ref cause) => cause,ListTrafficPolicyInstancesByPolicyError::Credentials(ref err) => err.description(),ListTrafficPolicyInstancesByPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTrafficPolicyInstancesByPolicyError::Unknown(ref cause) => cause
+                            ListTrafficPolicyInstancesByPolicyError::InvalidInput(ref cause) => cause,
+ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(ref cause) => cause,
+ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(ref cause) => cause,
+ListTrafficPolicyInstancesByPolicyError::Validation(ref cause) => cause,
+ListTrafficPolicyInstancesByPolicyError::Credentials(ref err) => err.description(),
+ListTrafficPolicyInstancesByPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTrafficPolicyInstancesByPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9534,10 +9792,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTrafficPolicyVersionsError {
                     
-///<p>No traffic policy exists with the specified ID.</p>
-NoSuchTrafficPolicy(String),
 ///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>No traffic policy exists with the specified ID.</p>
+NoSuchTrafficPolicy(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9586,7 +9844,12 @@ Unknown(String)
                 impl Error for ListTrafficPolicyVersionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTrafficPolicyVersionsError::InvalidInput(ref cause) => cause,ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(ref cause) => cause,ListTrafficPolicyVersionsError::Validation(ref cause) => cause,ListTrafficPolicyVersionsError::Credentials(ref err) => err.description(),ListTrafficPolicyVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTrafficPolicyVersionsError::Unknown(ref cause) => cause
+                            ListTrafficPolicyVersionsError::InvalidInput(ref cause) => cause,
+ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(ref cause) => cause,
+ListTrafficPolicyVersionsError::Validation(ref cause) => cause,
+ListTrafficPolicyVersionsError::Credentials(ref err) => err.description(),
+ListTrafficPolicyVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTrafficPolicyVersionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9616,7 +9879,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidPaginationToken" => ListVPCAssociationAuthorizationsError::InvalidPaginationToken(String::from(parsed_error.message)),"NoSuchHostedZone" => ListVPCAssociationAuthorizationsError::NoSuchHostedZone(String::from(parsed_error.message)),"InvalidInput" => ListVPCAssociationAuthorizationsError::InvalidInput(String::from(parsed_error.message)),_ => ListVPCAssociationAuthorizationsError::Unknown(String::from(body))
+                                    "InvalidInput" => ListVPCAssociationAuthorizationsError::InvalidInput(String::from(parsed_error.message)),"InvalidPaginationToken" => ListVPCAssociationAuthorizationsError::InvalidPaginationToken(String::from(parsed_error.message)),"NoSuchHostedZone" => ListVPCAssociationAuthorizationsError::NoSuchHostedZone(String::from(parsed_error.message)),_ => ListVPCAssociationAuthorizationsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListVPCAssociationAuthorizationsError::Unknown(body.to_string())
@@ -9648,7 +9911,13 @@ Unknown(String)
                 impl Error for ListVPCAssociationAuthorizationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListVPCAssociationAuthorizationsError::NoSuchHostedZone(ref cause) => cause,ListVPCAssociationAuthorizationsError::InvalidInput(ref cause) => cause,ListVPCAssociationAuthorizationsError::InvalidPaginationToken(ref cause) => cause,ListVPCAssociationAuthorizationsError::Validation(ref cause) => cause,ListVPCAssociationAuthorizationsError::Credentials(ref err) => err.description(),ListVPCAssociationAuthorizationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListVPCAssociationAuthorizationsError::Unknown(ref cause) => cause
+                            ListVPCAssociationAuthorizationsError::InvalidInput(ref cause) => cause,
+ListVPCAssociationAuthorizationsError::InvalidPaginationToken(ref cause) => cause,
+ListVPCAssociationAuthorizationsError::NoSuchHostedZone(ref cause) => cause,
+ListVPCAssociationAuthorizationsError::Validation(ref cause) => cause,
+ListVPCAssociationAuthorizationsError::Credentials(ref err) => err.description(),
+ListVPCAssociationAuthorizationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListVPCAssociationAuthorizationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9656,10 +9925,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum TestDNSAnswerError {
                     
-///<p>No hosted zone exists with the ID that you specified.</p>
-NoSuchHostedZone(String),
 ///<p>The input is not valid.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>No hosted zone exists with the ID that you specified.</p>
+NoSuchHostedZone(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9676,7 +9945,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchHostedZone" => TestDNSAnswerError::NoSuchHostedZone(String::from(parsed_error.message)),"InvalidInput" => TestDNSAnswerError::InvalidInput(String::from(parsed_error.message)),_ => TestDNSAnswerError::Unknown(String::from(body))
+                                    "InvalidInput" => TestDNSAnswerError::InvalidInput(String::from(parsed_error.message)),"NoSuchHostedZone" => TestDNSAnswerError::NoSuchHostedZone(String::from(parsed_error.message)),_ => TestDNSAnswerError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => TestDNSAnswerError::Unknown(body.to_string())
@@ -9708,7 +9977,12 @@ Unknown(String)
                 impl Error for TestDNSAnswerError {
                     fn description(&self) -> &str {
                         match *self {
-                            TestDNSAnswerError::InvalidInput(ref cause) => cause,TestDNSAnswerError::NoSuchHostedZone(ref cause) => cause,TestDNSAnswerError::Validation(ref cause) => cause,TestDNSAnswerError::Credentials(ref err) => err.description(),TestDNSAnswerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),TestDNSAnswerError::Unknown(ref cause) => cause
+                            TestDNSAnswerError::InvalidInput(ref cause) => cause,
+TestDNSAnswerError::NoSuchHostedZone(ref cause) => cause,
+TestDNSAnswerError::Validation(ref cause) => cause,
+TestDNSAnswerError::Credentials(ref err) => err.description(),
+TestDNSAnswerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+TestDNSAnswerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9716,12 +9990,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateHealthCheckError {
                     
+///<p>The value of <code>HealthCheckVersion</code> in the request doesn't match the value of <code>HealthCheckVersion</code> in the health check.</p>
+HealthCheckVersionMismatch(String),
 ///<p>The input is not valid.</p>
 InvalidInput(String),
 ///<p>No health check exists with the ID that you specified in the <code>DeleteHealthCheck</code> request.</p>
-NoSuchHealthCheck(String),
-///<p>The value of <code>HealthCheckVersion</code> in the request doesn't match the value of <code>HealthCheckVersion</code> in the health check.</p>
-HealthCheckVersionMismatch(String),/// An error occurred dispatching the HTTP request
+NoSuchHealthCheck(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9738,7 +10012,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchHealthCheck" => UpdateHealthCheckError::NoSuchHealthCheck(String::from(parsed_error.message)),"HealthCheckVersionMismatch" => UpdateHealthCheckError::HealthCheckVersionMismatch(String::from(parsed_error.message)),"InvalidInput" => UpdateHealthCheckError::InvalidInput(String::from(parsed_error.message)),_ => UpdateHealthCheckError::Unknown(String::from(body))
+                                    "HealthCheckVersionMismatch" => UpdateHealthCheckError::HealthCheckVersionMismatch(String::from(parsed_error.message)),"InvalidInput" => UpdateHealthCheckError::InvalidInput(String::from(parsed_error.message)),"NoSuchHealthCheck" => UpdateHealthCheckError::NoSuchHealthCheck(String::from(parsed_error.message)),_ => UpdateHealthCheckError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateHealthCheckError::Unknown(body.to_string())
@@ -9770,7 +10044,13 @@ Unknown(String)
                 impl Error for UpdateHealthCheckError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateHealthCheckError::InvalidInput(ref cause) => cause,UpdateHealthCheckError::HealthCheckVersionMismatch(ref cause) => cause,UpdateHealthCheckError::NoSuchHealthCheck(ref cause) => cause,UpdateHealthCheckError::Validation(ref cause) => cause,UpdateHealthCheckError::Credentials(ref err) => err.description(),UpdateHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateHealthCheckError::Unknown(ref cause) => cause
+                            UpdateHealthCheckError::HealthCheckVersionMismatch(ref cause) => cause,
+UpdateHealthCheckError::InvalidInput(ref cause) => cause,
+UpdateHealthCheckError::NoSuchHealthCheck(ref cause) => cause,
+UpdateHealthCheckError::Validation(ref cause) => cause,
+UpdateHealthCheckError::Credentials(ref err) => err.description(),
+UpdateHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateHealthCheckError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9798,7 +10078,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchHostedZone" => UpdateHostedZoneCommentError::NoSuchHostedZone(String::from(parsed_error.message)),"InvalidInput" => UpdateHostedZoneCommentError::InvalidInput(String::from(parsed_error.message)),_ => UpdateHostedZoneCommentError::Unknown(String::from(body))
+                                    "InvalidInput" => UpdateHostedZoneCommentError::InvalidInput(String::from(parsed_error.message)),"NoSuchHostedZone" => UpdateHostedZoneCommentError::NoSuchHostedZone(String::from(parsed_error.message)),_ => UpdateHostedZoneCommentError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateHostedZoneCommentError::Unknown(body.to_string())
@@ -9830,7 +10110,12 @@ Unknown(String)
                 impl Error for UpdateHostedZoneCommentError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateHostedZoneCommentError::InvalidInput(ref cause) => cause,UpdateHostedZoneCommentError::NoSuchHostedZone(ref cause) => cause,UpdateHostedZoneCommentError::Validation(ref cause) => cause,UpdateHostedZoneCommentError::Credentials(ref err) => err.description(),UpdateHostedZoneCommentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateHostedZoneCommentError::Unknown(ref cause) => cause
+                            UpdateHostedZoneCommentError::InvalidInput(ref cause) => cause,
+UpdateHostedZoneCommentError::NoSuchHostedZone(ref cause) => cause,
+UpdateHostedZoneCommentError::Validation(ref cause) => cause,
+UpdateHostedZoneCommentError::Credentials(ref err) => err.description(),
+UpdateHostedZoneCommentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateHostedZoneCommentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9860,7 +10145,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidInput" => UpdateTrafficPolicyCommentError::InvalidInput(String::from(parsed_error.message)),"NoSuchTrafficPolicy" => UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(String::from(parsed_error.message)),"ConcurrentModification" => UpdateTrafficPolicyCommentError::ConcurrentModification(String::from(parsed_error.message)),_ => UpdateTrafficPolicyCommentError::Unknown(String::from(body))
+                                    "ConcurrentModification" => UpdateTrafficPolicyCommentError::ConcurrentModification(String::from(parsed_error.message)),"InvalidInput" => UpdateTrafficPolicyCommentError::InvalidInput(String::from(parsed_error.message)),"NoSuchTrafficPolicy" => UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(String::from(parsed_error.message)),_ => UpdateTrafficPolicyCommentError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateTrafficPolicyCommentError::Unknown(body.to_string())
@@ -9892,7 +10177,13 @@ Unknown(String)
                 impl Error for UpdateTrafficPolicyCommentError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateTrafficPolicyCommentError::ConcurrentModification(ref cause) => cause,UpdateTrafficPolicyCommentError::InvalidInput(ref cause) => cause,UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(ref cause) => cause,UpdateTrafficPolicyCommentError::Validation(ref cause) => cause,UpdateTrafficPolicyCommentError::Credentials(ref err) => err.description(),UpdateTrafficPolicyCommentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateTrafficPolicyCommentError::Unknown(ref cause) => cause
+                            UpdateTrafficPolicyCommentError::ConcurrentModification(ref cause) => cause,
+UpdateTrafficPolicyCommentError::InvalidInput(ref cause) => cause,
+UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(ref cause) => cause,
+UpdateTrafficPolicyCommentError::Validation(ref cause) => cause,
+UpdateTrafficPolicyCommentError::Credentials(ref err) => err.description(),
+UpdateTrafficPolicyCommentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateTrafficPolicyCommentError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -9900,16 +10191,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateTrafficPolicyInstanceError {
                     
-///<p>No traffic policy instance exists with the specified ID.</p>
-NoSuchTrafficPolicyInstance(String),
-///<p>The input is not valid.</p>
-InvalidInput(String),
 ///<p>You tried to update a traffic policy instance by using a traffic policy version that has a different DNS type than the current type for the instance. You specified the type in the JSON document in the <code>CreateTrafficPolicy</code> or <code>CreateTrafficPolicyVersion</code>request. </p>
 ConflictingTypes(String),
-///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
-PriorRequestNotComplete(String),
+///<p>The input is not valid.</p>
+InvalidInput(String),
 ///<p>No traffic policy exists with the specified ID.</p>
-NoSuchTrafficPolicy(String),/// An error occurred dispatching the HTTP request
+NoSuchTrafficPolicy(String),
+///<p>No traffic policy instance exists with the specified ID.</p>
+NoSuchTrafficPolicyInstance(String),
+///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
+PriorRequestNotComplete(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -9926,7 +10217,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "PriorRequestNotComplete" => UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(String::from(parsed_error.message)),"ConflictingTypes" => UpdateTrafficPolicyInstanceError::ConflictingTypes(String::from(parsed_error.message)),"InvalidInput" => UpdateTrafficPolicyInstanceError::InvalidInput(String::from(parsed_error.message)),"NoSuchTrafficPolicy" => UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(parsed_error.message)),"NoSuchTrafficPolicyInstance" => UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(String::from(parsed_error.message)),_ => UpdateTrafficPolicyInstanceError::Unknown(String::from(body))
+                                    "ConflictingTypes" => UpdateTrafficPolicyInstanceError::ConflictingTypes(String::from(parsed_error.message)),"InvalidInput" => UpdateTrafficPolicyInstanceError::InvalidInput(String::from(parsed_error.message)),"NoSuchTrafficPolicy" => UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(parsed_error.message)),"NoSuchTrafficPolicyInstance" => UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(String::from(parsed_error.message)),"PriorRequestNotComplete" => UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(String::from(parsed_error.message)),_ => UpdateTrafficPolicyInstanceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateTrafficPolicyInstanceError::Unknown(body.to_string())
@@ -9958,7 +10249,15 @@ Unknown(String)
                 impl Error for UpdateTrafficPolicyInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(ref cause) => cause,UpdateTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(ref cause) => cause,UpdateTrafficPolicyInstanceError::ConflictingTypes(ref cause) => cause,UpdateTrafficPolicyInstanceError::Validation(ref cause) => cause,UpdateTrafficPolicyInstanceError::Credentials(ref err) => err.description(),UpdateTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateTrafficPolicyInstanceError::Unknown(ref cause) => cause
+                            UpdateTrafficPolicyInstanceError::ConflictingTypes(ref cause) => cause,
+UpdateTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,
+UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(ref cause) => cause,
+UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,
+UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(ref cause) => cause,
+UpdateTrafficPolicyInstanceError::Validation(ref cause) => cause,
+UpdateTrafficPolicyInstanceError::Credentials(ref err) => err.description(),
+UpdateTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateTrafficPolicyInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }

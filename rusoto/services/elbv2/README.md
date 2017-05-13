@@ -11,7 +11,9 @@ You may be looking for:
 
 ## Requirements
 
-Rust 1.15.0 or later is required.
+Rust stable or beta are required to use Rusoto. Nightly is tested, but not guaranteed to be supported. Older
+versions _may_ be supported. The currently supported Rust versions can be found in the Rusoto project 
+[`travis.yml`](https://github.com/rusoto/rusoto/blob/master/.travis.yml).
 
 On Linux, OpenSSL is required.
 

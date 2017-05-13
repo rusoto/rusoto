@@ -1235,14 +1235,14 @@ pub type ZeroTo512String = String;
                 #[derive(Debug, PartialEq)]
                 pub enum CancelJobError {
                     
-///<p>The resource you are attempting to change is in use. For example, you are attempting to delete a pipeline that is currently in use.</p>
-ResourceInUse(String),
-///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
-InternalService(String),
-///
-IncompatibleVersion(String),
 ///<p>General authentication failure. The request was not signed correctly.</p>
 AccessDenied(String),
+///
+IncompatibleVersion(String),
+///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
+InternalService(String),
+///<p>The resource you are attempting to change is in use. For example, you are attempting to delete a pipeline that is currently in use.</p>
+ResourceInUse(String),
 ///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
 ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1263,7 +1263,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "AccessDeniedException" => CancelJobError::AccessDenied(String::from(error_message)),"InternalServiceException" => CancelJobError::InternalService(String::from(error_message)),"ResourceInUseException" => CancelJobError::ResourceInUse(String::from(error_message)),"IncompatibleVersionException" => CancelJobError::IncompatibleVersion(String::from(error_message)),"ResourceNotFoundException" => CancelJobError::ResourceNotFound(String::from(error_message)),"ValidationException" => CancelJobError::Validation(error_message.to_string()),_ => CancelJobError::Unknown(String::from(body))
+                                    "AccessDeniedException" => CancelJobError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => CancelJobError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => CancelJobError::InternalService(String::from(error_message)),
+"ResourceInUseException" => CancelJobError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => CancelJobError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => CancelJobError::Validation(error_message.to_string()),
+_ => CancelJobError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CancelJobError::Unknown(String::from(body))
@@ -1294,7 +1300,15 @@ Unknown(String)
                 impl Error for CancelJobError {
                     fn description(&self) -> &str {
                         match *self {
-                            CancelJobError::AccessDenied(ref cause) => cause,CancelJobError::InternalService(ref cause) => cause,CancelJobError::ResourceInUse(ref cause) => cause,CancelJobError::ResourceNotFound(ref cause) => cause,CancelJobError::IncompatibleVersion(ref cause) => cause,CancelJobError::Validation(ref cause) => cause,CancelJobError::Credentials(ref err) => err.description(),CancelJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CancelJobError::Unknown(ref cause) => cause
+                            CancelJobError::AccessDenied(ref cause) => cause,
+CancelJobError::IncompatibleVersion(ref cause) => cause,
+CancelJobError::InternalService(ref cause) => cause,
+CancelJobError::ResourceInUse(ref cause) => cause,
+CancelJobError::ResourceNotFound(ref cause) => cause,
+CancelJobError::Validation(ref cause) => cause,
+CancelJobError::Credentials(ref err) => err.description(),
+CancelJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CancelJobError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1304,14 +1318,14 @@ Unknown(String)
                     
 ///<p>General authentication failure. The request was not signed correctly.</p>
 AccessDenied(String),
+///
+IncompatibleVersion(String),
 ///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
 InternalService(String),
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
 ///<p>Too many operations for a given AWS account. For example, the number of pipelines exceeds the maximum allowed.</p>
 LimitExceeded(String),
-///
-IncompatibleVersion(String),/// An error occurred dispatching the HTTP request
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1330,7 +1344,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => CreateJobError::LimitExceeded(String::from(error_message)),"ResourceNotFoundException" => CreateJobError::ResourceNotFound(String::from(error_message)),"AccessDeniedException" => CreateJobError::AccessDenied(String::from(error_message)),"IncompatibleVersionException" => CreateJobError::IncompatibleVersion(String::from(error_message)),"InternalServiceException" => CreateJobError::InternalService(String::from(error_message)),"ValidationException" => CreateJobError::Validation(error_message.to_string()),_ => CreateJobError::Unknown(String::from(body))
+                                    "AccessDeniedException" => CreateJobError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => CreateJobError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => CreateJobError::InternalService(String::from(error_message)),
+"LimitExceededException" => CreateJobError::LimitExceeded(String::from(error_message)),
+"ResourceNotFoundException" => CreateJobError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => CreateJobError::Validation(error_message.to_string()),
+_ => CreateJobError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateJobError::Unknown(String::from(body))
@@ -1361,7 +1381,15 @@ Unknown(String)
                 impl Error for CreateJobError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateJobError::LimitExceeded(ref cause) => cause,CreateJobError::ResourceNotFound(ref cause) => cause,CreateJobError::AccessDenied(ref cause) => cause,CreateJobError::IncompatibleVersion(ref cause) => cause,CreateJobError::InternalService(ref cause) => cause,CreateJobError::Validation(ref cause) => cause,CreateJobError::Credentials(ref err) => err.description(),CreateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateJobError::Unknown(ref cause) => cause
+                            CreateJobError::AccessDenied(ref cause) => cause,
+CreateJobError::IncompatibleVersion(ref cause) => cause,
+CreateJobError::InternalService(ref cause) => cause,
+CreateJobError::LimitExceeded(ref cause) => cause,
+CreateJobError::ResourceNotFound(ref cause) => cause,
+CreateJobError::Validation(ref cause) => cause,
+CreateJobError::Credentials(ref err) => err.description(),
+CreateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateJobError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1369,16 +1397,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreatePipelineError {
                     
-///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
-InternalService(String),
 ///<p>General authentication failure. The request was not signed correctly.</p>
 AccessDenied(String),
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
 ///
 IncompatibleVersion(String),
+///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
+InternalService(String),
 ///<p>Too many operations for a given AWS account. For example, the number of pipelines exceeds the maximum allowed.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1397,7 +1425,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => CreatePipelineError::LimitExceeded(String::from(error_message)),"InternalServiceException" => CreatePipelineError::InternalService(String::from(error_message)),"ResourceNotFoundException" => CreatePipelineError::ResourceNotFound(String::from(error_message)),"AccessDeniedException" => CreatePipelineError::AccessDenied(String::from(error_message)),"IncompatibleVersionException" => CreatePipelineError::IncompatibleVersion(String::from(error_message)),"ValidationException" => CreatePipelineError::Validation(error_message.to_string()),_ => CreatePipelineError::Unknown(String::from(body))
+                                    "AccessDeniedException" => CreatePipelineError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => CreatePipelineError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => CreatePipelineError::InternalService(String::from(error_message)),
+"LimitExceededException" => CreatePipelineError::LimitExceeded(String::from(error_message)),
+"ResourceNotFoundException" => CreatePipelineError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => CreatePipelineError::Validation(error_message.to_string()),
+_ => CreatePipelineError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreatePipelineError::Unknown(String::from(body))
@@ -1428,7 +1462,15 @@ Unknown(String)
                 impl Error for CreatePipelineError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreatePipelineError::AccessDenied(ref cause) => cause,CreatePipelineError::ResourceNotFound(ref cause) => cause,CreatePipelineError::IncompatibleVersion(ref cause) => cause,CreatePipelineError::InternalService(ref cause) => cause,CreatePipelineError::LimitExceeded(ref cause) => cause,CreatePipelineError::Validation(ref cause) => cause,CreatePipelineError::Credentials(ref err) => err.description(),CreatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreatePipelineError::Unknown(ref cause) => cause
+                            CreatePipelineError::AccessDenied(ref cause) => cause,
+CreatePipelineError::IncompatibleVersion(ref cause) => cause,
+CreatePipelineError::InternalService(ref cause) => cause,
+CreatePipelineError::LimitExceeded(ref cause) => cause,
+CreatePipelineError::ResourceNotFound(ref cause) => cause,
+CreatePipelineError::Validation(ref cause) => cause,
+CreatePipelineError::Credentials(ref err) => err.description(),
+CreatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreatePipelineError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1436,14 +1478,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreatePresetError {
                     
-///<p>Too many operations for a given AWS account. For example, the number of pipelines exceeds the maximum allowed.</p>
-LimitExceeded(String),
+///<p>General authentication failure. The request was not signed correctly.</p>
+AccessDenied(String),
 ///
 IncompatibleVersion(String),
 ///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
 InternalService(String),
-///<p>General authentication failure. The request was not signed correctly.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+///<p>Too many operations for a given AWS account. For example, the number of pipelines exceeds the maximum allowed.</p>
+LimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1462,7 +1504,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServiceException" => CreatePresetError::InternalService(String::from(error_message)),"IncompatibleVersionException" => CreatePresetError::IncompatibleVersion(String::from(error_message)),"LimitExceededException" => CreatePresetError::LimitExceeded(String::from(error_message)),"AccessDeniedException" => CreatePresetError::AccessDenied(String::from(error_message)),"ValidationException" => CreatePresetError::Validation(error_message.to_string()),_ => CreatePresetError::Unknown(String::from(body))
+                                    "AccessDeniedException" => CreatePresetError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => CreatePresetError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => CreatePresetError::InternalService(String::from(error_message)),
+"LimitExceededException" => CreatePresetError::LimitExceeded(String::from(error_message)),
+"ValidationException" => CreatePresetError::Validation(error_message.to_string()),
+_ => CreatePresetError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreatePresetError::Unknown(String::from(body))
@@ -1493,7 +1540,14 @@ Unknown(String)
                 impl Error for CreatePresetError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreatePresetError::InternalService(ref cause) => cause,CreatePresetError::IncompatibleVersion(ref cause) => cause,CreatePresetError::AccessDenied(ref cause) => cause,CreatePresetError::LimitExceeded(ref cause) => cause,CreatePresetError::Validation(ref cause) => cause,CreatePresetError::Credentials(ref err) => err.description(),CreatePresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreatePresetError::Unknown(ref cause) => cause
+                            CreatePresetError::AccessDenied(ref cause) => cause,
+CreatePresetError::IncompatibleVersion(ref cause) => cause,
+CreatePresetError::InternalService(ref cause) => cause,
+CreatePresetError::LimitExceeded(ref cause) => cause,
+CreatePresetError::Validation(ref cause) => cause,
+CreatePresetError::Credentials(ref err) => err.description(),
+CreatePresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreatePresetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1503,14 +1557,14 @@ Unknown(String)
                     
 ///<p>General authentication failure. The request was not signed correctly.</p>
 AccessDenied(String),
-///<p>The resource you are attempting to change is in use. For example, you are attempting to delete a pipeline that is currently in use.</p>
-ResourceInUse(String),
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
 ///
 IncompatibleVersion(String),
 ///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
-InternalService(String),/// An error occurred dispatching the HTTP request
+InternalService(String),
+///<p>The resource you are attempting to change is in use. For example, you are attempting to delete a pipeline that is currently in use.</p>
+ResourceInUse(String),
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1529,7 +1583,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServiceException" => DeletePipelineError::InternalService(String::from(error_message)),"IncompatibleVersionException" => DeletePipelineError::IncompatibleVersion(String::from(error_message)),"ResourceInUseException" => DeletePipelineError::ResourceInUse(String::from(error_message)),"AccessDeniedException" => DeletePipelineError::AccessDenied(String::from(error_message)),"ResourceNotFoundException" => DeletePipelineError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeletePipelineError::Validation(error_message.to_string()),_ => DeletePipelineError::Unknown(String::from(body))
+                                    "AccessDeniedException" => DeletePipelineError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => DeletePipelineError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => DeletePipelineError::InternalService(String::from(error_message)),
+"ResourceInUseException" => DeletePipelineError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => DeletePipelineError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeletePipelineError::Validation(error_message.to_string()),
+_ => DeletePipelineError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeletePipelineError::Unknown(String::from(body))
@@ -1560,7 +1620,15 @@ Unknown(String)
                 impl Error for DeletePipelineError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeletePipelineError::AccessDenied(ref cause) => cause,DeletePipelineError::IncompatibleVersion(ref cause) => cause,DeletePipelineError::ResourceNotFound(ref cause) => cause,DeletePipelineError::InternalService(ref cause) => cause,DeletePipelineError::ResourceInUse(ref cause) => cause,DeletePipelineError::Validation(ref cause) => cause,DeletePipelineError::Credentials(ref err) => err.description(),DeletePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeletePipelineError::Unknown(ref cause) => cause
+                            DeletePipelineError::AccessDenied(ref cause) => cause,
+DeletePipelineError::IncompatibleVersion(ref cause) => cause,
+DeletePipelineError::InternalService(ref cause) => cause,
+DeletePipelineError::ResourceInUse(ref cause) => cause,
+DeletePipelineError::ResourceNotFound(ref cause) => cause,
+DeletePipelineError::Validation(ref cause) => cause,
+DeletePipelineError::Credentials(ref err) => err.description(),
+DeletePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeletePipelineError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1568,12 +1636,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeletePresetError {
                     
+///<p>General authentication failure. The request was not signed correctly.</p>
+AccessDenied(String),
 ///
 IncompatibleVersion(String),
 ///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
 InternalService(String),
-///<p>General authentication failure. The request was not signed correctly.</p>
-AccessDenied(String),
 ///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
 ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1594,7 +1662,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServiceException" => DeletePresetError::InternalService(String::from(error_message)),"AccessDeniedException" => DeletePresetError::AccessDenied(String::from(error_message)),"IncompatibleVersionException" => DeletePresetError::IncompatibleVersion(String::from(error_message)),"ResourceNotFoundException" => DeletePresetError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeletePresetError::Validation(error_message.to_string()),_ => DeletePresetError::Unknown(String::from(body))
+                                    "AccessDeniedException" => DeletePresetError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => DeletePresetError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => DeletePresetError::InternalService(String::from(error_message)),
+"ResourceNotFoundException" => DeletePresetError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeletePresetError::Validation(error_message.to_string()),
+_ => DeletePresetError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeletePresetError::Unknown(String::from(body))
@@ -1625,7 +1698,14 @@ Unknown(String)
                 impl Error for DeletePresetError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeletePresetError::AccessDenied(ref cause) => cause,DeletePresetError::InternalService(ref cause) => cause,DeletePresetError::ResourceNotFound(ref cause) => cause,DeletePresetError::IncompatibleVersion(ref cause) => cause,DeletePresetError::Validation(ref cause) => cause,DeletePresetError::Credentials(ref err) => err.description(),DeletePresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeletePresetError::Unknown(ref cause) => cause
+                            DeletePresetError::AccessDenied(ref cause) => cause,
+DeletePresetError::IncompatibleVersion(ref cause) => cause,
+DeletePresetError::InternalService(ref cause) => cause,
+DeletePresetError::ResourceNotFound(ref cause) => cause,
+DeletePresetError::Validation(ref cause) => cause,
+DeletePresetError::Credentials(ref err) => err.description(),
+DeletePresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeletePresetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1633,14 +1713,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListJobsByPipelineError {
                     
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
-///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
-InternalService(String),
 ///<p>General authentication failure. The request was not signed correctly.</p>
 AccessDenied(String),
 ///
-IncompatibleVersion(String),/// An error occurred dispatching the HTTP request
+IncompatibleVersion(String),
+///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
+InternalService(String),
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1659,7 +1739,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "IncompatibleVersionException" => ListJobsByPipelineError::IncompatibleVersion(String::from(error_message)),"InternalServiceException" => ListJobsByPipelineError::InternalService(String::from(error_message)),"ResourceNotFoundException" => ListJobsByPipelineError::ResourceNotFound(String::from(error_message)),"AccessDeniedException" => ListJobsByPipelineError::AccessDenied(String::from(error_message)),"ValidationException" => ListJobsByPipelineError::Validation(error_message.to_string()),_ => ListJobsByPipelineError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListJobsByPipelineError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => ListJobsByPipelineError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => ListJobsByPipelineError::InternalService(String::from(error_message)),
+"ResourceNotFoundException" => ListJobsByPipelineError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => ListJobsByPipelineError::Validation(error_message.to_string()),
+_ => ListJobsByPipelineError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListJobsByPipelineError::Unknown(String::from(body))
@@ -1690,7 +1775,14 @@ Unknown(String)
                 impl Error for ListJobsByPipelineError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListJobsByPipelineError::AccessDenied(ref cause) => cause,ListJobsByPipelineError::ResourceNotFound(ref cause) => cause,ListJobsByPipelineError::InternalService(ref cause) => cause,ListJobsByPipelineError::IncompatibleVersion(ref cause) => cause,ListJobsByPipelineError::Validation(ref cause) => cause,ListJobsByPipelineError::Credentials(ref err) => err.description(),ListJobsByPipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListJobsByPipelineError::Unknown(ref cause) => cause
+                            ListJobsByPipelineError::AccessDenied(ref cause) => cause,
+ListJobsByPipelineError::IncompatibleVersion(ref cause) => cause,
+ListJobsByPipelineError::InternalService(ref cause) => cause,
+ListJobsByPipelineError::ResourceNotFound(ref cause) => cause,
+ListJobsByPipelineError::Validation(ref cause) => cause,
+ListJobsByPipelineError::Credentials(ref err) => err.description(),
+ListJobsByPipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListJobsByPipelineError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1698,14 +1790,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListJobsByStatusError {
                     
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
 ///<p>General authentication failure. The request was not signed correctly.</p>
 AccessDenied(String),
 ///
 IncompatibleVersion(String),
 ///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
-InternalService(String),/// An error occurred dispatching the HTTP request
+InternalService(String),
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1724,7 +1816,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "IncompatibleVersionException" => ListJobsByStatusError::IncompatibleVersion(String::from(error_message)),"AccessDeniedException" => ListJobsByStatusError::AccessDenied(String::from(error_message)),"ResourceNotFoundException" => ListJobsByStatusError::ResourceNotFound(String::from(error_message)),"InternalServiceException" => ListJobsByStatusError::InternalService(String::from(error_message)),"ValidationException" => ListJobsByStatusError::Validation(error_message.to_string()),_ => ListJobsByStatusError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListJobsByStatusError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => ListJobsByStatusError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => ListJobsByStatusError::InternalService(String::from(error_message)),
+"ResourceNotFoundException" => ListJobsByStatusError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => ListJobsByStatusError::Validation(error_message.to_string()),
+_ => ListJobsByStatusError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListJobsByStatusError::Unknown(String::from(body))
@@ -1755,7 +1852,14 @@ Unknown(String)
                 impl Error for ListJobsByStatusError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListJobsByStatusError::AccessDenied(ref cause) => cause,ListJobsByStatusError::InternalService(ref cause) => cause,ListJobsByStatusError::IncompatibleVersion(ref cause) => cause,ListJobsByStatusError::ResourceNotFound(ref cause) => cause,ListJobsByStatusError::Validation(ref cause) => cause,ListJobsByStatusError::Credentials(ref err) => err.description(),ListJobsByStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListJobsByStatusError::Unknown(ref cause) => cause
+                            ListJobsByStatusError::AccessDenied(ref cause) => cause,
+ListJobsByStatusError::IncompatibleVersion(ref cause) => cause,
+ListJobsByStatusError::InternalService(ref cause) => cause,
+ListJobsByStatusError::ResourceNotFound(ref cause) => cause,
+ListJobsByStatusError::Validation(ref cause) => cause,
+ListJobsByStatusError::Credentials(ref err) => err.description(),
+ListJobsByStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListJobsByStatusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1763,12 +1867,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListPipelinesError {
                     
-///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
-InternalService(String),
+///<p>General authentication failure. The request was not signed correctly.</p>
+AccessDenied(String),
 ///
 IncompatibleVersion(String),
-///<p>General authentication failure. The request was not signed correctly.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
+InternalService(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1787,7 +1891,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServiceException" => ListPipelinesError::InternalService(String::from(error_message)),"AccessDeniedException" => ListPipelinesError::AccessDenied(String::from(error_message)),"IncompatibleVersionException" => ListPipelinesError::IncompatibleVersion(String::from(error_message)),"ValidationException" => ListPipelinesError::Validation(error_message.to_string()),_ => ListPipelinesError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListPipelinesError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => ListPipelinesError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => ListPipelinesError::InternalService(String::from(error_message)),
+"ValidationException" => ListPipelinesError::Validation(error_message.to_string()),
+_ => ListPipelinesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListPipelinesError::Unknown(String::from(body))
@@ -1818,7 +1926,13 @@ Unknown(String)
                 impl Error for ListPipelinesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListPipelinesError::AccessDenied(ref cause) => cause,ListPipelinesError::InternalService(ref cause) => cause,ListPipelinesError::IncompatibleVersion(ref cause) => cause,ListPipelinesError::Validation(ref cause) => cause,ListPipelinesError::Credentials(ref err) => err.description(),ListPipelinesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListPipelinesError::Unknown(ref cause) => cause
+                            ListPipelinesError::AccessDenied(ref cause) => cause,
+ListPipelinesError::IncompatibleVersion(ref cause) => cause,
+ListPipelinesError::InternalService(ref cause) => cause,
+ListPipelinesError::Validation(ref cause) => cause,
+ListPipelinesError::Credentials(ref err) => err.description(),
+ListPipelinesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListPipelinesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1826,10 +1940,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListPresetsError {
                     
-///
-IncompatibleVersion(String),
 ///<p>General authentication failure. The request was not signed correctly.</p>
 AccessDenied(String),
+///
+IncompatibleVersion(String),
 ///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
 InternalService(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1850,7 +1964,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServiceException" => ListPresetsError::InternalService(String::from(error_message)),"IncompatibleVersionException" => ListPresetsError::IncompatibleVersion(String::from(error_message)),"AccessDeniedException" => ListPresetsError::AccessDenied(String::from(error_message)),"ValidationException" => ListPresetsError::Validation(error_message.to_string()),_ => ListPresetsError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListPresetsError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => ListPresetsError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => ListPresetsError::InternalService(String::from(error_message)),
+"ValidationException" => ListPresetsError::Validation(error_message.to_string()),
+_ => ListPresetsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListPresetsError::Unknown(String::from(body))
@@ -1881,7 +1999,13 @@ Unknown(String)
                 impl Error for ListPresetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListPresetsError::AccessDenied(ref cause) => cause,ListPresetsError::InternalService(ref cause) => cause,ListPresetsError::IncompatibleVersion(ref cause) => cause,ListPresetsError::Validation(ref cause) => cause,ListPresetsError::Credentials(ref err) => err.description(),ListPresetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListPresetsError::Unknown(ref cause) => cause
+                            ListPresetsError::AccessDenied(ref cause) => cause,
+ListPresetsError::IncompatibleVersion(ref cause) => cause,
+ListPresetsError::InternalService(ref cause) => cause,
+ListPresetsError::Validation(ref cause) => cause,
+ListPresetsError::Credentials(ref err) => err.description(),
+ListPresetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListPresetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1889,14 +2013,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ReadJobError {
                     
+///<p>General authentication failure. The request was not signed correctly.</p>
+AccessDenied(String),
 ///
 IncompatibleVersion(String),
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
 ///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
 InternalService(String),
-///<p>General authentication failure. The request was not signed correctly.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1915,7 +2039,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "IncompatibleVersionException" => ReadJobError::IncompatibleVersion(String::from(error_message)),"AccessDeniedException" => ReadJobError::AccessDenied(String::from(error_message)),"ResourceNotFoundException" => ReadJobError::ResourceNotFound(String::from(error_message)),"InternalServiceException" => ReadJobError::InternalService(String::from(error_message)),"ValidationException" => ReadJobError::Validation(error_message.to_string()),_ => ReadJobError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ReadJobError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => ReadJobError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => ReadJobError::InternalService(String::from(error_message)),
+"ResourceNotFoundException" => ReadJobError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => ReadJobError::Validation(error_message.to_string()),
+_ => ReadJobError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ReadJobError::Unknown(String::from(body))
@@ -1946,7 +2075,14 @@ Unknown(String)
                 impl Error for ReadJobError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReadJobError::IncompatibleVersion(ref cause) => cause,ReadJobError::ResourceNotFound(ref cause) => cause,ReadJobError::InternalService(ref cause) => cause,ReadJobError::AccessDenied(ref cause) => cause,ReadJobError::Validation(ref cause) => cause,ReadJobError::Credentials(ref err) => err.description(),ReadJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReadJobError::Unknown(ref cause) => cause
+                            ReadJobError::AccessDenied(ref cause) => cause,
+ReadJobError::IncompatibleVersion(ref cause) => cause,
+ReadJobError::InternalService(ref cause) => cause,
+ReadJobError::ResourceNotFound(ref cause) => cause,
+ReadJobError::Validation(ref cause) => cause,
+ReadJobError::Credentials(ref err) => err.description(),
+ReadJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReadJobError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1954,14 +2090,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ReadPipelineError {
                     
+///<p>General authentication failure. The request was not signed correctly.</p>
+AccessDenied(String),
 ///
 IncompatibleVersion(String),
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
 ///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
 InternalService(String),
-///<p>General authentication failure. The request was not signed correctly.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1980,7 +2116,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServiceException" => ReadPipelineError::InternalService(String::from(error_message)),"AccessDeniedException" => ReadPipelineError::AccessDenied(String::from(error_message)),"ResourceNotFoundException" => ReadPipelineError::ResourceNotFound(String::from(error_message)),"IncompatibleVersionException" => ReadPipelineError::IncompatibleVersion(String::from(error_message)),"ValidationException" => ReadPipelineError::Validation(error_message.to_string()),_ => ReadPipelineError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ReadPipelineError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => ReadPipelineError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => ReadPipelineError::InternalService(String::from(error_message)),
+"ResourceNotFoundException" => ReadPipelineError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => ReadPipelineError::Validation(error_message.to_string()),
+_ => ReadPipelineError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ReadPipelineError::Unknown(String::from(body))
@@ -2011,7 +2152,14 @@ Unknown(String)
                 impl Error for ReadPipelineError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReadPipelineError::ResourceNotFound(ref cause) => cause,ReadPipelineError::AccessDenied(ref cause) => cause,ReadPipelineError::InternalService(ref cause) => cause,ReadPipelineError::IncompatibleVersion(ref cause) => cause,ReadPipelineError::Validation(ref cause) => cause,ReadPipelineError::Credentials(ref err) => err.description(),ReadPipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReadPipelineError::Unknown(ref cause) => cause
+                            ReadPipelineError::AccessDenied(ref cause) => cause,
+ReadPipelineError::IncompatibleVersion(ref cause) => cause,
+ReadPipelineError::InternalService(ref cause) => cause,
+ReadPipelineError::ResourceNotFound(ref cause) => cause,
+ReadPipelineError::Validation(ref cause) => cause,
+ReadPipelineError::Credentials(ref err) => err.description(),
+ReadPipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReadPipelineError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2023,10 +2171,10 @@ Unknown(String)
 AccessDenied(String),
 ///
 IncompatibleVersion(String),
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
 ///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
-InternalService(String),/// An error occurred dispatching the HTTP request
+InternalService(String),
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2045,7 +2193,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServiceException" => ReadPresetError::InternalService(String::from(error_message)),"AccessDeniedException" => ReadPresetError::AccessDenied(String::from(error_message)),"ResourceNotFoundException" => ReadPresetError::ResourceNotFound(String::from(error_message)),"IncompatibleVersionException" => ReadPresetError::IncompatibleVersion(String::from(error_message)),"ValidationException" => ReadPresetError::Validation(error_message.to_string()),_ => ReadPresetError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ReadPresetError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => ReadPresetError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => ReadPresetError::InternalService(String::from(error_message)),
+"ResourceNotFoundException" => ReadPresetError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => ReadPresetError::Validation(error_message.to_string()),
+_ => ReadPresetError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ReadPresetError::Unknown(String::from(body))
@@ -2076,7 +2229,14 @@ Unknown(String)
                 impl Error for ReadPresetError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReadPresetError::IncompatibleVersion(ref cause) => cause,ReadPresetError::AccessDenied(ref cause) => cause,ReadPresetError::InternalService(ref cause) => cause,ReadPresetError::ResourceNotFound(ref cause) => cause,ReadPresetError::Validation(ref cause) => cause,ReadPresetError::Credentials(ref err) => err.description(),ReadPresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReadPresetError::Unknown(ref cause) => cause
+                            ReadPresetError::AccessDenied(ref cause) => cause,
+ReadPresetError::IncompatibleVersion(ref cause) => cause,
+ReadPresetError::InternalService(ref cause) => cause,
+ReadPresetError::ResourceNotFound(ref cause) => cause,
+ReadPresetError::Validation(ref cause) => cause,
+ReadPresetError::Credentials(ref err) => err.description(),
+ReadPresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReadPresetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2084,14 +2244,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum TestRoleError {
                     
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
 ///<p>General authentication failure. The request was not signed correctly.</p>
 AccessDenied(String),
+///
+IncompatibleVersion(String),
 ///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
 InternalService(String),
-///
-IncompatibleVersion(String),/// An error occurred dispatching the HTTP request
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2110,7 +2270,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServiceException" => TestRoleError::InternalService(String::from(error_message)),"ResourceNotFoundException" => TestRoleError::ResourceNotFound(String::from(error_message)),"IncompatibleVersionException" => TestRoleError::IncompatibleVersion(String::from(error_message)),"AccessDeniedException" => TestRoleError::AccessDenied(String::from(error_message)),"ValidationException" => TestRoleError::Validation(error_message.to_string()),_ => TestRoleError::Unknown(String::from(body))
+                                    "AccessDeniedException" => TestRoleError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => TestRoleError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => TestRoleError::InternalService(String::from(error_message)),
+"ResourceNotFoundException" => TestRoleError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => TestRoleError::Validation(error_message.to_string()),
+_ => TestRoleError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => TestRoleError::Unknown(String::from(body))
@@ -2141,7 +2306,14 @@ Unknown(String)
                 impl Error for TestRoleError {
                     fn description(&self) -> &str {
                         match *self {
-                            TestRoleError::InternalService(ref cause) => cause,TestRoleError::IncompatibleVersion(ref cause) => cause,TestRoleError::ResourceNotFound(ref cause) => cause,TestRoleError::AccessDenied(ref cause) => cause,TestRoleError::Validation(ref cause) => cause,TestRoleError::Credentials(ref err) => err.description(),TestRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),TestRoleError::Unknown(ref cause) => cause
+                            TestRoleError::AccessDenied(ref cause) => cause,
+TestRoleError::IncompatibleVersion(ref cause) => cause,
+TestRoleError::InternalService(ref cause) => cause,
+TestRoleError::ResourceNotFound(ref cause) => cause,
+TestRoleError::Validation(ref cause) => cause,
+TestRoleError::Credentials(ref err) => err.description(),
+TestRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+TestRoleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2149,16 +2321,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdatePipelineError {
                     
+///<p>General authentication failure. The request was not signed correctly.</p>
+AccessDenied(String),
 ///
 IncompatibleVersion(String),
 ///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
 InternalService(String),
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
 ///<p>The resource you are attempting to change is in use. For example, you are attempting to delete a pipeline that is currently in use.</p>
 ResourceInUse(String),
-///<p>General authentication failure. The request was not signed correctly.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2177,7 +2349,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "AccessDeniedException" => UpdatePipelineError::AccessDenied(String::from(error_message)),"ResourceNotFoundException" => UpdatePipelineError::ResourceNotFound(String::from(error_message)),"ResourceInUseException" => UpdatePipelineError::ResourceInUse(String::from(error_message)),"InternalServiceException" => UpdatePipelineError::InternalService(String::from(error_message)),"IncompatibleVersionException" => UpdatePipelineError::IncompatibleVersion(String::from(error_message)),"ValidationException" => UpdatePipelineError::Validation(error_message.to_string()),_ => UpdatePipelineError::Unknown(String::from(body))
+                                    "AccessDeniedException" => UpdatePipelineError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => UpdatePipelineError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => UpdatePipelineError::InternalService(String::from(error_message)),
+"ResourceInUseException" => UpdatePipelineError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => UpdatePipelineError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdatePipelineError::Validation(error_message.to_string()),
+_ => UpdatePipelineError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdatePipelineError::Unknown(String::from(body))
@@ -2208,7 +2386,15 @@ Unknown(String)
                 impl Error for UpdatePipelineError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdatePipelineError::AccessDenied(ref cause) => cause,UpdatePipelineError::ResourceNotFound(ref cause) => cause,UpdatePipelineError::IncompatibleVersion(ref cause) => cause,UpdatePipelineError::InternalService(ref cause) => cause,UpdatePipelineError::ResourceInUse(ref cause) => cause,UpdatePipelineError::Validation(ref cause) => cause,UpdatePipelineError::Credentials(ref err) => err.description(),UpdatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdatePipelineError::Unknown(ref cause) => cause
+                            UpdatePipelineError::AccessDenied(ref cause) => cause,
+UpdatePipelineError::IncompatibleVersion(ref cause) => cause,
+UpdatePipelineError::InternalService(ref cause) => cause,
+UpdatePipelineError::ResourceInUse(ref cause) => cause,
+UpdatePipelineError::ResourceNotFound(ref cause) => cause,
+UpdatePipelineError::Validation(ref cause) => cause,
+UpdatePipelineError::Credentials(ref err) => err.description(),
+UpdatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdatePipelineError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2216,16 +2402,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdatePipelineNotificationsError {
                     
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
-///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
-InternalService(String),
 ///<p>General authentication failure. The request was not signed correctly.</p>
 AccessDenied(String),
 ///
 IncompatibleVersion(String),
+///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
+InternalService(String),
 ///<p>The resource you are attempting to change is in use. For example, you are attempting to delete a pipeline that is currently in use.</p>
-ResourceInUse(String),/// An error occurred dispatching the HTTP request
+ResourceInUse(String),
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2244,7 +2430,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServiceException" => UpdatePipelineNotificationsError::InternalService(String::from(error_message)),"AccessDeniedException" => UpdatePipelineNotificationsError::AccessDenied(String::from(error_message)),"IncompatibleVersionException" => UpdatePipelineNotificationsError::IncompatibleVersion(String::from(error_message)),"ResourceNotFoundException" => UpdatePipelineNotificationsError::ResourceNotFound(String::from(error_message)),"ResourceInUseException" => UpdatePipelineNotificationsError::ResourceInUse(String::from(error_message)),"ValidationException" => UpdatePipelineNotificationsError::Validation(error_message.to_string()),_ => UpdatePipelineNotificationsError::Unknown(String::from(body))
+                                    "AccessDeniedException" => UpdatePipelineNotificationsError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => UpdatePipelineNotificationsError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => UpdatePipelineNotificationsError::InternalService(String::from(error_message)),
+"ResourceInUseException" => UpdatePipelineNotificationsError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => UpdatePipelineNotificationsError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdatePipelineNotificationsError::Validation(error_message.to_string()),
+_ => UpdatePipelineNotificationsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdatePipelineNotificationsError::Unknown(String::from(body))
@@ -2275,7 +2467,15 @@ Unknown(String)
                 impl Error for UpdatePipelineNotificationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdatePipelineNotificationsError::ResourceInUse(ref cause) => cause,UpdatePipelineNotificationsError::InternalService(ref cause) => cause,UpdatePipelineNotificationsError::ResourceNotFound(ref cause) => cause,UpdatePipelineNotificationsError::IncompatibleVersion(ref cause) => cause,UpdatePipelineNotificationsError::AccessDenied(ref cause) => cause,UpdatePipelineNotificationsError::Validation(ref cause) => cause,UpdatePipelineNotificationsError::Credentials(ref err) => err.description(),UpdatePipelineNotificationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdatePipelineNotificationsError::Unknown(ref cause) => cause
+                            UpdatePipelineNotificationsError::AccessDenied(ref cause) => cause,
+UpdatePipelineNotificationsError::IncompatibleVersion(ref cause) => cause,
+UpdatePipelineNotificationsError::InternalService(ref cause) => cause,
+UpdatePipelineNotificationsError::ResourceInUse(ref cause) => cause,
+UpdatePipelineNotificationsError::ResourceNotFound(ref cause) => cause,
+UpdatePipelineNotificationsError::Validation(ref cause) => cause,
+UpdatePipelineNotificationsError::Credentials(ref err) => err.description(),
+UpdatePipelineNotificationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdatePipelineNotificationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2283,16 +2483,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdatePipelineStatusError {
                     
-///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
-ResourceNotFound(String),
-///<p>The resource you are attempting to change is in use. For example, you are attempting to delete a pipeline that is currently in use.</p>
-ResourceInUse(String),
-///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
-InternalService(String),
+///<p>General authentication failure. The request was not signed correctly.</p>
+AccessDenied(String),
 ///
 IncompatibleVersion(String),
-///<p>General authentication failure. The request was not signed correctly.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+///<p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
+InternalService(String),
+///<p>The resource you are attempting to change is in use. For example, you are attempting to delete a pipeline that is currently in use.</p>
+ResourceInUse(String),
+///<p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2311,7 +2511,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "AccessDeniedException" => UpdatePipelineStatusError::AccessDenied(String::from(error_message)),"InternalServiceException" => UpdatePipelineStatusError::InternalService(String::from(error_message)),"ResourceInUseException" => UpdatePipelineStatusError::ResourceInUse(String::from(error_message)),"ResourceNotFoundException" => UpdatePipelineStatusError::ResourceNotFound(String::from(error_message)),"IncompatibleVersionException" => UpdatePipelineStatusError::IncompatibleVersion(String::from(error_message)),"ValidationException" => UpdatePipelineStatusError::Validation(error_message.to_string()),_ => UpdatePipelineStatusError::Unknown(String::from(body))
+                                    "AccessDeniedException" => UpdatePipelineStatusError::AccessDenied(String::from(error_message)),
+"IncompatibleVersionException" => UpdatePipelineStatusError::IncompatibleVersion(String::from(error_message)),
+"InternalServiceException" => UpdatePipelineStatusError::InternalService(String::from(error_message)),
+"ResourceInUseException" => UpdatePipelineStatusError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => UpdatePipelineStatusError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdatePipelineStatusError::Validation(error_message.to_string()),
+_ => UpdatePipelineStatusError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdatePipelineStatusError::Unknown(String::from(body))
@@ -2342,7 +2548,15 @@ Unknown(String)
                 impl Error for UpdatePipelineStatusError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdatePipelineStatusError::ResourceNotFound(ref cause) => cause,UpdatePipelineStatusError::InternalService(ref cause) => cause,UpdatePipelineStatusError::ResourceInUse(ref cause) => cause,UpdatePipelineStatusError::AccessDenied(ref cause) => cause,UpdatePipelineStatusError::IncompatibleVersion(ref cause) => cause,UpdatePipelineStatusError::Validation(ref cause) => cause,UpdatePipelineStatusError::Credentials(ref err) => err.description(),UpdatePipelineStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdatePipelineStatusError::Unknown(ref cause) => cause
+                            UpdatePipelineStatusError::AccessDenied(ref cause) => cause,
+UpdatePipelineStatusError::IncompatibleVersion(ref cause) => cause,
+UpdatePipelineStatusError::InternalService(ref cause) => cause,
+UpdatePipelineStatusError::ResourceInUse(ref cause) => cause,
+UpdatePipelineStatusError::ResourceNotFound(ref cause) => cause,
+UpdatePipelineStatusError::Validation(ref cause) => cause,
+UpdatePipelineStatusError::Credentials(ref err) => err.description(),
+UpdatePipelineStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdatePipelineStatusError::Unknown(ref cause) => cause
                         }
                     }
                  }

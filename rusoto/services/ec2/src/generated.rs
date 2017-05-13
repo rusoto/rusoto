@@ -36526,7 +36526,10 @@ Unknown(String)
                 impl Error for AcceptReservedInstancesExchangeQuoteError {
                     fn description(&self) -> &str {
                         match *self {
-                            AcceptReservedInstancesExchangeQuoteError::Validation(ref cause) => cause,AcceptReservedInstancesExchangeQuoteError::Credentials(ref err) => err.description(),AcceptReservedInstancesExchangeQuoteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AcceptReservedInstancesExchangeQuoteError::Unknown(ref cause) => cause
+                            AcceptReservedInstancesExchangeQuoteError::Validation(ref cause) => cause,
+AcceptReservedInstancesExchangeQuoteError::Credentials(ref err) => err.description(),
+AcceptReservedInstancesExchangeQuoteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AcceptReservedInstancesExchangeQuoteError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -36582,7 +36585,10 @@ Unknown(String)
                 impl Error for AcceptVpcPeeringConnectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            AcceptVpcPeeringConnectionError::Validation(ref cause) => cause,AcceptVpcPeeringConnectionError::Credentials(ref err) => err.description(),AcceptVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AcceptVpcPeeringConnectionError::Unknown(ref cause) => cause
+                            AcceptVpcPeeringConnectionError::Validation(ref cause) => cause,
+AcceptVpcPeeringConnectionError::Credentials(ref err) => err.description(),
+AcceptVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AcceptVpcPeeringConnectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -36638,7 +36644,10 @@ Unknown(String)
                 impl Error for AllocateAddressError {
                     fn description(&self) -> &str {
                         match *self {
-                            AllocateAddressError::Validation(ref cause) => cause,AllocateAddressError::Credentials(ref err) => err.description(),AllocateAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AllocateAddressError::Unknown(ref cause) => cause
+                            AllocateAddressError::Validation(ref cause) => cause,
+AllocateAddressError::Credentials(ref err) => err.description(),
+AllocateAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AllocateAddressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -36694,7 +36703,10 @@ Unknown(String)
                 impl Error for AllocateHostsError {
                     fn description(&self) -> &str {
                         match *self {
-                            AllocateHostsError::Validation(ref cause) => cause,AllocateHostsError::Credentials(ref err) => err.description(),AllocateHostsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AllocateHostsError::Unknown(ref cause) => cause
+                            AllocateHostsError::Validation(ref cause) => cause,
+AllocateHostsError::Credentials(ref err) => err.description(),
+AllocateHostsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AllocateHostsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -36750,7 +36762,10 @@ Unknown(String)
                 impl Error for AssignIpv6AddressesError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssignIpv6AddressesError::Validation(ref cause) => cause,AssignIpv6AddressesError::Credentials(ref err) => err.description(),AssignIpv6AddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssignIpv6AddressesError::Unknown(ref cause) => cause
+                            AssignIpv6AddressesError::Validation(ref cause) => cause,
+AssignIpv6AddressesError::Credentials(ref err) => err.description(),
+AssignIpv6AddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssignIpv6AddressesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -36806,7 +36821,10 @@ Unknown(String)
                 impl Error for AssignPrivateIpAddressesError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssignPrivateIpAddressesError::Validation(ref cause) => cause,AssignPrivateIpAddressesError::Credentials(ref err) => err.description(),AssignPrivateIpAddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssignPrivateIpAddressesError::Unknown(ref cause) => cause
+                            AssignPrivateIpAddressesError::Validation(ref cause) => cause,
+AssignPrivateIpAddressesError::Credentials(ref err) => err.description(),
+AssignPrivateIpAddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssignPrivateIpAddressesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -36862,7 +36880,10 @@ Unknown(String)
                 impl Error for AssociateAddressError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssociateAddressError::Validation(ref cause) => cause,AssociateAddressError::Credentials(ref err) => err.description(),AssociateAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssociateAddressError::Unknown(ref cause) => cause
+                            AssociateAddressError::Validation(ref cause) => cause,
+AssociateAddressError::Credentials(ref err) => err.description(),
+AssociateAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssociateAddressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -36918,7 +36939,10 @@ Unknown(String)
                 impl Error for AssociateDhcpOptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssociateDhcpOptionsError::Validation(ref cause) => cause,AssociateDhcpOptionsError::Credentials(ref err) => err.description(),AssociateDhcpOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssociateDhcpOptionsError::Unknown(ref cause) => cause
+                            AssociateDhcpOptionsError::Validation(ref cause) => cause,
+AssociateDhcpOptionsError::Credentials(ref err) => err.description(),
+AssociateDhcpOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssociateDhcpOptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -36974,7 +36998,10 @@ Unknown(String)
                 impl Error for AssociateRouteTableError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssociateRouteTableError::Validation(ref cause) => cause,AssociateRouteTableError::Credentials(ref err) => err.description(),AssociateRouteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssociateRouteTableError::Unknown(ref cause) => cause
+                            AssociateRouteTableError::Validation(ref cause) => cause,
+AssociateRouteTableError::Credentials(ref err) => err.description(),
+AssociateRouteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssociateRouteTableError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37030,7 +37057,10 @@ Unknown(String)
                 impl Error for AssociateSubnetCidrBlockError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssociateSubnetCidrBlockError::Validation(ref cause) => cause,AssociateSubnetCidrBlockError::Credentials(ref err) => err.description(),AssociateSubnetCidrBlockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssociateSubnetCidrBlockError::Unknown(ref cause) => cause
+                            AssociateSubnetCidrBlockError::Validation(ref cause) => cause,
+AssociateSubnetCidrBlockError::Credentials(ref err) => err.description(),
+AssociateSubnetCidrBlockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssociateSubnetCidrBlockError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37086,7 +37116,10 @@ Unknown(String)
                 impl Error for AssociateVpcCidrBlockError {
                     fn description(&self) -> &str {
                         match *self {
-                            AssociateVpcCidrBlockError::Validation(ref cause) => cause,AssociateVpcCidrBlockError::Credentials(ref err) => err.description(),AssociateVpcCidrBlockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AssociateVpcCidrBlockError::Unknown(ref cause) => cause
+                            AssociateVpcCidrBlockError::Validation(ref cause) => cause,
+AssociateVpcCidrBlockError::Credentials(ref err) => err.description(),
+AssociateVpcCidrBlockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AssociateVpcCidrBlockError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37142,7 +37175,10 @@ Unknown(String)
                 impl Error for AttachClassicLinkVpcError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachClassicLinkVpcError::Validation(ref cause) => cause,AttachClassicLinkVpcError::Credentials(ref err) => err.description(),AttachClassicLinkVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachClassicLinkVpcError::Unknown(ref cause) => cause
+                            AttachClassicLinkVpcError::Validation(ref cause) => cause,
+AttachClassicLinkVpcError::Credentials(ref err) => err.description(),
+AttachClassicLinkVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachClassicLinkVpcError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37198,7 +37234,10 @@ Unknown(String)
                 impl Error for AttachInternetGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachInternetGatewayError::Validation(ref cause) => cause,AttachInternetGatewayError::Credentials(ref err) => err.description(),AttachInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachInternetGatewayError::Unknown(ref cause) => cause
+                            AttachInternetGatewayError::Validation(ref cause) => cause,
+AttachInternetGatewayError::Credentials(ref err) => err.description(),
+AttachInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachInternetGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37254,7 +37293,10 @@ Unknown(String)
                 impl Error for AttachNetworkInterfaceError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachNetworkInterfaceError::Validation(ref cause) => cause,AttachNetworkInterfaceError::Credentials(ref err) => err.description(),AttachNetworkInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachNetworkInterfaceError::Unknown(ref cause) => cause
+                            AttachNetworkInterfaceError::Validation(ref cause) => cause,
+AttachNetworkInterfaceError::Credentials(ref err) => err.description(),
+AttachNetworkInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachNetworkInterfaceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37310,7 +37352,10 @@ Unknown(String)
                 impl Error for AttachVolumeError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachVolumeError::Validation(ref cause) => cause,AttachVolumeError::Credentials(ref err) => err.description(),AttachVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachVolumeError::Unknown(ref cause) => cause
+                            AttachVolumeError::Validation(ref cause) => cause,
+AttachVolumeError::Credentials(ref err) => err.description(),
+AttachVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachVolumeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37366,7 +37411,10 @@ Unknown(String)
                 impl Error for AttachVpnGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachVpnGatewayError::Validation(ref cause) => cause,AttachVpnGatewayError::Credentials(ref err) => err.description(),AttachVpnGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachVpnGatewayError::Unknown(ref cause) => cause
+                            AttachVpnGatewayError::Validation(ref cause) => cause,
+AttachVpnGatewayError::Credentials(ref err) => err.description(),
+AttachVpnGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachVpnGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37422,7 +37470,10 @@ Unknown(String)
                 impl Error for AuthorizeSecurityGroupEgressError {
                     fn description(&self) -> &str {
                         match *self {
-                            AuthorizeSecurityGroupEgressError::Validation(ref cause) => cause,AuthorizeSecurityGroupEgressError::Credentials(ref err) => err.description(),AuthorizeSecurityGroupEgressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AuthorizeSecurityGroupEgressError::Unknown(ref cause) => cause
+                            AuthorizeSecurityGroupEgressError::Validation(ref cause) => cause,
+AuthorizeSecurityGroupEgressError::Credentials(ref err) => err.description(),
+AuthorizeSecurityGroupEgressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AuthorizeSecurityGroupEgressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37478,7 +37529,10 @@ Unknown(String)
                 impl Error for AuthorizeSecurityGroupIngressError {
                     fn description(&self) -> &str {
                         match *self {
-                            AuthorizeSecurityGroupIngressError::Validation(ref cause) => cause,AuthorizeSecurityGroupIngressError::Credentials(ref err) => err.description(),AuthorizeSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AuthorizeSecurityGroupIngressError::Unknown(ref cause) => cause
+                            AuthorizeSecurityGroupIngressError::Validation(ref cause) => cause,
+AuthorizeSecurityGroupIngressError::Credentials(ref err) => err.description(),
+AuthorizeSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AuthorizeSecurityGroupIngressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37534,7 +37588,10 @@ Unknown(String)
                 impl Error for BundleInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            BundleInstanceError::Validation(ref cause) => cause,BundleInstanceError::Credentials(ref err) => err.description(),BundleInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BundleInstanceError::Unknown(ref cause) => cause
+                            BundleInstanceError::Validation(ref cause) => cause,
+BundleInstanceError::Credentials(ref err) => err.description(),
+BundleInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BundleInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37590,7 +37647,10 @@ Unknown(String)
                 impl Error for CancelBundleTaskError {
                     fn description(&self) -> &str {
                         match *self {
-                            CancelBundleTaskError::Validation(ref cause) => cause,CancelBundleTaskError::Credentials(ref err) => err.description(),CancelBundleTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CancelBundleTaskError::Unknown(ref cause) => cause
+                            CancelBundleTaskError::Validation(ref cause) => cause,
+CancelBundleTaskError::Credentials(ref err) => err.description(),
+CancelBundleTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CancelBundleTaskError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37646,7 +37706,10 @@ Unknown(String)
                 impl Error for CancelConversionTaskError {
                     fn description(&self) -> &str {
                         match *self {
-                            CancelConversionTaskError::Validation(ref cause) => cause,CancelConversionTaskError::Credentials(ref err) => err.description(),CancelConversionTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CancelConversionTaskError::Unknown(ref cause) => cause
+                            CancelConversionTaskError::Validation(ref cause) => cause,
+CancelConversionTaskError::Credentials(ref err) => err.description(),
+CancelConversionTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CancelConversionTaskError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37702,7 +37765,10 @@ Unknown(String)
                 impl Error for CancelExportTaskError {
                     fn description(&self) -> &str {
                         match *self {
-                            CancelExportTaskError::Validation(ref cause) => cause,CancelExportTaskError::Credentials(ref err) => err.description(),CancelExportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CancelExportTaskError::Unknown(ref cause) => cause
+                            CancelExportTaskError::Validation(ref cause) => cause,
+CancelExportTaskError::Credentials(ref err) => err.description(),
+CancelExportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CancelExportTaskError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37758,7 +37824,10 @@ Unknown(String)
                 impl Error for CancelImportTaskError {
                     fn description(&self) -> &str {
                         match *self {
-                            CancelImportTaskError::Validation(ref cause) => cause,CancelImportTaskError::Credentials(ref err) => err.description(),CancelImportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CancelImportTaskError::Unknown(ref cause) => cause
+                            CancelImportTaskError::Validation(ref cause) => cause,
+CancelImportTaskError::Credentials(ref err) => err.description(),
+CancelImportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CancelImportTaskError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37814,7 +37883,10 @@ Unknown(String)
                 impl Error for CancelReservedInstancesListingError {
                     fn description(&self) -> &str {
                         match *self {
-                            CancelReservedInstancesListingError::Validation(ref cause) => cause,CancelReservedInstancesListingError::Credentials(ref err) => err.description(),CancelReservedInstancesListingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CancelReservedInstancesListingError::Unknown(ref cause) => cause
+                            CancelReservedInstancesListingError::Validation(ref cause) => cause,
+CancelReservedInstancesListingError::Credentials(ref err) => err.description(),
+CancelReservedInstancesListingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CancelReservedInstancesListingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37870,7 +37942,10 @@ Unknown(String)
                 impl Error for EC2CancelSpotFleetRequestsError {
                     fn description(&self) -> &str {
                         match *self {
-                            EC2CancelSpotFleetRequestsError::Validation(ref cause) => cause,EC2CancelSpotFleetRequestsError::Credentials(ref err) => err.description(),EC2CancelSpotFleetRequestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EC2CancelSpotFleetRequestsError::Unknown(ref cause) => cause
+                            EC2CancelSpotFleetRequestsError::Validation(ref cause) => cause,
+EC2CancelSpotFleetRequestsError::Credentials(ref err) => err.description(),
+EC2CancelSpotFleetRequestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EC2CancelSpotFleetRequestsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37926,7 +38001,10 @@ Unknown(String)
                 impl Error for CancelSpotInstanceRequestsError {
                     fn description(&self) -> &str {
                         match *self {
-                            CancelSpotInstanceRequestsError::Validation(ref cause) => cause,CancelSpotInstanceRequestsError::Credentials(ref err) => err.description(),CancelSpotInstanceRequestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CancelSpotInstanceRequestsError::Unknown(ref cause) => cause
+                            CancelSpotInstanceRequestsError::Validation(ref cause) => cause,
+CancelSpotInstanceRequestsError::Credentials(ref err) => err.description(),
+CancelSpotInstanceRequestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CancelSpotInstanceRequestsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -37982,7 +38060,10 @@ Unknown(String)
                 impl Error for ConfirmProductInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ConfirmProductInstanceError::Validation(ref cause) => cause,ConfirmProductInstanceError::Credentials(ref err) => err.description(),ConfirmProductInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ConfirmProductInstanceError::Unknown(ref cause) => cause
+                            ConfirmProductInstanceError::Validation(ref cause) => cause,
+ConfirmProductInstanceError::Credentials(ref err) => err.description(),
+ConfirmProductInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ConfirmProductInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38038,7 +38119,10 @@ Unknown(String)
                 impl Error for CopyImageError {
                     fn description(&self) -> &str {
                         match *self {
-                            CopyImageError::Validation(ref cause) => cause,CopyImageError::Credentials(ref err) => err.description(),CopyImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CopyImageError::Unknown(ref cause) => cause
+                            CopyImageError::Validation(ref cause) => cause,
+CopyImageError::Credentials(ref err) => err.description(),
+CopyImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CopyImageError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38094,7 +38178,10 @@ Unknown(String)
                 impl Error for CopySnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            CopySnapshotError::Validation(ref cause) => cause,CopySnapshotError::Credentials(ref err) => err.description(),CopySnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CopySnapshotError::Unknown(ref cause) => cause
+                            CopySnapshotError::Validation(ref cause) => cause,
+CopySnapshotError::Credentials(ref err) => err.description(),
+CopySnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CopySnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38150,7 +38237,10 @@ Unknown(String)
                 impl Error for CreateCustomerGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateCustomerGatewayError::Validation(ref cause) => cause,CreateCustomerGatewayError::Credentials(ref err) => err.description(),CreateCustomerGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateCustomerGatewayError::Unknown(ref cause) => cause
+                            CreateCustomerGatewayError::Validation(ref cause) => cause,
+CreateCustomerGatewayError::Credentials(ref err) => err.description(),
+CreateCustomerGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateCustomerGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38206,7 +38296,10 @@ Unknown(String)
                 impl Error for CreateDhcpOptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDhcpOptionsError::Validation(ref cause) => cause,CreateDhcpOptionsError::Credentials(ref err) => err.description(),CreateDhcpOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDhcpOptionsError::Unknown(ref cause) => cause
+                            CreateDhcpOptionsError::Validation(ref cause) => cause,
+CreateDhcpOptionsError::Credentials(ref err) => err.description(),
+CreateDhcpOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDhcpOptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38262,7 +38355,10 @@ Unknown(String)
                 impl Error for CreateEgressOnlyInternetGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateEgressOnlyInternetGatewayError::Validation(ref cause) => cause,CreateEgressOnlyInternetGatewayError::Credentials(ref err) => err.description(),CreateEgressOnlyInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateEgressOnlyInternetGatewayError::Unknown(ref cause) => cause
+                            CreateEgressOnlyInternetGatewayError::Validation(ref cause) => cause,
+CreateEgressOnlyInternetGatewayError::Credentials(ref err) => err.description(),
+CreateEgressOnlyInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateEgressOnlyInternetGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38318,7 +38414,10 @@ Unknown(String)
                 impl Error for CreateFlowLogsError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateFlowLogsError::Validation(ref cause) => cause,CreateFlowLogsError::Credentials(ref err) => err.description(),CreateFlowLogsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateFlowLogsError::Unknown(ref cause) => cause
+                            CreateFlowLogsError::Validation(ref cause) => cause,
+CreateFlowLogsError::Credentials(ref err) => err.description(),
+CreateFlowLogsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateFlowLogsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38374,7 +38473,10 @@ Unknown(String)
                 impl Error for CreateImageError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateImageError::Validation(ref cause) => cause,CreateImageError::Credentials(ref err) => err.description(),CreateImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateImageError::Unknown(ref cause) => cause
+                            CreateImageError::Validation(ref cause) => cause,
+CreateImageError::Credentials(ref err) => err.description(),
+CreateImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateImageError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38430,7 +38532,10 @@ Unknown(String)
                 impl Error for CreateInstanceExportTaskError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateInstanceExportTaskError::Validation(ref cause) => cause,CreateInstanceExportTaskError::Credentials(ref err) => err.description(),CreateInstanceExportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateInstanceExportTaskError::Unknown(ref cause) => cause
+                            CreateInstanceExportTaskError::Validation(ref cause) => cause,
+CreateInstanceExportTaskError::Credentials(ref err) => err.description(),
+CreateInstanceExportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateInstanceExportTaskError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38486,7 +38591,10 @@ Unknown(String)
                 impl Error for CreateInternetGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateInternetGatewayError::Validation(ref cause) => cause,CreateInternetGatewayError::Credentials(ref err) => err.description(),CreateInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateInternetGatewayError::Unknown(ref cause) => cause
+                            CreateInternetGatewayError::Validation(ref cause) => cause,
+CreateInternetGatewayError::Credentials(ref err) => err.description(),
+CreateInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateInternetGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38542,7 +38650,10 @@ Unknown(String)
                 impl Error for CreateKeyPairError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateKeyPairError::Validation(ref cause) => cause,CreateKeyPairError::Credentials(ref err) => err.description(),CreateKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateKeyPairError::Unknown(ref cause) => cause
+                            CreateKeyPairError::Validation(ref cause) => cause,
+CreateKeyPairError::Credentials(ref err) => err.description(),
+CreateKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateKeyPairError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38598,7 +38709,10 @@ Unknown(String)
                 impl Error for CreateNatGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateNatGatewayError::Validation(ref cause) => cause,CreateNatGatewayError::Credentials(ref err) => err.description(),CreateNatGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateNatGatewayError::Unknown(ref cause) => cause
+                            CreateNatGatewayError::Validation(ref cause) => cause,
+CreateNatGatewayError::Credentials(ref err) => err.description(),
+CreateNatGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateNatGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38654,7 +38768,10 @@ Unknown(String)
                 impl Error for CreateNetworkAclError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateNetworkAclError::Validation(ref cause) => cause,CreateNetworkAclError::Credentials(ref err) => err.description(),CreateNetworkAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateNetworkAclError::Unknown(ref cause) => cause
+                            CreateNetworkAclError::Validation(ref cause) => cause,
+CreateNetworkAclError::Credentials(ref err) => err.description(),
+CreateNetworkAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateNetworkAclError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38710,7 +38827,10 @@ Unknown(String)
                 impl Error for CreateNetworkAclEntryError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateNetworkAclEntryError::Validation(ref cause) => cause,CreateNetworkAclEntryError::Credentials(ref err) => err.description(),CreateNetworkAclEntryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateNetworkAclEntryError::Unknown(ref cause) => cause
+                            CreateNetworkAclEntryError::Validation(ref cause) => cause,
+CreateNetworkAclEntryError::Credentials(ref err) => err.description(),
+CreateNetworkAclEntryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateNetworkAclEntryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38766,7 +38886,10 @@ Unknown(String)
                 impl Error for CreateNetworkInterfaceError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateNetworkInterfaceError::Validation(ref cause) => cause,CreateNetworkInterfaceError::Credentials(ref err) => err.description(),CreateNetworkInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateNetworkInterfaceError::Unknown(ref cause) => cause
+                            CreateNetworkInterfaceError::Validation(ref cause) => cause,
+CreateNetworkInterfaceError::Credentials(ref err) => err.description(),
+CreateNetworkInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateNetworkInterfaceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38822,7 +38945,10 @@ Unknown(String)
                 impl Error for CreatePlacementGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreatePlacementGroupError::Validation(ref cause) => cause,CreatePlacementGroupError::Credentials(ref err) => err.description(),CreatePlacementGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreatePlacementGroupError::Unknown(ref cause) => cause
+                            CreatePlacementGroupError::Validation(ref cause) => cause,
+CreatePlacementGroupError::Credentials(ref err) => err.description(),
+CreatePlacementGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreatePlacementGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38878,7 +39004,10 @@ Unknown(String)
                 impl Error for CreateReservedInstancesListingError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateReservedInstancesListingError::Validation(ref cause) => cause,CreateReservedInstancesListingError::Credentials(ref err) => err.description(),CreateReservedInstancesListingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateReservedInstancesListingError::Unknown(ref cause) => cause
+                            CreateReservedInstancesListingError::Validation(ref cause) => cause,
+CreateReservedInstancesListingError::Credentials(ref err) => err.description(),
+CreateReservedInstancesListingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateReservedInstancesListingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38934,7 +39063,10 @@ Unknown(String)
                 impl Error for CreateRouteError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateRouteError::Validation(ref cause) => cause,CreateRouteError::Credentials(ref err) => err.description(),CreateRouteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateRouteError::Unknown(ref cause) => cause
+                            CreateRouteError::Validation(ref cause) => cause,
+CreateRouteError::Credentials(ref err) => err.description(),
+CreateRouteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateRouteError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -38990,7 +39122,10 @@ Unknown(String)
                 impl Error for CreateRouteTableError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateRouteTableError::Validation(ref cause) => cause,CreateRouteTableError::Credentials(ref err) => err.description(),CreateRouteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateRouteTableError::Unknown(ref cause) => cause
+                            CreateRouteTableError::Validation(ref cause) => cause,
+CreateRouteTableError::Credentials(ref err) => err.description(),
+CreateRouteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateRouteTableError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39046,7 +39181,10 @@ Unknown(String)
                 impl Error for CreateSecurityGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateSecurityGroupError::Validation(ref cause) => cause,CreateSecurityGroupError::Credentials(ref err) => err.description(),CreateSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateSecurityGroupError::Unknown(ref cause) => cause
+                            CreateSecurityGroupError::Validation(ref cause) => cause,
+CreateSecurityGroupError::Credentials(ref err) => err.description(),
+CreateSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateSecurityGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39102,7 +39240,10 @@ Unknown(String)
                 impl Error for CreateSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateSnapshotError::Validation(ref cause) => cause,CreateSnapshotError::Credentials(ref err) => err.description(),CreateSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateSnapshotError::Unknown(ref cause) => cause
+                            CreateSnapshotError::Validation(ref cause) => cause,
+CreateSnapshotError::Credentials(ref err) => err.description(),
+CreateSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39158,7 +39299,10 @@ Unknown(String)
                 impl Error for CreateSpotDatafeedSubscriptionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateSpotDatafeedSubscriptionError::Validation(ref cause) => cause,CreateSpotDatafeedSubscriptionError::Credentials(ref err) => err.description(),CreateSpotDatafeedSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateSpotDatafeedSubscriptionError::Unknown(ref cause) => cause
+                            CreateSpotDatafeedSubscriptionError::Validation(ref cause) => cause,
+CreateSpotDatafeedSubscriptionError::Credentials(ref err) => err.description(),
+CreateSpotDatafeedSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateSpotDatafeedSubscriptionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39214,7 +39358,10 @@ Unknown(String)
                 impl Error for CreateSubnetError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateSubnetError::Validation(ref cause) => cause,CreateSubnetError::Credentials(ref err) => err.description(),CreateSubnetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateSubnetError::Unknown(ref cause) => cause
+                            CreateSubnetError::Validation(ref cause) => cause,
+CreateSubnetError::Credentials(ref err) => err.description(),
+CreateSubnetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateSubnetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39270,7 +39417,10 @@ Unknown(String)
                 impl Error for CreateTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateTagsError::Validation(ref cause) => cause,CreateTagsError::Credentials(ref err) => err.description(),CreateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateTagsError::Unknown(ref cause) => cause
+                            CreateTagsError::Validation(ref cause) => cause,
+CreateTagsError::Credentials(ref err) => err.description(),
+CreateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39326,7 +39476,10 @@ Unknown(String)
                 impl Error for CreateVolumeError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateVolumeError::Validation(ref cause) => cause,CreateVolumeError::Credentials(ref err) => err.description(),CreateVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateVolumeError::Unknown(ref cause) => cause
+                            CreateVolumeError::Validation(ref cause) => cause,
+CreateVolumeError::Credentials(ref err) => err.description(),
+CreateVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateVolumeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39382,7 +39535,10 @@ Unknown(String)
                 impl Error for CreateVpcError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateVpcError::Validation(ref cause) => cause,CreateVpcError::Credentials(ref err) => err.description(),CreateVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateVpcError::Unknown(ref cause) => cause
+                            CreateVpcError::Validation(ref cause) => cause,
+CreateVpcError::Credentials(ref err) => err.description(),
+CreateVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateVpcError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39438,7 +39594,10 @@ Unknown(String)
                 impl Error for CreateVpcEndpointError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateVpcEndpointError::Validation(ref cause) => cause,CreateVpcEndpointError::Credentials(ref err) => err.description(),CreateVpcEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateVpcEndpointError::Unknown(ref cause) => cause
+                            CreateVpcEndpointError::Validation(ref cause) => cause,
+CreateVpcEndpointError::Credentials(ref err) => err.description(),
+CreateVpcEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateVpcEndpointError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39494,7 +39653,10 @@ Unknown(String)
                 impl Error for CreateVpcPeeringConnectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateVpcPeeringConnectionError::Validation(ref cause) => cause,CreateVpcPeeringConnectionError::Credentials(ref err) => err.description(),CreateVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateVpcPeeringConnectionError::Unknown(ref cause) => cause
+                            CreateVpcPeeringConnectionError::Validation(ref cause) => cause,
+CreateVpcPeeringConnectionError::Credentials(ref err) => err.description(),
+CreateVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateVpcPeeringConnectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39550,7 +39712,10 @@ Unknown(String)
                 impl Error for CreateVpnConnectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateVpnConnectionError::Validation(ref cause) => cause,CreateVpnConnectionError::Credentials(ref err) => err.description(),CreateVpnConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateVpnConnectionError::Unknown(ref cause) => cause
+                            CreateVpnConnectionError::Validation(ref cause) => cause,
+CreateVpnConnectionError::Credentials(ref err) => err.description(),
+CreateVpnConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateVpnConnectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39606,7 +39771,10 @@ Unknown(String)
                 impl Error for CreateVpnConnectionRouteError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateVpnConnectionRouteError::Validation(ref cause) => cause,CreateVpnConnectionRouteError::Credentials(ref err) => err.description(),CreateVpnConnectionRouteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateVpnConnectionRouteError::Unknown(ref cause) => cause
+                            CreateVpnConnectionRouteError::Validation(ref cause) => cause,
+CreateVpnConnectionRouteError::Credentials(ref err) => err.description(),
+CreateVpnConnectionRouteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateVpnConnectionRouteError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39662,7 +39830,10 @@ Unknown(String)
                 impl Error for CreateVpnGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateVpnGatewayError::Validation(ref cause) => cause,CreateVpnGatewayError::Credentials(ref err) => err.description(),CreateVpnGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateVpnGatewayError::Unknown(ref cause) => cause
+                            CreateVpnGatewayError::Validation(ref cause) => cause,
+CreateVpnGatewayError::Credentials(ref err) => err.description(),
+CreateVpnGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateVpnGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39718,7 +39889,10 @@ Unknown(String)
                 impl Error for DeleteCustomerGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteCustomerGatewayError::Validation(ref cause) => cause,DeleteCustomerGatewayError::Credentials(ref err) => err.description(),DeleteCustomerGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteCustomerGatewayError::Unknown(ref cause) => cause
+                            DeleteCustomerGatewayError::Validation(ref cause) => cause,
+DeleteCustomerGatewayError::Credentials(ref err) => err.description(),
+DeleteCustomerGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteCustomerGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39774,7 +39948,10 @@ Unknown(String)
                 impl Error for DeleteDhcpOptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDhcpOptionsError::Validation(ref cause) => cause,DeleteDhcpOptionsError::Credentials(ref err) => err.description(),DeleteDhcpOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDhcpOptionsError::Unknown(ref cause) => cause
+                            DeleteDhcpOptionsError::Validation(ref cause) => cause,
+DeleteDhcpOptionsError::Credentials(ref err) => err.description(),
+DeleteDhcpOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDhcpOptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39830,7 +40007,10 @@ Unknown(String)
                 impl Error for DeleteEgressOnlyInternetGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteEgressOnlyInternetGatewayError::Validation(ref cause) => cause,DeleteEgressOnlyInternetGatewayError::Credentials(ref err) => err.description(),DeleteEgressOnlyInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteEgressOnlyInternetGatewayError::Unknown(ref cause) => cause
+                            DeleteEgressOnlyInternetGatewayError::Validation(ref cause) => cause,
+DeleteEgressOnlyInternetGatewayError::Credentials(ref err) => err.description(),
+DeleteEgressOnlyInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteEgressOnlyInternetGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39886,7 +40066,10 @@ Unknown(String)
                 impl Error for DeleteFlowLogsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteFlowLogsError::Validation(ref cause) => cause,DeleteFlowLogsError::Credentials(ref err) => err.description(),DeleteFlowLogsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteFlowLogsError::Unknown(ref cause) => cause
+                            DeleteFlowLogsError::Validation(ref cause) => cause,
+DeleteFlowLogsError::Credentials(ref err) => err.description(),
+DeleteFlowLogsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteFlowLogsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39942,7 +40125,10 @@ Unknown(String)
                 impl Error for DeleteInternetGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteInternetGatewayError::Validation(ref cause) => cause,DeleteInternetGatewayError::Credentials(ref err) => err.description(),DeleteInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteInternetGatewayError::Unknown(ref cause) => cause
+                            DeleteInternetGatewayError::Validation(ref cause) => cause,
+DeleteInternetGatewayError::Credentials(ref err) => err.description(),
+DeleteInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteInternetGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -39998,7 +40184,10 @@ Unknown(String)
                 impl Error for DeleteKeyPairError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteKeyPairError::Validation(ref cause) => cause,DeleteKeyPairError::Credentials(ref err) => err.description(),DeleteKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteKeyPairError::Unknown(ref cause) => cause
+                            DeleteKeyPairError::Validation(ref cause) => cause,
+DeleteKeyPairError::Credentials(ref err) => err.description(),
+DeleteKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteKeyPairError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40054,7 +40243,10 @@ Unknown(String)
                 impl Error for DeleteNatGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteNatGatewayError::Validation(ref cause) => cause,DeleteNatGatewayError::Credentials(ref err) => err.description(),DeleteNatGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteNatGatewayError::Unknown(ref cause) => cause
+                            DeleteNatGatewayError::Validation(ref cause) => cause,
+DeleteNatGatewayError::Credentials(ref err) => err.description(),
+DeleteNatGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteNatGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40110,7 +40302,10 @@ Unknown(String)
                 impl Error for DeleteNetworkAclError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteNetworkAclError::Validation(ref cause) => cause,DeleteNetworkAclError::Credentials(ref err) => err.description(),DeleteNetworkAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteNetworkAclError::Unknown(ref cause) => cause
+                            DeleteNetworkAclError::Validation(ref cause) => cause,
+DeleteNetworkAclError::Credentials(ref err) => err.description(),
+DeleteNetworkAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteNetworkAclError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40166,7 +40361,10 @@ Unknown(String)
                 impl Error for DeleteNetworkAclEntryError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteNetworkAclEntryError::Validation(ref cause) => cause,DeleteNetworkAclEntryError::Credentials(ref err) => err.description(),DeleteNetworkAclEntryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteNetworkAclEntryError::Unknown(ref cause) => cause
+                            DeleteNetworkAclEntryError::Validation(ref cause) => cause,
+DeleteNetworkAclEntryError::Credentials(ref err) => err.description(),
+DeleteNetworkAclEntryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteNetworkAclEntryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40222,7 +40420,10 @@ Unknown(String)
                 impl Error for DeleteNetworkInterfaceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteNetworkInterfaceError::Validation(ref cause) => cause,DeleteNetworkInterfaceError::Credentials(ref err) => err.description(),DeleteNetworkInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteNetworkInterfaceError::Unknown(ref cause) => cause
+                            DeleteNetworkInterfaceError::Validation(ref cause) => cause,
+DeleteNetworkInterfaceError::Credentials(ref err) => err.description(),
+DeleteNetworkInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteNetworkInterfaceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40278,7 +40479,10 @@ Unknown(String)
                 impl Error for DeletePlacementGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeletePlacementGroupError::Validation(ref cause) => cause,DeletePlacementGroupError::Credentials(ref err) => err.description(),DeletePlacementGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeletePlacementGroupError::Unknown(ref cause) => cause
+                            DeletePlacementGroupError::Validation(ref cause) => cause,
+DeletePlacementGroupError::Credentials(ref err) => err.description(),
+DeletePlacementGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeletePlacementGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40334,7 +40538,10 @@ Unknown(String)
                 impl Error for DeleteRouteError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteRouteError::Validation(ref cause) => cause,DeleteRouteError::Credentials(ref err) => err.description(),DeleteRouteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteRouteError::Unknown(ref cause) => cause
+                            DeleteRouteError::Validation(ref cause) => cause,
+DeleteRouteError::Credentials(ref err) => err.description(),
+DeleteRouteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteRouteError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40390,7 +40597,10 @@ Unknown(String)
                 impl Error for DeleteRouteTableError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteRouteTableError::Validation(ref cause) => cause,DeleteRouteTableError::Credentials(ref err) => err.description(),DeleteRouteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteRouteTableError::Unknown(ref cause) => cause
+                            DeleteRouteTableError::Validation(ref cause) => cause,
+DeleteRouteTableError::Credentials(ref err) => err.description(),
+DeleteRouteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteRouteTableError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40446,7 +40656,10 @@ Unknown(String)
                 impl Error for DeleteSecurityGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteSecurityGroupError::Validation(ref cause) => cause,DeleteSecurityGroupError::Credentials(ref err) => err.description(),DeleteSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteSecurityGroupError::Unknown(ref cause) => cause
+                            DeleteSecurityGroupError::Validation(ref cause) => cause,
+DeleteSecurityGroupError::Credentials(ref err) => err.description(),
+DeleteSecurityGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteSecurityGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40502,7 +40715,10 @@ Unknown(String)
                 impl Error for DeleteSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteSnapshotError::Validation(ref cause) => cause,DeleteSnapshotError::Credentials(ref err) => err.description(),DeleteSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteSnapshotError::Unknown(ref cause) => cause
+                            DeleteSnapshotError::Validation(ref cause) => cause,
+DeleteSnapshotError::Credentials(ref err) => err.description(),
+DeleteSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40558,7 +40774,10 @@ Unknown(String)
                 impl Error for DeleteSpotDatafeedSubscriptionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteSpotDatafeedSubscriptionError::Validation(ref cause) => cause,DeleteSpotDatafeedSubscriptionError::Credentials(ref err) => err.description(),DeleteSpotDatafeedSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteSpotDatafeedSubscriptionError::Unknown(ref cause) => cause
+                            DeleteSpotDatafeedSubscriptionError::Validation(ref cause) => cause,
+DeleteSpotDatafeedSubscriptionError::Credentials(ref err) => err.description(),
+DeleteSpotDatafeedSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteSpotDatafeedSubscriptionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40614,7 +40833,10 @@ Unknown(String)
                 impl Error for DeleteSubnetError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteSubnetError::Validation(ref cause) => cause,DeleteSubnetError::Credentials(ref err) => err.description(),DeleteSubnetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteSubnetError::Unknown(ref cause) => cause
+                            DeleteSubnetError::Validation(ref cause) => cause,
+DeleteSubnetError::Credentials(ref err) => err.description(),
+DeleteSubnetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteSubnetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40670,7 +40892,10 @@ Unknown(String)
                 impl Error for DeleteTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteTagsError::Validation(ref cause) => cause,DeleteTagsError::Credentials(ref err) => err.description(),DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteTagsError::Unknown(ref cause) => cause
+                            DeleteTagsError::Validation(ref cause) => cause,
+DeleteTagsError::Credentials(ref err) => err.description(),
+DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40726,7 +40951,10 @@ Unknown(String)
                 impl Error for DeleteVolumeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteVolumeError::Validation(ref cause) => cause,DeleteVolumeError::Credentials(ref err) => err.description(),DeleteVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteVolumeError::Unknown(ref cause) => cause
+                            DeleteVolumeError::Validation(ref cause) => cause,
+DeleteVolumeError::Credentials(ref err) => err.description(),
+DeleteVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteVolumeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40782,7 +41010,10 @@ Unknown(String)
                 impl Error for DeleteVpcError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteVpcError::Validation(ref cause) => cause,DeleteVpcError::Credentials(ref err) => err.description(),DeleteVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteVpcError::Unknown(ref cause) => cause
+                            DeleteVpcError::Validation(ref cause) => cause,
+DeleteVpcError::Credentials(ref err) => err.description(),
+DeleteVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteVpcError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40838,7 +41069,10 @@ Unknown(String)
                 impl Error for DeleteVpcEndpointsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteVpcEndpointsError::Validation(ref cause) => cause,DeleteVpcEndpointsError::Credentials(ref err) => err.description(),DeleteVpcEndpointsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteVpcEndpointsError::Unknown(ref cause) => cause
+                            DeleteVpcEndpointsError::Validation(ref cause) => cause,
+DeleteVpcEndpointsError::Credentials(ref err) => err.description(),
+DeleteVpcEndpointsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteVpcEndpointsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40894,7 +41128,10 @@ Unknown(String)
                 impl Error for DeleteVpcPeeringConnectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteVpcPeeringConnectionError::Validation(ref cause) => cause,DeleteVpcPeeringConnectionError::Credentials(ref err) => err.description(),DeleteVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteVpcPeeringConnectionError::Unknown(ref cause) => cause
+                            DeleteVpcPeeringConnectionError::Validation(ref cause) => cause,
+DeleteVpcPeeringConnectionError::Credentials(ref err) => err.description(),
+DeleteVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteVpcPeeringConnectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -40950,7 +41187,10 @@ Unknown(String)
                 impl Error for DeleteVpnConnectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteVpnConnectionError::Validation(ref cause) => cause,DeleteVpnConnectionError::Credentials(ref err) => err.description(),DeleteVpnConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteVpnConnectionError::Unknown(ref cause) => cause
+                            DeleteVpnConnectionError::Validation(ref cause) => cause,
+DeleteVpnConnectionError::Credentials(ref err) => err.description(),
+DeleteVpnConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteVpnConnectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41006,7 +41246,10 @@ Unknown(String)
                 impl Error for DeleteVpnConnectionRouteError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteVpnConnectionRouteError::Validation(ref cause) => cause,DeleteVpnConnectionRouteError::Credentials(ref err) => err.description(),DeleteVpnConnectionRouteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteVpnConnectionRouteError::Unknown(ref cause) => cause
+                            DeleteVpnConnectionRouteError::Validation(ref cause) => cause,
+DeleteVpnConnectionRouteError::Credentials(ref err) => err.description(),
+DeleteVpnConnectionRouteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteVpnConnectionRouteError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41062,7 +41305,10 @@ Unknown(String)
                 impl Error for DeleteVpnGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteVpnGatewayError::Validation(ref cause) => cause,DeleteVpnGatewayError::Credentials(ref err) => err.description(),DeleteVpnGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteVpnGatewayError::Unknown(ref cause) => cause
+                            DeleteVpnGatewayError::Validation(ref cause) => cause,
+DeleteVpnGatewayError::Credentials(ref err) => err.description(),
+DeleteVpnGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteVpnGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41118,7 +41364,10 @@ Unknown(String)
                 impl Error for DeregisterImageError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeregisterImageError::Validation(ref cause) => cause,DeregisterImageError::Credentials(ref err) => err.description(),DeregisterImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeregisterImageError::Unknown(ref cause) => cause
+                            DeregisterImageError::Validation(ref cause) => cause,
+DeregisterImageError::Credentials(ref err) => err.description(),
+DeregisterImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeregisterImageError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41174,7 +41423,10 @@ Unknown(String)
                 impl Error for DescribeAccountAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAccountAttributesError::Validation(ref cause) => cause,DescribeAccountAttributesError::Credentials(ref err) => err.description(),DescribeAccountAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAccountAttributesError::Unknown(ref cause) => cause
+                            DescribeAccountAttributesError::Validation(ref cause) => cause,
+DescribeAccountAttributesError::Credentials(ref err) => err.description(),
+DescribeAccountAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAccountAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41230,7 +41482,10 @@ Unknown(String)
                 impl Error for DescribeAddressesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAddressesError::Validation(ref cause) => cause,DescribeAddressesError::Credentials(ref err) => err.description(),DescribeAddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAddressesError::Unknown(ref cause) => cause
+                            DescribeAddressesError::Validation(ref cause) => cause,
+DescribeAddressesError::Credentials(ref err) => err.description(),
+DescribeAddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAddressesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41286,7 +41541,10 @@ Unknown(String)
                 impl Error for DescribeAvailabilityZonesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAvailabilityZonesError::Validation(ref cause) => cause,DescribeAvailabilityZonesError::Credentials(ref err) => err.description(),DescribeAvailabilityZonesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAvailabilityZonesError::Unknown(ref cause) => cause
+                            DescribeAvailabilityZonesError::Validation(ref cause) => cause,
+DescribeAvailabilityZonesError::Credentials(ref err) => err.description(),
+DescribeAvailabilityZonesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAvailabilityZonesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41342,7 +41600,10 @@ Unknown(String)
                 impl Error for DescribeBundleTasksError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeBundleTasksError::Validation(ref cause) => cause,DescribeBundleTasksError::Credentials(ref err) => err.description(),DescribeBundleTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeBundleTasksError::Unknown(ref cause) => cause
+                            DescribeBundleTasksError::Validation(ref cause) => cause,
+DescribeBundleTasksError::Credentials(ref err) => err.description(),
+DescribeBundleTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeBundleTasksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41398,7 +41659,10 @@ Unknown(String)
                 impl Error for DescribeClassicLinkInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeClassicLinkInstancesError::Validation(ref cause) => cause,DescribeClassicLinkInstancesError::Credentials(ref err) => err.description(),DescribeClassicLinkInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeClassicLinkInstancesError::Unknown(ref cause) => cause
+                            DescribeClassicLinkInstancesError::Validation(ref cause) => cause,
+DescribeClassicLinkInstancesError::Credentials(ref err) => err.description(),
+DescribeClassicLinkInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeClassicLinkInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41454,7 +41718,10 @@ Unknown(String)
                 impl Error for DescribeConversionTasksError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeConversionTasksError::Validation(ref cause) => cause,DescribeConversionTasksError::Credentials(ref err) => err.description(),DescribeConversionTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeConversionTasksError::Unknown(ref cause) => cause
+                            DescribeConversionTasksError::Validation(ref cause) => cause,
+DescribeConversionTasksError::Credentials(ref err) => err.description(),
+DescribeConversionTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeConversionTasksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41510,7 +41777,10 @@ Unknown(String)
                 impl Error for DescribeCustomerGatewaysError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeCustomerGatewaysError::Validation(ref cause) => cause,DescribeCustomerGatewaysError::Credentials(ref err) => err.description(),DescribeCustomerGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeCustomerGatewaysError::Unknown(ref cause) => cause
+                            DescribeCustomerGatewaysError::Validation(ref cause) => cause,
+DescribeCustomerGatewaysError::Credentials(ref err) => err.description(),
+DescribeCustomerGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeCustomerGatewaysError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41566,7 +41836,10 @@ Unknown(String)
                 impl Error for DescribeDhcpOptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDhcpOptionsError::Validation(ref cause) => cause,DescribeDhcpOptionsError::Credentials(ref err) => err.description(),DescribeDhcpOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDhcpOptionsError::Unknown(ref cause) => cause
+                            DescribeDhcpOptionsError::Validation(ref cause) => cause,
+DescribeDhcpOptionsError::Credentials(ref err) => err.description(),
+DescribeDhcpOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDhcpOptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41622,7 +41895,10 @@ Unknown(String)
                 impl Error for DescribeEgressOnlyInternetGatewaysError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEgressOnlyInternetGatewaysError::Validation(ref cause) => cause,DescribeEgressOnlyInternetGatewaysError::Credentials(ref err) => err.description(),DescribeEgressOnlyInternetGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEgressOnlyInternetGatewaysError::Unknown(ref cause) => cause
+                            DescribeEgressOnlyInternetGatewaysError::Validation(ref cause) => cause,
+DescribeEgressOnlyInternetGatewaysError::Credentials(ref err) => err.description(),
+DescribeEgressOnlyInternetGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEgressOnlyInternetGatewaysError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41678,7 +41954,10 @@ Unknown(String)
                 impl Error for DescribeExportTasksError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeExportTasksError::Validation(ref cause) => cause,DescribeExportTasksError::Credentials(ref err) => err.description(),DescribeExportTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeExportTasksError::Unknown(ref cause) => cause
+                            DescribeExportTasksError::Validation(ref cause) => cause,
+DescribeExportTasksError::Credentials(ref err) => err.description(),
+DescribeExportTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeExportTasksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41734,7 +42013,10 @@ Unknown(String)
                 impl Error for DescribeFlowLogsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeFlowLogsError::Validation(ref cause) => cause,DescribeFlowLogsError::Credentials(ref err) => err.description(),DescribeFlowLogsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeFlowLogsError::Unknown(ref cause) => cause
+                            DescribeFlowLogsError::Validation(ref cause) => cause,
+DescribeFlowLogsError::Credentials(ref err) => err.description(),
+DescribeFlowLogsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeFlowLogsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41790,7 +42072,10 @@ Unknown(String)
                 impl Error for DescribeHostReservationOfferingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeHostReservationOfferingsError::Validation(ref cause) => cause,DescribeHostReservationOfferingsError::Credentials(ref err) => err.description(),DescribeHostReservationOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeHostReservationOfferingsError::Unknown(ref cause) => cause
+                            DescribeHostReservationOfferingsError::Validation(ref cause) => cause,
+DescribeHostReservationOfferingsError::Credentials(ref err) => err.description(),
+DescribeHostReservationOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeHostReservationOfferingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41846,7 +42131,10 @@ Unknown(String)
                 impl Error for DescribeHostReservationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeHostReservationsError::Validation(ref cause) => cause,DescribeHostReservationsError::Credentials(ref err) => err.description(),DescribeHostReservationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeHostReservationsError::Unknown(ref cause) => cause
+                            DescribeHostReservationsError::Validation(ref cause) => cause,
+DescribeHostReservationsError::Credentials(ref err) => err.description(),
+DescribeHostReservationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeHostReservationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41902,7 +42190,10 @@ Unknown(String)
                 impl Error for DescribeHostsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeHostsError::Validation(ref cause) => cause,DescribeHostsError::Credentials(ref err) => err.description(),DescribeHostsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeHostsError::Unknown(ref cause) => cause
+                            DescribeHostsError::Validation(ref cause) => cause,
+DescribeHostsError::Credentials(ref err) => err.description(),
+DescribeHostsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeHostsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -41958,7 +42249,10 @@ Unknown(String)
                 impl Error for DescribeIdFormatError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeIdFormatError::Validation(ref cause) => cause,DescribeIdFormatError::Credentials(ref err) => err.description(),DescribeIdFormatError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeIdFormatError::Unknown(ref cause) => cause
+                            DescribeIdFormatError::Validation(ref cause) => cause,
+DescribeIdFormatError::Credentials(ref err) => err.description(),
+DescribeIdFormatError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeIdFormatError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42014,7 +42308,10 @@ Unknown(String)
                 impl Error for DescribeIdentityIdFormatError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeIdentityIdFormatError::Validation(ref cause) => cause,DescribeIdentityIdFormatError::Credentials(ref err) => err.description(),DescribeIdentityIdFormatError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeIdentityIdFormatError::Unknown(ref cause) => cause
+                            DescribeIdentityIdFormatError::Validation(ref cause) => cause,
+DescribeIdentityIdFormatError::Credentials(ref err) => err.description(),
+DescribeIdentityIdFormatError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeIdentityIdFormatError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42070,7 +42367,10 @@ Unknown(String)
                 impl Error for DescribeImageAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeImageAttributeError::Validation(ref cause) => cause,DescribeImageAttributeError::Credentials(ref err) => err.description(),DescribeImageAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeImageAttributeError::Unknown(ref cause) => cause
+                            DescribeImageAttributeError::Validation(ref cause) => cause,
+DescribeImageAttributeError::Credentials(ref err) => err.description(),
+DescribeImageAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeImageAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42126,7 +42426,10 @@ Unknown(String)
                 impl Error for DescribeImagesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeImagesError::Validation(ref cause) => cause,DescribeImagesError::Credentials(ref err) => err.description(),DescribeImagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeImagesError::Unknown(ref cause) => cause
+                            DescribeImagesError::Validation(ref cause) => cause,
+DescribeImagesError::Credentials(ref err) => err.description(),
+DescribeImagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeImagesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42182,7 +42485,10 @@ Unknown(String)
                 impl Error for DescribeImportImageTasksError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeImportImageTasksError::Validation(ref cause) => cause,DescribeImportImageTasksError::Credentials(ref err) => err.description(),DescribeImportImageTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeImportImageTasksError::Unknown(ref cause) => cause
+                            DescribeImportImageTasksError::Validation(ref cause) => cause,
+DescribeImportImageTasksError::Credentials(ref err) => err.description(),
+DescribeImportImageTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeImportImageTasksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42238,7 +42544,10 @@ Unknown(String)
                 impl Error for DescribeImportSnapshotTasksError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeImportSnapshotTasksError::Validation(ref cause) => cause,DescribeImportSnapshotTasksError::Credentials(ref err) => err.description(),DescribeImportSnapshotTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeImportSnapshotTasksError::Unknown(ref cause) => cause
+                            DescribeImportSnapshotTasksError::Validation(ref cause) => cause,
+DescribeImportSnapshotTasksError::Credentials(ref err) => err.description(),
+DescribeImportSnapshotTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeImportSnapshotTasksError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42294,7 +42603,10 @@ Unknown(String)
                 impl Error for DescribeInstanceAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeInstanceAttributeError::Validation(ref cause) => cause,DescribeInstanceAttributeError::Credentials(ref err) => err.description(),DescribeInstanceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeInstanceAttributeError::Unknown(ref cause) => cause
+                            DescribeInstanceAttributeError::Validation(ref cause) => cause,
+DescribeInstanceAttributeError::Credentials(ref err) => err.description(),
+DescribeInstanceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeInstanceAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42350,7 +42662,10 @@ Unknown(String)
                 impl Error for DescribeInstanceStatusError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeInstanceStatusError::Validation(ref cause) => cause,DescribeInstanceStatusError::Credentials(ref err) => err.description(),DescribeInstanceStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeInstanceStatusError::Unknown(ref cause) => cause
+                            DescribeInstanceStatusError::Validation(ref cause) => cause,
+DescribeInstanceStatusError::Credentials(ref err) => err.description(),
+DescribeInstanceStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeInstanceStatusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42406,7 +42721,10 @@ Unknown(String)
                 impl Error for DescribeInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeInstancesError::Validation(ref cause) => cause,DescribeInstancesError::Credentials(ref err) => err.description(),DescribeInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeInstancesError::Unknown(ref cause) => cause
+                            DescribeInstancesError::Validation(ref cause) => cause,
+DescribeInstancesError::Credentials(ref err) => err.description(),
+DescribeInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42462,7 +42780,10 @@ Unknown(String)
                 impl Error for DescribeInternetGatewaysError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeInternetGatewaysError::Validation(ref cause) => cause,DescribeInternetGatewaysError::Credentials(ref err) => err.description(),DescribeInternetGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeInternetGatewaysError::Unknown(ref cause) => cause
+                            DescribeInternetGatewaysError::Validation(ref cause) => cause,
+DescribeInternetGatewaysError::Credentials(ref err) => err.description(),
+DescribeInternetGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeInternetGatewaysError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42518,7 +42839,10 @@ Unknown(String)
                 impl Error for DescribeKeyPairsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeKeyPairsError::Validation(ref cause) => cause,DescribeKeyPairsError::Credentials(ref err) => err.description(),DescribeKeyPairsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeKeyPairsError::Unknown(ref cause) => cause
+                            DescribeKeyPairsError::Validation(ref cause) => cause,
+DescribeKeyPairsError::Credentials(ref err) => err.description(),
+DescribeKeyPairsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeKeyPairsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42574,7 +42898,10 @@ Unknown(String)
                 impl Error for DescribeMovingAddressesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeMovingAddressesError::Validation(ref cause) => cause,DescribeMovingAddressesError::Credentials(ref err) => err.description(),DescribeMovingAddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeMovingAddressesError::Unknown(ref cause) => cause
+                            DescribeMovingAddressesError::Validation(ref cause) => cause,
+DescribeMovingAddressesError::Credentials(ref err) => err.description(),
+DescribeMovingAddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeMovingAddressesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42630,7 +42957,10 @@ Unknown(String)
                 impl Error for DescribeNatGatewaysError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeNatGatewaysError::Validation(ref cause) => cause,DescribeNatGatewaysError::Credentials(ref err) => err.description(),DescribeNatGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeNatGatewaysError::Unknown(ref cause) => cause
+                            DescribeNatGatewaysError::Validation(ref cause) => cause,
+DescribeNatGatewaysError::Credentials(ref err) => err.description(),
+DescribeNatGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeNatGatewaysError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42686,7 +43016,10 @@ Unknown(String)
                 impl Error for DescribeNetworkAclsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeNetworkAclsError::Validation(ref cause) => cause,DescribeNetworkAclsError::Credentials(ref err) => err.description(),DescribeNetworkAclsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeNetworkAclsError::Unknown(ref cause) => cause
+                            DescribeNetworkAclsError::Validation(ref cause) => cause,
+DescribeNetworkAclsError::Credentials(ref err) => err.description(),
+DescribeNetworkAclsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeNetworkAclsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42742,7 +43075,10 @@ Unknown(String)
                 impl Error for DescribeNetworkInterfaceAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeNetworkInterfaceAttributeError::Validation(ref cause) => cause,DescribeNetworkInterfaceAttributeError::Credentials(ref err) => err.description(),DescribeNetworkInterfaceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeNetworkInterfaceAttributeError::Unknown(ref cause) => cause
+                            DescribeNetworkInterfaceAttributeError::Validation(ref cause) => cause,
+DescribeNetworkInterfaceAttributeError::Credentials(ref err) => err.description(),
+DescribeNetworkInterfaceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeNetworkInterfaceAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42798,7 +43134,10 @@ Unknown(String)
                 impl Error for DescribeNetworkInterfacesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeNetworkInterfacesError::Validation(ref cause) => cause,DescribeNetworkInterfacesError::Credentials(ref err) => err.description(),DescribeNetworkInterfacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeNetworkInterfacesError::Unknown(ref cause) => cause
+                            DescribeNetworkInterfacesError::Validation(ref cause) => cause,
+DescribeNetworkInterfacesError::Credentials(ref err) => err.description(),
+DescribeNetworkInterfacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeNetworkInterfacesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42854,7 +43193,10 @@ Unknown(String)
                 impl Error for DescribePlacementGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribePlacementGroupsError::Validation(ref cause) => cause,DescribePlacementGroupsError::Credentials(ref err) => err.description(),DescribePlacementGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribePlacementGroupsError::Unknown(ref cause) => cause
+                            DescribePlacementGroupsError::Validation(ref cause) => cause,
+DescribePlacementGroupsError::Credentials(ref err) => err.description(),
+DescribePlacementGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribePlacementGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42910,7 +43252,10 @@ Unknown(String)
                 impl Error for DescribePrefixListsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribePrefixListsError::Validation(ref cause) => cause,DescribePrefixListsError::Credentials(ref err) => err.description(),DescribePrefixListsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribePrefixListsError::Unknown(ref cause) => cause
+                            DescribePrefixListsError::Validation(ref cause) => cause,
+DescribePrefixListsError::Credentials(ref err) => err.description(),
+DescribePrefixListsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribePrefixListsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -42966,7 +43311,10 @@ Unknown(String)
                 impl Error for DescribeRegionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeRegionsError::Validation(ref cause) => cause,DescribeRegionsError::Credentials(ref err) => err.description(),DescribeRegionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeRegionsError::Unknown(ref cause) => cause
+                            DescribeRegionsError::Validation(ref cause) => cause,
+DescribeRegionsError::Credentials(ref err) => err.description(),
+DescribeRegionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeRegionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43022,7 +43370,10 @@ Unknown(String)
                 impl Error for DescribeReservedInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeReservedInstancesError::Validation(ref cause) => cause,DescribeReservedInstancesError::Credentials(ref err) => err.description(),DescribeReservedInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeReservedInstancesError::Unknown(ref cause) => cause
+                            DescribeReservedInstancesError::Validation(ref cause) => cause,
+DescribeReservedInstancesError::Credentials(ref err) => err.description(),
+DescribeReservedInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeReservedInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43078,7 +43429,10 @@ Unknown(String)
                 impl Error for DescribeReservedInstancesListingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeReservedInstancesListingsError::Validation(ref cause) => cause,DescribeReservedInstancesListingsError::Credentials(ref err) => err.description(),DescribeReservedInstancesListingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeReservedInstancesListingsError::Unknown(ref cause) => cause
+                            DescribeReservedInstancesListingsError::Validation(ref cause) => cause,
+DescribeReservedInstancesListingsError::Credentials(ref err) => err.description(),
+DescribeReservedInstancesListingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeReservedInstancesListingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43134,7 +43488,10 @@ Unknown(String)
                 impl Error for DescribeReservedInstancesModificationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeReservedInstancesModificationsError::Validation(ref cause) => cause,DescribeReservedInstancesModificationsError::Credentials(ref err) => err.description(),DescribeReservedInstancesModificationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeReservedInstancesModificationsError::Unknown(ref cause) => cause
+                            DescribeReservedInstancesModificationsError::Validation(ref cause) => cause,
+DescribeReservedInstancesModificationsError::Credentials(ref err) => err.description(),
+DescribeReservedInstancesModificationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeReservedInstancesModificationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43190,7 +43547,10 @@ Unknown(String)
                 impl Error for DescribeReservedInstancesOfferingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeReservedInstancesOfferingsError::Validation(ref cause) => cause,DescribeReservedInstancesOfferingsError::Credentials(ref err) => err.description(),DescribeReservedInstancesOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeReservedInstancesOfferingsError::Unknown(ref cause) => cause
+                            DescribeReservedInstancesOfferingsError::Validation(ref cause) => cause,
+DescribeReservedInstancesOfferingsError::Credentials(ref err) => err.description(),
+DescribeReservedInstancesOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeReservedInstancesOfferingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43246,7 +43606,10 @@ Unknown(String)
                 impl Error for DescribeRouteTablesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeRouteTablesError::Validation(ref cause) => cause,DescribeRouteTablesError::Credentials(ref err) => err.description(),DescribeRouteTablesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeRouteTablesError::Unknown(ref cause) => cause
+                            DescribeRouteTablesError::Validation(ref cause) => cause,
+DescribeRouteTablesError::Credentials(ref err) => err.description(),
+DescribeRouteTablesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeRouteTablesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43302,7 +43665,10 @@ Unknown(String)
                 impl Error for DescribeScheduledInstanceAvailabilityError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeScheduledInstanceAvailabilityError::Validation(ref cause) => cause,DescribeScheduledInstanceAvailabilityError::Credentials(ref err) => err.description(),DescribeScheduledInstanceAvailabilityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeScheduledInstanceAvailabilityError::Unknown(ref cause) => cause
+                            DescribeScheduledInstanceAvailabilityError::Validation(ref cause) => cause,
+DescribeScheduledInstanceAvailabilityError::Credentials(ref err) => err.description(),
+DescribeScheduledInstanceAvailabilityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeScheduledInstanceAvailabilityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43358,7 +43724,10 @@ Unknown(String)
                 impl Error for DescribeScheduledInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeScheduledInstancesError::Validation(ref cause) => cause,DescribeScheduledInstancesError::Credentials(ref err) => err.description(),DescribeScheduledInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeScheduledInstancesError::Unknown(ref cause) => cause
+                            DescribeScheduledInstancesError::Validation(ref cause) => cause,
+DescribeScheduledInstancesError::Credentials(ref err) => err.description(),
+DescribeScheduledInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeScheduledInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43414,7 +43783,10 @@ Unknown(String)
                 impl Error for DescribeSecurityGroupReferencesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSecurityGroupReferencesError::Validation(ref cause) => cause,DescribeSecurityGroupReferencesError::Credentials(ref err) => err.description(),DescribeSecurityGroupReferencesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSecurityGroupReferencesError::Unknown(ref cause) => cause
+                            DescribeSecurityGroupReferencesError::Validation(ref cause) => cause,
+DescribeSecurityGroupReferencesError::Credentials(ref err) => err.description(),
+DescribeSecurityGroupReferencesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSecurityGroupReferencesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43470,7 +43842,10 @@ Unknown(String)
                 impl Error for DescribeSecurityGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSecurityGroupsError::Validation(ref cause) => cause,DescribeSecurityGroupsError::Credentials(ref err) => err.description(),DescribeSecurityGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSecurityGroupsError::Unknown(ref cause) => cause
+                            DescribeSecurityGroupsError::Validation(ref cause) => cause,
+DescribeSecurityGroupsError::Credentials(ref err) => err.description(),
+DescribeSecurityGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSecurityGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43526,7 +43901,10 @@ Unknown(String)
                 impl Error for DescribeSnapshotAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSnapshotAttributeError::Validation(ref cause) => cause,DescribeSnapshotAttributeError::Credentials(ref err) => err.description(),DescribeSnapshotAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSnapshotAttributeError::Unknown(ref cause) => cause
+                            DescribeSnapshotAttributeError::Validation(ref cause) => cause,
+DescribeSnapshotAttributeError::Credentials(ref err) => err.description(),
+DescribeSnapshotAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSnapshotAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43582,7 +43960,10 @@ Unknown(String)
                 impl Error for DescribeSnapshotsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSnapshotsError::Validation(ref cause) => cause,DescribeSnapshotsError::Credentials(ref err) => err.description(),DescribeSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSnapshotsError::Unknown(ref cause) => cause
+                            DescribeSnapshotsError::Validation(ref cause) => cause,
+DescribeSnapshotsError::Credentials(ref err) => err.description(),
+DescribeSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSnapshotsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43638,7 +44019,10 @@ Unknown(String)
                 impl Error for DescribeSpotDatafeedSubscriptionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSpotDatafeedSubscriptionError::Validation(ref cause) => cause,DescribeSpotDatafeedSubscriptionError::Credentials(ref err) => err.description(),DescribeSpotDatafeedSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSpotDatafeedSubscriptionError::Unknown(ref cause) => cause
+                            DescribeSpotDatafeedSubscriptionError::Validation(ref cause) => cause,
+DescribeSpotDatafeedSubscriptionError::Credentials(ref err) => err.description(),
+DescribeSpotDatafeedSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSpotDatafeedSubscriptionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43694,7 +44078,10 @@ Unknown(String)
                 impl Error for DescribeSpotFleetInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSpotFleetInstancesError::Validation(ref cause) => cause,DescribeSpotFleetInstancesError::Credentials(ref err) => err.description(),DescribeSpotFleetInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSpotFleetInstancesError::Unknown(ref cause) => cause
+                            DescribeSpotFleetInstancesError::Validation(ref cause) => cause,
+DescribeSpotFleetInstancesError::Credentials(ref err) => err.description(),
+DescribeSpotFleetInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSpotFleetInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43750,7 +44137,10 @@ Unknown(String)
                 impl Error for DescribeSpotFleetRequestHistoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSpotFleetRequestHistoryError::Validation(ref cause) => cause,DescribeSpotFleetRequestHistoryError::Credentials(ref err) => err.description(),DescribeSpotFleetRequestHistoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSpotFleetRequestHistoryError::Unknown(ref cause) => cause
+                            DescribeSpotFleetRequestHistoryError::Validation(ref cause) => cause,
+DescribeSpotFleetRequestHistoryError::Credentials(ref err) => err.description(),
+DescribeSpotFleetRequestHistoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSpotFleetRequestHistoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43806,7 +44196,10 @@ Unknown(String)
                 impl Error for DescribeSpotFleetRequestsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSpotFleetRequestsError::Validation(ref cause) => cause,DescribeSpotFleetRequestsError::Credentials(ref err) => err.description(),DescribeSpotFleetRequestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSpotFleetRequestsError::Unknown(ref cause) => cause
+                            DescribeSpotFleetRequestsError::Validation(ref cause) => cause,
+DescribeSpotFleetRequestsError::Credentials(ref err) => err.description(),
+DescribeSpotFleetRequestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSpotFleetRequestsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43862,7 +44255,10 @@ Unknown(String)
                 impl Error for DescribeSpotInstanceRequestsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSpotInstanceRequestsError::Validation(ref cause) => cause,DescribeSpotInstanceRequestsError::Credentials(ref err) => err.description(),DescribeSpotInstanceRequestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSpotInstanceRequestsError::Unknown(ref cause) => cause
+                            DescribeSpotInstanceRequestsError::Validation(ref cause) => cause,
+DescribeSpotInstanceRequestsError::Credentials(ref err) => err.description(),
+DescribeSpotInstanceRequestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSpotInstanceRequestsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43918,7 +44314,10 @@ Unknown(String)
                 impl Error for DescribeSpotPriceHistoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSpotPriceHistoryError::Validation(ref cause) => cause,DescribeSpotPriceHistoryError::Credentials(ref err) => err.description(),DescribeSpotPriceHistoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSpotPriceHistoryError::Unknown(ref cause) => cause
+                            DescribeSpotPriceHistoryError::Validation(ref cause) => cause,
+DescribeSpotPriceHistoryError::Credentials(ref err) => err.description(),
+DescribeSpotPriceHistoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSpotPriceHistoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -43974,7 +44373,10 @@ Unknown(String)
                 impl Error for DescribeStaleSecurityGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeStaleSecurityGroupsError::Validation(ref cause) => cause,DescribeStaleSecurityGroupsError::Credentials(ref err) => err.description(),DescribeStaleSecurityGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeStaleSecurityGroupsError::Unknown(ref cause) => cause
+                            DescribeStaleSecurityGroupsError::Validation(ref cause) => cause,
+DescribeStaleSecurityGroupsError::Credentials(ref err) => err.description(),
+DescribeStaleSecurityGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeStaleSecurityGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44030,7 +44432,10 @@ Unknown(String)
                 impl Error for DescribeSubnetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSubnetsError::Validation(ref cause) => cause,DescribeSubnetsError::Credentials(ref err) => err.description(),DescribeSubnetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSubnetsError::Unknown(ref cause) => cause
+                            DescribeSubnetsError::Validation(ref cause) => cause,
+DescribeSubnetsError::Credentials(ref err) => err.description(),
+DescribeSubnetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSubnetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44086,7 +44491,10 @@ Unknown(String)
                 impl Error for DescribeTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeTagsError::Validation(ref cause) => cause,DescribeTagsError::Credentials(ref err) => err.description(),DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeTagsError::Unknown(ref cause) => cause
+                            DescribeTagsError::Validation(ref cause) => cause,
+DescribeTagsError::Credentials(ref err) => err.description(),
+DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44142,7 +44550,10 @@ Unknown(String)
                 impl Error for DescribeVolumeAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVolumeAttributeError::Validation(ref cause) => cause,DescribeVolumeAttributeError::Credentials(ref err) => err.description(),DescribeVolumeAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVolumeAttributeError::Unknown(ref cause) => cause
+                            DescribeVolumeAttributeError::Validation(ref cause) => cause,
+DescribeVolumeAttributeError::Credentials(ref err) => err.description(),
+DescribeVolumeAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVolumeAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44198,7 +44609,10 @@ Unknown(String)
                 impl Error for DescribeVolumeStatusError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVolumeStatusError::Validation(ref cause) => cause,DescribeVolumeStatusError::Credentials(ref err) => err.description(),DescribeVolumeStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVolumeStatusError::Unknown(ref cause) => cause
+                            DescribeVolumeStatusError::Validation(ref cause) => cause,
+DescribeVolumeStatusError::Credentials(ref err) => err.description(),
+DescribeVolumeStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVolumeStatusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44254,7 +44668,10 @@ Unknown(String)
                 impl Error for DescribeVolumesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVolumesError::Validation(ref cause) => cause,DescribeVolumesError::Credentials(ref err) => err.description(),DescribeVolumesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVolumesError::Unknown(ref cause) => cause
+                            DescribeVolumesError::Validation(ref cause) => cause,
+DescribeVolumesError::Credentials(ref err) => err.description(),
+DescribeVolumesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVolumesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44310,7 +44727,10 @@ Unknown(String)
                 impl Error for DescribeVpcAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVpcAttributeError::Validation(ref cause) => cause,DescribeVpcAttributeError::Credentials(ref err) => err.description(),DescribeVpcAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVpcAttributeError::Unknown(ref cause) => cause
+                            DescribeVpcAttributeError::Validation(ref cause) => cause,
+DescribeVpcAttributeError::Credentials(ref err) => err.description(),
+DescribeVpcAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVpcAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44366,7 +44786,10 @@ Unknown(String)
                 impl Error for DescribeVpcClassicLinkError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVpcClassicLinkError::Validation(ref cause) => cause,DescribeVpcClassicLinkError::Credentials(ref err) => err.description(),DescribeVpcClassicLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVpcClassicLinkError::Unknown(ref cause) => cause
+                            DescribeVpcClassicLinkError::Validation(ref cause) => cause,
+DescribeVpcClassicLinkError::Credentials(ref err) => err.description(),
+DescribeVpcClassicLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVpcClassicLinkError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44422,7 +44845,10 @@ Unknown(String)
                 impl Error for DescribeVpcClassicLinkDnsSupportError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVpcClassicLinkDnsSupportError::Validation(ref cause) => cause,DescribeVpcClassicLinkDnsSupportError::Credentials(ref err) => err.description(),DescribeVpcClassicLinkDnsSupportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVpcClassicLinkDnsSupportError::Unknown(ref cause) => cause
+                            DescribeVpcClassicLinkDnsSupportError::Validation(ref cause) => cause,
+DescribeVpcClassicLinkDnsSupportError::Credentials(ref err) => err.description(),
+DescribeVpcClassicLinkDnsSupportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVpcClassicLinkDnsSupportError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44478,7 +44904,10 @@ Unknown(String)
                 impl Error for DescribeVpcEndpointServicesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVpcEndpointServicesError::Validation(ref cause) => cause,DescribeVpcEndpointServicesError::Credentials(ref err) => err.description(),DescribeVpcEndpointServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVpcEndpointServicesError::Unknown(ref cause) => cause
+                            DescribeVpcEndpointServicesError::Validation(ref cause) => cause,
+DescribeVpcEndpointServicesError::Credentials(ref err) => err.description(),
+DescribeVpcEndpointServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVpcEndpointServicesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44534,7 +44963,10 @@ Unknown(String)
                 impl Error for DescribeVpcEndpointsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVpcEndpointsError::Validation(ref cause) => cause,DescribeVpcEndpointsError::Credentials(ref err) => err.description(),DescribeVpcEndpointsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVpcEndpointsError::Unknown(ref cause) => cause
+                            DescribeVpcEndpointsError::Validation(ref cause) => cause,
+DescribeVpcEndpointsError::Credentials(ref err) => err.description(),
+DescribeVpcEndpointsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVpcEndpointsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44590,7 +45022,10 @@ Unknown(String)
                 impl Error for DescribeVpcPeeringConnectionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVpcPeeringConnectionsError::Validation(ref cause) => cause,DescribeVpcPeeringConnectionsError::Credentials(ref err) => err.description(),DescribeVpcPeeringConnectionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVpcPeeringConnectionsError::Unknown(ref cause) => cause
+                            DescribeVpcPeeringConnectionsError::Validation(ref cause) => cause,
+DescribeVpcPeeringConnectionsError::Credentials(ref err) => err.description(),
+DescribeVpcPeeringConnectionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVpcPeeringConnectionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44646,7 +45081,10 @@ Unknown(String)
                 impl Error for DescribeVpcsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVpcsError::Validation(ref cause) => cause,DescribeVpcsError::Credentials(ref err) => err.description(),DescribeVpcsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVpcsError::Unknown(ref cause) => cause
+                            DescribeVpcsError::Validation(ref cause) => cause,
+DescribeVpcsError::Credentials(ref err) => err.description(),
+DescribeVpcsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVpcsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44702,7 +45140,10 @@ Unknown(String)
                 impl Error for DescribeVpnConnectionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVpnConnectionsError::Validation(ref cause) => cause,DescribeVpnConnectionsError::Credentials(ref err) => err.description(),DescribeVpnConnectionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVpnConnectionsError::Unknown(ref cause) => cause
+                            DescribeVpnConnectionsError::Validation(ref cause) => cause,
+DescribeVpnConnectionsError::Credentials(ref err) => err.description(),
+DescribeVpnConnectionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVpnConnectionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44758,7 +45199,10 @@ Unknown(String)
                 impl Error for DescribeVpnGatewaysError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeVpnGatewaysError::Validation(ref cause) => cause,DescribeVpnGatewaysError::Credentials(ref err) => err.description(),DescribeVpnGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeVpnGatewaysError::Unknown(ref cause) => cause
+                            DescribeVpnGatewaysError::Validation(ref cause) => cause,
+DescribeVpnGatewaysError::Credentials(ref err) => err.description(),
+DescribeVpnGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeVpnGatewaysError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44814,7 +45258,10 @@ Unknown(String)
                 impl Error for DetachClassicLinkVpcError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachClassicLinkVpcError::Validation(ref cause) => cause,DetachClassicLinkVpcError::Credentials(ref err) => err.description(),DetachClassicLinkVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachClassicLinkVpcError::Unknown(ref cause) => cause
+                            DetachClassicLinkVpcError::Validation(ref cause) => cause,
+DetachClassicLinkVpcError::Credentials(ref err) => err.description(),
+DetachClassicLinkVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachClassicLinkVpcError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44870,7 +45317,10 @@ Unknown(String)
                 impl Error for DetachInternetGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachInternetGatewayError::Validation(ref cause) => cause,DetachInternetGatewayError::Credentials(ref err) => err.description(),DetachInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachInternetGatewayError::Unknown(ref cause) => cause
+                            DetachInternetGatewayError::Validation(ref cause) => cause,
+DetachInternetGatewayError::Credentials(ref err) => err.description(),
+DetachInternetGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachInternetGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44926,7 +45376,10 @@ Unknown(String)
                 impl Error for DetachNetworkInterfaceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachNetworkInterfaceError::Validation(ref cause) => cause,DetachNetworkInterfaceError::Credentials(ref err) => err.description(),DetachNetworkInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachNetworkInterfaceError::Unknown(ref cause) => cause
+                            DetachNetworkInterfaceError::Validation(ref cause) => cause,
+DetachNetworkInterfaceError::Credentials(ref err) => err.description(),
+DetachNetworkInterfaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachNetworkInterfaceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -44982,7 +45435,10 @@ Unknown(String)
                 impl Error for DetachVolumeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachVolumeError::Validation(ref cause) => cause,DetachVolumeError::Credentials(ref err) => err.description(),DetachVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachVolumeError::Unknown(ref cause) => cause
+                            DetachVolumeError::Validation(ref cause) => cause,
+DetachVolumeError::Credentials(ref err) => err.description(),
+DetachVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachVolumeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45038,7 +45494,10 @@ Unknown(String)
                 impl Error for DetachVpnGatewayError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachVpnGatewayError::Validation(ref cause) => cause,DetachVpnGatewayError::Credentials(ref err) => err.description(),DetachVpnGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachVpnGatewayError::Unknown(ref cause) => cause
+                            DetachVpnGatewayError::Validation(ref cause) => cause,
+DetachVpnGatewayError::Credentials(ref err) => err.description(),
+DetachVpnGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachVpnGatewayError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45094,7 +45553,10 @@ Unknown(String)
                 impl Error for DisableVgwRoutePropagationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableVgwRoutePropagationError::Validation(ref cause) => cause,DisableVgwRoutePropagationError::Credentials(ref err) => err.description(),DisableVgwRoutePropagationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableVgwRoutePropagationError::Unknown(ref cause) => cause
+                            DisableVgwRoutePropagationError::Validation(ref cause) => cause,
+DisableVgwRoutePropagationError::Credentials(ref err) => err.description(),
+DisableVgwRoutePropagationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableVgwRoutePropagationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45150,7 +45612,10 @@ Unknown(String)
                 impl Error for DisableVpcClassicLinkError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableVpcClassicLinkError::Validation(ref cause) => cause,DisableVpcClassicLinkError::Credentials(ref err) => err.description(),DisableVpcClassicLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableVpcClassicLinkError::Unknown(ref cause) => cause
+                            DisableVpcClassicLinkError::Validation(ref cause) => cause,
+DisableVpcClassicLinkError::Credentials(ref err) => err.description(),
+DisableVpcClassicLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableVpcClassicLinkError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45206,7 +45671,10 @@ Unknown(String)
                 impl Error for DisableVpcClassicLinkDnsSupportError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableVpcClassicLinkDnsSupportError::Validation(ref cause) => cause,DisableVpcClassicLinkDnsSupportError::Credentials(ref err) => err.description(),DisableVpcClassicLinkDnsSupportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableVpcClassicLinkDnsSupportError::Unknown(ref cause) => cause
+                            DisableVpcClassicLinkDnsSupportError::Validation(ref cause) => cause,
+DisableVpcClassicLinkDnsSupportError::Credentials(ref err) => err.description(),
+DisableVpcClassicLinkDnsSupportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableVpcClassicLinkDnsSupportError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45262,7 +45730,10 @@ Unknown(String)
                 impl Error for DisassociateAddressError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisassociateAddressError::Validation(ref cause) => cause,DisassociateAddressError::Credentials(ref err) => err.description(),DisassociateAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisassociateAddressError::Unknown(ref cause) => cause
+                            DisassociateAddressError::Validation(ref cause) => cause,
+DisassociateAddressError::Credentials(ref err) => err.description(),
+DisassociateAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisassociateAddressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45318,7 +45789,10 @@ Unknown(String)
                 impl Error for DisassociateRouteTableError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisassociateRouteTableError::Validation(ref cause) => cause,DisassociateRouteTableError::Credentials(ref err) => err.description(),DisassociateRouteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisassociateRouteTableError::Unknown(ref cause) => cause
+                            DisassociateRouteTableError::Validation(ref cause) => cause,
+DisassociateRouteTableError::Credentials(ref err) => err.description(),
+DisassociateRouteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisassociateRouteTableError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45374,7 +45848,10 @@ Unknown(String)
                 impl Error for DisassociateSubnetCidrBlockError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisassociateSubnetCidrBlockError::Validation(ref cause) => cause,DisassociateSubnetCidrBlockError::Credentials(ref err) => err.description(),DisassociateSubnetCidrBlockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisassociateSubnetCidrBlockError::Unknown(ref cause) => cause
+                            DisassociateSubnetCidrBlockError::Validation(ref cause) => cause,
+DisassociateSubnetCidrBlockError::Credentials(ref err) => err.description(),
+DisassociateSubnetCidrBlockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisassociateSubnetCidrBlockError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45430,7 +45907,10 @@ Unknown(String)
                 impl Error for DisassociateVpcCidrBlockError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisassociateVpcCidrBlockError::Validation(ref cause) => cause,DisassociateVpcCidrBlockError::Credentials(ref err) => err.description(),DisassociateVpcCidrBlockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisassociateVpcCidrBlockError::Unknown(ref cause) => cause
+                            DisassociateVpcCidrBlockError::Validation(ref cause) => cause,
+DisassociateVpcCidrBlockError::Credentials(ref err) => err.description(),
+DisassociateVpcCidrBlockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisassociateVpcCidrBlockError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45486,7 +45966,10 @@ Unknown(String)
                 impl Error for EnableVgwRoutePropagationError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableVgwRoutePropagationError::Validation(ref cause) => cause,EnableVgwRoutePropagationError::Credentials(ref err) => err.description(),EnableVgwRoutePropagationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableVgwRoutePropagationError::Unknown(ref cause) => cause
+                            EnableVgwRoutePropagationError::Validation(ref cause) => cause,
+EnableVgwRoutePropagationError::Credentials(ref err) => err.description(),
+EnableVgwRoutePropagationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableVgwRoutePropagationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45542,7 +46025,10 @@ Unknown(String)
                 impl Error for EnableVolumeIOError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableVolumeIOError::Validation(ref cause) => cause,EnableVolumeIOError::Credentials(ref err) => err.description(),EnableVolumeIOError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableVolumeIOError::Unknown(ref cause) => cause
+                            EnableVolumeIOError::Validation(ref cause) => cause,
+EnableVolumeIOError::Credentials(ref err) => err.description(),
+EnableVolumeIOError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableVolumeIOError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45598,7 +46084,10 @@ Unknown(String)
                 impl Error for EnableVpcClassicLinkError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableVpcClassicLinkError::Validation(ref cause) => cause,EnableVpcClassicLinkError::Credentials(ref err) => err.description(),EnableVpcClassicLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableVpcClassicLinkError::Unknown(ref cause) => cause
+                            EnableVpcClassicLinkError::Validation(ref cause) => cause,
+EnableVpcClassicLinkError::Credentials(ref err) => err.description(),
+EnableVpcClassicLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableVpcClassicLinkError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45654,7 +46143,10 @@ Unknown(String)
                 impl Error for EnableVpcClassicLinkDnsSupportError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableVpcClassicLinkDnsSupportError::Validation(ref cause) => cause,EnableVpcClassicLinkDnsSupportError::Credentials(ref err) => err.description(),EnableVpcClassicLinkDnsSupportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableVpcClassicLinkDnsSupportError::Unknown(ref cause) => cause
+                            EnableVpcClassicLinkDnsSupportError::Validation(ref cause) => cause,
+EnableVpcClassicLinkDnsSupportError::Credentials(ref err) => err.description(),
+EnableVpcClassicLinkDnsSupportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableVpcClassicLinkDnsSupportError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45710,7 +46202,10 @@ Unknown(String)
                 impl Error for GetConsoleOutputError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetConsoleOutputError::Validation(ref cause) => cause,GetConsoleOutputError::Credentials(ref err) => err.description(),GetConsoleOutputError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetConsoleOutputError::Unknown(ref cause) => cause
+                            GetConsoleOutputError::Validation(ref cause) => cause,
+GetConsoleOutputError::Credentials(ref err) => err.description(),
+GetConsoleOutputError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetConsoleOutputError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45766,7 +46261,10 @@ Unknown(String)
                 impl Error for GetConsoleScreenshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetConsoleScreenshotError::Validation(ref cause) => cause,GetConsoleScreenshotError::Credentials(ref err) => err.description(),GetConsoleScreenshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetConsoleScreenshotError::Unknown(ref cause) => cause
+                            GetConsoleScreenshotError::Validation(ref cause) => cause,
+GetConsoleScreenshotError::Credentials(ref err) => err.description(),
+GetConsoleScreenshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetConsoleScreenshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45822,7 +46320,10 @@ Unknown(String)
                 impl Error for GetHostReservationPurchasePreviewError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetHostReservationPurchasePreviewError::Validation(ref cause) => cause,GetHostReservationPurchasePreviewError::Credentials(ref err) => err.description(),GetHostReservationPurchasePreviewError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetHostReservationPurchasePreviewError::Unknown(ref cause) => cause
+                            GetHostReservationPurchasePreviewError::Validation(ref cause) => cause,
+GetHostReservationPurchasePreviewError::Credentials(ref err) => err.description(),
+GetHostReservationPurchasePreviewError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetHostReservationPurchasePreviewError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45878,7 +46379,10 @@ Unknown(String)
                 impl Error for GetPasswordDataError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetPasswordDataError::Validation(ref cause) => cause,GetPasswordDataError::Credentials(ref err) => err.description(),GetPasswordDataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetPasswordDataError::Unknown(ref cause) => cause
+                            GetPasswordDataError::Validation(ref cause) => cause,
+GetPasswordDataError::Credentials(ref err) => err.description(),
+GetPasswordDataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetPasswordDataError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45934,7 +46438,10 @@ Unknown(String)
                 impl Error for GetReservedInstancesExchangeQuoteError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetReservedInstancesExchangeQuoteError::Validation(ref cause) => cause,GetReservedInstancesExchangeQuoteError::Credentials(ref err) => err.description(),GetReservedInstancesExchangeQuoteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetReservedInstancesExchangeQuoteError::Unknown(ref cause) => cause
+                            GetReservedInstancesExchangeQuoteError::Validation(ref cause) => cause,
+GetReservedInstancesExchangeQuoteError::Credentials(ref err) => err.description(),
+GetReservedInstancesExchangeQuoteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetReservedInstancesExchangeQuoteError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -45990,7 +46497,10 @@ Unknown(String)
                 impl Error for ImportImageError {
                     fn description(&self) -> &str {
                         match *self {
-                            ImportImageError::Validation(ref cause) => cause,ImportImageError::Credentials(ref err) => err.description(),ImportImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ImportImageError::Unknown(ref cause) => cause
+                            ImportImageError::Validation(ref cause) => cause,
+ImportImageError::Credentials(ref err) => err.description(),
+ImportImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ImportImageError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46046,7 +46556,10 @@ Unknown(String)
                 impl Error for ImportInstanceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ImportInstanceError::Validation(ref cause) => cause,ImportInstanceError::Credentials(ref err) => err.description(),ImportInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ImportInstanceError::Unknown(ref cause) => cause
+                            ImportInstanceError::Validation(ref cause) => cause,
+ImportInstanceError::Credentials(ref err) => err.description(),
+ImportInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ImportInstanceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46102,7 +46615,10 @@ Unknown(String)
                 impl Error for ImportKeyPairError {
                     fn description(&self) -> &str {
                         match *self {
-                            ImportKeyPairError::Validation(ref cause) => cause,ImportKeyPairError::Credentials(ref err) => err.description(),ImportKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ImportKeyPairError::Unknown(ref cause) => cause
+                            ImportKeyPairError::Validation(ref cause) => cause,
+ImportKeyPairError::Credentials(ref err) => err.description(),
+ImportKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ImportKeyPairError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46158,7 +46674,10 @@ Unknown(String)
                 impl Error for ImportSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            ImportSnapshotError::Validation(ref cause) => cause,ImportSnapshotError::Credentials(ref err) => err.description(),ImportSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ImportSnapshotError::Unknown(ref cause) => cause
+                            ImportSnapshotError::Validation(ref cause) => cause,
+ImportSnapshotError::Credentials(ref err) => err.description(),
+ImportSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ImportSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46214,7 +46733,10 @@ Unknown(String)
                 impl Error for ImportVolumeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ImportVolumeError::Validation(ref cause) => cause,ImportVolumeError::Credentials(ref err) => err.description(),ImportVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ImportVolumeError::Unknown(ref cause) => cause
+                            ImportVolumeError::Validation(ref cause) => cause,
+ImportVolumeError::Credentials(ref err) => err.description(),
+ImportVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ImportVolumeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46270,7 +46792,10 @@ Unknown(String)
                 impl Error for ModifyHostsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyHostsError::Validation(ref cause) => cause,ModifyHostsError::Credentials(ref err) => err.description(),ModifyHostsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyHostsError::Unknown(ref cause) => cause
+                            ModifyHostsError::Validation(ref cause) => cause,
+ModifyHostsError::Credentials(ref err) => err.description(),
+ModifyHostsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyHostsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46326,7 +46851,10 @@ Unknown(String)
                 impl Error for ModifyIdFormatError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyIdFormatError::Validation(ref cause) => cause,ModifyIdFormatError::Credentials(ref err) => err.description(),ModifyIdFormatError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyIdFormatError::Unknown(ref cause) => cause
+                            ModifyIdFormatError::Validation(ref cause) => cause,
+ModifyIdFormatError::Credentials(ref err) => err.description(),
+ModifyIdFormatError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyIdFormatError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46382,7 +46910,10 @@ Unknown(String)
                 impl Error for ModifyIdentityIdFormatError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyIdentityIdFormatError::Validation(ref cause) => cause,ModifyIdentityIdFormatError::Credentials(ref err) => err.description(),ModifyIdentityIdFormatError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyIdentityIdFormatError::Unknown(ref cause) => cause
+                            ModifyIdentityIdFormatError::Validation(ref cause) => cause,
+ModifyIdentityIdFormatError::Credentials(ref err) => err.description(),
+ModifyIdentityIdFormatError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyIdentityIdFormatError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46438,7 +46969,10 @@ Unknown(String)
                 impl Error for ModifyImageAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyImageAttributeError::Validation(ref cause) => cause,ModifyImageAttributeError::Credentials(ref err) => err.description(),ModifyImageAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyImageAttributeError::Unknown(ref cause) => cause
+                            ModifyImageAttributeError::Validation(ref cause) => cause,
+ModifyImageAttributeError::Credentials(ref err) => err.description(),
+ModifyImageAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyImageAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46494,7 +47028,10 @@ Unknown(String)
                 impl Error for ModifyInstanceAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyInstanceAttributeError::Validation(ref cause) => cause,ModifyInstanceAttributeError::Credentials(ref err) => err.description(),ModifyInstanceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyInstanceAttributeError::Unknown(ref cause) => cause
+                            ModifyInstanceAttributeError::Validation(ref cause) => cause,
+ModifyInstanceAttributeError::Credentials(ref err) => err.description(),
+ModifyInstanceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyInstanceAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46550,7 +47087,10 @@ Unknown(String)
                 impl Error for ModifyInstancePlacementError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyInstancePlacementError::Validation(ref cause) => cause,ModifyInstancePlacementError::Credentials(ref err) => err.description(),ModifyInstancePlacementError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyInstancePlacementError::Unknown(ref cause) => cause
+                            ModifyInstancePlacementError::Validation(ref cause) => cause,
+ModifyInstancePlacementError::Credentials(ref err) => err.description(),
+ModifyInstancePlacementError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyInstancePlacementError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46606,7 +47146,10 @@ Unknown(String)
                 impl Error for ModifyNetworkInterfaceAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyNetworkInterfaceAttributeError::Validation(ref cause) => cause,ModifyNetworkInterfaceAttributeError::Credentials(ref err) => err.description(),ModifyNetworkInterfaceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyNetworkInterfaceAttributeError::Unknown(ref cause) => cause
+                            ModifyNetworkInterfaceAttributeError::Validation(ref cause) => cause,
+ModifyNetworkInterfaceAttributeError::Credentials(ref err) => err.description(),
+ModifyNetworkInterfaceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyNetworkInterfaceAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46662,7 +47205,10 @@ Unknown(String)
                 impl Error for ModifyReservedInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyReservedInstancesError::Validation(ref cause) => cause,ModifyReservedInstancesError::Credentials(ref err) => err.description(),ModifyReservedInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyReservedInstancesError::Unknown(ref cause) => cause
+                            ModifyReservedInstancesError::Validation(ref cause) => cause,
+ModifyReservedInstancesError::Credentials(ref err) => err.description(),
+ModifyReservedInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyReservedInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46718,7 +47264,10 @@ Unknown(String)
                 impl Error for ModifySnapshotAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifySnapshotAttributeError::Validation(ref cause) => cause,ModifySnapshotAttributeError::Credentials(ref err) => err.description(),ModifySnapshotAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifySnapshotAttributeError::Unknown(ref cause) => cause
+                            ModifySnapshotAttributeError::Validation(ref cause) => cause,
+ModifySnapshotAttributeError::Credentials(ref err) => err.description(),
+ModifySnapshotAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifySnapshotAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46774,7 +47323,10 @@ Unknown(String)
                 impl Error for ModifySpotFleetRequestError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifySpotFleetRequestError::Validation(ref cause) => cause,ModifySpotFleetRequestError::Credentials(ref err) => err.description(),ModifySpotFleetRequestError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifySpotFleetRequestError::Unknown(ref cause) => cause
+                            ModifySpotFleetRequestError::Validation(ref cause) => cause,
+ModifySpotFleetRequestError::Credentials(ref err) => err.description(),
+ModifySpotFleetRequestError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifySpotFleetRequestError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46830,7 +47382,10 @@ Unknown(String)
                 impl Error for ModifySubnetAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifySubnetAttributeError::Validation(ref cause) => cause,ModifySubnetAttributeError::Credentials(ref err) => err.description(),ModifySubnetAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifySubnetAttributeError::Unknown(ref cause) => cause
+                            ModifySubnetAttributeError::Validation(ref cause) => cause,
+ModifySubnetAttributeError::Credentials(ref err) => err.description(),
+ModifySubnetAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifySubnetAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46886,7 +47441,10 @@ Unknown(String)
                 impl Error for ModifyVolumeAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyVolumeAttributeError::Validation(ref cause) => cause,ModifyVolumeAttributeError::Credentials(ref err) => err.description(),ModifyVolumeAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyVolumeAttributeError::Unknown(ref cause) => cause
+                            ModifyVolumeAttributeError::Validation(ref cause) => cause,
+ModifyVolumeAttributeError::Credentials(ref err) => err.description(),
+ModifyVolumeAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyVolumeAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46942,7 +47500,10 @@ Unknown(String)
                 impl Error for ModifyVpcAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyVpcAttributeError::Validation(ref cause) => cause,ModifyVpcAttributeError::Credentials(ref err) => err.description(),ModifyVpcAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyVpcAttributeError::Unknown(ref cause) => cause
+                            ModifyVpcAttributeError::Validation(ref cause) => cause,
+ModifyVpcAttributeError::Credentials(ref err) => err.description(),
+ModifyVpcAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyVpcAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -46998,7 +47559,10 @@ Unknown(String)
                 impl Error for ModifyVpcEndpointError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyVpcEndpointError::Validation(ref cause) => cause,ModifyVpcEndpointError::Credentials(ref err) => err.description(),ModifyVpcEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyVpcEndpointError::Unknown(ref cause) => cause
+                            ModifyVpcEndpointError::Validation(ref cause) => cause,
+ModifyVpcEndpointError::Credentials(ref err) => err.description(),
+ModifyVpcEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyVpcEndpointError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47054,7 +47618,10 @@ Unknown(String)
                 impl Error for ModifyVpcPeeringConnectionOptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyVpcPeeringConnectionOptionsError::Validation(ref cause) => cause,ModifyVpcPeeringConnectionOptionsError::Credentials(ref err) => err.description(),ModifyVpcPeeringConnectionOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyVpcPeeringConnectionOptionsError::Unknown(ref cause) => cause
+                            ModifyVpcPeeringConnectionOptionsError::Validation(ref cause) => cause,
+ModifyVpcPeeringConnectionOptionsError::Credentials(ref err) => err.description(),
+ModifyVpcPeeringConnectionOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyVpcPeeringConnectionOptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47110,7 +47677,10 @@ Unknown(String)
                 impl Error for MonitorInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            MonitorInstancesError::Validation(ref cause) => cause,MonitorInstancesError::Credentials(ref err) => err.description(),MonitorInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),MonitorInstancesError::Unknown(ref cause) => cause
+                            MonitorInstancesError::Validation(ref cause) => cause,
+MonitorInstancesError::Credentials(ref err) => err.description(),
+MonitorInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+MonitorInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47166,7 +47736,10 @@ Unknown(String)
                 impl Error for MoveAddressToVpcError {
                     fn description(&self) -> &str {
                         match *self {
-                            MoveAddressToVpcError::Validation(ref cause) => cause,MoveAddressToVpcError::Credentials(ref err) => err.description(),MoveAddressToVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),MoveAddressToVpcError::Unknown(ref cause) => cause
+                            MoveAddressToVpcError::Validation(ref cause) => cause,
+MoveAddressToVpcError::Credentials(ref err) => err.description(),
+MoveAddressToVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+MoveAddressToVpcError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47222,7 +47795,10 @@ Unknown(String)
                 impl Error for PurchaseHostReservationError {
                     fn description(&self) -> &str {
                         match *self {
-                            PurchaseHostReservationError::Validation(ref cause) => cause,PurchaseHostReservationError::Credentials(ref err) => err.description(),PurchaseHostReservationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PurchaseHostReservationError::Unknown(ref cause) => cause
+                            PurchaseHostReservationError::Validation(ref cause) => cause,
+PurchaseHostReservationError::Credentials(ref err) => err.description(),
+PurchaseHostReservationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PurchaseHostReservationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47278,7 +47854,10 @@ Unknown(String)
                 impl Error for PurchaseReservedInstancesOfferingError {
                     fn description(&self) -> &str {
                         match *self {
-                            PurchaseReservedInstancesOfferingError::Validation(ref cause) => cause,PurchaseReservedInstancesOfferingError::Credentials(ref err) => err.description(),PurchaseReservedInstancesOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PurchaseReservedInstancesOfferingError::Unknown(ref cause) => cause
+                            PurchaseReservedInstancesOfferingError::Validation(ref cause) => cause,
+PurchaseReservedInstancesOfferingError::Credentials(ref err) => err.description(),
+PurchaseReservedInstancesOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PurchaseReservedInstancesOfferingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47334,7 +47913,10 @@ Unknown(String)
                 impl Error for PurchaseScheduledInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            PurchaseScheduledInstancesError::Validation(ref cause) => cause,PurchaseScheduledInstancesError::Credentials(ref err) => err.description(),PurchaseScheduledInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PurchaseScheduledInstancesError::Unknown(ref cause) => cause
+                            PurchaseScheduledInstancesError::Validation(ref cause) => cause,
+PurchaseScheduledInstancesError::Credentials(ref err) => err.description(),
+PurchaseScheduledInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PurchaseScheduledInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47390,7 +47972,10 @@ Unknown(String)
                 impl Error for RebootInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            RebootInstancesError::Validation(ref cause) => cause,RebootInstancesError::Credentials(ref err) => err.description(),RebootInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RebootInstancesError::Unknown(ref cause) => cause
+                            RebootInstancesError::Validation(ref cause) => cause,
+RebootInstancesError::Credentials(ref err) => err.description(),
+RebootInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RebootInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47446,7 +48031,10 @@ Unknown(String)
                 impl Error for RegisterImageError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterImageError::Validation(ref cause) => cause,RegisterImageError::Credentials(ref err) => err.description(),RegisterImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterImageError::Unknown(ref cause) => cause
+                            RegisterImageError::Validation(ref cause) => cause,
+RegisterImageError::Credentials(ref err) => err.description(),
+RegisterImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterImageError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47502,7 +48090,10 @@ Unknown(String)
                 impl Error for RejectVpcPeeringConnectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            RejectVpcPeeringConnectionError::Validation(ref cause) => cause,RejectVpcPeeringConnectionError::Credentials(ref err) => err.description(),RejectVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RejectVpcPeeringConnectionError::Unknown(ref cause) => cause
+                            RejectVpcPeeringConnectionError::Validation(ref cause) => cause,
+RejectVpcPeeringConnectionError::Credentials(ref err) => err.description(),
+RejectVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RejectVpcPeeringConnectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47558,7 +48149,10 @@ Unknown(String)
                 impl Error for ReleaseAddressError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReleaseAddressError::Validation(ref cause) => cause,ReleaseAddressError::Credentials(ref err) => err.description(),ReleaseAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReleaseAddressError::Unknown(ref cause) => cause
+                            ReleaseAddressError::Validation(ref cause) => cause,
+ReleaseAddressError::Credentials(ref err) => err.description(),
+ReleaseAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReleaseAddressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47614,7 +48208,10 @@ Unknown(String)
                 impl Error for ReleaseHostsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReleaseHostsError::Validation(ref cause) => cause,ReleaseHostsError::Credentials(ref err) => err.description(),ReleaseHostsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReleaseHostsError::Unknown(ref cause) => cause
+                            ReleaseHostsError::Validation(ref cause) => cause,
+ReleaseHostsError::Credentials(ref err) => err.description(),
+ReleaseHostsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReleaseHostsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47670,7 +48267,10 @@ Unknown(String)
                 impl Error for ReplaceNetworkAclAssociationError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReplaceNetworkAclAssociationError::Validation(ref cause) => cause,ReplaceNetworkAclAssociationError::Credentials(ref err) => err.description(),ReplaceNetworkAclAssociationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReplaceNetworkAclAssociationError::Unknown(ref cause) => cause
+                            ReplaceNetworkAclAssociationError::Validation(ref cause) => cause,
+ReplaceNetworkAclAssociationError::Credentials(ref err) => err.description(),
+ReplaceNetworkAclAssociationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReplaceNetworkAclAssociationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47726,7 +48326,10 @@ Unknown(String)
                 impl Error for ReplaceNetworkAclEntryError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReplaceNetworkAclEntryError::Validation(ref cause) => cause,ReplaceNetworkAclEntryError::Credentials(ref err) => err.description(),ReplaceNetworkAclEntryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReplaceNetworkAclEntryError::Unknown(ref cause) => cause
+                            ReplaceNetworkAclEntryError::Validation(ref cause) => cause,
+ReplaceNetworkAclEntryError::Credentials(ref err) => err.description(),
+ReplaceNetworkAclEntryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReplaceNetworkAclEntryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47782,7 +48385,10 @@ Unknown(String)
                 impl Error for ReplaceRouteError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReplaceRouteError::Validation(ref cause) => cause,ReplaceRouteError::Credentials(ref err) => err.description(),ReplaceRouteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReplaceRouteError::Unknown(ref cause) => cause
+                            ReplaceRouteError::Validation(ref cause) => cause,
+ReplaceRouteError::Credentials(ref err) => err.description(),
+ReplaceRouteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReplaceRouteError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47838,7 +48444,10 @@ Unknown(String)
                 impl Error for ReplaceRouteTableAssociationError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReplaceRouteTableAssociationError::Validation(ref cause) => cause,ReplaceRouteTableAssociationError::Credentials(ref err) => err.description(),ReplaceRouteTableAssociationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReplaceRouteTableAssociationError::Unknown(ref cause) => cause
+                            ReplaceRouteTableAssociationError::Validation(ref cause) => cause,
+ReplaceRouteTableAssociationError::Credentials(ref err) => err.description(),
+ReplaceRouteTableAssociationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReplaceRouteTableAssociationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47894,7 +48503,10 @@ Unknown(String)
                 impl Error for ReportInstanceStatusError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReportInstanceStatusError::Validation(ref cause) => cause,ReportInstanceStatusError::Credentials(ref err) => err.description(),ReportInstanceStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReportInstanceStatusError::Unknown(ref cause) => cause
+                            ReportInstanceStatusError::Validation(ref cause) => cause,
+ReportInstanceStatusError::Credentials(ref err) => err.description(),
+ReportInstanceStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReportInstanceStatusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -47950,7 +48562,10 @@ Unknown(String)
                 impl Error for RequestSpotFleetError {
                     fn description(&self) -> &str {
                         match *self {
-                            RequestSpotFleetError::Validation(ref cause) => cause,RequestSpotFleetError::Credentials(ref err) => err.description(),RequestSpotFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RequestSpotFleetError::Unknown(ref cause) => cause
+                            RequestSpotFleetError::Validation(ref cause) => cause,
+RequestSpotFleetError::Credentials(ref err) => err.description(),
+RequestSpotFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RequestSpotFleetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48006,7 +48621,10 @@ Unknown(String)
                 impl Error for RequestSpotInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            RequestSpotInstancesError::Validation(ref cause) => cause,RequestSpotInstancesError::Credentials(ref err) => err.description(),RequestSpotInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RequestSpotInstancesError::Unknown(ref cause) => cause
+                            RequestSpotInstancesError::Validation(ref cause) => cause,
+RequestSpotInstancesError::Credentials(ref err) => err.description(),
+RequestSpotInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RequestSpotInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48062,7 +48680,10 @@ Unknown(String)
                 impl Error for ResetImageAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ResetImageAttributeError::Validation(ref cause) => cause,ResetImageAttributeError::Credentials(ref err) => err.description(),ResetImageAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ResetImageAttributeError::Unknown(ref cause) => cause
+                            ResetImageAttributeError::Validation(ref cause) => cause,
+ResetImageAttributeError::Credentials(ref err) => err.description(),
+ResetImageAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ResetImageAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48118,7 +48739,10 @@ Unknown(String)
                 impl Error for ResetInstanceAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ResetInstanceAttributeError::Validation(ref cause) => cause,ResetInstanceAttributeError::Credentials(ref err) => err.description(),ResetInstanceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ResetInstanceAttributeError::Unknown(ref cause) => cause
+                            ResetInstanceAttributeError::Validation(ref cause) => cause,
+ResetInstanceAttributeError::Credentials(ref err) => err.description(),
+ResetInstanceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ResetInstanceAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48174,7 +48798,10 @@ Unknown(String)
                 impl Error for ResetNetworkInterfaceAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ResetNetworkInterfaceAttributeError::Validation(ref cause) => cause,ResetNetworkInterfaceAttributeError::Credentials(ref err) => err.description(),ResetNetworkInterfaceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ResetNetworkInterfaceAttributeError::Unknown(ref cause) => cause
+                            ResetNetworkInterfaceAttributeError::Validation(ref cause) => cause,
+ResetNetworkInterfaceAttributeError::Credentials(ref err) => err.description(),
+ResetNetworkInterfaceAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ResetNetworkInterfaceAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48230,7 +48857,10 @@ Unknown(String)
                 impl Error for ResetSnapshotAttributeError {
                     fn description(&self) -> &str {
                         match *self {
-                            ResetSnapshotAttributeError::Validation(ref cause) => cause,ResetSnapshotAttributeError::Credentials(ref err) => err.description(),ResetSnapshotAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ResetSnapshotAttributeError::Unknown(ref cause) => cause
+                            ResetSnapshotAttributeError::Validation(ref cause) => cause,
+ResetSnapshotAttributeError::Credentials(ref err) => err.description(),
+ResetSnapshotAttributeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ResetSnapshotAttributeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48286,7 +48916,10 @@ Unknown(String)
                 impl Error for RestoreAddressToClassicError {
                     fn description(&self) -> &str {
                         match *self {
-                            RestoreAddressToClassicError::Validation(ref cause) => cause,RestoreAddressToClassicError::Credentials(ref err) => err.description(),RestoreAddressToClassicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RestoreAddressToClassicError::Unknown(ref cause) => cause
+                            RestoreAddressToClassicError::Validation(ref cause) => cause,
+RestoreAddressToClassicError::Credentials(ref err) => err.description(),
+RestoreAddressToClassicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RestoreAddressToClassicError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48342,7 +48975,10 @@ Unknown(String)
                 impl Error for RevokeSecurityGroupEgressError {
                     fn description(&self) -> &str {
                         match *self {
-                            RevokeSecurityGroupEgressError::Validation(ref cause) => cause,RevokeSecurityGroupEgressError::Credentials(ref err) => err.description(),RevokeSecurityGroupEgressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RevokeSecurityGroupEgressError::Unknown(ref cause) => cause
+                            RevokeSecurityGroupEgressError::Validation(ref cause) => cause,
+RevokeSecurityGroupEgressError::Credentials(ref err) => err.description(),
+RevokeSecurityGroupEgressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RevokeSecurityGroupEgressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48398,7 +49034,10 @@ Unknown(String)
                 impl Error for RevokeSecurityGroupIngressError {
                     fn description(&self) -> &str {
                         match *self {
-                            RevokeSecurityGroupIngressError::Validation(ref cause) => cause,RevokeSecurityGroupIngressError::Credentials(ref err) => err.description(),RevokeSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RevokeSecurityGroupIngressError::Unknown(ref cause) => cause
+                            RevokeSecurityGroupIngressError::Validation(ref cause) => cause,
+RevokeSecurityGroupIngressError::Credentials(ref err) => err.description(),
+RevokeSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RevokeSecurityGroupIngressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48454,7 +49093,10 @@ Unknown(String)
                 impl Error for RunInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            RunInstancesError::Validation(ref cause) => cause,RunInstancesError::Credentials(ref err) => err.description(),RunInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RunInstancesError::Unknown(ref cause) => cause
+                            RunInstancesError::Validation(ref cause) => cause,
+RunInstancesError::Credentials(ref err) => err.description(),
+RunInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RunInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48510,7 +49152,10 @@ Unknown(String)
                 impl Error for RunScheduledInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            RunScheduledInstancesError::Validation(ref cause) => cause,RunScheduledInstancesError::Credentials(ref err) => err.description(),RunScheduledInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RunScheduledInstancesError::Unknown(ref cause) => cause
+                            RunScheduledInstancesError::Validation(ref cause) => cause,
+RunScheduledInstancesError::Credentials(ref err) => err.description(),
+RunScheduledInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RunScheduledInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48566,7 +49211,10 @@ Unknown(String)
                 impl Error for StartInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            StartInstancesError::Validation(ref cause) => cause,StartInstancesError::Credentials(ref err) => err.description(),StartInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StartInstancesError::Unknown(ref cause) => cause
+                            StartInstancesError::Validation(ref cause) => cause,
+StartInstancesError::Credentials(ref err) => err.description(),
+StartInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StartInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48622,7 +49270,10 @@ Unknown(String)
                 impl Error for StopInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            StopInstancesError::Validation(ref cause) => cause,StopInstancesError::Credentials(ref err) => err.description(),StopInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StopInstancesError::Unknown(ref cause) => cause
+                            StopInstancesError::Validation(ref cause) => cause,
+StopInstancesError::Credentials(ref err) => err.description(),
+StopInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StopInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48678,7 +49329,10 @@ Unknown(String)
                 impl Error for TerminateInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            TerminateInstancesError::Validation(ref cause) => cause,TerminateInstancesError::Credentials(ref err) => err.description(),TerminateInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),TerminateInstancesError::Unknown(ref cause) => cause
+                            TerminateInstancesError::Validation(ref cause) => cause,
+TerminateInstancesError::Credentials(ref err) => err.description(),
+TerminateInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+TerminateInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48734,7 +49388,10 @@ Unknown(String)
                 impl Error for UnassignIpv6AddressesError {
                     fn description(&self) -> &str {
                         match *self {
-                            UnassignIpv6AddressesError::Validation(ref cause) => cause,UnassignIpv6AddressesError::Credentials(ref err) => err.description(),UnassignIpv6AddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UnassignIpv6AddressesError::Unknown(ref cause) => cause
+                            UnassignIpv6AddressesError::Validation(ref cause) => cause,
+UnassignIpv6AddressesError::Credentials(ref err) => err.description(),
+UnassignIpv6AddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UnassignIpv6AddressesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48790,7 +49447,10 @@ Unknown(String)
                 impl Error for UnassignPrivateIpAddressesError {
                     fn description(&self) -> &str {
                         match *self {
-                            UnassignPrivateIpAddressesError::Validation(ref cause) => cause,UnassignPrivateIpAddressesError::Credentials(ref err) => err.description(),UnassignPrivateIpAddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UnassignPrivateIpAddressesError::Unknown(ref cause) => cause
+                            UnassignPrivateIpAddressesError::Validation(ref cause) => cause,
+UnassignPrivateIpAddressesError::Credentials(ref err) => err.description(),
+UnassignPrivateIpAddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UnassignPrivateIpAddressesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -48846,7 +49506,10 @@ Unknown(String)
                 impl Error for UnmonitorInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            UnmonitorInstancesError::Validation(ref cause) => cause,UnmonitorInstancesError::Credentials(ref err) => err.description(),UnmonitorInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UnmonitorInstancesError::Unknown(ref cause) => cause
+                            UnmonitorInstancesError::Validation(ref cause) => cause,
+UnmonitorInstancesError::Credentials(ref err) => err.description(),
+UnmonitorInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UnmonitorInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }

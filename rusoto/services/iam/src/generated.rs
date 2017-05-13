@@ -10770,14 +10770,14 @@ pub type VirtualMFADeviceName = String;
                 #[derive(Debug, PartialEq)]
                 pub enum AddClientIDToOpenIDConnectProviderError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -10826,7 +10826,14 @@ Unknown(String)
                 impl Error for AddClientIDToOpenIDConnectProviderError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddClientIDToOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,AddClientIDToOpenIDConnectProviderError::InvalidInput(ref cause) => cause,AddClientIDToOpenIDConnectProviderError::LimitExceeded(ref cause) => cause,AddClientIDToOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,AddClientIDToOpenIDConnectProviderError::Validation(ref cause) => cause,AddClientIDToOpenIDConnectProviderError::Credentials(ref err) => err.description(),AddClientIDToOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddClientIDToOpenIDConnectProviderError::Unknown(ref cause) => cause
+                            AddClientIDToOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
+AddClientIDToOpenIDConnectProviderError::LimitExceeded(ref cause) => cause,
+AddClientIDToOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
+AddClientIDToOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+AddClientIDToOpenIDConnectProviderError::Validation(ref cause) => cause,
+AddClientIDToOpenIDConnectProviderError::Credentials(ref err) => err.description(),
+AddClientIDToOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddClientIDToOpenIDConnectProviderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -10858,7 +10865,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => AddRoleToInstanceProfileError::NoSuchEntity(String::from(parsed_error.message)),"EntityAlreadyExistsException" => AddRoleToInstanceProfileError::EntityAlreadyExists(String::from(parsed_error.message)),"ServiceFailureException" => AddRoleToInstanceProfileError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => AddRoleToInstanceProfileError::LimitExceeded(String::from(parsed_error.message)),_ => AddRoleToInstanceProfileError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => AddRoleToInstanceProfileError::EntityAlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => AddRoleToInstanceProfileError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => AddRoleToInstanceProfileError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => AddRoleToInstanceProfileError::ServiceFailure(String::from(parsed_error.message)),_ => AddRoleToInstanceProfileError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AddRoleToInstanceProfileError::Unknown(body.to_string())
@@ -10890,7 +10897,14 @@ Unknown(String)
                 impl Error for AddRoleToInstanceProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddRoleToInstanceProfileError::NoSuchEntity(ref cause) => cause,AddRoleToInstanceProfileError::ServiceFailure(ref cause) => cause,AddRoleToInstanceProfileError::EntityAlreadyExists(ref cause) => cause,AddRoleToInstanceProfileError::LimitExceeded(ref cause) => cause,AddRoleToInstanceProfileError::Validation(ref cause) => cause,AddRoleToInstanceProfileError::Credentials(ref err) => err.description(),AddRoleToInstanceProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddRoleToInstanceProfileError::Unknown(ref cause) => cause
+                            AddRoleToInstanceProfileError::EntityAlreadyExists(ref cause) => cause,
+AddRoleToInstanceProfileError::LimitExceeded(ref cause) => cause,
+AddRoleToInstanceProfileError::NoSuchEntity(ref cause) => cause,
+AddRoleToInstanceProfileError::ServiceFailure(ref cause) => cause,
+AddRoleToInstanceProfileError::Validation(ref cause) => cause,
+AddRoleToInstanceProfileError::Credentials(ref err) => err.description(),
+AddRoleToInstanceProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddRoleToInstanceProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -10898,12 +10912,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AddUserToGroupError {
                     
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -10920,7 +10934,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => AddUserToGroupError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => AddUserToGroupError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => AddUserToGroupError::ServiceFailure(String::from(parsed_error.message)),_ => AddUserToGroupError::Unknown(String::from(body))
+                                    "LimitExceededException" => AddUserToGroupError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => AddUserToGroupError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => AddUserToGroupError::ServiceFailure(String::from(parsed_error.message)),_ => AddUserToGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AddUserToGroupError::Unknown(body.to_string())
@@ -10952,7 +10966,13 @@ Unknown(String)
                 impl Error for AddUserToGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddUserToGroupError::NoSuchEntity(ref cause) => cause,AddUserToGroupError::LimitExceeded(ref cause) => cause,AddUserToGroupError::ServiceFailure(ref cause) => cause,AddUserToGroupError::Validation(ref cause) => cause,AddUserToGroupError::Credentials(ref err) => err.description(),AddUserToGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddUserToGroupError::Unknown(ref cause) => cause
+                            AddUserToGroupError::LimitExceeded(ref cause) => cause,
+AddUserToGroupError::NoSuchEntity(ref cause) => cause,
+AddUserToGroupError::ServiceFailure(ref cause) => cause,
+AddUserToGroupError::Validation(ref cause) => cause,
+AddUserToGroupError::Credentials(ref err) => err.description(),
+AddUserToGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddUserToGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -10960,14 +10980,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AttachGroupPolicyError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -10984,7 +11004,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => AttachGroupPolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => AttachGroupPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => AttachGroupPolicyError::ServiceFailure(String::from(parsed_error.message)),"InvalidInputException" => AttachGroupPolicyError::InvalidInput(String::from(parsed_error.message)),_ => AttachGroupPolicyError::Unknown(String::from(body))
+                                    "InvalidInputException" => AttachGroupPolicyError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => AttachGroupPolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => AttachGroupPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => AttachGroupPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => AttachGroupPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AttachGroupPolicyError::Unknown(body.to_string())
@@ -11016,7 +11036,14 @@ Unknown(String)
                 impl Error for AttachGroupPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachGroupPolicyError::NoSuchEntity(ref cause) => cause,AttachGroupPolicyError::InvalidInput(ref cause) => cause,AttachGroupPolicyError::LimitExceeded(ref cause) => cause,AttachGroupPolicyError::ServiceFailure(ref cause) => cause,AttachGroupPolicyError::Validation(ref cause) => cause,AttachGroupPolicyError::Credentials(ref err) => err.description(),AttachGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachGroupPolicyError::Unknown(ref cause) => cause
+                            AttachGroupPolicyError::InvalidInput(ref cause) => cause,
+AttachGroupPolicyError::LimitExceeded(ref cause) => cause,
+AttachGroupPolicyError::NoSuchEntity(ref cause) => cause,
+AttachGroupPolicyError::ServiceFailure(ref cause) => cause,
+AttachGroupPolicyError::Validation(ref cause) => cause,
+AttachGroupPolicyError::Credentials(ref err) => err.description(),
+AttachGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachGroupPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11024,14 +11051,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AttachRolePolicyError {
                     
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11048,7 +11075,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => AttachRolePolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => AttachRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => AttachRolePolicyError::ServiceFailure(String::from(parsed_error.message)),"InvalidInputException" => AttachRolePolicyError::InvalidInput(String::from(parsed_error.message)),_ => AttachRolePolicyError::Unknown(String::from(body))
+                                    "InvalidInputException" => AttachRolePolicyError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => AttachRolePolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => AttachRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => AttachRolePolicyError::ServiceFailure(String::from(parsed_error.message)),_ => AttachRolePolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AttachRolePolicyError::Unknown(body.to_string())
@@ -11080,7 +11107,14 @@ Unknown(String)
                 impl Error for AttachRolePolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachRolePolicyError::NoSuchEntity(ref cause) => cause,AttachRolePolicyError::LimitExceeded(ref cause) => cause,AttachRolePolicyError::ServiceFailure(ref cause) => cause,AttachRolePolicyError::InvalidInput(ref cause) => cause,AttachRolePolicyError::Validation(ref cause) => cause,AttachRolePolicyError::Credentials(ref err) => err.description(),AttachRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachRolePolicyError::Unknown(ref cause) => cause
+                            AttachRolePolicyError::InvalidInput(ref cause) => cause,
+AttachRolePolicyError::LimitExceeded(ref cause) => cause,
+AttachRolePolicyError::NoSuchEntity(ref cause) => cause,
+AttachRolePolicyError::ServiceFailure(ref cause) => cause,
+AttachRolePolicyError::Validation(ref cause) => cause,
+AttachRolePolicyError::Credentials(ref err) => err.description(),
+AttachRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachRolePolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11088,12 +11122,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AttachUserPolicyError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -11112,7 +11146,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => AttachUserPolicyError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => AttachUserPolicyError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => AttachUserPolicyError::LimitExceeded(String::from(parsed_error.message)),"InvalidInputException" => AttachUserPolicyError::InvalidInput(String::from(parsed_error.message)),_ => AttachUserPolicyError::Unknown(String::from(body))
+                                    "InvalidInputException" => AttachUserPolicyError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => AttachUserPolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => AttachUserPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => AttachUserPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => AttachUserPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AttachUserPolicyError::Unknown(body.to_string())
@@ -11144,7 +11178,14 @@ Unknown(String)
                 impl Error for AttachUserPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            AttachUserPolicyError::ServiceFailure(ref cause) => cause,AttachUserPolicyError::LimitExceeded(ref cause) => cause,AttachUserPolicyError::NoSuchEntity(ref cause) => cause,AttachUserPolicyError::InvalidInput(ref cause) => cause,AttachUserPolicyError::Validation(ref cause) => cause,AttachUserPolicyError::Credentials(ref err) => err.description(),AttachUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AttachUserPolicyError::Unknown(ref cause) => cause
+                            AttachUserPolicyError::InvalidInput(ref cause) => cause,
+AttachUserPolicyError::LimitExceeded(ref cause) => cause,
+AttachUserPolicyError::NoSuchEntity(ref cause) => cause,
+AttachUserPolicyError::ServiceFailure(ref cause) => cause,
+AttachUserPolicyError::Validation(ref cause) => cause,
+AttachUserPolicyError::Credentials(ref err) => err.description(),
+AttachUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AttachUserPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11152,18 +11193,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ChangePasswordError {
                     
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
+EntityTemporarilyUnmodifiable(String),
 ///<p>The request was rejected because the type of user for the transaction was incorrect.</p>
 InvalidUserType(String),
-///<p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
-PasswordPolicyViolation(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
-EntityTemporarilyUnmodifiable(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
+PasswordPolicyViolation(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11180,7 +11221,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => ChangePasswordError::NoSuchEntity(String::from(parsed_error.message)),"PasswordPolicyViolationException" => ChangePasswordError::PasswordPolicyViolation(String::from(parsed_error.message)),"InvalidUserTypeException" => ChangePasswordError::InvalidUserType(String::from(parsed_error.message)),"ServiceFailureException" => ChangePasswordError::ServiceFailure(String::from(parsed_error.message)),"EntityTemporarilyUnmodifiableException" => ChangePasswordError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),"LimitExceededException" => ChangePasswordError::LimitExceeded(String::from(parsed_error.message)),_ => ChangePasswordError::Unknown(String::from(body))
+                                    "EntityTemporarilyUnmodifiableException" => ChangePasswordError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),"InvalidUserTypeException" => ChangePasswordError::InvalidUserType(String::from(parsed_error.message)),"LimitExceededException" => ChangePasswordError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => ChangePasswordError::NoSuchEntity(String::from(parsed_error.message)),"PasswordPolicyViolationException" => ChangePasswordError::PasswordPolicyViolation(String::from(parsed_error.message)),"ServiceFailureException" => ChangePasswordError::ServiceFailure(String::from(parsed_error.message)),_ => ChangePasswordError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ChangePasswordError::Unknown(body.to_string())
@@ -11212,7 +11253,16 @@ Unknown(String)
                 impl Error for ChangePasswordError {
                     fn description(&self) -> &str {
                         match *self {
-                            ChangePasswordError::LimitExceeded(ref cause) => cause,ChangePasswordError::ServiceFailure(ref cause) => cause,ChangePasswordError::NoSuchEntity(ref cause) => cause,ChangePasswordError::PasswordPolicyViolation(ref cause) => cause,ChangePasswordError::InvalidUserType(ref cause) => cause,ChangePasswordError::EntityTemporarilyUnmodifiable(ref cause) => cause,ChangePasswordError::Validation(ref cause) => cause,ChangePasswordError::Credentials(ref err) => err.description(),ChangePasswordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ChangePasswordError::Unknown(ref cause) => cause
+                            ChangePasswordError::EntityTemporarilyUnmodifiable(ref cause) => cause,
+ChangePasswordError::InvalidUserType(ref cause) => cause,
+ChangePasswordError::LimitExceeded(ref cause) => cause,
+ChangePasswordError::NoSuchEntity(ref cause) => cause,
+ChangePasswordError::PasswordPolicyViolation(ref cause) => cause,
+ChangePasswordError::ServiceFailure(ref cause) => cause,
+ChangePasswordError::Validation(ref cause) => cause,
+ChangePasswordError::Credentials(ref err) => err.description(),
+ChangePasswordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ChangePasswordError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11220,12 +11270,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateAccessKeyError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11242,7 +11292,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => CreateAccessKeyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => CreateAccessKeyError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => CreateAccessKeyError::LimitExceeded(String::from(parsed_error.message)),_ => CreateAccessKeyError::Unknown(String::from(body))
+                                    "LimitExceededException" => CreateAccessKeyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => CreateAccessKeyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => CreateAccessKeyError::ServiceFailure(String::from(parsed_error.message)),_ => CreateAccessKeyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateAccessKeyError::Unknown(body.to_string())
@@ -11274,7 +11324,13 @@ Unknown(String)
                 impl Error for CreateAccessKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateAccessKeyError::ServiceFailure(ref cause) => cause,CreateAccessKeyError::LimitExceeded(ref cause) => cause,CreateAccessKeyError::NoSuchEntity(ref cause) => cause,CreateAccessKeyError::Validation(ref cause) => cause,CreateAccessKeyError::Credentials(ref err) => err.description(),CreateAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateAccessKeyError::Unknown(ref cause) => cause
+                            CreateAccessKeyError::LimitExceeded(ref cause) => cause,
+CreateAccessKeyError::NoSuchEntity(ref cause) => cause,
+CreateAccessKeyError::ServiceFailure(ref cause) => cause,
+CreateAccessKeyError::Validation(ref cause) => cause,
+CreateAccessKeyError::Credentials(ref err) => err.description(),
+CreateAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateAccessKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11282,12 +11338,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateAccountAliasError {
                     
+///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+EntityAlreadyExists(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it attempted to create a resource that already exists.</p>
-EntityAlreadyExists(String),/// An error occurred dispatching the HTTP request
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11304,7 +11360,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => CreateAccountAliasError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => CreateAccountAliasError::ServiceFailure(String::from(parsed_error.message)),"EntityAlreadyExistsException" => CreateAccountAliasError::EntityAlreadyExists(String::from(parsed_error.message)),_ => CreateAccountAliasError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => CreateAccountAliasError::EntityAlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => CreateAccountAliasError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => CreateAccountAliasError::ServiceFailure(String::from(parsed_error.message)),_ => CreateAccountAliasError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateAccountAliasError::Unknown(body.to_string())
@@ -11336,7 +11392,13 @@ Unknown(String)
                 impl Error for CreateAccountAliasError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateAccountAliasError::EntityAlreadyExists(ref cause) => cause,CreateAccountAliasError::ServiceFailure(ref cause) => cause,CreateAccountAliasError::LimitExceeded(ref cause) => cause,CreateAccountAliasError::Validation(ref cause) => cause,CreateAccountAliasError::Credentials(ref err) => err.description(),CreateAccountAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateAccountAliasError::Unknown(ref cause) => cause
+                            CreateAccountAliasError::EntityAlreadyExists(ref cause) => cause,
+CreateAccountAliasError::LimitExceeded(ref cause) => cause,
+CreateAccountAliasError::ServiceFailure(ref cause) => cause,
+CreateAccountAliasError::Validation(ref cause) => cause,
+CreateAccountAliasError::Credentials(ref err) => err.description(),
+CreateAccountAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateAccountAliasError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11344,14 +11406,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateGroupError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
+///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+EntityAlreadyExists(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it attempted to create a resource that already exists.</p>
-EntityAlreadyExists(String),/// An error occurred dispatching the HTTP request
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11368,7 +11430,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "EntityAlreadyExistsException" => CreateGroupError::EntityAlreadyExists(String::from(parsed_error.message)),"NoSuchEntityException" => CreateGroupError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => CreateGroupError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => CreateGroupError::LimitExceeded(String::from(parsed_error.message)),_ => CreateGroupError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => CreateGroupError::EntityAlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => CreateGroupError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => CreateGroupError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => CreateGroupError::ServiceFailure(String::from(parsed_error.message)),_ => CreateGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateGroupError::Unknown(body.to_string())
@@ -11400,7 +11462,14 @@ Unknown(String)
                 impl Error for CreateGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateGroupError::NoSuchEntity(ref cause) => cause,CreateGroupError::ServiceFailure(ref cause) => cause,CreateGroupError::EntityAlreadyExists(ref cause) => cause,CreateGroupError::LimitExceeded(ref cause) => cause,CreateGroupError::Validation(ref cause) => cause,CreateGroupError::Credentials(ref err) => err.description(),CreateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateGroupError::Unknown(ref cause) => cause
+                            CreateGroupError::EntityAlreadyExists(ref cause) => cause,
+CreateGroupError::LimitExceeded(ref cause) => cause,
+CreateGroupError::NoSuchEntity(ref cause) => cause,
+CreateGroupError::ServiceFailure(ref cause) => cause,
+CreateGroupError::Validation(ref cause) => cause,
+CreateGroupError::Credentials(ref err) => err.description(),
+CreateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11408,12 +11477,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateInstanceProfileError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+EntityAlreadyExists(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
-///<p>The request was rejected because it attempted to create a resource that already exists.</p>
-EntityAlreadyExists(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11430,7 +11499,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => CreateInstanceProfileError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => CreateInstanceProfileError::LimitExceeded(String::from(parsed_error.message)),"EntityAlreadyExistsException" => CreateInstanceProfileError::EntityAlreadyExists(String::from(parsed_error.message)),_ => CreateInstanceProfileError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => CreateInstanceProfileError::EntityAlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => CreateInstanceProfileError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => CreateInstanceProfileError::ServiceFailure(String::from(parsed_error.message)),_ => CreateInstanceProfileError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateInstanceProfileError::Unknown(body.to_string())
@@ -11462,7 +11531,13 @@ Unknown(String)
                 impl Error for CreateInstanceProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateInstanceProfileError::ServiceFailure(ref cause) => cause,CreateInstanceProfileError::EntityAlreadyExists(ref cause) => cause,CreateInstanceProfileError::LimitExceeded(ref cause) => cause,CreateInstanceProfileError::Validation(ref cause) => cause,CreateInstanceProfileError::Credentials(ref err) => err.description(),CreateInstanceProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateInstanceProfileError::Unknown(ref cause) => cause
+                            CreateInstanceProfileError::EntityAlreadyExists(ref cause) => cause,
+CreateInstanceProfileError::LimitExceeded(ref cause) => cause,
+CreateInstanceProfileError::ServiceFailure(ref cause) => cause,
+CreateInstanceProfileError::Validation(ref cause) => cause,
+CreateInstanceProfileError::Credentials(ref err) => err.description(),
+CreateInstanceProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateInstanceProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11470,16 +11545,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateLoginProfileError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
-///<p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
-PasswordPolicyViolation(String),
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 EntityAlreadyExists(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
+PasswordPolicyViolation(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11496,7 +11571,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => CreateLoginProfileError::ServiceFailure(String::from(parsed_error.message)),"PasswordPolicyViolationException" => CreateLoginProfileError::PasswordPolicyViolation(String::from(parsed_error.message)),"NoSuchEntityException" => CreateLoginProfileError::NoSuchEntity(String::from(parsed_error.message)),"EntityAlreadyExistsException" => CreateLoginProfileError::EntityAlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => CreateLoginProfileError::LimitExceeded(String::from(parsed_error.message)),_ => CreateLoginProfileError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => CreateLoginProfileError::EntityAlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => CreateLoginProfileError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => CreateLoginProfileError::NoSuchEntity(String::from(parsed_error.message)),"PasswordPolicyViolationException" => CreateLoginProfileError::PasswordPolicyViolation(String::from(parsed_error.message)),"ServiceFailureException" => CreateLoginProfileError::ServiceFailure(String::from(parsed_error.message)),_ => CreateLoginProfileError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateLoginProfileError::Unknown(body.to_string())
@@ -11528,7 +11603,15 @@ Unknown(String)
                 impl Error for CreateLoginProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateLoginProfileError::ServiceFailure(ref cause) => cause,CreateLoginProfileError::LimitExceeded(ref cause) => cause,CreateLoginProfileError::NoSuchEntity(ref cause) => cause,CreateLoginProfileError::EntityAlreadyExists(ref cause) => cause,CreateLoginProfileError::PasswordPolicyViolation(ref cause) => cause,CreateLoginProfileError::Validation(ref cause) => cause,CreateLoginProfileError::Credentials(ref err) => err.description(),CreateLoginProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateLoginProfileError::Unknown(ref cause) => cause
+                            CreateLoginProfileError::EntityAlreadyExists(ref cause) => cause,
+CreateLoginProfileError::LimitExceeded(ref cause) => cause,
+CreateLoginProfileError::NoSuchEntity(ref cause) => cause,
+CreateLoginProfileError::PasswordPolicyViolation(ref cause) => cause,
+CreateLoginProfileError::ServiceFailure(ref cause) => cause,
+CreateLoginProfileError::Validation(ref cause) => cause,
+CreateLoginProfileError::Credentials(ref err) => err.description(),
+CreateLoginProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateLoginProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11538,12 +11621,12 @@ Unknown(String)
                     
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 EntityAlreadyExists(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11560,7 +11643,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidInputException" => CreateOpenIDConnectProviderError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => CreateOpenIDConnectProviderError::LimitExceeded(String::from(parsed_error.message)),"EntityAlreadyExistsException" => CreateOpenIDConnectProviderError::EntityAlreadyExists(String::from(parsed_error.message)),"ServiceFailureException" => CreateOpenIDConnectProviderError::ServiceFailure(String::from(parsed_error.message)),_ => CreateOpenIDConnectProviderError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => CreateOpenIDConnectProviderError::EntityAlreadyExists(String::from(parsed_error.message)),"InvalidInputException" => CreateOpenIDConnectProviderError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => CreateOpenIDConnectProviderError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => CreateOpenIDConnectProviderError::ServiceFailure(String::from(parsed_error.message)),_ => CreateOpenIDConnectProviderError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateOpenIDConnectProviderError::Unknown(body.to_string())
@@ -11592,7 +11675,14 @@ Unknown(String)
                 impl Error for CreateOpenIDConnectProviderError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateOpenIDConnectProviderError::EntityAlreadyExists(ref cause) => cause,CreateOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,CreateOpenIDConnectProviderError::InvalidInput(ref cause) => cause,CreateOpenIDConnectProviderError::LimitExceeded(ref cause) => cause,CreateOpenIDConnectProviderError::Validation(ref cause) => cause,CreateOpenIDConnectProviderError::Credentials(ref err) => err.description(),CreateOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateOpenIDConnectProviderError::Unknown(ref cause) => cause
+                            CreateOpenIDConnectProviderError::EntityAlreadyExists(ref cause) => cause,
+CreateOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
+CreateOpenIDConnectProviderError::LimitExceeded(ref cause) => cause,
+CreateOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+CreateOpenIDConnectProviderError::Validation(ref cause) => cause,
+CreateOpenIDConnectProviderError::Credentials(ref err) => err.description(),
+CreateOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateOpenIDConnectProviderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11600,16 +11690,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreatePolicyError {
                     
-///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
-MalformedPolicyDocument(String),
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 EntityAlreadyExists(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+MalformedPolicyDocument(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11626,7 +11716,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => CreatePolicyError::ServiceFailure(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => CreatePolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),"LimitExceededException" => CreatePolicyError::LimitExceeded(String::from(parsed_error.message)),"InvalidInputException" => CreatePolicyError::InvalidInput(String::from(parsed_error.message)),"EntityAlreadyExistsException" => CreatePolicyError::EntityAlreadyExists(String::from(parsed_error.message)),_ => CreatePolicyError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => CreatePolicyError::EntityAlreadyExists(String::from(parsed_error.message)),"InvalidInputException" => CreatePolicyError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => CreatePolicyError::LimitExceeded(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => CreatePolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),"ServiceFailureException" => CreatePolicyError::ServiceFailure(String::from(parsed_error.message)),_ => CreatePolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreatePolicyError::Unknown(body.to_string())
@@ -11658,7 +11748,15 @@ Unknown(String)
                 impl Error for CreatePolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreatePolicyError::LimitExceeded(ref cause) => cause,CreatePolicyError::InvalidInput(ref cause) => cause,CreatePolicyError::ServiceFailure(ref cause) => cause,CreatePolicyError::MalformedPolicyDocument(ref cause) => cause,CreatePolicyError::EntityAlreadyExists(ref cause) => cause,CreatePolicyError::Validation(ref cause) => cause,CreatePolicyError::Credentials(ref err) => err.description(),CreatePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreatePolicyError::Unknown(ref cause) => cause
+                            CreatePolicyError::EntityAlreadyExists(ref cause) => cause,
+CreatePolicyError::InvalidInput(ref cause) => cause,
+CreatePolicyError::LimitExceeded(ref cause) => cause,
+CreatePolicyError::MalformedPolicyDocument(ref cause) => cause,
+CreatePolicyError::ServiceFailure(ref cause) => cause,
+CreatePolicyError::Validation(ref cause) => cause,
+CreatePolicyError::Credentials(ref err) => err.description(),
+CreatePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreatePolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11668,10 +11766,10 @@ Unknown(String)
                     
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
-///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
-MalformedPolicyDocument(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
+///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+MalformedPolicyDocument(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
@@ -11692,7 +11790,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "MalformedPolicyDocumentException" => CreatePolicyVersionError::MalformedPolicyDocument(String::from(parsed_error.message)),"ServiceFailureException" => CreatePolicyVersionError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => CreatePolicyVersionError::NoSuchEntity(String::from(parsed_error.message)),"InvalidInputException" => CreatePolicyVersionError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => CreatePolicyVersionError::LimitExceeded(String::from(parsed_error.message)),_ => CreatePolicyVersionError::Unknown(String::from(body))
+                                    "InvalidInputException" => CreatePolicyVersionError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => CreatePolicyVersionError::LimitExceeded(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => CreatePolicyVersionError::MalformedPolicyDocument(String::from(parsed_error.message)),"NoSuchEntityException" => CreatePolicyVersionError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => CreatePolicyVersionError::ServiceFailure(String::from(parsed_error.message)),_ => CreatePolicyVersionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreatePolicyVersionError::Unknown(body.to_string())
@@ -11724,7 +11822,15 @@ Unknown(String)
                 impl Error for CreatePolicyVersionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreatePolicyVersionError::ServiceFailure(ref cause) => cause,CreatePolicyVersionError::MalformedPolicyDocument(ref cause) => cause,CreatePolicyVersionError::InvalidInput(ref cause) => cause,CreatePolicyVersionError::NoSuchEntity(ref cause) => cause,CreatePolicyVersionError::LimitExceeded(ref cause) => cause,CreatePolicyVersionError::Validation(ref cause) => cause,CreatePolicyVersionError::Credentials(ref err) => err.description(),CreatePolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreatePolicyVersionError::Unknown(ref cause) => cause
+                            CreatePolicyVersionError::InvalidInput(ref cause) => cause,
+CreatePolicyVersionError::LimitExceeded(ref cause) => cause,
+CreatePolicyVersionError::MalformedPolicyDocument(ref cause) => cause,
+CreatePolicyVersionError::NoSuchEntity(ref cause) => cause,
+CreatePolicyVersionError::ServiceFailure(ref cause) => cause,
+CreatePolicyVersionError::Validation(ref cause) => cause,
+CreatePolicyVersionError::Credentials(ref err) => err.description(),
+CreatePolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreatePolicyVersionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11732,12 +11838,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateRoleError {
                     
+///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+EntityAlreadyExists(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
 MalformedPolicyDocument(String),
-///<p>The request was rejected because it attempted to create a resource that already exists.</p>
-EntityAlreadyExists(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -11756,7 +11862,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "MalformedPolicyDocumentException" => CreateRoleError::MalformedPolicyDocument(String::from(parsed_error.message)),"EntityAlreadyExistsException" => CreateRoleError::EntityAlreadyExists(String::from(parsed_error.message)),"ServiceFailureException" => CreateRoleError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => CreateRoleError::LimitExceeded(String::from(parsed_error.message)),_ => CreateRoleError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => CreateRoleError::EntityAlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => CreateRoleError::LimitExceeded(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => CreateRoleError::MalformedPolicyDocument(String::from(parsed_error.message)),"ServiceFailureException" => CreateRoleError::ServiceFailure(String::from(parsed_error.message)),_ => CreateRoleError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateRoleError::Unknown(body.to_string())
@@ -11788,7 +11894,14 @@ Unknown(String)
                 impl Error for CreateRoleError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateRoleError::ServiceFailure(ref cause) => cause,CreateRoleError::EntityAlreadyExists(ref cause) => cause,CreateRoleError::LimitExceeded(ref cause) => cause,CreateRoleError::MalformedPolicyDocument(ref cause) => cause,CreateRoleError::Validation(ref cause) => cause,CreateRoleError::Credentials(ref err) => err.description(),CreateRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateRoleError::Unknown(ref cause) => cause
+                            CreateRoleError::EntityAlreadyExists(ref cause) => cause,
+CreateRoleError::LimitExceeded(ref cause) => cause,
+CreateRoleError::MalformedPolicyDocument(ref cause) => cause,
+CreateRoleError::ServiceFailure(ref cause) => cause,
+CreateRoleError::Validation(ref cause) => cause,
+CreateRoleError::Credentials(ref err) => err.description(),
+CreateRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateRoleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11796,14 +11909,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateSAMLProviderError {
                     
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 EntityAlreadyExists(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11820,7 +11933,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => CreateSAMLProviderError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => CreateSAMLProviderError::LimitExceeded(String::from(parsed_error.message)),"InvalidInputException" => CreateSAMLProviderError::InvalidInput(String::from(parsed_error.message)),"EntityAlreadyExistsException" => CreateSAMLProviderError::EntityAlreadyExists(String::from(parsed_error.message)),_ => CreateSAMLProviderError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => CreateSAMLProviderError::EntityAlreadyExists(String::from(parsed_error.message)),"InvalidInputException" => CreateSAMLProviderError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => CreateSAMLProviderError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => CreateSAMLProviderError::ServiceFailure(String::from(parsed_error.message)),_ => CreateSAMLProviderError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateSAMLProviderError::Unknown(body.to_string())
@@ -11852,7 +11965,14 @@ Unknown(String)
                 impl Error for CreateSAMLProviderError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateSAMLProviderError::InvalidInput(ref cause) => cause,CreateSAMLProviderError::ServiceFailure(ref cause) => cause,CreateSAMLProviderError::LimitExceeded(ref cause) => cause,CreateSAMLProviderError::EntityAlreadyExists(ref cause) => cause,CreateSAMLProviderError::Validation(ref cause) => cause,CreateSAMLProviderError::Credentials(ref err) => err.description(),CreateSAMLProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateSAMLProviderError::Unknown(ref cause) => cause
+                            CreateSAMLProviderError::EntityAlreadyExists(ref cause) => cause,
+CreateSAMLProviderError::InvalidInput(ref cause) => cause,
+CreateSAMLProviderError::LimitExceeded(ref cause) => cause,
+CreateSAMLProviderError::ServiceFailure(ref cause) => cause,
+CreateSAMLProviderError::Validation(ref cause) => cause,
+CreateSAMLProviderError::Credentials(ref err) => err.description(),
+CreateSAMLProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateSAMLProviderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11860,10 +11980,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateServiceSpecificCredentialError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The specified service does not support service-specific credentials.</p>
 ServiceNotSupported(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -11882,7 +12002,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceNotSupportedException" => CreateServiceSpecificCredentialError::ServiceNotSupported(String::from(parsed_error.message)),"LimitExceededException" => CreateServiceSpecificCredentialError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => CreateServiceSpecificCredentialError::NoSuchEntity(String::from(parsed_error.message)),_ => CreateServiceSpecificCredentialError::Unknown(String::from(body))
+                                    "LimitExceededException" => CreateServiceSpecificCredentialError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => CreateServiceSpecificCredentialError::NoSuchEntity(String::from(parsed_error.message)),"ServiceNotSupportedException" => CreateServiceSpecificCredentialError::ServiceNotSupported(String::from(parsed_error.message)),_ => CreateServiceSpecificCredentialError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateServiceSpecificCredentialError::Unknown(body.to_string())
@@ -11914,7 +12034,13 @@ Unknown(String)
                 impl Error for CreateServiceSpecificCredentialError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateServiceSpecificCredentialError::LimitExceeded(ref cause) => cause,CreateServiceSpecificCredentialError::ServiceNotSupported(ref cause) => cause,CreateServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,CreateServiceSpecificCredentialError::Validation(ref cause) => cause,CreateServiceSpecificCredentialError::Credentials(ref err) => err.description(),CreateServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateServiceSpecificCredentialError::Unknown(ref cause) => cause
+                            CreateServiceSpecificCredentialError::LimitExceeded(ref cause) => cause,
+CreateServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
+CreateServiceSpecificCredentialError::ServiceNotSupported(ref cause) => cause,
+CreateServiceSpecificCredentialError::Validation(ref cause) => cause,
+CreateServiceSpecificCredentialError::Credentials(ref err) => err.description(),
+CreateServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateServiceSpecificCredentialError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11922,14 +12048,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateUserError {
                     
+///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+EntityAlreadyExists(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
-///<p>The request was rejected because it attempted to create a resource that already exists.</p>
-EntityAlreadyExists(String),/// An error occurred dispatching the HTTP request
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -11978,7 +12104,14 @@ Unknown(String)
                 impl Error for CreateUserError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateUserError::NoSuchEntity(ref cause) => cause,CreateUserError::LimitExceeded(ref cause) => cause,CreateUserError::EntityAlreadyExists(ref cause) => cause,CreateUserError::ServiceFailure(ref cause) => cause,CreateUserError::Validation(ref cause) => cause,CreateUserError::Credentials(ref err) => err.description(),CreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateUserError::Unknown(ref cause) => cause
+                            CreateUserError::EntityAlreadyExists(ref cause) => cause,
+CreateUserError::LimitExceeded(ref cause) => cause,
+CreateUserError::NoSuchEntity(ref cause) => cause,
+CreateUserError::ServiceFailure(ref cause) => cause,
+CreateUserError::Validation(ref cause) => cause,
+CreateUserError::Credentials(ref err) => err.description(),
+CreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateUserError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -11988,10 +12121,10 @@ Unknown(String)
                     
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 EntityAlreadyExists(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -12008,7 +12141,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "EntityAlreadyExistsException" => CreateVirtualMFADeviceError::EntityAlreadyExists(String::from(parsed_error.message)),"ServiceFailureException" => CreateVirtualMFADeviceError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => CreateVirtualMFADeviceError::LimitExceeded(String::from(parsed_error.message)),_ => CreateVirtualMFADeviceError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => CreateVirtualMFADeviceError::EntityAlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => CreateVirtualMFADeviceError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => CreateVirtualMFADeviceError::ServiceFailure(String::from(parsed_error.message)),_ => CreateVirtualMFADeviceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateVirtualMFADeviceError::Unknown(body.to_string())
@@ -12040,7 +12173,13 @@ Unknown(String)
                 impl Error for CreateVirtualMFADeviceError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateVirtualMFADeviceError::LimitExceeded(ref cause) => cause,CreateVirtualMFADeviceError::EntityAlreadyExists(ref cause) => cause,CreateVirtualMFADeviceError::ServiceFailure(ref cause) => cause,CreateVirtualMFADeviceError::Validation(ref cause) => cause,CreateVirtualMFADeviceError::Credentials(ref err) => err.description(),CreateVirtualMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateVirtualMFADeviceError::Unknown(ref cause) => cause
+                            CreateVirtualMFADeviceError::EntityAlreadyExists(ref cause) => cause,
+CreateVirtualMFADeviceError::LimitExceeded(ref cause) => cause,
+CreateVirtualMFADeviceError::ServiceFailure(ref cause) => cause,
+CreateVirtualMFADeviceError::Validation(ref cause) => cause,
+CreateVirtualMFADeviceError::Credentials(ref err) => err.description(),
+CreateVirtualMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateVirtualMFADeviceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12048,14 +12187,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeactivateMFADeviceError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
+EntityTemporarilyUnmodifiable(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
-EntityTemporarilyUnmodifiable(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -12072,7 +12211,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => DeactivateMFADeviceError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => DeactivateMFADeviceError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => DeactivateMFADeviceError::ServiceFailure(String::from(parsed_error.message)),"EntityTemporarilyUnmodifiableException" => DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),_ => DeactivateMFADeviceError::Unknown(String::from(body))
+                                    "EntityTemporarilyUnmodifiableException" => DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),"LimitExceededException" => DeactivateMFADeviceError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeactivateMFADeviceError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeactivateMFADeviceError::ServiceFailure(String::from(parsed_error.message)),_ => DeactivateMFADeviceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeactivateMFADeviceError::Unknown(body.to_string())
@@ -12104,7 +12243,14 @@ Unknown(String)
                 impl Error for DeactivateMFADeviceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeactivateMFADeviceError::LimitExceeded(ref cause) => cause,DeactivateMFADeviceError::NoSuchEntity(ref cause) => cause,DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => cause,DeactivateMFADeviceError::ServiceFailure(ref cause) => cause,DeactivateMFADeviceError::Validation(ref cause) => cause,DeactivateMFADeviceError::Credentials(ref err) => err.description(),DeactivateMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeactivateMFADeviceError::Unknown(ref cause) => cause
+                            DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => cause,
+DeactivateMFADeviceError::LimitExceeded(ref cause) => cause,
+DeactivateMFADeviceError::NoSuchEntity(ref cause) => cause,
+DeactivateMFADeviceError::ServiceFailure(ref cause) => cause,
+DeactivateMFADeviceError::Validation(ref cause) => cause,
+DeactivateMFADeviceError::Credentials(ref err) => err.description(),
+DeactivateMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeactivateMFADeviceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12112,12 +12258,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteAccessKeyError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -12134,7 +12280,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => DeleteAccessKeyError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => DeleteAccessKeyError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteAccessKeyError::NoSuchEntity(String::from(parsed_error.message)),_ => DeleteAccessKeyError::Unknown(String::from(body))
+                                    "LimitExceededException" => DeleteAccessKeyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteAccessKeyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteAccessKeyError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteAccessKeyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteAccessKeyError::Unknown(body.to_string())
@@ -12166,7 +12312,13 @@ Unknown(String)
                 impl Error for DeleteAccessKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAccessKeyError::NoSuchEntity(ref cause) => cause,DeleteAccessKeyError::LimitExceeded(ref cause) => cause,DeleteAccessKeyError::ServiceFailure(ref cause) => cause,DeleteAccessKeyError::Validation(ref cause) => cause,DeleteAccessKeyError::Credentials(ref err) => err.description(),DeleteAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAccessKeyError::Unknown(ref cause) => cause
+                            DeleteAccessKeyError::LimitExceeded(ref cause) => cause,
+DeleteAccessKeyError::NoSuchEntity(ref cause) => cause,
+DeleteAccessKeyError::ServiceFailure(ref cause) => cause,
+DeleteAccessKeyError::Validation(ref cause) => cause,
+DeleteAccessKeyError::Credentials(ref err) => err.description(),
+DeleteAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAccessKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12174,10 +12326,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteAccountAliasError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -12196,7 +12348,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => DeleteAccountAliasError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => DeleteAccountAliasError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteAccountAliasError::NoSuchEntity(String::from(parsed_error.message)),_ => DeleteAccountAliasError::Unknown(String::from(body))
+                                    "LimitExceededException" => DeleteAccountAliasError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteAccountAliasError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteAccountAliasError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteAccountAliasError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteAccountAliasError::Unknown(body.to_string())
@@ -12228,7 +12380,13 @@ Unknown(String)
                 impl Error for DeleteAccountAliasError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAccountAliasError::NoSuchEntity(ref cause) => cause,DeleteAccountAliasError::ServiceFailure(ref cause) => cause,DeleteAccountAliasError::LimitExceeded(ref cause) => cause,DeleteAccountAliasError::Validation(ref cause) => cause,DeleteAccountAliasError::Credentials(ref err) => err.description(),DeleteAccountAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAccountAliasError::Unknown(ref cause) => cause
+                            DeleteAccountAliasError::LimitExceeded(ref cause) => cause,
+DeleteAccountAliasError::NoSuchEntity(ref cause) => cause,
+DeleteAccountAliasError::ServiceFailure(ref cause) => cause,
+DeleteAccountAliasError::Validation(ref cause) => cause,
+DeleteAccountAliasError::Credentials(ref err) => err.description(),
+DeleteAccountAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAccountAliasError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12236,12 +12394,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteAccountPasswordPolicyError {
                     
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -12258,7 +12416,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => DeleteAccountPasswordPolicyError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => DeleteAccountPasswordPolicyError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteAccountPasswordPolicyError::NoSuchEntity(String::from(parsed_error.message)),_ => DeleteAccountPasswordPolicyError::Unknown(String::from(body))
+                                    "LimitExceededException" => DeleteAccountPasswordPolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteAccountPasswordPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteAccountPasswordPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteAccountPasswordPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteAccountPasswordPolicyError::Unknown(body.to_string())
@@ -12290,7 +12448,13 @@ Unknown(String)
                 impl Error for DeleteAccountPasswordPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,DeleteAccountPasswordPolicyError::LimitExceeded(ref cause) => cause,DeleteAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,DeleteAccountPasswordPolicyError::Validation(ref cause) => cause,DeleteAccountPasswordPolicyError::Credentials(ref err) => err.description(),DeleteAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAccountPasswordPolicyError::Unknown(ref cause) => cause
+                            DeleteAccountPasswordPolicyError::LimitExceeded(ref cause) => cause,
+DeleteAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
+DeleteAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
+DeleteAccountPasswordPolicyError::Validation(ref cause) => cause,
+DeleteAccountPasswordPolicyError::Credentials(ref err) => err.description(),
+DeleteAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAccountPasswordPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12298,14 +12462,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteGroupError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
+///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
+DeleteConflict(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
-///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
-DeleteConflict(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -12322,7 +12486,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => DeleteGroupError::LimitExceeded(String::from(parsed_error.message)),"DeleteConflictException" => DeleteGroupError::DeleteConflict(String::from(parsed_error.message)),"ServiceFailureException" => DeleteGroupError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteGroupError::NoSuchEntity(String::from(parsed_error.message)),_ => DeleteGroupError::Unknown(String::from(body))
+                                    "DeleteConflictException" => DeleteGroupError::DeleteConflict(String::from(parsed_error.message)),"LimitExceededException" => DeleteGroupError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteGroupError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteGroupError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteGroupError::Unknown(body.to_string())
@@ -12354,7 +12518,14 @@ Unknown(String)
                 impl Error for DeleteGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteGroupError::ServiceFailure(ref cause) => cause,DeleteGroupError::NoSuchEntity(ref cause) => cause,DeleteGroupError::LimitExceeded(ref cause) => cause,DeleteGroupError::DeleteConflict(ref cause) => cause,DeleteGroupError::Validation(ref cause) => cause,DeleteGroupError::Credentials(ref err) => err.description(),DeleteGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteGroupError::Unknown(ref cause) => cause
+                            DeleteGroupError::DeleteConflict(ref cause) => cause,
+DeleteGroupError::LimitExceeded(ref cause) => cause,
+DeleteGroupError::NoSuchEntity(ref cause) => cause,
+DeleteGroupError::ServiceFailure(ref cause) => cause,
+DeleteGroupError::Validation(ref cause) => cause,
+DeleteGroupError::Credentials(ref err) => err.description(),
+DeleteGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12362,12 +12533,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteGroupPolicyError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -12384,7 +12555,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => DeleteGroupPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteGroupPolicyError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => DeleteGroupPolicyError::LimitExceeded(String::from(parsed_error.message)),_ => DeleteGroupPolicyError::Unknown(String::from(body))
+                                    "LimitExceededException" => DeleteGroupPolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteGroupPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteGroupPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteGroupPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteGroupPolicyError::Unknown(body.to_string())
@@ -12416,7 +12587,13 @@ Unknown(String)
                 impl Error for DeleteGroupPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteGroupPolicyError::LimitExceeded(ref cause) => cause,DeleteGroupPolicyError::NoSuchEntity(ref cause) => cause,DeleteGroupPolicyError::ServiceFailure(ref cause) => cause,DeleteGroupPolicyError::Validation(ref cause) => cause,DeleteGroupPolicyError::Credentials(ref err) => err.description(),DeleteGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteGroupPolicyError::Unknown(ref cause) => cause
+                            DeleteGroupPolicyError::LimitExceeded(ref cause) => cause,
+DeleteGroupPolicyError::NoSuchEntity(ref cause) => cause,
+DeleteGroupPolicyError::ServiceFailure(ref cause) => cause,
+DeleteGroupPolicyError::Validation(ref cause) => cause,
+DeleteGroupPolicyError::Credentials(ref err) => err.description(),
+DeleteGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteGroupPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12448,7 +12625,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => DeleteInstanceProfileError::ServiceFailure(String::from(parsed_error.message)),"DeleteConflictException" => DeleteInstanceProfileError::DeleteConflict(String::from(parsed_error.message)),"LimitExceededException" => DeleteInstanceProfileError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteInstanceProfileError::NoSuchEntity(String::from(parsed_error.message)),_ => DeleteInstanceProfileError::Unknown(String::from(body))
+                                    "DeleteConflictException" => DeleteInstanceProfileError::DeleteConflict(String::from(parsed_error.message)),"LimitExceededException" => DeleteInstanceProfileError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteInstanceProfileError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteInstanceProfileError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteInstanceProfileError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteInstanceProfileError::Unknown(body.to_string())
@@ -12480,7 +12657,14 @@ Unknown(String)
                 impl Error for DeleteInstanceProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteInstanceProfileError::DeleteConflict(ref cause) => cause,DeleteInstanceProfileError::NoSuchEntity(ref cause) => cause,DeleteInstanceProfileError::LimitExceeded(ref cause) => cause,DeleteInstanceProfileError::ServiceFailure(ref cause) => cause,DeleteInstanceProfileError::Validation(ref cause) => cause,DeleteInstanceProfileError::Credentials(ref err) => err.description(),DeleteInstanceProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteInstanceProfileError::Unknown(ref cause) => cause
+                            DeleteInstanceProfileError::DeleteConflict(ref cause) => cause,
+DeleteInstanceProfileError::LimitExceeded(ref cause) => cause,
+DeleteInstanceProfileError::NoSuchEntity(ref cause) => cause,
+DeleteInstanceProfileError::ServiceFailure(ref cause) => cause,
+DeleteInstanceProfileError::Validation(ref cause) => cause,
+DeleteInstanceProfileError::Credentials(ref err) => err.description(),
+DeleteInstanceProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteInstanceProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12488,14 +12672,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteLoginProfileError {
                     
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
 EntityTemporarilyUnmodifiable(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -12512,7 +12696,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => DeleteLoginProfileError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => DeleteLoginProfileError::ServiceFailure(String::from(parsed_error.message)),"EntityTemporarilyUnmodifiableException" => DeleteLoginProfileError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteLoginProfileError::NoSuchEntity(String::from(parsed_error.message)),_ => DeleteLoginProfileError::Unknown(String::from(body))
+                                    "EntityTemporarilyUnmodifiableException" => DeleteLoginProfileError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),"LimitExceededException" => DeleteLoginProfileError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteLoginProfileError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteLoginProfileError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteLoginProfileError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteLoginProfileError::Unknown(body.to_string())
@@ -12544,7 +12728,14 @@ Unknown(String)
                 impl Error for DeleteLoginProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteLoginProfileError::NoSuchEntity(ref cause) => cause,DeleteLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => cause,DeleteLoginProfileError::ServiceFailure(ref cause) => cause,DeleteLoginProfileError::LimitExceeded(ref cause) => cause,DeleteLoginProfileError::Validation(ref cause) => cause,DeleteLoginProfileError::Credentials(ref err) => err.description(),DeleteLoginProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteLoginProfileError::Unknown(ref cause) => cause
+                            DeleteLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => cause,
+DeleteLoginProfileError::LimitExceeded(ref cause) => cause,
+DeleteLoginProfileError::NoSuchEntity(ref cause) => cause,
+DeleteLoginProfileError::ServiceFailure(ref cause) => cause,
+DeleteLoginProfileError::Validation(ref cause) => cause,
+DeleteLoginProfileError::Credentials(ref err) => err.description(),
+DeleteLoginProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteLoginProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12552,10 +12743,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteOpenIDConnectProviderError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -12574,7 +12765,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => DeleteOpenIDConnectProviderError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteOpenIDConnectProviderError::ServiceFailure(String::from(parsed_error.message)),"InvalidInputException" => DeleteOpenIDConnectProviderError::InvalidInput(String::from(parsed_error.message)),_ => DeleteOpenIDConnectProviderError::Unknown(String::from(body))
+                                    "InvalidInputException" => DeleteOpenIDConnectProviderError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteOpenIDConnectProviderError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteOpenIDConnectProviderError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteOpenIDConnectProviderError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteOpenIDConnectProviderError::Unknown(body.to_string())
@@ -12606,7 +12797,13 @@ Unknown(String)
                 impl Error for DeleteOpenIDConnectProviderError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteOpenIDConnectProviderError::InvalidInput(ref cause) => cause,DeleteOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,DeleteOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,DeleteOpenIDConnectProviderError::Validation(ref cause) => cause,DeleteOpenIDConnectProviderError::Credentials(ref err) => err.description(),DeleteOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteOpenIDConnectProviderError::Unknown(ref cause) => cause
+                            DeleteOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
+DeleteOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
+DeleteOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+DeleteOpenIDConnectProviderError::Validation(ref cause) => cause,
+DeleteOpenIDConnectProviderError::Credentials(ref err) => err.description(),
+DeleteOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteOpenIDConnectProviderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12614,16 +12811,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeletePolicyError {
                     
+///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
+DeleteConflict(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
-DeleteConflict(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -12640,7 +12837,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => DeletePolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeletePolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeletePolicyError::ServiceFailure(String::from(parsed_error.message)),"DeleteConflictException" => DeletePolicyError::DeleteConflict(String::from(parsed_error.message)),"InvalidInputException" => DeletePolicyError::InvalidInput(String::from(parsed_error.message)),_ => DeletePolicyError::Unknown(String::from(body))
+                                    "DeleteConflictException" => DeletePolicyError::DeleteConflict(String::from(parsed_error.message)),"InvalidInputException" => DeletePolicyError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => DeletePolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeletePolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeletePolicyError::ServiceFailure(String::from(parsed_error.message)),_ => DeletePolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeletePolicyError::Unknown(body.to_string())
@@ -12672,7 +12869,15 @@ Unknown(String)
                 impl Error for DeletePolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeletePolicyError::LimitExceeded(ref cause) => cause,DeletePolicyError::NoSuchEntity(ref cause) => cause,DeletePolicyError::DeleteConflict(ref cause) => cause,DeletePolicyError::ServiceFailure(ref cause) => cause,DeletePolicyError::InvalidInput(ref cause) => cause,DeletePolicyError::Validation(ref cause) => cause,DeletePolicyError::Credentials(ref err) => err.description(),DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeletePolicyError::Unknown(ref cause) => cause
+                            DeletePolicyError::DeleteConflict(ref cause) => cause,
+DeletePolicyError::InvalidInput(ref cause) => cause,
+DeletePolicyError::LimitExceeded(ref cause) => cause,
+DeletePolicyError::NoSuchEntity(ref cause) => cause,
+DeletePolicyError::ServiceFailure(ref cause) => cause,
+DeletePolicyError::Validation(ref cause) => cause,
+DeletePolicyError::Credentials(ref err) => err.description(),
+DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeletePolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12680,14 +12885,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeletePolicyVersionError {
                     
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
 ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
 DeleteConflict(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -12706,7 +12911,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DeleteConflictException" => DeletePolicyVersionError::DeleteConflict(String::from(parsed_error.message)),"LimitExceededException" => DeletePolicyVersionError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeletePolicyVersionError::NoSuchEntity(String::from(parsed_error.message)),"InvalidInputException" => DeletePolicyVersionError::InvalidInput(String::from(parsed_error.message)),"ServiceFailureException" => DeletePolicyVersionError::ServiceFailure(String::from(parsed_error.message)),_ => DeletePolicyVersionError::Unknown(String::from(body))
+                                    "DeleteConflictException" => DeletePolicyVersionError::DeleteConflict(String::from(parsed_error.message)),"InvalidInputException" => DeletePolicyVersionError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => DeletePolicyVersionError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeletePolicyVersionError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeletePolicyVersionError::ServiceFailure(String::from(parsed_error.message)),_ => DeletePolicyVersionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeletePolicyVersionError::Unknown(body.to_string())
@@ -12738,7 +12943,15 @@ Unknown(String)
                 impl Error for DeletePolicyVersionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeletePolicyVersionError::NoSuchEntity(ref cause) => cause,DeletePolicyVersionError::LimitExceeded(ref cause) => cause,DeletePolicyVersionError::DeleteConflict(ref cause) => cause,DeletePolicyVersionError::ServiceFailure(ref cause) => cause,DeletePolicyVersionError::InvalidInput(ref cause) => cause,DeletePolicyVersionError::Validation(ref cause) => cause,DeletePolicyVersionError::Credentials(ref err) => err.description(),DeletePolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeletePolicyVersionError::Unknown(ref cause) => cause
+                            DeletePolicyVersionError::DeleteConflict(ref cause) => cause,
+DeletePolicyVersionError::InvalidInput(ref cause) => cause,
+DeletePolicyVersionError::LimitExceeded(ref cause) => cause,
+DeletePolicyVersionError::NoSuchEntity(ref cause) => cause,
+DeletePolicyVersionError::ServiceFailure(ref cause) => cause,
+DeletePolicyVersionError::Validation(ref cause) => cause,
+DeletePolicyVersionError::Credentials(ref err) => err.description(),
+DeletePolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeletePolicyVersionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12746,14 +12959,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteRoleError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
+///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
+DeleteConflict(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
-DeleteConflict(String),/// An error occurred dispatching the HTTP request
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -12770,7 +12983,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => DeleteRoleError::NoSuchEntity(String::from(parsed_error.message)),"DeleteConflictException" => DeleteRoleError::DeleteConflict(String::from(parsed_error.message)),"LimitExceededException" => DeleteRoleError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => DeleteRoleError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteRoleError::Unknown(String::from(body))
+                                    "DeleteConflictException" => DeleteRoleError::DeleteConflict(String::from(parsed_error.message)),"LimitExceededException" => DeleteRoleError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteRoleError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteRoleError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteRoleError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteRoleError::Unknown(body.to_string())
@@ -12802,7 +13015,14 @@ Unknown(String)
                 impl Error for DeleteRoleError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteRoleError::NoSuchEntity(ref cause) => cause,DeleteRoleError::ServiceFailure(ref cause) => cause,DeleteRoleError::DeleteConflict(ref cause) => cause,DeleteRoleError::LimitExceeded(ref cause) => cause,DeleteRoleError::Validation(ref cause) => cause,DeleteRoleError::Credentials(ref err) => err.description(),DeleteRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteRoleError::Unknown(ref cause) => cause
+                            DeleteRoleError::DeleteConflict(ref cause) => cause,
+DeleteRoleError::LimitExceeded(ref cause) => cause,
+DeleteRoleError::NoSuchEntity(ref cause) => cause,
+DeleteRoleError::ServiceFailure(ref cause) => cause,
+DeleteRoleError::Validation(ref cause) => cause,
+DeleteRoleError::Credentials(ref err) => err.description(),
+DeleteRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteRoleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12810,10 +13030,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteRolePolicyError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -12832,7 +13052,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => DeleteRolePolicyError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => DeleteRolePolicyError::LimitExceeded(String::from(parsed_error.message)),_ => DeleteRolePolicyError::Unknown(String::from(body))
+                                    "LimitExceededException" => DeleteRolePolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteRolePolicyError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteRolePolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteRolePolicyError::Unknown(body.to_string())
@@ -12864,7 +13084,13 @@ Unknown(String)
                 impl Error for DeleteRolePolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteRolePolicyError::NoSuchEntity(ref cause) => cause,DeleteRolePolicyError::LimitExceeded(ref cause) => cause,DeleteRolePolicyError::ServiceFailure(ref cause) => cause,DeleteRolePolicyError::Validation(ref cause) => cause,DeleteRolePolicyError::Credentials(ref err) => err.description(),DeleteRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteRolePolicyError::Unknown(ref cause) => cause
+                            DeleteRolePolicyError::LimitExceeded(ref cause) => cause,
+DeleteRolePolicyError::NoSuchEntity(ref cause) => cause,
+DeleteRolePolicyError::ServiceFailure(ref cause) => cause,
+DeleteRolePolicyError::Validation(ref cause) => cause,
+DeleteRolePolicyError::Credentials(ref err) => err.description(),
+DeleteRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteRolePolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12874,12 +13100,12 @@ Unknown(String)
                     
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -12896,7 +13122,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidInputException" => DeleteSAMLProviderError::InvalidInput(String::from(parsed_error.message)),"ServiceFailureException" => DeleteSAMLProviderError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteSAMLProviderError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => DeleteSAMLProviderError::LimitExceeded(String::from(parsed_error.message)),_ => DeleteSAMLProviderError::Unknown(String::from(body))
+                                    "InvalidInputException" => DeleteSAMLProviderError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => DeleteSAMLProviderError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteSAMLProviderError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteSAMLProviderError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteSAMLProviderError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteSAMLProviderError::Unknown(body.to_string())
@@ -12928,7 +13154,14 @@ Unknown(String)
                 impl Error for DeleteSAMLProviderError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteSAMLProviderError::LimitExceeded(ref cause) => cause,DeleteSAMLProviderError::ServiceFailure(ref cause) => cause,DeleteSAMLProviderError::NoSuchEntity(ref cause) => cause,DeleteSAMLProviderError::InvalidInput(ref cause) => cause,DeleteSAMLProviderError::Validation(ref cause) => cause,DeleteSAMLProviderError::Credentials(ref err) => err.description(),DeleteSAMLProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteSAMLProviderError::Unknown(ref cause) => cause
+                            DeleteSAMLProviderError::InvalidInput(ref cause) => cause,
+DeleteSAMLProviderError::LimitExceeded(ref cause) => cause,
+DeleteSAMLProviderError::NoSuchEntity(ref cause) => cause,
+DeleteSAMLProviderError::ServiceFailure(ref cause) => cause,
+DeleteSAMLProviderError::Validation(ref cause) => cause,
+DeleteSAMLProviderError::Credentials(ref err) => err.description(),
+DeleteSAMLProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteSAMLProviderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12986,7 +13219,11 @@ Unknown(String)
                 impl Error for DeleteSSHPublicKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteSSHPublicKeyError::NoSuchEntity(ref cause) => cause,DeleteSSHPublicKeyError::Validation(ref cause) => cause,DeleteSSHPublicKeyError::Credentials(ref err) => err.description(),DeleteSSHPublicKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteSSHPublicKeyError::Unknown(ref cause) => cause
+                            DeleteSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
+DeleteSSHPublicKeyError::Validation(ref cause) => cause,
+DeleteSSHPublicKeyError::Credentials(ref err) => err.description(),
+DeleteSSHPublicKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteSSHPublicKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -12994,14 +13231,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteServerCertificateError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
 DeleteConflict(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -13018,7 +13255,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DeleteConflictException" => DeleteServerCertificateError::DeleteConflict(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteServerCertificateError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => DeleteServerCertificateError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => DeleteServerCertificateError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteServerCertificateError::Unknown(String::from(body))
+                                    "DeleteConflictException" => DeleteServerCertificateError::DeleteConflict(String::from(parsed_error.message)),"LimitExceededException" => DeleteServerCertificateError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteServerCertificateError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteServerCertificateError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteServerCertificateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteServerCertificateError::Unknown(body.to_string())
@@ -13050,7 +13287,14 @@ Unknown(String)
                 impl Error for DeleteServerCertificateError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteServerCertificateError::DeleteConflict(ref cause) => cause,DeleteServerCertificateError::ServiceFailure(ref cause) => cause,DeleteServerCertificateError::NoSuchEntity(ref cause) => cause,DeleteServerCertificateError::LimitExceeded(ref cause) => cause,DeleteServerCertificateError::Validation(ref cause) => cause,DeleteServerCertificateError::Credentials(ref err) => err.description(),DeleteServerCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteServerCertificateError::Unknown(ref cause) => cause
+                            DeleteServerCertificateError::DeleteConflict(ref cause) => cause,
+DeleteServerCertificateError::LimitExceeded(ref cause) => cause,
+DeleteServerCertificateError::NoSuchEntity(ref cause) => cause,
+DeleteServerCertificateError::ServiceFailure(ref cause) => cause,
+DeleteServerCertificateError::Validation(ref cause) => cause,
+DeleteServerCertificateError::Credentials(ref err) => err.description(),
+DeleteServerCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteServerCertificateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13108,7 +13352,11 @@ Unknown(String)
                 impl Error for DeleteServiceSpecificCredentialError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,DeleteServiceSpecificCredentialError::Validation(ref cause) => cause,DeleteServiceSpecificCredentialError::Credentials(ref err) => err.description(),DeleteServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteServiceSpecificCredentialError::Unknown(ref cause) => cause
+                            DeleteServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
+DeleteServiceSpecificCredentialError::Validation(ref cause) => cause,
+DeleteServiceSpecificCredentialError::Credentials(ref err) => err.description(),
+DeleteServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteServiceSpecificCredentialError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13116,12 +13364,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteSigningCertificateError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -13138,7 +13386,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => DeleteSigningCertificateError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => DeleteSigningCertificateError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteSigningCertificateError::NoSuchEntity(String::from(parsed_error.message)),_ => DeleteSigningCertificateError::Unknown(String::from(body))
+                                    "LimitExceededException" => DeleteSigningCertificateError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteSigningCertificateError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteSigningCertificateError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteSigningCertificateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteSigningCertificateError::Unknown(body.to_string())
@@ -13170,7 +13418,13 @@ Unknown(String)
                 impl Error for DeleteSigningCertificateError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteSigningCertificateError::LimitExceeded(ref cause) => cause,DeleteSigningCertificateError::NoSuchEntity(ref cause) => cause,DeleteSigningCertificateError::ServiceFailure(ref cause) => cause,DeleteSigningCertificateError::Validation(ref cause) => cause,DeleteSigningCertificateError::Credentials(ref err) => err.description(),DeleteSigningCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteSigningCertificateError::Unknown(ref cause) => cause
+                            DeleteSigningCertificateError::LimitExceeded(ref cause) => cause,
+DeleteSigningCertificateError::NoSuchEntity(ref cause) => cause,
+DeleteSigningCertificateError::ServiceFailure(ref cause) => cause,
+DeleteSigningCertificateError::Validation(ref cause) => cause,
+DeleteSigningCertificateError::Credentials(ref err) => err.description(),
+DeleteSigningCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteSigningCertificateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13178,14 +13432,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteUserError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
 ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
 DeleteConflict(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -13202,7 +13456,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "DeleteConflictException" => DeleteUserError::DeleteConflict(String::from(parsed_error.message)),"ServiceFailureException" => DeleteUserError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteUserError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => DeleteUserError::LimitExceeded(String::from(parsed_error.message)),_ => DeleteUserError::Unknown(String::from(body))
+                                    "DeleteConflictException" => DeleteUserError::DeleteConflict(String::from(parsed_error.message)),"LimitExceededException" => DeleteUserError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteUserError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteUserError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteUserError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteUserError::Unknown(body.to_string())
@@ -13234,7 +13488,14 @@ Unknown(String)
                 impl Error for DeleteUserError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteUserError::ServiceFailure(ref cause) => cause,DeleteUserError::DeleteConflict(ref cause) => cause,DeleteUserError::NoSuchEntity(ref cause) => cause,DeleteUserError::LimitExceeded(ref cause) => cause,DeleteUserError::Validation(ref cause) => cause,DeleteUserError::Credentials(ref err) => err.description(),DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteUserError::Unknown(ref cause) => cause
+                            DeleteUserError::DeleteConflict(ref cause) => cause,
+DeleteUserError::LimitExceeded(ref cause) => cause,
+DeleteUserError::NoSuchEntity(ref cause) => cause,
+DeleteUserError::ServiceFailure(ref cause) => cause,
+DeleteUserError::Validation(ref cause) => cause,
+DeleteUserError::Credentials(ref err) => err.description(),
+DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteUserError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13242,12 +13503,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteUserPolicyError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -13264,7 +13525,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => DeleteUserPolicyError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => DeleteUserPolicyError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => DeleteUserPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteUserPolicyError::Unknown(String::from(body))
+                                    "LimitExceededException" => DeleteUserPolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteUserPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteUserPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteUserPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteUserPolicyError::Unknown(body.to_string())
@@ -13296,7 +13557,13 @@ Unknown(String)
                 impl Error for DeleteUserPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteUserPolicyError::ServiceFailure(ref cause) => cause,DeleteUserPolicyError::LimitExceeded(ref cause) => cause,DeleteUserPolicyError::NoSuchEntity(ref cause) => cause,DeleteUserPolicyError::Validation(ref cause) => cause,DeleteUserPolicyError::Credentials(ref err) => err.description(),DeleteUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteUserPolicyError::Unknown(ref cause) => cause
+                            DeleteUserPolicyError::LimitExceeded(ref cause) => cause,
+DeleteUserPolicyError::NoSuchEntity(ref cause) => cause,
+DeleteUserPolicyError::ServiceFailure(ref cause) => cause,
+DeleteUserPolicyError::Validation(ref cause) => cause,
+DeleteUserPolicyError::Credentials(ref err) => err.description(),
+DeleteUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteUserPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13304,14 +13571,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteVirtualMFADeviceError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
 DeleteConflict(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -13328,7 +13595,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => DeleteVirtualMFADeviceError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => DeleteVirtualMFADeviceError::LimitExceeded(String::from(parsed_error.message)),"DeleteConflictException" => DeleteVirtualMFADeviceError::DeleteConflict(String::from(parsed_error.message)),"ServiceFailureException" => DeleteVirtualMFADeviceError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteVirtualMFADeviceError::Unknown(String::from(body))
+                                    "DeleteConflictException" => DeleteVirtualMFADeviceError::DeleteConflict(String::from(parsed_error.message)),"LimitExceededException" => DeleteVirtualMFADeviceError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DeleteVirtualMFADeviceError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DeleteVirtualMFADeviceError::ServiceFailure(String::from(parsed_error.message)),_ => DeleteVirtualMFADeviceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteVirtualMFADeviceError::Unknown(body.to_string())
@@ -13360,7 +13627,14 @@ Unknown(String)
                 impl Error for DeleteVirtualMFADeviceError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteVirtualMFADeviceError::NoSuchEntity(ref cause) => cause,DeleteVirtualMFADeviceError::ServiceFailure(ref cause) => cause,DeleteVirtualMFADeviceError::LimitExceeded(ref cause) => cause,DeleteVirtualMFADeviceError::DeleteConflict(ref cause) => cause,DeleteVirtualMFADeviceError::Validation(ref cause) => cause,DeleteVirtualMFADeviceError::Credentials(ref err) => err.description(),DeleteVirtualMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteVirtualMFADeviceError::Unknown(ref cause) => cause
+                            DeleteVirtualMFADeviceError::DeleteConflict(ref cause) => cause,
+DeleteVirtualMFADeviceError::LimitExceeded(ref cause) => cause,
+DeleteVirtualMFADeviceError::NoSuchEntity(ref cause) => cause,
+DeleteVirtualMFADeviceError::ServiceFailure(ref cause) => cause,
+DeleteVirtualMFADeviceError::Validation(ref cause) => cause,
+DeleteVirtualMFADeviceError::Credentials(ref err) => err.description(),
+DeleteVirtualMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteVirtualMFADeviceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13368,14 +13642,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DetachGroupPolicyError {
                     
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -13392,7 +13666,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => DetachGroupPolicyError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => DetachGroupPolicyError::LimitExceeded(String::from(parsed_error.message)),"InvalidInputException" => DetachGroupPolicyError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => DetachGroupPolicyError::NoSuchEntity(String::from(parsed_error.message)),_ => DetachGroupPolicyError::Unknown(String::from(body))
+                                    "InvalidInputException" => DetachGroupPolicyError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => DetachGroupPolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DetachGroupPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DetachGroupPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => DetachGroupPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DetachGroupPolicyError::Unknown(body.to_string())
@@ -13424,7 +13698,14 @@ Unknown(String)
                 impl Error for DetachGroupPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachGroupPolicyError::ServiceFailure(ref cause) => cause,DetachGroupPolicyError::InvalidInput(ref cause) => cause,DetachGroupPolicyError::LimitExceeded(ref cause) => cause,DetachGroupPolicyError::NoSuchEntity(ref cause) => cause,DetachGroupPolicyError::Validation(ref cause) => cause,DetachGroupPolicyError::Credentials(ref err) => err.description(),DetachGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachGroupPolicyError::Unknown(ref cause) => cause
+                            DetachGroupPolicyError::InvalidInput(ref cause) => cause,
+DetachGroupPolicyError::LimitExceeded(ref cause) => cause,
+DetachGroupPolicyError::NoSuchEntity(ref cause) => cause,
+DetachGroupPolicyError::ServiceFailure(ref cause) => cause,
+DetachGroupPolicyError::Validation(ref cause) => cause,
+DetachGroupPolicyError::Credentials(ref err) => err.description(),
+DetachGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachGroupPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13432,14 +13713,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DetachRolePolicyError {
                     
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -13456,7 +13737,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => DetachRolePolicyError::ServiceFailure(String::from(parsed_error.message)),"InvalidInputException" => DetachRolePolicyError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => DetachRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => DetachRolePolicyError::LimitExceeded(String::from(parsed_error.message)),_ => DetachRolePolicyError::Unknown(String::from(body))
+                                    "InvalidInputException" => DetachRolePolicyError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => DetachRolePolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DetachRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DetachRolePolicyError::ServiceFailure(String::from(parsed_error.message)),_ => DetachRolePolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DetachRolePolicyError::Unknown(body.to_string())
@@ -13488,7 +13769,14 @@ Unknown(String)
                 impl Error for DetachRolePolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachRolePolicyError::NoSuchEntity(ref cause) => cause,DetachRolePolicyError::InvalidInput(ref cause) => cause,DetachRolePolicyError::LimitExceeded(ref cause) => cause,DetachRolePolicyError::ServiceFailure(ref cause) => cause,DetachRolePolicyError::Validation(ref cause) => cause,DetachRolePolicyError::Credentials(ref err) => err.description(),DetachRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachRolePolicyError::Unknown(ref cause) => cause
+                            DetachRolePolicyError::InvalidInput(ref cause) => cause,
+DetachRolePolicyError::LimitExceeded(ref cause) => cause,
+DetachRolePolicyError::NoSuchEntity(ref cause) => cause,
+DetachRolePolicyError::ServiceFailure(ref cause) => cause,
+DetachRolePolicyError::Validation(ref cause) => cause,
+DetachRolePolicyError::Credentials(ref err) => err.description(),
+DetachRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachRolePolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13498,12 +13786,12 @@ Unknown(String)
                     
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -13520,7 +13808,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => DetachUserPolicyError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => DetachUserPolicyError::LimitExceeded(String::from(parsed_error.message)),"InvalidInputException" => DetachUserPolicyError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => DetachUserPolicyError::NoSuchEntity(String::from(parsed_error.message)),_ => DetachUserPolicyError::Unknown(String::from(body))
+                                    "InvalidInputException" => DetachUserPolicyError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => DetachUserPolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => DetachUserPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => DetachUserPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => DetachUserPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DetachUserPolicyError::Unknown(body.to_string())
@@ -13552,7 +13840,14 @@ Unknown(String)
                 impl Error for DetachUserPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DetachUserPolicyError::ServiceFailure(ref cause) => cause,DetachUserPolicyError::NoSuchEntity(ref cause) => cause,DetachUserPolicyError::LimitExceeded(ref cause) => cause,DetachUserPolicyError::InvalidInput(ref cause) => cause,DetachUserPolicyError::Validation(ref cause) => cause,DetachUserPolicyError::Credentials(ref err) => err.description(),DetachUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DetachUserPolicyError::Unknown(ref cause) => cause
+                            DetachUserPolicyError::InvalidInput(ref cause) => cause,
+DetachUserPolicyError::LimitExceeded(ref cause) => cause,
+DetachUserPolicyError::NoSuchEntity(ref cause) => cause,
+DetachUserPolicyError::ServiceFailure(ref cause) => cause,
+DetachUserPolicyError::Validation(ref cause) => cause,
+DetachUserPolicyError::Credentials(ref err) => err.description(),
+DetachUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DetachUserPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13560,18 +13855,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum EnableMFADeviceError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because the authentication code was not recognized. The error message describes the specific error.</p>
-InvalidAuthenticationCode(String),
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 EntityAlreadyExists(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
 EntityTemporarilyUnmodifiable(String),
+///<p>The request was rejected because the authentication code was not recognized. The error message describes the specific error.</p>
+InvalidAuthenticationCode(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -13588,7 +13883,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidAuthenticationCodeException" => EnableMFADeviceError::InvalidAuthenticationCode(String::from(parsed_error.message)),"EntityAlreadyExistsException" => EnableMFADeviceError::EntityAlreadyExists(String::from(parsed_error.message)),"EntityTemporarilyUnmodifiableException" => EnableMFADeviceError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),"LimitExceededException" => EnableMFADeviceError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => EnableMFADeviceError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => EnableMFADeviceError::ServiceFailure(String::from(parsed_error.message)),_ => EnableMFADeviceError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => EnableMFADeviceError::EntityAlreadyExists(String::from(parsed_error.message)),"EntityTemporarilyUnmodifiableException" => EnableMFADeviceError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),"InvalidAuthenticationCodeException" => EnableMFADeviceError::InvalidAuthenticationCode(String::from(parsed_error.message)),"LimitExceededException" => EnableMFADeviceError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => EnableMFADeviceError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => EnableMFADeviceError::ServiceFailure(String::from(parsed_error.message)),_ => EnableMFADeviceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => EnableMFADeviceError::Unknown(body.to_string())
@@ -13620,7 +13915,16 @@ Unknown(String)
                 impl Error for EnableMFADeviceError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableMFADeviceError::NoSuchEntity(ref cause) => cause,EnableMFADeviceError::EntityAlreadyExists(ref cause) => cause,EnableMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => cause,EnableMFADeviceError::ServiceFailure(ref cause) => cause,EnableMFADeviceError::InvalidAuthenticationCode(ref cause) => cause,EnableMFADeviceError::LimitExceeded(ref cause) => cause,EnableMFADeviceError::Validation(ref cause) => cause,EnableMFADeviceError::Credentials(ref err) => err.description(),EnableMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableMFADeviceError::Unknown(ref cause) => cause
+                            EnableMFADeviceError::EntityAlreadyExists(ref cause) => cause,
+EnableMFADeviceError::EntityTemporarilyUnmodifiable(ref cause) => cause,
+EnableMFADeviceError::InvalidAuthenticationCode(ref cause) => cause,
+EnableMFADeviceError::LimitExceeded(ref cause) => cause,
+EnableMFADeviceError::NoSuchEntity(ref cause) => cause,
+EnableMFADeviceError::ServiceFailure(ref cause) => cause,
+EnableMFADeviceError::Validation(ref cause) => cause,
+EnableMFADeviceError::Credentials(ref err) => err.description(),
+EnableMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableMFADeviceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13648,7 +13952,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => GenerateCredentialReportError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => GenerateCredentialReportError::LimitExceeded(String::from(parsed_error.message)),_ => GenerateCredentialReportError::Unknown(String::from(body))
+                                    "LimitExceededException" => GenerateCredentialReportError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => GenerateCredentialReportError::ServiceFailure(String::from(parsed_error.message)),_ => GenerateCredentialReportError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GenerateCredentialReportError::Unknown(body.to_string())
@@ -13680,7 +13984,12 @@ Unknown(String)
                 impl Error for GenerateCredentialReportError {
                     fn description(&self) -> &str {
                         match *self {
-                            GenerateCredentialReportError::LimitExceeded(ref cause) => cause,GenerateCredentialReportError::ServiceFailure(ref cause) => cause,GenerateCredentialReportError::Validation(ref cause) => cause,GenerateCredentialReportError::Credentials(ref err) => err.description(),GenerateCredentialReportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GenerateCredentialReportError::Unknown(ref cause) => cause
+                            GenerateCredentialReportError::LimitExceeded(ref cause) => cause,
+GenerateCredentialReportError::ServiceFailure(ref cause) => cause,
+GenerateCredentialReportError::Validation(ref cause) => cause,
+GenerateCredentialReportError::Credentials(ref err) => err.description(),
+GenerateCredentialReportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GenerateCredentialReportError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13738,7 +14047,11 @@ Unknown(String)
                 impl Error for GetAccessKeyLastUsedError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetAccessKeyLastUsedError::NoSuchEntity(ref cause) => cause,GetAccessKeyLastUsedError::Validation(ref cause) => cause,GetAccessKeyLastUsedError::Credentials(ref err) => err.description(),GetAccessKeyLastUsedError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetAccessKeyLastUsedError::Unknown(ref cause) => cause
+                            GetAccessKeyLastUsedError::NoSuchEntity(ref cause) => cause,
+GetAccessKeyLastUsedError::Validation(ref cause) => cause,
+GetAccessKeyLastUsedError::Credentials(ref err) => err.description(),
+GetAccessKeyLastUsedError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetAccessKeyLastUsedError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13796,7 +14109,11 @@ Unknown(String)
                 impl Error for GetAccountAuthorizationDetailsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetAccountAuthorizationDetailsError::ServiceFailure(ref cause) => cause,GetAccountAuthorizationDetailsError::Validation(ref cause) => cause,GetAccountAuthorizationDetailsError::Credentials(ref err) => err.description(),GetAccountAuthorizationDetailsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetAccountAuthorizationDetailsError::Unknown(ref cause) => cause
+                            GetAccountAuthorizationDetailsError::ServiceFailure(ref cause) => cause,
+GetAccountAuthorizationDetailsError::Validation(ref cause) => cause,
+GetAccountAuthorizationDetailsError::Credentials(ref err) => err.description(),
+GetAccountAuthorizationDetailsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetAccountAuthorizationDetailsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13856,7 +14173,12 @@ Unknown(String)
                 impl Error for GetAccountPasswordPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,GetAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,GetAccountPasswordPolicyError::Validation(ref cause) => cause,GetAccountPasswordPolicyError::Credentials(ref err) => err.description(),GetAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetAccountPasswordPolicyError::Unknown(ref cause) => cause
+                            GetAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
+GetAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
+GetAccountPasswordPolicyError::Validation(ref cause) => cause,
+GetAccountPasswordPolicyError::Credentials(ref err) => err.description(),
+GetAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetAccountPasswordPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13914,7 +14236,11 @@ Unknown(String)
                 impl Error for GetAccountSummaryError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetAccountSummaryError::ServiceFailure(ref cause) => cause,GetAccountSummaryError::Validation(ref cause) => cause,GetAccountSummaryError::Credentials(ref err) => err.description(),GetAccountSummaryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetAccountSummaryError::Unknown(ref cause) => cause
+                            GetAccountSummaryError::ServiceFailure(ref cause) => cause,
+GetAccountSummaryError::Validation(ref cause) => cause,
+GetAccountSummaryError::Credentials(ref err) => err.description(),
+GetAccountSummaryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetAccountSummaryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13972,7 +14298,11 @@ Unknown(String)
                 impl Error for GetContextKeysForCustomPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetContextKeysForCustomPolicyError::InvalidInput(ref cause) => cause,GetContextKeysForCustomPolicyError::Validation(ref cause) => cause,GetContextKeysForCustomPolicyError::Credentials(ref err) => err.description(),GetContextKeysForCustomPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetContextKeysForCustomPolicyError::Unknown(ref cause) => cause
+                            GetContextKeysForCustomPolicyError::InvalidInput(ref cause) => cause,
+GetContextKeysForCustomPolicyError::Validation(ref cause) => cause,
+GetContextKeysForCustomPolicyError::Credentials(ref err) => err.description(),
+GetContextKeysForCustomPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetContextKeysForCustomPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -13980,10 +14310,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetContextKeysForPrincipalPolicyError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14000,7 +14330,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => GetContextKeysForPrincipalPolicyError::NoSuchEntity(String::from(parsed_error.message)),"InvalidInputException" => GetContextKeysForPrincipalPolicyError::InvalidInput(String::from(parsed_error.message)),_ => GetContextKeysForPrincipalPolicyError::Unknown(String::from(body))
+                                    "InvalidInputException" => GetContextKeysForPrincipalPolicyError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => GetContextKeysForPrincipalPolicyError::NoSuchEntity(String::from(parsed_error.message)),_ => GetContextKeysForPrincipalPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetContextKeysForPrincipalPolicyError::Unknown(body.to_string())
@@ -14032,7 +14362,12 @@ Unknown(String)
                 impl Error for GetContextKeysForPrincipalPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetContextKeysForPrincipalPolicyError::NoSuchEntity(ref cause) => cause,GetContextKeysForPrincipalPolicyError::InvalidInput(ref cause) => cause,GetContextKeysForPrincipalPolicyError::Validation(ref cause) => cause,GetContextKeysForPrincipalPolicyError::Credentials(ref err) => err.description(),GetContextKeysForPrincipalPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetContextKeysForPrincipalPolicyError::Unknown(ref cause) => cause
+                            GetContextKeysForPrincipalPolicyError::InvalidInput(ref cause) => cause,
+GetContextKeysForPrincipalPolicyError::NoSuchEntity(ref cause) => cause,
+GetContextKeysForPrincipalPolicyError::Validation(ref cause) => cause,
+GetContextKeysForPrincipalPolicyError::Credentials(ref err) => err.description(),
+GetContextKeysForPrincipalPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetContextKeysForPrincipalPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14040,14 +14375,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetCredentialReportError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because the credential report does not exist. To generate a credential report, use <a>GenerateCredentialReport</a>.</p>
-CredentialReportNotPresent(String),
 ///<p>The request was rejected because the most recent credential report has expired. To generate a new credential report, use <a>GenerateCredentialReport</a>. For more information about credential report expiration, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
 CredentialReportExpired(String),
+///<p>The request was rejected because the credential report does not exist. To generate a credential report, use <a>GenerateCredentialReport</a>.</p>
+CredentialReportNotPresent(String),
 ///<p>The request was rejected because the credential report is still being generated.</p>
-CredentialReportNotReady(String),/// An error occurred dispatching the HTTP request
+CredentialReportNotReady(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14064,7 +14399,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CredentialReportNotPresentException" => GetCredentialReportError::CredentialReportNotPresent(String::from(parsed_error.message)),"CredentialReportExpiredException" => GetCredentialReportError::CredentialReportExpired(String::from(parsed_error.message)),"CredentialReportNotReadyException" => GetCredentialReportError::CredentialReportNotReady(String::from(parsed_error.message)),"ServiceFailureException" => GetCredentialReportError::ServiceFailure(String::from(parsed_error.message)),_ => GetCredentialReportError::Unknown(String::from(body))
+                                    "CredentialReportExpiredException" => GetCredentialReportError::CredentialReportExpired(String::from(parsed_error.message)),"CredentialReportNotPresentException" => GetCredentialReportError::CredentialReportNotPresent(String::from(parsed_error.message)),"CredentialReportNotReadyException" => GetCredentialReportError::CredentialReportNotReady(String::from(parsed_error.message)),"ServiceFailureException" => GetCredentialReportError::ServiceFailure(String::from(parsed_error.message)),_ => GetCredentialReportError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetCredentialReportError::Unknown(body.to_string())
@@ -14096,7 +14431,14 @@ Unknown(String)
                 impl Error for GetCredentialReportError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetCredentialReportError::CredentialReportNotPresent(ref cause) => cause,GetCredentialReportError::ServiceFailure(ref cause) => cause,GetCredentialReportError::CredentialReportExpired(ref cause) => cause,GetCredentialReportError::CredentialReportNotReady(ref cause) => cause,GetCredentialReportError::Validation(ref cause) => cause,GetCredentialReportError::Credentials(ref err) => err.description(),GetCredentialReportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetCredentialReportError::Unknown(ref cause) => cause
+                            GetCredentialReportError::CredentialReportExpired(ref cause) => cause,
+GetCredentialReportError::CredentialReportNotPresent(ref cause) => cause,
+GetCredentialReportError::CredentialReportNotReady(ref cause) => cause,
+GetCredentialReportError::ServiceFailure(ref cause) => cause,
+GetCredentialReportError::Validation(ref cause) => cause,
+GetCredentialReportError::Credentials(ref err) => err.description(),
+GetCredentialReportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetCredentialReportError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14156,7 +14498,12 @@ Unknown(String)
                 impl Error for GetGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetGroupError::NoSuchEntity(ref cause) => cause,GetGroupError::ServiceFailure(ref cause) => cause,GetGroupError::Validation(ref cause) => cause,GetGroupError::Credentials(ref err) => err.description(),GetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetGroupError::Unknown(ref cause) => cause
+                            GetGroupError::NoSuchEntity(ref cause) => cause,
+GetGroupError::ServiceFailure(ref cause) => cause,
+GetGroupError::Validation(ref cause) => cause,
+GetGroupError::Credentials(ref err) => err.description(),
+GetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14184,7 +14531,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => GetGroupPolicyError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => GetGroupPolicyError::NoSuchEntity(String::from(parsed_error.message)),_ => GetGroupPolicyError::Unknown(String::from(body))
+                                    "NoSuchEntityException" => GetGroupPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => GetGroupPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => GetGroupPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetGroupPolicyError::Unknown(body.to_string())
@@ -14216,7 +14563,12 @@ Unknown(String)
                 impl Error for GetGroupPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetGroupPolicyError::NoSuchEntity(ref cause) => cause,GetGroupPolicyError::ServiceFailure(ref cause) => cause,GetGroupPolicyError::Validation(ref cause) => cause,GetGroupPolicyError::Credentials(ref err) => err.description(),GetGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetGroupPolicyError::Unknown(ref cause) => cause
+                            GetGroupPolicyError::NoSuchEntity(ref cause) => cause,
+GetGroupPolicyError::ServiceFailure(ref cause) => cause,
+GetGroupPolicyError::Validation(ref cause) => cause,
+GetGroupPolicyError::Credentials(ref err) => err.description(),
+GetGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetGroupPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14224,10 +14576,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetInstanceProfileError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14244,7 +14596,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => GetInstanceProfileError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => GetInstanceProfileError::NoSuchEntity(String::from(parsed_error.message)),_ => GetInstanceProfileError::Unknown(String::from(body))
+                                    "NoSuchEntityException" => GetInstanceProfileError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => GetInstanceProfileError::ServiceFailure(String::from(parsed_error.message)),_ => GetInstanceProfileError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetInstanceProfileError::Unknown(body.to_string())
@@ -14276,7 +14628,12 @@ Unknown(String)
                 impl Error for GetInstanceProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetInstanceProfileError::ServiceFailure(ref cause) => cause,GetInstanceProfileError::NoSuchEntity(ref cause) => cause,GetInstanceProfileError::Validation(ref cause) => cause,GetInstanceProfileError::Credentials(ref err) => err.description(),GetInstanceProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetInstanceProfileError::Unknown(ref cause) => cause
+                            GetInstanceProfileError::NoSuchEntity(ref cause) => cause,
+GetInstanceProfileError::ServiceFailure(ref cause) => cause,
+GetInstanceProfileError::Validation(ref cause) => cause,
+GetInstanceProfileError::Credentials(ref err) => err.description(),
+GetInstanceProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetInstanceProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14284,10 +14641,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetLoginProfileError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14304,7 +14661,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => GetLoginProfileError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => GetLoginProfileError::NoSuchEntity(String::from(parsed_error.message)),_ => GetLoginProfileError::Unknown(String::from(body))
+                                    "NoSuchEntityException" => GetLoginProfileError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => GetLoginProfileError::ServiceFailure(String::from(parsed_error.message)),_ => GetLoginProfileError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetLoginProfileError::Unknown(body.to_string())
@@ -14336,7 +14693,12 @@ Unknown(String)
                 impl Error for GetLoginProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetLoginProfileError::NoSuchEntity(ref cause) => cause,GetLoginProfileError::ServiceFailure(ref cause) => cause,GetLoginProfileError::Validation(ref cause) => cause,GetLoginProfileError::Credentials(ref err) => err.description(),GetLoginProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetLoginProfileError::Unknown(ref cause) => cause
+                            GetLoginProfileError::NoSuchEntity(ref cause) => cause,
+GetLoginProfileError::ServiceFailure(ref cause) => cause,
+GetLoginProfileError::Validation(ref cause) => cause,
+GetLoginProfileError::Credentials(ref err) => err.description(),
+GetLoginProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetLoginProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14344,10 +14706,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetOpenIDConnectProviderError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -14366,7 +14728,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => GetOpenIDConnectProviderError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => GetOpenIDConnectProviderError::ServiceFailure(String::from(parsed_error.message)),"InvalidInputException" => GetOpenIDConnectProviderError::InvalidInput(String::from(parsed_error.message)),_ => GetOpenIDConnectProviderError::Unknown(String::from(body))
+                                    "InvalidInputException" => GetOpenIDConnectProviderError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => GetOpenIDConnectProviderError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => GetOpenIDConnectProviderError::ServiceFailure(String::from(parsed_error.message)),_ => GetOpenIDConnectProviderError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetOpenIDConnectProviderError::Unknown(body.to_string())
@@ -14398,7 +14760,13 @@ Unknown(String)
                 impl Error for GetOpenIDConnectProviderError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,GetOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,GetOpenIDConnectProviderError::InvalidInput(ref cause) => cause,GetOpenIDConnectProviderError::Validation(ref cause) => cause,GetOpenIDConnectProviderError::Credentials(ref err) => err.description(),GetOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetOpenIDConnectProviderError::Unknown(ref cause) => cause
+                            GetOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
+GetOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
+GetOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+GetOpenIDConnectProviderError::Validation(ref cause) => cause,
+GetOpenIDConnectProviderError::Credentials(ref err) => err.description(),
+GetOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetOpenIDConnectProviderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14406,12 +14774,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetPolicyError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14428,7 +14796,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => GetPolicyError::NoSuchEntity(String::from(parsed_error.message)),"InvalidInputException" => GetPolicyError::InvalidInput(String::from(parsed_error.message)),"ServiceFailureException" => GetPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => GetPolicyError::Unknown(String::from(body))
+                                    "InvalidInputException" => GetPolicyError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => GetPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => GetPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => GetPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetPolicyError::Unknown(body.to_string())
@@ -14460,7 +14828,13 @@ Unknown(String)
                 impl Error for GetPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetPolicyError::InvalidInput(ref cause) => cause,GetPolicyError::NoSuchEntity(ref cause) => cause,GetPolicyError::ServiceFailure(ref cause) => cause,GetPolicyError::Validation(ref cause) => cause,GetPolicyError::Credentials(ref err) => err.description(),GetPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetPolicyError::Unknown(ref cause) => cause
+                            GetPolicyError::InvalidInput(ref cause) => cause,
+GetPolicyError::NoSuchEntity(ref cause) => cause,
+GetPolicyError::ServiceFailure(ref cause) => cause,
+GetPolicyError::Validation(ref cause) => cause,
+GetPolicyError::Credentials(ref err) => err.description(),
+GetPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14490,7 +14864,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidInputException" => GetPolicyVersionError::InvalidInput(String::from(parsed_error.message)),"ServiceFailureException" => GetPolicyVersionError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => GetPolicyVersionError::NoSuchEntity(String::from(parsed_error.message)),_ => GetPolicyVersionError::Unknown(String::from(body))
+                                    "InvalidInputException" => GetPolicyVersionError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => GetPolicyVersionError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => GetPolicyVersionError::ServiceFailure(String::from(parsed_error.message)),_ => GetPolicyVersionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetPolicyVersionError::Unknown(body.to_string())
@@ -14522,7 +14896,13 @@ Unknown(String)
                 impl Error for GetPolicyVersionError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetPolicyVersionError::ServiceFailure(ref cause) => cause,GetPolicyVersionError::InvalidInput(ref cause) => cause,GetPolicyVersionError::NoSuchEntity(ref cause) => cause,GetPolicyVersionError::Validation(ref cause) => cause,GetPolicyVersionError::Credentials(ref err) => err.description(),GetPolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetPolicyVersionError::Unknown(ref cause) => cause
+                            GetPolicyVersionError::InvalidInput(ref cause) => cause,
+GetPolicyVersionError::NoSuchEntity(ref cause) => cause,
+GetPolicyVersionError::ServiceFailure(ref cause) => cause,
+GetPolicyVersionError::Validation(ref cause) => cause,
+GetPolicyVersionError::Credentials(ref err) => err.description(),
+GetPolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetPolicyVersionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14582,7 +14962,12 @@ Unknown(String)
                 impl Error for GetRoleError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetRoleError::ServiceFailure(ref cause) => cause,GetRoleError::NoSuchEntity(ref cause) => cause,GetRoleError::Validation(ref cause) => cause,GetRoleError::Credentials(ref err) => err.description(),GetRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetRoleError::Unknown(ref cause) => cause
+                            GetRoleError::NoSuchEntity(ref cause) => cause,
+GetRoleError::ServiceFailure(ref cause) => cause,
+GetRoleError::Validation(ref cause) => cause,
+GetRoleError::Credentials(ref err) => err.description(),
+GetRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetRoleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14610,7 +14995,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => GetRolePolicyError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => GetRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),_ => GetRolePolicyError::Unknown(String::from(body))
+                                    "NoSuchEntityException" => GetRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => GetRolePolicyError::ServiceFailure(String::from(parsed_error.message)),_ => GetRolePolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetRolePolicyError::Unknown(body.to_string())
@@ -14642,7 +15027,12 @@ Unknown(String)
                 impl Error for GetRolePolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetRolePolicyError::ServiceFailure(ref cause) => cause,GetRolePolicyError::NoSuchEntity(ref cause) => cause,GetRolePolicyError::Validation(ref cause) => cause,GetRolePolicyError::Credentials(ref err) => err.description(),GetRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetRolePolicyError::Unknown(ref cause) => cause
+                            GetRolePolicyError::NoSuchEntity(ref cause) => cause,
+GetRolePolicyError::ServiceFailure(ref cause) => cause,
+GetRolePolicyError::Validation(ref cause) => cause,
+GetRolePolicyError::Credentials(ref err) => err.description(),
+GetRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetRolePolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14652,10 +15042,10 @@ Unknown(String)
                     
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14672,7 +15062,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidInputException" => GetSAMLProviderError::InvalidInput(String::from(parsed_error.message)),"ServiceFailureException" => GetSAMLProviderError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => GetSAMLProviderError::NoSuchEntity(String::from(parsed_error.message)),_ => GetSAMLProviderError::Unknown(String::from(body))
+                                    "InvalidInputException" => GetSAMLProviderError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => GetSAMLProviderError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => GetSAMLProviderError::ServiceFailure(String::from(parsed_error.message)),_ => GetSAMLProviderError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetSAMLProviderError::Unknown(body.to_string())
@@ -14704,7 +15094,13 @@ Unknown(String)
                 impl Error for GetSAMLProviderError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetSAMLProviderError::NoSuchEntity(ref cause) => cause,GetSAMLProviderError::ServiceFailure(ref cause) => cause,GetSAMLProviderError::InvalidInput(ref cause) => cause,GetSAMLProviderError::Validation(ref cause) => cause,GetSAMLProviderError::Credentials(ref err) => err.description(),GetSAMLProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetSAMLProviderError::Unknown(ref cause) => cause
+                            GetSAMLProviderError::InvalidInput(ref cause) => cause,
+GetSAMLProviderError::NoSuchEntity(ref cause) => cause,
+GetSAMLProviderError::ServiceFailure(ref cause) => cause,
+GetSAMLProviderError::Validation(ref cause) => cause,
+GetSAMLProviderError::Credentials(ref err) => err.description(),
+GetSAMLProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetSAMLProviderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14732,7 +15128,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "UnrecognizedPublicKeyEncodingException" => GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(parsed_error.message)),"NoSuchEntityException" => GetSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message)),_ => GetSSHPublicKeyError::Unknown(String::from(body))
+                                    "NoSuchEntityException" => GetSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message)),"UnrecognizedPublicKeyEncodingException" => GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(parsed_error.message)),_ => GetSSHPublicKeyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetSSHPublicKeyError::Unknown(body.to_string())
@@ -14764,7 +15160,12 @@ Unknown(String)
                 impl Error for GetSSHPublicKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetSSHPublicKeyError::NoSuchEntity(ref cause) => cause,GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => cause,GetSSHPublicKeyError::Validation(ref cause) => cause,GetSSHPublicKeyError::Credentials(ref err) => err.description(),GetSSHPublicKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetSSHPublicKeyError::Unknown(ref cause) => cause
+                            GetSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
+GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => cause,
+GetSSHPublicKeyError::Validation(ref cause) => cause,
+GetSSHPublicKeyError::Credentials(ref err) => err.description(),
+GetSSHPublicKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetSSHPublicKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14772,10 +15173,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetServerCertificateError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14824,7 +15225,12 @@ Unknown(String)
                 impl Error for GetServerCertificateError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetServerCertificateError::ServiceFailure(ref cause) => cause,GetServerCertificateError::NoSuchEntity(ref cause) => cause,GetServerCertificateError::Validation(ref cause) => cause,GetServerCertificateError::Credentials(ref err) => err.description(),GetServerCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetServerCertificateError::Unknown(ref cause) => cause
+                            GetServerCertificateError::NoSuchEntity(ref cause) => cause,
+GetServerCertificateError::ServiceFailure(ref cause) => cause,
+GetServerCertificateError::Validation(ref cause) => cause,
+GetServerCertificateError::Credentials(ref err) => err.description(),
+GetServerCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetServerCertificateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14884,7 +15290,12 @@ Unknown(String)
                 impl Error for GetUserError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetUserError::ServiceFailure(ref cause) => cause,GetUserError::NoSuchEntity(ref cause) => cause,GetUserError::Validation(ref cause) => cause,GetUserError::Credentials(ref err) => err.description(),GetUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetUserError::Unknown(ref cause) => cause
+                            GetUserError::NoSuchEntity(ref cause) => cause,
+GetUserError::ServiceFailure(ref cause) => cause,
+GetUserError::Validation(ref cause) => cause,
+GetUserError::Credentials(ref err) => err.description(),
+GetUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetUserError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14892,10 +15303,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetUserPolicyError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -14944,7 +15355,12 @@ Unknown(String)
                 impl Error for GetUserPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetUserPolicyError::ServiceFailure(ref cause) => cause,GetUserPolicyError::NoSuchEntity(ref cause) => cause,GetUserPolicyError::Validation(ref cause) => cause,GetUserPolicyError::Credentials(ref err) => err.description(),GetUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetUserPolicyError::Unknown(ref cause) => cause
+                            GetUserPolicyError::NoSuchEntity(ref cause) => cause,
+GetUserPolicyError::ServiceFailure(ref cause) => cause,
+GetUserPolicyError::Validation(ref cause) => cause,
+GetUserPolicyError::Credentials(ref err) => err.description(),
+GetUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetUserPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -14952,10 +15368,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListAccessKeysError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15004,7 +15420,12 @@ Unknown(String)
                 impl Error for ListAccessKeysError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAccessKeysError::NoSuchEntity(ref cause) => cause,ListAccessKeysError::ServiceFailure(ref cause) => cause,ListAccessKeysError::Validation(ref cause) => cause,ListAccessKeysError::Credentials(ref err) => err.description(),ListAccessKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAccessKeysError::Unknown(ref cause) => cause
+                            ListAccessKeysError::NoSuchEntity(ref cause) => cause,
+ListAccessKeysError::ServiceFailure(ref cause) => cause,
+ListAccessKeysError::Validation(ref cause) => cause,
+ListAccessKeysError::Credentials(ref err) => err.description(),
+ListAccessKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAccessKeysError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15062,7 +15483,11 @@ Unknown(String)
                 impl Error for ListAccountAliasesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAccountAliasesError::ServiceFailure(ref cause) => cause,ListAccountAliasesError::Validation(ref cause) => cause,ListAccountAliasesError::Credentials(ref err) => err.description(),ListAccountAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAccountAliasesError::Unknown(ref cause) => cause
+                            ListAccountAliasesError::ServiceFailure(ref cause) => cause,
+ListAccountAliasesError::Validation(ref cause) => cause,
+ListAccountAliasesError::Credentials(ref err) => err.description(),
+ListAccountAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAccountAliasesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15124,7 +15549,13 @@ Unknown(String)
                 impl Error for ListAttachedGroupPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAttachedGroupPoliciesError::ServiceFailure(ref cause) => cause,ListAttachedGroupPoliciesError::NoSuchEntity(ref cause) => cause,ListAttachedGroupPoliciesError::InvalidInput(ref cause) => cause,ListAttachedGroupPoliciesError::Validation(ref cause) => cause,ListAttachedGroupPoliciesError::Credentials(ref err) => err.description(),ListAttachedGroupPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAttachedGroupPoliciesError::Unknown(ref cause) => cause
+                            ListAttachedGroupPoliciesError::InvalidInput(ref cause) => cause,
+ListAttachedGroupPoliciesError::NoSuchEntity(ref cause) => cause,
+ListAttachedGroupPoliciesError::ServiceFailure(ref cause) => cause,
+ListAttachedGroupPoliciesError::Validation(ref cause) => cause,
+ListAttachedGroupPoliciesError::Credentials(ref err) => err.description(),
+ListAttachedGroupPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAttachedGroupPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15132,12 +15563,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListAttachedRolePoliciesError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15154,7 +15585,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => ListAttachedRolePoliciesError::ServiceFailure(String::from(parsed_error.message)),"InvalidInputException" => ListAttachedRolePoliciesError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => ListAttachedRolePoliciesError::NoSuchEntity(String::from(parsed_error.message)),_ => ListAttachedRolePoliciesError::Unknown(String::from(body))
+                                    "InvalidInputException" => ListAttachedRolePoliciesError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => ListAttachedRolePoliciesError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => ListAttachedRolePoliciesError::ServiceFailure(String::from(parsed_error.message)),_ => ListAttachedRolePoliciesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListAttachedRolePoliciesError::Unknown(body.to_string())
@@ -15186,7 +15617,13 @@ Unknown(String)
                 impl Error for ListAttachedRolePoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAttachedRolePoliciesError::NoSuchEntity(ref cause) => cause,ListAttachedRolePoliciesError::ServiceFailure(ref cause) => cause,ListAttachedRolePoliciesError::InvalidInput(ref cause) => cause,ListAttachedRolePoliciesError::Validation(ref cause) => cause,ListAttachedRolePoliciesError::Credentials(ref err) => err.description(),ListAttachedRolePoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAttachedRolePoliciesError::Unknown(ref cause) => cause
+                            ListAttachedRolePoliciesError::InvalidInput(ref cause) => cause,
+ListAttachedRolePoliciesError::NoSuchEntity(ref cause) => cause,
+ListAttachedRolePoliciesError::ServiceFailure(ref cause) => cause,
+ListAttachedRolePoliciesError::Validation(ref cause) => cause,
+ListAttachedRolePoliciesError::Credentials(ref err) => err.description(),
+ListAttachedRolePoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAttachedRolePoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15194,10 +15631,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListAttachedUserPoliciesError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -15248,7 +15685,13 @@ Unknown(String)
                 impl Error for ListAttachedUserPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAttachedUserPoliciesError::NoSuchEntity(ref cause) => cause,ListAttachedUserPoliciesError::ServiceFailure(ref cause) => cause,ListAttachedUserPoliciesError::InvalidInput(ref cause) => cause,ListAttachedUserPoliciesError::Validation(ref cause) => cause,ListAttachedUserPoliciesError::Credentials(ref err) => err.description(),ListAttachedUserPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAttachedUserPoliciesError::Unknown(ref cause) => cause
+                            ListAttachedUserPoliciesError::InvalidInput(ref cause) => cause,
+ListAttachedUserPoliciesError::NoSuchEntity(ref cause) => cause,
+ListAttachedUserPoliciesError::ServiceFailure(ref cause) => cause,
+ListAttachedUserPoliciesError::Validation(ref cause) => cause,
+ListAttachedUserPoliciesError::Credentials(ref err) => err.description(),
+ListAttachedUserPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAttachedUserPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15278,7 +15721,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => ListEntitiesForPolicyError::NoSuchEntity(String::from(parsed_error.message)),"InvalidInputException" => ListEntitiesForPolicyError::InvalidInput(String::from(parsed_error.message)),"ServiceFailureException" => ListEntitiesForPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => ListEntitiesForPolicyError::Unknown(String::from(body))
+                                    "InvalidInputException" => ListEntitiesForPolicyError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => ListEntitiesForPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => ListEntitiesForPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => ListEntitiesForPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListEntitiesForPolicyError::Unknown(body.to_string())
@@ -15310,7 +15753,13 @@ Unknown(String)
                 impl Error for ListEntitiesForPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListEntitiesForPolicyError::InvalidInput(ref cause) => cause,ListEntitiesForPolicyError::ServiceFailure(ref cause) => cause,ListEntitiesForPolicyError::NoSuchEntity(ref cause) => cause,ListEntitiesForPolicyError::Validation(ref cause) => cause,ListEntitiesForPolicyError::Credentials(ref err) => err.description(),ListEntitiesForPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListEntitiesForPolicyError::Unknown(ref cause) => cause
+                            ListEntitiesForPolicyError::InvalidInput(ref cause) => cause,
+ListEntitiesForPolicyError::NoSuchEntity(ref cause) => cause,
+ListEntitiesForPolicyError::ServiceFailure(ref cause) => cause,
+ListEntitiesForPolicyError::Validation(ref cause) => cause,
+ListEntitiesForPolicyError::Credentials(ref err) => err.description(),
+ListEntitiesForPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListEntitiesForPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15338,7 +15787,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => ListGroupPoliciesError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => ListGroupPoliciesError::NoSuchEntity(String::from(parsed_error.message)),_ => ListGroupPoliciesError::Unknown(String::from(body))
+                                    "NoSuchEntityException" => ListGroupPoliciesError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => ListGroupPoliciesError::ServiceFailure(String::from(parsed_error.message)),_ => ListGroupPoliciesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListGroupPoliciesError::Unknown(body.to_string())
@@ -15370,7 +15819,12 @@ Unknown(String)
                 impl Error for ListGroupPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListGroupPoliciesError::ServiceFailure(ref cause) => cause,ListGroupPoliciesError::NoSuchEntity(ref cause) => cause,ListGroupPoliciesError::Validation(ref cause) => cause,ListGroupPoliciesError::Credentials(ref err) => err.description(),ListGroupPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListGroupPoliciesError::Unknown(ref cause) => cause
+                            ListGroupPoliciesError::NoSuchEntity(ref cause) => cause,
+ListGroupPoliciesError::ServiceFailure(ref cause) => cause,
+ListGroupPoliciesError::Validation(ref cause) => cause,
+ListGroupPoliciesError::Credentials(ref err) => err.description(),
+ListGroupPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListGroupPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15428,7 +15882,11 @@ Unknown(String)
                 impl Error for ListGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListGroupsError::ServiceFailure(ref cause) => cause,ListGroupsError::Validation(ref cause) => cause,ListGroupsError::Credentials(ref err) => err.description(),ListGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListGroupsError::Unknown(ref cause) => cause
+                            ListGroupsError::ServiceFailure(ref cause) => cause,
+ListGroupsError::Validation(ref cause) => cause,
+ListGroupsError::Credentials(ref err) => err.description(),
+ListGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15456,7 +15914,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => ListGroupsForUserError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => ListGroupsForUserError::NoSuchEntity(String::from(parsed_error.message)),_ => ListGroupsForUserError::Unknown(String::from(body))
+                                    "NoSuchEntityException" => ListGroupsForUserError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => ListGroupsForUserError::ServiceFailure(String::from(parsed_error.message)),_ => ListGroupsForUserError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListGroupsForUserError::Unknown(body.to_string())
@@ -15488,7 +15946,12 @@ Unknown(String)
                 impl Error for ListGroupsForUserError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListGroupsForUserError::NoSuchEntity(ref cause) => cause,ListGroupsForUserError::ServiceFailure(ref cause) => cause,ListGroupsForUserError::Validation(ref cause) => cause,ListGroupsForUserError::Credentials(ref err) => err.description(),ListGroupsForUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListGroupsForUserError::Unknown(ref cause) => cause
+                            ListGroupsForUserError::NoSuchEntity(ref cause) => cause,
+ListGroupsForUserError::ServiceFailure(ref cause) => cause,
+ListGroupsForUserError::Validation(ref cause) => cause,
+ListGroupsForUserError::Credentials(ref err) => err.description(),
+ListGroupsForUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListGroupsForUserError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15546,7 +16009,11 @@ Unknown(String)
                 impl Error for ListInstanceProfilesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListInstanceProfilesError::ServiceFailure(ref cause) => cause,ListInstanceProfilesError::Validation(ref cause) => cause,ListInstanceProfilesError::Credentials(ref err) => err.description(),ListInstanceProfilesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListInstanceProfilesError::Unknown(ref cause) => cause
+                            ListInstanceProfilesError::ServiceFailure(ref cause) => cause,
+ListInstanceProfilesError::Validation(ref cause) => cause,
+ListInstanceProfilesError::Credentials(ref err) => err.description(),
+ListInstanceProfilesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListInstanceProfilesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15554,10 +16021,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListInstanceProfilesForRoleError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15606,7 +16073,12 @@ Unknown(String)
                 impl Error for ListInstanceProfilesForRoleError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListInstanceProfilesForRoleError::NoSuchEntity(ref cause) => cause,ListInstanceProfilesForRoleError::ServiceFailure(ref cause) => cause,ListInstanceProfilesForRoleError::Validation(ref cause) => cause,ListInstanceProfilesForRoleError::Credentials(ref err) => err.description(),ListInstanceProfilesForRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListInstanceProfilesForRoleError::Unknown(ref cause) => cause
+                            ListInstanceProfilesForRoleError::NoSuchEntity(ref cause) => cause,
+ListInstanceProfilesForRoleError::ServiceFailure(ref cause) => cause,
+ListInstanceProfilesForRoleError::Validation(ref cause) => cause,
+ListInstanceProfilesForRoleError::Credentials(ref err) => err.description(),
+ListInstanceProfilesForRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListInstanceProfilesForRoleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15634,7 +16106,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => ListMFADevicesError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => ListMFADevicesError::NoSuchEntity(String::from(parsed_error.message)),_ => ListMFADevicesError::Unknown(String::from(body))
+                                    "NoSuchEntityException" => ListMFADevicesError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => ListMFADevicesError::ServiceFailure(String::from(parsed_error.message)),_ => ListMFADevicesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListMFADevicesError::Unknown(body.to_string())
@@ -15666,7 +16138,12 @@ Unknown(String)
                 impl Error for ListMFADevicesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListMFADevicesError::NoSuchEntity(ref cause) => cause,ListMFADevicesError::ServiceFailure(ref cause) => cause,ListMFADevicesError::Validation(ref cause) => cause,ListMFADevicesError::Credentials(ref err) => err.description(),ListMFADevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListMFADevicesError::Unknown(ref cause) => cause
+                            ListMFADevicesError::NoSuchEntity(ref cause) => cause,
+ListMFADevicesError::ServiceFailure(ref cause) => cause,
+ListMFADevicesError::Validation(ref cause) => cause,
+ListMFADevicesError::Credentials(ref err) => err.description(),
+ListMFADevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListMFADevicesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15724,7 +16201,11 @@ Unknown(String)
                 impl Error for ListOpenIDConnectProvidersError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListOpenIDConnectProvidersError::ServiceFailure(ref cause) => cause,ListOpenIDConnectProvidersError::Validation(ref cause) => cause,ListOpenIDConnectProvidersError::Credentials(ref err) => err.description(),ListOpenIDConnectProvidersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListOpenIDConnectProvidersError::Unknown(ref cause) => cause
+                            ListOpenIDConnectProvidersError::ServiceFailure(ref cause) => cause,
+ListOpenIDConnectProvidersError::Validation(ref cause) => cause,
+ListOpenIDConnectProvidersError::Credentials(ref err) => err.description(),
+ListOpenIDConnectProvidersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListOpenIDConnectProvidersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15782,7 +16263,11 @@ Unknown(String)
                 impl Error for ListPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListPoliciesError::ServiceFailure(ref cause) => cause,ListPoliciesError::Validation(ref cause) => cause,ListPoliciesError::Credentials(ref err) => err.description(),ListPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListPoliciesError::Unknown(ref cause) => cause
+                            ListPoliciesError::ServiceFailure(ref cause) => cause,
+ListPoliciesError::Validation(ref cause) => cause,
+ListPoliciesError::Credentials(ref err) => err.description(),
+ListPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15792,10 +16277,10 @@ Unknown(String)
                     
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -15812,7 +16297,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => ListPolicyVersionsError::NoSuchEntity(String::from(parsed_error.message)),"InvalidInputException" => ListPolicyVersionsError::InvalidInput(String::from(parsed_error.message)),"ServiceFailureException" => ListPolicyVersionsError::ServiceFailure(String::from(parsed_error.message)),_ => ListPolicyVersionsError::Unknown(String::from(body))
+                                    "InvalidInputException" => ListPolicyVersionsError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => ListPolicyVersionsError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => ListPolicyVersionsError::ServiceFailure(String::from(parsed_error.message)),_ => ListPolicyVersionsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListPolicyVersionsError::Unknown(body.to_string())
@@ -15844,7 +16329,13 @@ Unknown(String)
                 impl Error for ListPolicyVersionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListPolicyVersionsError::InvalidInput(ref cause) => cause,ListPolicyVersionsError::ServiceFailure(ref cause) => cause,ListPolicyVersionsError::NoSuchEntity(ref cause) => cause,ListPolicyVersionsError::Validation(ref cause) => cause,ListPolicyVersionsError::Credentials(ref err) => err.description(),ListPolicyVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListPolicyVersionsError::Unknown(ref cause) => cause
+                            ListPolicyVersionsError::InvalidInput(ref cause) => cause,
+ListPolicyVersionsError::NoSuchEntity(ref cause) => cause,
+ListPolicyVersionsError::ServiceFailure(ref cause) => cause,
+ListPolicyVersionsError::Validation(ref cause) => cause,
+ListPolicyVersionsError::Credentials(ref err) => err.description(),
+ListPolicyVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListPolicyVersionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15904,7 +16395,12 @@ Unknown(String)
                 impl Error for ListRolePoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListRolePoliciesError::ServiceFailure(ref cause) => cause,ListRolePoliciesError::NoSuchEntity(ref cause) => cause,ListRolePoliciesError::Validation(ref cause) => cause,ListRolePoliciesError::Credentials(ref err) => err.description(),ListRolePoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListRolePoliciesError::Unknown(ref cause) => cause
+                            ListRolePoliciesError::NoSuchEntity(ref cause) => cause,
+ListRolePoliciesError::ServiceFailure(ref cause) => cause,
+ListRolePoliciesError::Validation(ref cause) => cause,
+ListRolePoliciesError::Credentials(ref err) => err.description(),
+ListRolePoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListRolePoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -15962,7 +16458,11 @@ Unknown(String)
                 impl Error for ListRolesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListRolesError::ServiceFailure(ref cause) => cause,ListRolesError::Validation(ref cause) => cause,ListRolesError::Credentials(ref err) => err.description(),ListRolesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListRolesError::Unknown(ref cause) => cause
+                            ListRolesError::ServiceFailure(ref cause) => cause,
+ListRolesError::Validation(ref cause) => cause,
+ListRolesError::Credentials(ref err) => err.description(),
+ListRolesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListRolesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16020,7 +16520,11 @@ Unknown(String)
                 impl Error for ListSAMLProvidersError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListSAMLProvidersError::ServiceFailure(ref cause) => cause,ListSAMLProvidersError::Validation(ref cause) => cause,ListSAMLProvidersError::Credentials(ref err) => err.description(),ListSAMLProvidersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListSAMLProvidersError::Unknown(ref cause) => cause
+                            ListSAMLProvidersError::ServiceFailure(ref cause) => cause,
+ListSAMLProvidersError::Validation(ref cause) => cause,
+ListSAMLProvidersError::Credentials(ref err) => err.description(),
+ListSAMLProvidersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListSAMLProvidersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16078,7 +16582,11 @@ Unknown(String)
                 impl Error for ListSSHPublicKeysError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListSSHPublicKeysError::NoSuchEntity(ref cause) => cause,ListSSHPublicKeysError::Validation(ref cause) => cause,ListSSHPublicKeysError::Credentials(ref err) => err.description(),ListSSHPublicKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListSSHPublicKeysError::Unknown(ref cause) => cause
+                            ListSSHPublicKeysError::NoSuchEntity(ref cause) => cause,
+ListSSHPublicKeysError::Validation(ref cause) => cause,
+ListSSHPublicKeysError::Credentials(ref err) => err.description(),
+ListSSHPublicKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListSSHPublicKeysError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16136,7 +16644,11 @@ Unknown(String)
                 impl Error for ListServerCertificatesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListServerCertificatesError::ServiceFailure(ref cause) => cause,ListServerCertificatesError::Validation(ref cause) => cause,ListServerCertificatesError::Credentials(ref err) => err.description(),ListServerCertificatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListServerCertificatesError::Unknown(ref cause) => cause
+                            ListServerCertificatesError::ServiceFailure(ref cause) => cause,
+ListServerCertificatesError::Validation(ref cause) => cause,
+ListServerCertificatesError::Credentials(ref err) => err.description(),
+ListServerCertificatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListServerCertificatesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16144,10 +16656,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListServiceSpecificCredentialsError {
                     
-///<p>The specified service does not support service-specific credentials.</p>
-ServiceNotSupported(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The specified service does not support service-specific credentials.</p>
+ServiceNotSupported(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -16164,7 +16676,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceNotSupportedException" => ListServiceSpecificCredentialsError::ServiceNotSupported(String::from(parsed_error.message)),"NoSuchEntityException" => ListServiceSpecificCredentialsError::NoSuchEntity(String::from(parsed_error.message)),_ => ListServiceSpecificCredentialsError::Unknown(String::from(body))
+                                    "NoSuchEntityException" => ListServiceSpecificCredentialsError::NoSuchEntity(String::from(parsed_error.message)),"ServiceNotSupportedException" => ListServiceSpecificCredentialsError::ServiceNotSupported(String::from(parsed_error.message)),_ => ListServiceSpecificCredentialsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListServiceSpecificCredentialsError::Unknown(body.to_string())
@@ -16196,7 +16708,12 @@ Unknown(String)
                 impl Error for ListServiceSpecificCredentialsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListServiceSpecificCredentialsError::ServiceNotSupported(ref cause) => cause,ListServiceSpecificCredentialsError::NoSuchEntity(ref cause) => cause,ListServiceSpecificCredentialsError::Validation(ref cause) => cause,ListServiceSpecificCredentialsError::Credentials(ref err) => err.description(),ListServiceSpecificCredentialsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListServiceSpecificCredentialsError::Unknown(ref cause) => cause
+                            ListServiceSpecificCredentialsError::NoSuchEntity(ref cause) => cause,
+ListServiceSpecificCredentialsError::ServiceNotSupported(ref cause) => cause,
+ListServiceSpecificCredentialsError::Validation(ref cause) => cause,
+ListServiceSpecificCredentialsError::Credentials(ref err) => err.description(),
+ListServiceSpecificCredentialsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListServiceSpecificCredentialsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16224,7 +16741,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => ListSigningCertificatesError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => ListSigningCertificatesError::NoSuchEntity(String::from(parsed_error.message)),_ => ListSigningCertificatesError::Unknown(String::from(body))
+                                    "NoSuchEntityException" => ListSigningCertificatesError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => ListSigningCertificatesError::ServiceFailure(String::from(parsed_error.message)),_ => ListSigningCertificatesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListSigningCertificatesError::Unknown(body.to_string())
@@ -16256,7 +16773,12 @@ Unknown(String)
                 impl Error for ListSigningCertificatesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListSigningCertificatesError::NoSuchEntity(ref cause) => cause,ListSigningCertificatesError::ServiceFailure(ref cause) => cause,ListSigningCertificatesError::Validation(ref cause) => cause,ListSigningCertificatesError::Credentials(ref err) => err.description(),ListSigningCertificatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListSigningCertificatesError::Unknown(ref cause) => cause
+                            ListSigningCertificatesError::NoSuchEntity(ref cause) => cause,
+ListSigningCertificatesError::ServiceFailure(ref cause) => cause,
+ListSigningCertificatesError::Validation(ref cause) => cause,
+ListSigningCertificatesError::Credentials(ref err) => err.description(),
+ListSigningCertificatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListSigningCertificatesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16264,10 +16786,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListUserPoliciesError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -16316,7 +16838,12 @@ Unknown(String)
                 impl Error for ListUserPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListUserPoliciesError::NoSuchEntity(ref cause) => cause,ListUserPoliciesError::ServiceFailure(ref cause) => cause,ListUserPoliciesError::Validation(ref cause) => cause,ListUserPoliciesError::Credentials(ref err) => err.description(),ListUserPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListUserPoliciesError::Unknown(ref cause) => cause
+                            ListUserPoliciesError::NoSuchEntity(ref cause) => cause,
+ListUserPoliciesError::ServiceFailure(ref cause) => cause,
+ListUserPoliciesError::Validation(ref cause) => cause,
+ListUserPoliciesError::Credentials(ref err) => err.description(),
+ListUserPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListUserPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16374,7 +16901,11 @@ Unknown(String)
                 impl Error for ListUsersError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListUsersError::ServiceFailure(ref cause) => cause,ListUsersError::Validation(ref cause) => cause,ListUsersError::Credentials(ref err) => err.description(),ListUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListUsersError::Unknown(ref cause) => cause
+                            ListUsersError::ServiceFailure(ref cause) => cause,
+ListUsersError::Validation(ref cause) => cause,
+ListUsersError::Credentials(ref err) => err.description(),
+ListUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListUsersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16430,7 +16961,10 @@ Unknown(String)
                 impl Error for ListVirtualMFADevicesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListVirtualMFADevicesError::Validation(ref cause) => cause,ListVirtualMFADevicesError::Credentials(ref err) => err.description(),ListVirtualMFADevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListVirtualMFADevicesError::Unknown(ref cause) => cause
+                            ListVirtualMFADevicesError::Validation(ref cause) => cause,
+ListVirtualMFADevicesError::Credentials(ref err) => err.description(),
+ListVirtualMFADevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListVirtualMFADevicesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16438,12 +16972,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutGroupPolicyError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
 MalformedPolicyDocument(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -16462,7 +16996,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => PutGroupPolicyError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => PutGroupPolicyError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => PutGroupPolicyError::LimitExceeded(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => PutGroupPolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),_ => PutGroupPolicyError::Unknown(String::from(body))
+                                    "LimitExceededException" => PutGroupPolicyError::LimitExceeded(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => PutGroupPolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),"NoSuchEntityException" => PutGroupPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => PutGroupPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => PutGroupPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PutGroupPolicyError::Unknown(body.to_string())
@@ -16494,7 +17028,14 @@ Unknown(String)
                 impl Error for PutGroupPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutGroupPolicyError::ServiceFailure(ref cause) => cause,PutGroupPolicyError::LimitExceeded(ref cause) => cause,PutGroupPolicyError::NoSuchEntity(ref cause) => cause,PutGroupPolicyError::MalformedPolicyDocument(ref cause) => cause,PutGroupPolicyError::Validation(ref cause) => cause,PutGroupPolicyError::Credentials(ref err) => err.description(),PutGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutGroupPolicyError::Unknown(ref cause) => cause
+                            PutGroupPolicyError::LimitExceeded(ref cause) => cause,
+PutGroupPolicyError::MalformedPolicyDocument(ref cause) => cause,
+PutGroupPolicyError::NoSuchEntity(ref cause) => cause,
+PutGroupPolicyError::ServiceFailure(ref cause) => cause,
+PutGroupPolicyError::Validation(ref cause) => cause,
+PutGroupPolicyError::Credentials(ref err) => err.description(),
+PutGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutGroupPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16502,14 +17043,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutRolePolicyError {
                     
-///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
-MalformedPolicyDocument(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+MalformedPolicyDocument(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -16526,7 +17067,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "MalformedPolicyDocumentException" => PutRolePolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),"ServiceFailureException" => PutRolePolicyError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => PutRolePolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => PutRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),_ => PutRolePolicyError::Unknown(String::from(body))
+                                    "LimitExceededException" => PutRolePolicyError::LimitExceeded(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => PutRolePolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),"NoSuchEntityException" => PutRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => PutRolePolicyError::ServiceFailure(String::from(parsed_error.message)),_ => PutRolePolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PutRolePolicyError::Unknown(body.to_string())
@@ -16558,7 +17099,14 @@ Unknown(String)
                 impl Error for PutRolePolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutRolePolicyError::NoSuchEntity(ref cause) => cause,PutRolePolicyError::MalformedPolicyDocument(ref cause) => cause,PutRolePolicyError::ServiceFailure(ref cause) => cause,PutRolePolicyError::LimitExceeded(ref cause) => cause,PutRolePolicyError::Validation(ref cause) => cause,PutRolePolicyError::Credentials(ref err) => err.description(),PutRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutRolePolicyError::Unknown(ref cause) => cause
+                            PutRolePolicyError::LimitExceeded(ref cause) => cause,
+PutRolePolicyError::MalformedPolicyDocument(ref cause) => cause,
+PutRolePolicyError::NoSuchEntity(ref cause) => cause,
+PutRolePolicyError::ServiceFailure(ref cause) => cause,
+PutRolePolicyError::Validation(ref cause) => cause,
+PutRolePolicyError::Credentials(ref err) => err.description(),
+PutRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutRolePolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16566,14 +17114,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutUserPolicyError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
-MalformedPolicyDocument(String),/// An error occurred dispatching the HTTP request
+MalformedPolicyDocument(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -16590,7 +17138,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "MalformedPolicyDocumentException" => PutUserPolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),"LimitExceededException" => PutUserPolicyError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => PutUserPolicyError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => PutUserPolicyError::NoSuchEntity(String::from(parsed_error.message)),_ => PutUserPolicyError::Unknown(String::from(body))
+                                    "LimitExceededException" => PutUserPolicyError::LimitExceeded(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => PutUserPolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),"NoSuchEntityException" => PutUserPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => PutUserPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => PutUserPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PutUserPolicyError::Unknown(body.to_string())
@@ -16622,7 +17170,14 @@ Unknown(String)
                 impl Error for PutUserPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutUserPolicyError::MalformedPolicyDocument(ref cause) => cause,PutUserPolicyError::LimitExceeded(ref cause) => cause,PutUserPolicyError::ServiceFailure(ref cause) => cause,PutUserPolicyError::NoSuchEntity(ref cause) => cause,PutUserPolicyError::Validation(ref cause) => cause,PutUserPolicyError::Credentials(ref err) => err.description(),PutUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutUserPolicyError::Unknown(ref cause) => cause
+                            PutUserPolicyError::LimitExceeded(ref cause) => cause,
+PutUserPolicyError::MalformedPolicyDocument(ref cause) => cause,
+PutUserPolicyError::NoSuchEntity(ref cause) => cause,
+PutUserPolicyError::ServiceFailure(ref cause) => cause,
+PutUserPolicyError::Validation(ref cause) => cause,
+PutUserPolicyError::Credentials(ref err) => err.description(),
+PutUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutUserPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16630,10 +17185,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RemoveClientIDFromOpenIDConnectProviderError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -16652,7 +17207,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(String::from(parsed_error.message)),"InvalidInputException" => RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(String::from(parsed_error.message)),_ => RemoveClientIDFromOpenIDConnectProviderError::Unknown(String::from(body))
+                                    "InvalidInputException" => RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(String::from(parsed_error.message)),_ => RemoveClientIDFromOpenIDConnectProviderError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RemoveClientIDFromOpenIDConnectProviderError::Unknown(body.to_string())
@@ -16684,7 +17239,13 @@ Unknown(String)
                 impl Error for RemoveClientIDFromOpenIDConnectProviderError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(ref cause) => cause,RemoveClientIDFromOpenIDConnectProviderError::Validation(ref cause) => cause,RemoveClientIDFromOpenIDConnectProviderError::Credentials(ref err) => err.description(),RemoveClientIDFromOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveClientIDFromOpenIDConnectProviderError::Unknown(ref cause) => cause
+                            RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
+RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
+RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
+RemoveClientIDFromOpenIDConnectProviderError::Validation(ref cause) => cause,
+RemoveClientIDFromOpenIDConnectProviderError::Credentials(ref err) => err.description(),
+RemoveClientIDFromOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveClientIDFromOpenIDConnectProviderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16714,7 +17275,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => RemoveRoleFromInstanceProfileError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => RemoveRoleFromInstanceProfileError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => RemoveRoleFromInstanceProfileError::LimitExceeded(String::from(parsed_error.message)),_ => RemoveRoleFromInstanceProfileError::Unknown(String::from(body))
+                                    "LimitExceededException" => RemoveRoleFromInstanceProfileError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => RemoveRoleFromInstanceProfileError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => RemoveRoleFromInstanceProfileError::ServiceFailure(String::from(parsed_error.message)),_ => RemoveRoleFromInstanceProfileError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RemoveRoleFromInstanceProfileError::Unknown(body.to_string())
@@ -16746,7 +17307,13 @@ Unknown(String)
                 impl Error for RemoveRoleFromInstanceProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveRoleFromInstanceProfileError::NoSuchEntity(ref cause) => cause,RemoveRoleFromInstanceProfileError::ServiceFailure(ref cause) => cause,RemoveRoleFromInstanceProfileError::LimitExceeded(ref cause) => cause,RemoveRoleFromInstanceProfileError::Validation(ref cause) => cause,RemoveRoleFromInstanceProfileError::Credentials(ref err) => err.description(),RemoveRoleFromInstanceProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveRoleFromInstanceProfileError::Unknown(ref cause) => cause
+                            RemoveRoleFromInstanceProfileError::LimitExceeded(ref cause) => cause,
+RemoveRoleFromInstanceProfileError::NoSuchEntity(ref cause) => cause,
+RemoveRoleFromInstanceProfileError::ServiceFailure(ref cause) => cause,
+RemoveRoleFromInstanceProfileError::Validation(ref cause) => cause,
+RemoveRoleFromInstanceProfileError::Credentials(ref err) => err.description(),
+RemoveRoleFromInstanceProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveRoleFromInstanceProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16756,10 +17323,10 @@ Unknown(String)
                     
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -16808,7 +17375,13 @@ Unknown(String)
                 impl Error for RemoveUserFromGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveUserFromGroupError::LimitExceeded(ref cause) => cause,RemoveUserFromGroupError::ServiceFailure(ref cause) => cause,RemoveUserFromGroupError::NoSuchEntity(ref cause) => cause,RemoveUserFromGroupError::Validation(ref cause) => cause,RemoveUserFromGroupError::Credentials(ref err) => err.description(),RemoveUserFromGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveUserFromGroupError::Unknown(ref cause) => cause
+                            RemoveUserFromGroupError::LimitExceeded(ref cause) => cause,
+RemoveUserFromGroupError::NoSuchEntity(ref cause) => cause,
+RemoveUserFromGroupError::ServiceFailure(ref cause) => cause,
+RemoveUserFromGroupError::Validation(ref cause) => cause,
+RemoveUserFromGroupError::Credentials(ref err) => err.description(),
+RemoveUserFromGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveUserFromGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16866,7 +17439,11 @@ Unknown(String)
                 impl Error for ResetServiceSpecificCredentialError {
                     fn description(&self) -> &str {
                         match *self {
-                            ResetServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,ResetServiceSpecificCredentialError::Validation(ref cause) => cause,ResetServiceSpecificCredentialError::Credentials(ref err) => err.description(),ResetServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ResetServiceSpecificCredentialError::Unknown(ref cause) => cause
+                            ResetServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
+ResetServiceSpecificCredentialError::Validation(ref cause) => cause,
+ResetServiceSpecificCredentialError::Credentials(ref err) => err.description(),
+ResetServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ResetServiceSpecificCredentialError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16874,14 +17451,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ResyncMFADeviceError {
                     
+///<p>The request was rejected because the authentication code was not recognized. The error message describes the specific error.</p>
+InvalidAuthenticationCode(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because the authentication code was not recognized. The error message describes the specific error.</p>
-InvalidAuthenticationCode(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -16898,7 +17475,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => ResyncMFADeviceError::LimitExceeded(String::from(parsed_error.message)),"InvalidAuthenticationCodeException" => ResyncMFADeviceError::InvalidAuthenticationCode(String::from(parsed_error.message)),"ServiceFailureException" => ResyncMFADeviceError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => ResyncMFADeviceError::NoSuchEntity(String::from(parsed_error.message)),_ => ResyncMFADeviceError::Unknown(String::from(body))
+                                    "InvalidAuthenticationCodeException" => ResyncMFADeviceError::InvalidAuthenticationCode(String::from(parsed_error.message)),"LimitExceededException" => ResyncMFADeviceError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => ResyncMFADeviceError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => ResyncMFADeviceError::ServiceFailure(String::from(parsed_error.message)),_ => ResyncMFADeviceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ResyncMFADeviceError::Unknown(body.to_string())
@@ -16930,7 +17507,14 @@ Unknown(String)
                 impl Error for ResyncMFADeviceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ResyncMFADeviceError::InvalidAuthenticationCode(ref cause) => cause,ResyncMFADeviceError::NoSuchEntity(ref cause) => cause,ResyncMFADeviceError::ServiceFailure(ref cause) => cause,ResyncMFADeviceError::LimitExceeded(ref cause) => cause,ResyncMFADeviceError::Validation(ref cause) => cause,ResyncMFADeviceError::Credentials(ref err) => err.description(),ResyncMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ResyncMFADeviceError::Unknown(ref cause) => cause
+                            ResyncMFADeviceError::InvalidAuthenticationCode(ref cause) => cause,
+ResyncMFADeviceError::LimitExceeded(ref cause) => cause,
+ResyncMFADeviceError::NoSuchEntity(ref cause) => cause,
+ResyncMFADeviceError::ServiceFailure(ref cause) => cause,
+ResyncMFADeviceError::Validation(ref cause) => cause,
+ResyncMFADeviceError::Credentials(ref err) => err.description(),
+ResyncMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ResyncMFADeviceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -16938,14 +17522,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SetDefaultPolicyVersionError {
                     
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -16962,7 +17546,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => SetDefaultPolicyVersionError::ServiceFailure(String::from(parsed_error.message)),"InvalidInputException" => SetDefaultPolicyVersionError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => SetDefaultPolicyVersionError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => SetDefaultPolicyVersionError::NoSuchEntity(String::from(parsed_error.message)),_ => SetDefaultPolicyVersionError::Unknown(String::from(body))
+                                    "InvalidInputException" => SetDefaultPolicyVersionError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => SetDefaultPolicyVersionError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => SetDefaultPolicyVersionError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => SetDefaultPolicyVersionError::ServiceFailure(String::from(parsed_error.message)),_ => SetDefaultPolicyVersionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SetDefaultPolicyVersionError::Unknown(body.to_string())
@@ -16994,7 +17578,14 @@ Unknown(String)
                 impl Error for SetDefaultPolicyVersionError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetDefaultPolicyVersionError::ServiceFailure(ref cause) => cause,SetDefaultPolicyVersionError::LimitExceeded(ref cause) => cause,SetDefaultPolicyVersionError::InvalidInput(ref cause) => cause,SetDefaultPolicyVersionError::NoSuchEntity(ref cause) => cause,SetDefaultPolicyVersionError::Validation(ref cause) => cause,SetDefaultPolicyVersionError::Credentials(ref err) => err.description(),SetDefaultPolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetDefaultPolicyVersionError::Unknown(ref cause) => cause
+                            SetDefaultPolicyVersionError::InvalidInput(ref cause) => cause,
+SetDefaultPolicyVersionError::LimitExceeded(ref cause) => cause,
+SetDefaultPolicyVersionError::NoSuchEntity(ref cause) => cause,
+SetDefaultPolicyVersionError::ServiceFailure(ref cause) => cause,
+SetDefaultPolicyVersionError::Validation(ref cause) => cause,
+SetDefaultPolicyVersionError::Credentials(ref err) => err.description(),
+SetDefaultPolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetDefaultPolicyVersionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17002,10 +17593,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SimulateCustomPolicyError {
                     
-///<p>The request failed because a provided policy could not be successfully evaluated. An additional detail message indicates the source of the failure.</p>
-PolicyEvaluation(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>The request failed because a provided policy could not be successfully evaluated. An additional detail message indicates the source of the failure.</p>
+PolicyEvaluation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17054,7 +17645,12 @@ Unknown(String)
                 impl Error for SimulateCustomPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            SimulateCustomPolicyError::InvalidInput(ref cause) => cause,SimulateCustomPolicyError::PolicyEvaluation(ref cause) => cause,SimulateCustomPolicyError::Validation(ref cause) => cause,SimulateCustomPolicyError::Credentials(ref err) => err.description(),SimulateCustomPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SimulateCustomPolicyError::Unknown(ref cause) => cause
+                            SimulateCustomPolicyError::InvalidInput(ref cause) => cause,
+SimulateCustomPolicyError::PolicyEvaluation(ref cause) => cause,
+SimulateCustomPolicyError::Validation(ref cause) => cause,
+SimulateCustomPolicyError::Credentials(ref err) => err.description(),
+SimulateCustomPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SimulateCustomPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17062,10 +17658,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SimulatePrincipalPolicyError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request failed because a provided policy could not be successfully evaluated. An additional detail message indicates the source of the failure.</p>
 PolicyEvaluation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -17084,7 +17680,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => SimulatePrincipalPolicyError::NoSuchEntity(String::from(parsed_error.message)),"PolicyEvaluationException" => SimulatePrincipalPolicyError::PolicyEvaluation(String::from(parsed_error.message)),"InvalidInputException" => SimulatePrincipalPolicyError::InvalidInput(String::from(parsed_error.message)),_ => SimulatePrincipalPolicyError::Unknown(String::from(body))
+                                    "InvalidInputException" => SimulatePrincipalPolicyError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => SimulatePrincipalPolicyError::NoSuchEntity(String::from(parsed_error.message)),"PolicyEvaluationException" => SimulatePrincipalPolicyError::PolicyEvaluation(String::from(parsed_error.message)),_ => SimulatePrincipalPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SimulatePrincipalPolicyError::Unknown(body.to_string())
@@ -17116,7 +17712,13 @@ Unknown(String)
                 impl Error for SimulatePrincipalPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            SimulatePrincipalPolicyError::InvalidInput(ref cause) => cause,SimulatePrincipalPolicyError::PolicyEvaluation(ref cause) => cause,SimulatePrincipalPolicyError::NoSuchEntity(ref cause) => cause,SimulatePrincipalPolicyError::Validation(ref cause) => cause,SimulatePrincipalPolicyError::Credentials(ref err) => err.description(),SimulatePrincipalPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SimulatePrincipalPolicyError::Unknown(ref cause) => cause
+                            SimulatePrincipalPolicyError::InvalidInput(ref cause) => cause,
+SimulatePrincipalPolicyError::NoSuchEntity(ref cause) => cause,
+SimulatePrincipalPolicyError::PolicyEvaluation(ref cause) => cause,
+SimulatePrincipalPolicyError::Validation(ref cause) => cause,
+SimulatePrincipalPolicyError::Credentials(ref err) => err.description(),
+SimulatePrincipalPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SimulatePrincipalPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17146,7 +17748,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => UpdateAccessKeyError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => UpdateAccessKeyError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateAccessKeyError::NoSuchEntity(String::from(parsed_error.message)),_ => UpdateAccessKeyError::Unknown(String::from(body))
+                                    "LimitExceededException" => UpdateAccessKeyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateAccessKeyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateAccessKeyError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateAccessKeyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateAccessKeyError::Unknown(body.to_string())
@@ -17178,7 +17780,13 @@ Unknown(String)
                 impl Error for UpdateAccessKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateAccessKeyError::LimitExceeded(ref cause) => cause,UpdateAccessKeyError::NoSuchEntity(ref cause) => cause,UpdateAccessKeyError::ServiceFailure(ref cause) => cause,UpdateAccessKeyError::Validation(ref cause) => cause,UpdateAccessKeyError::Credentials(ref err) => err.description(),UpdateAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateAccessKeyError::Unknown(ref cause) => cause
+                            UpdateAccessKeyError::LimitExceeded(ref cause) => cause,
+UpdateAccessKeyError::NoSuchEntity(ref cause) => cause,
+UpdateAccessKeyError::ServiceFailure(ref cause) => cause,
+UpdateAccessKeyError::Validation(ref cause) => cause,
+UpdateAccessKeyError::Credentials(ref err) => err.description(),
+UpdateAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateAccessKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17188,12 +17796,12 @@ Unknown(String)
                     
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+MalformedPolicyDocument(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
-MalformedPolicyDocument(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17210,7 +17818,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => UpdateAccountPasswordPolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateAccountPasswordPolicyError::NoSuchEntity(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => UpdateAccountPasswordPolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),"ServiceFailureException" => UpdateAccountPasswordPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateAccountPasswordPolicyError::Unknown(String::from(body))
+                                    "LimitExceededException" => UpdateAccountPasswordPolicyError::LimitExceeded(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => UpdateAccountPasswordPolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateAccountPasswordPolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateAccountPasswordPolicyError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateAccountPasswordPolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateAccountPasswordPolicyError::Unknown(body.to_string())
@@ -17242,7 +17850,14 @@ Unknown(String)
                 impl Error for UpdateAccountPasswordPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateAccountPasswordPolicyError::LimitExceeded(ref cause) => cause,UpdateAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,UpdateAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,UpdateAccountPasswordPolicyError::MalformedPolicyDocument(ref cause) => cause,UpdateAccountPasswordPolicyError::Validation(ref cause) => cause,UpdateAccountPasswordPolicyError::Credentials(ref err) => err.description(),UpdateAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateAccountPasswordPolicyError::Unknown(ref cause) => cause
+                            UpdateAccountPasswordPolicyError::LimitExceeded(ref cause) => cause,
+UpdateAccountPasswordPolicyError::MalformedPolicyDocument(ref cause) => cause,
+UpdateAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
+UpdateAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
+UpdateAccountPasswordPolicyError::Validation(ref cause) => cause,
+UpdateAccountPasswordPolicyError::Credentials(ref err) => err.description(),
+UpdateAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateAccountPasswordPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17252,12 +17867,12 @@ Unknown(String)
                     
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
+///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
+MalformedPolicyDocument(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
-MalformedPolicyDocument(String),/// An error occurred dispatching the HTTP request
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17274,7 +17889,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "MalformedPolicyDocumentException" => UpdateAssumeRolePolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),"LimitExceededException" => UpdateAssumeRolePolicyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateAssumeRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateAssumeRolePolicyError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateAssumeRolePolicyError::Unknown(String::from(body))
+                                    "LimitExceededException" => UpdateAssumeRolePolicyError::LimitExceeded(String::from(parsed_error.message)),"MalformedPolicyDocumentException" => UpdateAssumeRolePolicyError::MalformedPolicyDocument(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateAssumeRolePolicyError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateAssumeRolePolicyError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateAssumeRolePolicyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateAssumeRolePolicyError::Unknown(body.to_string())
@@ -17306,7 +17921,14 @@ Unknown(String)
                 impl Error for UpdateAssumeRolePolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateAssumeRolePolicyError::NoSuchEntity(ref cause) => cause,UpdateAssumeRolePolicyError::MalformedPolicyDocument(ref cause) => cause,UpdateAssumeRolePolicyError::ServiceFailure(ref cause) => cause,UpdateAssumeRolePolicyError::LimitExceeded(ref cause) => cause,UpdateAssumeRolePolicyError::Validation(ref cause) => cause,UpdateAssumeRolePolicyError::Credentials(ref err) => err.description(),UpdateAssumeRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateAssumeRolePolicyError::Unknown(ref cause) => cause
+                            UpdateAssumeRolePolicyError::LimitExceeded(ref cause) => cause,
+UpdateAssumeRolePolicyError::MalformedPolicyDocument(ref cause) => cause,
+UpdateAssumeRolePolicyError::NoSuchEntity(ref cause) => cause,
+UpdateAssumeRolePolicyError::ServiceFailure(ref cause) => cause,
+UpdateAssumeRolePolicyError::Validation(ref cause) => cause,
+UpdateAssumeRolePolicyError::Credentials(ref err) => err.description(),
+UpdateAssumeRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateAssumeRolePolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17316,10 +17938,10 @@ Unknown(String)
                     
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 EntityAlreadyExists(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -17338,7 +17960,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "EntityAlreadyExistsException" => UpdateGroupError::EntityAlreadyExists(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateGroupError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateGroupError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => UpdateGroupError::LimitExceeded(String::from(parsed_error.message)),_ => UpdateGroupError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => UpdateGroupError::EntityAlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => UpdateGroupError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateGroupError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateGroupError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateGroupError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateGroupError::Unknown(body.to_string())
@@ -17370,7 +17992,14 @@ Unknown(String)
                 impl Error for UpdateGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateGroupError::EntityAlreadyExists(ref cause) => cause,UpdateGroupError::LimitExceeded(ref cause) => cause,UpdateGroupError::ServiceFailure(ref cause) => cause,UpdateGroupError::NoSuchEntity(ref cause) => cause,UpdateGroupError::Validation(ref cause) => cause,UpdateGroupError::Credentials(ref err) => err.description(),UpdateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateGroupError::Unknown(ref cause) => cause
+                            UpdateGroupError::EntityAlreadyExists(ref cause) => cause,
+UpdateGroupError::LimitExceeded(ref cause) => cause,
+UpdateGroupError::NoSuchEntity(ref cause) => cause,
+UpdateGroupError::ServiceFailure(ref cause) => cause,
+UpdateGroupError::Validation(ref cause) => cause,
+UpdateGroupError::Credentials(ref err) => err.description(),
+UpdateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17378,16 +18007,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateLoginProfileError {
                     
-///<p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
-PasswordPolicyViolation(String),
+///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
+EntityTemporarilyUnmodifiable(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
-EntityTemporarilyUnmodifiable(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
+PasswordPolicyViolation(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17404,7 +18033,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => UpdateLoginProfileError::LimitExceeded(String::from(parsed_error.message)),"EntityTemporarilyUnmodifiableException" => UpdateLoginProfileError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),"PasswordPolicyViolationException" => UpdateLoginProfileError::PasswordPolicyViolation(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateLoginProfileError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateLoginProfileError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateLoginProfileError::Unknown(String::from(body))
+                                    "EntityTemporarilyUnmodifiableException" => UpdateLoginProfileError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),"LimitExceededException" => UpdateLoginProfileError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateLoginProfileError::NoSuchEntity(String::from(parsed_error.message)),"PasswordPolicyViolationException" => UpdateLoginProfileError::PasswordPolicyViolation(String::from(parsed_error.message)),"ServiceFailureException" => UpdateLoginProfileError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateLoginProfileError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateLoginProfileError::Unknown(body.to_string())
@@ -17436,7 +18065,15 @@ Unknown(String)
                 impl Error for UpdateLoginProfileError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateLoginProfileError::LimitExceeded(ref cause) => cause,UpdateLoginProfileError::PasswordPolicyViolation(ref cause) => cause,UpdateLoginProfileError::ServiceFailure(ref cause) => cause,UpdateLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => cause,UpdateLoginProfileError::NoSuchEntity(ref cause) => cause,UpdateLoginProfileError::Validation(ref cause) => cause,UpdateLoginProfileError::Credentials(ref err) => err.description(),UpdateLoginProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateLoginProfileError::Unknown(ref cause) => cause
+                            UpdateLoginProfileError::EntityTemporarilyUnmodifiable(ref cause) => cause,
+UpdateLoginProfileError::LimitExceeded(ref cause) => cause,
+UpdateLoginProfileError::NoSuchEntity(ref cause) => cause,
+UpdateLoginProfileError::PasswordPolicyViolation(ref cause) => cause,
+UpdateLoginProfileError::ServiceFailure(ref cause) => cause,
+UpdateLoginProfileError::Validation(ref cause) => cause,
+UpdateLoginProfileError::Credentials(ref err) => err.description(),
+UpdateLoginProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateLoginProfileError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17446,10 +18083,10 @@ Unknown(String)
                     
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17466,7 +18103,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(String::from(parsed_error.message)),"InvalidInputException" => UpdateOpenIDConnectProviderThumbprintError::InvalidInput(String::from(parsed_error.message)),_ => UpdateOpenIDConnectProviderThumbprintError::Unknown(String::from(body))
+                                    "InvalidInputException" => UpdateOpenIDConnectProviderThumbprintError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateOpenIDConnectProviderThumbprintError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateOpenIDConnectProviderThumbprintError::Unknown(body.to_string())
@@ -17498,7 +18135,13 @@ Unknown(String)
                 impl Error for UpdateOpenIDConnectProviderThumbprintError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(ref cause) => cause,UpdateOpenIDConnectProviderThumbprintError::InvalidInput(ref cause) => cause,UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(ref cause) => cause,UpdateOpenIDConnectProviderThumbprintError::Validation(ref cause) => cause,UpdateOpenIDConnectProviderThumbprintError::Credentials(ref err) => err.description(),UpdateOpenIDConnectProviderThumbprintError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateOpenIDConnectProviderThumbprintError::Unknown(ref cause) => cause
+                            UpdateOpenIDConnectProviderThumbprintError::InvalidInput(ref cause) => cause,
+UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(ref cause) => cause,
+UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(ref cause) => cause,
+UpdateOpenIDConnectProviderThumbprintError::Validation(ref cause) => cause,
+UpdateOpenIDConnectProviderThumbprintError::Credentials(ref err) => err.description(),
+UpdateOpenIDConnectProviderThumbprintError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateOpenIDConnectProviderThumbprintError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17506,14 +18149,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateSAMLProviderError {
                     
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17530,7 +18173,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidInputException" => UpdateSAMLProviderError::InvalidInput(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateSAMLProviderError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => UpdateSAMLProviderError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => UpdateSAMLProviderError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateSAMLProviderError::Unknown(String::from(body))
+                                    "InvalidInputException" => UpdateSAMLProviderError::InvalidInput(String::from(parsed_error.message)),"LimitExceededException" => UpdateSAMLProviderError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateSAMLProviderError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateSAMLProviderError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateSAMLProviderError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateSAMLProviderError::Unknown(body.to_string())
@@ -17562,7 +18205,14 @@ Unknown(String)
                 impl Error for UpdateSAMLProviderError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateSAMLProviderError::NoSuchEntity(ref cause) => cause,UpdateSAMLProviderError::ServiceFailure(ref cause) => cause,UpdateSAMLProviderError::LimitExceeded(ref cause) => cause,UpdateSAMLProviderError::InvalidInput(ref cause) => cause,UpdateSAMLProviderError::Validation(ref cause) => cause,UpdateSAMLProviderError::Credentials(ref err) => err.description(),UpdateSAMLProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateSAMLProviderError::Unknown(ref cause) => cause
+                            UpdateSAMLProviderError::InvalidInput(ref cause) => cause,
+UpdateSAMLProviderError::LimitExceeded(ref cause) => cause,
+UpdateSAMLProviderError::NoSuchEntity(ref cause) => cause,
+UpdateSAMLProviderError::ServiceFailure(ref cause) => cause,
+UpdateSAMLProviderError::Validation(ref cause) => cause,
+UpdateSAMLProviderError::Credentials(ref err) => err.description(),
+UpdateSAMLProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateSAMLProviderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17620,7 +18270,11 @@ Unknown(String)
                 impl Error for UpdateSSHPublicKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateSSHPublicKeyError::NoSuchEntity(ref cause) => cause,UpdateSSHPublicKeyError::Validation(ref cause) => cause,UpdateSSHPublicKeyError::Credentials(ref err) => err.description(),UpdateSSHPublicKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateSSHPublicKeyError::Unknown(ref cause) => cause
+                            UpdateSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
+UpdateSSHPublicKeyError::Validation(ref cause) => cause,
+UpdateSSHPublicKeyError::Credentials(ref err) => err.description(),
+UpdateSSHPublicKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateSSHPublicKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17628,12 +18282,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateServerCertificateError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 EntityAlreadyExists(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -17652,7 +18306,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => UpdateServerCertificateError::ServiceFailure(String::from(parsed_error.message)),"EntityAlreadyExistsException" => UpdateServerCertificateError::EntityAlreadyExists(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateServerCertificateError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => UpdateServerCertificateError::LimitExceeded(String::from(parsed_error.message)),_ => UpdateServerCertificateError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => UpdateServerCertificateError::EntityAlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => UpdateServerCertificateError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateServerCertificateError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateServerCertificateError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateServerCertificateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateServerCertificateError::Unknown(body.to_string())
@@ -17684,7 +18338,14 @@ Unknown(String)
                 impl Error for UpdateServerCertificateError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateServerCertificateError::NoSuchEntity(ref cause) => cause,UpdateServerCertificateError::ServiceFailure(ref cause) => cause,UpdateServerCertificateError::LimitExceeded(ref cause) => cause,UpdateServerCertificateError::EntityAlreadyExists(ref cause) => cause,UpdateServerCertificateError::Validation(ref cause) => cause,UpdateServerCertificateError::Credentials(ref err) => err.description(),UpdateServerCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateServerCertificateError::Unknown(ref cause) => cause
+                            UpdateServerCertificateError::EntityAlreadyExists(ref cause) => cause,
+UpdateServerCertificateError::LimitExceeded(ref cause) => cause,
+UpdateServerCertificateError::NoSuchEntity(ref cause) => cause,
+UpdateServerCertificateError::ServiceFailure(ref cause) => cause,
+UpdateServerCertificateError::Validation(ref cause) => cause,
+UpdateServerCertificateError::Credentials(ref err) => err.description(),
+UpdateServerCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateServerCertificateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17742,7 +18403,11 @@ Unknown(String)
                 impl Error for UpdateServiceSpecificCredentialError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,UpdateServiceSpecificCredentialError::Validation(ref cause) => cause,UpdateServiceSpecificCredentialError::Credentials(ref err) => err.description(),UpdateServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateServiceSpecificCredentialError::Unknown(ref cause) => cause
+                            UpdateServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
+UpdateServiceSpecificCredentialError::Validation(ref cause) => cause,
+UpdateServiceSpecificCredentialError::Credentials(ref err) => err.description(),
+UpdateServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateServiceSpecificCredentialError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17772,7 +18437,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => UpdateSigningCertificateError::ServiceFailure(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateSigningCertificateError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => UpdateSigningCertificateError::LimitExceeded(String::from(parsed_error.message)),_ => UpdateSigningCertificateError::Unknown(String::from(body))
+                                    "LimitExceededException" => UpdateSigningCertificateError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateSigningCertificateError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateSigningCertificateError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateSigningCertificateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateSigningCertificateError::Unknown(body.to_string())
@@ -17804,7 +18469,13 @@ Unknown(String)
                 impl Error for UpdateSigningCertificateError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateSigningCertificateError::NoSuchEntity(ref cause) => cause,UpdateSigningCertificateError::LimitExceeded(ref cause) => cause,UpdateSigningCertificateError::ServiceFailure(ref cause) => cause,UpdateSigningCertificateError::Validation(ref cause) => cause,UpdateSigningCertificateError::Credentials(ref err) => err.description(),UpdateSigningCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateSigningCertificateError::Unknown(ref cause) => cause
+                            UpdateSigningCertificateError::LimitExceeded(ref cause) => cause,
+UpdateSigningCertificateError::NoSuchEntity(ref cause) => cause,
+UpdateSigningCertificateError::ServiceFailure(ref cause) => cause,
+UpdateSigningCertificateError::Validation(ref cause) => cause,
+UpdateSigningCertificateError::Credentials(ref err) => err.description(),
+UpdateSigningCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateSigningCertificateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17812,16 +18483,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateUserError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 EntityAlreadyExists(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
 ///<p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
-EntityTemporarilyUnmodifiable(String),/// An error occurred dispatching the HTTP request
+EntityTemporarilyUnmodifiable(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17838,7 +18509,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "EntityTemporarilyUnmodifiableException" => UpdateUserError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),"EntityAlreadyExistsException" => UpdateUserError::EntityAlreadyExists(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateUserError::NoSuchEntity(String::from(parsed_error.message)),"LimitExceededException" => UpdateUserError::LimitExceeded(String::from(parsed_error.message)),"ServiceFailureException" => UpdateUserError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateUserError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => UpdateUserError::EntityAlreadyExists(String::from(parsed_error.message)),"EntityTemporarilyUnmodifiableException" => UpdateUserError::EntityTemporarilyUnmodifiable(String::from(parsed_error.message)),"LimitExceededException" => UpdateUserError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => UpdateUserError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UpdateUserError::ServiceFailure(String::from(parsed_error.message)),_ => UpdateUserError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateUserError::Unknown(body.to_string())
@@ -17870,7 +18541,15 @@ Unknown(String)
                 impl Error for UpdateUserError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateUserError::ServiceFailure(ref cause) => cause,UpdateUserError::LimitExceeded(ref cause) => cause,UpdateUserError::EntityTemporarilyUnmodifiable(ref cause) => cause,UpdateUserError::NoSuchEntity(ref cause) => cause,UpdateUserError::EntityAlreadyExists(ref cause) => cause,UpdateUserError::Validation(ref cause) => cause,UpdateUserError::Credentials(ref err) => err.description(),UpdateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateUserError::Unknown(ref cause) => cause
+                            UpdateUserError::EntityAlreadyExists(ref cause) => cause,
+UpdateUserError::EntityTemporarilyUnmodifiable(ref cause) => cause,
+UpdateUserError::LimitExceeded(ref cause) => cause,
+UpdateUserError::NoSuchEntity(ref cause) => cause,
+UpdateUserError::ServiceFailure(ref cause) => cause,
+UpdateUserError::Validation(ref cause) => cause,
+UpdateUserError::Credentials(ref err) => err.description(),
+UpdateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateUserError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17880,14 +18559,14 @@ Unknown(String)
                     
 ///<p>The request was rejected because the SSH public key is already associated with the specified IAM user.</p>
 DuplicateSSHPublicKey(String),
-///<p>The request was rejected because the public key encoding format is unsupported or unrecognized.</p>
-UnrecognizedPublicKeyEncoding(String),
 ///<p>The request was rejected because the public key is malformed or otherwise invalid.</p>
 InvalidPublicKey(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
 NoSuchEntity(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because the public key encoding format is unsupported or unrecognized.</p>
+UnrecognizedPublicKeyEncoding(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -17904,7 +18583,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidPublicKeyException" => UploadSSHPublicKeyError::InvalidPublicKey(String::from(parsed_error.message)),"LimitExceededException" => UploadSSHPublicKeyError::LimitExceeded(String::from(parsed_error.message)),"UnrecognizedPublicKeyEncodingException" => UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(parsed_error.message)),"DuplicateSSHPublicKeyException" => UploadSSHPublicKeyError::DuplicateSSHPublicKey(String::from(parsed_error.message)),"NoSuchEntityException" => UploadSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message)),_ => UploadSSHPublicKeyError::Unknown(String::from(body))
+                                    "DuplicateSSHPublicKeyException" => UploadSSHPublicKeyError::DuplicateSSHPublicKey(String::from(parsed_error.message)),"InvalidPublicKeyException" => UploadSSHPublicKeyError::InvalidPublicKey(String::from(parsed_error.message)),"LimitExceededException" => UploadSSHPublicKeyError::LimitExceeded(String::from(parsed_error.message)),"NoSuchEntityException" => UploadSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message)),"UnrecognizedPublicKeyEncodingException" => UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(parsed_error.message)),_ => UploadSSHPublicKeyError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UploadSSHPublicKeyError::Unknown(body.to_string())
@@ -17936,7 +18615,15 @@ Unknown(String)
                 impl Error for UploadSSHPublicKeyError {
                     fn description(&self) -> &str {
                         match *self {
-                            UploadSSHPublicKeyError::DuplicateSSHPublicKey(ref cause) => cause,UploadSSHPublicKeyError::NoSuchEntity(ref cause) => cause,UploadSSHPublicKeyError::LimitExceeded(ref cause) => cause,UploadSSHPublicKeyError::InvalidPublicKey(ref cause) => cause,UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => cause,UploadSSHPublicKeyError::Validation(ref cause) => cause,UploadSSHPublicKeyError::Credentials(ref err) => err.description(),UploadSSHPublicKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UploadSSHPublicKeyError::Unknown(ref cause) => cause
+                            UploadSSHPublicKeyError::DuplicateSSHPublicKey(ref cause) => cause,
+UploadSSHPublicKeyError::InvalidPublicKey(ref cause) => cause,
+UploadSSHPublicKeyError::LimitExceeded(ref cause) => cause,
+UploadSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
+UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => cause,
+UploadSSHPublicKeyError::Validation(ref cause) => cause,
+UploadSSHPublicKeyError::Credentials(ref err) => err.description(),
+UploadSSHPublicKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UploadSSHPublicKeyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -17946,12 +18633,12 @@ Unknown(String)
                     
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 EntityAlreadyExists(String),
+///<p>The request was rejected because the public key certificate and the private key do not match.</p>
+KeyPairMismatch(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because the certificate was malformed or expired. The error message describes the specific error.</p>
 MalformedCertificate(String),
-///<p>The request was rejected because the public key certificate and the private key do not match.</p>
-KeyPairMismatch(String),
 ///<p>The request processing has failed because of an unknown error, exception or failure.</p>
 ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -17970,7 +18657,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ServiceFailureException" => UploadServerCertificateError::ServiceFailure(String::from(parsed_error.message)),"LimitExceededException" => UploadServerCertificateError::LimitExceeded(String::from(parsed_error.message)),"MalformedCertificateException" => UploadServerCertificateError::MalformedCertificate(String::from(parsed_error.message)),"KeyPairMismatchException" => UploadServerCertificateError::KeyPairMismatch(String::from(parsed_error.message)),"EntityAlreadyExistsException" => UploadServerCertificateError::EntityAlreadyExists(String::from(parsed_error.message)),_ => UploadServerCertificateError::Unknown(String::from(body))
+                                    "EntityAlreadyExistsException" => UploadServerCertificateError::EntityAlreadyExists(String::from(parsed_error.message)),"KeyPairMismatchException" => UploadServerCertificateError::KeyPairMismatch(String::from(parsed_error.message)),"LimitExceededException" => UploadServerCertificateError::LimitExceeded(String::from(parsed_error.message)),"MalformedCertificateException" => UploadServerCertificateError::MalformedCertificate(String::from(parsed_error.message)),"ServiceFailureException" => UploadServerCertificateError::ServiceFailure(String::from(parsed_error.message)),_ => UploadServerCertificateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UploadServerCertificateError::Unknown(body.to_string())
@@ -18002,7 +18689,15 @@ Unknown(String)
                 impl Error for UploadServerCertificateError {
                     fn description(&self) -> &str {
                         match *self {
-                            UploadServerCertificateError::KeyPairMismatch(ref cause) => cause,UploadServerCertificateError::LimitExceeded(ref cause) => cause,UploadServerCertificateError::EntityAlreadyExists(ref cause) => cause,UploadServerCertificateError::MalformedCertificate(ref cause) => cause,UploadServerCertificateError::ServiceFailure(ref cause) => cause,UploadServerCertificateError::Validation(ref cause) => cause,UploadServerCertificateError::Credentials(ref err) => err.description(),UploadServerCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UploadServerCertificateError::Unknown(ref cause) => cause
+                            UploadServerCertificateError::EntityAlreadyExists(ref cause) => cause,
+UploadServerCertificateError::KeyPairMismatch(ref cause) => cause,
+UploadServerCertificateError::LimitExceeded(ref cause) => cause,
+UploadServerCertificateError::MalformedCertificate(ref cause) => cause,
+UploadServerCertificateError::ServiceFailure(ref cause) => cause,
+UploadServerCertificateError::Validation(ref cause) => cause,
+UploadServerCertificateError::Credentials(ref err) => err.description(),
+UploadServerCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UploadServerCertificateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -18010,20 +18705,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UploadSigningCertificateError {
                     
+///<p>The request was rejected because the same certificate is associated with an IAM user in the account.</p>
+DuplicateCertificate(String),
 ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
 EntityAlreadyExists(String),
 ///<p>The request was rejected because the certificate is invalid.</p>
 InvalidCertificate(String),
-///<p>The request processing has failed because of an unknown error, exception or failure.</p>
-ServiceFailure(String),
-///<p>The request was rejected because the same certificate is associated with an IAM user in the account.</p>
-DuplicateCertificate(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
 LimitExceeded(String),
 ///<p>The request was rejected because the certificate was malformed or expired. The error message describes the specific error.</p>
-MalformedCertificate(String),/// An error occurred dispatching the HTTP request
+MalformedCertificate(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+NoSuchEntity(String),
+///<p>The request processing has failed because of an unknown error, exception or failure.</p>
+ServiceFailure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -18040,7 +18735,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchEntityException" => UploadSigningCertificateError::NoSuchEntity(String::from(parsed_error.message)),"DuplicateCertificateException" => UploadSigningCertificateError::DuplicateCertificate(String::from(parsed_error.message)),"InvalidCertificateException" => UploadSigningCertificateError::InvalidCertificate(String::from(parsed_error.message)),"LimitExceededException" => UploadSigningCertificateError::LimitExceeded(String::from(parsed_error.message)),"EntityAlreadyExistsException" => UploadSigningCertificateError::EntityAlreadyExists(String::from(parsed_error.message)),"ServiceFailureException" => UploadSigningCertificateError::ServiceFailure(String::from(parsed_error.message)),"MalformedCertificateException" => UploadSigningCertificateError::MalformedCertificate(String::from(parsed_error.message)),_ => UploadSigningCertificateError::Unknown(String::from(body))
+                                    "DuplicateCertificateException" => UploadSigningCertificateError::DuplicateCertificate(String::from(parsed_error.message)),"EntityAlreadyExistsException" => UploadSigningCertificateError::EntityAlreadyExists(String::from(parsed_error.message)),"InvalidCertificateException" => UploadSigningCertificateError::InvalidCertificate(String::from(parsed_error.message)),"LimitExceededException" => UploadSigningCertificateError::LimitExceeded(String::from(parsed_error.message)),"MalformedCertificateException" => UploadSigningCertificateError::MalformedCertificate(String::from(parsed_error.message)),"NoSuchEntityException" => UploadSigningCertificateError::NoSuchEntity(String::from(parsed_error.message)),"ServiceFailureException" => UploadSigningCertificateError::ServiceFailure(String::from(parsed_error.message)),_ => UploadSigningCertificateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UploadSigningCertificateError::Unknown(body.to_string())
@@ -18072,7 +18767,17 @@ Unknown(String)
                 impl Error for UploadSigningCertificateError {
                     fn description(&self) -> &str {
                         match *self {
-                            UploadSigningCertificateError::ServiceFailure(ref cause) => cause,UploadSigningCertificateError::MalformedCertificate(ref cause) => cause,UploadSigningCertificateError::InvalidCertificate(ref cause) => cause,UploadSigningCertificateError::NoSuchEntity(ref cause) => cause,UploadSigningCertificateError::DuplicateCertificate(ref cause) => cause,UploadSigningCertificateError::LimitExceeded(ref cause) => cause,UploadSigningCertificateError::EntityAlreadyExists(ref cause) => cause,UploadSigningCertificateError::Validation(ref cause) => cause,UploadSigningCertificateError::Credentials(ref err) => err.description(),UploadSigningCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UploadSigningCertificateError::Unknown(ref cause) => cause
+                            UploadSigningCertificateError::DuplicateCertificate(ref cause) => cause,
+UploadSigningCertificateError::EntityAlreadyExists(ref cause) => cause,
+UploadSigningCertificateError::InvalidCertificate(ref cause) => cause,
+UploadSigningCertificateError::LimitExceeded(ref cause) => cause,
+UploadSigningCertificateError::MalformedCertificate(ref cause) => cause,
+UploadSigningCertificateError::NoSuchEntity(ref cause) => cause,
+UploadSigningCertificateError::ServiceFailure(ref cause) => cause,
+UploadSigningCertificateError::Validation(ref cause) => cause,
+UploadSigningCertificateError::Credentials(ref err) => err.description(),
+UploadSigningCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UploadSigningCertificateError::Unknown(ref cause) => cause
                         }
                     }
                  }

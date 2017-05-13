@@ -6263,16 +6263,16 @@ struct ViewerProtocolPolicyDeserializer;
                 #[derive(Debug, PartialEq)]
                 pub enum CreateCloudFrontOriginAccessIdentityError {
                     
-///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
-MissingBody(String),
-///<p>Processing your request would cause you to exceed the maximum number of origin access identities allowed.</p>
-TooManyCloudFrontOriginAccessIdentities(String),
-///<p>The argument is invalid.</p>
-InvalidArgument(String),
 ///<p>If the <code>CallerReference</code> is a value you already sent in a previous request to create an identity but the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is different from the original request, CloudFront returns a <code>CloudFrontOriginAccessIdentityAlreadyExists</code> error. </p>
 CloudFrontOriginAccessIdentityAlreadyExists(String),
 ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
-InconsistentQuantities(String),/// An error occurred dispatching the HTTP request
+InconsistentQuantities(String),
+///<p>The argument is invalid.</p>
+InvalidArgument(String),
+///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+MissingBody(String),
+///<p>Processing your request would cause you to exceed the maximum number of origin access identities allowed.</p>
+TooManyCloudFrontOriginAccessIdentities(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6289,7 +6289,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TooManyCloudFrontOriginAccessIdentities" => CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(String::from(parsed_error.message)),"CloudFrontOriginAccessIdentityAlreadyExists" => CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(String::from(parsed_error.message)),"InvalidArgument" => CreateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"InconsistentQuantities" => CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"MissingBody" => CreateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),_ => CreateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
+                                    "CloudFrontOriginAccessIdentityAlreadyExists" => CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => CreateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"MissingBody" => CreateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(String::from(parsed_error.message)),_ => CreateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
@@ -6321,7 +6321,15 @@ Unknown(String)
                 impl Error for CreateCloudFrontOriginAccessIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(ref cause) => cause,CreateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => cause,CreateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => cause,CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(ref cause) => cause,CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => cause,CreateCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,CreateCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),CreateCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause
+                            CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),
+CreateCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6329,82 +6337,82 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDistributionError {
                     
+///<p>Access denied.</p>
+AccessDenied(String),
+///
+CNAMEAlreadyExists(String),
+///<p>The caller reference you attempted to create the distribution with is associated with another distribution.</p>
+DistributionAlreadyExists(String),
+///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+InconsistentQuantities(String),
+///<p>The argument is invalid.</p>
+InvalidArgument(String),
+///<p>The default root object file name is too big or contains an invalid character.</p>
+InvalidDefaultRootObject(String),
+///
+InvalidErrorCode(String),
 ///<p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
 InvalidForwardCookies(String),
 ///
 InvalidGeoRestrictionParameter(String),
-///<p>You cannot specify SSLv3 as the minimum protocol version if you only want to support only clients that support Server Name Indication (SNI).</p>
-InvalidProtocolSettings(String),
-///<p>The specified Lambda function association is invalid.</p>
-InvalidLambdaFunctionAssociation(String),
-///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
-InvalidOrigin(String),
-///<p>Processing your request would cause you to exceed the maximum number of distributions allowed.</p>
-TooManyDistributions(String),
-///
-TooManyQueryStringParameters(String),
-///<p>You cannot create more cache behaviors for the distribution.</p>
-TooManyCacheBehaviors(String),
-///
-InvalidErrorCode(String),
-///<p>No origin exists with the specified <code>Origin Id</code>. </p>
-NoSuchOrigin(String),
-///<p>The origin access identity is not valid or doesn't exist.</p>
-InvalidOriginAccessIdentity(String),
-///<p>The argument is invalid.</p>
-InvalidArgument(String),
-///
-TooManyHeadersInForwardedValues(String),
-///<p>Your request contains more trusted signers than are allowed per distribution.</p>
-TooManyTrustedSigners(String),
-///
-InvalidQueryStringParameters(String),
-///
-InvalidMinimumProtocolVersion(String),
-///
-InvalidWebACLId(String),
-///<p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
-TooManyDistributionsWithLambdaAssociations(String),
 ///
 InvalidHeadersForS3Origin(String),
+///<p>The specified Lambda function association is invalid.</p>
+InvalidLambdaFunctionAssociation(String),
+///
+InvalidLocationCode(String),
+///
+InvalidMinimumProtocolVersion(String),
+///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
+InvalidOrigin(String),
+///<p>The origin access identity is not valid or doesn't exist.</p>
+InvalidOriginAccessIdentity(String),
+///<p>You cannot specify SSLv3 as the minimum protocol version if you only want to support only clients that support Server Name Indication (SNI).</p>
+InvalidProtocolSettings(String),
+///
+InvalidQueryStringParameters(String),
+///<p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
+InvalidRelativePath(String),
 ///<p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
 InvalidRequiredProtocol(String),
 ///
-InvalidTTLOrder(String),
-///<p>Your request contains more CNAMEs than are allowed per distribution.</p>
-TooManyDistributionCNAMEs(String),
-///<p>The caller reference you attempted to create the distribution with is associated with another distribution.</p>
-DistributionAlreadyExists(String),
-///<p>Access denied.</p>
-AccessDenied(String),
-///<p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
-TooManyCookieNamesInWhiteList(String),
-///<p>You cannot create more origins for the distribution.</p>
-TooManyOrigins(String),
-///
 InvalidResponseCode(String),
 ///
-InvalidLocationCode(String),
-///<p>You cannot create anymore custom SSL/TLS certificates.</p>
-TooManyCertificates(String),
+InvalidTTLOrder(String),
 ///
 InvalidViewerCertificate(String),
 ///
-CNAMEAlreadyExists(String),
-///
-TooManyOriginCustomHeaders(String),
-///<p>Your request contains more Lambda function associations than are allowed per distribution.</p>
-TooManyLambdaFunctionAssociations(String),
-///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
-InconsistentQuantities(String),
-///<p>One or more of your trusted signers do not exist.</p>
-TrustedSignerDoesNotExist(String),
-///<p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
-InvalidRelativePath(String),
+InvalidWebACLId(String),
 ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
 MissingBody(String),
-///<p>The default root object file name is too big or contains an invalid character.</p>
-InvalidDefaultRootObject(String),/// An error occurred dispatching the HTTP request
+///<p>No origin exists with the specified <code>Origin Id</code>. </p>
+NoSuchOrigin(String),
+///<p>You cannot create more cache behaviors for the distribution.</p>
+TooManyCacheBehaviors(String),
+///<p>You cannot create anymore custom SSL/TLS certificates.</p>
+TooManyCertificates(String),
+///<p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
+TooManyCookieNamesInWhiteList(String),
+///<p>Your request contains more CNAMEs than are allowed per distribution.</p>
+TooManyDistributionCNAMEs(String),
+///<p>Processing your request would cause you to exceed the maximum number of distributions allowed.</p>
+TooManyDistributions(String),
+///<p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
+TooManyDistributionsWithLambdaAssociations(String),
+///
+TooManyHeadersInForwardedValues(String),
+///<p>Your request contains more Lambda function associations than are allowed per distribution.</p>
+TooManyLambdaFunctionAssociations(String),
+///
+TooManyOriginCustomHeaders(String),
+///<p>You cannot create more origins for the distribution.</p>
+TooManyOrigins(String),
+///
+TooManyQueryStringParameters(String),
+///<p>Your request contains more trusted signers than are allowed per distribution.</p>
+TooManyTrustedSigners(String),
+///<p>One or more of your trusted signers do not exist.</p>
+TrustedSignerDoesNotExist(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6421,7 +6429,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TooManyDistributionCNAMEs" => CreateDistributionError::TooManyDistributionCNAMEs(String::from(parsed_error.message)),"InvalidViewerCertificate" => CreateDistributionError::InvalidViewerCertificate(String::from(parsed_error.message)),"TooManyQueryStringParameters" => CreateDistributionError::TooManyQueryStringParameters(String::from(parsed_error.message)),"NoSuchOrigin" => CreateDistributionError::NoSuchOrigin(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => CreateDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"TooManyOriginCustomHeaders" => CreateDistributionError::TooManyOriginCustomHeaders(String::from(parsed_error.message)),"InvalidLambdaFunctionAssociation" => CreateDistributionError::InvalidLambdaFunctionAssociation(String::from(parsed_error.message)),"TooManyCacheBehaviors" => CreateDistributionError::TooManyCacheBehaviors(String::from(parsed_error.message)),"InvalidTTLOrder" => CreateDistributionError::InvalidTTLOrder(String::from(parsed_error.message)),"InconsistentQuantities" => CreateDistributionError::InconsistentQuantities(String::from(parsed_error.message)),"TooManyTrustedSigners" => CreateDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),"InvalidOrigin" => CreateDistributionError::InvalidOrigin(String::from(parsed_error.message)),"TooManyCookieNamesInWhiteList" => CreateDistributionError::TooManyCookieNamesInWhiteList(String::from(parsed_error.message)),"InvalidGeoRestrictionParameter" => CreateDistributionError::InvalidGeoRestrictionParameter(String::from(parsed_error.message)),"TooManyOrigins" => CreateDistributionError::TooManyOrigins(String::from(parsed_error.message)),"InvalidRequiredProtocol" => CreateDistributionError::InvalidRequiredProtocol(String::from(parsed_error.message)),"TooManyLambdaFunctionAssociations" => CreateDistributionError::TooManyLambdaFunctionAssociations(String::from(parsed_error.message)),"InvalidHeadersForS3Origin" => CreateDistributionError::InvalidHeadersForS3Origin(String::from(parsed_error.message)),"InvalidArgument" => CreateDistributionError::InvalidArgument(String::from(parsed_error.message)),"InvalidWebACLId" => CreateDistributionError::InvalidWebACLId(String::from(parsed_error.message)),"CNAMEAlreadyExists" => CreateDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),"TooManyCertificates" => CreateDistributionError::TooManyCertificates(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => CreateDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),"TooManyHeadersInForwardedValues" => CreateDistributionError::TooManyHeadersInForwardedValues(String::from(parsed_error.message)),"InvalidForwardCookies" => CreateDistributionError::InvalidForwardCookies(String::from(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => CreateDistributionError::TooManyDistributionsWithLambdaAssociations(String::from(parsed_error.message)),"MissingBody" => CreateDistributionError::MissingBody(String::from(parsed_error.message)),"InvalidLocationCode" => CreateDistributionError::InvalidLocationCode(String::from(parsed_error.message)),"InvalidQueryStringParameters" => CreateDistributionError::InvalidQueryStringParameters(String::from(parsed_error.message)),"AccessDenied" => CreateDistributionError::AccessDenied(String::from(parsed_error.message)),"InvalidRelativePath" => CreateDistributionError::InvalidRelativePath(String::from(parsed_error.message)),"InvalidResponseCode" => CreateDistributionError::InvalidResponseCode(String::from(parsed_error.message)),"TooManyDistributions" => CreateDistributionError::TooManyDistributions(String::from(parsed_error.message)),"DistributionAlreadyExists" => CreateDistributionError::DistributionAlreadyExists(String::from(parsed_error.message)),"InvalidDefaultRootObject" => CreateDistributionError::InvalidDefaultRootObject(String::from(parsed_error.message)),"InvalidErrorCode" => CreateDistributionError::InvalidErrorCode(String::from(parsed_error.message)),"InvalidProtocolSettings" => CreateDistributionError::InvalidProtocolSettings(String::from(parsed_error.message)),"InvalidMinimumProtocolVersion" => CreateDistributionError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),_ => CreateDistributionError::Unknown(String::from(body))
+                                    "AccessDenied" => CreateDistributionError::AccessDenied(String::from(parsed_error.message)),"CNAMEAlreadyExists" => CreateDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),"DistributionAlreadyExists" => CreateDistributionError::DistributionAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => CreateDistributionError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => CreateDistributionError::InvalidArgument(String::from(parsed_error.message)),"InvalidDefaultRootObject" => CreateDistributionError::InvalidDefaultRootObject(String::from(parsed_error.message)),"InvalidErrorCode" => CreateDistributionError::InvalidErrorCode(String::from(parsed_error.message)),"InvalidForwardCookies" => CreateDistributionError::InvalidForwardCookies(String::from(parsed_error.message)),"InvalidGeoRestrictionParameter" => CreateDistributionError::InvalidGeoRestrictionParameter(String::from(parsed_error.message)),"InvalidHeadersForS3Origin" => CreateDistributionError::InvalidHeadersForS3Origin(String::from(parsed_error.message)),"InvalidLambdaFunctionAssociation" => CreateDistributionError::InvalidLambdaFunctionAssociation(String::from(parsed_error.message)),"InvalidLocationCode" => CreateDistributionError::InvalidLocationCode(String::from(parsed_error.message)),"InvalidMinimumProtocolVersion" => CreateDistributionError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),"InvalidOrigin" => CreateDistributionError::InvalidOrigin(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => CreateDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"InvalidProtocolSettings" => CreateDistributionError::InvalidProtocolSettings(String::from(parsed_error.message)),"InvalidQueryStringParameters" => CreateDistributionError::InvalidQueryStringParameters(String::from(parsed_error.message)),"InvalidRelativePath" => CreateDistributionError::InvalidRelativePath(String::from(parsed_error.message)),"InvalidRequiredProtocol" => CreateDistributionError::InvalidRequiredProtocol(String::from(parsed_error.message)),"InvalidResponseCode" => CreateDistributionError::InvalidResponseCode(String::from(parsed_error.message)),"InvalidTTLOrder" => CreateDistributionError::InvalidTTLOrder(String::from(parsed_error.message)),"InvalidViewerCertificate" => CreateDistributionError::InvalidViewerCertificate(String::from(parsed_error.message)),"InvalidWebACLId" => CreateDistributionError::InvalidWebACLId(String::from(parsed_error.message)),"MissingBody" => CreateDistributionError::MissingBody(String::from(parsed_error.message)),"NoSuchOrigin" => CreateDistributionError::NoSuchOrigin(String::from(parsed_error.message)),"TooManyCacheBehaviors" => CreateDistributionError::TooManyCacheBehaviors(String::from(parsed_error.message)),"TooManyCertificates" => CreateDistributionError::TooManyCertificates(String::from(parsed_error.message)),"TooManyCookieNamesInWhiteList" => CreateDistributionError::TooManyCookieNamesInWhiteList(String::from(parsed_error.message)),"TooManyDistributionCNAMEs" => CreateDistributionError::TooManyDistributionCNAMEs(String::from(parsed_error.message)),"TooManyDistributions" => CreateDistributionError::TooManyDistributions(String::from(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => CreateDistributionError::TooManyDistributionsWithLambdaAssociations(String::from(parsed_error.message)),"TooManyHeadersInForwardedValues" => CreateDistributionError::TooManyHeadersInForwardedValues(String::from(parsed_error.message)),"TooManyLambdaFunctionAssociations" => CreateDistributionError::TooManyLambdaFunctionAssociations(String::from(parsed_error.message)),"TooManyOriginCustomHeaders" => CreateDistributionError::TooManyOriginCustomHeaders(String::from(parsed_error.message)),"TooManyOrigins" => CreateDistributionError::TooManyOrigins(String::from(parsed_error.message)),"TooManyQueryStringParameters" => CreateDistributionError::TooManyQueryStringParameters(String::from(parsed_error.message)),"TooManyTrustedSigners" => CreateDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => CreateDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),_ => CreateDistributionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDistributionError::Unknown(body.to_string())
@@ -6453,7 +6461,48 @@ Unknown(String)
                 impl Error for CreateDistributionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDistributionError::InvalidViewerCertificate(ref cause) => cause,CreateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => cause,CreateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,CreateDistributionError::TooManyDistributions(ref cause) => cause,CreateDistributionError::TooManyHeadersInForwardedValues(ref cause) => cause,CreateDistributionError::InvalidOrigin(ref cause) => cause,CreateDistributionError::TooManyCacheBehaviors(ref cause) => cause,CreateDistributionError::InvalidTTLOrder(ref cause) => cause,CreateDistributionError::InvalidRequiredProtocol(ref cause) => cause,CreateDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,CreateDistributionError::TooManyOrigins(ref cause) => cause,CreateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => cause,CreateDistributionError::InvalidHeadersForS3Origin(ref cause) => cause,CreateDistributionError::DistributionAlreadyExists(ref cause) => cause,CreateDistributionError::CNAMEAlreadyExists(ref cause) => cause,CreateDistributionError::TooManyCertificates(ref cause) => cause,CreateDistributionError::TooManyOriginCustomHeaders(ref cause) => cause,CreateDistributionError::MissingBody(ref cause) => cause,CreateDistributionError::InvalidResponseCode(ref cause) => cause,CreateDistributionError::InvalidProtocolSettings(ref cause) => cause,CreateDistributionError::TooManyQueryStringParameters(ref cause) => cause,CreateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => cause,CreateDistributionError::InvalidMinimumProtocolVersion(ref cause) => cause,CreateDistributionError::InvalidLocationCode(ref cause) => cause,CreateDistributionError::InvalidErrorCode(ref cause) => cause,CreateDistributionError::AccessDenied(ref cause) => cause,CreateDistributionError::InvalidQueryStringParameters(ref cause) => cause,CreateDistributionError::InvalidForwardCookies(ref cause) => cause,CreateDistributionError::InvalidGeoRestrictionParameter(ref cause) => cause,CreateDistributionError::InvalidDefaultRootObject(ref cause) => cause,CreateDistributionError::InvalidArgument(ref cause) => cause,CreateDistributionError::InvalidWebACLId(ref cause) => cause,CreateDistributionError::TooManyTrustedSigners(ref cause) => cause,CreateDistributionError::InvalidRelativePath(ref cause) => cause,CreateDistributionError::InconsistentQuantities(ref cause) => cause,CreateDistributionError::NoSuchOrigin(ref cause) => cause,CreateDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,CreateDistributionError::TooManyDistributionCNAMEs(ref cause) => cause,CreateDistributionError::Validation(ref cause) => cause,CreateDistributionError::Credentials(ref err) => err.description(),CreateDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDistributionError::Unknown(ref cause) => cause
+                            CreateDistributionError::AccessDenied(ref cause) => cause,
+CreateDistributionError::CNAMEAlreadyExists(ref cause) => cause,
+CreateDistributionError::DistributionAlreadyExists(ref cause) => cause,
+CreateDistributionError::InconsistentQuantities(ref cause) => cause,
+CreateDistributionError::InvalidArgument(ref cause) => cause,
+CreateDistributionError::InvalidDefaultRootObject(ref cause) => cause,
+CreateDistributionError::InvalidErrorCode(ref cause) => cause,
+CreateDistributionError::InvalidForwardCookies(ref cause) => cause,
+CreateDistributionError::InvalidGeoRestrictionParameter(ref cause) => cause,
+CreateDistributionError::InvalidHeadersForS3Origin(ref cause) => cause,
+CreateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => cause,
+CreateDistributionError::InvalidLocationCode(ref cause) => cause,
+CreateDistributionError::InvalidMinimumProtocolVersion(ref cause) => cause,
+CreateDistributionError::InvalidOrigin(ref cause) => cause,
+CreateDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
+CreateDistributionError::InvalidProtocolSettings(ref cause) => cause,
+CreateDistributionError::InvalidQueryStringParameters(ref cause) => cause,
+CreateDistributionError::InvalidRelativePath(ref cause) => cause,
+CreateDistributionError::InvalidRequiredProtocol(ref cause) => cause,
+CreateDistributionError::InvalidResponseCode(ref cause) => cause,
+CreateDistributionError::InvalidTTLOrder(ref cause) => cause,
+CreateDistributionError::InvalidViewerCertificate(ref cause) => cause,
+CreateDistributionError::InvalidWebACLId(ref cause) => cause,
+CreateDistributionError::MissingBody(ref cause) => cause,
+CreateDistributionError::NoSuchOrigin(ref cause) => cause,
+CreateDistributionError::TooManyCacheBehaviors(ref cause) => cause,
+CreateDistributionError::TooManyCertificates(ref cause) => cause,
+CreateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => cause,
+CreateDistributionError::TooManyDistributionCNAMEs(ref cause) => cause,
+CreateDistributionError::TooManyDistributions(ref cause) => cause,
+CreateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,
+CreateDistributionError::TooManyHeadersInForwardedValues(ref cause) => cause,
+CreateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => cause,
+CreateDistributionError::TooManyOriginCustomHeaders(ref cause) => cause,
+CreateDistributionError::TooManyOrigins(ref cause) => cause,
+CreateDistributionError::TooManyQueryStringParameters(ref cause) => cause,
+CreateDistributionError::TooManyTrustedSigners(ref cause) => cause,
+CreateDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,
+CreateDistributionError::Validation(ref cause) => cause,
+CreateDistributionError::Credentials(ref err) => err.description(),
+CreateDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDistributionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6461,84 +6510,84 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDistributionWithTagsError {
                     
+///<p>Access denied.</p>
+AccessDenied(String),
 ///
-InvalidMinimumProtocolVersion(String),
-///
-InvalidGeoRestrictionParameter(String),
-///<p>One or more of your trusted signers do not exist.</p>
-TrustedSignerDoesNotExist(String),
-///<p>Your request contains more CNAMEs than are allowed per distribution.</p>
-TooManyDistributionCNAMEs(String),
-///
-TooManyHeadersInForwardedValues(String),
+CNAMEAlreadyExists(String),
+///<p>The caller reference you attempted to create the distribution with is associated with another distribution.</p>
+DistributionAlreadyExists(String),
+///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+InconsistentQuantities(String),
+///<p>The argument is invalid.</p>
+InvalidArgument(String),
 ///<p>The default root object file name is too big or contains an invalid character.</p>
 InvalidDefaultRootObject(String),
 ///
-CNAMEAlreadyExists(String),
-///<p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
-InvalidRelativePath(String),
-///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
-MissingBody(String),
+InvalidErrorCode(String),
+///<p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
+InvalidForwardCookies(String),
+///
+InvalidGeoRestrictionParameter(String),
 ///
 InvalidHeadersForS3Origin(String),
-///<p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
-TooManyDistributionsWithLambdaAssociations(String),
-///<p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
-InvalidRequiredProtocol(String),
-///<p>Processing your request would cause you to exceed the maximum number of distributions allowed.</p>
-TooManyDistributions(String),
-///
-InvalidResponseCode(String),
-///
-InvalidQueryStringParameters(String),
-///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
-InconsistentQuantities(String),
-///<p>No origin exists with the specified <code>Origin Id</code>. </p>
-NoSuchOrigin(String),
-///
-TooManyOriginCustomHeaders(String),
-///<p>You cannot create more origins for the distribution.</p>
-TooManyOrigins(String),
-///<p>Your request contains more trusted signers than are allowed per distribution.</p>
-TooManyTrustedSigners(String),
-///
-InvalidViewerCertificate(String),
-///<p>You cannot specify SSLv3 as the minimum protocol version if you only want to support only clients that support Server Name Indication (SNI).</p>
-InvalidProtocolSettings(String),
-///
-TooManyQueryStringParameters(String),
-///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
-InvalidOrigin(String),
-///
-InvalidErrorCode(String),
 ///<p>The specified Lambda function association is invalid.</p>
 InvalidLambdaFunctionAssociation(String),
 ///
-InvalidWebACLId(String),
+InvalidLocationCode(String),
+///
+InvalidMinimumProtocolVersion(String),
+///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
+InvalidOrigin(String),
+///<p>The origin access identity is not valid or doesn't exist.</p>
+InvalidOriginAccessIdentity(String),
+///<p>You cannot specify SSLv3 as the minimum protocol version if you only want to support only clients that support Server Name Indication (SNI).</p>
+InvalidProtocolSettings(String),
+///
+InvalidQueryStringParameters(String),
+///<p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
+InvalidRelativePath(String),
+///<p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
+InvalidRequiredProtocol(String),
+///
+InvalidResponseCode(String),
 ///
 InvalidTTLOrder(String),
 ///
 InvalidTagging(String),
-///<p>The caller reference you attempted to create the distribution with is associated with another distribution.</p>
-DistributionAlreadyExists(String),
-///<p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
-InvalidForwardCookies(String),
-///<p>Your request contains more Lambda function associations than are allowed per distribution.</p>
-TooManyLambdaFunctionAssociations(String),
+///
+InvalidViewerCertificate(String),
+///
+InvalidWebACLId(String),
+///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+MissingBody(String),
+///<p>No origin exists with the specified <code>Origin Id</code>. </p>
+NoSuchOrigin(String),
 ///<p>You cannot create more cache behaviors for the distribution.</p>
 TooManyCacheBehaviors(String),
-///<p>The origin access identity is not valid or doesn't exist.</p>
-InvalidOriginAccessIdentity(String),
-///<p>The argument is invalid.</p>
-InvalidArgument(String),
 ///<p>You cannot create anymore custom SSL/TLS certificates.</p>
 TooManyCertificates(String),
-///<p>Access denied.</p>
-AccessDenied(String),
 ///<p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
 TooManyCookieNamesInWhiteList(String),
+///<p>Your request contains more CNAMEs than are allowed per distribution.</p>
+TooManyDistributionCNAMEs(String),
+///<p>Processing your request would cause you to exceed the maximum number of distributions allowed.</p>
+TooManyDistributions(String),
+///<p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
+TooManyDistributionsWithLambdaAssociations(String),
 ///
-InvalidLocationCode(String),/// An error occurred dispatching the HTTP request
+TooManyHeadersInForwardedValues(String),
+///<p>Your request contains more Lambda function associations than are allowed per distribution.</p>
+TooManyLambdaFunctionAssociations(String),
+///
+TooManyOriginCustomHeaders(String),
+///<p>You cannot create more origins for the distribution.</p>
+TooManyOrigins(String),
+///
+TooManyQueryStringParameters(String),
+///<p>Your request contains more trusted signers than are allowed per distribution.</p>
+TooManyTrustedSigners(String),
+///<p>One or more of your trusted signers do not exist.</p>
+TrustedSignerDoesNotExist(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6555,7 +6604,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TooManyTrustedSigners" => CreateDistributionWithTagsError::TooManyTrustedSigners(String::from(parsed_error.message)),"CNAMEAlreadyExists" => CreateDistributionWithTagsError::CNAMEAlreadyExists(String::from(parsed_error.message)),"TooManyCertificates" => CreateDistributionWithTagsError::TooManyCertificates(String::from(parsed_error.message)),"TooManyDistributions" => CreateDistributionWithTagsError::TooManyDistributions(String::from(parsed_error.message)),"NoSuchOrigin" => CreateDistributionWithTagsError::NoSuchOrigin(String::from(parsed_error.message)),"InvalidResponseCode" => CreateDistributionWithTagsError::InvalidResponseCode(String::from(parsed_error.message)),"InvalidLambdaFunctionAssociation" => CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(String::from(parsed_error.message)),"InvalidOrigin" => CreateDistributionWithTagsError::InvalidOrigin(String::from(parsed_error.message)),"TooManyCookieNamesInWhiteList" => CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(String::from(parsed_error.message)),"TooManyOrigins" => CreateDistributionWithTagsError::TooManyOrigins(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => CreateDistributionWithTagsError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),"AccessDenied" => CreateDistributionWithTagsError::AccessDenied(String::from(parsed_error.message)),"InvalidErrorCode" => CreateDistributionWithTagsError::InvalidErrorCode(String::from(parsed_error.message)),"InvalidForwardCookies" => CreateDistributionWithTagsError::InvalidForwardCookies(String::from(parsed_error.message)),"InvalidQueryStringParameters" => CreateDistributionWithTagsError::InvalidQueryStringParameters(String::from(parsed_error.message)),"InconsistentQuantities" => CreateDistributionWithTagsError::InconsistentQuantities(String::from(parsed_error.message)),"MissingBody" => CreateDistributionWithTagsError::MissingBody(String::from(parsed_error.message)),"TooManyCacheBehaviors" => CreateDistributionWithTagsError::TooManyCacheBehaviors(String::from(parsed_error.message)),"InvalidHeadersForS3Origin" => CreateDistributionWithTagsError::InvalidHeadersForS3Origin(String::from(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(String::from(parsed_error.message)),"TooManyLambdaFunctionAssociations" => CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(String::from(parsed_error.message)),"InvalidRequiredProtocol" => CreateDistributionWithTagsError::InvalidRequiredProtocol(String::from(parsed_error.message)),"InvalidTTLOrder" => CreateDistributionWithTagsError::InvalidTTLOrder(String::from(parsed_error.message)),"InvalidWebACLId" => CreateDistributionWithTagsError::InvalidWebACLId(String::from(parsed_error.message)),"InvalidRelativePath" => CreateDistributionWithTagsError::InvalidRelativePath(String::from(parsed_error.message)),"InvalidGeoRestrictionParameter" => CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(String::from(parsed_error.message)),"InvalidTagging" => CreateDistributionWithTagsError::InvalidTagging(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => CreateDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"InvalidLocationCode" => CreateDistributionWithTagsError::InvalidLocationCode(String::from(parsed_error.message)),"TooManyDistributionCNAMEs" => CreateDistributionWithTagsError::TooManyDistributionCNAMEs(String::from(parsed_error.message)),"InvalidProtocolSettings" => CreateDistributionWithTagsError::InvalidProtocolSettings(String::from(parsed_error.message)),"TooManyQueryStringParameters" => CreateDistributionWithTagsError::TooManyQueryStringParameters(String::from(parsed_error.message)),"TooManyOriginCustomHeaders" => CreateDistributionWithTagsError::TooManyOriginCustomHeaders(String::from(parsed_error.message)),"DistributionAlreadyExists" => CreateDistributionWithTagsError::DistributionAlreadyExists(String::from(parsed_error.message)),"InvalidArgument" => CreateDistributionWithTagsError::InvalidArgument(String::from(parsed_error.message)),"InvalidMinimumProtocolVersion" => CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),"InvalidViewerCertificate" => CreateDistributionWithTagsError::InvalidViewerCertificate(String::from(parsed_error.message)),"InvalidDefaultRootObject" => CreateDistributionWithTagsError::InvalidDefaultRootObject(String::from(parsed_error.message)),"TooManyHeadersInForwardedValues" => CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(String::from(parsed_error.message)),_ => CreateDistributionWithTagsError::Unknown(String::from(body))
+                                    "AccessDenied" => CreateDistributionWithTagsError::AccessDenied(String::from(parsed_error.message)),"CNAMEAlreadyExists" => CreateDistributionWithTagsError::CNAMEAlreadyExists(String::from(parsed_error.message)),"DistributionAlreadyExists" => CreateDistributionWithTagsError::DistributionAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => CreateDistributionWithTagsError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => CreateDistributionWithTagsError::InvalidArgument(String::from(parsed_error.message)),"InvalidDefaultRootObject" => CreateDistributionWithTagsError::InvalidDefaultRootObject(String::from(parsed_error.message)),"InvalidErrorCode" => CreateDistributionWithTagsError::InvalidErrorCode(String::from(parsed_error.message)),"InvalidForwardCookies" => CreateDistributionWithTagsError::InvalidForwardCookies(String::from(parsed_error.message)),"InvalidGeoRestrictionParameter" => CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(String::from(parsed_error.message)),"InvalidHeadersForS3Origin" => CreateDistributionWithTagsError::InvalidHeadersForS3Origin(String::from(parsed_error.message)),"InvalidLambdaFunctionAssociation" => CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(String::from(parsed_error.message)),"InvalidLocationCode" => CreateDistributionWithTagsError::InvalidLocationCode(String::from(parsed_error.message)),"InvalidMinimumProtocolVersion" => CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),"InvalidOrigin" => CreateDistributionWithTagsError::InvalidOrigin(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => CreateDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"InvalidProtocolSettings" => CreateDistributionWithTagsError::InvalidProtocolSettings(String::from(parsed_error.message)),"InvalidQueryStringParameters" => CreateDistributionWithTagsError::InvalidQueryStringParameters(String::from(parsed_error.message)),"InvalidRelativePath" => CreateDistributionWithTagsError::InvalidRelativePath(String::from(parsed_error.message)),"InvalidRequiredProtocol" => CreateDistributionWithTagsError::InvalidRequiredProtocol(String::from(parsed_error.message)),"InvalidResponseCode" => CreateDistributionWithTagsError::InvalidResponseCode(String::from(parsed_error.message)),"InvalidTTLOrder" => CreateDistributionWithTagsError::InvalidTTLOrder(String::from(parsed_error.message)),"InvalidTagging" => CreateDistributionWithTagsError::InvalidTagging(String::from(parsed_error.message)),"InvalidViewerCertificate" => CreateDistributionWithTagsError::InvalidViewerCertificate(String::from(parsed_error.message)),"InvalidWebACLId" => CreateDistributionWithTagsError::InvalidWebACLId(String::from(parsed_error.message)),"MissingBody" => CreateDistributionWithTagsError::MissingBody(String::from(parsed_error.message)),"NoSuchOrigin" => CreateDistributionWithTagsError::NoSuchOrigin(String::from(parsed_error.message)),"TooManyCacheBehaviors" => CreateDistributionWithTagsError::TooManyCacheBehaviors(String::from(parsed_error.message)),"TooManyCertificates" => CreateDistributionWithTagsError::TooManyCertificates(String::from(parsed_error.message)),"TooManyCookieNamesInWhiteList" => CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(String::from(parsed_error.message)),"TooManyDistributionCNAMEs" => CreateDistributionWithTagsError::TooManyDistributionCNAMEs(String::from(parsed_error.message)),"TooManyDistributions" => CreateDistributionWithTagsError::TooManyDistributions(String::from(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(String::from(parsed_error.message)),"TooManyHeadersInForwardedValues" => CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(String::from(parsed_error.message)),"TooManyLambdaFunctionAssociations" => CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(String::from(parsed_error.message)),"TooManyOriginCustomHeaders" => CreateDistributionWithTagsError::TooManyOriginCustomHeaders(String::from(parsed_error.message)),"TooManyOrigins" => CreateDistributionWithTagsError::TooManyOrigins(String::from(parsed_error.message)),"TooManyQueryStringParameters" => CreateDistributionWithTagsError::TooManyQueryStringParameters(String::from(parsed_error.message)),"TooManyTrustedSigners" => CreateDistributionWithTagsError::TooManyTrustedSigners(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => CreateDistributionWithTagsError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),_ => CreateDistributionWithTagsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDistributionWithTagsError::Unknown(body.to_string())
@@ -6587,7 +6636,49 @@ Unknown(String)
                 impl Error for CreateDistributionWithTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDistributionWithTagsError::TooManyTrustedSigners(ref cause) => cause,CreateDistributionWithTagsError::InvalidForwardCookies(ref cause) => cause,CreateDistributionWithTagsError::InvalidLocationCode(ref cause) => cause,CreateDistributionWithTagsError::TooManyCacheBehaviors(ref cause) => cause,CreateDistributionWithTagsError::InvalidErrorCode(ref cause) => cause,CreateDistributionWithTagsError::NoSuchOrigin(ref cause) => cause,CreateDistributionWithTagsError::InvalidRequiredProtocol(ref cause) => cause,CreateDistributionWithTagsError::InvalidTagging(ref cause) => cause,CreateDistributionWithTagsError::DistributionAlreadyExists(ref cause) => cause,CreateDistributionWithTagsError::InvalidResponseCode(ref cause) => cause,CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(ref cause) => cause,CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(ref cause) => cause,CreateDistributionWithTagsError::InvalidProtocolSettings(ref cause) => cause,CreateDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => cause,CreateDistributionWithTagsError::InvalidQueryStringParameters(ref cause) => cause,CreateDistributionWithTagsError::InvalidViewerCertificate(ref cause) => cause,CreateDistributionWithTagsError::TooManyCertificates(ref cause) => cause,CreateDistributionWithTagsError::AccessDenied(ref cause) => cause,CreateDistributionWithTagsError::InvalidWebACLId(ref cause) => cause,CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(ref cause) => cause,CreateDistributionWithTagsError::InvalidArgument(ref cause) => cause,CreateDistributionWithTagsError::InvalidHeadersForS3Origin(ref cause) => cause,CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(ref cause) => cause,CreateDistributionWithTagsError::MissingBody(ref cause) => cause,CreateDistributionWithTagsError::InvalidTTLOrder(ref cause) => cause,CreateDistributionWithTagsError::TooManyQueryStringParameters(ref cause) => cause,CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,CreateDistributionWithTagsError::TooManyOrigins(ref cause) => cause,CreateDistributionWithTagsError::InvalidOrigin(ref cause) => cause,CreateDistributionWithTagsError::InvalidDefaultRootObject(ref cause) => cause,CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(ref cause) => cause,CreateDistributionWithTagsError::InconsistentQuantities(ref cause) => cause,CreateDistributionWithTagsError::TooManyDistributionCNAMEs(ref cause) => cause,CreateDistributionWithTagsError::TooManyDistributions(ref cause) => cause,CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(ref cause) => cause,CreateDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => cause,CreateDistributionWithTagsError::TooManyOriginCustomHeaders(ref cause) => cause,CreateDistributionWithTagsError::InvalidRelativePath(ref cause) => cause,CreateDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => cause,CreateDistributionWithTagsError::Validation(ref cause) => cause,CreateDistributionWithTagsError::Credentials(ref err) => err.description(),CreateDistributionWithTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDistributionWithTagsError::Unknown(ref cause) => cause
+                            CreateDistributionWithTagsError::AccessDenied(ref cause) => cause,
+CreateDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => cause,
+CreateDistributionWithTagsError::DistributionAlreadyExists(ref cause) => cause,
+CreateDistributionWithTagsError::InconsistentQuantities(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidArgument(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidDefaultRootObject(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidErrorCode(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidForwardCookies(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidHeadersForS3Origin(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidLocationCode(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidOrigin(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidProtocolSettings(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidQueryStringParameters(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidRelativePath(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidRequiredProtocol(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidResponseCode(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidTTLOrder(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidTagging(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidViewerCertificate(ref cause) => cause,
+CreateDistributionWithTagsError::InvalidWebACLId(ref cause) => cause,
+CreateDistributionWithTagsError::MissingBody(ref cause) => cause,
+CreateDistributionWithTagsError::NoSuchOrigin(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyCacheBehaviors(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyCertificates(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyDistributionCNAMEs(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyDistributions(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyOriginCustomHeaders(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyOrigins(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyQueryStringParameters(ref cause) => cause,
+CreateDistributionWithTagsError::TooManyTrustedSigners(ref cause) => cause,
+CreateDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => cause,
+CreateDistributionWithTagsError::Validation(ref cause) => cause,
+CreateDistributionWithTagsError::Credentials(ref err) => err.description(),
+CreateDistributionWithTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDistributionWithTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6595,20 +6686,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateInvalidationError {
                     
-///<p>You have exceeded the maximum number of allowable InProgress invalidation batch requests, or invalidation objects.</p>
-TooManyInvalidationsInProgress(String),
-///<p>The argument is invalid.</p>
-InvalidArgument(String),
+///<p>Access denied.</p>
+AccessDenied(String),
 ///
 BatchTooLarge(String),
+///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+InconsistentQuantities(String),
+///<p>The argument is invalid.</p>
+InvalidArgument(String),
 ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
 MissingBody(String),
 ///<p>The specified distribution does not exist.</p>
 NoSuchDistribution(String),
-///<p>Access denied.</p>
-AccessDenied(String),
-///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
-InconsistentQuantities(String),/// An error occurred dispatching the HTTP request
+///<p>You have exceeded the maximum number of allowable InProgress invalidation batch requests, or invalidation objects.</p>
+TooManyInvalidationsInProgress(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6625,7 +6716,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "BatchTooLarge" => CreateInvalidationError::BatchTooLarge(String::from(parsed_error.message)),"TooManyInvalidationsInProgress" => CreateInvalidationError::TooManyInvalidationsInProgress(String::from(parsed_error.message)),"AccessDenied" => CreateInvalidationError::AccessDenied(String::from(parsed_error.message)),"NoSuchDistribution" => CreateInvalidationError::NoSuchDistribution(String::from(parsed_error.message)),"InvalidArgument" => CreateInvalidationError::InvalidArgument(String::from(parsed_error.message)),"InconsistentQuantities" => CreateInvalidationError::InconsistentQuantities(String::from(parsed_error.message)),"MissingBody" => CreateInvalidationError::MissingBody(String::from(parsed_error.message)),_ => CreateInvalidationError::Unknown(String::from(body))
+                                    "AccessDenied" => CreateInvalidationError::AccessDenied(String::from(parsed_error.message)),"BatchTooLarge" => CreateInvalidationError::BatchTooLarge(String::from(parsed_error.message)),"InconsistentQuantities" => CreateInvalidationError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => CreateInvalidationError::InvalidArgument(String::from(parsed_error.message)),"MissingBody" => CreateInvalidationError::MissingBody(String::from(parsed_error.message)),"NoSuchDistribution" => CreateInvalidationError::NoSuchDistribution(String::from(parsed_error.message)),"TooManyInvalidationsInProgress" => CreateInvalidationError::TooManyInvalidationsInProgress(String::from(parsed_error.message)),_ => CreateInvalidationError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateInvalidationError::Unknown(body.to_string())
@@ -6657,7 +6748,17 @@ Unknown(String)
                 impl Error for CreateInvalidationError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateInvalidationError::AccessDenied(ref cause) => cause,CreateInvalidationError::InvalidArgument(ref cause) => cause,CreateInvalidationError::BatchTooLarge(ref cause) => cause,CreateInvalidationError::TooManyInvalidationsInProgress(ref cause) => cause,CreateInvalidationError::InconsistentQuantities(ref cause) => cause,CreateInvalidationError::NoSuchDistribution(ref cause) => cause,CreateInvalidationError::MissingBody(ref cause) => cause,CreateInvalidationError::Validation(ref cause) => cause,CreateInvalidationError::Credentials(ref err) => err.description(),CreateInvalidationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateInvalidationError::Unknown(ref cause) => cause
+                            CreateInvalidationError::AccessDenied(ref cause) => cause,
+CreateInvalidationError::BatchTooLarge(ref cause) => cause,
+CreateInvalidationError::InconsistentQuantities(ref cause) => cause,
+CreateInvalidationError::InvalidArgument(ref cause) => cause,
+CreateInvalidationError::MissingBody(ref cause) => cause,
+CreateInvalidationError::NoSuchDistribution(ref cause) => cause,
+CreateInvalidationError::TooManyInvalidationsInProgress(ref cause) => cause,
+CreateInvalidationError::Validation(ref cause) => cause,
+CreateInvalidationError::Credentials(ref err) => err.description(),
+CreateInvalidationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateInvalidationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6665,30 +6766,30 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateStreamingDistributionError {
                     
+///<p>Access denied.</p>
+AccessDenied(String),
 ///
-StreamingDistributionAlreadyExists(String),
-///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
-InvalidOrigin(String),
+CNAMEAlreadyExists(String),
 ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
 InconsistentQuantities(String),
-///
-TooManyStreamingDistributionCNAMEs(String),
 ///<p>The argument is invalid.</p>
 InvalidArgument(String),
-///<p>One or more of your trusted signers do not exist.</p>
-TrustedSignerDoesNotExist(String),
+///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
+InvalidOrigin(String),
+///<p>The origin access identity is not valid or doesn't exist.</p>
+InvalidOriginAccessIdentity(String),
+///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+MissingBody(String),
+///
+StreamingDistributionAlreadyExists(String),
+///
+TooManyStreamingDistributionCNAMEs(String),
 ///<p>Processing your request would cause you to exceed the maximum number of streaming distributions allowed.</p>
 TooManyStreamingDistributions(String),
 ///<p>Your request contains more trusted signers than are allowed per distribution.</p>
 TooManyTrustedSigners(String),
-///
-CNAMEAlreadyExists(String),
-///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
-MissingBody(String),
-///<p>The origin access identity is not valid or doesn't exist.</p>
-InvalidOriginAccessIdentity(String),
-///<p>Access denied.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+///<p>One or more of your trusted signers do not exist.</p>
+TrustedSignerDoesNotExist(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6705,7 +6806,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "StreamingDistributionAlreadyExists" => CreateStreamingDistributionError::StreamingDistributionAlreadyExists(String::from(parsed_error.message)),"CNAMEAlreadyExists" => CreateStreamingDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => CreateStreamingDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"TooManyTrustedSigners" => CreateStreamingDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(String::from(parsed_error.message)),"InvalidOrigin" => CreateStreamingDistributionError::InvalidOrigin(String::from(parsed_error.message)),"InconsistentQuantities" => CreateStreamingDistributionError::InconsistentQuantities(String::from(parsed_error.message)),"AccessDenied" => CreateStreamingDistributionError::AccessDenied(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => CreateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),"TooManyStreamingDistributions" => CreateStreamingDistributionError::TooManyStreamingDistributions(String::from(parsed_error.message)),"InvalidArgument" => CreateStreamingDistributionError::InvalidArgument(String::from(parsed_error.message)),"MissingBody" => CreateStreamingDistributionError::MissingBody(String::from(parsed_error.message)),_ => CreateStreamingDistributionError::Unknown(String::from(body))
+                                    "AccessDenied" => CreateStreamingDistributionError::AccessDenied(String::from(parsed_error.message)),"CNAMEAlreadyExists" => CreateStreamingDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => CreateStreamingDistributionError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => CreateStreamingDistributionError::InvalidArgument(String::from(parsed_error.message)),"InvalidOrigin" => CreateStreamingDistributionError::InvalidOrigin(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => CreateStreamingDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"MissingBody" => CreateStreamingDistributionError::MissingBody(String::from(parsed_error.message)),"StreamingDistributionAlreadyExists" => CreateStreamingDistributionError::StreamingDistributionAlreadyExists(String::from(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(String::from(parsed_error.message)),"TooManyStreamingDistributions" => CreateStreamingDistributionError::TooManyStreamingDistributions(String::from(parsed_error.message)),"TooManyTrustedSigners" => CreateStreamingDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => CreateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),_ => CreateStreamingDistributionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateStreamingDistributionError::Unknown(body.to_string())
@@ -6737,7 +6838,22 @@ Unknown(String)
                 impl Error for CreateStreamingDistributionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateStreamingDistributionError::InvalidArgument(ref cause) => cause,CreateStreamingDistributionError::TooManyTrustedSigners(ref cause) => cause,CreateStreamingDistributionError::InvalidOrigin(ref cause) => cause,CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(ref cause) => cause,CreateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,CreateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => cause,CreateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,CreateStreamingDistributionError::MissingBody(ref cause) => cause,CreateStreamingDistributionError::AccessDenied(ref cause) => cause,CreateStreamingDistributionError::TooManyStreamingDistributions(ref cause) => cause,CreateStreamingDistributionError::InconsistentQuantities(ref cause) => cause,CreateStreamingDistributionError::StreamingDistributionAlreadyExists(ref cause) => cause,CreateStreamingDistributionError::Validation(ref cause) => cause,CreateStreamingDistributionError::Credentials(ref err) => err.description(),CreateStreamingDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateStreamingDistributionError::Unknown(ref cause) => cause
+                            CreateStreamingDistributionError::AccessDenied(ref cause) => cause,
+CreateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => cause,
+CreateStreamingDistributionError::InconsistentQuantities(ref cause) => cause,
+CreateStreamingDistributionError::InvalidArgument(ref cause) => cause,
+CreateStreamingDistributionError::InvalidOrigin(ref cause) => cause,
+CreateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
+CreateStreamingDistributionError::MissingBody(ref cause) => cause,
+CreateStreamingDistributionError::StreamingDistributionAlreadyExists(ref cause) => cause,
+CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(ref cause) => cause,
+CreateStreamingDistributionError::TooManyStreamingDistributions(ref cause) => cause,
+CreateStreamingDistributionError::TooManyTrustedSigners(ref cause) => cause,
+CreateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,
+CreateStreamingDistributionError::Validation(ref cause) => cause,
+CreateStreamingDistributionError::Credentials(ref err) => err.description(),
+CreateStreamingDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateStreamingDistributionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6745,32 +6861,32 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateStreamingDistributionWithTagsError {
                     
-///
-TooManyStreamingDistributionCNAMEs(String),
-///<p>The argument is invalid.</p>
-InvalidArgument(String),
-///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
-InconsistentQuantities(String),
-///
-CNAMEAlreadyExists(String),
-///
-StreamingDistributionAlreadyExists(String),
-///<p>The origin access identity is not valid or doesn't exist.</p>
-InvalidOriginAccessIdentity(String),
-///<p>One or more of your trusted signers do not exist.</p>
-TrustedSignerDoesNotExist(String),
-///
-InvalidTagging(String),
-///<p>Your request contains more trusted signers than are allowed per distribution.</p>
-TooManyTrustedSigners(String),
-///<p>Processing your request would cause you to exceed the maximum number of streaming distributions allowed.</p>
-TooManyStreamingDistributions(String),
 ///<p>Access denied.</p>
 AccessDenied(String),
+///
+CNAMEAlreadyExists(String),
+///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+InconsistentQuantities(String),
+///<p>The argument is invalid.</p>
+InvalidArgument(String),
+///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
+InvalidOrigin(String),
+///<p>The origin access identity is not valid or doesn't exist.</p>
+InvalidOriginAccessIdentity(String),
+///
+InvalidTagging(String),
 ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
 MissingBody(String),
-///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
-InvalidOrigin(String),/// An error occurred dispatching the HTTP request
+///
+StreamingDistributionAlreadyExists(String),
+///
+TooManyStreamingDistributionCNAMEs(String),
+///<p>Processing your request would cause you to exceed the maximum number of streaming distributions allowed.</p>
+TooManyStreamingDistributions(String),
+///<p>Your request contains more trusted signers than are allowed per distribution.</p>
+TooManyTrustedSigners(String),
+///<p>One or more of your trusted signers do not exist.</p>
+TrustedSignerDoesNotExist(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6787,7 +6903,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CNAMEAlreadyExists" => CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(String::from(parsed_error.message)),"MissingBody" => CreateStreamingDistributionWithTagsError::MissingBody(String::from(parsed_error.message)),"StreamingDistributionAlreadyExists" => CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(String::from(parsed_error.message)),"InvalidTagging" => CreateStreamingDistributionWithTagsError::InvalidTagging(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),"AccessDenied" => CreateStreamingDistributionWithTagsError::AccessDenied(String::from(parsed_error.message)),"InconsistentQuantities" => CreateStreamingDistributionWithTagsError::InconsistentQuantities(String::from(parsed_error.message)),"TooManyTrustedSigners" => CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(String::from(parsed_error.message)),"TooManyStreamingDistributions" => CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(String::from(parsed_error.message)),"InvalidOrigin" => CreateStreamingDistributionWithTagsError::InvalidOrigin(String::from(parsed_error.message)),"InvalidArgument" => CreateStreamingDistributionWithTagsError::InvalidArgument(String::from(parsed_error.message)),_ => CreateStreamingDistributionWithTagsError::Unknown(String::from(body))
+                                    "AccessDenied" => CreateStreamingDistributionWithTagsError::AccessDenied(String::from(parsed_error.message)),"CNAMEAlreadyExists" => CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => CreateStreamingDistributionWithTagsError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => CreateStreamingDistributionWithTagsError::InvalidArgument(String::from(parsed_error.message)),"InvalidOrigin" => CreateStreamingDistributionWithTagsError::InvalidOrigin(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"InvalidTagging" => CreateStreamingDistributionWithTagsError::InvalidTagging(String::from(parsed_error.message)),"MissingBody" => CreateStreamingDistributionWithTagsError::MissingBody(String::from(parsed_error.message)),"StreamingDistributionAlreadyExists" => CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(String::from(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(String::from(parsed_error.message)),"TooManyStreamingDistributions" => CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(String::from(parsed_error.message)),"TooManyTrustedSigners" => CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),_ => CreateStreamingDistributionWithTagsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateStreamingDistributionWithTagsError::Unknown(body.to_string())
@@ -6819,7 +6935,23 @@ Unknown(String)
                 impl Error for CreateStreamingDistributionWithTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateStreamingDistributionWithTagsError::MissingBody(ref cause) => cause,CreateStreamingDistributionWithTagsError::InvalidArgument(ref cause) => cause,CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => cause,CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(ref cause) => cause,CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => cause,CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(ref cause) => cause,CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(ref cause) => cause,CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(ref cause) => cause,CreateStreamingDistributionWithTagsError::InvalidOrigin(ref cause) => cause,CreateStreamingDistributionWithTagsError::AccessDenied(ref cause) => cause,CreateStreamingDistributionWithTagsError::InvalidTagging(ref cause) => cause,CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => cause,CreateStreamingDistributionWithTagsError::InconsistentQuantities(ref cause) => cause,CreateStreamingDistributionWithTagsError::Validation(ref cause) => cause,CreateStreamingDistributionWithTagsError::Credentials(ref err) => err.description(),CreateStreamingDistributionWithTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateStreamingDistributionWithTagsError::Unknown(ref cause) => cause
+                            CreateStreamingDistributionWithTagsError::AccessDenied(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::InconsistentQuantities(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::InvalidArgument(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::InvalidOrigin(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::InvalidTagging(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::MissingBody(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::Validation(ref cause) => cause,
+CreateStreamingDistributionWithTagsError::Credentials(ref err) => err.description(),
+CreateStreamingDistributionWithTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateStreamingDistributionWithTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6827,14 +6959,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteCloudFrontOriginAccessIdentityError {
                     
-///<p>The specified origin access identity does not exist.</p>
-NoSuchCloudFrontOriginAccessIdentity(String),
+///<p>Access denied.</p>
+AccessDenied(String),
 ///
 CloudFrontOriginAccessIdentityInUse(String),
 ///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
 InvalidIfMatchVersion(String),
-///<p>Access denied.</p>
-AccessDenied(String),
+///<p>The specified origin access identity does not exist.</p>
+NoSuchCloudFrontOriginAccessIdentity(String),
 ///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
 PreconditionFailed(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -6853,7 +6985,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidIfMatchVersion" => DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"CloudFrontOriginAccessIdentityInUse" => DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(String::from(parsed_error.message)),"AccessDenied" => DeleteCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"PreconditionFailed" => DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),_ => DeleteCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
+                                    "AccessDenied" => DeleteCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"CloudFrontOriginAccessIdentityInUse" => DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(String::from(parsed_error.message)),"InvalidIfMatchVersion" => DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"PreconditionFailed" => DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),_ => DeleteCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
@@ -6885,7 +7017,15 @@ Unknown(String)
                 impl Error for DeleteCloudFrontOriginAccessIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(ref cause) => cause,DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => cause,DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => cause,DeleteCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,DeleteCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),DeleteCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause
+                            DeleteCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,
+DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(ref cause) => cause,
+DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => cause,
+DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,
+DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => cause,
+DeleteCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,
+DeleteCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),
+DeleteCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6893,16 +7033,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDistributionError {
                     
+///<p>Access denied.</p>
+AccessDenied(String),
+///
+DistributionNotDisabled(String),
+///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+InvalidIfMatchVersion(String),
 ///<p>The specified distribution does not exist.</p>
 NoSuchDistribution(String),
 ///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
-PreconditionFailed(String),
-///
-DistributionNotDisabled(String),
-///<p>Access denied.</p>
-AccessDenied(String),
-///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
-InvalidIfMatchVersion(String),/// An error occurred dispatching the HTTP request
+PreconditionFailed(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6919,7 +7059,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "PreconditionFailed" => DeleteDistributionError::PreconditionFailed(String::from(parsed_error.message)),"AccessDenied" => DeleteDistributionError::AccessDenied(String::from(parsed_error.message)),"DistributionNotDisabled" => DeleteDistributionError::DistributionNotDisabled(String::from(parsed_error.message)),"NoSuchDistribution" => DeleteDistributionError::NoSuchDistribution(String::from(parsed_error.message)),"InvalidIfMatchVersion" => DeleteDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),_ => DeleteDistributionError::Unknown(String::from(body))
+                                    "AccessDenied" => DeleteDistributionError::AccessDenied(String::from(parsed_error.message)),"DistributionNotDisabled" => DeleteDistributionError::DistributionNotDisabled(String::from(parsed_error.message)),"InvalidIfMatchVersion" => DeleteDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),"NoSuchDistribution" => DeleteDistributionError::NoSuchDistribution(String::from(parsed_error.message)),"PreconditionFailed" => DeleteDistributionError::PreconditionFailed(String::from(parsed_error.message)),_ => DeleteDistributionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteDistributionError::Unknown(body.to_string())
@@ -6951,7 +7091,15 @@ Unknown(String)
                 impl Error for DeleteDistributionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDistributionError::InvalidIfMatchVersion(ref cause) => cause,DeleteDistributionError::NoSuchDistribution(ref cause) => cause,DeleteDistributionError::DistributionNotDisabled(ref cause) => cause,DeleteDistributionError::AccessDenied(ref cause) => cause,DeleteDistributionError::PreconditionFailed(ref cause) => cause,DeleteDistributionError::Validation(ref cause) => cause,DeleteDistributionError::Credentials(ref err) => err.description(),DeleteDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDistributionError::Unknown(ref cause) => cause
+                            DeleteDistributionError::AccessDenied(ref cause) => cause,
+DeleteDistributionError::DistributionNotDisabled(ref cause) => cause,
+DeleteDistributionError::InvalidIfMatchVersion(ref cause) => cause,
+DeleteDistributionError::NoSuchDistribution(ref cause) => cause,
+DeleteDistributionError::PreconditionFailed(ref cause) => cause,
+DeleteDistributionError::Validation(ref cause) => cause,
+DeleteDistributionError::Credentials(ref err) => err.description(),
+DeleteDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDistributionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6961,14 +7109,14 @@ Unknown(String)
                     
 ///<p>Access denied.</p>
 AccessDenied(String),
-///
-StreamingDistributionNotDisabled(String),
-///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
-PreconditionFailed(String),
+///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+InvalidIfMatchVersion(String),
 ///<p>The specified streaming distribution does not exist.</p>
 NoSuchStreamingDistribution(String),
-///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
-InvalidIfMatchVersion(String),/// An error occurred dispatching the HTTP request
+///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+PreconditionFailed(String),
+///
+StreamingDistributionNotDisabled(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6985,7 +7133,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchStreamingDistribution" => DeleteStreamingDistributionError::NoSuchStreamingDistribution(String::from(parsed_error.message)),"StreamingDistributionNotDisabled" => DeleteStreamingDistributionError::StreamingDistributionNotDisabled(String::from(parsed_error.message)),"AccessDenied" => DeleteStreamingDistributionError::AccessDenied(String::from(parsed_error.message)),"PreconditionFailed" => DeleteStreamingDistributionError::PreconditionFailed(String::from(parsed_error.message)),"InvalidIfMatchVersion" => DeleteStreamingDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),_ => DeleteStreamingDistributionError::Unknown(String::from(body))
+                                    "AccessDenied" => DeleteStreamingDistributionError::AccessDenied(String::from(parsed_error.message)),"InvalidIfMatchVersion" => DeleteStreamingDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),"NoSuchStreamingDistribution" => DeleteStreamingDistributionError::NoSuchStreamingDistribution(String::from(parsed_error.message)),"PreconditionFailed" => DeleteStreamingDistributionError::PreconditionFailed(String::from(parsed_error.message)),"StreamingDistributionNotDisabled" => DeleteStreamingDistributionError::StreamingDistributionNotDisabled(String::from(parsed_error.message)),_ => DeleteStreamingDistributionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteStreamingDistributionError::Unknown(body.to_string())
@@ -7017,7 +7165,15 @@ Unknown(String)
                 impl Error for DeleteStreamingDistributionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteStreamingDistributionError::AccessDenied(ref cause) => cause,DeleteStreamingDistributionError::StreamingDistributionNotDisabled(ref cause) => cause,DeleteStreamingDistributionError::PreconditionFailed(ref cause) => cause,DeleteStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,DeleteStreamingDistributionError::InvalidIfMatchVersion(ref cause) => cause,DeleteStreamingDistributionError::Validation(ref cause) => cause,DeleteStreamingDistributionError::Credentials(ref err) => err.description(),DeleteStreamingDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteStreamingDistributionError::Unknown(ref cause) => cause
+                            DeleteStreamingDistributionError::AccessDenied(ref cause) => cause,
+DeleteStreamingDistributionError::InvalidIfMatchVersion(ref cause) => cause,
+DeleteStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,
+DeleteStreamingDistributionError::PreconditionFailed(ref cause) => cause,
+DeleteStreamingDistributionError::StreamingDistributionNotDisabled(ref cause) => cause,
+DeleteStreamingDistributionError::Validation(ref cause) => cause,
+DeleteStreamingDistributionError::Credentials(ref err) => err.description(),
+DeleteStreamingDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteStreamingDistributionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7045,7 +7201,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchCloudFrontOriginAccessIdentity" => GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"AccessDenied" => GetCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),_ => GetCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
+                                    "AccessDenied" => GetCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),_ => GetCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
@@ -7077,7 +7233,12 @@ Unknown(String)
                 impl Error for GetCloudFrontOriginAccessIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,GetCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,GetCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),GetCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause
+                            GetCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,
+GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,
+GetCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,
+GetCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),
+GetCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7085,10 +7246,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetCloudFrontOriginAccessIdentityConfigError {
                     
-///<p>The specified origin access identity does not exist.</p>
-NoSuchCloudFrontOriginAccessIdentity(String),
 ///<p>Access denied.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+AccessDenied(String),
+///<p>The specified origin access identity does not exist.</p>
+NoSuchCloudFrontOriginAccessIdentity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7137,7 +7298,12 @@ Unknown(String)
                 impl Error for GetCloudFrontOriginAccessIdentityConfigError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(ref cause) => cause,GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,GetCloudFrontOriginAccessIdentityConfigError::Validation(ref cause) => cause,GetCloudFrontOriginAccessIdentityConfigError::Credentials(ref err) => err.description(),GetCloudFrontOriginAccessIdentityConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetCloudFrontOriginAccessIdentityConfigError::Unknown(ref cause) => cause
+                            GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(ref cause) => cause,
+GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,
+GetCloudFrontOriginAccessIdentityConfigError::Validation(ref cause) => cause,
+GetCloudFrontOriginAccessIdentityConfigError::Credentials(ref err) => err.description(),
+GetCloudFrontOriginAccessIdentityConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetCloudFrontOriginAccessIdentityConfigError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7165,7 +7331,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchDistribution" => GetDistributionError::NoSuchDistribution(String::from(parsed_error.message)),"AccessDenied" => GetDistributionError::AccessDenied(String::from(parsed_error.message)),_ => GetDistributionError::Unknown(String::from(body))
+                                    "AccessDenied" => GetDistributionError::AccessDenied(String::from(parsed_error.message)),"NoSuchDistribution" => GetDistributionError::NoSuchDistribution(String::from(parsed_error.message)),_ => GetDistributionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetDistributionError::Unknown(body.to_string())
@@ -7197,7 +7363,12 @@ Unknown(String)
                 impl Error for GetDistributionError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDistributionError::NoSuchDistribution(ref cause) => cause,GetDistributionError::AccessDenied(ref cause) => cause,GetDistributionError::Validation(ref cause) => cause,GetDistributionError::Credentials(ref err) => err.description(),GetDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDistributionError::Unknown(ref cause) => cause
+                            GetDistributionError::AccessDenied(ref cause) => cause,
+GetDistributionError::NoSuchDistribution(ref cause) => cause,
+GetDistributionError::Validation(ref cause) => cause,
+GetDistributionError::Credentials(ref err) => err.description(),
+GetDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDistributionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7257,7 +7428,12 @@ Unknown(String)
                 impl Error for GetDistributionConfigError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDistributionConfigError::AccessDenied(ref cause) => cause,GetDistributionConfigError::NoSuchDistribution(ref cause) => cause,GetDistributionConfigError::Validation(ref cause) => cause,GetDistributionConfigError::Credentials(ref err) => err.description(),GetDistributionConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDistributionConfigError::Unknown(ref cause) => cause
+                            GetDistributionConfigError::AccessDenied(ref cause) => cause,
+GetDistributionConfigError::NoSuchDistribution(ref cause) => cause,
+GetDistributionConfigError::Validation(ref cause) => cause,
+GetDistributionConfigError::Credentials(ref err) => err.description(),
+GetDistributionConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDistributionConfigError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7267,10 +7443,10 @@ Unknown(String)
                     
 ///<p>Access denied.</p>
 AccessDenied(String),
-///<p>The specified invalidation does not exist.</p>
-NoSuchInvalidation(String),
 ///<p>The specified distribution does not exist.</p>
-NoSuchDistribution(String),/// An error occurred dispatching the HTTP request
+NoSuchDistribution(String),
+///<p>The specified invalidation does not exist.</p>
+NoSuchInvalidation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7287,7 +7463,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchDistribution" => GetInvalidationError::NoSuchDistribution(String::from(parsed_error.message)),"NoSuchInvalidation" => GetInvalidationError::NoSuchInvalidation(String::from(parsed_error.message)),"AccessDenied" => GetInvalidationError::AccessDenied(String::from(parsed_error.message)),_ => GetInvalidationError::Unknown(String::from(body))
+                                    "AccessDenied" => GetInvalidationError::AccessDenied(String::from(parsed_error.message)),"NoSuchDistribution" => GetInvalidationError::NoSuchDistribution(String::from(parsed_error.message)),"NoSuchInvalidation" => GetInvalidationError::NoSuchInvalidation(String::from(parsed_error.message)),_ => GetInvalidationError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetInvalidationError::Unknown(body.to_string())
@@ -7319,7 +7495,13 @@ Unknown(String)
                 impl Error for GetInvalidationError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetInvalidationError::AccessDenied(ref cause) => cause,GetInvalidationError::NoSuchDistribution(ref cause) => cause,GetInvalidationError::NoSuchInvalidation(ref cause) => cause,GetInvalidationError::Validation(ref cause) => cause,GetInvalidationError::Credentials(ref err) => err.description(),GetInvalidationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetInvalidationError::Unknown(ref cause) => cause
+                            GetInvalidationError::AccessDenied(ref cause) => cause,
+GetInvalidationError::NoSuchDistribution(ref cause) => cause,
+GetInvalidationError::NoSuchInvalidation(ref cause) => cause,
+GetInvalidationError::Validation(ref cause) => cause,
+GetInvalidationError::Credentials(ref err) => err.description(),
+GetInvalidationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetInvalidationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7327,10 +7509,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetStreamingDistributionError {
                     
-///<p>The specified streaming distribution does not exist.</p>
-NoSuchStreamingDistribution(String),
 ///<p>Access denied.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+AccessDenied(String),
+///<p>The specified streaming distribution does not exist.</p>
+NoSuchStreamingDistribution(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7379,7 +7561,12 @@ Unknown(String)
                 impl Error for GetStreamingDistributionError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,GetStreamingDistributionError::AccessDenied(ref cause) => cause,GetStreamingDistributionError::Validation(ref cause) => cause,GetStreamingDistributionError::Credentials(ref err) => err.description(),GetStreamingDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetStreamingDistributionError::Unknown(ref cause) => cause
+                            GetStreamingDistributionError::AccessDenied(ref cause) => cause,
+GetStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,
+GetStreamingDistributionError::Validation(ref cause) => cause,
+GetStreamingDistributionError::Credentials(ref err) => err.description(),
+GetStreamingDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetStreamingDistributionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7387,10 +7574,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetStreamingDistributionConfigError {
                     
-///<p>The specified streaming distribution does not exist.</p>
-NoSuchStreamingDistribution(String),
 ///<p>Access denied.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+AccessDenied(String),
+///<p>The specified streaming distribution does not exist.</p>
+NoSuchStreamingDistribution(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7407,7 +7594,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchStreamingDistribution" => GetStreamingDistributionConfigError::NoSuchStreamingDistribution(String::from(parsed_error.message)),"AccessDenied" => GetStreamingDistributionConfigError::AccessDenied(String::from(parsed_error.message)),_ => GetStreamingDistributionConfigError::Unknown(String::from(body))
+                                    "AccessDenied" => GetStreamingDistributionConfigError::AccessDenied(String::from(parsed_error.message)),"NoSuchStreamingDistribution" => GetStreamingDistributionConfigError::NoSuchStreamingDistribution(String::from(parsed_error.message)),_ => GetStreamingDistributionConfigError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetStreamingDistributionConfigError::Unknown(body.to_string())
@@ -7439,7 +7626,12 @@ Unknown(String)
                 impl Error for GetStreamingDistributionConfigError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetStreamingDistributionConfigError::NoSuchStreamingDistribution(ref cause) => cause,GetStreamingDistributionConfigError::AccessDenied(ref cause) => cause,GetStreamingDistributionConfigError::Validation(ref cause) => cause,GetStreamingDistributionConfigError::Credentials(ref err) => err.description(),GetStreamingDistributionConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetStreamingDistributionConfigError::Unknown(ref cause) => cause
+                            GetStreamingDistributionConfigError::AccessDenied(ref cause) => cause,
+GetStreamingDistributionConfigError::NoSuchStreamingDistribution(ref cause) => cause,
+GetStreamingDistributionConfigError::Validation(ref cause) => cause,
+GetStreamingDistributionConfigError::Credentials(ref err) => err.description(),
+GetStreamingDistributionConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetStreamingDistributionConfigError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7497,7 +7689,11 @@ Unknown(String)
                 impl Error for ListCloudFrontOriginAccessIdentitiesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(ref cause) => cause,ListCloudFrontOriginAccessIdentitiesError::Validation(ref cause) => cause,ListCloudFrontOriginAccessIdentitiesError::Credentials(ref err) => err.description(),ListCloudFrontOriginAccessIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListCloudFrontOriginAccessIdentitiesError::Unknown(ref cause) => cause
+                            ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(ref cause) => cause,
+ListCloudFrontOriginAccessIdentitiesError::Validation(ref cause) => cause,
+ListCloudFrontOriginAccessIdentitiesError::Credentials(ref err) => err.description(),
+ListCloudFrontOriginAccessIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListCloudFrontOriginAccessIdentitiesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7555,7 +7751,11 @@ Unknown(String)
                 impl Error for ListDistributionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDistributionsError::InvalidArgument(ref cause) => cause,ListDistributionsError::Validation(ref cause) => cause,ListDistributionsError::Credentials(ref err) => err.description(),ListDistributionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDistributionsError::Unknown(ref cause) => cause
+                            ListDistributionsError::InvalidArgument(ref cause) => cause,
+ListDistributionsError::Validation(ref cause) => cause,
+ListDistributionsError::Credentials(ref err) => err.description(),
+ListDistributionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDistributionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7563,10 +7763,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListDistributionsByWebACLIdError {
                     
-///
-InvalidWebACLId(String),
 ///<p>The argument is invalid.</p>
-InvalidArgument(String),/// An error occurred dispatching the HTTP request
+InvalidArgument(String),
+///
+InvalidWebACLId(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7583,7 +7783,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidWebACLId" => ListDistributionsByWebACLIdError::InvalidWebACLId(String::from(parsed_error.message)),"InvalidArgument" => ListDistributionsByWebACLIdError::InvalidArgument(String::from(parsed_error.message)),_ => ListDistributionsByWebACLIdError::Unknown(String::from(body))
+                                    "InvalidArgument" => ListDistributionsByWebACLIdError::InvalidArgument(String::from(parsed_error.message)),"InvalidWebACLId" => ListDistributionsByWebACLIdError::InvalidWebACLId(String::from(parsed_error.message)),_ => ListDistributionsByWebACLIdError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListDistributionsByWebACLIdError::Unknown(body.to_string())
@@ -7615,7 +7815,12 @@ Unknown(String)
                 impl Error for ListDistributionsByWebACLIdError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDistributionsByWebACLIdError::InvalidWebACLId(ref cause) => cause,ListDistributionsByWebACLIdError::InvalidArgument(ref cause) => cause,ListDistributionsByWebACLIdError::Validation(ref cause) => cause,ListDistributionsByWebACLIdError::Credentials(ref err) => err.description(),ListDistributionsByWebACLIdError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDistributionsByWebACLIdError::Unknown(ref cause) => cause
+                            ListDistributionsByWebACLIdError::InvalidArgument(ref cause) => cause,
+ListDistributionsByWebACLIdError::InvalidWebACLId(ref cause) => cause,
+ListDistributionsByWebACLIdError::Validation(ref cause) => cause,
+ListDistributionsByWebACLIdError::Credentials(ref err) => err.description(),
+ListDistributionsByWebACLIdError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDistributionsByWebACLIdError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7623,12 +7828,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListInvalidationsError {
                     
-///<p>The specified distribution does not exist.</p>
-NoSuchDistribution(String),
 ///<p>Access denied.</p>
 AccessDenied(String),
 ///<p>The argument is invalid.</p>
-InvalidArgument(String),/// An error occurred dispatching the HTTP request
+InvalidArgument(String),
+///<p>The specified distribution does not exist.</p>
+NoSuchDistribution(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7645,7 +7850,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidArgument" => ListInvalidationsError::InvalidArgument(String::from(parsed_error.message)),"AccessDenied" => ListInvalidationsError::AccessDenied(String::from(parsed_error.message)),"NoSuchDistribution" => ListInvalidationsError::NoSuchDistribution(String::from(parsed_error.message)),_ => ListInvalidationsError::Unknown(String::from(body))
+                                    "AccessDenied" => ListInvalidationsError::AccessDenied(String::from(parsed_error.message)),"InvalidArgument" => ListInvalidationsError::InvalidArgument(String::from(parsed_error.message)),"NoSuchDistribution" => ListInvalidationsError::NoSuchDistribution(String::from(parsed_error.message)),_ => ListInvalidationsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListInvalidationsError::Unknown(body.to_string())
@@ -7677,7 +7882,13 @@ Unknown(String)
                 impl Error for ListInvalidationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListInvalidationsError::NoSuchDistribution(ref cause) => cause,ListInvalidationsError::AccessDenied(ref cause) => cause,ListInvalidationsError::InvalidArgument(ref cause) => cause,ListInvalidationsError::Validation(ref cause) => cause,ListInvalidationsError::Credentials(ref err) => err.description(),ListInvalidationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListInvalidationsError::Unknown(ref cause) => cause
+                            ListInvalidationsError::AccessDenied(ref cause) => cause,
+ListInvalidationsError::InvalidArgument(ref cause) => cause,
+ListInvalidationsError::NoSuchDistribution(ref cause) => cause,
+ListInvalidationsError::Validation(ref cause) => cause,
+ListInvalidationsError::Credentials(ref err) => err.description(),
+ListInvalidationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListInvalidationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7735,7 +7946,11 @@ Unknown(String)
                 impl Error for ListStreamingDistributionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListStreamingDistributionsError::InvalidArgument(ref cause) => cause,ListStreamingDistributionsError::Validation(ref cause) => cause,ListStreamingDistributionsError::Credentials(ref err) => err.description(),ListStreamingDistributionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListStreamingDistributionsError::Unknown(ref cause) => cause
+                            ListStreamingDistributionsError::InvalidArgument(ref cause) => cause,
+ListStreamingDistributionsError::Validation(ref cause) => cause,
+ListStreamingDistributionsError::Credentials(ref err) => err.description(),
+ListStreamingDistributionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListStreamingDistributionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7743,14 +7958,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTagsForResourceError {
                     
-///
-InvalidTagging(String),
+///<p>Access denied.</p>
+AccessDenied(String),
 ///<p>The argument is invalid.</p>
 InvalidArgument(String),
 ///
-NoSuchResource(String),
-///<p>Access denied.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+InvalidTagging(String),
+///
+NoSuchResource(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7767,7 +7982,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidArgument" => ListTagsForResourceError::InvalidArgument(String::from(parsed_error.message)),"InvalidTagging" => ListTagsForResourceError::InvalidTagging(String::from(parsed_error.message)),"AccessDenied" => ListTagsForResourceError::AccessDenied(String::from(parsed_error.message)),"NoSuchResource" => ListTagsForResourceError::NoSuchResource(String::from(parsed_error.message)),_ => ListTagsForResourceError::Unknown(String::from(body))
+                                    "AccessDenied" => ListTagsForResourceError::AccessDenied(String::from(parsed_error.message)),"InvalidArgument" => ListTagsForResourceError::InvalidArgument(String::from(parsed_error.message)),"InvalidTagging" => ListTagsForResourceError::InvalidTagging(String::from(parsed_error.message)),"NoSuchResource" => ListTagsForResourceError::NoSuchResource(String::from(parsed_error.message)),_ => ListTagsForResourceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListTagsForResourceError::Unknown(body.to_string())
@@ -7799,7 +8014,14 @@ Unknown(String)
                 impl Error for ListTagsForResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTagsForResourceError::AccessDenied(ref cause) => cause,ListTagsForResourceError::NoSuchResource(ref cause) => cause,ListTagsForResourceError::InvalidArgument(ref cause) => cause,ListTagsForResourceError::InvalidTagging(ref cause) => cause,ListTagsForResourceError::Validation(ref cause) => cause,ListTagsForResourceError::Credentials(ref err) => err.description(),ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTagsForResourceError::Unknown(ref cause) => cause
+                            ListTagsForResourceError::AccessDenied(ref cause) => cause,
+ListTagsForResourceError::InvalidArgument(ref cause) => cause,
+ListTagsForResourceError::InvalidTagging(ref cause) => cause,
+ListTagsForResourceError::NoSuchResource(ref cause) => cause,
+ListTagsForResourceError::Validation(ref cause) => cause,
+ListTagsForResourceError::Credentials(ref err) => err.description(),
+ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTagsForResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7807,12 +8029,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum TagResourceError {
                     
+///<p>Access denied.</p>
+AccessDenied(String),
 ///<p>The argument is invalid.</p>
 InvalidArgument(String),
 ///
 InvalidTagging(String),
-///<p>Access denied.</p>
-AccessDenied(String),
 ///
 NoSuchResource(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -7831,7 +8053,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidArgument" => TagResourceError::InvalidArgument(String::from(parsed_error.message)),"InvalidTagging" => TagResourceError::InvalidTagging(String::from(parsed_error.message)),"NoSuchResource" => TagResourceError::NoSuchResource(String::from(parsed_error.message)),"AccessDenied" => TagResourceError::AccessDenied(String::from(parsed_error.message)),_ => TagResourceError::Unknown(String::from(body))
+                                    "AccessDenied" => TagResourceError::AccessDenied(String::from(parsed_error.message)),"InvalidArgument" => TagResourceError::InvalidArgument(String::from(parsed_error.message)),"InvalidTagging" => TagResourceError::InvalidTagging(String::from(parsed_error.message)),"NoSuchResource" => TagResourceError::NoSuchResource(String::from(parsed_error.message)),_ => TagResourceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => TagResourceError::Unknown(body.to_string())
@@ -7863,7 +8085,14 @@ Unknown(String)
                 impl Error for TagResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            TagResourceError::InvalidArgument(ref cause) => cause,TagResourceError::NoSuchResource(ref cause) => cause,TagResourceError::AccessDenied(ref cause) => cause,TagResourceError::InvalidTagging(ref cause) => cause,TagResourceError::Validation(ref cause) => cause,TagResourceError::Credentials(ref err) => err.description(),TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),TagResourceError::Unknown(ref cause) => cause
+                            TagResourceError::AccessDenied(ref cause) => cause,
+TagResourceError::InvalidArgument(ref cause) => cause,
+TagResourceError::InvalidTagging(ref cause) => cause,
+TagResourceError::NoSuchResource(ref cause) => cause,
+TagResourceError::Validation(ref cause) => cause,
+TagResourceError::Credentials(ref err) => err.description(),
+TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+TagResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7871,14 +8100,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UntagResourceError {
                     
+///<p>Access denied.</p>
+AccessDenied(String),
 ///<p>The argument is invalid.</p>
 InvalidArgument(String),
 ///
-NoSuchResource(String),
-///
 InvalidTagging(String),
-///<p>Access denied.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+///
+NoSuchResource(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7895,7 +8124,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "AccessDenied" => UntagResourceError::AccessDenied(String::from(parsed_error.message)),"NoSuchResource" => UntagResourceError::NoSuchResource(String::from(parsed_error.message)),"InvalidTagging" => UntagResourceError::InvalidTagging(String::from(parsed_error.message)),"InvalidArgument" => UntagResourceError::InvalidArgument(String::from(parsed_error.message)),_ => UntagResourceError::Unknown(String::from(body))
+                                    "AccessDenied" => UntagResourceError::AccessDenied(String::from(parsed_error.message)),"InvalidArgument" => UntagResourceError::InvalidArgument(String::from(parsed_error.message)),"InvalidTagging" => UntagResourceError::InvalidTagging(String::from(parsed_error.message)),"NoSuchResource" => UntagResourceError::NoSuchResource(String::from(parsed_error.message)),_ => UntagResourceError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UntagResourceError::Unknown(body.to_string())
@@ -7927,7 +8156,14 @@ Unknown(String)
                 impl Error for UntagResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            UntagResourceError::AccessDenied(ref cause) => cause,UntagResourceError::InvalidTagging(ref cause) => cause,UntagResourceError::InvalidArgument(ref cause) => cause,UntagResourceError::NoSuchResource(ref cause) => cause,UntagResourceError::Validation(ref cause) => cause,UntagResourceError::Credentials(ref err) => err.description(),UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UntagResourceError::Unknown(ref cause) => cause
+                            UntagResourceError::AccessDenied(ref cause) => cause,
+UntagResourceError::InvalidArgument(ref cause) => cause,
+UntagResourceError::InvalidTagging(ref cause) => cause,
+UntagResourceError::NoSuchResource(ref cause) => cause,
+UntagResourceError::Validation(ref cause) => cause,
+UntagResourceError::Credentials(ref err) => err.description(),
+UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UntagResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7935,22 +8171,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateCloudFrontOriginAccessIdentityError {
                     
-///<p>Origin and <code>CallerReference</code> cannot be updated. </p>
-IllegalUpdate(String),
-///<p>The argument is invalid.</p>
-InvalidArgument(String),
-///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
-InconsistentQuantities(String),
-///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
-PreconditionFailed(String),
-///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
-InvalidIfMatchVersion(String),
 ///<p>Access denied.</p>
 AccessDenied(String),
+///<p>Origin and <code>CallerReference</code> cannot be updated. </p>
+IllegalUpdate(String),
+///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+InconsistentQuantities(String),
+///<p>The argument is invalid.</p>
+InvalidArgument(String),
+///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+InvalidIfMatchVersion(String),
+///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+MissingBody(String),
 ///<p>The specified origin access identity does not exist.</p>
 NoSuchCloudFrontOriginAccessIdentity(String),
-///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
-MissingBody(String),/// An error occurred dispatching the HTTP request
+///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+PreconditionFailed(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -7967,7 +8203,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "IllegalUpdate" => UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(String::from(parsed_error.message)),"PreconditionFailed" => UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"InvalidIfMatchVersion" => UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"InvalidArgument" => UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"AccessDenied" => UpdateCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"InconsistentQuantities" => UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"MissingBody" => UpdateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),_ => UpdateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
+                                    "AccessDenied" => UpdateCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"IllegalUpdate" => UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(String::from(parsed_error.message)),"InconsistentQuantities" => UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"InvalidIfMatchVersion" => UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"MissingBody" => UpdateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"PreconditionFailed" => UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),_ => UpdateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
@@ -7999,7 +8235,18 @@ Unknown(String)
                 impl Error for UpdateCloudFrontOriginAccessIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => cause,UpdateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => cause,UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => cause,UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => cause,UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => cause,UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(ref cause) => cause,UpdateCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,UpdateCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,UpdateCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),UpdateCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause
+                            UpdateCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,
+UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(ref cause) => cause,
+UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => cause,
+UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => cause,
+UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => cause,
+UpdateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => cause,
+UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,
+UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => cause,
+UpdateCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,
+UpdateCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),
+UpdateCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8007,34 +8254,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateDistributionError {
                     
-///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
-MissingBody(String),
-///<p>You cannot create more origins for the distribution.</p>
-TooManyOrigins(String),
-///<p>Your request contains more trusted signers than are allowed per distribution.</p>
-TooManyTrustedSigners(String),
-///<p>Origin and <code>CallerReference</code> cannot be updated. </p>
-IllegalUpdate(String),
-///
-InvalidWebACLId(String),
-///<p>Your request contains more CNAMEs than are allowed per distribution.</p>
-TooManyDistributionCNAMEs(String),
+///<p>Access denied.</p>
+AccessDenied(String),
 ///
 CNAMEAlreadyExists(String),
-///<p>You cannot create anymore custom SSL/TLS certificates.</p>
-TooManyCertificates(String),
-///
-TooManyQueryStringParameters(String),
-///
-InvalidResponseCode(String),
-///
-TooManyHeadersInForwardedValues(String),
-///<p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
-InvalidRelativePath(String),
-///
-InvalidHeadersForS3Origin(String),
-///<p>The specified Lambda function association is invalid.</p>
-InvalidLambdaFunctionAssociation(String),
+///<p>Origin and <code>CallerReference</code> cannot be updated. </p>
+IllegalUpdate(String),
 ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
 InconsistentQuantities(String),
 ///<p>The argument is invalid.</p>
@@ -8042,47 +8267,69 @@ InvalidArgument(String),
 ///<p>The default root object file name is too big or contains an invalid character.</p>
 InvalidDefaultRootObject(String),
 ///
-InvalidViewerCertificate(String),
-///
-InvalidTTLOrder(String),
-///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
-InvalidIfMatchVersion(String),
-///
-InvalidGeoRestrictionParameter(String),
-///<p>No origin exists with the specified <code>Origin Id</code>. </p>
-NoSuchOrigin(String),
-///<p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
-InvalidRequiredProtocol(String),
+InvalidErrorCode(String),
 ///<p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
 InvalidForwardCookies(String),
 ///
-TooManyOriginCustomHeaders(String),
+InvalidGeoRestrictionParameter(String),
 ///
-InvalidMinimumProtocolVersion(String),
-///<p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
-TooManyCookieNamesInWhiteList(String),
+InvalidHeadersForS3Origin(String),
+///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+InvalidIfMatchVersion(String),
+///<p>The specified Lambda function association is invalid.</p>
+InvalidLambdaFunctionAssociation(String),
 ///
 InvalidLocationCode(String),
-///<p>The specified distribution does not exist.</p>
-NoSuchDistribution(String),
-///<p>Your request contains more Lambda function associations than are allowed per distribution.</p>
-TooManyLambdaFunctionAssociations(String),
-///<p>You cannot create more cache behaviors for the distribution.</p>
-TooManyCacheBehaviors(String),
-///<p>One or more of your trusted signers do not exist.</p>
-TrustedSignerDoesNotExist(String),
-///<p>Access denied.</p>
-AccessDenied(String),
-///<p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
-TooManyDistributionsWithLambdaAssociations(String),
-///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
-PreconditionFailed(String),
+///
+InvalidMinimumProtocolVersion(String),
 ///<p>The origin access identity is not valid or doesn't exist.</p>
 InvalidOriginAccessIdentity(String),
 ///
 InvalidQueryStringParameters(String),
+///<p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
+InvalidRelativePath(String),
+///<p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
+InvalidRequiredProtocol(String),
 ///
-InvalidErrorCode(String),/// An error occurred dispatching the HTTP request
+InvalidResponseCode(String),
+///
+InvalidTTLOrder(String),
+///
+InvalidViewerCertificate(String),
+///
+InvalidWebACLId(String),
+///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+MissingBody(String),
+///<p>The specified distribution does not exist.</p>
+NoSuchDistribution(String),
+///<p>No origin exists with the specified <code>Origin Id</code>. </p>
+NoSuchOrigin(String),
+///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+PreconditionFailed(String),
+///<p>You cannot create more cache behaviors for the distribution.</p>
+TooManyCacheBehaviors(String),
+///<p>You cannot create anymore custom SSL/TLS certificates.</p>
+TooManyCertificates(String),
+///<p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
+TooManyCookieNamesInWhiteList(String),
+///<p>Your request contains more CNAMEs than are allowed per distribution.</p>
+TooManyDistributionCNAMEs(String),
+///<p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
+TooManyDistributionsWithLambdaAssociations(String),
+///
+TooManyHeadersInForwardedValues(String),
+///<p>Your request contains more Lambda function associations than are allowed per distribution.</p>
+TooManyLambdaFunctionAssociations(String),
+///
+TooManyOriginCustomHeaders(String),
+///<p>You cannot create more origins for the distribution.</p>
+TooManyOrigins(String),
+///
+TooManyQueryStringParameters(String),
+///<p>Your request contains more trusted signers than are allowed per distribution.</p>
+TooManyTrustedSigners(String),
+///<p>One or more of your trusted signers do not exist.</p>
+TrustedSignerDoesNotExist(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8099,7 +8346,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "TooManyTrustedSigners" => UpdateDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),"InvalidGeoRestrictionParameter" => UpdateDistributionError::InvalidGeoRestrictionParameter(String::from(parsed_error.message)),"NoSuchOrigin" => UpdateDistributionError::NoSuchOrigin(String::from(parsed_error.message)),"InvalidLambdaFunctionAssociation" => UpdateDistributionError::InvalidLambdaFunctionAssociation(String::from(parsed_error.message)),"InvalidIfMatchVersion" => UpdateDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => UpdateDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"AccessDenied" => UpdateDistributionError::AccessDenied(String::from(parsed_error.message)),"MissingBody" => UpdateDistributionError::MissingBody(String::from(parsed_error.message)),"InconsistentQuantities" => UpdateDistributionError::InconsistentQuantities(String::from(parsed_error.message)),"TooManyDistributionCNAMEs" => UpdateDistributionError::TooManyDistributionCNAMEs(String::from(parsed_error.message)),"InvalidResponseCode" => UpdateDistributionError::InvalidResponseCode(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => UpdateDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),"InvalidTTLOrder" => UpdateDistributionError::InvalidTTLOrder(String::from(parsed_error.message)),"TooManyCacheBehaviors" => UpdateDistributionError::TooManyCacheBehaviors(String::from(parsed_error.message)),"InvalidWebACLId" => UpdateDistributionError::InvalidWebACLId(String::from(parsed_error.message)),"TooManyCookieNamesInWhiteList" => UpdateDistributionError::TooManyCookieNamesInWhiteList(String::from(parsed_error.message)),"InvalidLocationCode" => UpdateDistributionError::InvalidLocationCode(String::from(parsed_error.message)),"NoSuchDistribution" => UpdateDistributionError::NoSuchDistribution(String::from(parsed_error.message)),"InvalidDefaultRootObject" => UpdateDistributionError::InvalidDefaultRootObject(String::from(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(String::from(parsed_error.message)),"TooManyHeadersInForwardedValues" => UpdateDistributionError::TooManyHeadersInForwardedValues(String::from(parsed_error.message)),"InvalidRelativePath" => UpdateDistributionError::InvalidRelativePath(String::from(parsed_error.message)),"InvalidRequiredProtocol" => UpdateDistributionError::InvalidRequiredProtocol(String::from(parsed_error.message)),"CNAMEAlreadyExists" => UpdateDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),"InvalidArgument" => UpdateDistributionError::InvalidArgument(String::from(parsed_error.message)),"InvalidViewerCertificate" => UpdateDistributionError::InvalidViewerCertificate(String::from(parsed_error.message)),"InvalidMinimumProtocolVersion" => UpdateDistributionError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),"PreconditionFailed" => UpdateDistributionError::PreconditionFailed(String::from(parsed_error.message)),"TooManyOrigins" => UpdateDistributionError::TooManyOrigins(String::from(parsed_error.message)),"InvalidHeadersForS3Origin" => UpdateDistributionError::InvalidHeadersForS3Origin(String::from(parsed_error.message)),"TooManyOriginCustomHeaders" => UpdateDistributionError::TooManyOriginCustomHeaders(String::from(parsed_error.message)),"TooManyQueryStringParameters" => UpdateDistributionError::TooManyQueryStringParameters(String::from(parsed_error.message)),"IllegalUpdate" => UpdateDistributionError::IllegalUpdate(String::from(parsed_error.message)),"TooManyCertificates" => UpdateDistributionError::TooManyCertificates(String::from(parsed_error.message)),"InvalidQueryStringParameters" => UpdateDistributionError::InvalidQueryStringParameters(String::from(parsed_error.message)),"InvalidForwardCookies" => UpdateDistributionError::InvalidForwardCookies(String::from(parsed_error.message)),"TooManyLambdaFunctionAssociations" => UpdateDistributionError::TooManyLambdaFunctionAssociations(String::from(parsed_error.message)),"InvalidErrorCode" => UpdateDistributionError::InvalidErrorCode(String::from(parsed_error.message)),_ => UpdateDistributionError::Unknown(String::from(body))
+                                    "AccessDenied" => UpdateDistributionError::AccessDenied(String::from(parsed_error.message)),"CNAMEAlreadyExists" => UpdateDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),"IllegalUpdate" => UpdateDistributionError::IllegalUpdate(String::from(parsed_error.message)),"InconsistentQuantities" => UpdateDistributionError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => UpdateDistributionError::InvalidArgument(String::from(parsed_error.message)),"InvalidDefaultRootObject" => UpdateDistributionError::InvalidDefaultRootObject(String::from(parsed_error.message)),"InvalidErrorCode" => UpdateDistributionError::InvalidErrorCode(String::from(parsed_error.message)),"InvalidForwardCookies" => UpdateDistributionError::InvalidForwardCookies(String::from(parsed_error.message)),"InvalidGeoRestrictionParameter" => UpdateDistributionError::InvalidGeoRestrictionParameter(String::from(parsed_error.message)),"InvalidHeadersForS3Origin" => UpdateDistributionError::InvalidHeadersForS3Origin(String::from(parsed_error.message)),"InvalidIfMatchVersion" => UpdateDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),"InvalidLambdaFunctionAssociation" => UpdateDistributionError::InvalidLambdaFunctionAssociation(String::from(parsed_error.message)),"InvalidLocationCode" => UpdateDistributionError::InvalidLocationCode(String::from(parsed_error.message)),"InvalidMinimumProtocolVersion" => UpdateDistributionError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => UpdateDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"InvalidQueryStringParameters" => UpdateDistributionError::InvalidQueryStringParameters(String::from(parsed_error.message)),"InvalidRelativePath" => UpdateDistributionError::InvalidRelativePath(String::from(parsed_error.message)),"InvalidRequiredProtocol" => UpdateDistributionError::InvalidRequiredProtocol(String::from(parsed_error.message)),"InvalidResponseCode" => UpdateDistributionError::InvalidResponseCode(String::from(parsed_error.message)),"InvalidTTLOrder" => UpdateDistributionError::InvalidTTLOrder(String::from(parsed_error.message)),"InvalidViewerCertificate" => UpdateDistributionError::InvalidViewerCertificate(String::from(parsed_error.message)),"InvalidWebACLId" => UpdateDistributionError::InvalidWebACLId(String::from(parsed_error.message)),"MissingBody" => UpdateDistributionError::MissingBody(String::from(parsed_error.message)),"NoSuchDistribution" => UpdateDistributionError::NoSuchDistribution(String::from(parsed_error.message)),"NoSuchOrigin" => UpdateDistributionError::NoSuchOrigin(String::from(parsed_error.message)),"PreconditionFailed" => UpdateDistributionError::PreconditionFailed(String::from(parsed_error.message)),"TooManyCacheBehaviors" => UpdateDistributionError::TooManyCacheBehaviors(String::from(parsed_error.message)),"TooManyCertificates" => UpdateDistributionError::TooManyCertificates(String::from(parsed_error.message)),"TooManyCookieNamesInWhiteList" => UpdateDistributionError::TooManyCookieNamesInWhiteList(String::from(parsed_error.message)),"TooManyDistributionCNAMEs" => UpdateDistributionError::TooManyDistributionCNAMEs(String::from(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(String::from(parsed_error.message)),"TooManyHeadersInForwardedValues" => UpdateDistributionError::TooManyHeadersInForwardedValues(String::from(parsed_error.message)),"TooManyLambdaFunctionAssociations" => UpdateDistributionError::TooManyLambdaFunctionAssociations(String::from(parsed_error.message)),"TooManyOriginCustomHeaders" => UpdateDistributionError::TooManyOriginCustomHeaders(String::from(parsed_error.message)),"TooManyOrigins" => UpdateDistributionError::TooManyOrigins(String::from(parsed_error.message)),"TooManyQueryStringParameters" => UpdateDistributionError::TooManyQueryStringParameters(String::from(parsed_error.message)),"TooManyTrustedSigners" => UpdateDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => UpdateDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),_ => UpdateDistributionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateDistributionError::Unknown(body.to_string())
@@ -8131,7 +8378,48 @@ Unknown(String)
                 impl Error for UpdateDistributionError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateDistributionError::InvalidQueryStringParameters(ref cause) => cause,UpdateDistributionError::InvalidRequiredProtocol(ref cause) => cause,UpdateDistributionError::InvalidHeadersForS3Origin(ref cause) => cause,UpdateDistributionError::InvalidArgument(ref cause) => cause,UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,UpdateDistributionError::InvalidViewerCertificate(ref cause) => cause,UpdateDistributionError::InvalidForwardCookies(ref cause) => cause,UpdateDistributionError::AccessDenied(ref cause) => cause,UpdateDistributionError::InvalidIfMatchVersion(ref cause) => cause,UpdateDistributionError::InvalidTTLOrder(ref cause) => cause,UpdateDistributionError::TooManyTrustedSigners(ref cause) => cause,UpdateDistributionError::CNAMEAlreadyExists(ref cause) => cause,UpdateDistributionError::InvalidResponseCode(ref cause) => cause,UpdateDistributionError::InvalidDefaultRootObject(ref cause) => cause,UpdateDistributionError::TooManyDistributionCNAMEs(ref cause) => cause,UpdateDistributionError::InvalidRelativePath(ref cause) => cause,UpdateDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,UpdateDistributionError::InvalidMinimumProtocolVersion(ref cause) => cause,UpdateDistributionError::InconsistentQuantities(ref cause) => cause,UpdateDistributionError::IllegalUpdate(ref cause) => cause,UpdateDistributionError::InvalidGeoRestrictionParameter(ref cause) => cause,UpdateDistributionError::InvalidLocationCode(ref cause) => cause,UpdateDistributionError::InvalidErrorCode(ref cause) => cause,UpdateDistributionError::NoSuchDistribution(ref cause) => cause,UpdateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => cause,UpdateDistributionError::TooManyCacheBehaviors(ref cause) => cause,UpdateDistributionError::TooManyOrigins(ref cause) => cause,UpdateDistributionError::TooManyOriginCustomHeaders(ref cause) => cause,UpdateDistributionError::PreconditionFailed(ref cause) => cause,UpdateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => cause,UpdateDistributionError::MissingBody(ref cause) => cause,UpdateDistributionError::InvalidWebACLId(ref cause) => cause,UpdateDistributionError::TooManyQueryStringParameters(ref cause) => cause,UpdateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => cause,UpdateDistributionError::NoSuchOrigin(ref cause) => cause,UpdateDistributionError::TooManyCertificates(ref cause) => cause,UpdateDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,UpdateDistributionError::TooManyHeadersInForwardedValues(ref cause) => cause,UpdateDistributionError::Validation(ref cause) => cause,UpdateDistributionError::Credentials(ref err) => err.description(),UpdateDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateDistributionError::Unknown(ref cause) => cause
+                            UpdateDistributionError::AccessDenied(ref cause) => cause,
+UpdateDistributionError::CNAMEAlreadyExists(ref cause) => cause,
+UpdateDistributionError::IllegalUpdate(ref cause) => cause,
+UpdateDistributionError::InconsistentQuantities(ref cause) => cause,
+UpdateDistributionError::InvalidArgument(ref cause) => cause,
+UpdateDistributionError::InvalidDefaultRootObject(ref cause) => cause,
+UpdateDistributionError::InvalidErrorCode(ref cause) => cause,
+UpdateDistributionError::InvalidForwardCookies(ref cause) => cause,
+UpdateDistributionError::InvalidGeoRestrictionParameter(ref cause) => cause,
+UpdateDistributionError::InvalidHeadersForS3Origin(ref cause) => cause,
+UpdateDistributionError::InvalidIfMatchVersion(ref cause) => cause,
+UpdateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => cause,
+UpdateDistributionError::InvalidLocationCode(ref cause) => cause,
+UpdateDistributionError::InvalidMinimumProtocolVersion(ref cause) => cause,
+UpdateDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
+UpdateDistributionError::InvalidQueryStringParameters(ref cause) => cause,
+UpdateDistributionError::InvalidRelativePath(ref cause) => cause,
+UpdateDistributionError::InvalidRequiredProtocol(ref cause) => cause,
+UpdateDistributionError::InvalidResponseCode(ref cause) => cause,
+UpdateDistributionError::InvalidTTLOrder(ref cause) => cause,
+UpdateDistributionError::InvalidViewerCertificate(ref cause) => cause,
+UpdateDistributionError::InvalidWebACLId(ref cause) => cause,
+UpdateDistributionError::MissingBody(ref cause) => cause,
+UpdateDistributionError::NoSuchDistribution(ref cause) => cause,
+UpdateDistributionError::NoSuchOrigin(ref cause) => cause,
+UpdateDistributionError::PreconditionFailed(ref cause) => cause,
+UpdateDistributionError::TooManyCacheBehaviors(ref cause) => cause,
+UpdateDistributionError::TooManyCertificates(ref cause) => cause,
+UpdateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => cause,
+UpdateDistributionError::TooManyDistributionCNAMEs(ref cause) => cause,
+UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,
+UpdateDistributionError::TooManyHeadersInForwardedValues(ref cause) => cause,
+UpdateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => cause,
+UpdateDistributionError::TooManyOriginCustomHeaders(ref cause) => cause,
+UpdateDistributionError::TooManyOrigins(ref cause) => cause,
+UpdateDistributionError::TooManyQueryStringParameters(ref cause) => cause,
+UpdateDistributionError::TooManyTrustedSigners(ref cause) => cause,
+UpdateDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,
+UpdateDistributionError::Validation(ref cause) => cause,
+UpdateDistributionError::Credentials(ref err) => err.description(),
+UpdateDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateDistributionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8139,32 +8427,32 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateStreamingDistributionError {
                     
-///<p>Origin and <code>CallerReference</code> cannot be updated. </p>
-IllegalUpdate(String),
-///<p>The argument is invalid.</p>
-InvalidArgument(String),
-///<p>Your request contains more trusted signers than are allowed per distribution.</p>
-TooManyTrustedSigners(String),
-///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
-InvalidIfMatchVersion(String),
 ///<p>Access denied.</p>
 AccessDenied(String),
-///<p>One or more of your trusted signers do not exist.</p>
-TrustedSignerDoesNotExist(String),
+///
+CNAMEAlreadyExists(String),
+///<p>Origin and <code>CallerReference</code> cannot be updated. </p>
+IllegalUpdate(String),
 ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
 InconsistentQuantities(String),
+///<p>The argument is invalid.</p>
+InvalidArgument(String),
+///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+InvalidIfMatchVersion(String),
+///<p>The origin access identity is not valid or doesn't exist.</p>
+InvalidOriginAccessIdentity(String),
+///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+MissingBody(String),
 ///<p>The specified streaming distribution does not exist.</p>
 NoSuchStreamingDistribution(String),
 ///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
 PreconditionFailed(String),
 ///
 TooManyStreamingDistributionCNAMEs(String),
-///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
-MissingBody(String),
-///<p>The origin access identity is not valid or doesn't exist.</p>
-InvalidOriginAccessIdentity(String),
-///
-CNAMEAlreadyExists(String),/// An error occurred dispatching the HTTP request
+///<p>Your request contains more trusted signers than are allowed per distribution.</p>
+TooManyTrustedSigners(String),
+///<p>One or more of your trusted signers do not exist.</p>
+TrustedSignerDoesNotExist(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8181,7 +8469,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidOriginAccessIdentity" => UpdateStreamingDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"IllegalUpdate" => UpdateStreamingDistributionError::IllegalUpdate(String::from(parsed_error.message)),"InconsistentQuantities" => UpdateStreamingDistributionError::InconsistentQuantities(String::from(parsed_error.message)),"AccessDenied" => UpdateStreamingDistributionError::AccessDenied(String::from(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(String::from(parsed_error.message)),"PreconditionFailed" => UpdateStreamingDistributionError::PreconditionFailed(String::from(parsed_error.message)),"CNAMEAlreadyExists" => UpdateStreamingDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),"InvalidArgument" => UpdateStreamingDistributionError::InvalidArgument(String::from(parsed_error.message)),"InvalidIfMatchVersion" => UpdateStreamingDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),"NoSuchStreamingDistribution" => UpdateStreamingDistributionError::NoSuchStreamingDistribution(String::from(parsed_error.message)),"TooManyTrustedSigners" => UpdateStreamingDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => UpdateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),"MissingBody" => UpdateStreamingDistributionError::MissingBody(String::from(parsed_error.message)),_ => UpdateStreamingDistributionError::Unknown(String::from(body))
+                                    "AccessDenied" => UpdateStreamingDistributionError::AccessDenied(String::from(parsed_error.message)),"CNAMEAlreadyExists" => UpdateStreamingDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),"IllegalUpdate" => UpdateStreamingDistributionError::IllegalUpdate(String::from(parsed_error.message)),"InconsistentQuantities" => UpdateStreamingDistributionError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => UpdateStreamingDistributionError::InvalidArgument(String::from(parsed_error.message)),"InvalidIfMatchVersion" => UpdateStreamingDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => UpdateStreamingDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"MissingBody" => UpdateStreamingDistributionError::MissingBody(String::from(parsed_error.message)),"NoSuchStreamingDistribution" => UpdateStreamingDistributionError::NoSuchStreamingDistribution(String::from(parsed_error.message)),"PreconditionFailed" => UpdateStreamingDistributionError::PreconditionFailed(String::from(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(String::from(parsed_error.message)),"TooManyTrustedSigners" => UpdateStreamingDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => UpdateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),_ => UpdateStreamingDistributionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateStreamingDistributionError::Unknown(body.to_string())
@@ -8213,7 +8501,23 @@ Unknown(String)
                 impl Error for UpdateStreamingDistributionError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,UpdateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,UpdateStreamingDistributionError::IllegalUpdate(ref cause) => cause,UpdateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,UpdateStreamingDistributionError::InvalidArgument(ref cause) => cause,UpdateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => cause,UpdateStreamingDistributionError::MissingBody(ref cause) => cause,UpdateStreamingDistributionError::AccessDenied(ref cause) => cause,UpdateStreamingDistributionError::InvalidIfMatchVersion(ref cause) => cause,UpdateStreamingDistributionError::TooManyTrustedSigners(ref cause) => cause,UpdateStreamingDistributionError::InconsistentQuantities(ref cause) => cause,UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(ref cause) => cause,UpdateStreamingDistributionError::PreconditionFailed(ref cause) => cause,UpdateStreamingDistributionError::Validation(ref cause) => cause,UpdateStreamingDistributionError::Credentials(ref err) => err.description(),UpdateStreamingDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateStreamingDistributionError::Unknown(ref cause) => cause
+                            UpdateStreamingDistributionError::AccessDenied(ref cause) => cause,
+UpdateStreamingDistributionError::CNAMEAlreadyExists(ref cause) => cause,
+UpdateStreamingDistributionError::IllegalUpdate(ref cause) => cause,
+UpdateStreamingDistributionError::InconsistentQuantities(ref cause) => cause,
+UpdateStreamingDistributionError::InvalidArgument(ref cause) => cause,
+UpdateStreamingDistributionError::InvalidIfMatchVersion(ref cause) => cause,
+UpdateStreamingDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
+UpdateStreamingDistributionError::MissingBody(ref cause) => cause,
+UpdateStreamingDistributionError::NoSuchStreamingDistribution(ref cause) => cause,
+UpdateStreamingDistributionError::PreconditionFailed(ref cause) => cause,
+UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(ref cause) => cause,
+UpdateStreamingDistributionError::TooManyTrustedSigners(ref cause) => cause,
+UpdateStreamingDistributionError::TrustedSignerDoesNotExist(ref cause) => cause,
+UpdateStreamingDistributionError::Validation(ref cause) => cause,
+UpdateStreamingDistributionError::Credentials(ref err) => err.description(),
+UpdateStreamingDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateStreamingDistributionError::Unknown(ref cause) => cause
                         }
                     }
                  }

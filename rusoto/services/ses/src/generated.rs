@@ -6093,12 +6093,12 @@ if let Some(ref field_value) = obj.topic_arn {
                 #[derive(Debug, PartialEq)]
                 pub enum CloneReceiptRuleSetError {
                     
+///<p>Indicates that a resource could not be created because of a naming conflict.</p>
+AlreadyExists(String),
 ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
 LimitExceeded(String),
 ///<p>Indicates that the provided receipt rule set does not exist.</p>
-RuleSetDoesNotExist(String),
-///<p>Indicates that a resource could not be created because of a naming conflict.</p>
-AlreadyExists(String),/// An error occurred dispatching the HTTP request
+RuleSetDoesNotExist(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6115,7 +6115,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "RuleSetDoesNotExistException" => CloneReceiptRuleSetError::RuleSetDoesNotExist(String::from(parsed_error.message)),"AlreadyExistsException" => CloneReceiptRuleSetError::AlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => CloneReceiptRuleSetError::LimitExceeded(String::from(parsed_error.message)),_ => CloneReceiptRuleSetError::Unknown(String::from(body))
+                                    "AlreadyExistsException" => CloneReceiptRuleSetError::AlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => CloneReceiptRuleSetError::LimitExceeded(String::from(parsed_error.message)),"RuleSetDoesNotExistException" => CloneReceiptRuleSetError::RuleSetDoesNotExist(String::from(parsed_error.message)),_ => CloneReceiptRuleSetError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CloneReceiptRuleSetError::Unknown(body.to_string())
@@ -6147,7 +6147,13 @@ Unknown(String)
                 impl Error for CloneReceiptRuleSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            CloneReceiptRuleSetError::AlreadyExists(ref cause) => cause,CloneReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,CloneReceiptRuleSetError::LimitExceeded(ref cause) => cause,CloneReceiptRuleSetError::Validation(ref cause) => cause,CloneReceiptRuleSetError::Credentials(ref err) => err.description(),CloneReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CloneReceiptRuleSetError::Unknown(ref cause) => cause
+                            CloneReceiptRuleSetError::AlreadyExists(ref cause) => cause,
+CloneReceiptRuleSetError::LimitExceeded(ref cause) => cause,
+CloneReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
+CloneReceiptRuleSetError::Validation(ref cause) => cause,
+CloneReceiptRuleSetError::Credentials(ref err) => err.description(),
+CloneReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CloneReceiptRuleSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6209,7 +6215,13 @@ Unknown(String)
                 impl Error for CreateConfigurationSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateConfigurationSetError::InvalidConfigurationSet(ref cause) => cause,CreateConfigurationSetError::ConfigurationSetAlreadyExists(ref cause) => cause,CreateConfigurationSetError::LimitExceeded(ref cause) => cause,CreateConfigurationSetError::Validation(ref cause) => cause,CreateConfigurationSetError::Credentials(ref err) => err.description(),CreateConfigurationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateConfigurationSetError::Unknown(ref cause) => cause
+                            CreateConfigurationSetError::ConfigurationSetAlreadyExists(ref cause) => cause,
+CreateConfigurationSetError::InvalidConfigurationSet(ref cause) => cause,
+CreateConfigurationSetError::LimitExceeded(ref cause) => cause,
+CreateConfigurationSetError::Validation(ref cause) => cause,
+CreateConfigurationSetError::Credentials(ref err) => err.description(),
+CreateConfigurationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateConfigurationSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6217,14 +6229,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateConfigurationSetEventDestinationError {
                     
-///<p>Indicates that the Amazon Kinesis Firehose destination is invalid. See the error message for details.</p>
-InvalidFirehoseDestination(String),
-///<p>Indicates that the event destination could not be created because of a naming conflict.</p>
-EventDestinationAlreadyExists(String),
 ///<p>Indicates that the configuration set does not exist.</p>
 ConfigurationSetDoesNotExist(String),
+///<p>Indicates that the event destination could not be created because of a naming conflict.</p>
+EventDestinationAlreadyExists(String),
 ///<p>Indicates that the Amazon CloudWatch destination is invalid. See the error message for details.</p>
 InvalidCloudWatchDestination(String),
+///<p>Indicates that the Amazon Kinesis Firehose destination is invalid. See the error message for details.</p>
+InvalidFirehoseDestination(String),
 ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
 LimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -6243,7 +6255,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "EventDestinationAlreadyExistsException" => CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(String::from(parsed_error.message)),"InvalidFirehoseDestinationException" => CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(String::from(parsed_error.message)),"LimitExceededException" => CreateConfigurationSetEventDestinationError::LimitExceeded(String::from(parsed_error.message)),"InvalidCloudWatchDestinationException" => CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(String::from(parsed_error.message)),"ConfigurationSetDoesNotExistException" => CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => CreateConfigurationSetEventDestinationError::Unknown(String::from(body))
+                                    "ConfigurationSetDoesNotExistException" => CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"EventDestinationAlreadyExistsException" => CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(String::from(parsed_error.message)),"InvalidCloudWatchDestinationException" => CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(String::from(parsed_error.message)),"InvalidFirehoseDestinationException" => CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(String::from(parsed_error.message)),"LimitExceededException" => CreateConfigurationSetEventDestinationError::LimitExceeded(String::from(parsed_error.message)),_ => CreateConfigurationSetEventDestinationError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateConfigurationSetEventDestinationError::Unknown(body.to_string())
@@ -6275,7 +6287,15 @@ Unknown(String)
                 impl Error for CreateConfigurationSetEventDestinationError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(ref cause) => cause,CreateConfigurationSetEventDestinationError::LimitExceeded(ref cause) => cause,CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(ref cause) => cause,CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(ref cause) => cause,CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(ref cause) => cause,CreateConfigurationSetEventDestinationError::Validation(ref cause) => cause,CreateConfigurationSetEventDestinationError::Credentials(ref err) => err.description(),CreateConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateConfigurationSetEventDestinationError::Unknown(ref cause) => cause
+                            CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(ref cause) => cause,
+CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(ref cause) => cause,
+CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(ref cause) => cause,
+CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(ref cause) => cause,
+CreateConfigurationSetEventDestinationError::LimitExceeded(ref cause) => cause,
+CreateConfigurationSetEventDestinationError::Validation(ref cause) => cause,
+CreateConfigurationSetEventDestinationError::Credentials(ref err) => err.description(),
+CreateConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateConfigurationSetEventDestinationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6335,7 +6355,12 @@ Unknown(String)
                 impl Error for CreateReceiptFilterError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateReceiptFilterError::AlreadyExists(ref cause) => cause,CreateReceiptFilterError::LimitExceeded(ref cause) => cause,CreateReceiptFilterError::Validation(ref cause) => cause,CreateReceiptFilterError::Credentials(ref err) => err.description(),CreateReceiptFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateReceiptFilterError::Unknown(ref cause) => cause
+                            CreateReceiptFilterError::AlreadyExists(ref cause) => cause,
+CreateReceiptFilterError::LimitExceeded(ref cause) => cause,
+CreateReceiptFilterError::Validation(ref cause) => cause,
+CreateReceiptFilterError::Credentials(ref err) => err.description(),
+CreateReceiptFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateReceiptFilterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6343,20 +6368,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateReceiptRuleError {
                     
-///<p>Indicates that the provided receipt rule does not exist.</p>
-RuleDoesNotExist(String),
-///<p>Indicates that the provided AWS Lambda function is invalid, or that Amazon SES could not execute the provided function, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
-InvalidLambdaFunction(String),
-///<p>Indicates that the provided Amazon SNS topic is invalid, or that Amazon SES could not publish to the topic, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
-InvalidSnsTopic(String),
 ///<p>Indicates that a resource could not be created because of a naming conflict.</p>
 AlreadyExists(String),
+///<p>Indicates that the provided AWS Lambda function is invalid, or that Amazon SES could not execute the provided function, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+InvalidLambdaFunction(String),
 ///<p>Indicates that the provided Amazon S3 bucket or AWS KMS encryption key is invalid, or that Amazon SES could not publish to the bucket, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
 InvalidS3Configuration(String),
-///<p>Indicates that the provided receipt rule set does not exist.</p>
-RuleSetDoesNotExist(String),
+///<p>Indicates that the provided Amazon SNS topic is invalid, or that Amazon SES could not publish to the topic, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+InvalidSnsTopic(String),
 ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>Indicates that the provided receipt rule does not exist.</p>
+RuleDoesNotExist(String),
+///<p>Indicates that the provided receipt rule set does not exist.</p>
+RuleSetDoesNotExist(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6373,7 +6398,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidS3ConfigurationException" => CreateReceiptRuleError::InvalidS3Configuration(String::from(parsed_error.message)),"AlreadyExistsException" => CreateReceiptRuleError::AlreadyExists(String::from(parsed_error.message)),"InvalidLambdaFunctionException" => CreateReceiptRuleError::InvalidLambdaFunction(String::from(parsed_error.message)),"RuleSetDoesNotExistException" => CreateReceiptRuleError::RuleSetDoesNotExist(String::from(parsed_error.message)),"InvalidSnsTopicException" => CreateReceiptRuleError::InvalidSnsTopic(String::from(parsed_error.message)),"LimitExceededException" => CreateReceiptRuleError::LimitExceeded(String::from(parsed_error.message)),"RuleDoesNotExistException" => CreateReceiptRuleError::RuleDoesNotExist(String::from(parsed_error.message)),_ => CreateReceiptRuleError::Unknown(String::from(body))
+                                    "AlreadyExistsException" => CreateReceiptRuleError::AlreadyExists(String::from(parsed_error.message)),"InvalidLambdaFunctionException" => CreateReceiptRuleError::InvalidLambdaFunction(String::from(parsed_error.message)),"InvalidS3ConfigurationException" => CreateReceiptRuleError::InvalidS3Configuration(String::from(parsed_error.message)),"InvalidSnsTopicException" => CreateReceiptRuleError::InvalidSnsTopic(String::from(parsed_error.message)),"LimitExceededException" => CreateReceiptRuleError::LimitExceeded(String::from(parsed_error.message)),"RuleDoesNotExistException" => CreateReceiptRuleError::RuleDoesNotExist(String::from(parsed_error.message)),"RuleSetDoesNotExistException" => CreateReceiptRuleError::RuleSetDoesNotExist(String::from(parsed_error.message)),_ => CreateReceiptRuleError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateReceiptRuleError::Unknown(body.to_string())
@@ -6405,7 +6430,17 @@ Unknown(String)
                 impl Error for CreateReceiptRuleError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateReceiptRuleError::AlreadyExists(ref cause) => cause,CreateReceiptRuleError::RuleDoesNotExist(ref cause) => cause,CreateReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,CreateReceiptRuleError::InvalidS3Configuration(ref cause) => cause,CreateReceiptRuleError::InvalidLambdaFunction(ref cause) => cause,CreateReceiptRuleError::LimitExceeded(ref cause) => cause,CreateReceiptRuleError::InvalidSnsTopic(ref cause) => cause,CreateReceiptRuleError::Validation(ref cause) => cause,CreateReceiptRuleError::Credentials(ref err) => err.description(),CreateReceiptRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateReceiptRuleError::Unknown(ref cause) => cause
+                            CreateReceiptRuleError::AlreadyExists(ref cause) => cause,
+CreateReceiptRuleError::InvalidLambdaFunction(ref cause) => cause,
+CreateReceiptRuleError::InvalidS3Configuration(ref cause) => cause,
+CreateReceiptRuleError::InvalidSnsTopic(ref cause) => cause,
+CreateReceiptRuleError::LimitExceeded(ref cause) => cause,
+CreateReceiptRuleError::RuleDoesNotExist(ref cause) => cause,
+CreateReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
+CreateReceiptRuleError::Validation(ref cause) => cause,
+CreateReceiptRuleError::Credentials(ref err) => err.description(),
+CreateReceiptRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateReceiptRuleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6413,10 +6448,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateReceiptRuleSetError {
                     
-///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
-LimitExceeded(String),
 ///<p>Indicates that a resource could not be created because of a naming conflict.</p>
-AlreadyExists(String),/// An error occurred dispatching the HTTP request
+AlreadyExists(String),
+///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
+LimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6433,7 +6468,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "LimitExceededException" => CreateReceiptRuleSetError::LimitExceeded(String::from(parsed_error.message)),"AlreadyExistsException" => CreateReceiptRuleSetError::AlreadyExists(String::from(parsed_error.message)),_ => CreateReceiptRuleSetError::Unknown(String::from(body))
+                                    "AlreadyExistsException" => CreateReceiptRuleSetError::AlreadyExists(String::from(parsed_error.message)),"LimitExceededException" => CreateReceiptRuleSetError::LimitExceeded(String::from(parsed_error.message)),_ => CreateReceiptRuleSetError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateReceiptRuleSetError::Unknown(body.to_string())
@@ -6465,7 +6500,12 @@ Unknown(String)
                 impl Error for CreateReceiptRuleSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateReceiptRuleSetError::AlreadyExists(ref cause) => cause,CreateReceiptRuleSetError::LimitExceeded(ref cause) => cause,CreateReceiptRuleSetError::Validation(ref cause) => cause,CreateReceiptRuleSetError::Credentials(ref err) => err.description(),CreateReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateReceiptRuleSetError::Unknown(ref cause) => cause
+                            CreateReceiptRuleSetError::AlreadyExists(ref cause) => cause,
+CreateReceiptRuleSetError::LimitExceeded(ref cause) => cause,
+CreateReceiptRuleSetError::Validation(ref cause) => cause,
+CreateReceiptRuleSetError::Credentials(ref err) => err.description(),
+CreateReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateReceiptRuleSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6523,7 +6563,11 @@ Unknown(String)
                 impl Error for DeleteConfigurationSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteConfigurationSetError::ConfigurationSetDoesNotExist(ref cause) => cause,DeleteConfigurationSetError::Validation(ref cause) => cause,DeleteConfigurationSetError::Credentials(ref err) => err.description(),DeleteConfigurationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteConfigurationSetError::Unknown(ref cause) => cause
+                            DeleteConfigurationSetError::ConfigurationSetDoesNotExist(ref cause) => cause,
+DeleteConfigurationSetError::Validation(ref cause) => cause,
+DeleteConfigurationSetError::Credentials(ref err) => err.description(),
+DeleteConfigurationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteConfigurationSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6531,10 +6575,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteConfigurationSetEventDestinationError {
                     
-///<p>Indicates that the event destination does not exist.</p>
-EventDestinationDoesNotExist(String),
 ///<p>Indicates that the configuration set does not exist.</p>
-ConfigurationSetDoesNotExist(String),/// An error occurred dispatching the HTTP request
+ConfigurationSetDoesNotExist(String),
+///<p>Indicates that the event destination does not exist.</p>
+EventDestinationDoesNotExist(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -6583,7 +6627,12 @@ Unknown(String)
                 impl Error for DeleteConfigurationSetEventDestinationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(ref cause) => cause,DeleteConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(ref cause) => cause,DeleteConfigurationSetEventDestinationError::Validation(ref cause) => cause,DeleteConfigurationSetEventDestinationError::Credentials(ref err) => err.description(),DeleteConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteConfigurationSetEventDestinationError::Unknown(ref cause) => cause
+                            DeleteConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(ref cause) => cause,
+DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(ref cause) => cause,
+DeleteConfigurationSetEventDestinationError::Validation(ref cause) => cause,
+DeleteConfigurationSetEventDestinationError::Credentials(ref err) => err.description(),
+DeleteConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteConfigurationSetEventDestinationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6639,7 +6688,10 @@ Unknown(String)
                 impl Error for DeleteIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteIdentityError::Validation(ref cause) => cause,DeleteIdentityError::Credentials(ref err) => err.description(),DeleteIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteIdentityError::Unknown(ref cause) => cause
+                            DeleteIdentityError::Validation(ref cause) => cause,
+DeleteIdentityError::Credentials(ref err) => err.description(),
+DeleteIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6695,7 +6747,10 @@ Unknown(String)
                 impl Error for DeleteIdentityPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteIdentityPolicyError::Validation(ref cause) => cause,DeleteIdentityPolicyError::Credentials(ref err) => err.description(),DeleteIdentityPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteIdentityPolicyError::Unknown(ref cause) => cause
+                            DeleteIdentityPolicyError::Validation(ref cause) => cause,
+DeleteIdentityPolicyError::Credentials(ref err) => err.description(),
+DeleteIdentityPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteIdentityPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6751,7 +6806,10 @@ Unknown(String)
                 impl Error for DeleteReceiptFilterError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteReceiptFilterError::Validation(ref cause) => cause,DeleteReceiptFilterError::Credentials(ref err) => err.description(),DeleteReceiptFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteReceiptFilterError::Unknown(ref cause) => cause
+                            DeleteReceiptFilterError::Validation(ref cause) => cause,
+DeleteReceiptFilterError::Credentials(ref err) => err.description(),
+DeleteReceiptFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteReceiptFilterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6809,7 +6867,11 @@ Unknown(String)
                 impl Error for DeleteReceiptRuleError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,DeleteReceiptRuleError::Validation(ref cause) => cause,DeleteReceiptRuleError::Credentials(ref err) => err.description(),DeleteReceiptRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteReceiptRuleError::Unknown(ref cause) => cause
+                            DeleteReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
+DeleteReceiptRuleError::Validation(ref cause) => cause,
+DeleteReceiptRuleError::Credentials(ref err) => err.description(),
+DeleteReceiptRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteReceiptRuleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6867,7 +6929,11 @@ Unknown(String)
                 impl Error for DeleteReceiptRuleSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteReceiptRuleSetError::CannotDelete(ref cause) => cause,DeleteReceiptRuleSetError::Validation(ref cause) => cause,DeleteReceiptRuleSetError::Credentials(ref err) => err.description(),DeleteReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteReceiptRuleSetError::Unknown(ref cause) => cause
+                            DeleteReceiptRuleSetError::CannotDelete(ref cause) => cause,
+DeleteReceiptRuleSetError::Validation(ref cause) => cause,
+DeleteReceiptRuleSetError::Credentials(ref err) => err.description(),
+DeleteReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteReceiptRuleSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6923,7 +6989,10 @@ Unknown(String)
                 impl Error for DeleteVerifiedEmailAddressError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteVerifiedEmailAddressError::Validation(ref cause) => cause,DeleteVerifiedEmailAddressError::Credentials(ref err) => err.description(),DeleteVerifiedEmailAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteVerifiedEmailAddressError::Unknown(ref cause) => cause
+                            DeleteVerifiedEmailAddressError::Validation(ref cause) => cause,
+DeleteVerifiedEmailAddressError::Credentials(ref err) => err.description(),
+DeleteVerifiedEmailAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteVerifiedEmailAddressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -6979,7 +7048,10 @@ Unknown(String)
                 impl Error for DescribeActiveReceiptRuleSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeActiveReceiptRuleSetError::Validation(ref cause) => cause,DescribeActiveReceiptRuleSetError::Credentials(ref err) => err.description(),DescribeActiveReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeActiveReceiptRuleSetError::Unknown(ref cause) => cause
+                            DescribeActiveReceiptRuleSetError::Validation(ref cause) => cause,
+DescribeActiveReceiptRuleSetError::Credentials(ref err) => err.description(),
+DescribeActiveReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeActiveReceiptRuleSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7037,7 +7109,11 @@ Unknown(String)
                 impl Error for DescribeConfigurationSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeConfigurationSetError::ConfigurationSetDoesNotExist(ref cause) => cause,DescribeConfigurationSetError::Validation(ref cause) => cause,DescribeConfigurationSetError::Credentials(ref err) => err.description(),DescribeConfigurationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeConfigurationSetError::Unknown(ref cause) => cause
+                            DescribeConfigurationSetError::ConfigurationSetDoesNotExist(ref cause) => cause,
+DescribeConfigurationSetError::Validation(ref cause) => cause,
+DescribeConfigurationSetError::Credentials(ref err) => err.description(),
+DescribeConfigurationSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeConfigurationSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7097,7 +7173,12 @@ Unknown(String)
                 impl Error for DescribeReceiptRuleError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,DescribeReceiptRuleError::RuleDoesNotExist(ref cause) => cause,DescribeReceiptRuleError::Validation(ref cause) => cause,DescribeReceiptRuleError::Credentials(ref err) => err.description(),DescribeReceiptRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeReceiptRuleError::Unknown(ref cause) => cause
+                            DescribeReceiptRuleError::RuleDoesNotExist(ref cause) => cause,
+DescribeReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
+DescribeReceiptRuleError::Validation(ref cause) => cause,
+DescribeReceiptRuleError::Credentials(ref err) => err.description(),
+DescribeReceiptRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeReceiptRuleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7155,7 +7236,11 @@ Unknown(String)
                 impl Error for DescribeReceiptRuleSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,DescribeReceiptRuleSetError::Validation(ref cause) => cause,DescribeReceiptRuleSetError::Credentials(ref err) => err.description(),DescribeReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeReceiptRuleSetError::Unknown(ref cause) => cause
+                            DescribeReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
+DescribeReceiptRuleSetError::Validation(ref cause) => cause,
+DescribeReceiptRuleSetError::Credentials(ref err) => err.description(),
+DescribeReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeReceiptRuleSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7211,7 +7296,10 @@ Unknown(String)
                 impl Error for GetIdentityDkimAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetIdentityDkimAttributesError::Validation(ref cause) => cause,GetIdentityDkimAttributesError::Credentials(ref err) => err.description(),GetIdentityDkimAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetIdentityDkimAttributesError::Unknown(ref cause) => cause
+                            GetIdentityDkimAttributesError::Validation(ref cause) => cause,
+GetIdentityDkimAttributesError::Credentials(ref err) => err.description(),
+GetIdentityDkimAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetIdentityDkimAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7267,7 +7355,10 @@ Unknown(String)
                 impl Error for GetIdentityMailFromDomainAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetIdentityMailFromDomainAttributesError::Validation(ref cause) => cause,GetIdentityMailFromDomainAttributesError::Credentials(ref err) => err.description(),GetIdentityMailFromDomainAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetIdentityMailFromDomainAttributesError::Unknown(ref cause) => cause
+                            GetIdentityMailFromDomainAttributesError::Validation(ref cause) => cause,
+GetIdentityMailFromDomainAttributesError::Credentials(ref err) => err.description(),
+GetIdentityMailFromDomainAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetIdentityMailFromDomainAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7323,7 +7414,10 @@ Unknown(String)
                 impl Error for GetIdentityNotificationAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetIdentityNotificationAttributesError::Validation(ref cause) => cause,GetIdentityNotificationAttributesError::Credentials(ref err) => err.description(),GetIdentityNotificationAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetIdentityNotificationAttributesError::Unknown(ref cause) => cause
+                            GetIdentityNotificationAttributesError::Validation(ref cause) => cause,
+GetIdentityNotificationAttributesError::Credentials(ref err) => err.description(),
+GetIdentityNotificationAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetIdentityNotificationAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7379,7 +7473,10 @@ Unknown(String)
                 impl Error for GetIdentityPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetIdentityPoliciesError::Validation(ref cause) => cause,GetIdentityPoliciesError::Credentials(ref err) => err.description(),GetIdentityPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetIdentityPoliciesError::Unknown(ref cause) => cause
+                            GetIdentityPoliciesError::Validation(ref cause) => cause,
+GetIdentityPoliciesError::Credentials(ref err) => err.description(),
+GetIdentityPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetIdentityPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7435,7 +7532,10 @@ Unknown(String)
                 impl Error for GetIdentityVerificationAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetIdentityVerificationAttributesError::Validation(ref cause) => cause,GetIdentityVerificationAttributesError::Credentials(ref err) => err.description(),GetIdentityVerificationAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetIdentityVerificationAttributesError::Unknown(ref cause) => cause
+                            GetIdentityVerificationAttributesError::Validation(ref cause) => cause,
+GetIdentityVerificationAttributesError::Credentials(ref err) => err.description(),
+GetIdentityVerificationAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetIdentityVerificationAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7491,7 +7591,10 @@ Unknown(String)
                 impl Error for GetSendQuotaError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetSendQuotaError::Validation(ref cause) => cause,GetSendQuotaError::Credentials(ref err) => err.description(),GetSendQuotaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetSendQuotaError::Unknown(ref cause) => cause
+                            GetSendQuotaError::Validation(ref cause) => cause,
+GetSendQuotaError::Credentials(ref err) => err.description(),
+GetSendQuotaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetSendQuotaError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7547,7 +7650,10 @@ Unknown(String)
                 impl Error for GetSendStatisticsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetSendStatisticsError::Validation(ref cause) => cause,GetSendStatisticsError::Credentials(ref err) => err.description(),GetSendStatisticsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetSendStatisticsError::Unknown(ref cause) => cause
+                            GetSendStatisticsError::Validation(ref cause) => cause,
+GetSendStatisticsError::Credentials(ref err) => err.description(),
+GetSendStatisticsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetSendStatisticsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7603,7 +7709,10 @@ Unknown(String)
                 impl Error for ListConfigurationSetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListConfigurationSetsError::Validation(ref cause) => cause,ListConfigurationSetsError::Credentials(ref err) => err.description(),ListConfigurationSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListConfigurationSetsError::Unknown(ref cause) => cause
+                            ListConfigurationSetsError::Validation(ref cause) => cause,
+ListConfigurationSetsError::Credentials(ref err) => err.description(),
+ListConfigurationSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListConfigurationSetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7659,7 +7768,10 @@ Unknown(String)
                 impl Error for ListIdentitiesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListIdentitiesError::Validation(ref cause) => cause,ListIdentitiesError::Credentials(ref err) => err.description(),ListIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListIdentitiesError::Unknown(ref cause) => cause
+                            ListIdentitiesError::Validation(ref cause) => cause,
+ListIdentitiesError::Credentials(ref err) => err.description(),
+ListIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListIdentitiesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7715,7 +7827,10 @@ Unknown(String)
                 impl Error for ListIdentityPoliciesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListIdentityPoliciesError::Validation(ref cause) => cause,ListIdentityPoliciesError::Credentials(ref err) => err.description(),ListIdentityPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListIdentityPoliciesError::Unknown(ref cause) => cause
+                            ListIdentityPoliciesError::Validation(ref cause) => cause,
+ListIdentityPoliciesError::Credentials(ref err) => err.description(),
+ListIdentityPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListIdentityPoliciesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7771,7 +7886,10 @@ Unknown(String)
                 impl Error for ListReceiptFiltersError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListReceiptFiltersError::Validation(ref cause) => cause,ListReceiptFiltersError::Credentials(ref err) => err.description(),ListReceiptFiltersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListReceiptFiltersError::Unknown(ref cause) => cause
+                            ListReceiptFiltersError::Validation(ref cause) => cause,
+ListReceiptFiltersError::Credentials(ref err) => err.description(),
+ListReceiptFiltersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListReceiptFiltersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7827,7 +7945,10 @@ Unknown(String)
                 impl Error for ListReceiptRuleSetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListReceiptRuleSetsError::Validation(ref cause) => cause,ListReceiptRuleSetsError::Credentials(ref err) => err.description(),ListReceiptRuleSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListReceiptRuleSetsError::Unknown(ref cause) => cause
+                            ListReceiptRuleSetsError::Validation(ref cause) => cause,
+ListReceiptRuleSetsError::Credentials(ref err) => err.description(),
+ListReceiptRuleSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListReceiptRuleSetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7883,7 +8004,10 @@ Unknown(String)
                 impl Error for ListVerifiedEmailAddressesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListVerifiedEmailAddressesError::Validation(ref cause) => cause,ListVerifiedEmailAddressesError::Credentials(ref err) => err.description(),ListVerifiedEmailAddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListVerifiedEmailAddressesError::Unknown(ref cause) => cause
+                            ListVerifiedEmailAddressesError::Validation(ref cause) => cause,
+ListVerifiedEmailAddressesError::Credentials(ref err) => err.description(),
+ListVerifiedEmailAddressesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListVerifiedEmailAddressesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -7941,7 +8065,11 @@ Unknown(String)
                 impl Error for PutIdentityPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutIdentityPolicyError::InvalidPolicy(ref cause) => cause,PutIdentityPolicyError::Validation(ref cause) => cause,PutIdentityPolicyError::Credentials(ref err) => err.description(),PutIdentityPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutIdentityPolicyError::Unknown(ref cause) => cause
+                            PutIdentityPolicyError::InvalidPolicy(ref cause) => cause,
+PutIdentityPolicyError::Validation(ref cause) => cause,
+PutIdentityPolicyError::Credentials(ref err) => err.description(),
+PutIdentityPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutIdentityPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8001,7 +8129,12 @@ Unknown(String)
                 impl Error for ReorderReceiptRuleSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            ReorderReceiptRuleSetError::RuleDoesNotExist(ref cause) => cause,ReorderReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,ReorderReceiptRuleSetError::Validation(ref cause) => cause,ReorderReceiptRuleSetError::Credentials(ref err) => err.description(),ReorderReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ReorderReceiptRuleSetError::Unknown(ref cause) => cause
+                            ReorderReceiptRuleSetError::RuleDoesNotExist(ref cause) => cause,
+ReorderReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
+ReorderReceiptRuleSetError::Validation(ref cause) => cause,
+ReorderReceiptRuleSetError::Credentials(ref err) => err.description(),
+ReorderReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ReorderReceiptRuleSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8059,7 +8192,11 @@ Unknown(String)
                 impl Error for SendBounceError {
                     fn description(&self) -> &str {
                         match *self {
-                            SendBounceError::MessageRejected(ref cause) => cause,SendBounceError::Validation(ref cause) => cause,SendBounceError::Credentials(ref err) => err.description(),SendBounceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SendBounceError::Unknown(ref cause) => cause
+                            SendBounceError::MessageRejected(ref cause) => cause,
+SendBounceError::Validation(ref cause) => cause,
+SendBounceError::Credentials(ref err) => err.description(),
+SendBounceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SendBounceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8067,12 +8204,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SendEmailError {
                     
-///<p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
-MessageRejected(String),
 ///<p>Indicates that the configuration set does not exist.</p>
 ConfigurationSetDoesNotExist(String),
 ///<p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
-MailFromDomainNotVerified(String),/// An error occurred dispatching the HTTP request
+MailFromDomainNotVerified(String),
+///<p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
+MessageRejected(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8089,7 +8226,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "MessageRejected" => SendEmailError::MessageRejected(String::from(parsed_error.message)),"MailFromDomainNotVerifiedException" => SendEmailError::MailFromDomainNotVerified(String::from(parsed_error.message)),"ConfigurationSetDoesNotExistException" => SendEmailError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => SendEmailError::Unknown(String::from(body))
+                                    "ConfigurationSetDoesNotExistException" => SendEmailError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"MailFromDomainNotVerifiedException" => SendEmailError::MailFromDomainNotVerified(String::from(parsed_error.message)),"MessageRejected" => SendEmailError::MessageRejected(String::from(parsed_error.message)),_ => SendEmailError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SendEmailError::Unknown(body.to_string())
@@ -8121,7 +8258,13 @@ Unknown(String)
                 impl Error for SendEmailError {
                     fn description(&self) -> &str {
                         match *self {
-                            SendEmailError::MessageRejected(ref cause) => cause,SendEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,SendEmailError::MailFromDomainNotVerified(ref cause) => cause,SendEmailError::Validation(ref cause) => cause,SendEmailError::Credentials(ref err) => err.description(),SendEmailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SendEmailError::Unknown(ref cause) => cause
+                            SendEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
+SendEmailError::MailFromDomainNotVerified(ref cause) => cause,
+SendEmailError::MessageRejected(ref cause) => cause,
+SendEmailError::Validation(ref cause) => cause,
+SendEmailError::Credentials(ref err) => err.description(),
+SendEmailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SendEmailError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8129,10 +8272,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SendRawEmailError {
                     
-///<p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
-MailFromDomainNotVerified(String),
 ///<p>Indicates that the configuration set does not exist.</p>
 ConfigurationSetDoesNotExist(String),
+///<p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
+MailFromDomainNotVerified(String),
 ///<p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
 MessageRejected(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -8151,7 +8294,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "MessageRejected" => SendRawEmailError::MessageRejected(String::from(parsed_error.message)),"ConfigurationSetDoesNotExistException" => SendRawEmailError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"MailFromDomainNotVerifiedException" => SendRawEmailError::MailFromDomainNotVerified(String::from(parsed_error.message)),_ => SendRawEmailError::Unknown(String::from(body))
+                                    "ConfigurationSetDoesNotExistException" => SendRawEmailError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"MailFromDomainNotVerifiedException" => SendRawEmailError::MailFromDomainNotVerified(String::from(parsed_error.message)),"MessageRejected" => SendRawEmailError::MessageRejected(String::from(parsed_error.message)),_ => SendRawEmailError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SendRawEmailError::Unknown(body.to_string())
@@ -8183,7 +8326,13 @@ Unknown(String)
                 impl Error for SendRawEmailError {
                     fn description(&self) -> &str {
                         match *self {
-                            SendRawEmailError::MessageRejected(ref cause) => cause,SendRawEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,SendRawEmailError::MailFromDomainNotVerified(ref cause) => cause,SendRawEmailError::Validation(ref cause) => cause,SendRawEmailError::Credentials(ref err) => err.description(),SendRawEmailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SendRawEmailError::Unknown(ref cause) => cause
+                            SendRawEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
+SendRawEmailError::MailFromDomainNotVerified(ref cause) => cause,
+SendRawEmailError::MessageRejected(ref cause) => cause,
+SendRawEmailError::Validation(ref cause) => cause,
+SendRawEmailError::Credentials(ref err) => err.description(),
+SendRawEmailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SendRawEmailError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8241,7 +8390,11 @@ Unknown(String)
                 impl Error for SetActiveReceiptRuleSetError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetActiveReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,SetActiveReceiptRuleSetError::Validation(ref cause) => cause,SetActiveReceiptRuleSetError::Credentials(ref err) => err.description(),SetActiveReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetActiveReceiptRuleSetError::Unknown(ref cause) => cause
+                            SetActiveReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
+SetActiveReceiptRuleSetError::Validation(ref cause) => cause,
+SetActiveReceiptRuleSetError::Credentials(ref err) => err.description(),
+SetActiveReceiptRuleSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetActiveReceiptRuleSetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8297,7 +8450,10 @@ Unknown(String)
                 impl Error for SetIdentityDkimEnabledError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetIdentityDkimEnabledError::Validation(ref cause) => cause,SetIdentityDkimEnabledError::Credentials(ref err) => err.description(),SetIdentityDkimEnabledError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetIdentityDkimEnabledError::Unknown(ref cause) => cause
+                            SetIdentityDkimEnabledError::Validation(ref cause) => cause,
+SetIdentityDkimEnabledError::Credentials(ref err) => err.description(),
+SetIdentityDkimEnabledError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetIdentityDkimEnabledError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8353,7 +8509,10 @@ Unknown(String)
                 impl Error for SetIdentityFeedbackForwardingEnabledError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetIdentityFeedbackForwardingEnabledError::Validation(ref cause) => cause,SetIdentityFeedbackForwardingEnabledError::Credentials(ref err) => err.description(),SetIdentityFeedbackForwardingEnabledError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetIdentityFeedbackForwardingEnabledError::Unknown(ref cause) => cause
+                            SetIdentityFeedbackForwardingEnabledError::Validation(ref cause) => cause,
+SetIdentityFeedbackForwardingEnabledError::Credentials(ref err) => err.description(),
+SetIdentityFeedbackForwardingEnabledError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetIdentityFeedbackForwardingEnabledError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8409,7 +8568,10 @@ Unknown(String)
                 impl Error for SetIdentityHeadersInNotificationsEnabledError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetIdentityHeadersInNotificationsEnabledError::Validation(ref cause) => cause,SetIdentityHeadersInNotificationsEnabledError::Credentials(ref err) => err.description(),SetIdentityHeadersInNotificationsEnabledError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetIdentityHeadersInNotificationsEnabledError::Unknown(ref cause) => cause
+                            SetIdentityHeadersInNotificationsEnabledError::Validation(ref cause) => cause,
+SetIdentityHeadersInNotificationsEnabledError::Credentials(ref err) => err.description(),
+SetIdentityHeadersInNotificationsEnabledError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetIdentityHeadersInNotificationsEnabledError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8465,7 +8627,10 @@ Unknown(String)
                 impl Error for SetIdentityMailFromDomainError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetIdentityMailFromDomainError::Validation(ref cause) => cause,SetIdentityMailFromDomainError::Credentials(ref err) => err.description(),SetIdentityMailFromDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetIdentityMailFromDomainError::Unknown(ref cause) => cause
+                            SetIdentityMailFromDomainError::Validation(ref cause) => cause,
+SetIdentityMailFromDomainError::Credentials(ref err) => err.description(),
+SetIdentityMailFromDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetIdentityMailFromDomainError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8521,7 +8686,10 @@ Unknown(String)
                 impl Error for SetIdentityNotificationTopicError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetIdentityNotificationTopicError::Validation(ref cause) => cause,SetIdentityNotificationTopicError::Credentials(ref err) => err.description(),SetIdentityNotificationTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetIdentityNotificationTopicError::Unknown(ref cause) => cause
+                            SetIdentityNotificationTopicError::Validation(ref cause) => cause,
+SetIdentityNotificationTopicError::Credentials(ref err) => err.description(),
+SetIdentityNotificationTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetIdentityNotificationTopicError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8549,7 +8717,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "RuleSetDoesNotExistException" => SetReceiptRulePositionError::RuleSetDoesNotExist(String::from(parsed_error.message)),"RuleDoesNotExistException" => SetReceiptRulePositionError::RuleDoesNotExist(String::from(parsed_error.message)),_ => SetReceiptRulePositionError::Unknown(String::from(body))
+                                    "RuleDoesNotExistException" => SetReceiptRulePositionError::RuleDoesNotExist(String::from(parsed_error.message)),"RuleSetDoesNotExistException" => SetReceiptRulePositionError::RuleSetDoesNotExist(String::from(parsed_error.message)),_ => SetReceiptRulePositionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SetReceiptRulePositionError::Unknown(body.to_string())
@@ -8581,7 +8749,12 @@ Unknown(String)
                 impl Error for SetReceiptRulePositionError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetReceiptRulePositionError::RuleSetDoesNotExist(ref cause) => cause,SetReceiptRulePositionError::RuleDoesNotExist(ref cause) => cause,SetReceiptRulePositionError::Validation(ref cause) => cause,SetReceiptRulePositionError::Credentials(ref err) => err.description(),SetReceiptRulePositionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetReceiptRulePositionError::Unknown(ref cause) => cause
+                            SetReceiptRulePositionError::RuleDoesNotExist(ref cause) => cause,
+SetReceiptRulePositionError::RuleSetDoesNotExist(ref cause) => cause,
+SetReceiptRulePositionError::Validation(ref cause) => cause,
+SetReceiptRulePositionError::Credentials(ref err) => err.description(),
+SetReceiptRulePositionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetReceiptRulePositionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8593,10 +8766,10 @@ Unknown(String)
 ConfigurationSetDoesNotExist(String),
 ///<p>Indicates that the event destination does not exist.</p>
 EventDestinationDoesNotExist(String),
-///<p>Indicates that the Amazon Kinesis Firehose destination is invalid. See the error message for details.</p>
-InvalidFirehoseDestination(String),
 ///<p>Indicates that the Amazon CloudWatch destination is invalid. See the error message for details.</p>
-InvalidCloudWatchDestination(String),/// An error occurred dispatching the HTTP request
+InvalidCloudWatchDestination(String),
+///<p>Indicates that the Amazon Kinesis Firehose destination is invalid. See the error message for details.</p>
+InvalidFirehoseDestination(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -8613,7 +8786,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "EventDestinationDoesNotExistException" => UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(String::from(parsed_error.message)),"ConfigurationSetDoesNotExistException" => UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"InvalidFirehoseDestinationException" => UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(String::from(parsed_error.message)),"InvalidCloudWatchDestinationException" => UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(String::from(parsed_error.message)),_ => UpdateConfigurationSetEventDestinationError::Unknown(String::from(body))
+                                    "ConfigurationSetDoesNotExistException" => UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"EventDestinationDoesNotExistException" => UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(String::from(parsed_error.message)),"InvalidCloudWatchDestinationException" => UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(String::from(parsed_error.message)),"InvalidFirehoseDestinationException" => UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(String::from(parsed_error.message)),_ => UpdateConfigurationSetEventDestinationError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateConfigurationSetEventDestinationError::Unknown(body.to_string())
@@ -8645,7 +8818,14 @@ Unknown(String)
                 impl Error for UpdateConfigurationSetEventDestinationError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(ref cause) => cause,UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(ref cause) => cause,UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(ref cause) => cause,UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(ref cause) => cause,UpdateConfigurationSetEventDestinationError::Validation(ref cause) => cause,UpdateConfigurationSetEventDestinationError::Credentials(ref err) => err.description(),UpdateConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateConfigurationSetEventDestinationError::Unknown(ref cause) => cause
+                            UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(ref cause) => cause,
+UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(ref cause) => cause,
+UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(ref cause) => cause,
+UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(ref cause) => cause,
+UpdateConfigurationSetEventDestinationError::Validation(ref cause) => cause,
+UpdateConfigurationSetEventDestinationError::Credentials(ref err) => err.description(),
+UpdateConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateConfigurationSetEventDestinationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8653,16 +8833,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateReceiptRuleError {
                     
-///<p>Indicates that the provided receipt rule does not exist.</p>
-RuleDoesNotExist(String),
 ///<p>Indicates that the provided AWS Lambda function is invalid, or that Amazon SES could not execute the provided function, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
 InvalidLambdaFunction(String),
+///<p>Indicates that the provided Amazon S3 bucket or AWS KMS encryption key is invalid, or that Amazon SES could not publish to the bucket, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+InvalidS3Configuration(String),
 ///<p>Indicates that the provided Amazon SNS topic is invalid, or that Amazon SES could not publish to the topic, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
 InvalidSnsTopic(String),
 ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
 LimitExceeded(String),
-///<p>Indicates that the provided Amazon S3 bucket or AWS KMS encryption key is invalid, or that Amazon SES could not publish to the bucket, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
-InvalidS3Configuration(String),
+///<p>Indicates that the provided receipt rule does not exist.</p>
+RuleDoesNotExist(String),
 ///<p>Indicates that the provided receipt rule set does not exist.</p>
 RuleSetDoesNotExist(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -8681,7 +8861,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "RuleSetDoesNotExistException" => UpdateReceiptRuleError::RuleSetDoesNotExist(String::from(parsed_error.message)),"LimitExceededException" => UpdateReceiptRuleError::LimitExceeded(String::from(parsed_error.message)),"InvalidSnsTopicException" => UpdateReceiptRuleError::InvalidSnsTopic(String::from(parsed_error.message)),"InvalidLambdaFunctionException" => UpdateReceiptRuleError::InvalidLambdaFunction(String::from(parsed_error.message)),"RuleDoesNotExistException" => UpdateReceiptRuleError::RuleDoesNotExist(String::from(parsed_error.message)),"InvalidS3ConfigurationException" => UpdateReceiptRuleError::InvalidS3Configuration(String::from(parsed_error.message)),_ => UpdateReceiptRuleError::Unknown(String::from(body))
+                                    "InvalidLambdaFunctionException" => UpdateReceiptRuleError::InvalidLambdaFunction(String::from(parsed_error.message)),"InvalidS3ConfigurationException" => UpdateReceiptRuleError::InvalidS3Configuration(String::from(parsed_error.message)),"InvalidSnsTopicException" => UpdateReceiptRuleError::InvalidSnsTopic(String::from(parsed_error.message)),"LimitExceededException" => UpdateReceiptRuleError::LimitExceeded(String::from(parsed_error.message)),"RuleDoesNotExistException" => UpdateReceiptRuleError::RuleDoesNotExist(String::from(parsed_error.message)),"RuleSetDoesNotExistException" => UpdateReceiptRuleError::RuleSetDoesNotExist(String::from(parsed_error.message)),_ => UpdateReceiptRuleError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateReceiptRuleError::Unknown(body.to_string())
@@ -8713,7 +8893,16 @@ Unknown(String)
                 impl Error for UpdateReceiptRuleError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateReceiptRuleError::LimitExceeded(ref cause) => cause,UpdateReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,UpdateReceiptRuleError::InvalidS3Configuration(ref cause) => cause,UpdateReceiptRuleError::RuleDoesNotExist(ref cause) => cause,UpdateReceiptRuleError::InvalidSnsTopic(ref cause) => cause,UpdateReceiptRuleError::InvalidLambdaFunction(ref cause) => cause,UpdateReceiptRuleError::Validation(ref cause) => cause,UpdateReceiptRuleError::Credentials(ref err) => err.description(),UpdateReceiptRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateReceiptRuleError::Unknown(ref cause) => cause
+                            UpdateReceiptRuleError::InvalidLambdaFunction(ref cause) => cause,
+UpdateReceiptRuleError::InvalidS3Configuration(ref cause) => cause,
+UpdateReceiptRuleError::InvalidSnsTopic(ref cause) => cause,
+UpdateReceiptRuleError::LimitExceeded(ref cause) => cause,
+UpdateReceiptRuleError::RuleDoesNotExist(ref cause) => cause,
+UpdateReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
+UpdateReceiptRuleError::Validation(ref cause) => cause,
+UpdateReceiptRuleError::Credentials(ref err) => err.description(),
+UpdateReceiptRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateReceiptRuleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8769,7 +8958,10 @@ Unknown(String)
                 impl Error for VerifyDomainDkimError {
                     fn description(&self) -> &str {
                         match *self {
-                            VerifyDomainDkimError::Validation(ref cause) => cause,VerifyDomainDkimError::Credentials(ref err) => err.description(),VerifyDomainDkimError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),VerifyDomainDkimError::Unknown(ref cause) => cause
+                            VerifyDomainDkimError::Validation(ref cause) => cause,
+VerifyDomainDkimError::Credentials(ref err) => err.description(),
+VerifyDomainDkimError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+VerifyDomainDkimError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8825,7 +9017,10 @@ Unknown(String)
                 impl Error for VerifyDomainIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            VerifyDomainIdentityError::Validation(ref cause) => cause,VerifyDomainIdentityError::Credentials(ref err) => err.description(),VerifyDomainIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),VerifyDomainIdentityError::Unknown(ref cause) => cause
+                            VerifyDomainIdentityError::Validation(ref cause) => cause,
+VerifyDomainIdentityError::Credentials(ref err) => err.description(),
+VerifyDomainIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+VerifyDomainIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8881,7 +9076,10 @@ Unknown(String)
                 impl Error for VerifyEmailAddressError {
                     fn description(&self) -> &str {
                         match *self {
-                            VerifyEmailAddressError::Validation(ref cause) => cause,VerifyEmailAddressError::Credentials(ref err) => err.description(),VerifyEmailAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),VerifyEmailAddressError::Unknown(ref cause) => cause
+                            VerifyEmailAddressError::Validation(ref cause) => cause,
+VerifyEmailAddressError::Credentials(ref err) => err.description(),
+VerifyEmailAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+VerifyEmailAddressError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -8937,7 +9135,10 @@ Unknown(String)
                 impl Error for VerifyEmailIdentityError {
                     fn description(&self) -> &str {
                         match *self {
-                            VerifyEmailIdentityError::Validation(ref cause) => cause,VerifyEmailIdentityError::Credentials(ref err) => err.description(),VerifyEmailIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),VerifyEmailIdentityError::Unknown(ref cause) => cause
+                            VerifyEmailIdentityError::Validation(ref cause) => cause,
+VerifyEmailIdentityError::Credentials(ref err) => err.description(),
+VerifyEmailIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+VerifyEmailIdentityError::Unknown(ref cause) => cause
                         }
                     }
                  }

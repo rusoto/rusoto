@@ -1027,7 +1027,10 @@ Unknown(String)
                 impl Error for BatchDeleteAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchDeleteAttributesError::Validation(ref cause) => cause,BatchDeleteAttributesError::Credentials(ref err) => err.description(),BatchDeleteAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchDeleteAttributesError::Unknown(ref cause) => cause
+                            BatchDeleteAttributesError::Validation(ref cause) => cause,
+BatchDeleteAttributesError::Credentials(ref err) => err.description(),
+BatchDeleteAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchDeleteAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1035,24 +1038,24 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum BatchPutAttributesError {
                     
-///<p>Too many bytes in this domain.</p>
-NumberDomainBytesExceeded(String),
 ///<p>The item name was specified more than once. </p>
 DuplicateItemName(String),
-///<p>Too many attributes in this domain.</p>
-NumberDomainAttributesExceeded(String),
-///<p>Too many attributes in this item.</p>
-NumberItemAttributesExceeded(String),
-///<p>Too many items exist in a single call.</p>
-NumberSubmittedItemsExceeded(String),
+///<p>The request must contain the specified missing parameter.</p>
+MissingParameter(String),
 ///<p>The specified domain does not exist.</p>
 NoSuchDomain(String),
 ///<p>The value for a parameter is invalid.</p>
 InvalidParameterValue(String),
-///<p>The request must contain the specified missing parameter.</p>
-MissingParameter(String),
 ///<p>Too many attributes exist in a single call.</p>
-NumberSubmittedAttributesExceeded(String),/// An error occurred dispatching the HTTP request
+NumberSubmittedAttributesExceeded(String),
+///<p>Too many attributes in this domain.</p>
+NumberDomainAttributesExceeded(String),
+///<p>Too many attributes in this item.</p>
+NumberItemAttributesExceeded(String),
+///<p>Too many bytes in this domain.</p>
+NumberDomainBytesExceeded(String),
+///<p>Too many items exist in a single call.</p>
+NumberSubmittedItemsExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1069,7 +1072,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "MissingParameter" => BatchPutAttributesError::MissingParameter(String::from(parsed_error.message)),"NumberSubmittedAttributesExceeded" => BatchPutAttributesError::NumberSubmittedAttributesExceeded(String::from(parsed_error.message)),"InvalidParameterValue" => BatchPutAttributesError::InvalidParameterValue(String::from(parsed_error.message)),"NoSuchDomain" => BatchPutAttributesError::NoSuchDomain(String::from(parsed_error.message)),"NumberSubmittedItemsExceeded" => BatchPutAttributesError::NumberSubmittedItemsExceeded(String::from(parsed_error.message)),"NumberDomainBytesExceeded" => BatchPutAttributesError::NumberDomainBytesExceeded(String::from(parsed_error.message)),"NumberDomainAttributesExceeded" => BatchPutAttributesError::NumberDomainAttributesExceeded(String::from(parsed_error.message)),"DuplicateItemName" => BatchPutAttributesError::DuplicateItemName(String::from(parsed_error.message)),"NumberItemAttributesExceeded" => BatchPutAttributesError::NumberItemAttributesExceeded(String::from(parsed_error.message)),_ => BatchPutAttributesError::Unknown(String::from(body))
+                                    "DuplicateItemName" => BatchPutAttributesError::DuplicateItemName(String::from(parsed_error.message)),"MissingParameter" => BatchPutAttributesError::MissingParameter(String::from(parsed_error.message)),"NoSuchDomain" => BatchPutAttributesError::NoSuchDomain(String::from(parsed_error.message)),"InvalidParameterValue" => BatchPutAttributesError::InvalidParameterValue(String::from(parsed_error.message)),"NumberSubmittedAttributesExceeded" => BatchPutAttributesError::NumberSubmittedAttributesExceeded(String::from(parsed_error.message)),"NumberDomainAttributesExceeded" => BatchPutAttributesError::NumberDomainAttributesExceeded(String::from(parsed_error.message)),"NumberItemAttributesExceeded" => BatchPutAttributesError::NumberItemAttributesExceeded(String::from(parsed_error.message)),"NumberDomainBytesExceeded" => BatchPutAttributesError::NumberDomainBytesExceeded(String::from(parsed_error.message)),"NumberSubmittedItemsExceeded" => BatchPutAttributesError::NumberSubmittedItemsExceeded(String::from(parsed_error.message)),_ => BatchPutAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => BatchPutAttributesError::Unknown(body.to_string())
@@ -1101,7 +1104,19 @@ Unknown(String)
                 impl Error for BatchPutAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            BatchPutAttributesError::NoSuchDomain(ref cause) => cause,BatchPutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,BatchPutAttributesError::NumberSubmittedItemsExceeded(ref cause) => cause,BatchPutAttributesError::NumberDomainBytesExceeded(ref cause) => cause,BatchPutAttributesError::DuplicateItemName(ref cause) => cause,BatchPutAttributesError::NumberSubmittedAttributesExceeded(ref cause) => cause,BatchPutAttributesError::MissingParameter(ref cause) => cause,BatchPutAttributesError::NumberDomainAttributesExceeded(ref cause) => cause,BatchPutAttributesError::InvalidParameterValue(ref cause) => cause,BatchPutAttributesError::Validation(ref cause) => cause,BatchPutAttributesError::Credentials(ref err) => err.description(),BatchPutAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),BatchPutAttributesError::Unknown(ref cause) => cause
+                            BatchPutAttributesError::DuplicateItemName(ref cause) => cause,
+BatchPutAttributesError::MissingParameter(ref cause) => cause,
+BatchPutAttributesError::NoSuchDomain(ref cause) => cause,
+BatchPutAttributesError::InvalidParameterValue(ref cause) => cause,
+BatchPutAttributesError::NumberSubmittedAttributesExceeded(ref cause) => cause,
+BatchPutAttributesError::NumberDomainAttributesExceeded(ref cause) => cause,
+BatchPutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
+BatchPutAttributesError::NumberDomainBytesExceeded(ref cause) => cause,
+BatchPutAttributesError::NumberSubmittedItemsExceeded(ref cause) => cause,
+BatchPutAttributesError::Validation(ref cause) => cause,
+BatchPutAttributesError::Credentials(ref err) => err.description(),
+BatchPutAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+BatchPutAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1109,12 +1124,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDomainError {
                     
+///<p>The request must contain the specified missing parameter.</p>
+MissingParameter(String),
 ///<p>The value for a parameter is invalid.</p>
 InvalidParameterValue(String),
 ///<p>Too many domains exist per this account.</p>
-NumberDomainsExceeded(String),
-///<p>The request must contain the specified missing parameter.</p>
-MissingParameter(String),/// An error occurred dispatching the HTTP request
+NumberDomainsExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1131,7 +1146,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "MissingParameter" => CreateDomainError::MissingParameter(String::from(parsed_error.message)),"NumberDomainsExceeded" => CreateDomainError::NumberDomainsExceeded(String::from(parsed_error.message)),"InvalidParameterValue" => CreateDomainError::InvalidParameterValue(String::from(parsed_error.message)),_ => CreateDomainError::Unknown(String::from(body))
+                                    "MissingParameter" => CreateDomainError::MissingParameter(String::from(parsed_error.message)),"InvalidParameterValue" => CreateDomainError::InvalidParameterValue(String::from(parsed_error.message)),"NumberDomainsExceeded" => CreateDomainError::NumberDomainsExceeded(String::from(parsed_error.message)),_ => CreateDomainError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateDomainError::Unknown(body.to_string())
@@ -1163,7 +1178,13 @@ Unknown(String)
                 impl Error for CreateDomainError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDomainError::NumberDomainsExceeded(ref cause) => cause,CreateDomainError::InvalidParameterValue(ref cause) => cause,CreateDomainError::MissingParameter(ref cause) => cause,CreateDomainError::Validation(ref cause) => cause,CreateDomainError::Credentials(ref err) => err.description(),CreateDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDomainError::Unknown(ref cause) => cause
+                            CreateDomainError::MissingParameter(ref cause) => cause,
+CreateDomainError::InvalidParameterValue(ref cause) => cause,
+CreateDomainError::NumberDomainsExceeded(ref cause) => cause,
+CreateDomainError::Validation(ref cause) => cause,
+CreateDomainError::Credentials(ref err) => err.description(),
+CreateDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDomainError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1171,14 +1192,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteAttributesError {
                     
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
-///<p>The specified domain does not exist.</p>
-NoSuchDomain(String),
+///<p>The request must contain the specified missing parameter.</p>
+MissingParameter(String),
 ///<p>The specified attribute does not exist.</p>
 AttributeDoesNotExist(String),
-///<p>The request must contain the specified missing parameter.</p>
-MissingParameter(String),/// An error occurred dispatching the HTTP request
+///<p>The specified domain does not exist.</p>
+NoSuchDomain(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1195,7 +1216,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValue" => DeleteAttributesError::InvalidParameterValue(String::from(parsed_error.message)),"NoSuchDomain" => DeleteAttributesError::NoSuchDomain(String::from(parsed_error.message)),"AttributeDoesNotExist" => DeleteAttributesError::AttributeDoesNotExist(String::from(parsed_error.message)),"MissingParameter" => DeleteAttributesError::MissingParameter(String::from(parsed_error.message)),_ => DeleteAttributesError::Unknown(String::from(body))
+                                    "MissingParameter" => DeleteAttributesError::MissingParameter(String::from(parsed_error.message)),"AttributeDoesNotExist" => DeleteAttributesError::AttributeDoesNotExist(String::from(parsed_error.message)),"NoSuchDomain" => DeleteAttributesError::NoSuchDomain(String::from(parsed_error.message)),"InvalidParameterValue" => DeleteAttributesError::InvalidParameterValue(String::from(parsed_error.message)),_ => DeleteAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteAttributesError::Unknown(body.to_string())
@@ -1227,7 +1248,14 @@ Unknown(String)
                 impl Error for DeleteAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAttributesError::MissingParameter(ref cause) => cause,DeleteAttributesError::InvalidParameterValue(ref cause) => cause,DeleteAttributesError::AttributeDoesNotExist(ref cause) => cause,DeleteAttributesError::NoSuchDomain(ref cause) => cause,DeleteAttributesError::Validation(ref cause) => cause,DeleteAttributesError::Credentials(ref err) => err.description(),DeleteAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAttributesError::Unknown(ref cause) => cause
+                            DeleteAttributesError::MissingParameter(ref cause) => cause,
+DeleteAttributesError::AttributeDoesNotExist(ref cause) => cause,
+DeleteAttributesError::NoSuchDomain(ref cause) => cause,
+DeleteAttributesError::InvalidParameterValue(ref cause) => cause,
+DeleteAttributesError::Validation(ref cause) => cause,
+DeleteAttributesError::Credentials(ref err) => err.description(),
+DeleteAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1285,7 +1313,11 @@ Unknown(String)
                 impl Error for DeleteDomainError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDomainError::MissingParameter(ref cause) => cause,DeleteDomainError::Validation(ref cause) => cause,DeleteDomainError::Credentials(ref err) => err.description(),DeleteDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDomainError::Unknown(ref cause) => cause
+                            DeleteDomainError::MissingParameter(ref cause) => cause,
+DeleteDomainError::Validation(ref cause) => cause,
+DeleteDomainError::Credentials(ref err) => err.description(),
+DeleteDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDomainError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1313,7 +1345,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchDomain" => DomainMetadataError::NoSuchDomain(String::from(parsed_error.message)),"MissingParameter" => DomainMetadataError::MissingParameter(String::from(parsed_error.message)),_ => DomainMetadataError::Unknown(String::from(body))
+                                    "MissingParameter" => DomainMetadataError::MissingParameter(String::from(parsed_error.message)),"NoSuchDomain" => DomainMetadataError::NoSuchDomain(String::from(parsed_error.message)),_ => DomainMetadataError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DomainMetadataError::Unknown(body.to_string())
@@ -1345,7 +1377,12 @@ Unknown(String)
                 impl Error for DomainMetadataError {
                     fn description(&self) -> &str {
                         match *self {
-                            DomainMetadataError::NoSuchDomain(ref cause) => cause,DomainMetadataError::MissingParameter(ref cause) => cause,DomainMetadataError::Validation(ref cause) => cause,DomainMetadataError::Credentials(ref err) => err.description(),DomainMetadataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DomainMetadataError::Unknown(ref cause) => cause
+                            DomainMetadataError::MissingParameter(ref cause) => cause,
+DomainMetadataError::NoSuchDomain(ref cause) => cause,
+DomainMetadataError::Validation(ref cause) => cause,
+DomainMetadataError::Credentials(ref err) => err.description(),
+DomainMetadataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DomainMetadataError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1353,12 +1390,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetAttributesError {
                     
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
+///<p>The request must contain the specified missing parameter.</p>
+MissingParameter(String),
 ///<p>The specified domain does not exist.</p>
 NoSuchDomain(String),
-///<p>The request must contain the specified missing parameter.</p>
-MissingParameter(String),/// An error occurred dispatching the HTTP request
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1375,7 +1412,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NoSuchDomain" => GetAttributesError::NoSuchDomain(String::from(parsed_error.message)),"InvalidParameterValue" => GetAttributesError::InvalidParameterValue(String::from(parsed_error.message)),"MissingParameter" => GetAttributesError::MissingParameter(String::from(parsed_error.message)),_ => GetAttributesError::Unknown(String::from(body))
+                                    "MissingParameter" => GetAttributesError::MissingParameter(String::from(parsed_error.message)),"NoSuchDomain" => GetAttributesError::NoSuchDomain(String::from(parsed_error.message)),"InvalidParameterValue" => GetAttributesError::InvalidParameterValue(String::from(parsed_error.message)),_ => GetAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetAttributesError::Unknown(body.to_string())
@@ -1407,7 +1444,13 @@ Unknown(String)
                 impl Error for GetAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetAttributesError::NoSuchDomain(ref cause) => cause,GetAttributesError::MissingParameter(ref cause) => cause,GetAttributesError::InvalidParameterValue(ref cause) => cause,GetAttributesError::Validation(ref cause) => cause,GetAttributesError::Credentials(ref err) => err.description(),GetAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetAttributesError::Unknown(ref cause) => cause
+                            GetAttributesError::MissingParameter(ref cause) => cause,
+GetAttributesError::NoSuchDomain(ref cause) => cause,
+GetAttributesError::InvalidParameterValue(ref cause) => cause,
+GetAttributesError::Validation(ref cause) => cause,
+GetAttributesError::Credentials(ref err) => err.description(),
+GetAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1435,7 +1478,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterValue" => ListDomainsError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidNextToken" => ListDomainsError::InvalidNextToken(String::from(parsed_error.message)),_ => ListDomainsError::Unknown(String::from(body))
+                                    "InvalidNextToken" => ListDomainsError::InvalidNextToken(String::from(parsed_error.message)),"InvalidParameterValue" => ListDomainsError::InvalidParameterValue(String::from(parsed_error.message)),_ => ListDomainsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListDomainsError::Unknown(body.to_string())
@@ -1467,7 +1510,12 @@ Unknown(String)
                 impl Error for ListDomainsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDomainsError::InvalidParameterValue(ref cause) => cause,ListDomainsError::InvalidNextToken(ref cause) => cause,ListDomainsError::Validation(ref cause) => cause,ListDomainsError::Credentials(ref err) => err.description(),ListDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDomainsError::Unknown(ref cause) => cause
+                            ListDomainsError::InvalidNextToken(ref cause) => cause,
+ListDomainsError::InvalidParameterValue(ref cause) => cause,
+ListDomainsError::Validation(ref cause) => cause,
+ListDomainsError::Credentials(ref err) => err.description(),
+ListDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDomainsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1475,20 +1523,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutAttributesError {
                     
+///<p>The request must contain the specified missing parameter.</p>
+MissingParameter(String),
+///<p>The specified attribute does not exist.</p>
+AttributeDoesNotExist(String),
 ///<p>The specified domain does not exist.</p>
 NoSuchDomain(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),
 ///<p>Too many attributes in this domain.</p>
 NumberDomainAttributesExceeded(String),
 ///<p>Too many attributes in this item.</p>
 NumberItemAttributesExceeded(String),
-///<p>The request must contain the specified missing parameter.</p>
-MissingParameter(String),
 ///<p>Too many bytes in this domain.</p>
-NumberDomainBytesExceeded(String),
-///<p>The specified attribute does not exist.</p>
-AttributeDoesNotExist(String),
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),/// An error occurred dispatching the HTTP request
+NumberDomainBytesExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1505,7 +1553,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "AttributeDoesNotExist" => PutAttributesError::AttributeDoesNotExist(String::from(parsed_error.message)),"NumberDomainBytesExceeded" => PutAttributesError::NumberDomainBytesExceeded(String::from(parsed_error.message)),"NumberItemAttributesExceeded" => PutAttributesError::NumberItemAttributesExceeded(String::from(parsed_error.message)),"MissingParameter" => PutAttributesError::MissingParameter(String::from(parsed_error.message)),"InvalidParameterValue" => PutAttributesError::InvalidParameterValue(String::from(parsed_error.message)),"NumberDomainAttributesExceeded" => PutAttributesError::NumberDomainAttributesExceeded(String::from(parsed_error.message)),"NoSuchDomain" => PutAttributesError::NoSuchDomain(String::from(parsed_error.message)),_ => PutAttributesError::Unknown(String::from(body))
+                                    "MissingParameter" => PutAttributesError::MissingParameter(String::from(parsed_error.message)),"AttributeDoesNotExist" => PutAttributesError::AttributeDoesNotExist(String::from(parsed_error.message)),"NoSuchDomain" => PutAttributesError::NoSuchDomain(String::from(parsed_error.message)),"InvalidParameterValue" => PutAttributesError::InvalidParameterValue(String::from(parsed_error.message)),"NumberDomainAttributesExceeded" => PutAttributesError::NumberDomainAttributesExceeded(String::from(parsed_error.message)),"NumberItemAttributesExceeded" => PutAttributesError::NumberItemAttributesExceeded(String::from(parsed_error.message)),"NumberDomainBytesExceeded" => PutAttributesError::NumberDomainBytesExceeded(String::from(parsed_error.message)),_ => PutAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PutAttributesError::Unknown(body.to_string())
@@ -1537,7 +1585,17 @@ Unknown(String)
                 impl Error for PutAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutAttributesError::NumberDomainBytesExceeded(ref cause) => cause,PutAttributesError::MissingParameter(ref cause) => cause,PutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,PutAttributesError::NoSuchDomain(ref cause) => cause,PutAttributesError::AttributeDoesNotExist(ref cause) => cause,PutAttributesError::InvalidParameterValue(ref cause) => cause,PutAttributesError::NumberDomainAttributesExceeded(ref cause) => cause,PutAttributesError::Validation(ref cause) => cause,PutAttributesError::Credentials(ref err) => err.description(),PutAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutAttributesError::Unknown(ref cause) => cause
+                            PutAttributesError::MissingParameter(ref cause) => cause,
+PutAttributesError::AttributeDoesNotExist(ref cause) => cause,
+PutAttributesError::NoSuchDomain(ref cause) => cause,
+PutAttributesError::InvalidParameterValue(ref cause) => cause,
+PutAttributesError::NumberDomainAttributesExceeded(ref cause) => cause,
+PutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
+PutAttributesError::NumberDomainBytesExceeded(ref cause) => cause,
+PutAttributesError::Validation(ref cause) => cause,
+PutAttributesError::Credentials(ref err) => err.description(),
+PutAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1545,24 +1603,24 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SelectError {
                     
+///<p>A timeout occurred when attempting to query the specified domain with specified query expression.</p>
+RequestTimeout(String),
+///<p>The request must contain the specified missing parameter.</p>
+MissingParameter(String),
+///<p>The specified NextToken is not valid. </p>
+InvalidNextToken(String),
+///<p>The specified domain does not exist.</p>
+NoSuchDomain(String),
+///<p>The specified query expression syntax is not valid.</p>
+InvalidQueryExpression(String),
+///<p>The value for a parameter is invalid.</p>
+InvalidParameterValue(String),
 ///<p>Too many attributes requested.</p>
 TooManyRequestedAttributes(String),
 ///<p>Too many predicates exist in the query expression.</p>
-InvalidNumberValueTests(String),
-///<p>The specified query expression syntax is not valid.</p>
-InvalidQueryExpression(String),
-///<p>The specified NextToken is not valid. </p>
-InvalidNextToken(String),
-///<p>A timeout occurred when attempting to query the specified domain with specified query expression.</p>
-RequestTimeout(String),
-///<p>The specified domain does not exist.</p>
-NoSuchDomain(String),
-///<p>The value for a parameter is invalid.</p>
-InvalidParameterValue(String),
-///<p>Too many predicates exist in the query expression.</p>
 InvalidNumberPredicates(String),
-///<p>The request must contain the specified missing parameter.</p>
-MissingParameter(String),/// An error occurred dispatching the HTTP request
+///<p>Too many predicates exist in the query expression.</p>
+InvalidNumberValueTests(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1579,7 +1637,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidNextToken" => SelectError::InvalidNextToken(String::from(parsed_error.message)),"InvalidNumberValueTests" => SelectError::InvalidNumberValueTests(String::from(parsed_error.message)),"InvalidQueryExpression" => SelectError::InvalidQueryExpression(String::from(parsed_error.message)),"NoSuchDomain" => SelectError::NoSuchDomain(String::from(parsed_error.message)),"InvalidNumberPredicates" => SelectError::InvalidNumberPredicates(String::from(parsed_error.message)),"InvalidParameterValue" => SelectError::InvalidParameterValue(String::from(parsed_error.message)),"TooManyRequestedAttributes" => SelectError::TooManyRequestedAttributes(String::from(parsed_error.message)),"MissingParameter" => SelectError::MissingParameter(String::from(parsed_error.message)),"RequestTimeout" => SelectError::RequestTimeout(String::from(parsed_error.message)),_ => SelectError::Unknown(String::from(body))
+                                    "RequestTimeout" => SelectError::RequestTimeout(String::from(parsed_error.message)),"MissingParameter" => SelectError::MissingParameter(String::from(parsed_error.message)),"InvalidNextToken" => SelectError::InvalidNextToken(String::from(parsed_error.message)),"NoSuchDomain" => SelectError::NoSuchDomain(String::from(parsed_error.message)),"InvalidQueryExpression" => SelectError::InvalidQueryExpression(String::from(parsed_error.message)),"InvalidParameterValue" => SelectError::InvalidParameterValue(String::from(parsed_error.message)),"TooManyRequestedAttributes" => SelectError::TooManyRequestedAttributes(String::from(parsed_error.message)),"InvalidNumberPredicates" => SelectError::InvalidNumberPredicates(String::from(parsed_error.message)),"InvalidNumberValueTests" => SelectError::InvalidNumberValueTests(String::from(parsed_error.message)),_ => SelectError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SelectError::Unknown(body.to_string())
@@ -1611,7 +1669,19 @@ Unknown(String)
                 impl Error for SelectError {
                     fn description(&self) -> &str {
                         match *self {
-                            SelectError::TooManyRequestedAttributes(ref cause) => cause,SelectError::InvalidNumberPredicates(ref cause) => cause,SelectError::MissingParameter(ref cause) => cause,SelectError::InvalidNextToken(ref cause) => cause,SelectError::InvalidNumberValueTests(ref cause) => cause,SelectError::InvalidParameterValue(ref cause) => cause,SelectError::InvalidQueryExpression(ref cause) => cause,SelectError::RequestTimeout(ref cause) => cause,SelectError::NoSuchDomain(ref cause) => cause,SelectError::Validation(ref cause) => cause,SelectError::Credentials(ref err) => err.description(),SelectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SelectError::Unknown(ref cause) => cause
+                            SelectError::RequestTimeout(ref cause) => cause,
+SelectError::MissingParameter(ref cause) => cause,
+SelectError::InvalidNextToken(ref cause) => cause,
+SelectError::NoSuchDomain(ref cause) => cause,
+SelectError::InvalidQueryExpression(ref cause) => cause,
+SelectError::InvalidParameterValue(ref cause) => cause,
+SelectError::TooManyRequestedAttributes(ref cause) => cause,
+SelectError::InvalidNumberPredicates(ref cause) => cause,
+SelectError::InvalidNumberValueTests(ref cause) => cause,
+SelectError::Validation(ref cause) => cause,
+SelectError::Credentials(ref err) => err.description(),
+SelectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SelectError::Unknown(ref cause) => cause
                         }
                     }
                  }

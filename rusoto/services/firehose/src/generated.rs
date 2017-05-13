@@ -803,12 +803,12 @@ pub type Username = String;
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDeliveryStreamError {
                     
-///<p>The resource is already in use and not available for this operation.</p>
-ResourceInUse(String),
 ///<p>The specified input parameter has an value that is not valid.</p>
 InvalidArgument(String),
 ///<p>You have already reached the limit for a requested resource.</p>
-LimitExceeded(String),/// An error occurred dispatching the HTTP request
+LimitExceeded(String),
+///<p>The resource is already in use and not available for this operation.</p>
+ResourceInUse(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -827,7 +827,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidArgumentException" => CreateDeliveryStreamError::InvalidArgument(String::from(error_message)),"LimitExceededException" => CreateDeliveryStreamError::LimitExceeded(String::from(error_message)),"ResourceInUseException" => CreateDeliveryStreamError::ResourceInUse(String::from(error_message)),"ValidationException" => CreateDeliveryStreamError::Validation(error_message.to_string()),_ => CreateDeliveryStreamError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => CreateDeliveryStreamError::InvalidArgument(String::from(error_message)),
+"LimitExceededException" => CreateDeliveryStreamError::LimitExceeded(String::from(error_message)),
+"ResourceInUseException" => CreateDeliveryStreamError::ResourceInUse(String::from(error_message)),
+"ValidationException" => CreateDeliveryStreamError::Validation(error_message.to_string()),
+_ => CreateDeliveryStreamError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateDeliveryStreamError::Unknown(String::from(body))
@@ -858,7 +862,13 @@ Unknown(String)
                 impl Error for CreateDeliveryStreamError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDeliveryStreamError::InvalidArgument(ref cause) => cause,CreateDeliveryStreamError::ResourceInUse(ref cause) => cause,CreateDeliveryStreamError::LimitExceeded(ref cause) => cause,CreateDeliveryStreamError::Validation(ref cause) => cause,CreateDeliveryStreamError::Credentials(ref err) => err.description(),CreateDeliveryStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDeliveryStreamError::Unknown(ref cause) => cause
+                            CreateDeliveryStreamError::InvalidArgument(ref cause) => cause,
+CreateDeliveryStreamError::LimitExceeded(ref cause) => cause,
+CreateDeliveryStreamError::ResourceInUse(ref cause) => cause,
+CreateDeliveryStreamError::Validation(ref cause) => cause,
+CreateDeliveryStreamError::Credentials(ref err) => err.description(),
+CreateDeliveryStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDeliveryStreamError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -866,10 +876,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteDeliveryStreamError {
                     
-///<p>The specified resource could not be found.</p>
-ResourceNotFound(String),
 ///<p>The resource is already in use and not available for this operation.</p>
-ResourceInUse(String),/// An error occurred dispatching the HTTP request
+ResourceInUse(String),
+///<p>The specified resource could not be found.</p>
+ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -888,7 +898,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceInUseException" => DeleteDeliveryStreamError::ResourceInUse(String::from(error_message)),"ResourceNotFoundException" => DeleteDeliveryStreamError::ResourceNotFound(String::from(error_message)),"ValidationException" => DeleteDeliveryStreamError::Validation(error_message.to_string()),_ => DeleteDeliveryStreamError::Unknown(String::from(body))
+                                    "ResourceInUseException" => DeleteDeliveryStreamError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => DeleteDeliveryStreamError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DeleteDeliveryStreamError::Validation(error_message.to_string()),
+_ => DeleteDeliveryStreamError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteDeliveryStreamError::Unknown(String::from(body))
@@ -919,7 +932,12 @@ Unknown(String)
                 impl Error for DeleteDeliveryStreamError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDeliveryStreamError::ResourceNotFound(ref cause) => cause,DeleteDeliveryStreamError::ResourceInUse(ref cause) => cause,DeleteDeliveryStreamError::Validation(ref cause) => cause,DeleteDeliveryStreamError::Credentials(ref err) => err.description(),DeleteDeliveryStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDeliveryStreamError::Unknown(ref cause) => cause
+                            DeleteDeliveryStreamError::ResourceInUse(ref cause) => cause,
+DeleteDeliveryStreamError::ResourceNotFound(ref cause) => cause,
+DeleteDeliveryStreamError::Validation(ref cause) => cause,
+DeleteDeliveryStreamError::Credentials(ref err) => err.description(),
+DeleteDeliveryStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDeliveryStreamError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -947,7 +965,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => DescribeDeliveryStreamError::ResourceNotFound(String::from(error_message)),"ValidationException" => DescribeDeliveryStreamError::Validation(error_message.to_string()),_ => DescribeDeliveryStreamError::Unknown(String::from(body))
+                                    "ResourceNotFoundException" => DescribeDeliveryStreamError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => DescribeDeliveryStreamError::Validation(error_message.to_string()),
+_ => DescribeDeliveryStreamError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeDeliveryStreamError::Unknown(String::from(body))
@@ -978,7 +998,11 @@ Unknown(String)
                 impl Error for DescribeDeliveryStreamError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDeliveryStreamError::ResourceNotFound(ref cause) => cause,DescribeDeliveryStreamError::Validation(ref cause) => cause,DescribeDeliveryStreamError::Credentials(ref err) => err.description(),DescribeDeliveryStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDeliveryStreamError::Unknown(ref cause) => cause
+                            DescribeDeliveryStreamError::ResourceNotFound(ref cause) => cause,
+DescribeDeliveryStreamError::Validation(ref cause) => cause,
+DescribeDeliveryStreamError::Credentials(ref err) => err.description(),
+DescribeDeliveryStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDeliveryStreamError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1004,7 +1028,8 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ValidationException" => ListDeliveryStreamsError::Validation(error_message.to_string()),_ => ListDeliveryStreamsError::Unknown(String::from(body))
+                                    "ValidationException" => ListDeliveryStreamsError::Validation(error_message.to_string()),
+_ => ListDeliveryStreamsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListDeliveryStreamsError::Unknown(String::from(body))
@@ -1035,7 +1060,10 @@ Unknown(String)
                 impl Error for ListDeliveryStreamsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDeliveryStreamsError::Validation(ref cause) => cause,ListDeliveryStreamsError::Credentials(ref err) => err.description(),ListDeliveryStreamsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDeliveryStreamsError::Unknown(ref cause) => cause
+                            ListDeliveryStreamsError::Validation(ref cause) => cause,
+ListDeliveryStreamsError::Credentials(ref err) => err.description(),
+ListDeliveryStreamsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDeliveryStreamsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1043,12 +1071,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutRecordError {
                     
-///<p>The service is unavailable, back off and retry the operation. If you continue to see the exception, throughput limits for the delivery stream may have been exceeded. For more information about limits and how to request an increase, see <a href="http://docs.aws.amazon.com/firehose/latest/dev/limits.html">Amazon Kinesis Firehose Limits</a>.</p>
-ServiceUnavailable(String),
 ///<p>The specified input parameter has an value that is not valid.</p>
 InvalidArgument(String),
 ///<p>The specified resource could not be found.</p>
-ResourceNotFound(String),/// An error occurred dispatching the HTTP request
+ResourceNotFound(String),
+///<p>The service is unavailable, back off and retry the operation. If you continue to see the exception, throughput limits for the delivery stream may have been exceeded. For more information about limits and how to request an increase, see <a href="http://docs.aws.amazon.com/firehose/latest/dev/limits.html">Amazon Kinesis Firehose Limits</a>.</p>
+ServiceUnavailable(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1067,7 +1095,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => PutRecordError::ResourceNotFound(String::from(error_message)),"InvalidArgumentException" => PutRecordError::InvalidArgument(String::from(error_message)),"ServiceUnavailableException" => PutRecordError::ServiceUnavailable(String::from(error_message)),"ValidationException" => PutRecordError::Validation(error_message.to_string()),_ => PutRecordError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => PutRecordError::InvalidArgument(String::from(error_message)),
+"ResourceNotFoundException" => PutRecordError::ResourceNotFound(String::from(error_message)),
+"ServiceUnavailableException" => PutRecordError::ServiceUnavailable(String::from(error_message)),
+"ValidationException" => PutRecordError::Validation(error_message.to_string()),
+_ => PutRecordError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutRecordError::Unknown(String::from(body))
@@ -1098,7 +1130,13 @@ Unknown(String)
                 impl Error for PutRecordError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutRecordError::ResourceNotFound(ref cause) => cause,PutRecordError::ServiceUnavailable(ref cause) => cause,PutRecordError::InvalidArgument(ref cause) => cause,PutRecordError::Validation(ref cause) => cause,PutRecordError::Credentials(ref err) => err.description(),PutRecordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutRecordError::Unknown(ref cause) => cause
+                            PutRecordError::InvalidArgument(ref cause) => cause,
+PutRecordError::ResourceNotFound(ref cause) => cause,
+PutRecordError::ServiceUnavailable(ref cause) => cause,
+PutRecordError::Validation(ref cause) => cause,
+PutRecordError::Credentials(ref err) => err.description(),
+PutRecordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutRecordError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1106,12 +1144,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutRecordBatchError {
                     
-///<p>The service is unavailable, back off and retry the operation. If you continue to see the exception, throughput limits for the delivery stream may have been exceeded. For more information about limits and how to request an increase, see <a href="http://docs.aws.amazon.com/firehose/latest/dev/limits.html">Amazon Kinesis Firehose Limits</a>.</p>
-ServiceUnavailable(String),
+///<p>The specified input parameter has an value that is not valid.</p>
+InvalidArgument(String),
 ///<p>The specified resource could not be found.</p>
 ResourceNotFound(String),
-///<p>The specified input parameter has an value that is not valid.</p>
-InvalidArgument(String),/// An error occurred dispatching the HTTP request
+///<p>The service is unavailable, back off and retry the operation. If you continue to see the exception, throughput limits for the delivery stream may have been exceeded. For more information about limits and how to request an increase, see <a href="http://docs.aws.amazon.com/firehose/latest/dev/limits.html">Amazon Kinesis Firehose Limits</a>.</p>
+ServiceUnavailable(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1130,7 +1168,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ResourceNotFoundException" => PutRecordBatchError::ResourceNotFound(String::from(error_message)),"ServiceUnavailableException" => PutRecordBatchError::ServiceUnavailable(String::from(error_message)),"InvalidArgumentException" => PutRecordBatchError::InvalidArgument(String::from(error_message)),"ValidationException" => PutRecordBatchError::Validation(error_message.to_string()),_ => PutRecordBatchError::Unknown(String::from(body))
+                                    "InvalidArgumentException" => PutRecordBatchError::InvalidArgument(String::from(error_message)),
+"ResourceNotFoundException" => PutRecordBatchError::ResourceNotFound(String::from(error_message)),
+"ServiceUnavailableException" => PutRecordBatchError::ServiceUnavailable(String::from(error_message)),
+"ValidationException" => PutRecordBatchError::Validation(error_message.to_string()),
+_ => PutRecordBatchError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutRecordBatchError::Unknown(String::from(body))
@@ -1161,7 +1203,13 @@ Unknown(String)
                 impl Error for PutRecordBatchError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutRecordBatchError::ResourceNotFound(ref cause) => cause,PutRecordBatchError::InvalidArgument(ref cause) => cause,PutRecordBatchError::ServiceUnavailable(ref cause) => cause,PutRecordBatchError::Validation(ref cause) => cause,PutRecordBatchError::Credentials(ref err) => err.description(),PutRecordBatchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutRecordBatchError::Unknown(ref cause) => cause
+                            PutRecordBatchError::InvalidArgument(ref cause) => cause,
+PutRecordBatchError::ResourceNotFound(ref cause) => cause,
+PutRecordBatchError::ServiceUnavailable(ref cause) => cause,
+PutRecordBatchError::Validation(ref cause) => cause,
+PutRecordBatchError::Credentials(ref err) => err.description(),
+PutRecordBatchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutRecordBatchError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1169,12 +1217,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateDestinationError {
                     
-///<p>The resource is already in use and not available for this operation.</p>
-ResourceInUse(String),
 ///<p>Another modification has already happened. Fetch <b>VersionId</b> again and use it to update the destination.</p>
 ConcurrentModification(String),
 ///<p>The specified input parameter has an value that is not valid.</p>
 InvalidArgument(String),
+///<p>The resource is already in use and not available for this operation.</p>
+ResourceInUse(String),
 ///<p>The specified resource could not be found.</p>
 ResourceNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1195,7 +1243,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ConcurrentModificationException" => UpdateDestinationError::ConcurrentModification(String::from(error_message)),"ResourceNotFoundException" => UpdateDestinationError::ResourceNotFound(String::from(error_message)),"ResourceInUseException" => UpdateDestinationError::ResourceInUse(String::from(error_message)),"InvalidArgumentException" => UpdateDestinationError::InvalidArgument(String::from(error_message)),"ValidationException" => UpdateDestinationError::Validation(error_message.to_string()),_ => UpdateDestinationError::Unknown(String::from(body))
+                                    "ConcurrentModificationException" => UpdateDestinationError::ConcurrentModification(String::from(error_message)),
+"InvalidArgumentException" => UpdateDestinationError::InvalidArgument(String::from(error_message)),
+"ResourceInUseException" => UpdateDestinationError::ResourceInUse(String::from(error_message)),
+"ResourceNotFoundException" => UpdateDestinationError::ResourceNotFound(String::from(error_message)),
+"ValidationException" => UpdateDestinationError::Validation(error_message.to_string()),
+_ => UpdateDestinationError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateDestinationError::Unknown(String::from(body))
@@ -1226,7 +1279,14 @@ Unknown(String)
                 impl Error for UpdateDestinationError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateDestinationError::ConcurrentModification(ref cause) => cause,UpdateDestinationError::ResourceNotFound(ref cause) => cause,UpdateDestinationError::InvalidArgument(ref cause) => cause,UpdateDestinationError::ResourceInUse(ref cause) => cause,UpdateDestinationError::Validation(ref cause) => cause,UpdateDestinationError::Credentials(ref err) => err.description(),UpdateDestinationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateDestinationError::Unknown(ref cause) => cause
+                            UpdateDestinationError::ConcurrentModification(ref cause) => cause,
+UpdateDestinationError::InvalidArgument(ref cause) => cause,
+UpdateDestinationError::ResourceInUse(ref cause) => cause,
+UpdateDestinationError::ResourceNotFound(ref cause) => cause,
+UpdateDestinationError::Validation(ref cause) => cause,
+UpdateDestinationError::Credentials(ref err) => err.description(),
+UpdateDestinationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateDestinationError::Unknown(ref cause) => cause
                         }
                     }
                  }

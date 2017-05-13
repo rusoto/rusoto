@@ -792,7 +792,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "UnsupportedTLD" => CheckDomainAvailabilityError::UnsupportedTLD(String::from(error_message)),"InvalidInput" => CheckDomainAvailabilityError::InvalidInput(String::from(error_message)),"ValidationException" => CheckDomainAvailabilityError::Validation(error_message.to_string()),_ => CheckDomainAvailabilityError::Unknown(String::from(body))
+                                    "InvalidInput" => CheckDomainAvailabilityError::InvalidInput(String::from(error_message)),
+"UnsupportedTLD" => CheckDomainAvailabilityError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => CheckDomainAvailabilityError::Validation(error_message.to_string()),
+_ => CheckDomainAvailabilityError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CheckDomainAvailabilityError::Unknown(String::from(body))
@@ -823,7 +826,12 @@ Unknown(String)
                 impl Error for CheckDomainAvailabilityError {
                     fn description(&self) -> &str {
                         match *self {
-                            CheckDomainAvailabilityError::UnsupportedTLD(ref cause) => cause,CheckDomainAvailabilityError::InvalidInput(ref cause) => cause,CheckDomainAvailabilityError::Validation(ref cause) => cause,CheckDomainAvailabilityError::Credentials(ref err) => err.description(),CheckDomainAvailabilityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CheckDomainAvailabilityError::Unknown(ref cause) => cause
+                            CheckDomainAvailabilityError::InvalidInput(ref cause) => cause,
+CheckDomainAvailabilityError::UnsupportedTLD(ref cause) => cause,
+CheckDomainAvailabilityError::Validation(ref cause) => cause,
+CheckDomainAvailabilityError::Credentials(ref err) => err.description(),
+CheckDomainAvailabilityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CheckDomainAvailabilityError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -855,7 +863,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "OperationLimitExceeded" => DeleteTagsForDomainError::OperationLimitExceeded(String::from(error_message)),"UnsupportedTLD" => DeleteTagsForDomainError::UnsupportedTLD(String::from(error_message)),"InvalidInput" => DeleteTagsForDomainError::InvalidInput(String::from(error_message)),"ValidationException" => DeleteTagsForDomainError::Validation(error_message.to_string()),_ => DeleteTagsForDomainError::Unknown(String::from(body))
+                                    "InvalidInput" => DeleteTagsForDomainError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => DeleteTagsForDomainError::OperationLimitExceeded(String::from(error_message)),
+"UnsupportedTLD" => DeleteTagsForDomainError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => DeleteTagsForDomainError::Validation(error_message.to_string()),
+_ => DeleteTagsForDomainError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteTagsForDomainError::Unknown(String::from(body))
@@ -886,7 +898,13 @@ Unknown(String)
                 impl Error for DeleteTagsForDomainError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteTagsForDomainError::InvalidInput(ref cause) => cause,DeleteTagsForDomainError::UnsupportedTLD(ref cause) => cause,DeleteTagsForDomainError::OperationLimitExceeded(ref cause) => cause,DeleteTagsForDomainError::Validation(ref cause) => cause,DeleteTagsForDomainError::Credentials(ref err) => err.description(),DeleteTagsForDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteTagsForDomainError::Unknown(ref cause) => cause
+                            DeleteTagsForDomainError::InvalidInput(ref cause) => cause,
+DeleteTagsForDomainError::OperationLimitExceeded(ref cause) => cause,
+DeleteTagsForDomainError::UnsupportedTLD(ref cause) => cause,
+DeleteTagsForDomainError::Validation(ref cause) => cause,
+DeleteTagsForDomainError::Credentials(ref err) => err.description(),
+DeleteTagsForDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteTagsForDomainError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -916,7 +934,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => DisableDomainAutoRenewError::InvalidInput(String::from(error_message)),"UnsupportedTLD" => DisableDomainAutoRenewError::UnsupportedTLD(String::from(error_message)),"ValidationException" => DisableDomainAutoRenewError::Validation(error_message.to_string()),_ => DisableDomainAutoRenewError::Unknown(String::from(body))
+                                    "InvalidInput" => DisableDomainAutoRenewError::InvalidInput(String::from(error_message)),
+"UnsupportedTLD" => DisableDomainAutoRenewError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => DisableDomainAutoRenewError::Validation(error_message.to_string()),
+_ => DisableDomainAutoRenewError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DisableDomainAutoRenewError::Unknown(String::from(body))
@@ -947,7 +968,12 @@ Unknown(String)
                 impl Error for DisableDomainAutoRenewError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableDomainAutoRenewError::UnsupportedTLD(ref cause) => cause,DisableDomainAutoRenewError::InvalidInput(ref cause) => cause,DisableDomainAutoRenewError::Validation(ref cause) => cause,DisableDomainAutoRenewError::Credentials(ref err) => err.description(),DisableDomainAutoRenewError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableDomainAutoRenewError::Unknown(ref cause) => cause
+                            DisableDomainAutoRenewError::InvalidInput(ref cause) => cause,
+DisableDomainAutoRenewError::UnsupportedTLD(ref cause) => cause,
+DisableDomainAutoRenewError::Validation(ref cause) => cause,
+DisableDomainAutoRenewError::Credentials(ref err) => err.description(),
+DisableDomainAutoRenewError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableDomainAutoRenewError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -955,16 +981,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DisableDomainTransferLockError {
                     
+///<p>The request is already in progress for the domain.</p>
+DuplicateRequest(String),
+///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+InvalidInput(String),
 ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
 OperationLimitExceeded(String),
 ///<p>The top-level domain does not support this operation.</p>
 TLDRulesViolation(String),
 ///<p>Amazon Route 53 does not support this top-level domain.</p>
-UnsupportedTLD(String),
-///<p>The request is already in progress for the domain.</p>
-DuplicateRequest(String),
-///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -983,7 +1009,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => DisableDomainTransferLockError::InvalidInput(String::from(error_message)),"UnsupportedTLD" => DisableDomainTransferLockError::UnsupportedTLD(String::from(error_message)),"OperationLimitExceeded" => DisableDomainTransferLockError::OperationLimitExceeded(String::from(error_message)),"TLDRulesViolation" => DisableDomainTransferLockError::TLDRulesViolation(String::from(error_message)),"DuplicateRequest" => DisableDomainTransferLockError::DuplicateRequest(String::from(error_message)),"ValidationException" => DisableDomainTransferLockError::Validation(error_message.to_string()),_ => DisableDomainTransferLockError::Unknown(String::from(body))
+                                    "DuplicateRequest" => DisableDomainTransferLockError::DuplicateRequest(String::from(error_message)),
+"InvalidInput" => DisableDomainTransferLockError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => DisableDomainTransferLockError::OperationLimitExceeded(String::from(error_message)),
+"TLDRulesViolation" => DisableDomainTransferLockError::TLDRulesViolation(String::from(error_message)),
+"UnsupportedTLD" => DisableDomainTransferLockError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => DisableDomainTransferLockError::Validation(error_message.to_string()),
+_ => DisableDomainTransferLockError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DisableDomainTransferLockError::Unknown(String::from(body))
@@ -1014,7 +1046,15 @@ Unknown(String)
                 impl Error for DisableDomainTransferLockError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableDomainTransferLockError::TLDRulesViolation(ref cause) => cause,DisableDomainTransferLockError::UnsupportedTLD(ref cause) => cause,DisableDomainTransferLockError::InvalidInput(ref cause) => cause,DisableDomainTransferLockError::DuplicateRequest(ref cause) => cause,DisableDomainTransferLockError::OperationLimitExceeded(ref cause) => cause,DisableDomainTransferLockError::Validation(ref cause) => cause,DisableDomainTransferLockError::Credentials(ref err) => err.description(),DisableDomainTransferLockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableDomainTransferLockError::Unknown(ref cause) => cause
+                            DisableDomainTransferLockError::DuplicateRequest(ref cause) => cause,
+DisableDomainTransferLockError::InvalidInput(ref cause) => cause,
+DisableDomainTransferLockError::OperationLimitExceeded(ref cause) => cause,
+DisableDomainTransferLockError::TLDRulesViolation(ref cause) => cause,
+DisableDomainTransferLockError::UnsupportedTLD(ref cause) => cause,
+DisableDomainTransferLockError::Validation(ref cause) => cause,
+DisableDomainTransferLockError::Credentials(ref err) => err.description(),
+DisableDomainTransferLockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableDomainTransferLockError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1022,10 +1062,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum EnableDomainAutoRenewError {
                     
-///<p>The top-level domain does not support this operation.</p>
-TLDRulesViolation(String),
 ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
 InvalidInput(String),
+///<p>The top-level domain does not support this operation.</p>
+TLDRulesViolation(String),
 ///<p>Amazon Route 53 does not support this top-level domain.</p>
 UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1046,7 +1086,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => EnableDomainAutoRenewError::InvalidInput(String::from(error_message)),"TLDRulesViolation" => EnableDomainAutoRenewError::TLDRulesViolation(String::from(error_message)),"UnsupportedTLD" => EnableDomainAutoRenewError::UnsupportedTLD(String::from(error_message)),"ValidationException" => EnableDomainAutoRenewError::Validation(error_message.to_string()),_ => EnableDomainAutoRenewError::Unknown(String::from(body))
+                                    "InvalidInput" => EnableDomainAutoRenewError::InvalidInput(String::from(error_message)),
+"TLDRulesViolation" => EnableDomainAutoRenewError::TLDRulesViolation(String::from(error_message)),
+"UnsupportedTLD" => EnableDomainAutoRenewError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => EnableDomainAutoRenewError::Validation(error_message.to_string()),
+_ => EnableDomainAutoRenewError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => EnableDomainAutoRenewError::Unknown(String::from(body))
@@ -1077,7 +1121,13 @@ Unknown(String)
                 impl Error for EnableDomainAutoRenewError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableDomainAutoRenewError::InvalidInput(ref cause) => cause,EnableDomainAutoRenewError::UnsupportedTLD(ref cause) => cause,EnableDomainAutoRenewError::TLDRulesViolation(ref cause) => cause,EnableDomainAutoRenewError::Validation(ref cause) => cause,EnableDomainAutoRenewError::Credentials(ref err) => err.description(),EnableDomainAutoRenewError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableDomainAutoRenewError::Unknown(ref cause) => cause
+                            EnableDomainAutoRenewError::InvalidInput(ref cause) => cause,
+EnableDomainAutoRenewError::TLDRulesViolation(ref cause) => cause,
+EnableDomainAutoRenewError::UnsupportedTLD(ref cause) => cause,
+EnableDomainAutoRenewError::Validation(ref cause) => cause,
+EnableDomainAutoRenewError::Credentials(ref err) => err.description(),
+EnableDomainAutoRenewError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableDomainAutoRenewError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1085,16 +1135,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum EnableDomainTransferLockError {
                     
-///<p>Amazon Route 53 does not support this top-level domain.</p>
-UnsupportedTLD(String),
-///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
-InvalidInput(String),
-///<p>The top-level domain does not support this operation.</p>
-TLDRulesViolation(String),
 ///<p>The request is already in progress for the domain.</p>
 DuplicateRequest(String),
+///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+InvalidInput(String),
 ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
-OperationLimitExceeded(String),/// An error occurred dispatching the HTTP request
+OperationLimitExceeded(String),
+///<p>The top-level domain does not support this operation.</p>
+TLDRulesViolation(String),
+///<p>Amazon Route 53 does not support this top-level domain.</p>
+UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1113,7 +1163,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "UnsupportedTLD" => EnableDomainTransferLockError::UnsupportedTLD(String::from(error_message)),"OperationLimitExceeded" => EnableDomainTransferLockError::OperationLimitExceeded(String::from(error_message)),"DuplicateRequest" => EnableDomainTransferLockError::DuplicateRequest(String::from(error_message)),"InvalidInput" => EnableDomainTransferLockError::InvalidInput(String::from(error_message)),"TLDRulesViolation" => EnableDomainTransferLockError::TLDRulesViolation(String::from(error_message)),"ValidationException" => EnableDomainTransferLockError::Validation(error_message.to_string()),_ => EnableDomainTransferLockError::Unknown(String::from(body))
+                                    "DuplicateRequest" => EnableDomainTransferLockError::DuplicateRequest(String::from(error_message)),
+"InvalidInput" => EnableDomainTransferLockError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => EnableDomainTransferLockError::OperationLimitExceeded(String::from(error_message)),
+"TLDRulesViolation" => EnableDomainTransferLockError::TLDRulesViolation(String::from(error_message)),
+"UnsupportedTLD" => EnableDomainTransferLockError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => EnableDomainTransferLockError::Validation(error_message.to_string()),
+_ => EnableDomainTransferLockError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => EnableDomainTransferLockError::Unknown(String::from(body))
@@ -1144,7 +1200,15 @@ Unknown(String)
                 impl Error for EnableDomainTransferLockError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableDomainTransferLockError::TLDRulesViolation(ref cause) => cause,EnableDomainTransferLockError::DuplicateRequest(ref cause) => cause,EnableDomainTransferLockError::OperationLimitExceeded(ref cause) => cause,EnableDomainTransferLockError::InvalidInput(ref cause) => cause,EnableDomainTransferLockError::UnsupportedTLD(ref cause) => cause,EnableDomainTransferLockError::Validation(ref cause) => cause,EnableDomainTransferLockError::Credentials(ref err) => err.description(),EnableDomainTransferLockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableDomainTransferLockError::Unknown(ref cause) => cause
+                            EnableDomainTransferLockError::DuplicateRequest(ref cause) => cause,
+EnableDomainTransferLockError::InvalidInput(ref cause) => cause,
+EnableDomainTransferLockError::OperationLimitExceeded(ref cause) => cause,
+EnableDomainTransferLockError::TLDRulesViolation(ref cause) => cause,
+EnableDomainTransferLockError::UnsupportedTLD(ref cause) => cause,
+EnableDomainTransferLockError::Validation(ref cause) => cause,
+EnableDomainTransferLockError::Credentials(ref err) => err.description(),
+EnableDomainTransferLockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableDomainTransferLockError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1152,10 +1216,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetContactReachabilityStatusError {
                     
-///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
-OperationLimitExceeded(String),
 ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
 InvalidInput(String),
+///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+OperationLimitExceeded(String),
 ///<p>Amazon Route 53 does not support this top-level domain.</p>
 UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1176,7 +1240,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => GetContactReachabilityStatusError::InvalidInput(String::from(error_message)),"UnsupportedTLD" => GetContactReachabilityStatusError::UnsupportedTLD(String::from(error_message)),"OperationLimitExceeded" => GetContactReachabilityStatusError::OperationLimitExceeded(String::from(error_message)),"ValidationException" => GetContactReachabilityStatusError::Validation(error_message.to_string()),_ => GetContactReachabilityStatusError::Unknown(String::from(body))
+                                    "InvalidInput" => GetContactReachabilityStatusError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => GetContactReachabilityStatusError::OperationLimitExceeded(String::from(error_message)),
+"UnsupportedTLD" => GetContactReachabilityStatusError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => GetContactReachabilityStatusError::Validation(error_message.to_string()),
+_ => GetContactReachabilityStatusError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetContactReachabilityStatusError::Unknown(String::from(body))
@@ -1207,7 +1275,13 @@ Unknown(String)
                 impl Error for GetContactReachabilityStatusError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetContactReachabilityStatusError::OperationLimitExceeded(ref cause) => cause,GetContactReachabilityStatusError::UnsupportedTLD(ref cause) => cause,GetContactReachabilityStatusError::InvalidInput(ref cause) => cause,GetContactReachabilityStatusError::Validation(ref cause) => cause,GetContactReachabilityStatusError::Credentials(ref err) => err.description(),GetContactReachabilityStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetContactReachabilityStatusError::Unknown(ref cause) => cause
+                            GetContactReachabilityStatusError::InvalidInput(ref cause) => cause,
+GetContactReachabilityStatusError::OperationLimitExceeded(ref cause) => cause,
+GetContactReachabilityStatusError::UnsupportedTLD(ref cause) => cause,
+GetContactReachabilityStatusError::Validation(ref cause) => cause,
+GetContactReachabilityStatusError::Credentials(ref err) => err.description(),
+GetContactReachabilityStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetContactReachabilityStatusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1237,7 +1311,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => GetDomainDetailError::InvalidInput(String::from(error_message)),"UnsupportedTLD" => GetDomainDetailError::UnsupportedTLD(String::from(error_message)),"ValidationException" => GetDomainDetailError::Validation(error_message.to_string()),_ => GetDomainDetailError::Unknown(String::from(body))
+                                    "InvalidInput" => GetDomainDetailError::InvalidInput(String::from(error_message)),
+"UnsupportedTLD" => GetDomainDetailError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => GetDomainDetailError::Validation(error_message.to_string()),
+_ => GetDomainDetailError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetDomainDetailError::Unknown(String::from(body))
@@ -1268,7 +1345,12 @@ Unknown(String)
                 impl Error for GetDomainDetailError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDomainDetailError::InvalidInput(ref cause) => cause,GetDomainDetailError::UnsupportedTLD(ref cause) => cause,GetDomainDetailError::Validation(ref cause) => cause,GetDomainDetailError::Credentials(ref err) => err.description(),GetDomainDetailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDomainDetailError::Unknown(ref cause) => cause
+                            GetDomainDetailError::InvalidInput(ref cause) => cause,
+GetDomainDetailError::UnsupportedTLD(ref cause) => cause,
+GetDomainDetailError::Validation(ref cause) => cause,
+GetDomainDetailError::Credentials(ref err) => err.description(),
+GetDomainDetailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDomainDetailError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1276,10 +1358,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetDomainSuggestionsError {
                     
-///<p>Amazon Route 53 does not support this top-level domain.</p>
-UnsupportedTLD(String),
 ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>Amazon Route 53 does not support this top-level domain.</p>
+UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1298,7 +1380,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => GetDomainSuggestionsError::InvalidInput(String::from(error_message)),"UnsupportedTLD" => GetDomainSuggestionsError::UnsupportedTLD(String::from(error_message)),"ValidationException" => GetDomainSuggestionsError::Validation(error_message.to_string()),_ => GetDomainSuggestionsError::Unknown(String::from(body))
+                                    "InvalidInput" => GetDomainSuggestionsError::InvalidInput(String::from(error_message)),
+"UnsupportedTLD" => GetDomainSuggestionsError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => GetDomainSuggestionsError::Validation(error_message.to_string()),
+_ => GetDomainSuggestionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetDomainSuggestionsError::Unknown(String::from(body))
@@ -1329,7 +1414,12 @@ Unknown(String)
                 impl Error for GetDomainSuggestionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDomainSuggestionsError::UnsupportedTLD(ref cause) => cause,GetDomainSuggestionsError::InvalidInput(ref cause) => cause,GetDomainSuggestionsError::Validation(ref cause) => cause,GetDomainSuggestionsError::Credentials(ref err) => err.description(),GetDomainSuggestionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDomainSuggestionsError::Unknown(ref cause) => cause
+                            GetDomainSuggestionsError::InvalidInput(ref cause) => cause,
+GetDomainSuggestionsError::UnsupportedTLD(ref cause) => cause,
+GetDomainSuggestionsError::Validation(ref cause) => cause,
+GetDomainSuggestionsError::Credentials(ref err) => err.description(),
+GetDomainSuggestionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDomainSuggestionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1357,7 +1447,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => GetOperationDetailError::InvalidInput(String::from(error_message)),"ValidationException" => GetOperationDetailError::Validation(error_message.to_string()),_ => GetOperationDetailError::Unknown(String::from(body))
+                                    "InvalidInput" => GetOperationDetailError::InvalidInput(String::from(error_message)),
+"ValidationException" => GetOperationDetailError::Validation(error_message.to_string()),
+_ => GetOperationDetailError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetOperationDetailError::Unknown(String::from(body))
@@ -1388,7 +1480,11 @@ Unknown(String)
                 impl Error for GetOperationDetailError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetOperationDetailError::InvalidInput(ref cause) => cause,GetOperationDetailError::Validation(ref cause) => cause,GetOperationDetailError::Credentials(ref err) => err.description(),GetOperationDetailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetOperationDetailError::Unknown(ref cause) => cause
+                            GetOperationDetailError::InvalidInput(ref cause) => cause,
+GetOperationDetailError::Validation(ref cause) => cause,
+GetOperationDetailError::Credentials(ref err) => err.description(),
+GetOperationDetailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetOperationDetailError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1416,7 +1512,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => ListDomainsError::InvalidInput(String::from(error_message)),"ValidationException" => ListDomainsError::Validation(error_message.to_string()),_ => ListDomainsError::Unknown(String::from(body))
+                                    "InvalidInput" => ListDomainsError::InvalidInput(String::from(error_message)),
+"ValidationException" => ListDomainsError::Validation(error_message.to_string()),
+_ => ListDomainsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListDomainsError::Unknown(String::from(body))
@@ -1447,7 +1545,11 @@ Unknown(String)
                 impl Error for ListDomainsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListDomainsError::InvalidInput(ref cause) => cause,ListDomainsError::Validation(ref cause) => cause,ListDomainsError::Credentials(ref err) => err.description(),ListDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListDomainsError::Unknown(ref cause) => cause
+                            ListDomainsError::InvalidInput(ref cause) => cause,
+ListDomainsError::Validation(ref cause) => cause,
+ListDomainsError::Credentials(ref err) => err.description(),
+ListDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListDomainsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1475,7 +1577,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => ListOperationsError::InvalidInput(String::from(error_message)),"ValidationException" => ListOperationsError::Validation(error_message.to_string()),_ => ListOperationsError::Unknown(String::from(body))
+                                    "InvalidInput" => ListOperationsError::InvalidInput(String::from(error_message)),
+"ValidationException" => ListOperationsError::Validation(error_message.to_string()),
+_ => ListOperationsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListOperationsError::Unknown(String::from(body))
@@ -1506,7 +1610,11 @@ Unknown(String)
                 impl Error for ListOperationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListOperationsError::InvalidInput(ref cause) => cause,ListOperationsError::Validation(ref cause) => cause,ListOperationsError::Credentials(ref err) => err.description(),ListOperationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListOperationsError::Unknown(ref cause) => cause
+                            ListOperationsError::InvalidInput(ref cause) => cause,
+ListOperationsError::Validation(ref cause) => cause,
+ListOperationsError::Credentials(ref err) => err.description(),
+ListOperationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListOperationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1514,12 +1622,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTagsForDomainError {
                     
+///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+InvalidInput(String),
 ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
 OperationLimitExceeded(String),
 ///<p>Amazon Route 53 does not support this top-level domain.</p>
-UnsupportedTLD(String),
-///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1538,7 +1646,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => ListTagsForDomainError::InvalidInput(String::from(error_message)),"OperationLimitExceeded" => ListTagsForDomainError::OperationLimitExceeded(String::from(error_message)),"UnsupportedTLD" => ListTagsForDomainError::UnsupportedTLD(String::from(error_message)),"ValidationException" => ListTagsForDomainError::Validation(error_message.to_string()),_ => ListTagsForDomainError::Unknown(String::from(body))
+                                    "InvalidInput" => ListTagsForDomainError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => ListTagsForDomainError::OperationLimitExceeded(String::from(error_message)),
+"UnsupportedTLD" => ListTagsForDomainError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => ListTagsForDomainError::Validation(error_message.to_string()),
+_ => ListTagsForDomainError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListTagsForDomainError::Unknown(String::from(body))
@@ -1569,7 +1681,13 @@ Unknown(String)
                 impl Error for ListTagsForDomainError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTagsForDomainError::OperationLimitExceeded(ref cause) => cause,ListTagsForDomainError::UnsupportedTLD(ref cause) => cause,ListTagsForDomainError::InvalidInput(ref cause) => cause,ListTagsForDomainError::Validation(ref cause) => cause,ListTagsForDomainError::Credentials(ref err) => err.description(),ListTagsForDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTagsForDomainError::Unknown(ref cause) => cause
+                            ListTagsForDomainError::InvalidInput(ref cause) => cause,
+ListTagsForDomainError::OperationLimitExceeded(ref cause) => cause,
+ListTagsForDomainError::UnsupportedTLD(ref cause) => cause,
+ListTagsForDomainError::Validation(ref cause) => cause,
+ListTagsForDomainError::Credentials(ref err) => err.description(),
+ListTagsForDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTagsForDomainError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1577,18 +1695,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RegisterDomainError {
                     
-///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
-InvalidInput(String),
-///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
-OperationLimitExceeded(String),
-///<p>Amazon Route 53 does not support this top-level domain.</p>
-UnsupportedTLD(String),
 ///<p>The number of domains has exceeded the allowed threshold for the account.</p>
 DomainLimitExceeded(String),
 ///<p>The request is already in progress for the domain.</p>
 DuplicateRequest(String),
+///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+InvalidInput(String),
+///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+OperationLimitExceeded(String),
 ///<p>The top-level domain does not support this operation.</p>
-TLDRulesViolation(String),/// An error occurred dispatching the HTTP request
+TLDRulesViolation(String),
+///<p>Amazon Route 53 does not support this top-level domain.</p>
+UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1607,7 +1725,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DomainLimitExceeded" => RegisterDomainError::DomainLimitExceeded(String::from(error_message)),"TLDRulesViolation" => RegisterDomainError::TLDRulesViolation(String::from(error_message)),"UnsupportedTLD" => RegisterDomainError::UnsupportedTLD(String::from(error_message)),"InvalidInput" => RegisterDomainError::InvalidInput(String::from(error_message)),"OperationLimitExceeded" => RegisterDomainError::OperationLimitExceeded(String::from(error_message)),"DuplicateRequest" => RegisterDomainError::DuplicateRequest(String::from(error_message)),"ValidationException" => RegisterDomainError::Validation(error_message.to_string()),_ => RegisterDomainError::Unknown(String::from(body))
+                                    "DomainLimitExceeded" => RegisterDomainError::DomainLimitExceeded(String::from(error_message)),
+"DuplicateRequest" => RegisterDomainError::DuplicateRequest(String::from(error_message)),
+"InvalidInput" => RegisterDomainError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => RegisterDomainError::OperationLimitExceeded(String::from(error_message)),
+"TLDRulesViolation" => RegisterDomainError::TLDRulesViolation(String::from(error_message)),
+"UnsupportedTLD" => RegisterDomainError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => RegisterDomainError::Validation(error_message.to_string()),
+_ => RegisterDomainError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterDomainError::Unknown(String::from(body))
@@ -1638,7 +1763,16 @@ Unknown(String)
                 impl Error for RegisterDomainError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterDomainError::UnsupportedTLD(ref cause) => cause,RegisterDomainError::InvalidInput(ref cause) => cause,RegisterDomainError::OperationLimitExceeded(ref cause) => cause,RegisterDomainError::DuplicateRequest(ref cause) => cause,RegisterDomainError::TLDRulesViolation(ref cause) => cause,RegisterDomainError::DomainLimitExceeded(ref cause) => cause,RegisterDomainError::Validation(ref cause) => cause,RegisterDomainError::Credentials(ref err) => err.description(),RegisterDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterDomainError::Unknown(ref cause) => cause
+                            RegisterDomainError::DomainLimitExceeded(ref cause) => cause,
+RegisterDomainError::DuplicateRequest(ref cause) => cause,
+RegisterDomainError::InvalidInput(ref cause) => cause,
+RegisterDomainError::OperationLimitExceeded(ref cause) => cause,
+RegisterDomainError::TLDRulesViolation(ref cause) => cause,
+RegisterDomainError::UnsupportedTLD(ref cause) => cause,
+RegisterDomainError::Validation(ref cause) => cause,
+RegisterDomainError::Credentials(ref err) => err.description(),
+RegisterDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterDomainError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1646,14 +1780,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RenewDomainError {
                     
-///<p>The top-level domain does not support this operation.</p>
-TLDRulesViolation(String),
 ///<p>The request is already in progress for the domain.</p>
 DuplicateRequest(String),
 ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
 InvalidInput(String),
 ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
 OperationLimitExceeded(String),
+///<p>The top-level domain does not support this operation.</p>
+TLDRulesViolation(String),
 ///<p>Amazon Route 53 does not support this top-level domain.</p>
 UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1674,7 +1808,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "TLDRulesViolation" => RenewDomainError::TLDRulesViolation(String::from(error_message)),"DuplicateRequest" => RenewDomainError::DuplicateRequest(String::from(error_message)),"InvalidInput" => RenewDomainError::InvalidInput(String::from(error_message)),"UnsupportedTLD" => RenewDomainError::UnsupportedTLD(String::from(error_message)),"OperationLimitExceeded" => RenewDomainError::OperationLimitExceeded(String::from(error_message)),"ValidationException" => RenewDomainError::Validation(error_message.to_string()),_ => RenewDomainError::Unknown(String::from(body))
+                                    "DuplicateRequest" => RenewDomainError::DuplicateRequest(String::from(error_message)),
+"InvalidInput" => RenewDomainError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => RenewDomainError::OperationLimitExceeded(String::from(error_message)),
+"TLDRulesViolation" => RenewDomainError::TLDRulesViolation(String::from(error_message)),
+"UnsupportedTLD" => RenewDomainError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => RenewDomainError::Validation(error_message.to_string()),
+_ => RenewDomainError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RenewDomainError::Unknown(String::from(body))
@@ -1705,7 +1845,15 @@ Unknown(String)
                 impl Error for RenewDomainError {
                     fn description(&self) -> &str {
                         match *self {
-                            RenewDomainError::InvalidInput(ref cause) => cause,RenewDomainError::DuplicateRequest(ref cause) => cause,RenewDomainError::TLDRulesViolation(ref cause) => cause,RenewDomainError::UnsupportedTLD(ref cause) => cause,RenewDomainError::OperationLimitExceeded(ref cause) => cause,RenewDomainError::Validation(ref cause) => cause,RenewDomainError::Credentials(ref err) => err.description(),RenewDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RenewDomainError::Unknown(ref cause) => cause
+                            RenewDomainError::DuplicateRequest(ref cause) => cause,
+RenewDomainError::InvalidInput(ref cause) => cause,
+RenewDomainError::OperationLimitExceeded(ref cause) => cause,
+RenewDomainError::TLDRulesViolation(ref cause) => cause,
+RenewDomainError::UnsupportedTLD(ref cause) => cause,
+RenewDomainError::Validation(ref cause) => cause,
+RenewDomainError::Credentials(ref err) => err.description(),
+RenewDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RenewDomainError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1713,12 +1861,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ResendContactReachabilityEmailError {
                     
-///<p>Amazon Route 53 does not support this top-level domain.</p>
-UnsupportedTLD(String),
+///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+InvalidInput(String),
 ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
 OperationLimitExceeded(String),
-///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+///<p>Amazon Route 53 does not support this top-level domain.</p>
+UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1737,7 +1885,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "UnsupportedTLD" => ResendContactReachabilityEmailError::UnsupportedTLD(String::from(error_message)),"OperationLimitExceeded" => ResendContactReachabilityEmailError::OperationLimitExceeded(String::from(error_message)),"InvalidInput" => ResendContactReachabilityEmailError::InvalidInput(String::from(error_message)),"ValidationException" => ResendContactReachabilityEmailError::Validation(error_message.to_string()),_ => ResendContactReachabilityEmailError::Unknown(String::from(body))
+                                    "InvalidInput" => ResendContactReachabilityEmailError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => ResendContactReachabilityEmailError::OperationLimitExceeded(String::from(error_message)),
+"UnsupportedTLD" => ResendContactReachabilityEmailError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => ResendContactReachabilityEmailError::Validation(error_message.to_string()),
+_ => ResendContactReachabilityEmailError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ResendContactReachabilityEmailError::Unknown(String::from(body))
@@ -1768,7 +1920,13 @@ Unknown(String)
                 impl Error for ResendContactReachabilityEmailError {
                     fn description(&self) -> &str {
                         match *self {
-                            ResendContactReachabilityEmailError::InvalidInput(ref cause) => cause,ResendContactReachabilityEmailError::UnsupportedTLD(ref cause) => cause,ResendContactReachabilityEmailError::OperationLimitExceeded(ref cause) => cause,ResendContactReachabilityEmailError::Validation(ref cause) => cause,ResendContactReachabilityEmailError::Credentials(ref err) => err.description(),ResendContactReachabilityEmailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ResendContactReachabilityEmailError::Unknown(ref cause) => cause
+                            ResendContactReachabilityEmailError::InvalidInput(ref cause) => cause,
+ResendContactReachabilityEmailError::OperationLimitExceeded(ref cause) => cause,
+ResendContactReachabilityEmailError::UnsupportedTLD(ref cause) => cause,
+ResendContactReachabilityEmailError::Validation(ref cause) => cause,
+ResendContactReachabilityEmailError::Credentials(ref err) => err.description(),
+ResendContactReachabilityEmailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ResendContactReachabilityEmailError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1776,10 +1934,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RetrieveDomainAuthCodeError {
                     
-///<p>Amazon Route 53 does not support this top-level domain.</p>
-UnsupportedTLD(String),
 ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>Amazon Route 53 does not support this top-level domain.</p>
+UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1798,7 +1956,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "UnsupportedTLD" => RetrieveDomainAuthCodeError::UnsupportedTLD(String::from(error_message)),"InvalidInput" => RetrieveDomainAuthCodeError::InvalidInput(String::from(error_message)),"ValidationException" => RetrieveDomainAuthCodeError::Validation(error_message.to_string()),_ => RetrieveDomainAuthCodeError::Unknown(String::from(body))
+                                    "InvalidInput" => RetrieveDomainAuthCodeError::InvalidInput(String::from(error_message)),
+"UnsupportedTLD" => RetrieveDomainAuthCodeError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => RetrieveDomainAuthCodeError::Validation(error_message.to_string()),
+_ => RetrieveDomainAuthCodeError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RetrieveDomainAuthCodeError::Unknown(String::from(body))
@@ -1829,7 +1990,12 @@ Unknown(String)
                 impl Error for RetrieveDomainAuthCodeError {
                     fn description(&self) -> &str {
                         match *self {
-                            RetrieveDomainAuthCodeError::UnsupportedTLD(ref cause) => cause,RetrieveDomainAuthCodeError::InvalidInput(ref cause) => cause,RetrieveDomainAuthCodeError::Validation(ref cause) => cause,RetrieveDomainAuthCodeError::Credentials(ref err) => err.description(),RetrieveDomainAuthCodeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RetrieveDomainAuthCodeError::Unknown(ref cause) => cause
+                            RetrieveDomainAuthCodeError::InvalidInput(ref cause) => cause,
+RetrieveDomainAuthCodeError::UnsupportedTLD(ref cause) => cause,
+RetrieveDomainAuthCodeError::Validation(ref cause) => cause,
+RetrieveDomainAuthCodeError::Credentials(ref err) => err.description(),
+RetrieveDomainAuthCodeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RetrieveDomainAuthCodeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1837,18 +2003,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum TransferDomainError {
                     
-///<p>The top-level domain does not support this operation.</p>
-TLDRulesViolation(String),
-///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
-InvalidInput(String),
-///<p>Amazon Route 53 does not support this top-level domain.</p>
-UnsupportedTLD(String),
 ///<p>The number of domains has exceeded the allowed threshold for the account.</p>
 DomainLimitExceeded(String),
+///<p>The request is already in progress for the domain.</p>
+DuplicateRequest(String),
+///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+InvalidInput(String),
 ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
 OperationLimitExceeded(String),
-///<p>The request is already in progress for the domain.</p>
-DuplicateRequest(String),/// An error occurred dispatching the HTTP request
+///<p>The top-level domain does not support this operation.</p>
+TLDRulesViolation(String),
+///<p>Amazon Route 53 does not support this top-level domain.</p>
+UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1867,7 +2033,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "OperationLimitExceeded" => TransferDomainError::OperationLimitExceeded(String::from(error_message)),"InvalidInput" => TransferDomainError::InvalidInput(String::from(error_message)),"UnsupportedTLD" => TransferDomainError::UnsupportedTLD(String::from(error_message)),"DomainLimitExceeded" => TransferDomainError::DomainLimitExceeded(String::from(error_message)),"TLDRulesViolation" => TransferDomainError::TLDRulesViolation(String::from(error_message)),"DuplicateRequest" => TransferDomainError::DuplicateRequest(String::from(error_message)),"ValidationException" => TransferDomainError::Validation(error_message.to_string()),_ => TransferDomainError::Unknown(String::from(body))
+                                    "DomainLimitExceeded" => TransferDomainError::DomainLimitExceeded(String::from(error_message)),
+"DuplicateRequest" => TransferDomainError::DuplicateRequest(String::from(error_message)),
+"InvalidInput" => TransferDomainError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => TransferDomainError::OperationLimitExceeded(String::from(error_message)),
+"TLDRulesViolation" => TransferDomainError::TLDRulesViolation(String::from(error_message)),
+"UnsupportedTLD" => TransferDomainError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => TransferDomainError::Validation(error_message.to_string()),
+_ => TransferDomainError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => TransferDomainError::Unknown(String::from(body))
@@ -1898,7 +2071,16 @@ Unknown(String)
                 impl Error for TransferDomainError {
                     fn description(&self) -> &str {
                         match *self {
-                            TransferDomainError::TLDRulesViolation(ref cause) => cause,TransferDomainError::InvalidInput(ref cause) => cause,TransferDomainError::UnsupportedTLD(ref cause) => cause,TransferDomainError::DomainLimitExceeded(ref cause) => cause,TransferDomainError::OperationLimitExceeded(ref cause) => cause,TransferDomainError::DuplicateRequest(ref cause) => cause,TransferDomainError::Validation(ref cause) => cause,TransferDomainError::Credentials(ref err) => err.description(),TransferDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),TransferDomainError::Unknown(ref cause) => cause
+                            TransferDomainError::DomainLimitExceeded(ref cause) => cause,
+TransferDomainError::DuplicateRequest(ref cause) => cause,
+TransferDomainError::InvalidInput(ref cause) => cause,
+TransferDomainError::OperationLimitExceeded(ref cause) => cause,
+TransferDomainError::TLDRulesViolation(ref cause) => cause,
+TransferDomainError::UnsupportedTLD(ref cause) => cause,
+TransferDomainError::Validation(ref cause) => cause,
+TransferDomainError::Credentials(ref err) => err.description(),
+TransferDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+TransferDomainError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1906,16 +2088,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateDomainContactError {
                     
+///<p>The request is already in progress for the domain.</p>
+DuplicateRequest(String),
 ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
 InvalidInput(String),
 ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
 OperationLimitExceeded(String),
-///<p>Amazon Route 53 does not support this top-level domain.</p>
-UnsupportedTLD(String),
 ///<p>The top-level domain does not support this operation.</p>
 TLDRulesViolation(String),
-///<p>The request is already in progress for the domain.</p>
-DuplicateRequest(String),/// An error occurred dispatching the HTTP request
+///<p>Amazon Route 53 does not support this top-level domain.</p>
+UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1934,7 +2116,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "UnsupportedTLD" => UpdateDomainContactError::UnsupportedTLD(String::from(error_message)),"InvalidInput" => UpdateDomainContactError::InvalidInput(String::from(error_message)),"OperationLimitExceeded" => UpdateDomainContactError::OperationLimitExceeded(String::from(error_message)),"DuplicateRequest" => UpdateDomainContactError::DuplicateRequest(String::from(error_message)),"TLDRulesViolation" => UpdateDomainContactError::TLDRulesViolation(String::from(error_message)),"ValidationException" => UpdateDomainContactError::Validation(error_message.to_string()),_ => UpdateDomainContactError::Unknown(String::from(body))
+                                    "DuplicateRequest" => UpdateDomainContactError::DuplicateRequest(String::from(error_message)),
+"InvalidInput" => UpdateDomainContactError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => UpdateDomainContactError::OperationLimitExceeded(String::from(error_message)),
+"TLDRulesViolation" => UpdateDomainContactError::TLDRulesViolation(String::from(error_message)),
+"UnsupportedTLD" => UpdateDomainContactError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => UpdateDomainContactError::Validation(error_message.to_string()),
+_ => UpdateDomainContactError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateDomainContactError::Unknown(String::from(body))
@@ -1965,7 +2153,15 @@ Unknown(String)
                 impl Error for UpdateDomainContactError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateDomainContactError::UnsupportedTLD(ref cause) => cause,UpdateDomainContactError::DuplicateRequest(ref cause) => cause,UpdateDomainContactError::InvalidInput(ref cause) => cause,UpdateDomainContactError::OperationLimitExceeded(ref cause) => cause,UpdateDomainContactError::TLDRulesViolation(ref cause) => cause,UpdateDomainContactError::Validation(ref cause) => cause,UpdateDomainContactError::Credentials(ref err) => err.description(),UpdateDomainContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateDomainContactError::Unknown(ref cause) => cause
+                            UpdateDomainContactError::DuplicateRequest(ref cause) => cause,
+UpdateDomainContactError::InvalidInput(ref cause) => cause,
+UpdateDomainContactError::OperationLimitExceeded(ref cause) => cause,
+UpdateDomainContactError::TLDRulesViolation(ref cause) => cause,
+UpdateDomainContactError::UnsupportedTLD(ref cause) => cause,
+UpdateDomainContactError::Validation(ref cause) => cause,
+UpdateDomainContactError::Credentials(ref err) => err.description(),
+UpdateDomainContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateDomainContactError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1973,16 +2169,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateDomainContactPrivacyError {
                     
-///<p>The top-level domain does not support this operation.</p>
-TLDRulesViolation(String),
 ///<p>The request is already in progress for the domain.</p>
 DuplicateRequest(String),
-///<p>Amazon Route 53 does not support this top-level domain.</p>
-UnsupportedTLD(String),
+///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+InvalidInput(String),
 ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
 OperationLimitExceeded(String),
-///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+///<p>The top-level domain does not support this operation.</p>
+TLDRulesViolation(String),
+///<p>Amazon Route 53 does not support this top-level domain.</p>
+UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2001,7 +2197,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "TLDRulesViolation" => UpdateDomainContactPrivacyError::TLDRulesViolation(String::from(error_message)),"UnsupportedTLD" => UpdateDomainContactPrivacyError::UnsupportedTLD(String::from(error_message)),"OperationLimitExceeded" => UpdateDomainContactPrivacyError::OperationLimitExceeded(String::from(error_message)),"DuplicateRequest" => UpdateDomainContactPrivacyError::DuplicateRequest(String::from(error_message)),"InvalidInput" => UpdateDomainContactPrivacyError::InvalidInput(String::from(error_message)),"ValidationException" => UpdateDomainContactPrivacyError::Validation(error_message.to_string()),_ => UpdateDomainContactPrivacyError::Unknown(String::from(body))
+                                    "DuplicateRequest" => UpdateDomainContactPrivacyError::DuplicateRequest(String::from(error_message)),
+"InvalidInput" => UpdateDomainContactPrivacyError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => UpdateDomainContactPrivacyError::OperationLimitExceeded(String::from(error_message)),
+"TLDRulesViolation" => UpdateDomainContactPrivacyError::TLDRulesViolation(String::from(error_message)),
+"UnsupportedTLD" => UpdateDomainContactPrivacyError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => UpdateDomainContactPrivacyError::Validation(error_message.to_string()),
+_ => UpdateDomainContactPrivacyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateDomainContactPrivacyError::Unknown(String::from(body))
@@ -2032,7 +2234,15 @@ Unknown(String)
                 impl Error for UpdateDomainContactPrivacyError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateDomainContactPrivacyError::TLDRulesViolation(ref cause) => cause,UpdateDomainContactPrivacyError::UnsupportedTLD(ref cause) => cause,UpdateDomainContactPrivacyError::DuplicateRequest(ref cause) => cause,UpdateDomainContactPrivacyError::OperationLimitExceeded(ref cause) => cause,UpdateDomainContactPrivacyError::InvalidInput(ref cause) => cause,UpdateDomainContactPrivacyError::Validation(ref cause) => cause,UpdateDomainContactPrivacyError::Credentials(ref err) => err.description(),UpdateDomainContactPrivacyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateDomainContactPrivacyError::Unknown(ref cause) => cause
+                            UpdateDomainContactPrivacyError::DuplicateRequest(ref cause) => cause,
+UpdateDomainContactPrivacyError::InvalidInput(ref cause) => cause,
+UpdateDomainContactPrivacyError::OperationLimitExceeded(ref cause) => cause,
+UpdateDomainContactPrivacyError::TLDRulesViolation(ref cause) => cause,
+UpdateDomainContactPrivacyError::UnsupportedTLD(ref cause) => cause,
+UpdateDomainContactPrivacyError::Validation(ref cause) => cause,
+UpdateDomainContactPrivacyError::Credentials(ref err) => err.description(),
+UpdateDomainContactPrivacyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateDomainContactPrivacyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2040,16 +2250,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateDomainNameserversError {
                     
+///<p>The request is already in progress for the domain.</p>
+DuplicateRequest(String),
 ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
 InvalidInput(String),
-///<p>Amazon Route 53 does not support this top-level domain.</p>
-UnsupportedTLD(String),
 ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
 OperationLimitExceeded(String),
 ///<p>The top-level domain does not support this operation.</p>
 TLDRulesViolation(String),
-///<p>The request is already in progress for the domain.</p>
-DuplicateRequest(String),/// An error occurred dispatching the HTTP request
+///<p>Amazon Route 53 does not support this top-level domain.</p>
+UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2068,7 +2278,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => UpdateDomainNameserversError::InvalidInput(String::from(error_message)),"UnsupportedTLD" => UpdateDomainNameserversError::UnsupportedTLD(String::from(error_message)),"OperationLimitExceeded" => UpdateDomainNameserversError::OperationLimitExceeded(String::from(error_message)),"TLDRulesViolation" => UpdateDomainNameserversError::TLDRulesViolation(String::from(error_message)),"DuplicateRequest" => UpdateDomainNameserversError::DuplicateRequest(String::from(error_message)),"ValidationException" => UpdateDomainNameserversError::Validation(error_message.to_string()),_ => UpdateDomainNameserversError::Unknown(String::from(body))
+                                    "DuplicateRequest" => UpdateDomainNameserversError::DuplicateRequest(String::from(error_message)),
+"InvalidInput" => UpdateDomainNameserversError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => UpdateDomainNameserversError::OperationLimitExceeded(String::from(error_message)),
+"TLDRulesViolation" => UpdateDomainNameserversError::TLDRulesViolation(String::from(error_message)),
+"UnsupportedTLD" => UpdateDomainNameserversError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => UpdateDomainNameserversError::Validation(error_message.to_string()),
+_ => UpdateDomainNameserversError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateDomainNameserversError::Unknown(String::from(body))
@@ -2099,7 +2315,15 @@ Unknown(String)
                 impl Error for UpdateDomainNameserversError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateDomainNameserversError::UnsupportedTLD(ref cause) => cause,UpdateDomainNameserversError::OperationLimitExceeded(ref cause) => cause,UpdateDomainNameserversError::DuplicateRequest(ref cause) => cause,UpdateDomainNameserversError::InvalidInput(ref cause) => cause,UpdateDomainNameserversError::TLDRulesViolation(ref cause) => cause,UpdateDomainNameserversError::Validation(ref cause) => cause,UpdateDomainNameserversError::Credentials(ref err) => err.description(),UpdateDomainNameserversError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateDomainNameserversError::Unknown(ref cause) => cause
+                            UpdateDomainNameserversError::DuplicateRequest(ref cause) => cause,
+UpdateDomainNameserversError::InvalidInput(ref cause) => cause,
+UpdateDomainNameserversError::OperationLimitExceeded(ref cause) => cause,
+UpdateDomainNameserversError::TLDRulesViolation(ref cause) => cause,
+UpdateDomainNameserversError::UnsupportedTLD(ref cause) => cause,
+UpdateDomainNameserversError::Validation(ref cause) => cause,
+UpdateDomainNameserversError::Credentials(ref err) => err.description(),
+UpdateDomainNameserversError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateDomainNameserversError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2107,10 +2331,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateTagsForDomainError {
                     
-///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
-OperationLimitExceeded(String),
 ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
 InvalidInput(String),
+///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+OperationLimitExceeded(String),
 ///<p>Amazon Route 53 does not support this top-level domain.</p>
 UnsupportedTLD(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2131,7 +2355,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "OperationLimitExceeded" => UpdateTagsForDomainError::OperationLimitExceeded(String::from(error_message)),"InvalidInput" => UpdateTagsForDomainError::InvalidInput(String::from(error_message)),"UnsupportedTLD" => UpdateTagsForDomainError::UnsupportedTLD(String::from(error_message)),"ValidationException" => UpdateTagsForDomainError::Validation(error_message.to_string()),_ => UpdateTagsForDomainError::Unknown(String::from(body))
+                                    "InvalidInput" => UpdateTagsForDomainError::InvalidInput(String::from(error_message)),
+"OperationLimitExceeded" => UpdateTagsForDomainError::OperationLimitExceeded(String::from(error_message)),
+"UnsupportedTLD" => UpdateTagsForDomainError::UnsupportedTLD(String::from(error_message)),
+"ValidationException" => UpdateTagsForDomainError::Validation(error_message.to_string()),
+_ => UpdateTagsForDomainError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateTagsForDomainError::Unknown(String::from(body))
@@ -2162,7 +2390,13 @@ Unknown(String)
                 impl Error for UpdateTagsForDomainError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateTagsForDomainError::UnsupportedTLD(ref cause) => cause,UpdateTagsForDomainError::OperationLimitExceeded(ref cause) => cause,UpdateTagsForDomainError::InvalidInput(ref cause) => cause,UpdateTagsForDomainError::Validation(ref cause) => cause,UpdateTagsForDomainError::Credentials(ref err) => err.description(),UpdateTagsForDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateTagsForDomainError::Unknown(ref cause) => cause
+                            UpdateTagsForDomainError::InvalidInput(ref cause) => cause,
+UpdateTagsForDomainError::OperationLimitExceeded(ref cause) => cause,
+UpdateTagsForDomainError::UnsupportedTLD(ref cause) => cause,
+UpdateTagsForDomainError::Validation(ref cause) => cause,
+UpdateTagsForDomainError::Credentials(ref err) => err.description(),
+UpdateTagsForDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateTagsForDomainError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2190,7 +2424,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInput" => ViewBillingError::InvalidInput(String::from(error_message)),"ValidationException" => ViewBillingError::Validation(error_message.to_string()),_ => ViewBillingError::Unknown(String::from(body))
+                                    "InvalidInput" => ViewBillingError::InvalidInput(String::from(error_message)),
+"ValidationException" => ViewBillingError::Validation(error_message.to_string()),
+_ => ViewBillingError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ViewBillingError::Unknown(String::from(body))
@@ -2221,7 +2457,11 @@ Unknown(String)
                 impl Error for ViewBillingError {
                     fn description(&self) -> &str {
                         match *self {
-                            ViewBillingError::InvalidInput(ref cause) => cause,ViewBillingError::Validation(ref cause) => cause,ViewBillingError::Credentials(ref err) => err.description(),ViewBillingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ViewBillingError::Unknown(ref cause) => cause
+                            ViewBillingError::InvalidInput(ref cause) => cause,
+ViewBillingError::Validation(ref cause) => cause,
+ViewBillingError::Credentials(ref err) => err.description(),
+ViewBillingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ViewBillingError::Unknown(ref cause) => cause
                         }
                     }
                  }

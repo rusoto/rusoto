@@ -1254,20 +1254,20 @@ pub type VpcId = String;
                 #[derive(Debug, PartialEq)]
                 pub enum AddIpRoutesError {
                     
+///<p>A client exception has occurred.</p>
+Client(String),
 ///<p>The specified directory is unavailable or could not be found.</p>
 DirectoryUnavailable(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
-///<p>The maximum allowed number of IP addresses was exceeded. The default limit is 100 IP address blocks.</p>
-IpRouteLimitExceeded(String),
 ///<p>The specified entity already exists.</p>
 EntityAlreadyExists(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
 InvalidParameter(String),
+///<p>The maximum allowed number of IP addresses was exceeded. The default limit is 100 IP address blocks.</p>
+IpRouteLimitExceeded(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>A client exception has occurred.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1286,7 +1286,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EntityAlreadyExistsException" => AddIpRoutesError::EntityAlreadyExists(String::from(error_message)),"ServiceException" => AddIpRoutesError::Service(String::from(error_message)),"InvalidParameterException" => AddIpRoutesError::InvalidParameter(String::from(error_message)),"EntityDoesNotExistException" => AddIpRoutesError::EntityDoesNotExist(String::from(error_message)),"DirectoryUnavailableException" => AddIpRoutesError::DirectoryUnavailable(String::from(error_message)),"IpRouteLimitExceededException" => AddIpRoutesError::IpRouteLimitExceeded(String::from(error_message)),"ClientException" => AddIpRoutesError::Client(String::from(error_message)),"ValidationException" => AddIpRoutesError::Validation(error_message.to_string()),_ => AddIpRoutesError::Unknown(String::from(body))
+                                    "ClientException" => AddIpRoutesError::Client(String::from(error_message)),
+"DirectoryUnavailableException" => AddIpRoutesError::DirectoryUnavailable(String::from(error_message)),
+"EntityAlreadyExistsException" => AddIpRoutesError::EntityAlreadyExists(String::from(error_message)),
+"EntityDoesNotExistException" => AddIpRoutesError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => AddIpRoutesError::InvalidParameter(String::from(error_message)),
+"IpRouteLimitExceededException" => AddIpRoutesError::IpRouteLimitExceeded(String::from(error_message)),
+"ServiceException" => AddIpRoutesError::Service(String::from(error_message)),
+"ValidationException" => AddIpRoutesError::Validation(error_message.to_string()),
+_ => AddIpRoutesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AddIpRoutesError::Unknown(String::from(body))
@@ -1317,7 +1325,17 @@ Unknown(String)
                 impl Error for AddIpRoutesError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddIpRoutesError::DirectoryUnavailable(ref cause) => cause,AddIpRoutesError::IpRouteLimitExceeded(ref cause) => cause,AddIpRoutesError::Service(ref cause) => cause,AddIpRoutesError::InvalidParameter(ref cause) => cause,AddIpRoutesError::EntityDoesNotExist(ref cause) => cause,AddIpRoutesError::EntityAlreadyExists(ref cause) => cause,AddIpRoutesError::Client(ref cause) => cause,AddIpRoutesError::Validation(ref cause) => cause,AddIpRoutesError::Credentials(ref err) => err.description(),AddIpRoutesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddIpRoutesError::Unknown(ref cause) => cause
+                            AddIpRoutesError::Client(ref cause) => cause,
+AddIpRoutesError::DirectoryUnavailable(ref cause) => cause,
+AddIpRoutesError::EntityAlreadyExists(ref cause) => cause,
+AddIpRoutesError::EntityDoesNotExist(ref cause) => cause,
+AddIpRoutesError::InvalidParameter(ref cause) => cause,
+AddIpRoutesError::IpRouteLimitExceeded(ref cause) => cause,
+AddIpRoutesError::Service(ref cause) => cause,
+AddIpRoutesError::Validation(ref cause) => cause,
+AddIpRoutesError::Credentials(ref err) => err.description(),
+AddIpRoutesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddIpRoutesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1325,16 +1343,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AddTagsToResourceError {
                     
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
+///<p>A client exception has occurred.</p>
+Client(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
-///<p>The maximum allowed number of tags was exceeded.</p>
-TagLimitExceeded(String),
 ///<p>One or more parameters are not valid.</p>
 InvalidParameter(String),
-///<p>A client exception has occurred.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),
+///<p>The maximum allowed number of tags was exceeded.</p>
+TagLimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1353,7 +1371,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceException" => AddTagsToResourceError::Service(String::from(error_message)),"ClientException" => AddTagsToResourceError::Client(String::from(error_message)),"InvalidParameterException" => AddTagsToResourceError::InvalidParameter(String::from(error_message)),"EntityDoesNotExistException" => AddTagsToResourceError::EntityDoesNotExist(String::from(error_message)),"TagLimitExceededException" => AddTagsToResourceError::TagLimitExceeded(String::from(error_message)),"ValidationException" => AddTagsToResourceError::Validation(error_message.to_string()),_ => AddTagsToResourceError::Unknown(String::from(body))
+                                    "ClientException" => AddTagsToResourceError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => AddTagsToResourceError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => AddTagsToResourceError::InvalidParameter(String::from(error_message)),
+"ServiceException" => AddTagsToResourceError::Service(String::from(error_message)),
+"TagLimitExceededException" => AddTagsToResourceError::TagLimitExceeded(String::from(error_message)),
+"ValidationException" => AddTagsToResourceError::Validation(error_message.to_string()),
+_ => AddTagsToResourceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AddTagsToResourceError::Unknown(String::from(body))
@@ -1384,7 +1408,15 @@ Unknown(String)
                 impl Error for AddTagsToResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddTagsToResourceError::Client(ref cause) => cause,AddTagsToResourceError::EntityDoesNotExist(ref cause) => cause,AddTagsToResourceError::InvalidParameter(ref cause) => cause,AddTagsToResourceError::Service(ref cause) => cause,AddTagsToResourceError::TagLimitExceeded(ref cause) => cause,AddTagsToResourceError::Validation(ref cause) => cause,AddTagsToResourceError::Credentials(ref err) => err.description(),AddTagsToResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddTagsToResourceError::Unknown(ref cause) => cause
+                            AddTagsToResourceError::Client(ref cause) => cause,
+AddTagsToResourceError::EntityDoesNotExist(ref cause) => cause,
+AddTagsToResourceError::InvalidParameter(ref cause) => cause,
+AddTagsToResourceError::Service(ref cause) => cause,
+AddTagsToResourceError::TagLimitExceeded(ref cause) => cause,
+AddTagsToResourceError::Validation(ref cause) => cause,
+AddTagsToResourceError::Credentials(ref err) => err.description(),
+AddTagsToResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddTagsToResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1394,10 +1426,10 @@ Unknown(String)
                     
 ///<p>A client exception has occurred.</p>
 Client(String),
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
 ///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),/// An error occurred dispatching the HTTP request
+EntityDoesNotExist(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1416,7 +1448,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EntityDoesNotExistException" => CancelSchemaExtensionError::EntityDoesNotExist(String::from(error_message)),"ServiceException" => CancelSchemaExtensionError::Service(String::from(error_message)),"ClientException" => CancelSchemaExtensionError::Client(String::from(error_message)),"ValidationException" => CancelSchemaExtensionError::Validation(error_message.to_string()),_ => CancelSchemaExtensionError::Unknown(String::from(body))
+                                    "ClientException" => CancelSchemaExtensionError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => CancelSchemaExtensionError::EntityDoesNotExist(String::from(error_message)),
+"ServiceException" => CancelSchemaExtensionError::Service(String::from(error_message)),
+"ValidationException" => CancelSchemaExtensionError::Validation(error_message.to_string()),
+_ => CancelSchemaExtensionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CancelSchemaExtensionError::Unknown(String::from(body))
@@ -1447,7 +1483,13 @@ Unknown(String)
                 impl Error for CancelSchemaExtensionError {
                     fn description(&self) -> &str {
                         match *self {
-                            CancelSchemaExtensionError::Service(ref cause) => cause,CancelSchemaExtensionError::Client(ref cause) => cause,CancelSchemaExtensionError::EntityDoesNotExist(ref cause) => cause,CancelSchemaExtensionError::Validation(ref cause) => cause,CancelSchemaExtensionError::Credentials(ref err) => err.description(),CancelSchemaExtensionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CancelSchemaExtensionError::Unknown(ref cause) => cause
+                            CancelSchemaExtensionError::Client(ref cause) => cause,
+CancelSchemaExtensionError::EntityDoesNotExist(ref cause) => cause,
+CancelSchemaExtensionError::Service(ref cause) => cause,
+CancelSchemaExtensionError::Validation(ref cause) => cause,
+CancelSchemaExtensionError::Credentials(ref err) => err.description(),
+CancelSchemaExtensionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CancelSchemaExtensionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1455,14 +1497,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ConnectDirectoryError {
                     
-///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
 ///<p>The maximum number of directories in the region has been reached. You can use the <a>GetDirectoryLimits</a> operation to determine your directory limits in the region.</p>
-DirectoryLimitExceeded(String),/// An error occurred dispatching the HTTP request
+DirectoryLimitExceeded(String),
+///<p>One or more parameters are not valid.</p>
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1481,7 +1523,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectoryLimitExceededException" => ConnectDirectoryError::DirectoryLimitExceeded(String::from(error_message)),"ServiceException" => ConnectDirectoryError::Service(String::from(error_message)),"InvalidParameterException" => ConnectDirectoryError::InvalidParameter(String::from(error_message)),"ClientException" => ConnectDirectoryError::Client(String::from(error_message)),"ValidationException" => ConnectDirectoryError::Validation(error_message.to_string()),_ => ConnectDirectoryError::Unknown(String::from(body))
+                                    "ClientException" => ConnectDirectoryError::Client(String::from(error_message)),
+"DirectoryLimitExceededException" => ConnectDirectoryError::DirectoryLimitExceeded(String::from(error_message)),
+"InvalidParameterException" => ConnectDirectoryError::InvalidParameter(String::from(error_message)),
+"ServiceException" => ConnectDirectoryError::Service(String::from(error_message)),
+"ValidationException" => ConnectDirectoryError::Validation(error_message.to_string()),
+_ => ConnectDirectoryError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ConnectDirectoryError::Unknown(String::from(body))
@@ -1512,7 +1559,14 @@ Unknown(String)
                 impl Error for ConnectDirectoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            ConnectDirectoryError::InvalidParameter(ref cause) => cause,ConnectDirectoryError::Client(ref cause) => cause,ConnectDirectoryError::DirectoryLimitExceeded(ref cause) => cause,ConnectDirectoryError::Service(ref cause) => cause,ConnectDirectoryError::Validation(ref cause) => cause,ConnectDirectoryError::Credentials(ref err) => err.description(),ConnectDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ConnectDirectoryError::Unknown(ref cause) => cause
+                            ConnectDirectoryError::Client(ref cause) => cause,
+ConnectDirectoryError::DirectoryLimitExceeded(ref cause) => cause,
+ConnectDirectoryError::InvalidParameter(ref cause) => cause,
+ConnectDirectoryError::Service(ref cause) => cause,
+ConnectDirectoryError::Validation(ref cause) => cause,
+ConnectDirectoryError::Credentials(ref err) => err.description(),
+ConnectDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ConnectDirectoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1522,14 +1576,14 @@ Unknown(String)
                     
 ///<p>A client exception has occurred.</p>
 Client(String),
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
 ///<p>The specified entity already exists.</p>
 EntityAlreadyExists(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1548,7 +1602,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EntityDoesNotExistException" => CreateAliasError::EntityDoesNotExist(String::from(error_message)),"EntityAlreadyExistsException" => CreateAliasError::EntityAlreadyExists(String::from(error_message)),"InvalidParameterException" => CreateAliasError::InvalidParameter(String::from(error_message)),"ServiceException" => CreateAliasError::Service(String::from(error_message)),"ClientException" => CreateAliasError::Client(String::from(error_message)),"ValidationException" => CreateAliasError::Validation(error_message.to_string()),_ => CreateAliasError::Unknown(String::from(body))
+                                    "ClientException" => CreateAliasError::Client(String::from(error_message)),
+"EntityAlreadyExistsException" => CreateAliasError::EntityAlreadyExists(String::from(error_message)),
+"EntityDoesNotExistException" => CreateAliasError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => CreateAliasError::InvalidParameter(String::from(error_message)),
+"ServiceException" => CreateAliasError::Service(String::from(error_message)),
+"ValidationException" => CreateAliasError::Validation(error_message.to_string()),
+_ => CreateAliasError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateAliasError::Unknown(String::from(body))
@@ -1579,7 +1639,15 @@ Unknown(String)
                 impl Error for CreateAliasError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateAliasError::Service(ref cause) => cause,CreateAliasError::Client(ref cause) => cause,CreateAliasError::InvalidParameter(ref cause) => cause,CreateAliasError::EntityDoesNotExist(ref cause) => cause,CreateAliasError::EntityAlreadyExists(ref cause) => cause,CreateAliasError::Validation(ref cause) => cause,CreateAliasError::Credentials(ref err) => err.description(),CreateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateAliasError::Unknown(ref cause) => cause
+                            CreateAliasError::Client(ref cause) => cause,
+CreateAliasError::EntityAlreadyExists(ref cause) => cause,
+CreateAliasError::EntityDoesNotExist(ref cause) => cause,
+CreateAliasError::InvalidParameter(ref cause) => cause,
+CreateAliasError::Service(ref cause) => cause,
+CreateAliasError::Validation(ref cause) => cause,
+CreateAliasError::Credentials(ref err) => err.description(),
+CreateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateAliasError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1587,22 +1655,22 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateComputerError {
                     
+///<p>An authentication error occurred.</p>
+AuthenticationFailed(String),
+///<p>A client exception has occurred.</p>
+Client(String),
 ///<p>The specified directory is unavailable or could not be found.</p>
 DirectoryUnavailable(String),
 ///<p>The specified entity already exists.</p>
 EntityAlreadyExists(String),
-///<p>An authentication error occurred.</p>
-AuthenticationFailed(String),
-///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
-///<p>The operation is not supported.</p>
-UnsupportedOperation(String),
-///<p>A client exception has occurred.</p>
-Client(String),
+///<p>One or more parameters are not valid.</p>
+InvalidParameter(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),/// An error occurred dispatching the HTTP request
+Service(String),
+///<p>The operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1621,7 +1689,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectoryUnavailableException" => CreateComputerError::DirectoryUnavailable(String::from(error_message)),"ServiceException" => CreateComputerError::Service(String::from(error_message)),"EntityDoesNotExistException" => CreateComputerError::EntityDoesNotExist(String::from(error_message)),"ClientException" => CreateComputerError::Client(String::from(error_message)),"AuthenticationFailedException" => CreateComputerError::AuthenticationFailed(String::from(error_message)),"UnsupportedOperationException" => CreateComputerError::UnsupportedOperation(String::from(error_message)),"InvalidParameterException" => CreateComputerError::InvalidParameter(String::from(error_message)),"EntityAlreadyExistsException" => CreateComputerError::EntityAlreadyExists(String::from(error_message)),"ValidationException" => CreateComputerError::Validation(error_message.to_string()),_ => CreateComputerError::Unknown(String::from(body))
+                                    "AuthenticationFailedException" => CreateComputerError::AuthenticationFailed(String::from(error_message)),
+"ClientException" => CreateComputerError::Client(String::from(error_message)),
+"DirectoryUnavailableException" => CreateComputerError::DirectoryUnavailable(String::from(error_message)),
+"EntityAlreadyExistsException" => CreateComputerError::EntityAlreadyExists(String::from(error_message)),
+"EntityDoesNotExistException" => CreateComputerError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => CreateComputerError::InvalidParameter(String::from(error_message)),
+"ServiceException" => CreateComputerError::Service(String::from(error_message)),
+"UnsupportedOperationException" => CreateComputerError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => CreateComputerError::Validation(error_message.to_string()),
+_ => CreateComputerError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateComputerError::Unknown(String::from(body))
@@ -1652,7 +1729,18 @@ Unknown(String)
                 impl Error for CreateComputerError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateComputerError::EntityAlreadyExists(ref cause) => cause,CreateComputerError::UnsupportedOperation(ref cause) => cause,CreateComputerError::Client(ref cause) => cause,CreateComputerError::AuthenticationFailed(ref cause) => cause,CreateComputerError::DirectoryUnavailable(ref cause) => cause,CreateComputerError::InvalidParameter(ref cause) => cause,CreateComputerError::EntityDoesNotExist(ref cause) => cause,CreateComputerError::Service(ref cause) => cause,CreateComputerError::Validation(ref cause) => cause,CreateComputerError::Credentials(ref err) => err.description(),CreateComputerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateComputerError::Unknown(ref cause) => cause
+                            CreateComputerError::AuthenticationFailed(ref cause) => cause,
+CreateComputerError::Client(ref cause) => cause,
+CreateComputerError::DirectoryUnavailable(ref cause) => cause,
+CreateComputerError::EntityAlreadyExists(ref cause) => cause,
+CreateComputerError::EntityDoesNotExist(ref cause) => cause,
+CreateComputerError::InvalidParameter(ref cause) => cause,
+CreateComputerError::Service(ref cause) => cause,
+CreateComputerError::UnsupportedOperation(ref cause) => cause,
+CreateComputerError::Validation(ref cause) => cause,
+CreateComputerError::Credentials(ref err) => err.description(),
+CreateComputerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateComputerError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1662,18 +1750,18 @@ Unknown(String)
                     
 ///<p>A client exception has occurred.</p>
 Client(String),
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>The operation is not supported.</p>
-UnsupportedOperation(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
 ///<p>The specified directory is unavailable or could not be found.</p>
 DirectoryUnavailable(String),
 ///<p>The specified entity already exists.</p>
 EntityAlreadyExists(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),
+///<p>The operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1692,7 +1780,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EntityAlreadyExistsException" => CreateConditionalForwarderError::EntityAlreadyExists(String::from(error_message)),"ServiceException" => CreateConditionalForwarderError::Service(String::from(error_message)),"ClientException" => CreateConditionalForwarderError::Client(String::from(error_message)),"UnsupportedOperationException" => CreateConditionalForwarderError::UnsupportedOperation(String::from(error_message)),"DirectoryUnavailableException" => CreateConditionalForwarderError::DirectoryUnavailable(String::from(error_message)),"EntityDoesNotExistException" => CreateConditionalForwarderError::EntityDoesNotExist(String::from(error_message)),"InvalidParameterException" => CreateConditionalForwarderError::InvalidParameter(String::from(error_message)),"ValidationException" => CreateConditionalForwarderError::Validation(error_message.to_string()),_ => CreateConditionalForwarderError::Unknown(String::from(body))
+                                    "ClientException" => CreateConditionalForwarderError::Client(String::from(error_message)),
+"DirectoryUnavailableException" => CreateConditionalForwarderError::DirectoryUnavailable(String::from(error_message)),
+"EntityAlreadyExistsException" => CreateConditionalForwarderError::EntityAlreadyExists(String::from(error_message)),
+"EntityDoesNotExistException" => CreateConditionalForwarderError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => CreateConditionalForwarderError::InvalidParameter(String::from(error_message)),
+"ServiceException" => CreateConditionalForwarderError::Service(String::from(error_message)),
+"UnsupportedOperationException" => CreateConditionalForwarderError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => CreateConditionalForwarderError::Validation(error_message.to_string()),
+_ => CreateConditionalForwarderError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateConditionalForwarderError::Unknown(String::from(body))
@@ -1723,7 +1819,17 @@ Unknown(String)
                 impl Error for CreateConditionalForwarderError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateConditionalForwarderError::Client(ref cause) => cause,CreateConditionalForwarderError::UnsupportedOperation(ref cause) => cause,CreateConditionalForwarderError::DirectoryUnavailable(ref cause) => cause,CreateConditionalForwarderError::InvalidParameter(ref cause) => cause,CreateConditionalForwarderError::EntityDoesNotExist(ref cause) => cause,CreateConditionalForwarderError::EntityAlreadyExists(ref cause) => cause,CreateConditionalForwarderError::Service(ref cause) => cause,CreateConditionalForwarderError::Validation(ref cause) => cause,CreateConditionalForwarderError::Credentials(ref err) => err.description(),CreateConditionalForwarderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateConditionalForwarderError::Unknown(ref cause) => cause
+                            CreateConditionalForwarderError::Client(ref cause) => cause,
+CreateConditionalForwarderError::DirectoryUnavailable(ref cause) => cause,
+CreateConditionalForwarderError::EntityAlreadyExists(ref cause) => cause,
+CreateConditionalForwarderError::EntityDoesNotExist(ref cause) => cause,
+CreateConditionalForwarderError::InvalidParameter(ref cause) => cause,
+CreateConditionalForwarderError::Service(ref cause) => cause,
+CreateConditionalForwarderError::UnsupportedOperation(ref cause) => cause,
+CreateConditionalForwarderError::Validation(ref cause) => cause,
+CreateConditionalForwarderError::Credentials(ref err) => err.description(),
+CreateConditionalForwarderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateConditionalForwarderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1731,14 +1837,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateDirectoryError {
                     
-///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
 ///<p>The maximum number of directories in the region has been reached. You can use the <a>GetDirectoryLimits</a> operation to determine your directory limits in the region.</p>
-DirectoryLimitExceeded(String),/// An error occurred dispatching the HTTP request
+DirectoryLimitExceeded(String),
+///<p>One or more parameters are not valid.</p>
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1757,7 +1863,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectoryLimitExceededException" => CreateDirectoryError::DirectoryLimitExceeded(String::from(error_message)),"ServiceException" => CreateDirectoryError::Service(String::from(error_message)),"InvalidParameterException" => CreateDirectoryError::InvalidParameter(String::from(error_message)),"ClientException" => CreateDirectoryError::Client(String::from(error_message)),"ValidationException" => CreateDirectoryError::Validation(error_message.to_string()),_ => CreateDirectoryError::Unknown(String::from(body))
+                                    "ClientException" => CreateDirectoryError::Client(String::from(error_message)),
+"DirectoryLimitExceededException" => CreateDirectoryError::DirectoryLimitExceeded(String::from(error_message)),
+"InvalidParameterException" => CreateDirectoryError::InvalidParameter(String::from(error_message)),
+"ServiceException" => CreateDirectoryError::Service(String::from(error_message)),
+"ValidationException" => CreateDirectoryError::Validation(error_message.to_string()),
+_ => CreateDirectoryError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateDirectoryError::Unknown(String::from(body))
@@ -1788,7 +1899,14 @@ Unknown(String)
                 impl Error for CreateDirectoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateDirectoryError::DirectoryLimitExceeded(ref cause) => cause,CreateDirectoryError::Service(ref cause) => cause,CreateDirectoryError::Client(ref cause) => cause,CreateDirectoryError::InvalidParameter(ref cause) => cause,CreateDirectoryError::Validation(ref cause) => cause,CreateDirectoryError::Credentials(ref err) => err.description(),CreateDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateDirectoryError::Unknown(ref cause) => cause
+                            CreateDirectoryError::Client(ref cause) => cause,
+CreateDirectoryError::DirectoryLimitExceeded(ref cause) => cause,
+CreateDirectoryError::InvalidParameter(ref cause) => cause,
+CreateDirectoryError::Service(ref cause) => cause,
+CreateDirectoryError::Validation(ref cause) => cause,
+CreateDirectoryError::Credentials(ref err) => err.description(),
+CreateDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateDirectoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1798,12 +1916,12 @@ Unknown(String)
                     
 ///<p>A client exception has occurred.</p>
 Client(String),
+///<p>The maximum number of directories in the region has been reached. You can use the <a>GetDirectoryLimits</a> operation to determine your directory limits in the region.</p>
+DirectoryLimitExceeded(String),
 ///<p>One or more parameters are not valid.</p>
 InvalidParameter(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
 Service(String),
-///<p>The maximum number of directories in the region has been reached. You can use the <a>GetDirectoryLimits</a> operation to determine your directory limits in the region.</p>
-DirectoryLimitExceeded(String),
 ///<p>The operation is not supported.</p>
 UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1824,7 +1942,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectoryLimitExceededException" => CreateMicrosoftADError::DirectoryLimitExceeded(String::from(error_message)),"UnsupportedOperationException" => CreateMicrosoftADError::UnsupportedOperation(String::from(error_message)),"InvalidParameterException" => CreateMicrosoftADError::InvalidParameter(String::from(error_message)),"ClientException" => CreateMicrosoftADError::Client(String::from(error_message)),"ServiceException" => CreateMicrosoftADError::Service(String::from(error_message)),"ValidationException" => CreateMicrosoftADError::Validation(error_message.to_string()),_ => CreateMicrosoftADError::Unknown(String::from(body))
+                                    "ClientException" => CreateMicrosoftADError::Client(String::from(error_message)),
+"DirectoryLimitExceededException" => CreateMicrosoftADError::DirectoryLimitExceeded(String::from(error_message)),
+"InvalidParameterException" => CreateMicrosoftADError::InvalidParameter(String::from(error_message)),
+"ServiceException" => CreateMicrosoftADError::Service(String::from(error_message)),
+"UnsupportedOperationException" => CreateMicrosoftADError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => CreateMicrosoftADError::Validation(error_message.to_string()),
+_ => CreateMicrosoftADError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateMicrosoftADError::Unknown(String::from(body))
@@ -1855,7 +1979,15 @@ Unknown(String)
                 impl Error for CreateMicrosoftADError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateMicrosoftADError::UnsupportedOperation(ref cause) => cause,CreateMicrosoftADError::Client(ref cause) => cause,CreateMicrosoftADError::Service(ref cause) => cause,CreateMicrosoftADError::DirectoryLimitExceeded(ref cause) => cause,CreateMicrosoftADError::InvalidParameter(ref cause) => cause,CreateMicrosoftADError::Validation(ref cause) => cause,CreateMicrosoftADError::Credentials(ref err) => err.description(),CreateMicrosoftADError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateMicrosoftADError::Unknown(ref cause) => cause
+                            CreateMicrosoftADError::Client(ref cause) => cause,
+CreateMicrosoftADError::DirectoryLimitExceeded(ref cause) => cause,
+CreateMicrosoftADError::InvalidParameter(ref cause) => cause,
+CreateMicrosoftADError::Service(ref cause) => cause,
+CreateMicrosoftADError::UnsupportedOperation(ref cause) => cause,
+CreateMicrosoftADError::Validation(ref cause) => cause,
+CreateMicrosoftADError::Credentials(ref err) => err.description(),
+CreateMicrosoftADError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateMicrosoftADError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1865,14 +1997,14 @@ Unknown(String)
                     
 ///<p>A client exception has occurred.</p>
 Client(String),
-///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
-///<p>The maximum number of manual snapshots for the directory has been reached. You can use the <a>GetSnapshotLimits</a> operation to determine the snapshot limits for a directory.</p>
-SnapshotLimitExceeded(String),
+///<p>One or more parameters are not valid.</p>
+InvalidParameter(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),/// An error occurred dispatching the HTTP request
+Service(String),
+///<p>The maximum number of manual snapshots for the directory has been reached. You can use the <a>GetSnapshotLimits</a> operation to determine the snapshot limits for a directory.</p>
+SnapshotLimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1891,7 +2023,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceException" => CreateSnapshotError::Service(String::from(error_message)),"SnapshotLimitExceededException" => CreateSnapshotError::SnapshotLimitExceeded(String::from(error_message)),"InvalidParameterException" => CreateSnapshotError::InvalidParameter(String::from(error_message)),"EntityDoesNotExistException" => CreateSnapshotError::EntityDoesNotExist(String::from(error_message)),"ClientException" => CreateSnapshotError::Client(String::from(error_message)),"ValidationException" => CreateSnapshotError::Validation(error_message.to_string()),_ => CreateSnapshotError::Unknown(String::from(body))
+                                    "ClientException" => CreateSnapshotError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => CreateSnapshotError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => CreateSnapshotError::InvalidParameter(String::from(error_message)),
+"ServiceException" => CreateSnapshotError::Service(String::from(error_message)),
+"SnapshotLimitExceededException" => CreateSnapshotError::SnapshotLimitExceeded(String::from(error_message)),
+"ValidationException" => CreateSnapshotError::Validation(error_message.to_string()),
+_ => CreateSnapshotError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateSnapshotError::Unknown(String::from(body))
@@ -1922,7 +2060,15 @@ Unknown(String)
                 impl Error for CreateSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateSnapshotError::InvalidParameter(ref cause) => cause,CreateSnapshotError::Client(ref cause) => cause,CreateSnapshotError::Service(ref cause) => cause,CreateSnapshotError::SnapshotLimitExceeded(ref cause) => cause,CreateSnapshotError::EntityDoesNotExist(ref cause) => cause,CreateSnapshotError::Validation(ref cause) => cause,CreateSnapshotError::Credentials(ref err) => err.description(),CreateSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateSnapshotError::Unknown(ref cause) => cause
+                            CreateSnapshotError::Client(ref cause) => cause,
+CreateSnapshotError::EntityDoesNotExist(ref cause) => cause,
+CreateSnapshotError::InvalidParameter(ref cause) => cause,
+CreateSnapshotError::Service(ref cause) => cause,
+CreateSnapshotError::SnapshotLimitExceeded(ref cause) => cause,
+CreateSnapshotError::Validation(ref cause) => cause,
+CreateSnapshotError::Credentials(ref err) => err.description(),
+CreateSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1930,18 +2076,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateTrustError {
                     
-///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),
-///<p>The specified entity already exists.</p>
-EntityAlreadyExists(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
+///<p>The specified entity already exists.</p>
+EntityAlreadyExists(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
+///<p>One or more parameters are not valid.</p>
+InvalidParameter(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
 Service(String),
 ///<p>The operation is not supported.</p>
-UnsupportedOperation(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),/// An error occurred dispatching the HTTP request
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1960,7 +2106,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EntityAlreadyExistsException" => CreateTrustError::EntityAlreadyExists(String::from(error_message)),"ServiceException" => CreateTrustError::Service(String::from(error_message)),"UnsupportedOperationException" => CreateTrustError::UnsupportedOperation(String::from(error_message)),"InvalidParameterException" => CreateTrustError::InvalidParameter(String::from(error_message)),"ClientException" => CreateTrustError::Client(String::from(error_message)),"EntityDoesNotExistException" => CreateTrustError::EntityDoesNotExist(String::from(error_message)),"ValidationException" => CreateTrustError::Validation(error_message.to_string()),_ => CreateTrustError::Unknown(String::from(body))
+                                    "ClientException" => CreateTrustError::Client(String::from(error_message)),
+"EntityAlreadyExistsException" => CreateTrustError::EntityAlreadyExists(String::from(error_message)),
+"EntityDoesNotExistException" => CreateTrustError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => CreateTrustError::InvalidParameter(String::from(error_message)),
+"ServiceException" => CreateTrustError::Service(String::from(error_message)),
+"UnsupportedOperationException" => CreateTrustError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => CreateTrustError::Validation(error_message.to_string()),
+_ => CreateTrustError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateTrustError::Unknown(String::from(body))
@@ -1991,7 +2144,16 @@ Unknown(String)
                 impl Error for CreateTrustError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateTrustError::Service(ref cause) => cause,CreateTrustError::InvalidParameter(ref cause) => cause,CreateTrustError::UnsupportedOperation(ref cause) => cause,CreateTrustError::EntityDoesNotExist(ref cause) => cause,CreateTrustError::EntityAlreadyExists(ref cause) => cause,CreateTrustError::Client(ref cause) => cause,CreateTrustError::Validation(ref cause) => cause,CreateTrustError::Credentials(ref err) => err.description(),CreateTrustError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateTrustError::Unknown(ref cause) => cause
+                            CreateTrustError::Client(ref cause) => cause,
+CreateTrustError::EntityAlreadyExists(ref cause) => cause,
+CreateTrustError::EntityDoesNotExist(ref cause) => cause,
+CreateTrustError::InvalidParameter(ref cause) => cause,
+CreateTrustError::Service(ref cause) => cause,
+CreateTrustError::UnsupportedOperation(ref cause) => cause,
+CreateTrustError::Validation(ref cause) => cause,
+CreateTrustError::Credentials(ref err) => err.description(),
+CreateTrustError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateTrustError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1999,18 +2161,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteConditionalForwarderError {
                     
-///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
-///<p>The operation is not supported.</p>
-UnsupportedOperation(String),
+///<p>The specified directory is unavailable or could not be found.</p>
+DirectoryUnavailable(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
+///<p>One or more parameters are not valid.</p>
+InvalidParameter(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
 Service(String),
-///<p>The specified directory is unavailable or could not be found.</p>
-DirectoryUnavailable(String),/// An error occurred dispatching the HTTP request
+///<p>The operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2029,7 +2191,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EntityDoesNotExistException" => DeleteConditionalForwarderError::EntityDoesNotExist(String::from(error_message)),"InvalidParameterException" => DeleteConditionalForwarderError::InvalidParameter(String::from(error_message)),"DirectoryUnavailableException" => DeleteConditionalForwarderError::DirectoryUnavailable(String::from(error_message)),"ClientException" => DeleteConditionalForwarderError::Client(String::from(error_message)),"UnsupportedOperationException" => DeleteConditionalForwarderError::UnsupportedOperation(String::from(error_message)),"ServiceException" => DeleteConditionalForwarderError::Service(String::from(error_message)),"ValidationException" => DeleteConditionalForwarderError::Validation(error_message.to_string()),_ => DeleteConditionalForwarderError::Unknown(String::from(body))
+                                    "ClientException" => DeleteConditionalForwarderError::Client(String::from(error_message)),
+"DirectoryUnavailableException" => DeleteConditionalForwarderError::DirectoryUnavailable(String::from(error_message)),
+"EntityDoesNotExistException" => DeleteConditionalForwarderError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => DeleteConditionalForwarderError::InvalidParameter(String::from(error_message)),
+"ServiceException" => DeleteConditionalForwarderError::Service(String::from(error_message)),
+"UnsupportedOperationException" => DeleteConditionalForwarderError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => DeleteConditionalForwarderError::Validation(error_message.to_string()),
+_ => DeleteConditionalForwarderError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteConditionalForwarderError::Unknown(String::from(body))
@@ -2060,7 +2229,16 @@ Unknown(String)
                 impl Error for DeleteConditionalForwarderError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteConditionalForwarderError::EntityDoesNotExist(ref cause) => cause,DeleteConditionalForwarderError::DirectoryUnavailable(ref cause) => cause,DeleteConditionalForwarderError::InvalidParameter(ref cause) => cause,DeleteConditionalForwarderError::Client(ref cause) => cause,DeleteConditionalForwarderError::UnsupportedOperation(ref cause) => cause,DeleteConditionalForwarderError::Service(ref cause) => cause,DeleteConditionalForwarderError::Validation(ref cause) => cause,DeleteConditionalForwarderError::Credentials(ref err) => err.description(),DeleteConditionalForwarderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteConditionalForwarderError::Unknown(ref cause) => cause
+                            DeleteConditionalForwarderError::Client(ref cause) => cause,
+DeleteConditionalForwarderError::DirectoryUnavailable(ref cause) => cause,
+DeleteConditionalForwarderError::EntityDoesNotExist(ref cause) => cause,
+DeleteConditionalForwarderError::InvalidParameter(ref cause) => cause,
+DeleteConditionalForwarderError::Service(ref cause) => cause,
+DeleteConditionalForwarderError::UnsupportedOperation(ref cause) => cause,
+DeleteConditionalForwarderError::Validation(ref cause) => cause,
+DeleteConditionalForwarderError::Credentials(ref err) => err.description(),
+DeleteConditionalForwarderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteConditionalForwarderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2092,7 +2270,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EntityDoesNotExistException" => DeleteDirectoryError::EntityDoesNotExist(String::from(error_message)),"ServiceException" => DeleteDirectoryError::Service(String::from(error_message)),"ClientException" => DeleteDirectoryError::Client(String::from(error_message)),"ValidationException" => DeleteDirectoryError::Validation(error_message.to_string()),_ => DeleteDirectoryError::Unknown(String::from(body))
+                                    "ClientException" => DeleteDirectoryError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => DeleteDirectoryError::EntityDoesNotExist(String::from(error_message)),
+"ServiceException" => DeleteDirectoryError::Service(String::from(error_message)),
+"ValidationException" => DeleteDirectoryError::Validation(error_message.to_string()),
+_ => DeleteDirectoryError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteDirectoryError::Unknown(String::from(body))
@@ -2123,7 +2305,13 @@ Unknown(String)
                 impl Error for DeleteDirectoryError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteDirectoryError::EntityDoesNotExist(ref cause) => cause,DeleteDirectoryError::Service(ref cause) => cause,DeleteDirectoryError::Client(ref cause) => cause,DeleteDirectoryError::Validation(ref cause) => cause,DeleteDirectoryError::Credentials(ref err) => err.description(),DeleteDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteDirectoryError::Unknown(ref cause) => cause
+                            DeleteDirectoryError::Client(ref cause) => cause,
+DeleteDirectoryError::EntityDoesNotExist(ref cause) => cause,
+DeleteDirectoryError::Service(ref cause) => cause,
+DeleteDirectoryError::Validation(ref cause) => cause,
+DeleteDirectoryError::Credentials(ref err) => err.description(),
+DeleteDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteDirectoryError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2131,14 +2319,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteSnapshotError {
                     
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2157,7 +2345,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EntityDoesNotExistException" => DeleteSnapshotError::EntityDoesNotExist(String::from(error_message)),"ServiceException" => DeleteSnapshotError::Service(String::from(error_message)),"ClientException" => DeleteSnapshotError::Client(String::from(error_message)),"InvalidParameterException" => DeleteSnapshotError::InvalidParameter(String::from(error_message)),"ValidationException" => DeleteSnapshotError::Validation(error_message.to_string()),_ => DeleteSnapshotError::Unknown(String::from(body))
+                                    "ClientException" => DeleteSnapshotError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => DeleteSnapshotError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => DeleteSnapshotError::InvalidParameter(String::from(error_message)),
+"ServiceException" => DeleteSnapshotError::Service(String::from(error_message)),
+"ValidationException" => DeleteSnapshotError::Validation(error_message.to_string()),
+_ => DeleteSnapshotError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteSnapshotError::Unknown(String::from(body))
@@ -2188,7 +2381,14 @@ Unknown(String)
                 impl Error for DeleteSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteSnapshotError::Service(ref cause) => cause,DeleteSnapshotError::InvalidParameter(ref cause) => cause,DeleteSnapshotError::Client(ref cause) => cause,DeleteSnapshotError::EntityDoesNotExist(ref cause) => cause,DeleteSnapshotError::Validation(ref cause) => cause,DeleteSnapshotError::Credentials(ref err) => err.description(),DeleteSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteSnapshotError::Unknown(ref cause) => cause
+                            DeleteSnapshotError::Client(ref cause) => cause,
+DeleteSnapshotError::EntityDoesNotExist(ref cause) => cause,
+DeleteSnapshotError::InvalidParameter(ref cause) => cause,
+DeleteSnapshotError::Service(ref cause) => cause,
+DeleteSnapshotError::Validation(ref cause) => cause,
+DeleteSnapshotError::Credentials(ref err) => err.description(),
+DeleteSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2196,14 +2396,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteTrustError {
                     
+///<p>A client exception has occurred.</p>
+Client(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
 InvalidParameter(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
 Service(String),
-///<p>A client exception has occurred.</p>
-Client(String),
 ///<p>The operation is not supported.</p>
 UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2224,7 +2424,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "UnsupportedOperationException" => DeleteTrustError::UnsupportedOperation(String::from(error_message)),"ClientException" => DeleteTrustError::Client(String::from(error_message)),"ServiceException" => DeleteTrustError::Service(String::from(error_message)),"EntityDoesNotExistException" => DeleteTrustError::EntityDoesNotExist(String::from(error_message)),"InvalidParameterException" => DeleteTrustError::InvalidParameter(String::from(error_message)),"ValidationException" => DeleteTrustError::Validation(error_message.to_string()),_ => DeleteTrustError::Unknown(String::from(body))
+                                    "ClientException" => DeleteTrustError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => DeleteTrustError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => DeleteTrustError::InvalidParameter(String::from(error_message)),
+"ServiceException" => DeleteTrustError::Service(String::from(error_message)),
+"UnsupportedOperationException" => DeleteTrustError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => DeleteTrustError::Validation(error_message.to_string()),
+_ => DeleteTrustError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteTrustError::Unknown(String::from(body))
@@ -2255,7 +2461,15 @@ Unknown(String)
                 impl Error for DeleteTrustError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteTrustError::UnsupportedOperation(ref cause) => cause,DeleteTrustError::InvalidParameter(ref cause) => cause,DeleteTrustError::EntityDoesNotExist(ref cause) => cause,DeleteTrustError::Client(ref cause) => cause,DeleteTrustError::Service(ref cause) => cause,DeleteTrustError::Validation(ref cause) => cause,DeleteTrustError::Credentials(ref err) => err.description(),DeleteTrustError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteTrustError::Unknown(ref cause) => cause
+                            DeleteTrustError::Client(ref cause) => cause,
+DeleteTrustError::EntityDoesNotExist(ref cause) => cause,
+DeleteTrustError::InvalidParameter(ref cause) => cause,
+DeleteTrustError::Service(ref cause) => cause,
+DeleteTrustError::UnsupportedOperation(ref cause) => cause,
+DeleteTrustError::Validation(ref cause) => cause,
+DeleteTrustError::Credentials(ref err) => err.description(),
+DeleteTrustError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteTrustError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2263,14 +2477,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeregisterEventTopicError {
                     
+///<p>A client exception has occurred.</p>
+Client(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
 InvalidParameter(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
-///<p>A client exception has occurred.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2289,7 +2503,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => DeregisterEventTopicError::InvalidParameter(String::from(error_message)),"ClientException" => DeregisterEventTopicError::Client(String::from(error_message)),"EntityDoesNotExistException" => DeregisterEventTopicError::EntityDoesNotExist(String::from(error_message)),"ServiceException" => DeregisterEventTopicError::Service(String::from(error_message)),"ValidationException" => DeregisterEventTopicError::Validation(error_message.to_string()),_ => DeregisterEventTopicError::Unknown(String::from(body))
+                                    "ClientException" => DeregisterEventTopicError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => DeregisterEventTopicError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => DeregisterEventTopicError::InvalidParameter(String::from(error_message)),
+"ServiceException" => DeregisterEventTopicError::Service(String::from(error_message)),
+"ValidationException" => DeregisterEventTopicError::Validation(error_message.to_string()),
+_ => DeregisterEventTopicError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeregisterEventTopicError::Unknown(String::from(body))
@@ -2320,7 +2539,14 @@ Unknown(String)
                 impl Error for DeregisterEventTopicError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeregisterEventTopicError::Service(ref cause) => cause,DeregisterEventTopicError::Client(ref cause) => cause,DeregisterEventTopicError::InvalidParameter(ref cause) => cause,DeregisterEventTopicError::EntityDoesNotExist(ref cause) => cause,DeregisterEventTopicError::Validation(ref cause) => cause,DeregisterEventTopicError::Credentials(ref err) => err.description(),DeregisterEventTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeregisterEventTopicError::Unknown(ref cause) => cause
+                            DeregisterEventTopicError::Client(ref cause) => cause,
+DeregisterEventTopicError::EntityDoesNotExist(ref cause) => cause,
+DeregisterEventTopicError::InvalidParameter(ref cause) => cause,
+DeregisterEventTopicError::Service(ref cause) => cause,
+DeregisterEventTopicError::Validation(ref cause) => cause,
+DeregisterEventTopicError::Credentials(ref err) => err.description(),
+DeregisterEventTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeregisterEventTopicError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2328,10 +2554,6 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeConditionalForwardersError {
                     
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>The operation is not supported.</p>
-UnsupportedOperation(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
 ///<p>The specified directory is unavailable or could not be found.</p>
@@ -2339,7 +2561,11 @@ DirectoryUnavailable(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),
+///<p>The operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2358,7 +2584,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceException" => DescribeConditionalForwardersError::Service(String::from(error_message)),"DirectoryUnavailableException" => DescribeConditionalForwardersError::DirectoryUnavailable(String::from(error_message)),"ClientException" => DescribeConditionalForwardersError::Client(String::from(error_message)),"UnsupportedOperationException" => DescribeConditionalForwardersError::UnsupportedOperation(String::from(error_message)),"EntityDoesNotExistException" => DescribeConditionalForwardersError::EntityDoesNotExist(String::from(error_message)),"InvalidParameterException" => DescribeConditionalForwardersError::InvalidParameter(String::from(error_message)),"ValidationException" => DescribeConditionalForwardersError::Validation(error_message.to_string()),_ => DescribeConditionalForwardersError::Unknown(String::from(body))
+                                    "ClientException" => DescribeConditionalForwardersError::Client(String::from(error_message)),
+"DirectoryUnavailableException" => DescribeConditionalForwardersError::DirectoryUnavailable(String::from(error_message)),
+"EntityDoesNotExistException" => DescribeConditionalForwardersError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => DescribeConditionalForwardersError::InvalidParameter(String::from(error_message)),
+"ServiceException" => DescribeConditionalForwardersError::Service(String::from(error_message)),
+"UnsupportedOperationException" => DescribeConditionalForwardersError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => DescribeConditionalForwardersError::Validation(error_message.to_string()),
+_ => DescribeConditionalForwardersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeConditionalForwardersError::Unknown(String::from(body))
@@ -2389,7 +2622,16 @@ Unknown(String)
                 impl Error for DescribeConditionalForwardersError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeConditionalForwardersError::Client(ref cause) => cause,DescribeConditionalForwardersError::UnsupportedOperation(ref cause) => cause,DescribeConditionalForwardersError::Service(ref cause) => cause,DescribeConditionalForwardersError::DirectoryUnavailable(ref cause) => cause,DescribeConditionalForwardersError::EntityDoesNotExist(ref cause) => cause,DescribeConditionalForwardersError::InvalidParameter(ref cause) => cause,DescribeConditionalForwardersError::Validation(ref cause) => cause,DescribeConditionalForwardersError::Credentials(ref err) => err.description(),DescribeConditionalForwardersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeConditionalForwardersError::Unknown(ref cause) => cause
+                            DescribeConditionalForwardersError::Client(ref cause) => cause,
+DescribeConditionalForwardersError::DirectoryUnavailable(ref cause) => cause,
+DescribeConditionalForwardersError::EntityDoesNotExist(ref cause) => cause,
+DescribeConditionalForwardersError::InvalidParameter(ref cause) => cause,
+DescribeConditionalForwardersError::Service(ref cause) => cause,
+DescribeConditionalForwardersError::UnsupportedOperation(ref cause) => cause,
+DescribeConditionalForwardersError::Validation(ref cause) => cause,
+DescribeConditionalForwardersError::Credentials(ref err) => err.description(),
+DescribeConditionalForwardersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeConditionalForwardersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2399,14 +2641,14 @@ Unknown(String)
                     
 ///<p>A client exception has occurred.</p>
 Client(String),
-///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>The <i>NextToken</i> value is not valid.</p>
 InvalidNextToken(String),
+///<p>One or more parameters are not valid.</p>
+InvalidParameter(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),/// An error occurred dispatching the HTTP request
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2425,7 +2667,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EntityDoesNotExistException" => DescribeDirectoriesError::EntityDoesNotExist(String::from(error_message)),"ClientException" => DescribeDirectoriesError::Client(String::from(error_message)),"InvalidNextTokenException" => DescribeDirectoriesError::InvalidNextToken(String::from(error_message)),"InvalidParameterException" => DescribeDirectoriesError::InvalidParameter(String::from(error_message)),"ServiceException" => DescribeDirectoriesError::Service(String::from(error_message)),"ValidationException" => DescribeDirectoriesError::Validation(error_message.to_string()),_ => DescribeDirectoriesError::Unknown(String::from(body))
+                                    "ClientException" => DescribeDirectoriesError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => DescribeDirectoriesError::EntityDoesNotExist(String::from(error_message)),
+"InvalidNextTokenException" => DescribeDirectoriesError::InvalidNextToken(String::from(error_message)),
+"InvalidParameterException" => DescribeDirectoriesError::InvalidParameter(String::from(error_message)),
+"ServiceException" => DescribeDirectoriesError::Service(String::from(error_message)),
+"ValidationException" => DescribeDirectoriesError::Validation(error_message.to_string()),
+_ => DescribeDirectoriesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeDirectoriesError::Unknown(String::from(body))
@@ -2456,7 +2704,15 @@ Unknown(String)
                 impl Error for DescribeDirectoriesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeDirectoriesError::InvalidParameter(ref cause) => cause,DescribeDirectoriesError::InvalidNextToken(ref cause) => cause,DescribeDirectoriesError::Service(ref cause) => cause,DescribeDirectoriesError::Client(ref cause) => cause,DescribeDirectoriesError::EntityDoesNotExist(ref cause) => cause,DescribeDirectoriesError::Validation(ref cause) => cause,DescribeDirectoriesError::Credentials(ref err) => err.description(),DescribeDirectoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeDirectoriesError::Unknown(ref cause) => cause
+                            DescribeDirectoriesError::Client(ref cause) => cause,
+DescribeDirectoriesError::EntityDoesNotExist(ref cause) => cause,
+DescribeDirectoriesError::InvalidNextToken(ref cause) => cause,
+DescribeDirectoriesError::InvalidParameter(ref cause) => cause,
+DescribeDirectoriesError::Service(ref cause) => cause,
+DescribeDirectoriesError::Validation(ref cause) => cause,
+DescribeDirectoriesError::Credentials(ref err) => err.description(),
+DescribeDirectoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeDirectoriesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2464,14 +2720,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeEventTopicsError {
                     
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2490,7 +2746,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => DescribeEventTopicsError::Client(String::from(error_message)),"ServiceException" => DescribeEventTopicsError::Service(String::from(error_message)),"EntityDoesNotExistException" => DescribeEventTopicsError::EntityDoesNotExist(String::from(error_message)),"InvalidParameterException" => DescribeEventTopicsError::InvalidParameter(String::from(error_message)),"ValidationException" => DescribeEventTopicsError::Validation(error_message.to_string()),_ => DescribeEventTopicsError::Unknown(String::from(body))
+                                    "ClientException" => DescribeEventTopicsError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => DescribeEventTopicsError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => DescribeEventTopicsError::InvalidParameter(String::from(error_message)),
+"ServiceException" => DescribeEventTopicsError::Service(String::from(error_message)),
+"ValidationException" => DescribeEventTopicsError::Validation(error_message.to_string()),
+_ => DescribeEventTopicsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeEventTopicsError::Unknown(String::from(body))
@@ -2521,7 +2782,14 @@ Unknown(String)
                 impl Error for DescribeEventTopicsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeEventTopicsError::EntityDoesNotExist(ref cause) => cause,DescribeEventTopicsError::InvalidParameter(ref cause) => cause,DescribeEventTopicsError::Service(ref cause) => cause,DescribeEventTopicsError::Client(ref cause) => cause,DescribeEventTopicsError::Validation(ref cause) => cause,DescribeEventTopicsError::Credentials(ref err) => err.description(),DescribeEventTopicsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeEventTopicsError::Unknown(ref cause) => cause
+                            DescribeEventTopicsError::Client(ref cause) => cause,
+DescribeEventTopicsError::EntityDoesNotExist(ref cause) => cause,
+DescribeEventTopicsError::InvalidParameter(ref cause) => cause,
+DescribeEventTopicsError::Service(ref cause) => cause,
+DescribeEventTopicsError::Validation(ref cause) => cause,
+DescribeEventTopicsError::Credentials(ref err) => err.description(),
+DescribeEventTopicsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeEventTopicsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2529,16 +2797,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeSnapshotsError {
                     
+///<p>A client exception has occurred.</p>
+Client(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
+///<p>The <i>NextToken</i> value is not valid.</p>
+InvalidNextToken(String),
 ///<p>One or more parameters are not valid.</p>
 InvalidParameter(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>The <i>NextToken</i> value is not valid.</p>
-InvalidNextToken(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
-///<p>A client exception has occurred.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2557,7 +2825,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => DescribeSnapshotsError::Client(String::from(error_message)),"InvalidNextTokenException" => DescribeSnapshotsError::InvalidNextToken(String::from(error_message)),"ServiceException" => DescribeSnapshotsError::Service(String::from(error_message)),"EntityDoesNotExistException" => DescribeSnapshotsError::EntityDoesNotExist(String::from(error_message)),"InvalidParameterException" => DescribeSnapshotsError::InvalidParameter(String::from(error_message)),"ValidationException" => DescribeSnapshotsError::Validation(error_message.to_string()),_ => DescribeSnapshotsError::Unknown(String::from(body))
+                                    "ClientException" => DescribeSnapshotsError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => DescribeSnapshotsError::EntityDoesNotExist(String::from(error_message)),
+"InvalidNextTokenException" => DescribeSnapshotsError::InvalidNextToken(String::from(error_message)),
+"InvalidParameterException" => DescribeSnapshotsError::InvalidParameter(String::from(error_message)),
+"ServiceException" => DescribeSnapshotsError::Service(String::from(error_message)),
+"ValidationException" => DescribeSnapshotsError::Validation(error_message.to_string()),
+_ => DescribeSnapshotsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeSnapshotsError::Unknown(String::from(body))
@@ -2588,7 +2862,15 @@ Unknown(String)
                 impl Error for DescribeSnapshotsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSnapshotsError::InvalidParameter(ref cause) => cause,DescribeSnapshotsError::InvalidNextToken(ref cause) => cause,DescribeSnapshotsError::Service(ref cause) => cause,DescribeSnapshotsError::EntityDoesNotExist(ref cause) => cause,DescribeSnapshotsError::Client(ref cause) => cause,DescribeSnapshotsError::Validation(ref cause) => cause,DescribeSnapshotsError::Credentials(ref err) => err.description(),DescribeSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSnapshotsError::Unknown(ref cause) => cause
+                            DescribeSnapshotsError::Client(ref cause) => cause,
+DescribeSnapshotsError::EntityDoesNotExist(ref cause) => cause,
+DescribeSnapshotsError::InvalidNextToken(ref cause) => cause,
+DescribeSnapshotsError::InvalidParameter(ref cause) => cause,
+DescribeSnapshotsError::Service(ref cause) => cause,
+DescribeSnapshotsError::Validation(ref cause) => cause,
+DescribeSnapshotsError::Credentials(ref err) => err.description(),
+DescribeSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSnapshotsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2596,18 +2878,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeTrustsError {
                     
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
+///<p>The <i>NextToken</i> value is not valid.</p>
+InvalidNextToken(String),
 ///<p>One or more parameters are not valid.</p>
 InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),
 ///<p>The operation is not supported.</p>
-UnsupportedOperation(String),
-///<p>The <i>NextToken</i> value is not valid.</p>
-InvalidNextToken(String),/// An error occurred dispatching the HTTP request
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2626,7 +2908,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "UnsupportedOperationException" => DescribeTrustsError::UnsupportedOperation(String::from(error_message)),"InvalidNextTokenException" => DescribeTrustsError::InvalidNextToken(String::from(error_message)),"ClientException" => DescribeTrustsError::Client(String::from(error_message)),"ServiceException" => DescribeTrustsError::Service(String::from(error_message)),"EntityDoesNotExistException" => DescribeTrustsError::EntityDoesNotExist(String::from(error_message)),"InvalidParameterException" => DescribeTrustsError::InvalidParameter(String::from(error_message)),"ValidationException" => DescribeTrustsError::Validation(error_message.to_string()),_ => DescribeTrustsError::Unknown(String::from(body))
+                                    "ClientException" => DescribeTrustsError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => DescribeTrustsError::EntityDoesNotExist(String::from(error_message)),
+"InvalidNextTokenException" => DescribeTrustsError::InvalidNextToken(String::from(error_message)),
+"InvalidParameterException" => DescribeTrustsError::InvalidParameter(String::from(error_message)),
+"ServiceException" => DescribeTrustsError::Service(String::from(error_message)),
+"UnsupportedOperationException" => DescribeTrustsError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => DescribeTrustsError::Validation(error_message.to_string()),
+_ => DescribeTrustsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeTrustsError::Unknown(String::from(body))
@@ -2657,7 +2946,16 @@ Unknown(String)
                 impl Error for DescribeTrustsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeTrustsError::InvalidNextToken(ref cause) => cause,DescribeTrustsError::Service(ref cause) => cause,DescribeTrustsError::Client(ref cause) => cause,DescribeTrustsError::EntityDoesNotExist(ref cause) => cause,DescribeTrustsError::UnsupportedOperation(ref cause) => cause,DescribeTrustsError::InvalidParameter(ref cause) => cause,DescribeTrustsError::Validation(ref cause) => cause,DescribeTrustsError::Credentials(ref err) => err.description(),DescribeTrustsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeTrustsError::Unknown(ref cause) => cause
+                            DescribeTrustsError::Client(ref cause) => cause,
+DescribeTrustsError::EntityDoesNotExist(ref cause) => cause,
+DescribeTrustsError::InvalidNextToken(ref cause) => cause,
+DescribeTrustsError::InvalidParameter(ref cause) => cause,
+DescribeTrustsError::Service(ref cause) => cause,
+DescribeTrustsError::UnsupportedOperation(ref cause) => cause,
+DescribeTrustsError::Validation(ref cause) => cause,
+DescribeTrustsError::Credentials(ref err) => err.description(),
+DescribeTrustsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeTrustsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2665,12 +2963,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DisableRadiusError {
                     
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
 ///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),/// An error occurred dispatching the HTTP request
+EntityDoesNotExist(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2689,7 +2987,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceException" => DisableRadiusError::Service(String::from(error_message)),"ClientException" => DisableRadiusError::Client(String::from(error_message)),"EntityDoesNotExistException" => DisableRadiusError::EntityDoesNotExist(String::from(error_message)),"ValidationException" => DisableRadiusError::Validation(error_message.to_string()),_ => DisableRadiusError::Unknown(String::from(body))
+                                    "ClientException" => DisableRadiusError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => DisableRadiusError::EntityDoesNotExist(String::from(error_message)),
+"ServiceException" => DisableRadiusError::Service(String::from(error_message)),
+"ValidationException" => DisableRadiusError::Validation(error_message.to_string()),
+_ => DisableRadiusError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DisableRadiusError::Unknown(String::from(body))
@@ -2720,7 +3022,13 @@ Unknown(String)
                 impl Error for DisableRadiusError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableRadiusError::EntityDoesNotExist(ref cause) => cause,DisableRadiusError::Client(ref cause) => cause,DisableRadiusError::Service(ref cause) => cause,DisableRadiusError::Validation(ref cause) => cause,DisableRadiusError::Credentials(ref err) => err.description(),DisableRadiusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableRadiusError::Unknown(ref cause) => cause
+                            DisableRadiusError::Client(ref cause) => cause,
+DisableRadiusError::EntityDoesNotExist(ref cause) => cause,
+DisableRadiusError::Service(ref cause) => cause,
+DisableRadiusError::Validation(ref cause) => cause,
+DisableRadiusError::Credentials(ref err) => err.description(),
+DisableRadiusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableRadiusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2730,14 +3038,14 @@ Unknown(String)
                     
 ///<p>An authentication error occurred.</p>
 AuthenticationFailed(String),
+///<p>A client exception has occurred.</p>
+Client(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>The account does not have sufficient permission to perform the operation.</p>
 InsufficientPermissions(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
-///<p>A client exception has occurred.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2756,7 +3064,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceException" => DisableSsoError::Service(String::from(error_message)),"InsufficientPermissionsException" => DisableSsoError::InsufficientPermissions(String::from(error_message)),"ClientException" => DisableSsoError::Client(String::from(error_message)),"EntityDoesNotExistException" => DisableSsoError::EntityDoesNotExist(String::from(error_message)),"AuthenticationFailedException" => DisableSsoError::AuthenticationFailed(String::from(error_message)),"ValidationException" => DisableSsoError::Validation(error_message.to_string()),_ => DisableSsoError::Unknown(String::from(body))
+                                    "AuthenticationFailedException" => DisableSsoError::AuthenticationFailed(String::from(error_message)),
+"ClientException" => DisableSsoError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => DisableSsoError::EntityDoesNotExist(String::from(error_message)),
+"InsufficientPermissionsException" => DisableSsoError::InsufficientPermissions(String::from(error_message)),
+"ServiceException" => DisableSsoError::Service(String::from(error_message)),
+"ValidationException" => DisableSsoError::Validation(error_message.to_string()),
+_ => DisableSsoError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DisableSsoError::Unknown(String::from(body))
@@ -2787,7 +3101,15 @@ Unknown(String)
                 impl Error for DisableSsoError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableSsoError::Service(ref cause) => cause,DisableSsoError::AuthenticationFailed(ref cause) => cause,DisableSsoError::EntityDoesNotExist(ref cause) => cause,DisableSsoError::InsufficientPermissions(ref cause) => cause,DisableSsoError::Client(ref cause) => cause,DisableSsoError::Validation(ref cause) => cause,DisableSsoError::Credentials(ref err) => err.description(),DisableSsoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableSsoError::Unknown(ref cause) => cause
+                            DisableSsoError::AuthenticationFailed(ref cause) => cause,
+DisableSsoError::Client(ref cause) => cause,
+DisableSsoError::EntityDoesNotExist(ref cause) => cause,
+DisableSsoError::InsufficientPermissions(ref cause) => cause,
+DisableSsoError::Service(ref cause) => cause,
+DisableSsoError::Validation(ref cause) => cause,
+DisableSsoError::Credentials(ref err) => err.description(),
+DisableSsoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableSsoError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2799,12 +3121,12 @@ Unknown(String)
 Client(String),
 ///<p>The specified entity already exists.</p>
 EntityAlreadyExists(String),
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2823,7 +3145,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => EnableRadiusError::Client(String::from(error_message)),"EntityAlreadyExistsException" => EnableRadiusError::EntityAlreadyExists(String::from(error_message)),"EntityDoesNotExistException" => EnableRadiusError::EntityDoesNotExist(String::from(error_message)),"ServiceException" => EnableRadiusError::Service(String::from(error_message)),"InvalidParameterException" => EnableRadiusError::InvalidParameter(String::from(error_message)),"ValidationException" => EnableRadiusError::Validation(error_message.to_string()),_ => EnableRadiusError::Unknown(String::from(body))
+                                    "ClientException" => EnableRadiusError::Client(String::from(error_message)),
+"EntityAlreadyExistsException" => EnableRadiusError::EntityAlreadyExists(String::from(error_message)),
+"EntityDoesNotExistException" => EnableRadiusError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => EnableRadiusError::InvalidParameter(String::from(error_message)),
+"ServiceException" => EnableRadiusError::Service(String::from(error_message)),
+"ValidationException" => EnableRadiusError::Validation(error_message.to_string()),
+_ => EnableRadiusError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => EnableRadiusError::Unknown(String::from(body))
@@ -2854,7 +3182,15 @@ Unknown(String)
                 impl Error for EnableRadiusError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableRadiusError::Client(ref cause) => cause,EnableRadiusError::InvalidParameter(ref cause) => cause,EnableRadiusError::Service(ref cause) => cause,EnableRadiusError::EntityDoesNotExist(ref cause) => cause,EnableRadiusError::EntityAlreadyExists(ref cause) => cause,EnableRadiusError::Validation(ref cause) => cause,EnableRadiusError::Credentials(ref err) => err.description(),EnableRadiusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableRadiusError::Unknown(ref cause) => cause
+                            EnableRadiusError::Client(ref cause) => cause,
+EnableRadiusError::EntityAlreadyExists(ref cause) => cause,
+EnableRadiusError::EntityDoesNotExist(ref cause) => cause,
+EnableRadiusError::InvalidParameter(ref cause) => cause,
+EnableRadiusError::Service(ref cause) => cause,
+EnableRadiusError::Validation(ref cause) => cause,
+EnableRadiusError::Credentials(ref err) => err.description(),
+EnableRadiusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableRadiusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2862,16 +3198,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum EnableSsoError {
                     
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
 ///<p>An authentication error occurred.</p>
 AuthenticationFailed(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>The account does not have sufficient permission to perform the operation.</p>
 InsufficientPermissions(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),/// An error occurred dispatching the HTTP request
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2890,7 +3226,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InsufficientPermissionsException" => EnableSsoError::InsufficientPermissions(String::from(error_message)),"EntityDoesNotExistException" => EnableSsoError::EntityDoesNotExist(String::from(error_message)),"ServiceException" => EnableSsoError::Service(String::from(error_message)),"AuthenticationFailedException" => EnableSsoError::AuthenticationFailed(String::from(error_message)),"ClientException" => EnableSsoError::Client(String::from(error_message)),"ValidationException" => EnableSsoError::Validation(error_message.to_string()),_ => EnableSsoError::Unknown(String::from(body))
+                                    "AuthenticationFailedException" => EnableSsoError::AuthenticationFailed(String::from(error_message)),
+"ClientException" => EnableSsoError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => EnableSsoError::EntityDoesNotExist(String::from(error_message)),
+"InsufficientPermissionsException" => EnableSsoError::InsufficientPermissions(String::from(error_message)),
+"ServiceException" => EnableSsoError::Service(String::from(error_message)),
+"ValidationException" => EnableSsoError::Validation(error_message.to_string()),
+_ => EnableSsoError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => EnableSsoError::Unknown(String::from(body))
@@ -2921,7 +3263,15 @@ Unknown(String)
                 impl Error for EnableSsoError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableSsoError::AuthenticationFailed(ref cause) => cause,EnableSsoError::Client(ref cause) => cause,EnableSsoError::InsufficientPermissions(ref cause) => cause,EnableSsoError::EntityDoesNotExist(ref cause) => cause,EnableSsoError::Service(ref cause) => cause,EnableSsoError::Validation(ref cause) => cause,EnableSsoError::Credentials(ref err) => err.description(),EnableSsoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableSsoError::Unknown(ref cause) => cause
+                            EnableSsoError::AuthenticationFailed(ref cause) => cause,
+EnableSsoError::Client(ref cause) => cause,
+EnableSsoError::EntityDoesNotExist(ref cause) => cause,
+EnableSsoError::InsufficientPermissions(ref cause) => cause,
+EnableSsoError::Service(ref cause) => cause,
+EnableSsoError::Validation(ref cause) => cause,
+EnableSsoError::Credentials(ref err) => err.description(),
+EnableSsoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableSsoError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2929,12 +3279,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetDirectoryLimitsError {
                     
+///<p>A client exception has occurred.</p>
+Client(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>A client exception has occurred.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2953,7 +3303,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => GetDirectoryLimitsError::Client(String::from(error_message)),"ServiceException" => GetDirectoryLimitsError::Service(String::from(error_message)),"EntityDoesNotExistException" => GetDirectoryLimitsError::EntityDoesNotExist(String::from(error_message)),"ValidationException" => GetDirectoryLimitsError::Validation(error_message.to_string()),_ => GetDirectoryLimitsError::Unknown(String::from(body))
+                                    "ClientException" => GetDirectoryLimitsError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => GetDirectoryLimitsError::EntityDoesNotExist(String::from(error_message)),
+"ServiceException" => GetDirectoryLimitsError::Service(String::from(error_message)),
+"ValidationException" => GetDirectoryLimitsError::Validation(error_message.to_string()),
+_ => GetDirectoryLimitsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetDirectoryLimitsError::Unknown(String::from(body))
@@ -2984,7 +3338,13 @@ Unknown(String)
                 impl Error for GetDirectoryLimitsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetDirectoryLimitsError::Client(ref cause) => cause,GetDirectoryLimitsError::EntityDoesNotExist(ref cause) => cause,GetDirectoryLimitsError::Service(ref cause) => cause,GetDirectoryLimitsError::Validation(ref cause) => cause,GetDirectoryLimitsError::Credentials(ref err) => err.description(),GetDirectoryLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetDirectoryLimitsError::Unknown(ref cause) => cause
+                            GetDirectoryLimitsError::Client(ref cause) => cause,
+GetDirectoryLimitsError::EntityDoesNotExist(ref cause) => cause,
+GetDirectoryLimitsError::Service(ref cause) => cause,
+GetDirectoryLimitsError::Validation(ref cause) => cause,
+GetDirectoryLimitsError::Credentials(ref err) => err.description(),
+GetDirectoryLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetDirectoryLimitsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2992,12 +3352,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetSnapshotLimitsError {
                     
+///<p>A client exception has occurred.</p>
+Client(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>A client exception has occurred.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3016,7 +3376,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ServiceException" => GetSnapshotLimitsError::Service(String::from(error_message)),"EntityDoesNotExistException" => GetSnapshotLimitsError::EntityDoesNotExist(String::from(error_message)),"ClientException" => GetSnapshotLimitsError::Client(String::from(error_message)),"ValidationException" => GetSnapshotLimitsError::Validation(error_message.to_string()),_ => GetSnapshotLimitsError::Unknown(String::from(body))
+                                    "ClientException" => GetSnapshotLimitsError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => GetSnapshotLimitsError::EntityDoesNotExist(String::from(error_message)),
+"ServiceException" => GetSnapshotLimitsError::Service(String::from(error_message)),
+"ValidationException" => GetSnapshotLimitsError::Validation(error_message.to_string()),
+_ => GetSnapshotLimitsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetSnapshotLimitsError::Unknown(String::from(body))
@@ -3047,7 +3411,13 @@ Unknown(String)
                 impl Error for GetSnapshotLimitsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetSnapshotLimitsError::Client(ref cause) => cause,GetSnapshotLimitsError::EntityDoesNotExist(ref cause) => cause,GetSnapshotLimitsError::Service(ref cause) => cause,GetSnapshotLimitsError::Validation(ref cause) => cause,GetSnapshotLimitsError::Credentials(ref err) => err.description(),GetSnapshotLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetSnapshotLimitsError::Unknown(ref cause) => cause
+                            GetSnapshotLimitsError::Client(ref cause) => cause,
+GetSnapshotLimitsError::EntityDoesNotExist(ref cause) => cause,
+GetSnapshotLimitsError::Service(ref cause) => cause,
+GetSnapshotLimitsError::Validation(ref cause) => cause,
+GetSnapshotLimitsError::Credentials(ref err) => err.description(),
+GetSnapshotLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetSnapshotLimitsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3055,16 +3425,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListIpRoutesError {
                     
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>The <i>NextToken</i> value is not valid.</p>
 InvalidNextToken(String),
 ///<p>One or more parameters are not valid.</p>
 InvalidParameter(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),/// An error occurred dispatching the HTTP request
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3083,7 +3453,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => ListIpRoutesError::Client(String::from(error_message)),"InvalidParameterException" => ListIpRoutesError::InvalidParameter(String::from(error_message)),"EntityDoesNotExistException" => ListIpRoutesError::EntityDoesNotExist(String::from(error_message)),"InvalidNextTokenException" => ListIpRoutesError::InvalidNextToken(String::from(error_message)),"ServiceException" => ListIpRoutesError::Service(String::from(error_message)),"ValidationException" => ListIpRoutesError::Validation(error_message.to_string()),_ => ListIpRoutesError::Unknown(String::from(body))
+                                    "ClientException" => ListIpRoutesError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => ListIpRoutesError::EntityDoesNotExist(String::from(error_message)),
+"InvalidNextTokenException" => ListIpRoutesError::InvalidNextToken(String::from(error_message)),
+"InvalidParameterException" => ListIpRoutesError::InvalidParameter(String::from(error_message)),
+"ServiceException" => ListIpRoutesError::Service(String::from(error_message)),
+"ValidationException" => ListIpRoutesError::Validation(error_message.to_string()),
+_ => ListIpRoutesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListIpRoutesError::Unknown(String::from(body))
@@ -3114,7 +3490,15 @@ Unknown(String)
                 impl Error for ListIpRoutesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListIpRoutesError::InvalidParameter(ref cause) => cause,ListIpRoutesError::InvalidNextToken(ref cause) => cause,ListIpRoutesError::Service(ref cause) => cause,ListIpRoutesError::EntityDoesNotExist(ref cause) => cause,ListIpRoutesError::Client(ref cause) => cause,ListIpRoutesError::Validation(ref cause) => cause,ListIpRoutesError::Credentials(ref err) => err.description(),ListIpRoutesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListIpRoutesError::Unknown(ref cause) => cause
+                            ListIpRoutesError::Client(ref cause) => cause,
+ListIpRoutesError::EntityDoesNotExist(ref cause) => cause,
+ListIpRoutesError::InvalidNextToken(ref cause) => cause,
+ListIpRoutesError::InvalidParameter(ref cause) => cause,
+ListIpRoutesError::Service(ref cause) => cause,
+ListIpRoutesError::Validation(ref cause) => cause,
+ListIpRoutesError::Credentials(ref err) => err.description(),
+ListIpRoutesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListIpRoutesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3122,14 +3506,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListSchemaExtensionsError {
                     
+///<p>A client exception has occurred.</p>
+Client(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
 ///<p>The <i>NextToken</i> value is not valid.</p>
 InvalidNextToken(String),
-///<p>A client exception has occurred.</p>
-Client(String),/// An error occurred dispatching the HTTP request
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3148,7 +3532,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => ListSchemaExtensionsError::Client(String::from(error_message)),"ServiceException" => ListSchemaExtensionsError::Service(String::from(error_message)),"InvalidNextTokenException" => ListSchemaExtensionsError::InvalidNextToken(String::from(error_message)),"EntityDoesNotExistException" => ListSchemaExtensionsError::EntityDoesNotExist(String::from(error_message)),"ValidationException" => ListSchemaExtensionsError::Validation(error_message.to_string()),_ => ListSchemaExtensionsError::Unknown(String::from(body))
+                                    "ClientException" => ListSchemaExtensionsError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => ListSchemaExtensionsError::EntityDoesNotExist(String::from(error_message)),
+"InvalidNextTokenException" => ListSchemaExtensionsError::InvalidNextToken(String::from(error_message)),
+"ServiceException" => ListSchemaExtensionsError::Service(String::from(error_message)),
+"ValidationException" => ListSchemaExtensionsError::Validation(error_message.to_string()),
+_ => ListSchemaExtensionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListSchemaExtensionsError::Unknown(String::from(body))
@@ -3179,7 +3568,14 @@ Unknown(String)
                 impl Error for ListSchemaExtensionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListSchemaExtensionsError::Client(ref cause) => cause,ListSchemaExtensionsError::EntityDoesNotExist(ref cause) => cause,ListSchemaExtensionsError::InvalidNextToken(ref cause) => cause,ListSchemaExtensionsError::Service(ref cause) => cause,ListSchemaExtensionsError::Validation(ref cause) => cause,ListSchemaExtensionsError::Credentials(ref err) => err.description(),ListSchemaExtensionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListSchemaExtensionsError::Unknown(ref cause) => cause
+                            ListSchemaExtensionsError::Client(ref cause) => cause,
+ListSchemaExtensionsError::EntityDoesNotExist(ref cause) => cause,
+ListSchemaExtensionsError::InvalidNextToken(ref cause) => cause,
+ListSchemaExtensionsError::Service(ref cause) => cause,
+ListSchemaExtensionsError::Validation(ref cause) => cause,
+ListSchemaExtensionsError::Credentials(ref err) => err.description(),
+ListSchemaExtensionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListSchemaExtensionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3187,10 +3583,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTagsForResourceError {
                     
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>The <i>NextToken</i> value is not valid.</p>
 InvalidNextToken(String),
 ///<p>One or more parameters are not valid.</p>
@@ -3215,7 +3611,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => ListTagsForResourceError::InvalidParameter(String::from(error_message)),"EntityDoesNotExistException" => ListTagsForResourceError::EntityDoesNotExist(String::from(error_message)),"InvalidNextTokenException" => ListTagsForResourceError::InvalidNextToken(String::from(error_message)),"ServiceException" => ListTagsForResourceError::Service(String::from(error_message)),"ClientException" => ListTagsForResourceError::Client(String::from(error_message)),"ValidationException" => ListTagsForResourceError::Validation(error_message.to_string()),_ => ListTagsForResourceError::Unknown(String::from(body))
+                                    "ClientException" => ListTagsForResourceError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => ListTagsForResourceError::EntityDoesNotExist(String::from(error_message)),
+"InvalidNextTokenException" => ListTagsForResourceError::InvalidNextToken(String::from(error_message)),
+"InvalidParameterException" => ListTagsForResourceError::InvalidParameter(String::from(error_message)),
+"ServiceException" => ListTagsForResourceError::Service(String::from(error_message)),
+"ValidationException" => ListTagsForResourceError::Validation(error_message.to_string()),
+_ => ListTagsForResourceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListTagsForResourceError::Unknown(String::from(body))
@@ -3246,7 +3648,15 @@ Unknown(String)
                 impl Error for ListTagsForResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTagsForResourceError::Service(ref cause) => cause,ListTagsForResourceError::EntityDoesNotExist(ref cause) => cause,ListTagsForResourceError::InvalidNextToken(ref cause) => cause,ListTagsForResourceError::InvalidParameter(ref cause) => cause,ListTagsForResourceError::Client(ref cause) => cause,ListTagsForResourceError::Validation(ref cause) => cause,ListTagsForResourceError::Credentials(ref err) => err.description(),ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTagsForResourceError::Unknown(ref cause) => cause
+                            ListTagsForResourceError::Client(ref cause) => cause,
+ListTagsForResourceError::EntityDoesNotExist(ref cause) => cause,
+ListTagsForResourceError::InvalidNextToken(ref cause) => cause,
+ListTagsForResourceError::InvalidParameter(ref cause) => cause,
+ListTagsForResourceError::Service(ref cause) => cause,
+ListTagsForResourceError::Validation(ref cause) => cause,
+ListTagsForResourceError::Credentials(ref err) => err.description(),
+ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTagsForResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3254,14 +3664,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RegisterEventTopicError {
                     
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3280,7 +3690,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => RegisterEventTopicError::Client(String::from(error_message)),"EntityDoesNotExistException" => RegisterEventTopicError::EntityDoesNotExist(String::from(error_message)),"ServiceException" => RegisterEventTopicError::Service(String::from(error_message)),"InvalidParameterException" => RegisterEventTopicError::InvalidParameter(String::from(error_message)),"ValidationException" => RegisterEventTopicError::Validation(error_message.to_string()),_ => RegisterEventTopicError::Unknown(String::from(body))
+                                    "ClientException" => RegisterEventTopicError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => RegisterEventTopicError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => RegisterEventTopicError::InvalidParameter(String::from(error_message)),
+"ServiceException" => RegisterEventTopicError::Service(String::from(error_message)),
+"ValidationException" => RegisterEventTopicError::Validation(error_message.to_string()),
+_ => RegisterEventTopicError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterEventTopicError::Unknown(String::from(body))
@@ -3311,7 +3726,14 @@ Unknown(String)
                 impl Error for RegisterEventTopicError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterEventTopicError::InvalidParameter(ref cause) => cause,RegisterEventTopicError::EntityDoesNotExist(ref cause) => cause,RegisterEventTopicError::Service(ref cause) => cause,RegisterEventTopicError::Client(ref cause) => cause,RegisterEventTopicError::Validation(ref cause) => cause,RegisterEventTopicError::Credentials(ref err) => err.description(),RegisterEventTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterEventTopicError::Unknown(ref cause) => cause
+                            RegisterEventTopicError::Client(ref cause) => cause,
+RegisterEventTopicError::EntityDoesNotExist(ref cause) => cause,
+RegisterEventTopicError::InvalidParameter(ref cause) => cause,
+RegisterEventTopicError::Service(ref cause) => cause,
+RegisterEventTopicError::Validation(ref cause) => cause,
+RegisterEventTopicError::Credentials(ref err) => err.description(),
+RegisterEventTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterEventTopicError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3319,16 +3741,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RemoveIpRoutesError {
                     
-///<p>The specified directory is unavailable or could not be found.</p>
-DirectoryUnavailable(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
+///<p>The specified directory is unavailable or could not be found.</p>
+DirectoryUnavailable(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
 ///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3347,7 +3769,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EntityDoesNotExistException" => RemoveIpRoutesError::EntityDoesNotExist(String::from(error_message)),"ClientException" => RemoveIpRoutesError::Client(String::from(error_message)),"InvalidParameterException" => RemoveIpRoutesError::InvalidParameter(String::from(error_message)),"ServiceException" => RemoveIpRoutesError::Service(String::from(error_message)),"DirectoryUnavailableException" => RemoveIpRoutesError::DirectoryUnavailable(String::from(error_message)),"ValidationException" => RemoveIpRoutesError::Validation(error_message.to_string()),_ => RemoveIpRoutesError::Unknown(String::from(body))
+                                    "ClientException" => RemoveIpRoutesError::Client(String::from(error_message)),
+"DirectoryUnavailableException" => RemoveIpRoutesError::DirectoryUnavailable(String::from(error_message)),
+"EntityDoesNotExistException" => RemoveIpRoutesError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => RemoveIpRoutesError::InvalidParameter(String::from(error_message)),
+"ServiceException" => RemoveIpRoutesError::Service(String::from(error_message)),
+"ValidationException" => RemoveIpRoutesError::Validation(error_message.to_string()),
+_ => RemoveIpRoutesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RemoveIpRoutesError::Unknown(String::from(body))
@@ -3378,7 +3806,15 @@ Unknown(String)
                 impl Error for RemoveIpRoutesError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveIpRoutesError::Client(ref cause) => cause,RemoveIpRoutesError::Service(ref cause) => cause,RemoveIpRoutesError::EntityDoesNotExist(ref cause) => cause,RemoveIpRoutesError::InvalidParameter(ref cause) => cause,RemoveIpRoutesError::DirectoryUnavailable(ref cause) => cause,RemoveIpRoutesError::Validation(ref cause) => cause,RemoveIpRoutesError::Credentials(ref err) => err.description(),RemoveIpRoutesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveIpRoutesError::Unknown(ref cause) => cause
+                            RemoveIpRoutesError::Client(ref cause) => cause,
+RemoveIpRoutesError::DirectoryUnavailable(ref cause) => cause,
+RemoveIpRoutesError::EntityDoesNotExist(ref cause) => cause,
+RemoveIpRoutesError::InvalidParameter(ref cause) => cause,
+RemoveIpRoutesError::Service(ref cause) => cause,
+RemoveIpRoutesError::Validation(ref cause) => cause,
+RemoveIpRoutesError::Credentials(ref err) => err.description(),
+RemoveIpRoutesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveIpRoutesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3386,12 +3822,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RemoveTagsFromResourceError {
                     
+///<p>A client exception has occurred.</p>
+Client(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
 InvalidParameter(String),
-///<p>A client exception has occurred.</p>
-Client(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
 Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -3412,7 +3848,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ClientException" => RemoveTagsFromResourceError::Client(String::from(error_message)),"ServiceException" => RemoveTagsFromResourceError::Service(String::from(error_message)),"EntityDoesNotExistException" => RemoveTagsFromResourceError::EntityDoesNotExist(String::from(error_message)),"InvalidParameterException" => RemoveTagsFromResourceError::InvalidParameter(String::from(error_message)),"ValidationException" => RemoveTagsFromResourceError::Validation(error_message.to_string()),_ => RemoveTagsFromResourceError::Unknown(String::from(body))
+                                    "ClientException" => RemoveTagsFromResourceError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => RemoveTagsFromResourceError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => RemoveTagsFromResourceError::InvalidParameter(String::from(error_message)),
+"ServiceException" => RemoveTagsFromResourceError::Service(String::from(error_message)),
+"ValidationException" => RemoveTagsFromResourceError::Validation(error_message.to_string()),
+_ => RemoveTagsFromResourceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RemoveTagsFromResourceError::Unknown(String::from(body))
@@ -3443,7 +3884,14 @@ Unknown(String)
                 impl Error for RemoveTagsFromResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveTagsFromResourceError::EntityDoesNotExist(ref cause) => cause,RemoveTagsFromResourceError::Client(ref cause) => cause,RemoveTagsFromResourceError::InvalidParameter(ref cause) => cause,RemoveTagsFromResourceError::Service(ref cause) => cause,RemoveTagsFromResourceError::Validation(ref cause) => cause,RemoveTagsFromResourceError::Credentials(ref err) => err.description(),RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveTagsFromResourceError::Unknown(ref cause) => cause
+                            RemoveTagsFromResourceError::Client(ref cause) => cause,
+RemoveTagsFromResourceError::EntityDoesNotExist(ref cause) => cause,
+RemoveTagsFromResourceError::InvalidParameter(ref cause) => cause,
+RemoveTagsFromResourceError::Service(ref cause) => cause,
+RemoveTagsFromResourceError::Validation(ref cause) => cause,
+RemoveTagsFromResourceError::Credentials(ref err) => err.description(),
+RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveTagsFromResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3451,10 +3899,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RestoreFromSnapshotError {
                     
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
 InvalidParameter(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
@@ -3477,7 +3925,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => RestoreFromSnapshotError::InvalidParameter(String::from(error_message)),"EntityDoesNotExistException" => RestoreFromSnapshotError::EntityDoesNotExist(String::from(error_message)),"ServiceException" => RestoreFromSnapshotError::Service(String::from(error_message)),"ClientException" => RestoreFromSnapshotError::Client(String::from(error_message)),"ValidationException" => RestoreFromSnapshotError::Validation(error_message.to_string()),_ => RestoreFromSnapshotError::Unknown(String::from(body))
+                                    "ClientException" => RestoreFromSnapshotError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => RestoreFromSnapshotError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => RestoreFromSnapshotError::InvalidParameter(String::from(error_message)),
+"ServiceException" => RestoreFromSnapshotError::Service(String::from(error_message)),
+"ValidationException" => RestoreFromSnapshotError::Validation(error_message.to_string()),
+_ => RestoreFromSnapshotError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RestoreFromSnapshotError::Unknown(String::from(body))
@@ -3508,7 +3961,14 @@ Unknown(String)
                 impl Error for RestoreFromSnapshotError {
                     fn description(&self) -> &str {
                         match *self {
-                            RestoreFromSnapshotError::InvalidParameter(ref cause) => cause,RestoreFromSnapshotError::EntityDoesNotExist(ref cause) => cause,RestoreFromSnapshotError::Client(ref cause) => cause,RestoreFromSnapshotError::Service(ref cause) => cause,RestoreFromSnapshotError::Validation(ref cause) => cause,RestoreFromSnapshotError::Credentials(ref err) => err.description(),RestoreFromSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RestoreFromSnapshotError::Unknown(ref cause) => cause
+                            RestoreFromSnapshotError::Client(ref cause) => cause,
+RestoreFromSnapshotError::EntityDoesNotExist(ref cause) => cause,
+RestoreFromSnapshotError::InvalidParameter(ref cause) => cause,
+RestoreFromSnapshotError::Service(ref cause) => cause,
+RestoreFromSnapshotError::Validation(ref cause) => cause,
+RestoreFromSnapshotError::Credentials(ref err) => err.description(),
+RestoreFromSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RestoreFromSnapshotError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3516,18 +3976,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum StartSchemaExtensionError {
                     
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
-///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
-///<p>The maximum number of manual snapshots for the directory has been reached. You can use the <a>GetSnapshotLimits</a> operation to determine the snapshot limits for a directory.</p>
-SnapshotLimitExceeded(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
 ///<p>The specified directory is unavailable or could not be found.</p>
-DirectoryUnavailable(String),/// An error occurred dispatching the HTTP request
+DirectoryUnavailable(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
+///<p>One or more parameters are not valid.</p>
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),
+///<p>The maximum number of manual snapshots for the directory has been reached. You can use the <a>GetSnapshotLimits</a> operation to determine the snapshot limits for a directory.</p>
+SnapshotLimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3546,7 +4006,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "SnapshotLimitExceededException" => StartSchemaExtensionError::SnapshotLimitExceeded(String::from(error_message)),"ClientException" => StartSchemaExtensionError::Client(String::from(error_message)),"ServiceException" => StartSchemaExtensionError::Service(String::from(error_message)),"InvalidParameterException" => StartSchemaExtensionError::InvalidParameter(String::from(error_message)),"DirectoryUnavailableException" => StartSchemaExtensionError::DirectoryUnavailable(String::from(error_message)),"EntityDoesNotExistException" => StartSchemaExtensionError::EntityDoesNotExist(String::from(error_message)),"ValidationException" => StartSchemaExtensionError::Validation(error_message.to_string()),_ => StartSchemaExtensionError::Unknown(String::from(body))
+                                    "ClientException" => StartSchemaExtensionError::Client(String::from(error_message)),
+"DirectoryUnavailableException" => StartSchemaExtensionError::DirectoryUnavailable(String::from(error_message)),
+"EntityDoesNotExistException" => StartSchemaExtensionError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => StartSchemaExtensionError::InvalidParameter(String::from(error_message)),
+"ServiceException" => StartSchemaExtensionError::Service(String::from(error_message)),
+"SnapshotLimitExceededException" => StartSchemaExtensionError::SnapshotLimitExceeded(String::from(error_message)),
+"ValidationException" => StartSchemaExtensionError::Validation(error_message.to_string()),
+_ => StartSchemaExtensionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StartSchemaExtensionError::Unknown(String::from(body))
@@ -3577,7 +4044,16 @@ Unknown(String)
                 impl Error for StartSchemaExtensionError {
                     fn description(&self) -> &str {
                         match *self {
-                            StartSchemaExtensionError::SnapshotLimitExceeded(ref cause) => cause,StartSchemaExtensionError::InvalidParameter(ref cause) => cause,StartSchemaExtensionError::DirectoryUnavailable(ref cause) => cause,StartSchemaExtensionError::Service(ref cause) => cause,StartSchemaExtensionError::EntityDoesNotExist(ref cause) => cause,StartSchemaExtensionError::Client(ref cause) => cause,StartSchemaExtensionError::Validation(ref cause) => cause,StartSchemaExtensionError::Credentials(ref err) => err.description(),StartSchemaExtensionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StartSchemaExtensionError::Unknown(ref cause) => cause
+                            StartSchemaExtensionError::Client(ref cause) => cause,
+StartSchemaExtensionError::DirectoryUnavailable(ref cause) => cause,
+StartSchemaExtensionError::EntityDoesNotExist(ref cause) => cause,
+StartSchemaExtensionError::InvalidParameter(ref cause) => cause,
+StartSchemaExtensionError::Service(ref cause) => cause,
+StartSchemaExtensionError::SnapshotLimitExceeded(ref cause) => cause,
+StartSchemaExtensionError::Validation(ref cause) => cause,
+StartSchemaExtensionError::Credentials(ref err) => err.description(),
+StartSchemaExtensionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StartSchemaExtensionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3585,18 +4061,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateConditionalForwarderError {
                     
+///<p>A client exception has occurred.</p>
+Client(String),
+///<p>The specified directory is unavailable or could not be found.</p>
+DirectoryUnavailable(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
 ///<p>One or more parameters are not valid.</p>
 InvalidParameter(String),
-///<p>The operation is not supported.</p>
-UnsupportedOperation(String),
-///<p>A client exception has occurred.</p>
-Client(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
 Service(String),
-///<p>The specified directory is unavailable or could not be found.</p>
-DirectoryUnavailable(String),/// An error occurred dispatching the HTTP request
+///<p>The operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3615,7 +4091,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "DirectoryUnavailableException" => UpdateConditionalForwarderError::DirectoryUnavailable(String::from(error_message)),"ClientException" => UpdateConditionalForwarderError::Client(String::from(error_message)),"UnsupportedOperationException" => UpdateConditionalForwarderError::UnsupportedOperation(String::from(error_message)),"ServiceException" => UpdateConditionalForwarderError::Service(String::from(error_message)),"InvalidParameterException" => UpdateConditionalForwarderError::InvalidParameter(String::from(error_message)),"EntityDoesNotExistException" => UpdateConditionalForwarderError::EntityDoesNotExist(String::from(error_message)),"ValidationException" => UpdateConditionalForwarderError::Validation(error_message.to_string()),_ => UpdateConditionalForwarderError::Unknown(String::from(body))
+                                    "ClientException" => UpdateConditionalForwarderError::Client(String::from(error_message)),
+"DirectoryUnavailableException" => UpdateConditionalForwarderError::DirectoryUnavailable(String::from(error_message)),
+"EntityDoesNotExistException" => UpdateConditionalForwarderError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => UpdateConditionalForwarderError::InvalidParameter(String::from(error_message)),
+"ServiceException" => UpdateConditionalForwarderError::Service(String::from(error_message)),
+"UnsupportedOperationException" => UpdateConditionalForwarderError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => UpdateConditionalForwarderError::Validation(error_message.to_string()),
+_ => UpdateConditionalForwarderError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateConditionalForwarderError::Unknown(String::from(body))
@@ -3646,7 +4129,16 @@ Unknown(String)
                 impl Error for UpdateConditionalForwarderError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateConditionalForwarderError::Service(ref cause) => cause,UpdateConditionalForwarderError::UnsupportedOperation(ref cause) => cause,UpdateConditionalForwarderError::EntityDoesNotExist(ref cause) => cause,UpdateConditionalForwarderError::InvalidParameter(ref cause) => cause,UpdateConditionalForwarderError::DirectoryUnavailable(ref cause) => cause,UpdateConditionalForwarderError::Client(ref cause) => cause,UpdateConditionalForwarderError::Validation(ref cause) => cause,UpdateConditionalForwarderError::Credentials(ref err) => err.description(),UpdateConditionalForwarderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateConditionalForwarderError::Unknown(ref cause) => cause
+                            UpdateConditionalForwarderError::Client(ref cause) => cause,
+UpdateConditionalForwarderError::DirectoryUnavailable(ref cause) => cause,
+UpdateConditionalForwarderError::EntityDoesNotExist(ref cause) => cause,
+UpdateConditionalForwarderError::InvalidParameter(ref cause) => cause,
+UpdateConditionalForwarderError::Service(ref cause) => cause,
+UpdateConditionalForwarderError::UnsupportedOperation(ref cause) => cause,
+UpdateConditionalForwarderError::Validation(ref cause) => cause,
+UpdateConditionalForwarderError::Credentials(ref err) => err.description(),
+UpdateConditionalForwarderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateConditionalForwarderError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3654,12 +4146,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateRadiusError {
                     
-///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),
-///<p>The specified entity could not be found.</p>
-EntityDoesNotExist(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
+///<p>The specified entity could not be found.</p>
+EntityDoesNotExist(String),
+///<p>One or more parameters are not valid.</p>
+InvalidParameter(String),
 ///<p>An exception has occurred in AWS Directory Service.</p>
 Service(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -3680,7 +4172,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidParameterException" => UpdateRadiusError::InvalidParameter(String::from(error_message)),"EntityDoesNotExistException" => UpdateRadiusError::EntityDoesNotExist(String::from(error_message)),"ServiceException" => UpdateRadiusError::Service(String::from(error_message)),"ClientException" => UpdateRadiusError::Client(String::from(error_message)),"ValidationException" => UpdateRadiusError::Validation(error_message.to_string()),_ => UpdateRadiusError::Unknown(String::from(body))
+                                    "ClientException" => UpdateRadiusError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => UpdateRadiusError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => UpdateRadiusError::InvalidParameter(String::from(error_message)),
+"ServiceException" => UpdateRadiusError::Service(String::from(error_message)),
+"ValidationException" => UpdateRadiusError::Validation(error_message.to_string()),
+_ => UpdateRadiusError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateRadiusError::Unknown(String::from(body))
@@ -3711,7 +4208,14 @@ Unknown(String)
                 impl Error for UpdateRadiusError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateRadiusError::Client(ref cause) => cause,UpdateRadiusError::Service(ref cause) => cause,UpdateRadiusError::InvalidParameter(ref cause) => cause,UpdateRadiusError::EntityDoesNotExist(ref cause) => cause,UpdateRadiusError::Validation(ref cause) => cause,UpdateRadiusError::Credentials(ref err) => err.description(),UpdateRadiusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateRadiusError::Unknown(ref cause) => cause
+                            UpdateRadiusError::Client(ref cause) => cause,
+UpdateRadiusError::EntityDoesNotExist(ref cause) => cause,
+UpdateRadiusError::InvalidParameter(ref cause) => cause,
+UpdateRadiusError::Service(ref cause) => cause,
+UpdateRadiusError::Validation(ref cause) => cause,
+UpdateRadiusError::Credentials(ref err) => err.description(),
+UpdateRadiusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateRadiusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3719,14 +4223,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum VerifyTrustError {
                     
-///<p>One or more parameters are not valid.</p>
-InvalidParameter(String),
 ///<p>A client exception has occurred.</p>
 Client(String),
-///<p>An exception has occurred in AWS Directory Service.</p>
-Service(String),
 ///<p>The specified entity could not be found.</p>
 EntityDoesNotExist(String),
+///<p>One or more parameters are not valid.</p>
+InvalidParameter(String),
+///<p>An exception has occurred in AWS Directory Service.</p>
+Service(String),
 ///<p>The operation is not supported.</p>
 UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -3747,7 +4251,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "EntityDoesNotExistException" => VerifyTrustError::EntityDoesNotExist(String::from(error_message)),"ServiceException" => VerifyTrustError::Service(String::from(error_message)),"InvalidParameterException" => VerifyTrustError::InvalidParameter(String::from(error_message)),"UnsupportedOperationException" => VerifyTrustError::UnsupportedOperation(String::from(error_message)),"ClientException" => VerifyTrustError::Client(String::from(error_message)),"ValidationException" => VerifyTrustError::Validation(error_message.to_string()),_ => VerifyTrustError::Unknown(String::from(body))
+                                    "ClientException" => VerifyTrustError::Client(String::from(error_message)),
+"EntityDoesNotExistException" => VerifyTrustError::EntityDoesNotExist(String::from(error_message)),
+"InvalidParameterException" => VerifyTrustError::InvalidParameter(String::from(error_message)),
+"ServiceException" => VerifyTrustError::Service(String::from(error_message)),
+"UnsupportedOperationException" => VerifyTrustError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => VerifyTrustError::Validation(error_message.to_string()),
+_ => VerifyTrustError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => VerifyTrustError::Unknown(String::from(body))
@@ -3778,7 +4288,15 @@ Unknown(String)
                 impl Error for VerifyTrustError {
                     fn description(&self) -> &str {
                         match *self {
-                            VerifyTrustError::Service(ref cause) => cause,VerifyTrustError::EntityDoesNotExist(ref cause) => cause,VerifyTrustError::UnsupportedOperation(ref cause) => cause,VerifyTrustError::Client(ref cause) => cause,VerifyTrustError::InvalidParameter(ref cause) => cause,VerifyTrustError::Validation(ref cause) => cause,VerifyTrustError::Credentials(ref err) => err.description(),VerifyTrustError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),VerifyTrustError::Unknown(ref cause) => cause
+                            VerifyTrustError::Client(ref cause) => cause,
+VerifyTrustError::EntityDoesNotExist(ref cause) => cause,
+VerifyTrustError::InvalidParameter(ref cause) => cause,
+VerifyTrustError::Service(ref cause) => cause,
+VerifyTrustError::UnsupportedOperation(ref cause) => cause,
+VerifyTrustError::Validation(ref cause) => cause,
+VerifyTrustError::Credentials(ref err) => err.description(),
+VerifyTrustError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+VerifyTrustError::Unknown(ref cause) => cause
                         }
                     }
                  }

@@ -627,22 +627,22 @@ pub trail_arn: Option<String>,
                 #[derive(Debug, PartialEq)]
                 pub enum AddTagsError {
                     
-///<p>This exception is thrown when the specified resource is not found.</p>
-ResourceNotFound(String),
-///<p>The number of tags per trail has exceeded the permitted amount. Currently, the limit is 50.</p>
-TagsLimitExceeded(String),
-///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
-InvalidTrailName(String),
-///<p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
-InvalidTagParameter(String),
-///<p>This exception is thrown when the requested operation is not supported.</p>
-UnsupportedOperation(String),
 ///<p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
 CloudTrailARNInvalid(String),
+///<p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
+InvalidTagParameter(String),
+///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+InvalidTrailName(String),
+///<p>This exception is thrown when the requested operation is not permitted.</p>
+OperationNotPermitted(String),
+///<p>This exception is thrown when the specified resource is not found.</p>
+ResourceNotFound(String),
 ///<p>This exception is thrown when the specified resource type is not supported by CloudTrail.</p>
 ResourceTypeNotSupported(String),
-///<p>This exception is thrown when the requested operation is not permitted.</p>
-OperationNotPermitted(String),/// An error occurred dispatching the HTTP request
+///<p>The number of tags per trail has exceeded the permitted amount. Currently, the limit is 50.</p>
+TagsLimitExceeded(String),
+///<p>This exception is thrown when the requested operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -661,7 +661,16 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "TagsLimitExceededException" => AddTagsError::TagsLimitExceeded(String::from(error_message)),"InvalidTrailNameException" => AddTagsError::InvalidTrailName(String::from(error_message)),"CloudTrailARNInvalidException" => AddTagsError::CloudTrailARNInvalid(String::from(error_message)),"UnsupportedOperationException" => AddTagsError::UnsupportedOperation(String::from(error_message)),"InvalidTagParameterException" => AddTagsError::InvalidTagParameter(String::from(error_message)),"OperationNotPermittedException" => AddTagsError::OperationNotPermitted(String::from(error_message)),"ResourceTypeNotSupportedException" => AddTagsError::ResourceTypeNotSupported(String::from(error_message)),"ResourceNotFoundException" => AddTagsError::ResourceNotFound(String::from(error_message)),"ValidationException" => AddTagsError::Validation(error_message.to_string()),_ => AddTagsError::Unknown(String::from(body))
+                                    "CloudTrailARNInvalidException" => AddTagsError::CloudTrailARNInvalid(String::from(error_message)),
+"InvalidTagParameterException" => AddTagsError::InvalidTagParameter(String::from(error_message)),
+"InvalidTrailNameException" => AddTagsError::InvalidTrailName(String::from(error_message)),
+"OperationNotPermittedException" => AddTagsError::OperationNotPermitted(String::from(error_message)),
+"ResourceNotFoundException" => AddTagsError::ResourceNotFound(String::from(error_message)),
+"ResourceTypeNotSupportedException" => AddTagsError::ResourceTypeNotSupported(String::from(error_message)),
+"TagsLimitExceededException" => AddTagsError::TagsLimitExceeded(String::from(error_message)),
+"UnsupportedOperationException" => AddTagsError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => AddTagsError::Validation(error_message.to_string()),
+_ => AddTagsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AddTagsError::Unknown(String::from(body))
@@ -692,7 +701,18 @@ Unknown(String)
                 impl Error for AddTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddTagsError::UnsupportedOperation(ref cause) => cause,AddTagsError::TagsLimitExceeded(ref cause) => cause,AddTagsError::CloudTrailARNInvalid(ref cause) => cause,AddTagsError::ResourceTypeNotSupported(ref cause) => cause,AddTagsError::InvalidTagParameter(ref cause) => cause,AddTagsError::OperationNotPermitted(ref cause) => cause,AddTagsError::ResourceNotFound(ref cause) => cause,AddTagsError::InvalidTrailName(ref cause) => cause,AddTagsError::Validation(ref cause) => cause,AddTagsError::Credentials(ref err) => err.description(),AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddTagsError::Unknown(ref cause) => cause
+                            AddTagsError::CloudTrailARNInvalid(ref cause) => cause,
+AddTagsError::InvalidTagParameter(ref cause) => cause,
+AddTagsError::InvalidTrailName(ref cause) => cause,
+AddTagsError::OperationNotPermitted(ref cause) => cause,
+AddTagsError::ResourceNotFound(ref cause) => cause,
+AddTagsError::ResourceTypeNotSupported(ref cause) => cause,
+AddTagsError::TagsLimitExceeded(ref cause) => cause,
+AddTagsError::UnsupportedOperation(ref cause) => cause,
+AddTagsError::Validation(ref cause) => cause,
+AddTagsError::Credentials(ref err) => err.description(),
+AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -700,48 +720,48 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateTrailError {
                     
-///<p>This exception is deprecated.</p>
-TrailNotProvided(String),
-///<p>This exception is thrown when there is an issue with the specified KMS key and the trail can’t be updated.</p>
-Kms(String),
-///<p>This exception is thrown when the provided role is not valid.</p>
-InvalidCloudWatchLogsRoleArn(String),
-///<p>This exception is thrown when the maximum number of trails is reached.</p>
-MaximumNumberOfTrailsExceeded(String),
-///<p>This exception is thrown when the provided S3 prefix is not valid.</p>
-InvalidS3Prefix(String),
-///<p>This exception is thrown when the KMS key ARN is invalid.</p>
-InvalidKmsKeyId(String),
-///<p>This exception is thrown when the specified trail already exists.</p>
-TrailAlreadyExists(String),
-///<p>This exception is thrown when the requested operation is not permitted.</p>
-OperationNotPermitted(String),
-///<p>This exception is thrown when the policy on the S3 bucket or KMS key is not sufficient.</p>
-InsufficientEncryptionPolicy(String),
-///<p>This exception is thrown when the specified S3 bucket does not exist.</p>
-S3BucketDoesNotExist(String),
-///<p>This exception is thrown when the requested operation is not supported.</p>
-UnsupportedOperation(String),
 ///<p>Cannot set a CloudWatch Logs delivery for this region.</p>
 CloudWatchLogsDeliveryUnavailable(String),
+///<p>This exception is thrown when the policy on the S3 bucket or KMS key is not sufficient.</p>
+InsufficientEncryptionPolicy(String),
+///<p>This exception is thrown when the policy on the S3 bucket is not sufficient.</p>
+InsufficientS3BucketPolicy(String),
 ///<p>This exception is thrown when the policy on the SNS topic is not sufficient.</p>
 InsufficientSnsTopicPolicy(String),
 ///<p>This exception is thrown when the provided CloudWatch log group is not valid.</p>
 InvalidCloudWatchLogsLogGroupArn(String),
-///<p>This exception is thrown when the policy on the S3 bucket is not sufficient.</p>
-InsufficientS3BucketPolicy(String),
-///<p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
-KmsKeyNotFound(String),
-///<p>This exception is deprecated.</p>
-KmsKeyDisabled(String),
+///<p>This exception is thrown when the provided role is not valid.</p>
+InvalidCloudWatchLogsRoleArn(String),
+///<p>This exception is thrown when the KMS key ARN is invalid.</p>
+InvalidKmsKeyId(String),
+///<p>This exception is thrown when the combination of parameters provided is not valid.</p>
+InvalidParameterCombination(String),
 ///<p>This exception is thrown when the provided S3 bucket name is not valid.</p>
 InvalidS3BucketName(String),
-///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
-InvalidTrailName(String),
+///<p>This exception is thrown when the provided S3 prefix is not valid.</p>
+InvalidS3Prefix(String),
 ///<p>This exception is thrown when the provided SNS topic name is not valid.</p>
 InvalidSnsTopicName(String),
-///<p>This exception is thrown when the combination of parameters provided is not valid.</p>
-InvalidParameterCombination(String),/// An error occurred dispatching the HTTP request
+///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+InvalidTrailName(String),
+///<p>This exception is thrown when there is an issue with the specified KMS key and the trail can’t be updated.</p>
+Kms(String),
+///<p>This exception is deprecated.</p>
+KmsKeyDisabled(String),
+///<p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
+KmsKeyNotFound(String),
+///<p>This exception is thrown when the maximum number of trails is reached.</p>
+MaximumNumberOfTrailsExceeded(String),
+///<p>This exception is thrown when the requested operation is not permitted.</p>
+OperationNotPermitted(String),
+///<p>This exception is thrown when the specified S3 bucket does not exist.</p>
+S3BucketDoesNotExist(String),
+///<p>This exception is thrown when the specified trail already exists.</p>
+TrailAlreadyExists(String),
+///<p>This exception is deprecated.</p>
+TrailNotProvided(String),
+///<p>This exception is thrown when the requested operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -760,7 +780,29 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidS3PrefixException" => CreateTrailError::InvalidS3Prefix(String::from(error_message)),"InvalidCloudWatchLogsRoleArnException" => CreateTrailError::InvalidCloudWatchLogsRoleArn(String::from(error_message)),"KmsKeyNotFoundException" => CreateTrailError::KmsKeyNotFound(String::from(error_message)),"CloudWatchLogsDeliveryUnavailableException" => CreateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(error_message)),"InvalidKmsKeyIdException" => CreateTrailError::InvalidKmsKeyId(String::from(error_message)),"KmsKeyDisabledException" => CreateTrailError::KmsKeyDisabled(String::from(error_message)),"InvalidParameterCombinationException" => CreateTrailError::InvalidParameterCombination(String::from(error_message)),"InvalidSnsTopicNameException" => CreateTrailError::InvalidSnsTopicName(String::from(error_message)),"UnsupportedOperationException" => CreateTrailError::UnsupportedOperation(String::from(error_message)),"InsufficientSnsTopicPolicyException" => CreateTrailError::InsufficientSnsTopicPolicy(String::from(error_message)),"InvalidCloudWatchLogsLogGroupArnException" => CreateTrailError::InvalidCloudWatchLogsLogGroupArn(String::from(error_message)),"InsufficientS3BucketPolicyException" => CreateTrailError::InsufficientS3BucketPolicy(String::from(error_message)),"InvalidS3BucketNameException" => CreateTrailError::InvalidS3BucketName(String::from(error_message)),"TrailNotProvidedException" => CreateTrailError::TrailNotProvided(String::from(error_message)),"OperationNotPermittedException" => CreateTrailError::OperationNotPermitted(String::from(error_message)),"InsufficientEncryptionPolicyException" => CreateTrailError::InsufficientEncryptionPolicy(String::from(error_message)),"MaximumNumberOfTrailsExceededException" => CreateTrailError::MaximumNumberOfTrailsExceeded(String::from(error_message)),"S3BucketDoesNotExistException" => CreateTrailError::S3BucketDoesNotExist(String::from(error_message)),"TrailAlreadyExistsException" => CreateTrailError::TrailAlreadyExists(String::from(error_message)),"InvalidTrailNameException" => CreateTrailError::InvalidTrailName(String::from(error_message)),"KmsException" => CreateTrailError::Kms(String::from(error_message)),"ValidationException" => CreateTrailError::Validation(error_message.to_string()),_ => CreateTrailError::Unknown(String::from(body))
+                                    "CloudWatchLogsDeliveryUnavailableException" => CreateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(error_message)),
+"InsufficientEncryptionPolicyException" => CreateTrailError::InsufficientEncryptionPolicy(String::from(error_message)),
+"InsufficientS3BucketPolicyException" => CreateTrailError::InsufficientS3BucketPolicy(String::from(error_message)),
+"InsufficientSnsTopicPolicyException" => CreateTrailError::InsufficientSnsTopicPolicy(String::from(error_message)),
+"InvalidCloudWatchLogsLogGroupArnException" => CreateTrailError::InvalidCloudWatchLogsLogGroupArn(String::from(error_message)),
+"InvalidCloudWatchLogsRoleArnException" => CreateTrailError::InvalidCloudWatchLogsRoleArn(String::from(error_message)),
+"InvalidKmsKeyIdException" => CreateTrailError::InvalidKmsKeyId(String::from(error_message)),
+"InvalidParameterCombinationException" => CreateTrailError::InvalidParameterCombination(String::from(error_message)),
+"InvalidS3BucketNameException" => CreateTrailError::InvalidS3BucketName(String::from(error_message)),
+"InvalidS3PrefixException" => CreateTrailError::InvalidS3Prefix(String::from(error_message)),
+"InvalidSnsTopicNameException" => CreateTrailError::InvalidSnsTopicName(String::from(error_message)),
+"InvalidTrailNameException" => CreateTrailError::InvalidTrailName(String::from(error_message)),
+"KmsException" => CreateTrailError::Kms(String::from(error_message)),
+"KmsKeyDisabledException" => CreateTrailError::KmsKeyDisabled(String::from(error_message)),
+"KmsKeyNotFoundException" => CreateTrailError::KmsKeyNotFound(String::from(error_message)),
+"MaximumNumberOfTrailsExceededException" => CreateTrailError::MaximumNumberOfTrailsExceeded(String::from(error_message)),
+"OperationNotPermittedException" => CreateTrailError::OperationNotPermitted(String::from(error_message)),
+"S3BucketDoesNotExistException" => CreateTrailError::S3BucketDoesNotExist(String::from(error_message)),
+"TrailAlreadyExistsException" => CreateTrailError::TrailAlreadyExists(String::from(error_message)),
+"TrailNotProvidedException" => CreateTrailError::TrailNotProvided(String::from(error_message)),
+"UnsupportedOperationException" => CreateTrailError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => CreateTrailError::Validation(error_message.to_string()),
+_ => CreateTrailError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateTrailError::Unknown(String::from(body))
@@ -791,7 +833,31 @@ Unknown(String)
                 impl Error for CreateTrailError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateTrailError::InsufficientSnsTopicPolicy(ref cause) => cause,CreateTrailError::S3BucketDoesNotExist(ref cause) => cause,CreateTrailError::KmsKeyDisabled(ref cause) => cause,CreateTrailError::InvalidCloudWatchLogsLogGroupArn(ref cause) => cause,CreateTrailError::CloudWatchLogsDeliveryUnavailable(ref cause) => cause,CreateTrailError::InvalidCloudWatchLogsRoleArn(ref cause) => cause,CreateTrailError::UnsupportedOperation(ref cause) => cause,CreateTrailError::OperationNotPermitted(ref cause) => cause,CreateTrailError::KmsKeyNotFound(ref cause) => cause,CreateTrailError::Kms(ref cause) => cause,CreateTrailError::InvalidTrailName(ref cause) => cause,CreateTrailError::InsufficientEncryptionPolicy(ref cause) => cause,CreateTrailError::InvalidS3BucketName(ref cause) => cause,CreateTrailError::InvalidKmsKeyId(ref cause) => cause,CreateTrailError::InvalidParameterCombination(ref cause) => cause,CreateTrailError::MaximumNumberOfTrailsExceeded(ref cause) => cause,CreateTrailError::TrailNotProvided(ref cause) => cause,CreateTrailError::InsufficientS3BucketPolicy(ref cause) => cause,CreateTrailError::TrailAlreadyExists(ref cause) => cause,CreateTrailError::InvalidS3Prefix(ref cause) => cause,CreateTrailError::InvalidSnsTopicName(ref cause) => cause,CreateTrailError::Validation(ref cause) => cause,CreateTrailError::Credentials(ref err) => err.description(),CreateTrailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateTrailError::Unknown(ref cause) => cause
+                            CreateTrailError::CloudWatchLogsDeliveryUnavailable(ref cause) => cause,
+CreateTrailError::InsufficientEncryptionPolicy(ref cause) => cause,
+CreateTrailError::InsufficientS3BucketPolicy(ref cause) => cause,
+CreateTrailError::InsufficientSnsTopicPolicy(ref cause) => cause,
+CreateTrailError::InvalidCloudWatchLogsLogGroupArn(ref cause) => cause,
+CreateTrailError::InvalidCloudWatchLogsRoleArn(ref cause) => cause,
+CreateTrailError::InvalidKmsKeyId(ref cause) => cause,
+CreateTrailError::InvalidParameterCombination(ref cause) => cause,
+CreateTrailError::InvalidS3BucketName(ref cause) => cause,
+CreateTrailError::InvalidS3Prefix(ref cause) => cause,
+CreateTrailError::InvalidSnsTopicName(ref cause) => cause,
+CreateTrailError::InvalidTrailName(ref cause) => cause,
+CreateTrailError::Kms(ref cause) => cause,
+CreateTrailError::KmsKeyDisabled(ref cause) => cause,
+CreateTrailError::KmsKeyNotFound(ref cause) => cause,
+CreateTrailError::MaximumNumberOfTrailsExceeded(ref cause) => cause,
+CreateTrailError::OperationNotPermitted(ref cause) => cause,
+CreateTrailError::S3BucketDoesNotExist(ref cause) => cause,
+CreateTrailError::TrailAlreadyExists(ref cause) => cause,
+CreateTrailError::TrailNotProvided(ref cause) => cause,
+CreateTrailError::UnsupportedOperation(ref cause) => cause,
+CreateTrailError::Validation(ref cause) => cause,
+CreateTrailError::Credentials(ref err) => err.description(),
+CreateTrailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateTrailError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -823,7 +889,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "TrailNotFoundException" => DeleteTrailError::TrailNotFound(String::from(error_message)),"InvalidHomeRegionException" => DeleteTrailError::InvalidHomeRegion(String::from(error_message)),"InvalidTrailNameException" => DeleteTrailError::InvalidTrailName(String::from(error_message)),"ValidationException" => DeleteTrailError::Validation(error_message.to_string()),_ => DeleteTrailError::Unknown(String::from(body))
+                                    "InvalidHomeRegionException" => DeleteTrailError::InvalidHomeRegion(String::from(error_message)),
+"InvalidTrailNameException" => DeleteTrailError::InvalidTrailName(String::from(error_message)),
+"TrailNotFoundException" => DeleteTrailError::TrailNotFound(String::from(error_message)),
+"ValidationException" => DeleteTrailError::Validation(error_message.to_string()),
+_ => DeleteTrailError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteTrailError::Unknown(String::from(body))
@@ -854,7 +924,13 @@ Unknown(String)
                 impl Error for DeleteTrailError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteTrailError::TrailNotFound(ref cause) => cause,DeleteTrailError::InvalidHomeRegion(ref cause) => cause,DeleteTrailError::InvalidTrailName(ref cause) => cause,DeleteTrailError::Validation(ref cause) => cause,DeleteTrailError::Credentials(ref err) => err.description(),DeleteTrailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteTrailError::Unknown(ref cause) => cause
+                            DeleteTrailError::InvalidHomeRegion(ref cause) => cause,
+DeleteTrailError::InvalidTrailName(ref cause) => cause,
+DeleteTrailError::TrailNotFound(ref cause) => cause,
+DeleteTrailError::Validation(ref cause) => cause,
+DeleteTrailError::Credentials(ref err) => err.description(),
+DeleteTrailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteTrailError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -862,10 +938,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeTrailsError {
                     
-///<p>This exception is thrown when the requested operation is not supported.</p>
-UnsupportedOperation(String),
 ///<p>This exception is thrown when the requested operation is not permitted.</p>
-OperationNotPermitted(String),/// An error occurred dispatching the HTTP request
+OperationNotPermitted(String),
+///<p>This exception is thrown when the requested operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -884,7 +960,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "UnsupportedOperationException" => DescribeTrailsError::UnsupportedOperation(String::from(error_message)),"OperationNotPermittedException" => DescribeTrailsError::OperationNotPermitted(String::from(error_message)),"ValidationException" => DescribeTrailsError::Validation(error_message.to_string()),_ => DescribeTrailsError::Unknown(String::from(body))
+                                    "OperationNotPermittedException" => DescribeTrailsError::OperationNotPermitted(String::from(error_message)),
+"UnsupportedOperationException" => DescribeTrailsError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => DescribeTrailsError::Validation(error_message.to_string()),
+_ => DescribeTrailsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeTrailsError::Unknown(String::from(body))
@@ -915,7 +994,12 @@ Unknown(String)
                 impl Error for DescribeTrailsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeTrailsError::UnsupportedOperation(ref cause) => cause,DescribeTrailsError::OperationNotPermitted(ref cause) => cause,DescribeTrailsError::Validation(ref cause) => cause,DescribeTrailsError::Credentials(ref err) => err.description(),DescribeTrailsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeTrailsError::Unknown(ref cause) => cause
+                            DescribeTrailsError::OperationNotPermitted(ref cause) => cause,
+DescribeTrailsError::UnsupportedOperation(ref cause) => cause,
+DescribeTrailsError::Validation(ref cause) => cause,
+DescribeTrailsError::Credentials(ref err) => err.description(),
+DescribeTrailsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeTrailsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -923,14 +1007,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetEventSelectorsError {
                     
+///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+InvalidTrailName(String),
 ///<p>This exception is thrown when the requested operation is not permitted.</p>
 OperationNotPermitted(String),
-///<p>This exception is thrown when the requested operation is not supported.</p>
-UnsupportedOperation(String),
 ///<p>This exception is thrown when the trail with the given name is not found.</p>
 TrailNotFound(String),
-///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
-InvalidTrailName(String),/// An error occurred dispatching the HTTP request
+///<p>This exception is thrown when the requested operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -949,7 +1033,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidTrailNameException" => GetEventSelectorsError::InvalidTrailName(String::from(error_message)),"OperationNotPermittedException" => GetEventSelectorsError::OperationNotPermitted(String::from(error_message)),"TrailNotFoundException" => GetEventSelectorsError::TrailNotFound(String::from(error_message)),"UnsupportedOperationException" => GetEventSelectorsError::UnsupportedOperation(String::from(error_message)),"ValidationException" => GetEventSelectorsError::Validation(error_message.to_string()),_ => GetEventSelectorsError::Unknown(String::from(body))
+                                    "InvalidTrailNameException" => GetEventSelectorsError::InvalidTrailName(String::from(error_message)),
+"OperationNotPermittedException" => GetEventSelectorsError::OperationNotPermitted(String::from(error_message)),
+"TrailNotFoundException" => GetEventSelectorsError::TrailNotFound(String::from(error_message)),
+"UnsupportedOperationException" => GetEventSelectorsError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => GetEventSelectorsError::Validation(error_message.to_string()),
+_ => GetEventSelectorsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetEventSelectorsError::Unknown(String::from(body))
@@ -980,7 +1069,14 @@ Unknown(String)
                 impl Error for GetEventSelectorsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetEventSelectorsError::UnsupportedOperation(ref cause) => cause,GetEventSelectorsError::TrailNotFound(ref cause) => cause,GetEventSelectorsError::InvalidTrailName(ref cause) => cause,GetEventSelectorsError::OperationNotPermitted(ref cause) => cause,GetEventSelectorsError::Validation(ref cause) => cause,GetEventSelectorsError::Credentials(ref err) => err.description(),GetEventSelectorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetEventSelectorsError::Unknown(ref cause) => cause
+                            GetEventSelectorsError::InvalidTrailName(ref cause) => cause,
+GetEventSelectorsError::OperationNotPermitted(ref cause) => cause,
+GetEventSelectorsError::TrailNotFound(ref cause) => cause,
+GetEventSelectorsError::UnsupportedOperation(ref cause) => cause,
+GetEventSelectorsError::Validation(ref cause) => cause,
+GetEventSelectorsError::Credentials(ref err) => err.description(),
+GetEventSelectorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetEventSelectorsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1010,7 +1106,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidTrailNameException" => GetTrailStatusError::InvalidTrailName(String::from(error_message)),"TrailNotFoundException" => GetTrailStatusError::TrailNotFound(String::from(error_message)),"ValidationException" => GetTrailStatusError::Validation(error_message.to_string()),_ => GetTrailStatusError::Unknown(String::from(body))
+                                    "InvalidTrailNameException" => GetTrailStatusError::InvalidTrailName(String::from(error_message)),
+"TrailNotFoundException" => GetTrailStatusError::TrailNotFound(String::from(error_message)),
+"ValidationException" => GetTrailStatusError::Validation(error_message.to_string()),
+_ => GetTrailStatusError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetTrailStatusError::Unknown(String::from(body))
@@ -1041,7 +1140,12 @@ Unknown(String)
                 impl Error for GetTrailStatusError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetTrailStatusError::InvalidTrailName(ref cause) => cause,GetTrailStatusError::TrailNotFound(ref cause) => cause,GetTrailStatusError::Validation(ref cause) => cause,GetTrailStatusError::Credentials(ref err) => err.description(),GetTrailStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetTrailStatusError::Unknown(ref cause) => cause
+                            GetTrailStatusError::InvalidTrailName(ref cause) => cause,
+GetTrailStatusError::TrailNotFound(ref cause) => cause,
+GetTrailStatusError::Validation(ref cause) => cause,
+GetTrailStatusError::Credentials(ref err) => err.description(),
+GetTrailStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetTrailStatusError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1049,14 +1153,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListPublicKeysError {
                     
+///<p>Occurs if the timestamp values are invalid. Either the start time occurs after the end time or the time range is outside the range of possible values.</p>
+InvalidTimeRange(String),
 ///<p>Reserved for future use.</p>
 InvalidToken(String),
-///<p>This exception is thrown when the requested operation is not supported.</p>
-UnsupportedOperation(String),
 ///<p>This exception is thrown when the requested operation is not permitted.</p>
 OperationNotPermitted(String),
-///<p>Occurs if the timestamp values are invalid. Either the start time occurs after the end time or the time range is outside the range of possible values.</p>
-InvalidTimeRange(String),/// An error occurred dispatching the HTTP request
+///<p>This exception is thrown when the requested operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1075,7 +1179,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "UnsupportedOperationException" => ListPublicKeysError::UnsupportedOperation(String::from(error_message)),"OperationNotPermittedException" => ListPublicKeysError::OperationNotPermitted(String::from(error_message)),"InvalidTimeRangeException" => ListPublicKeysError::InvalidTimeRange(String::from(error_message)),"InvalidTokenException" => ListPublicKeysError::InvalidToken(String::from(error_message)),"ValidationException" => ListPublicKeysError::Validation(error_message.to_string()),_ => ListPublicKeysError::Unknown(String::from(body))
+                                    "InvalidTimeRangeException" => ListPublicKeysError::InvalidTimeRange(String::from(error_message)),
+"InvalidTokenException" => ListPublicKeysError::InvalidToken(String::from(error_message)),
+"OperationNotPermittedException" => ListPublicKeysError::OperationNotPermitted(String::from(error_message)),
+"UnsupportedOperationException" => ListPublicKeysError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => ListPublicKeysError::Validation(error_message.to_string()),
+_ => ListPublicKeysError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListPublicKeysError::Unknown(String::from(body))
@@ -1106,7 +1215,14 @@ Unknown(String)
                 impl Error for ListPublicKeysError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListPublicKeysError::OperationNotPermitted(ref cause) => cause,ListPublicKeysError::UnsupportedOperation(ref cause) => cause,ListPublicKeysError::InvalidTimeRange(ref cause) => cause,ListPublicKeysError::InvalidToken(ref cause) => cause,ListPublicKeysError::Validation(ref cause) => cause,ListPublicKeysError::Credentials(ref err) => err.description(),ListPublicKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListPublicKeysError::Unknown(ref cause) => cause
+                            ListPublicKeysError::InvalidTimeRange(ref cause) => cause,
+ListPublicKeysError::InvalidToken(ref cause) => cause,
+ListPublicKeysError::OperationNotPermitted(ref cause) => cause,
+ListPublicKeysError::UnsupportedOperation(ref cause) => cause,
+ListPublicKeysError::Validation(ref cause) => cause,
+ListPublicKeysError::Credentials(ref err) => err.description(),
+ListPublicKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListPublicKeysError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1114,20 +1230,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTagsError {
                     
-///<p>This exception is thrown when the specified resource is not found.</p>
-ResourceNotFound(String),
+///<p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+CloudTrailARNInvalid(String),
 ///<p>Reserved for future use.</p>
 InvalidToken(String),
 ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
 InvalidTrailName(String),
 ///<p>This exception is thrown when the requested operation is not permitted.</p>
 OperationNotPermitted(String),
-///<p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
-CloudTrailARNInvalid(String),
-///<p>This exception is thrown when the requested operation is not supported.</p>
-UnsupportedOperation(String),
+///<p>This exception is thrown when the specified resource is not found.</p>
+ResourceNotFound(String),
 ///<p>This exception is thrown when the specified resource type is not supported by CloudTrail.</p>
-ResourceTypeNotSupported(String),/// An error occurred dispatching the HTTP request
+ResourceTypeNotSupported(String),
+///<p>This exception is thrown when the requested operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1146,7 +1262,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidTokenException" => ListTagsError::InvalidToken(String::from(error_message)),"ResourceTypeNotSupportedException" => ListTagsError::ResourceTypeNotSupported(String::from(error_message)),"UnsupportedOperationException" => ListTagsError::UnsupportedOperation(String::from(error_message)),"InvalidTrailNameException" => ListTagsError::InvalidTrailName(String::from(error_message)),"CloudTrailARNInvalidException" => ListTagsError::CloudTrailARNInvalid(String::from(error_message)),"ResourceNotFoundException" => ListTagsError::ResourceNotFound(String::from(error_message)),"OperationNotPermittedException" => ListTagsError::OperationNotPermitted(String::from(error_message)),"ValidationException" => ListTagsError::Validation(error_message.to_string()),_ => ListTagsError::Unknown(String::from(body))
+                                    "CloudTrailARNInvalidException" => ListTagsError::CloudTrailARNInvalid(String::from(error_message)),
+"InvalidTokenException" => ListTagsError::InvalidToken(String::from(error_message)),
+"InvalidTrailNameException" => ListTagsError::InvalidTrailName(String::from(error_message)),
+"OperationNotPermittedException" => ListTagsError::OperationNotPermitted(String::from(error_message)),
+"ResourceNotFoundException" => ListTagsError::ResourceNotFound(String::from(error_message)),
+"ResourceTypeNotSupportedException" => ListTagsError::ResourceTypeNotSupported(String::from(error_message)),
+"UnsupportedOperationException" => ListTagsError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => ListTagsError::Validation(error_message.to_string()),
+_ => ListTagsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListTagsError::Unknown(String::from(body))
@@ -1177,7 +1301,17 @@ Unknown(String)
                 impl Error for ListTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTagsError::CloudTrailARNInvalid(ref cause) => cause,ListTagsError::InvalidToken(ref cause) => cause,ListTagsError::ResourceNotFound(ref cause) => cause,ListTagsError::UnsupportedOperation(ref cause) => cause,ListTagsError::OperationNotPermitted(ref cause) => cause,ListTagsError::InvalidTrailName(ref cause) => cause,ListTagsError::ResourceTypeNotSupported(ref cause) => cause,ListTagsError::Validation(ref cause) => cause,ListTagsError::Credentials(ref err) => err.description(),ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTagsError::Unknown(ref cause) => cause
+                            ListTagsError::CloudTrailARNInvalid(ref cause) => cause,
+ListTagsError::InvalidToken(ref cause) => cause,
+ListTagsError::InvalidTrailName(ref cause) => cause,
+ListTagsError::OperationNotPermitted(ref cause) => cause,
+ListTagsError::ResourceNotFound(ref cause) => cause,
+ListTagsError::ResourceTypeNotSupported(ref cause) => cause,
+ListTagsError::UnsupportedOperation(ref cause) => cause,
+ListTagsError::Validation(ref cause) => cause,
+ListTagsError::Credentials(ref err) => err.description(),
+ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1185,14 +1319,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum LookupEventsError {
                     
-///<p>Occurs if the timestamp values are invalid. Either the start time occurs after the end time or the time range is outside the range of possible values.</p>
-InvalidTimeRange(String),
-///<p>This exception is thrown if the limit specified is invalid.</p>
-InvalidMaxResults(String),
 ///<p>Occurs when an invalid lookup attribute is specified.</p>
 InvalidLookupAttributes(String),
+///<p>This exception is thrown if the limit specified is invalid.</p>
+InvalidMaxResults(String),
 ///<p>Invalid token or token that was previously used in a request with different parameters. This exception is thrown if the token is invalid.</p>
-InvalidNextToken(String),/// An error occurred dispatching the HTTP request
+InvalidNextToken(String),
+///<p>Occurs if the timestamp values are invalid. Either the start time occurs after the end time or the time range is outside the range of possible values.</p>
+InvalidTimeRange(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1211,7 +1345,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidMaxResultsException" => LookupEventsError::InvalidMaxResults(String::from(error_message)),"InvalidTimeRangeException" => LookupEventsError::InvalidTimeRange(String::from(error_message)),"InvalidLookupAttributesException" => LookupEventsError::InvalidLookupAttributes(String::from(error_message)),"InvalidNextTokenException" => LookupEventsError::InvalidNextToken(String::from(error_message)),"ValidationException" => LookupEventsError::Validation(error_message.to_string()),_ => LookupEventsError::Unknown(String::from(body))
+                                    "InvalidLookupAttributesException" => LookupEventsError::InvalidLookupAttributes(String::from(error_message)),
+"InvalidMaxResultsException" => LookupEventsError::InvalidMaxResults(String::from(error_message)),
+"InvalidNextTokenException" => LookupEventsError::InvalidNextToken(String::from(error_message)),
+"InvalidTimeRangeException" => LookupEventsError::InvalidTimeRange(String::from(error_message)),
+"ValidationException" => LookupEventsError::Validation(error_message.to_string()),
+_ => LookupEventsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => LookupEventsError::Unknown(String::from(body))
@@ -1242,7 +1381,14 @@ Unknown(String)
                 impl Error for LookupEventsError {
                     fn description(&self) -> &str {
                         match *self {
-                            LookupEventsError::InvalidNextToken(ref cause) => cause,LookupEventsError::InvalidMaxResults(ref cause) => cause,LookupEventsError::InvalidTimeRange(ref cause) => cause,LookupEventsError::InvalidLookupAttributes(ref cause) => cause,LookupEventsError::Validation(ref cause) => cause,LookupEventsError::Credentials(ref err) => err.description(),LookupEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),LookupEventsError::Unknown(ref cause) => cause
+                            LookupEventsError::InvalidLookupAttributes(ref cause) => cause,
+LookupEventsError::InvalidMaxResults(ref cause) => cause,
+LookupEventsError::InvalidNextToken(ref cause) => cause,
+LookupEventsError::InvalidTimeRange(ref cause) => cause,
+LookupEventsError::Validation(ref cause) => cause,
+LookupEventsError::Credentials(ref err) => err.description(),
+LookupEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+LookupEventsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1250,18 +1396,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutEventSelectorsError {
                     
-///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
-InvalidTrailName(String),
+///<p>This exception is thrown when the <code>PutEventSelectors</code> operation is called with an invalid number of event selectors, data resources, or an invalid value for a parameter:</p> <ul> <li> <p>Specify a valid number of event selectors (1 to 5) for a trail.</p> </li> <li> <p>Specify a valid number of data resources (1 to 50) for an event selector.</p> </li> <li> <p>Specify a valid value for a parameter. For example, specifying the <code>ReadWriteType</code> parameter with a value of <code>read-only</code> is invalid.</p> </li> </ul>
+InvalidEventSelectors(String),
 ///<p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
 InvalidHomeRegion(String),
-///<p>This exception is thrown when the trail with the given name is not found.</p>
-TrailNotFound(String),
+///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+InvalidTrailName(String),
 ///<p>This exception is thrown when the requested operation is not permitted.</p>
 OperationNotPermitted(String),
+///<p>This exception is thrown when the trail with the given name is not found.</p>
+TrailNotFound(String),
 ///<p>This exception is thrown when the requested operation is not supported.</p>
-UnsupportedOperation(String),
-///<p>This exception is thrown when the <code>PutEventSelectors</code> operation is called with an invalid number of event selectors, data resources, or an invalid value for a parameter:</p> <ul> <li> <p>Specify a valid number of event selectors (1 to 5) for a trail.</p> </li> <li> <p>Specify a valid number of data resources (1 to 50) for an event selector.</p> </li> <li> <p>Specify a valid value for a parameter. For example, specifying the <code>ReadWriteType</code> parameter with a value of <code>read-only</code> is invalid.</p> </li> </ul>
-InvalidEventSelectors(String),/// An error occurred dispatching the HTTP request
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1280,7 +1426,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "TrailNotFoundException" => PutEventSelectorsError::TrailNotFound(String::from(error_message)),"InvalidTrailNameException" => PutEventSelectorsError::InvalidTrailName(String::from(error_message)),"InvalidEventSelectorsException" => PutEventSelectorsError::InvalidEventSelectors(String::from(error_message)),"OperationNotPermittedException" => PutEventSelectorsError::OperationNotPermitted(String::from(error_message)),"InvalidHomeRegionException" => PutEventSelectorsError::InvalidHomeRegion(String::from(error_message)),"UnsupportedOperationException" => PutEventSelectorsError::UnsupportedOperation(String::from(error_message)),"ValidationException" => PutEventSelectorsError::Validation(error_message.to_string()),_ => PutEventSelectorsError::Unknown(String::from(body))
+                                    "InvalidEventSelectorsException" => PutEventSelectorsError::InvalidEventSelectors(String::from(error_message)),
+"InvalidHomeRegionException" => PutEventSelectorsError::InvalidHomeRegion(String::from(error_message)),
+"InvalidTrailNameException" => PutEventSelectorsError::InvalidTrailName(String::from(error_message)),
+"OperationNotPermittedException" => PutEventSelectorsError::OperationNotPermitted(String::from(error_message)),
+"TrailNotFoundException" => PutEventSelectorsError::TrailNotFound(String::from(error_message)),
+"UnsupportedOperationException" => PutEventSelectorsError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => PutEventSelectorsError::Validation(error_message.to_string()),
+_ => PutEventSelectorsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutEventSelectorsError::Unknown(String::from(body))
@@ -1311,7 +1464,16 @@ Unknown(String)
                 impl Error for PutEventSelectorsError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutEventSelectorsError::OperationNotPermitted(ref cause) => cause,PutEventSelectorsError::UnsupportedOperation(ref cause) => cause,PutEventSelectorsError::TrailNotFound(ref cause) => cause,PutEventSelectorsError::InvalidHomeRegion(ref cause) => cause,PutEventSelectorsError::InvalidEventSelectors(ref cause) => cause,PutEventSelectorsError::InvalidTrailName(ref cause) => cause,PutEventSelectorsError::Validation(ref cause) => cause,PutEventSelectorsError::Credentials(ref err) => err.description(),PutEventSelectorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutEventSelectorsError::Unknown(ref cause) => cause
+                            PutEventSelectorsError::InvalidEventSelectors(ref cause) => cause,
+PutEventSelectorsError::InvalidHomeRegion(ref cause) => cause,
+PutEventSelectorsError::InvalidTrailName(ref cause) => cause,
+PutEventSelectorsError::OperationNotPermitted(ref cause) => cause,
+PutEventSelectorsError::TrailNotFound(ref cause) => cause,
+PutEventSelectorsError::UnsupportedOperation(ref cause) => cause,
+PutEventSelectorsError::Validation(ref cause) => cause,
+PutEventSelectorsError::Credentials(ref err) => err.description(),
+PutEventSelectorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutEventSelectorsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1319,20 +1481,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RemoveTagsError {
                     
+///<p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+CloudTrailARNInvalid(String),
 ///<p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
 InvalidTagParameter(String),
 ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
 InvalidTrailName(String),
 ///<p>This exception is thrown when the requested operation is not permitted.</p>
 OperationNotPermitted(String),
-///<p>This exception is thrown when the requested operation is not supported.</p>
-UnsupportedOperation(String),
-///<p>This exception is thrown when the specified resource type is not supported by CloudTrail.</p>
-ResourceTypeNotSupported(String),
 ///<p>This exception is thrown when the specified resource is not found.</p>
 ResourceNotFound(String),
-///<p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
-CloudTrailARNInvalid(String),/// An error occurred dispatching the HTTP request
+///<p>This exception is thrown when the specified resource type is not supported by CloudTrail.</p>
+ResourceTypeNotSupported(String),
+///<p>This exception is thrown when the requested operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1351,7 +1513,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "CloudTrailARNInvalidException" => RemoveTagsError::CloudTrailARNInvalid(String::from(error_message)),"ResourceTypeNotSupportedException" => RemoveTagsError::ResourceTypeNotSupported(String::from(error_message)),"InvalidTagParameterException" => RemoveTagsError::InvalidTagParameter(String::from(error_message)),"UnsupportedOperationException" => RemoveTagsError::UnsupportedOperation(String::from(error_message)),"InvalidTrailNameException" => RemoveTagsError::InvalidTrailName(String::from(error_message)),"ResourceNotFoundException" => RemoveTagsError::ResourceNotFound(String::from(error_message)),"OperationNotPermittedException" => RemoveTagsError::OperationNotPermitted(String::from(error_message)),"ValidationException" => RemoveTagsError::Validation(error_message.to_string()),_ => RemoveTagsError::Unknown(String::from(body))
+                                    "CloudTrailARNInvalidException" => RemoveTagsError::CloudTrailARNInvalid(String::from(error_message)),
+"InvalidTagParameterException" => RemoveTagsError::InvalidTagParameter(String::from(error_message)),
+"InvalidTrailNameException" => RemoveTagsError::InvalidTrailName(String::from(error_message)),
+"OperationNotPermittedException" => RemoveTagsError::OperationNotPermitted(String::from(error_message)),
+"ResourceNotFoundException" => RemoveTagsError::ResourceNotFound(String::from(error_message)),
+"ResourceTypeNotSupportedException" => RemoveTagsError::ResourceTypeNotSupported(String::from(error_message)),
+"UnsupportedOperationException" => RemoveTagsError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => RemoveTagsError::Validation(error_message.to_string()),
+_ => RemoveTagsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RemoveTagsError::Unknown(String::from(body))
@@ -1382,7 +1552,17 @@ Unknown(String)
                 impl Error for RemoveTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveTagsError::ResourceNotFound(ref cause) => cause,RemoveTagsError::CloudTrailARNInvalid(ref cause) => cause,RemoveTagsError::UnsupportedOperation(ref cause) => cause,RemoveTagsError::OperationNotPermitted(ref cause) => cause,RemoveTagsError::InvalidTrailName(ref cause) => cause,RemoveTagsError::InvalidTagParameter(ref cause) => cause,RemoveTagsError::ResourceTypeNotSupported(ref cause) => cause,RemoveTagsError::Validation(ref cause) => cause,RemoveTagsError::Credentials(ref err) => err.description(),RemoveTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveTagsError::Unknown(ref cause) => cause
+                            RemoveTagsError::CloudTrailARNInvalid(ref cause) => cause,
+RemoveTagsError::InvalidTagParameter(ref cause) => cause,
+RemoveTagsError::InvalidTrailName(ref cause) => cause,
+RemoveTagsError::OperationNotPermitted(ref cause) => cause,
+RemoveTagsError::ResourceNotFound(ref cause) => cause,
+RemoveTagsError::ResourceTypeNotSupported(ref cause) => cause,
+RemoveTagsError::UnsupportedOperation(ref cause) => cause,
+RemoveTagsError::Validation(ref cause) => cause,
+RemoveTagsError::Credentials(ref err) => err.description(),
+RemoveTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1414,7 +1594,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidTrailNameException" => StartLoggingError::InvalidTrailName(String::from(error_message)),"InvalidHomeRegionException" => StartLoggingError::InvalidHomeRegion(String::from(error_message)),"TrailNotFoundException" => StartLoggingError::TrailNotFound(String::from(error_message)),"ValidationException" => StartLoggingError::Validation(error_message.to_string()),_ => StartLoggingError::Unknown(String::from(body))
+                                    "InvalidHomeRegionException" => StartLoggingError::InvalidHomeRegion(String::from(error_message)),
+"InvalidTrailNameException" => StartLoggingError::InvalidTrailName(String::from(error_message)),
+"TrailNotFoundException" => StartLoggingError::TrailNotFound(String::from(error_message)),
+"ValidationException" => StartLoggingError::Validation(error_message.to_string()),
+_ => StartLoggingError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StartLoggingError::Unknown(String::from(body))
@@ -1445,7 +1629,13 @@ Unknown(String)
                 impl Error for StartLoggingError {
                     fn description(&self) -> &str {
                         match *self {
-                            StartLoggingError::InvalidTrailName(ref cause) => cause,StartLoggingError::InvalidHomeRegion(ref cause) => cause,StartLoggingError::TrailNotFound(ref cause) => cause,StartLoggingError::Validation(ref cause) => cause,StartLoggingError::Credentials(ref err) => err.description(),StartLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StartLoggingError::Unknown(ref cause) => cause
+                            StartLoggingError::InvalidHomeRegion(ref cause) => cause,
+StartLoggingError::InvalidTrailName(ref cause) => cause,
+StartLoggingError::TrailNotFound(ref cause) => cause,
+StartLoggingError::Validation(ref cause) => cause,
+StartLoggingError::Credentials(ref err) => err.description(),
+StartLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StartLoggingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1455,10 +1645,10 @@ Unknown(String)
                     
 ///<p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
 InvalidHomeRegion(String),
-///<p>This exception is thrown when the trail with the given name is not found.</p>
-TrailNotFound(String),
 ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
-InvalidTrailName(String),/// An error occurred dispatching the HTTP request
+InvalidTrailName(String),
+///<p>This exception is thrown when the trail with the given name is not found.</p>
+TrailNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1477,7 +1667,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidTrailNameException" => StopLoggingError::InvalidTrailName(String::from(error_message)),"InvalidHomeRegionException" => StopLoggingError::InvalidHomeRegion(String::from(error_message)),"TrailNotFoundException" => StopLoggingError::TrailNotFound(String::from(error_message)),"ValidationException" => StopLoggingError::Validation(error_message.to_string()),_ => StopLoggingError::Unknown(String::from(body))
+                                    "InvalidHomeRegionException" => StopLoggingError::InvalidHomeRegion(String::from(error_message)),
+"InvalidTrailNameException" => StopLoggingError::InvalidTrailName(String::from(error_message)),
+"TrailNotFoundException" => StopLoggingError::TrailNotFound(String::from(error_message)),
+"ValidationException" => StopLoggingError::Validation(error_message.to_string()),
+_ => StopLoggingError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StopLoggingError::Unknown(String::from(body))
@@ -1508,7 +1702,13 @@ Unknown(String)
                 impl Error for StopLoggingError {
                     fn description(&self) -> &str {
                         match *self {
-                            StopLoggingError::InvalidHomeRegion(ref cause) => cause,StopLoggingError::InvalidTrailName(ref cause) => cause,StopLoggingError::TrailNotFound(ref cause) => cause,StopLoggingError::Validation(ref cause) => cause,StopLoggingError::Credentials(ref err) => err.description(),StopLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StopLoggingError::Unknown(ref cause) => cause
+                            StopLoggingError::InvalidHomeRegion(ref cause) => cause,
+StopLoggingError::InvalidTrailName(ref cause) => cause,
+StopLoggingError::TrailNotFound(ref cause) => cause,
+StopLoggingError::Validation(ref cause) => cause,
+StopLoggingError::Credentials(ref err) => err.description(),
+StopLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StopLoggingError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1516,48 +1716,48 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdateTrailError {
                     
-///<p>This exception is thrown when the KMS key ARN is invalid.</p>
-InvalidKmsKeyId(String),
-///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
-InvalidTrailName(String),
-///<p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
-InvalidHomeRegion(String),
 ///<p>Cannot set a CloudWatch Logs delivery for this region.</p>
 CloudWatchLogsDeliveryUnavailable(String),
-///<p>This exception is thrown when the specified S3 bucket does not exist.</p>
-S3BucketDoesNotExist(String),
-///<p>This exception is thrown when the requested operation is not permitted.</p>
-OperationNotPermitted(String),
-///<p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
-KmsKeyNotFound(String),
 ///<p>This exception is thrown when the policy on the S3 bucket or KMS key is not sufficient.</p>
 InsufficientEncryptionPolicy(String),
-///<p>This exception is thrown when the trail with the given name is not found.</p>
-TrailNotFound(String),
-///<p>This exception is thrown when the provided role is not valid.</p>
-InvalidCloudWatchLogsRoleArn(String),
-///<p>This exception is thrown when the requested operation is not supported.</p>
-UnsupportedOperation(String),
-///<p>This exception is thrown when the provided S3 bucket name is not valid.</p>
-InvalidS3BucketName(String),
-///<p>This exception is thrown when the provided SNS topic name is not valid.</p>
-InvalidSnsTopicName(String),
-///<p>This exception is thrown when the policy on the SNS topic is not sufficient.</p>
-InsufficientSnsTopicPolicy(String),
-///<p>This exception is thrown when there is an issue with the specified KMS key and the trail can’t be updated.</p>
-Kms(String),
 ///<p>This exception is thrown when the policy on the S3 bucket is not sufficient.</p>
 InsufficientS3BucketPolicy(String),
+///<p>This exception is thrown when the policy on the SNS topic is not sufficient.</p>
+InsufficientSnsTopicPolicy(String),
 ///<p>This exception is thrown when the provided CloudWatch log group is not valid.</p>
 InvalidCloudWatchLogsLogGroupArn(String),
-///<p>This exception is thrown when the provided S3 prefix is not valid.</p>
-InvalidS3Prefix(String),
+///<p>This exception is thrown when the provided role is not valid.</p>
+InvalidCloudWatchLogsRoleArn(String),
+///<p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
+InvalidHomeRegion(String),
+///<p>This exception is thrown when the KMS key ARN is invalid.</p>
+InvalidKmsKeyId(String),
 ///<p>This exception is thrown when the combination of parameters provided is not valid.</p>
 InvalidParameterCombination(String),
+///<p>This exception is thrown when the provided S3 bucket name is not valid.</p>
+InvalidS3BucketName(String),
+///<p>This exception is thrown when the provided S3 prefix is not valid.</p>
+InvalidS3Prefix(String),
+///<p>This exception is thrown when the provided SNS topic name is not valid.</p>
+InvalidSnsTopicName(String),
+///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+InvalidTrailName(String),
+///<p>This exception is thrown when there is an issue with the specified KMS key and the trail can’t be updated.</p>
+Kms(String),
 ///<p>This exception is deprecated.</p>
 KmsKeyDisabled(String),
+///<p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
+KmsKeyNotFound(String),
+///<p>This exception is thrown when the requested operation is not permitted.</p>
+OperationNotPermitted(String),
+///<p>This exception is thrown when the specified S3 bucket does not exist.</p>
+S3BucketDoesNotExist(String),
+///<p>This exception is thrown when the trail with the given name is not found.</p>
+TrailNotFound(String),
 ///<p>This exception is deprecated.</p>
-TrailNotProvided(String),/// An error occurred dispatching the HTTP request
+TrailNotProvided(String),
+///<p>This exception is thrown when the requested operation is not supported.</p>
+UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1576,7 +1776,29 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidS3PrefixException" => UpdateTrailError::InvalidS3Prefix(String::from(error_message)),"TrailNotProvidedException" => UpdateTrailError::TrailNotProvided(String::from(error_message)),"InvalidHomeRegionException" => UpdateTrailError::InvalidHomeRegion(String::from(error_message)),"InvalidKmsKeyIdException" => UpdateTrailError::InvalidKmsKeyId(String::from(error_message)),"UnsupportedOperationException" => UpdateTrailError::UnsupportedOperation(String::from(error_message)),"InvalidCloudWatchLogsRoleArnException" => UpdateTrailError::InvalidCloudWatchLogsRoleArn(String::from(error_message)),"TrailNotFoundException" => UpdateTrailError::TrailNotFound(String::from(error_message)),"S3BucketDoesNotExistException" => UpdateTrailError::S3BucketDoesNotExist(String::from(error_message)),"InvalidS3BucketNameException" => UpdateTrailError::InvalidS3BucketName(String::from(error_message)),"KmsKeyNotFoundException" => UpdateTrailError::KmsKeyNotFound(String::from(error_message)),"InvalidSnsTopicNameException" => UpdateTrailError::InvalidSnsTopicName(String::from(error_message)),"InvalidParameterCombinationException" => UpdateTrailError::InvalidParameterCombination(String::from(error_message)),"InvalidCloudWatchLogsLogGroupArnException" => UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(String::from(error_message)),"KmsException" => UpdateTrailError::Kms(String::from(error_message)),"KmsKeyDisabledException" => UpdateTrailError::KmsKeyDisabled(String::from(error_message)),"OperationNotPermittedException" => UpdateTrailError::OperationNotPermitted(String::from(error_message)),"CloudWatchLogsDeliveryUnavailableException" => UpdateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(error_message)),"InvalidTrailNameException" => UpdateTrailError::InvalidTrailName(String::from(error_message)),"InsufficientEncryptionPolicyException" => UpdateTrailError::InsufficientEncryptionPolicy(String::from(error_message)),"InsufficientS3BucketPolicyException" => UpdateTrailError::InsufficientS3BucketPolicy(String::from(error_message)),"InsufficientSnsTopicPolicyException" => UpdateTrailError::InsufficientSnsTopicPolicy(String::from(error_message)),"ValidationException" => UpdateTrailError::Validation(error_message.to_string()),_ => UpdateTrailError::Unknown(String::from(body))
+                                    "CloudWatchLogsDeliveryUnavailableException" => UpdateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(error_message)),
+"InsufficientEncryptionPolicyException" => UpdateTrailError::InsufficientEncryptionPolicy(String::from(error_message)),
+"InsufficientS3BucketPolicyException" => UpdateTrailError::InsufficientS3BucketPolicy(String::from(error_message)),
+"InsufficientSnsTopicPolicyException" => UpdateTrailError::InsufficientSnsTopicPolicy(String::from(error_message)),
+"InvalidCloudWatchLogsLogGroupArnException" => UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(String::from(error_message)),
+"InvalidCloudWatchLogsRoleArnException" => UpdateTrailError::InvalidCloudWatchLogsRoleArn(String::from(error_message)),
+"InvalidHomeRegionException" => UpdateTrailError::InvalidHomeRegion(String::from(error_message)),
+"InvalidKmsKeyIdException" => UpdateTrailError::InvalidKmsKeyId(String::from(error_message)),
+"InvalidParameterCombinationException" => UpdateTrailError::InvalidParameterCombination(String::from(error_message)),
+"InvalidS3BucketNameException" => UpdateTrailError::InvalidS3BucketName(String::from(error_message)),
+"InvalidS3PrefixException" => UpdateTrailError::InvalidS3Prefix(String::from(error_message)),
+"InvalidSnsTopicNameException" => UpdateTrailError::InvalidSnsTopicName(String::from(error_message)),
+"InvalidTrailNameException" => UpdateTrailError::InvalidTrailName(String::from(error_message)),
+"KmsException" => UpdateTrailError::Kms(String::from(error_message)),
+"KmsKeyDisabledException" => UpdateTrailError::KmsKeyDisabled(String::from(error_message)),
+"KmsKeyNotFoundException" => UpdateTrailError::KmsKeyNotFound(String::from(error_message)),
+"OperationNotPermittedException" => UpdateTrailError::OperationNotPermitted(String::from(error_message)),
+"S3BucketDoesNotExistException" => UpdateTrailError::S3BucketDoesNotExist(String::from(error_message)),
+"TrailNotFoundException" => UpdateTrailError::TrailNotFound(String::from(error_message)),
+"TrailNotProvidedException" => UpdateTrailError::TrailNotProvided(String::from(error_message)),
+"UnsupportedOperationException" => UpdateTrailError::UnsupportedOperation(String::from(error_message)),
+"ValidationException" => UpdateTrailError::Validation(error_message.to_string()),
+_ => UpdateTrailError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateTrailError::Unknown(String::from(body))
@@ -1607,7 +1829,31 @@ Unknown(String)
                 impl Error for UpdateTrailError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateTrailError::CloudWatchLogsDeliveryUnavailable(ref cause) => cause,UpdateTrailError::InvalidS3Prefix(ref cause) => cause,UpdateTrailError::OperationNotPermitted(ref cause) => cause,UpdateTrailError::TrailNotProvided(ref cause) => cause,UpdateTrailError::InvalidSnsTopicName(ref cause) => cause,UpdateTrailError::InvalidHomeRegion(ref cause) => cause,UpdateTrailError::Kms(ref cause) => cause,UpdateTrailError::InsufficientEncryptionPolicy(ref cause) => cause,UpdateTrailError::TrailNotFound(ref cause) => cause,UpdateTrailError::InsufficientS3BucketPolicy(ref cause) => cause,UpdateTrailError::InvalidS3BucketName(ref cause) => cause,UpdateTrailError::UnsupportedOperation(ref cause) => cause,UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(ref cause) => cause,UpdateTrailError::InvalidTrailName(ref cause) => cause,UpdateTrailError::InvalidCloudWatchLogsRoleArn(ref cause) => cause,UpdateTrailError::S3BucketDoesNotExist(ref cause) => cause,UpdateTrailError::InvalidKmsKeyId(ref cause) => cause,UpdateTrailError::InvalidParameterCombination(ref cause) => cause,UpdateTrailError::InsufficientSnsTopicPolicy(ref cause) => cause,UpdateTrailError::KmsKeyNotFound(ref cause) => cause,UpdateTrailError::KmsKeyDisabled(ref cause) => cause,UpdateTrailError::Validation(ref cause) => cause,UpdateTrailError::Credentials(ref err) => err.description(),UpdateTrailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateTrailError::Unknown(ref cause) => cause
+                            UpdateTrailError::CloudWatchLogsDeliveryUnavailable(ref cause) => cause,
+UpdateTrailError::InsufficientEncryptionPolicy(ref cause) => cause,
+UpdateTrailError::InsufficientS3BucketPolicy(ref cause) => cause,
+UpdateTrailError::InsufficientSnsTopicPolicy(ref cause) => cause,
+UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(ref cause) => cause,
+UpdateTrailError::InvalidCloudWatchLogsRoleArn(ref cause) => cause,
+UpdateTrailError::InvalidHomeRegion(ref cause) => cause,
+UpdateTrailError::InvalidKmsKeyId(ref cause) => cause,
+UpdateTrailError::InvalidParameterCombination(ref cause) => cause,
+UpdateTrailError::InvalidS3BucketName(ref cause) => cause,
+UpdateTrailError::InvalidS3Prefix(ref cause) => cause,
+UpdateTrailError::InvalidSnsTopicName(ref cause) => cause,
+UpdateTrailError::InvalidTrailName(ref cause) => cause,
+UpdateTrailError::Kms(ref cause) => cause,
+UpdateTrailError::KmsKeyDisabled(ref cause) => cause,
+UpdateTrailError::KmsKeyNotFound(ref cause) => cause,
+UpdateTrailError::OperationNotPermitted(ref cause) => cause,
+UpdateTrailError::S3BucketDoesNotExist(ref cause) => cause,
+UpdateTrailError::TrailNotFound(ref cause) => cause,
+UpdateTrailError::TrailNotProvided(ref cause) => cause,
+UpdateTrailError::UnsupportedOperation(ref cause) => cause,
+UpdateTrailError::Validation(ref cause) => cause,
+UpdateTrailError::Credentials(ref err) => err.description(),
+UpdateTrailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateTrailError::Unknown(ref cause) => cause
                         }
                     }
                  }

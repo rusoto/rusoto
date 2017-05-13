@@ -2369,14 +2369,14 @@ pub subscription_arn: SubscriptionARN,
                 #[derive(Debug, PartialEq)]
                 pub enum AddPermissionError {
                     
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
 InvalidParameter(String),
 ///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2393,7 +2393,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalErrorException" => AddPermissionError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => AddPermissionError::AuthorizationError(String::from(parsed_error.message)),"NotFoundException" => AddPermissionError::NotFound(String::from(parsed_error.message)),"InvalidParameterException" => AddPermissionError::InvalidParameter(String::from(parsed_error.message)),_ => AddPermissionError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => AddPermissionError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => AddPermissionError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => AddPermissionError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => AddPermissionError::NotFound(String::from(parsed_error.message)),_ => AddPermissionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AddPermissionError::Unknown(body.to_string())
@@ -2425,7 +2425,14 @@ Unknown(String)
                 impl Error for AddPermissionError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddPermissionError::NotFound(ref cause) => cause,AddPermissionError::InternalError(ref cause) => cause,AddPermissionError::InvalidParameter(ref cause) => cause,AddPermissionError::AuthorizationError(ref cause) => cause,AddPermissionError::Validation(ref cause) => cause,AddPermissionError::Credentials(ref err) => err.description(),AddPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddPermissionError::Unknown(ref cause) => cause
+                            AddPermissionError::AuthorizationError(ref cause) => cause,
+AddPermissionError::InternalError(ref cause) => cause,
+AddPermissionError::InvalidParameter(ref cause) => cause,
+AddPermissionError::NotFound(ref cause) => cause,
+AddPermissionError::Validation(ref cause) => cause,
+AddPermissionError::Credentials(ref err) => err.description(),
+AddPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddPermissionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2433,12 +2440,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CheckIfPhoneNumberIsOptedOutError {
                     
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
 InvalidParameter(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
 ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
 Throttled(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2457,7 +2464,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => CheckIfPhoneNumberIsOptedOutError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => CheckIfPhoneNumberIsOptedOutError::Throttled(String::from(parsed_error.message)),"AuthorizationErrorException" => CheckIfPhoneNumberIsOptedOutError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => CheckIfPhoneNumberIsOptedOutError::InternalError(String::from(parsed_error.message)),_ => CheckIfPhoneNumberIsOptedOutError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => CheckIfPhoneNumberIsOptedOutError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => CheckIfPhoneNumberIsOptedOutError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => CheckIfPhoneNumberIsOptedOutError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => CheckIfPhoneNumberIsOptedOutError::Throttled(String::from(parsed_error.message)),_ => CheckIfPhoneNumberIsOptedOutError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CheckIfPhoneNumberIsOptedOutError::Unknown(body.to_string())
@@ -2489,7 +2496,14 @@ Unknown(String)
                 impl Error for CheckIfPhoneNumberIsOptedOutError {
                     fn description(&self) -> &str {
                         match *self {
-                            CheckIfPhoneNumberIsOptedOutError::Throttled(ref cause) => cause,CheckIfPhoneNumberIsOptedOutError::AuthorizationError(ref cause) => cause,CheckIfPhoneNumberIsOptedOutError::InternalError(ref cause) => cause,CheckIfPhoneNumberIsOptedOutError::InvalidParameter(ref cause) => cause,CheckIfPhoneNumberIsOptedOutError::Validation(ref cause) => cause,CheckIfPhoneNumberIsOptedOutError::Credentials(ref err) => err.description(),CheckIfPhoneNumberIsOptedOutError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CheckIfPhoneNumberIsOptedOutError::Unknown(ref cause) => cause
+                            CheckIfPhoneNumberIsOptedOutError::AuthorizationError(ref cause) => cause,
+CheckIfPhoneNumberIsOptedOutError::InternalError(ref cause) => cause,
+CheckIfPhoneNumberIsOptedOutError::InvalidParameter(ref cause) => cause,
+CheckIfPhoneNumberIsOptedOutError::Throttled(ref cause) => cause,
+CheckIfPhoneNumberIsOptedOutError::Validation(ref cause) => cause,
+CheckIfPhoneNumberIsOptedOutError::Credentials(ref err) => err.description(),
+CheckIfPhoneNumberIsOptedOutError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CheckIfPhoneNumberIsOptedOutError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2499,12 +2513,12 @@ Unknown(String)
                     
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
+///<p>Indicates an internal service error.</p>
+InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
 InvalidParameter(String),
 ///<p>Indicates that the requested resource does not exist.</p>
 NotFound(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
 ///<p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
 SubscriptionLimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2523,7 +2537,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NotFoundException" => ConfirmSubscriptionError::NotFound(String::from(parsed_error.message)),"AuthorizationErrorException" => ConfirmSubscriptionError::AuthorizationError(String::from(parsed_error.message)),"SubscriptionLimitExceededException" => ConfirmSubscriptionError::SubscriptionLimitExceeded(String::from(parsed_error.message)),"InvalidParameterException" => ConfirmSubscriptionError::InvalidParameter(String::from(parsed_error.message)),"InternalErrorException" => ConfirmSubscriptionError::InternalError(String::from(parsed_error.message)),_ => ConfirmSubscriptionError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => ConfirmSubscriptionError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ConfirmSubscriptionError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ConfirmSubscriptionError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => ConfirmSubscriptionError::NotFound(String::from(parsed_error.message)),"SubscriptionLimitExceededException" => ConfirmSubscriptionError::SubscriptionLimitExceeded(String::from(parsed_error.message)),_ => ConfirmSubscriptionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ConfirmSubscriptionError::Unknown(body.to_string())
@@ -2555,7 +2569,15 @@ Unknown(String)
                 impl Error for ConfirmSubscriptionError {
                     fn description(&self) -> &str {
                         match *self {
-                            ConfirmSubscriptionError::InvalidParameter(ref cause) => cause,ConfirmSubscriptionError::InternalError(ref cause) => cause,ConfirmSubscriptionError::SubscriptionLimitExceeded(ref cause) => cause,ConfirmSubscriptionError::AuthorizationError(ref cause) => cause,ConfirmSubscriptionError::NotFound(ref cause) => cause,ConfirmSubscriptionError::Validation(ref cause) => cause,ConfirmSubscriptionError::Credentials(ref err) => err.description(),ConfirmSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ConfirmSubscriptionError::Unknown(ref cause) => cause
+                            ConfirmSubscriptionError::AuthorizationError(ref cause) => cause,
+ConfirmSubscriptionError::InternalError(ref cause) => cause,
+ConfirmSubscriptionError::InvalidParameter(ref cause) => cause,
+ConfirmSubscriptionError::NotFound(ref cause) => cause,
+ConfirmSubscriptionError::SubscriptionLimitExceeded(ref cause) => cause,
+ConfirmSubscriptionError::Validation(ref cause) => cause,
+ConfirmSubscriptionError::Credentials(ref err) => err.description(),
+ConfirmSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ConfirmSubscriptionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2563,12 +2585,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreatePlatformApplicationError {
                     
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameter(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2585,7 +2607,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalErrorException" => CreatePlatformApplicationError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => CreatePlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),"InvalidParameterException" => CreatePlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),_ => CreatePlatformApplicationError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => CreatePlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => CreatePlatformApplicationError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => CreatePlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),_ => CreatePlatformApplicationError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreatePlatformApplicationError::Unknown(body.to_string())
@@ -2617,7 +2639,13 @@ Unknown(String)
                 impl Error for CreatePlatformApplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreatePlatformApplicationError::InternalError(ref cause) => cause,CreatePlatformApplicationError::AuthorizationError(ref cause) => cause,CreatePlatformApplicationError::InvalidParameter(ref cause) => cause,CreatePlatformApplicationError::Validation(ref cause) => cause,CreatePlatformApplicationError::Credentials(ref err) => err.description(),CreatePlatformApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreatePlatformApplicationError::Unknown(ref cause) => cause
+                            CreatePlatformApplicationError::AuthorizationError(ref cause) => cause,
+CreatePlatformApplicationError::InternalError(ref cause) => cause,
+CreatePlatformApplicationError::InvalidParameter(ref cause) => cause,
+CreatePlatformApplicationError::Validation(ref cause) => cause,
+CreatePlatformApplicationError::Credentials(ref err) => err.description(),
+CreatePlatformApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreatePlatformApplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2625,14 +2653,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreatePlatformEndpointError {
                     
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
 InvalidParameter(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+///<p>Indicates that the requested resource does not exist.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2649,7 +2677,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => CreatePlatformEndpointError::InvalidParameter(String::from(parsed_error.message)),"InternalErrorException" => CreatePlatformEndpointError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => CreatePlatformEndpointError::AuthorizationError(String::from(parsed_error.message)),"NotFoundException" => CreatePlatformEndpointError::NotFound(String::from(parsed_error.message)),_ => CreatePlatformEndpointError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => CreatePlatformEndpointError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => CreatePlatformEndpointError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => CreatePlatformEndpointError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => CreatePlatformEndpointError::NotFound(String::from(parsed_error.message)),_ => CreatePlatformEndpointError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreatePlatformEndpointError::Unknown(body.to_string())
@@ -2681,7 +2709,14 @@ Unknown(String)
                 impl Error for CreatePlatformEndpointError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreatePlatformEndpointError::InvalidParameter(ref cause) => cause,CreatePlatformEndpointError::InternalError(ref cause) => cause,CreatePlatformEndpointError::AuthorizationError(ref cause) => cause,CreatePlatformEndpointError::NotFound(ref cause) => cause,CreatePlatformEndpointError::Validation(ref cause) => cause,CreatePlatformEndpointError::Credentials(ref err) => err.description(),CreatePlatformEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreatePlatformEndpointError::Unknown(ref cause) => cause
+                            CreatePlatformEndpointError::AuthorizationError(ref cause) => cause,
+CreatePlatformEndpointError::InternalError(ref cause) => cause,
+CreatePlatformEndpointError::InvalidParameter(ref cause) => cause,
+CreatePlatformEndpointError::NotFound(ref cause) => cause,
+CreatePlatformEndpointError::Validation(ref cause) => cause,
+CreatePlatformEndpointError::Credentials(ref err) => err.description(),
+CreatePlatformEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreatePlatformEndpointError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2689,14 +2724,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateTopicError {
                     
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
-///<p>Indicates that the customer already owns the maximum allowed number of topics.</p>
-TopicLimitExceeded(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
 InvalidParameter(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+///<p>Indicates that the customer already owns the maximum allowed number of topics.</p>
+TopicLimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2713,7 +2748,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalErrorException" => CreateTopicError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => CreateTopicError::AuthorizationError(String::from(parsed_error.message)),"InvalidParameterException" => CreateTopicError::InvalidParameter(String::from(parsed_error.message)),"TopicLimitExceededException" => CreateTopicError::TopicLimitExceeded(String::from(parsed_error.message)),_ => CreateTopicError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => CreateTopicError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => CreateTopicError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => CreateTopicError::InvalidParameter(String::from(parsed_error.message)),"TopicLimitExceededException" => CreateTopicError::TopicLimitExceeded(String::from(parsed_error.message)),_ => CreateTopicError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateTopicError::Unknown(body.to_string())
@@ -2745,7 +2780,14 @@ Unknown(String)
                 impl Error for CreateTopicError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateTopicError::InvalidParameter(ref cause) => cause,CreateTopicError::TopicLimitExceeded(ref cause) => cause,CreateTopicError::AuthorizationError(ref cause) => cause,CreateTopicError::InternalError(ref cause) => cause,CreateTopicError::Validation(ref cause) => cause,CreateTopicError::Credentials(ref err) => err.description(),CreateTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateTopicError::Unknown(ref cause) => cause
+                            CreateTopicError::AuthorizationError(ref cause) => cause,
+CreateTopicError::InternalError(ref cause) => cause,
+CreateTopicError::InvalidParameter(ref cause) => cause,
+CreateTopicError::TopicLimitExceeded(ref cause) => cause,
+CreateTopicError::Validation(ref cause) => cause,
+CreateTopicError::Credentials(ref err) => err.description(),
+CreateTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateTopicError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2775,7 +2817,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => DeleteEndpointError::InvalidParameter(String::from(parsed_error.message)),"InternalErrorException" => DeleteEndpointError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => DeleteEndpointError::AuthorizationError(String::from(parsed_error.message)),_ => DeleteEndpointError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => DeleteEndpointError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => DeleteEndpointError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => DeleteEndpointError::InvalidParameter(String::from(parsed_error.message)),_ => DeleteEndpointError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteEndpointError::Unknown(body.to_string())
@@ -2807,7 +2849,13 @@ Unknown(String)
                 impl Error for DeleteEndpointError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteEndpointError::InternalError(ref cause) => cause,DeleteEndpointError::InvalidParameter(ref cause) => cause,DeleteEndpointError::AuthorizationError(ref cause) => cause,DeleteEndpointError::Validation(ref cause) => cause,DeleteEndpointError::Credentials(ref err) => err.description(),DeleteEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteEndpointError::Unknown(ref cause) => cause
+                            DeleteEndpointError::AuthorizationError(ref cause) => cause,
+DeleteEndpointError::InternalError(ref cause) => cause,
+DeleteEndpointError::InvalidParameter(ref cause) => cause,
+DeleteEndpointError::Validation(ref cause) => cause,
+DeleteEndpointError::Credentials(ref err) => err.description(),
+DeleteEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteEndpointError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2817,10 +2865,10 @@ Unknown(String)
                     
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
 ///<p>Indicates an internal service error.</p>
-InternalError(String),/// An error occurred dispatching the HTTP request
+InternalError(String),
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameter(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2837,7 +2885,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => DeletePlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),"AuthorizationErrorException" => DeletePlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => DeletePlatformApplicationError::InternalError(String::from(parsed_error.message)),_ => DeletePlatformApplicationError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => DeletePlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => DeletePlatformApplicationError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => DeletePlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),_ => DeletePlatformApplicationError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeletePlatformApplicationError::Unknown(body.to_string())
@@ -2869,7 +2917,13 @@ Unknown(String)
                 impl Error for DeletePlatformApplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeletePlatformApplicationError::InternalError(ref cause) => cause,DeletePlatformApplicationError::InvalidParameter(ref cause) => cause,DeletePlatformApplicationError::AuthorizationError(ref cause) => cause,DeletePlatformApplicationError::Validation(ref cause) => cause,DeletePlatformApplicationError::Credentials(ref err) => err.description(),DeletePlatformApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeletePlatformApplicationError::Unknown(ref cause) => cause
+                            DeletePlatformApplicationError::AuthorizationError(ref cause) => cause,
+DeletePlatformApplicationError::InternalError(ref cause) => cause,
+DeletePlatformApplicationError::InvalidParameter(ref cause) => cause,
+DeletePlatformApplicationError::Validation(ref cause) => cause,
+DeletePlatformApplicationError::Credentials(ref err) => err.description(),
+DeletePlatformApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeletePlatformApplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2877,14 +2931,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteTopicError {
                     
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
 InvalidParameter(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+///<p>Indicates that the requested resource does not exist.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2901,7 +2955,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => DeleteTopicError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => DeleteTopicError::NotFound(String::from(parsed_error.message)),"AuthorizationErrorException" => DeleteTopicError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => DeleteTopicError::InternalError(String::from(parsed_error.message)),_ => DeleteTopicError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => DeleteTopicError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => DeleteTopicError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => DeleteTopicError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => DeleteTopicError::NotFound(String::from(parsed_error.message)),_ => DeleteTopicError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DeleteTopicError::Unknown(body.to_string())
@@ -2933,7 +2987,14 @@ Unknown(String)
                 impl Error for DeleteTopicError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteTopicError::NotFound(ref cause) => cause,DeleteTopicError::AuthorizationError(ref cause) => cause,DeleteTopicError::InternalError(ref cause) => cause,DeleteTopicError::InvalidParameter(ref cause) => cause,DeleteTopicError::Validation(ref cause) => cause,DeleteTopicError::Credentials(ref err) => err.description(),DeleteTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteTopicError::Unknown(ref cause) => cause
+                            DeleteTopicError::AuthorizationError(ref cause) => cause,
+DeleteTopicError::InternalError(ref cause) => cause,
+DeleteTopicError::InvalidParameter(ref cause) => cause,
+DeleteTopicError::NotFound(ref cause) => cause,
+DeleteTopicError::Validation(ref cause) => cause,
+DeleteTopicError::Credentials(ref err) => err.description(),
+DeleteTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteTopicError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2941,14 +3002,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetEndpointAttributesError {
                     
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameter(String),
 ///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2965,7 +3026,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalErrorException" => GetEndpointAttributesError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => GetEndpointAttributesError::AuthorizationError(String::from(parsed_error.message)),"InvalidParameterException" => GetEndpointAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => GetEndpointAttributesError::NotFound(String::from(parsed_error.message)),_ => GetEndpointAttributesError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => GetEndpointAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => GetEndpointAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => GetEndpointAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => GetEndpointAttributesError::NotFound(String::from(parsed_error.message)),_ => GetEndpointAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetEndpointAttributesError::Unknown(body.to_string())
@@ -2997,7 +3058,14 @@ Unknown(String)
                 impl Error for GetEndpointAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetEndpointAttributesError::AuthorizationError(ref cause) => cause,GetEndpointAttributesError::NotFound(ref cause) => cause,GetEndpointAttributesError::InternalError(ref cause) => cause,GetEndpointAttributesError::InvalidParameter(ref cause) => cause,GetEndpointAttributesError::Validation(ref cause) => cause,GetEndpointAttributesError::Credentials(ref err) => err.description(),GetEndpointAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetEndpointAttributesError::Unknown(ref cause) => cause
+                            GetEndpointAttributesError::AuthorizationError(ref cause) => cause,
+GetEndpointAttributesError::InternalError(ref cause) => cause,
+GetEndpointAttributesError::InvalidParameter(ref cause) => cause,
+GetEndpointAttributesError::NotFound(ref cause) => cause,
+GetEndpointAttributesError::Validation(ref cause) => cause,
+GetEndpointAttributesError::Credentials(ref err) => err.description(),
+GetEndpointAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetEndpointAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3007,12 +3075,12 @@ Unknown(String)
                     
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
+///<p>Indicates an internal service error.</p>
+InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
 InvalidParameter(String),
 ///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),/// An error occurred dispatching the HTTP request
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3029,7 +3097,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => GetPlatformApplicationAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => GetPlatformApplicationAttributesError::NotFound(String::from(parsed_error.message)),"AuthorizationErrorException" => GetPlatformApplicationAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => GetPlatformApplicationAttributesError::InternalError(String::from(parsed_error.message)),_ => GetPlatformApplicationAttributesError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => GetPlatformApplicationAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => GetPlatformApplicationAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => GetPlatformApplicationAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => GetPlatformApplicationAttributesError::NotFound(String::from(parsed_error.message)),_ => GetPlatformApplicationAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetPlatformApplicationAttributesError::Unknown(body.to_string())
@@ -3061,7 +3129,14 @@ Unknown(String)
                 impl Error for GetPlatformApplicationAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetPlatformApplicationAttributesError::NotFound(ref cause) => cause,GetPlatformApplicationAttributesError::InternalError(ref cause) => cause,GetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,GetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,GetPlatformApplicationAttributesError::Validation(ref cause) => cause,GetPlatformApplicationAttributesError::Credentials(ref err) => err.description(),GetPlatformApplicationAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetPlatformApplicationAttributesError::Unknown(ref cause) => cause
+                            GetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
+GetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
+GetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
+GetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
+GetPlatformApplicationAttributesError::Validation(ref cause) => cause,
+GetPlatformApplicationAttributesError::Credentials(ref err) => err.description(),
+GetPlatformApplicationAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetPlatformApplicationAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3069,14 +3144,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetSMSAttributesError {
                     
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
-Throttled(String),
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
+///<p>Indicates an internal service error.</p>
+InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+Throttled(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3093,7 +3168,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => GetSMSAttributesError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => GetSMSAttributesError::Throttled(String::from(parsed_error.message)),"InternalErrorException" => GetSMSAttributesError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => GetSMSAttributesError::AuthorizationError(String::from(parsed_error.message)),_ => GetSMSAttributesError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => GetSMSAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => GetSMSAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => GetSMSAttributesError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => GetSMSAttributesError::Throttled(String::from(parsed_error.message)),_ => GetSMSAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetSMSAttributesError::Unknown(body.to_string())
@@ -3125,7 +3200,14 @@ Unknown(String)
                 impl Error for GetSMSAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetSMSAttributesError::InvalidParameter(ref cause) => cause,GetSMSAttributesError::AuthorizationError(ref cause) => cause,GetSMSAttributesError::Throttled(ref cause) => cause,GetSMSAttributesError::InternalError(ref cause) => cause,GetSMSAttributesError::Validation(ref cause) => cause,GetSMSAttributesError::Credentials(ref err) => err.description(),GetSMSAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetSMSAttributesError::Unknown(ref cause) => cause
+                            GetSMSAttributesError::AuthorizationError(ref cause) => cause,
+GetSMSAttributesError::InternalError(ref cause) => cause,
+GetSMSAttributesError::InvalidParameter(ref cause) => cause,
+GetSMSAttributesError::Throttled(ref cause) => cause,
+GetSMSAttributesError::Validation(ref cause) => cause,
+GetSMSAttributesError::Credentials(ref err) => err.description(),
+GetSMSAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetSMSAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3133,14 +3215,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetSubscriptionAttributesError {
                     
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameter(String),
 ///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3157,7 +3239,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => GetSubscriptionAttributesError::InvalidParameter(String::from(parsed_error.message)),"AuthorizationErrorException" => GetSubscriptionAttributesError::AuthorizationError(String::from(parsed_error.message)),"NotFoundException" => GetSubscriptionAttributesError::NotFound(String::from(parsed_error.message)),"InternalErrorException" => GetSubscriptionAttributesError::InternalError(String::from(parsed_error.message)),_ => GetSubscriptionAttributesError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => GetSubscriptionAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => GetSubscriptionAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => GetSubscriptionAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => GetSubscriptionAttributesError::NotFound(String::from(parsed_error.message)),_ => GetSubscriptionAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetSubscriptionAttributesError::Unknown(body.to_string())
@@ -3189,7 +3271,14 @@ Unknown(String)
                 impl Error for GetSubscriptionAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetSubscriptionAttributesError::NotFound(ref cause) => cause,GetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,GetSubscriptionAttributesError::InternalError(ref cause) => cause,GetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,GetSubscriptionAttributesError::Validation(ref cause) => cause,GetSubscriptionAttributesError::Credentials(ref err) => err.description(),GetSubscriptionAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetSubscriptionAttributesError::Unknown(ref cause) => cause
+                            GetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
+GetSubscriptionAttributesError::InternalError(ref cause) => cause,
+GetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
+GetSubscriptionAttributesError::NotFound(ref cause) => cause,
+GetSubscriptionAttributesError::Validation(ref cause) => cause,
+GetSubscriptionAttributesError::Credentials(ref err) => err.description(),
+GetSubscriptionAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetSubscriptionAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3197,14 +3286,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetTopicAttributesError {
                     
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameter(String),
 ///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3221,7 +3310,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => GetTopicAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => GetTopicAttributesError::NotFound(String::from(parsed_error.message)),"InternalErrorException" => GetTopicAttributesError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => GetTopicAttributesError::AuthorizationError(String::from(parsed_error.message)),_ => GetTopicAttributesError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => GetTopicAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => GetTopicAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => GetTopicAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => GetTopicAttributesError::NotFound(String::from(parsed_error.message)),_ => GetTopicAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetTopicAttributesError::Unknown(body.to_string())
@@ -3253,7 +3342,14 @@ Unknown(String)
                 impl Error for GetTopicAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetTopicAttributesError::NotFound(ref cause) => cause,GetTopicAttributesError::AuthorizationError(ref cause) => cause,GetTopicAttributesError::InternalError(ref cause) => cause,GetTopicAttributesError::InvalidParameter(ref cause) => cause,GetTopicAttributesError::Validation(ref cause) => cause,GetTopicAttributesError::Credentials(ref err) => err.description(),GetTopicAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetTopicAttributesError::Unknown(ref cause) => cause
+                            GetTopicAttributesError::AuthorizationError(ref cause) => cause,
+GetTopicAttributesError::InternalError(ref cause) => cause,
+GetTopicAttributesError::InvalidParameter(ref cause) => cause,
+GetTopicAttributesError::NotFound(ref cause) => cause,
+GetTopicAttributesError::Validation(ref cause) => cause,
+GetTopicAttributesError::Credentials(ref err) => err.description(),
+GetTopicAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetTopicAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3261,14 +3357,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListEndpointsByPlatformApplicationError {
                     
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameter(String),
 ///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3285,7 +3381,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NotFoundException" => ListEndpointsByPlatformApplicationError::NotFound(String::from(parsed_error.message)),"InvalidParameterException" => ListEndpointsByPlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),"InternalErrorException" => ListEndpointsByPlatformApplicationError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => ListEndpointsByPlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),_ => ListEndpointsByPlatformApplicationError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => ListEndpointsByPlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListEndpointsByPlatformApplicationError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListEndpointsByPlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => ListEndpointsByPlatformApplicationError::NotFound(String::from(parsed_error.message)),_ => ListEndpointsByPlatformApplicationError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListEndpointsByPlatformApplicationError::Unknown(body.to_string())
@@ -3317,7 +3413,14 @@ Unknown(String)
                 impl Error for ListEndpointsByPlatformApplicationError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListEndpointsByPlatformApplicationError::InternalError(ref cause) => cause,ListEndpointsByPlatformApplicationError::NotFound(ref cause) => cause,ListEndpointsByPlatformApplicationError::InvalidParameter(ref cause) => cause,ListEndpointsByPlatformApplicationError::AuthorizationError(ref cause) => cause,ListEndpointsByPlatformApplicationError::Validation(ref cause) => cause,ListEndpointsByPlatformApplicationError::Credentials(ref err) => err.description(),ListEndpointsByPlatformApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListEndpointsByPlatformApplicationError::Unknown(ref cause) => cause
+                            ListEndpointsByPlatformApplicationError::AuthorizationError(ref cause) => cause,
+ListEndpointsByPlatformApplicationError::InternalError(ref cause) => cause,
+ListEndpointsByPlatformApplicationError::InvalidParameter(ref cause) => cause,
+ListEndpointsByPlatformApplicationError::NotFound(ref cause) => cause,
+ListEndpointsByPlatformApplicationError::Validation(ref cause) => cause,
+ListEndpointsByPlatformApplicationError::Credentials(ref err) => err.description(),
+ListEndpointsByPlatformApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListEndpointsByPlatformApplicationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3325,14 +3428,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListPhoneNumbersOptedOutError {
                     
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameter(String),
 ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
-Throttled(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+Throttled(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3349,7 +3452,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ThrottledException" => ListPhoneNumbersOptedOutError::Throttled(String::from(parsed_error.message)),"InternalErrorException" => ListPhoneNumbersOptedOutError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListPhoneNumbersOptedOutError::InvalidParameter(String::from(parsed_error.message)),"AuthorizationErrorException" => ListPhoneNumbersOptedOutError::AuthorizationError(String::from(parsed_error.message)),_ => ListPhoneNumbersOptedOutError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => ListPhoneNumbersOptedOutError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListPhoneNumbersOptedOutError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListPhoneNumbersOptedOutError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => ListPhoneNumbersOptedOutError::Throttled(String::from(parsed_error.message)),_ => ListPhoneNumbersOptedOutError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListPhoneNumbersOptedOutError::Unknown(body.to_string())
@@ -3381,7 +3484,14 @@ Unknown(String)
                 impl Error for ListPhoneNumbersOptedOutError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListPhoneNumbersOptedOutError::InvalidParameter(ref cause) => cause,ListPhoneNumbersOptedOutError::AuthorizationError(ref cause) => cause,ListPhoneNumbersOptedOutError::InternalError(ref cause) => cause,ListPhoneNumbersOptedOutError::Throttled(ref cause) => cause,ListPhoneNumbersOptedOutError::Validation(ref cause) => cause,ListPhoneNumbersOptedOutError::Credentials(ref err) => err.description(),ListPhoneNumbersOptedOutError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListPhoneNumbersOptedOutError::Unknown(ref cause) => cause
+                            ListPhoneNumbersOptedOutError::AuthorizationError(ref cause) => cause,
+ListPhoneNumbersOptedOutError::InternalError(ref cause) => cause,
+ListPhoneNumbersOptedOutError::InvalidParameter(ref cause) => cause,
+ListPhoneNumbersOptedOutError::Throttled(ref cause) => cause,
+ListPhoneNumbersOptedOutError::Validation(ref cause) => cause,
+ListPhoneNumbersOptedOutError::Credentials(ref err) => err.description(),
+ListPhoneNumbersOptedOutError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListPhoneNumbersOptedOutError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3389,12 +3499,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListPlatformApplicationsError {
                     
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameter(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3443,7 +3553,13 @@ Unknown(String)
                 impl Error for ListPlatformApplicationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListPlatformApplicationsError::InternalError(ref cause) => cause,ListPlatformApplicationsError::InvalidParameter(ref cause) => cause,ListPlatformApplicationsError::AuthorizationError(ref cause) => cause,ListPlatformApplicationsError::Validation(ref cause) => cause,ListPlatformApplicationsError::Credentials(ref err) => err.description(),ListPlatformApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListPlatformApplicationsError::Unknown(ref cause) => cause
+                            ListPlatformApplicationsError::AuthorizationError(ref cause) => cause,
+ListPlatformApplicationsError::InternalError(ref cause) => cause,
+ListPlatformApplicationsError::InvalidParameter(ref cause) => cause,
+ListPlatformApplicationsError::Validation(ref cause) => cause,
+ListPlatformApplicationsError::Credentials(ref err) => err.description(),
+ListPlatformApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListPlatformApplicationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3473,7 +3589,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => ListSubscriptionsError::InvalidParameter(String::from(parsed_error.message)),"InternalErrorException" => ListSubscriptionsError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => ListSubscriptionsError::AuthorizationError(String::from(parsed_error.message)),_ => ListSubscriptionsError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => ListSubscriptionsError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListSubscriptionsError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListSubscriptionsError::InvalidParameter(String::from(parsed_error.message)),_ => ListSubscriptionsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListSubscriptionsError::Unknown(body.to_string())
@@ -3505,7 +3621,13 @@ Unknown(String)
                 impl Error for ListSubscriptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListSubscriptionsError::InternalError(ref cause) => cause,ListSubscriptionsError::AuthorizationError(ref cause) => cause,ListSubscriptionsError::InvalidParameter(ref cause) => cause,ListSubscriptionsError::Validation(ref cause) => cause,ListSubscriptionsError::Credentials(ref err) => err.description(),ListSubscriptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListSubscriptionsError::Unknown(ref cause) => cause
+                            ListSubscriptionsError::AuthorizationError(ref cause) => cause,
+ListSubscriptionsError::InternalError(ref cause) => cause,
+ListSubscriptionsError::InvalidParameter(ref cause) => cause,
+ListSubscriptionsError::Validation(ref cause) => cause,
+ListSubscriptionsError::Credentials(ref err) => err.description(),
+ListSubscriptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListSubscriptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3513,12 +3635,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListSubscriptionsByTopicError {
                     
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameter(String),
 ///<p>Indicates that the requested resource does not exist.</p>
 NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -3537,7 +3659,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => ListSubscriptionsByTopicError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => ListSubscriptionsByTopicError::NotFound(String::from(parsed_error.message)),"AuthorizationErrorException" => ListSubscriptionsByTopicError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListSubscriptionsByTopicError::InternalError(String::from(parsed_error.message)),_ => ListSubscriptionsByTopicError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => ListSubscriptionsByTopicError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListSubscriptionsByTopicError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListSubscriptionsByTopicError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => ListSubscriptionsByTopicError::NotFound(String::from(parsed_error.message)),_ => ListSubscriptionsByTopicError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListSubscriptionsByTopicError::Unknown(body.to_string())
@@ -3569,7 +3691,14 @@ Unknown(String)
                 impl Error for ListSubscriptionsByTopicError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListSubscriptionsByTopicError::NotFound(ref cause) => cause,ListSubscriptionsByTopicError::InternalError(ref cause) => cause,ListSubscriptionsByTopicError::InvalidParameter(ref cause) => cause,ListSubscriptionsByTopicError::AuthorizationError(ref cause) => cause,ListSubscriptionsByTopicError::Validation(ref cause) => cause,ListSubscriptionsByTopicError::Credentials(ref err) => err.description(),ListSubscriptionsByTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListSubscriptionsByTopicError::Unknown(ref cause) => cause
+                            ListSubscriptionsByTopicError::AuthorizationError(ref cause) => cause,
+ListSubscriptionsByTopicError::InternalError(ref cause) => cause,
+ListSubscriptionsByTopicError::InvalidParameter(ref cause) => cause,
+ListSubscriptionsByTopicError::NotFound(ref cause) => cause,
+ListSubscriptionsByTopicError::Validation(ref cause) => cause,
+ListSubscriptionsByTopicError::Credentials(ref err) => err.description(),
+ListSubscriptionsByTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListSubscriptionsByTopicError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3577,10 +3706,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTopicsError {
                     
-///<p>Indicates an internal service error.</p>
-InternalError(String),
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
+///<p>Indicates an internal service error.</p>
+InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
 InvalidParameter(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -3599,7 +3728,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => ListTopicsError::AuthorizationError(String::from(parsed_error.message)),"InvalidParameterException" => ListTopicsError::InvalidParameter(String::from(parsed_error.message)),"InternalErrorException" => ListTopicsError::InternalError(String::from(parsed_error.message)),_ => ListTopicsError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => ListTopicsError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListTopicsError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListTopicsError::InvalidParameter(String::from(parsed_error.message)),_ => ListTopicsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ListTopicsError::Unknown(body.to_string())
@@ -3631,7 +3760,13 @@ Unknown(String)
                 impl Error for ListTopicsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTopicsError::InternalError(ref cause) => cause,ListTopicsError::AuthorizationError(ref cause) => cause,ListTopicsError::InvalidParameter(ref cause) => cause,ListTopicsError::Validation(ref cause) => cause,ListTopicsError::Credentials(ref err) => err.description(),ListTopicsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTopicsError::Unknown(ref cause) => cause
+                            ListTopicsError::AuthorizationError(ref cause) => cause,
+ListTopicsError::InternalError(ref cause) => cause,
+ListTopicsError::InvalidParameter(ref cause) => cause,
+ListTopicsError::Validation(ref cause) => cause,
+ListTopicsError::Credentials(ref err) => err.description(),
+ListTopicsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTopicsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3639,14 +3774,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum OptInPhoneNumberError {
                     
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameter(String),
 ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
-Throttled(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+Throttled(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3663,7 +3798,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => OptInPhoneNumberError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => OptInPhoneNumberError::Throttled(String::from(parsed_error.message)),"InternalErrorException" => OptInPhoneNumberError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => OptInPhoneNumberError::AuthorizationError(String::from(parsed_error.message)),_ => OptInPhoneNumberError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => OptInPhoneNumberError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => OptInPhoneNumberError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => OptInPhoneNumberError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => OptInPhoneNumberError::Throttled(String::from(parsed_error.message)),_ => OptInPhoneNumberError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => OptInPhoneNumberError::Unknown(body.to_string())
@@ -3695,7 +3830,14 @@ Unknown(String)
                 impl Error for OptInPhoneNumberError {
                     fn description(&self) -> &str {
                         match *self {
-                            OptInPhoneNumberError::AuthorizationError(ref cause) => cause,OptInPhoneNumberError::Throttled(ref cause) => cause,OptInPhoneNumberError::InternalError(ref cause) => cause,OptInPhoneNumberError::InvalidParameter(ref cause) => cause,OptInPhoneNumberError::Validation(ref cause) => cause,OptInPhoneNumberError::Credentials(ref err) => err.description(),OptInPhoneNumberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),OptInPhoneNumberError::Unknown(ref cause) => cause
+                            OptInPhoneNumberError::AuthorizationError(ref cause) => cause,
+OptInPhoneNumberError::InternalError(ref cause) => cause,
+OptInPhoneNumberError::InvalidParameter(ref cause) => cause,
+OptInPhoneNumberError::Throttled(ref cause) => cause,
+OptInPhoneNumberError::Validation(ref cause) => cause,
+OptInPhoneNumberError::Credentials(ref err) => err.description(),
+OptInPhoneNumberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+OptInPhoneNumberError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3703,18 +3845,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PublishError {
                     
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameterValue(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Exception error indicating endpoint disabled.</p>
-EndpointDisabled(String),
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
+///<p>Exception error indicating endpoint disabled.</p>
+EndpointDisabled(String),
+///<p>Indicates an internal service error.</p>
+InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
 InvalidParameter(String),
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameterValue(String),
+///<p>Indicates that the requested resource does not exist.</p>
+NotFound(String),
 ///<p>Exception error indicating platform application disabled.</p>
 PlatformApplicationDisabled(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -3733,7 +3875,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => PublishError::InvalidParameter(String::from(parsed_error.message)),"InternalErrorException" => PublishError::InternalError(String::from(parsed_error.message)),"PlatformApplicationDisabledException" => PublishError::PlatformApplicationDisabled(String::from(parsed_error.message)),"NotFoundException" => PublishError::NotFound(String::from(parsed_error.message)),"EndpointDisabledException" => PublishError::EndpointDisabled(String::from(parsed_error.message)),"AuthorizationErrorException" => PublishError::AuthorizationError(String::from(parsed_error.message)),"InvalidParameterValueException" => PublishError::InvalidParameterValue(String::from(parsed_error.message)),_ => PublishError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => PublishError::AuthorizationError(String::from(parsed_error.message)),"EndpointDisabledException" => PublishError::EndpointDisabled(String::from(parsed_error.message)),"InternalErrorException" => PublishError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => PublishError::InvalidParameter(String::from(parsed_error.message)),"InvalidParameterValueException" => PublishError::InvalidParameterValue(String::from(parsed_error.message)),"NotFoundException" => PublishError::NotFound(String::from(parsed_error.message)),"PlatformApplicationDisabledException" => PublishError::PlatformApplicationDisabled(String::from(parsed_error.message)),_ => PublishError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PublishError::Unknown(body.to_string())
@@ -3765,7 +3907,17 @@ Unknown(String)
                 impl Error for PublishError {
                     fn description(&self) -> &str {
                         match *self {
-                            PublishError::AuthorizationError(ref cause) => cause,PublishError::InvalidParameterValue(ref cause) => cause,PublishError::InvalidParameter(ref cause) => cause,PublishError::EndpointDisabled(ref cause) => cause,PublishError::PlatformApplicationDisabled(ref cause) => cause,PublishError::NotFound(ref cause) => cause,PublishError::InternalError(ref cause) => cause,PublishError::Validation(ref cause) => cause,PublishError::Credentials(ref err) => err.description(),PublishError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PublishError::Unknown(ref cause) => cause
+                            PublishError::AuthorizationError(ref cause) => cause,
+PublishError::EndpointDisabled(ref cause) => cause,
+PublishError::InternalError(ref cause) => cause,
+PublishError::InvalidParameter(ref cause) => cause,
+PublishError::InvalidParameterValue(ref cause) => cause,
+PublishError::NotFound(ref cause) => cause,
+PublishError::PlatformApplicationDisabled(ref cause) => cause,
+PublishError::Validation(ref cause) => cause,
+PublishError::Credentials(ref err) => err.description(),
+PublishError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PublishError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3773,14 +3925,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RemovePermissionError {
                     
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
+///<p>Indicates an internal service error.</p>
+InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>Indicates that the requested resource does not exist.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3797,7 +3949,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => RemovePermissionError::InvalidParameter(String::from(parsed_error.message)),"InternalErrorException" => RemovePermissionError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => RemovePermissionError::AuthorizationError(String::from(parsed_error.message)),"NotFoundException" => RemovePermissionError::NotFound(String::from(parsed_error.message)),_ => RemovePermissionError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => RemovePermissionError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => RemovePermissionError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => RemovePermissionError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => RemovePermissionError::NotFound(String::from(parsed_error.message)),_ => RemovePermissionError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => RemovePermissionError::Unknown(body.to_string())
@@ -3829,7 +3981,14 @@ Unknown(String)
                 impl Error for RemovePermissionError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemovePermissionError::InternalError(ref cause) => cause,RemovePermissionError::NotFound(ref cause) => cause,RemovePermissionError::InvalidParameter(ref cause) => cause,RemovePermissionError::AuthorizationError(ref cause) => cause,RemovePermissionError::Validation(ref cause) => cause,RemovePermissionError::Credentials(ref err) => err.description(),RemovePermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemovePermissionError::Unknown(ref cause) => cause
+                            RemovePermissionError::AuthorizationError(ref cause) => cause,
+RemovePermissionError::InternalError(ref cause) => cause,
+RemovePermissionError::InvalidParameter(ref cause) => cause,
+RemovePermissionError::NotFound(ref cause) => cause,
+RemovePermissionError::Validation(ref cause) => cause,
+RemovePermissionError::Credentials(ref err) => err.description(),
+RemovePermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemovePermissionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3837,14 +3996,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SetEndpointAttributesError {
                     
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+InvalidParameter(String),
+///<p>Indicates that the requested resource does not exist.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3861,7 +4020,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NotFoundException" => SetEndpointAttributesError::NotFound(String::from(parsed_error.message)),"InvalidParameterException" => SetEndpointAttributesError::InvalidParameter(String::from(parsed_error.message)),"InternalErrorException" => SetEndpointAttributesError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => SetEndpointAttributesError::AuthorizationError(String::from(parsed_error.message)),_ => SetEndpointAttributesError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => SetEndpointAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SetEndpointAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SetEndpointAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => SetEndpointAttributesError::NotFound(String::from(parsed_error.message)),_ => SetEndpointAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SetEndpointAttributesError::Unknown(body.to_string())
@@ -3893,7 +4052,14 @@ Unknown(String)
                 impl Error for SetEndpointAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetEndpointAttributesError::NotFound(ref cause) => cause,SetEndpointAttributesError::InvalidParameter(ref cause) => cause,SetEndpointAttributesError::InternalError(ref cause) => cause,SetEndpointAttributesError::AuthorizationError(ref cause) => cause,SetEndpointAttributesError::Validation(ref cause) => cause,SetEndpointAttributesError::Credentials(ref err) => err.description(),SetEndpointAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetEndpointAttributesError::Unknown(ref cause) => cause
+                            SetEndpointAttributesError::AuthorizationError(ref cause) => cause,
+SetEndpointAttributesError::InternalError(ref cause) => cause,
+SetEndpointAttributesError::InvalidParameter(ref cause) => cause,
+SetEndpointAttributesError::NotFound(ref cause) => cause,
+SetEndpointAttributesError::Validation(ref cause) => cause,
+SetEndpointAttributesError::Credentials(ref err) => err.description(),
+SetEndpointAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetEndpointAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3901,14 +4067,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SetPlatformApplicationAttributesError {
                     
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
+///<p>Indicates an internal service error.</p>
+InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>Indicates that the requested resource does not exist.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3925,7 +4091,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalErrorException" => SetPlatformApplicationAttributesError::InternalError(String::from(parsed_error.message)),"NotFoundException" => SetPlatformApplicationAttributesError::NotFound(String::from(parsed_error.message)),"InvalidParameterException" => SetPlatformApplicationAttributesError::InvalidParameter(String::from(parsed_error.message)),"AuthorizationErrorException" => SetPlatformApplicationAttributesError::AuthorizationError(String::from(parsed_error.message)),_ => SetPlatformApplicationAttributesError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => SetPlatformApplicationAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SetPlatformApplicationAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SetPlatformApplicationAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => SetPlatformApplicationAttributesError::NotFound(String::from(parsed_error.message)),_ => SetPlatformApplicationAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SetPlatformApplicationAttributesError::Unknown(body.to_string())
@@ -3957,7 +4123,14 @@ Unknown(String)
                 impl Error for SetPlatformApplicationAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetPlatformApplicationAttributesError::InternalError(ref cause) => cause,SetPlatformApplicationAttributesError::NotFound(ref cause) => cause,SetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,SetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,SetPlatformApplicationAttributesError::Validation(ref cause) => cause,SetPlatformApplicationAttributesError::Credentials(ref err) => err.description(),SetPlatformApplicationAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetPlatformApplicationAttributesError::Unknown(ref cause) => cause
+                            SetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
+SetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
+SetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
+SetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
+SetPlatformApplicationAttributesError::Validation(ref cause) => cause,
+SetPlatformApplicationAttributesError::Credentials(ref err) => err.description(),
+SetPlatformApplicationAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetPlatformApplicationAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3965,14 +4138,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SetSMSAttributesError {
                     
-///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
-Throttled(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
+///<p>Indicates an internal service error.</p>
+InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+Throttled(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3989,7 +4162,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InternalErrorException" => SetSMSAttributesError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => SetSMSAttributesError::AuthorizationError(String::from(parsed_error.message)),"ThrottledException" => SetSMSAttributesError::Throttled(String::from(parsed_error.message)),"InvalidParameterException" => SetSMSAttributesError::InvalidParameter(String::from(parsed_error.message)),_ => SetSMSAttributesError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => SetSMSAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SetSMSAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SetSMSAttributesError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => SetSMSAttributesError::Throttled(String::from(parsed_error.message)),_ => SetSMSAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SetSMSAttributesError::Unknown(body.to_string())
@@ -4021,7 +4194,14 @@ Unknown(String)
                 impl Error for SetSMSAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetSMSAttributesError::AuthorizationError(ref cause) => cause,SetSMSAttributesError::Throttled(ref cause) => cause,SetSMSAttributesError::InvalidParameter(ref cause) => cause,SetSMSAttributesError::InternalError(ref cause) => cause,SetSMSAttributesError::Validation(ref cause) => cause,SetSMSAttributesError::Credentials(ref err) => err.description(),SetSMSAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetSMSAttributesError::Unknown(ref cause) => cause
+                            SetSMSAttributesError::AuthorizationError(ref cause) => cause,
+SetSMSAttributesError::InternalError(ref cause) => cause,
+SetSMSAttributesError::InvalidParameter(ref cause) => cause,
+SetSMSAttributesError::Throttled(ref cause) => cause,
+SetSMSAttributesError::Validation(ref cause) => cause,
+SetSMSAttributesError::Credentials(ref err) => err.description(),
+SetSMSAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetSMSAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4029,14 +4209,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SetSubscriptionAttributesError {
                     
+///<p>Indicates that the user has been denied access to the requested resource.</p>
+AuthorizationError(String),
 ///<p>Indicates an internal service error.</p>
 InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
 InvalidParameter(String),
 ///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),/// An error occurred dispatching the HTTP request
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4053,7 +4233,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => SetSubscriptionAttributesError::AuthorizationError(String::from(parsed_error.message)),"InvalidParameterException" => SetSubscriptionAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => SetSubscriptionAttributesError::NotFound(String::from(parsed_error.message)),"InternalErrorException" => SetSubscriptionAttributesError::InternalError(String::from(parsed_error.message)),_ => SetSubscriptionAttributesError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => SetSubscriptionAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SetSubscriptionAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SetSubscriptionAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => SetSubscriptionAttributesError::NotFound(String::from(parsed_error.message)),_ => SetSubscriptionAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SetSubscriptionAttributesError::Unknown(body.to_string())
@@ -4085,7 +4265,14 @@ Unknown(String)
                 impl Error for SetSubscriptionAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,SetSubscriptionAttributesError::NotFound(ref cause) => cause,SetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,SetSubscriptionAttributesError::InternalError(ref cause) => cause,SetSubscriptionAttributesError::Validation(ref cause) => cause,SetSubscriptionAttributesError::Credentials(ref err) => err.description(),SetSubscriptionAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetSubscriptionAttributesError::Unknown(ref cause) => cause
+                            SetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
+SetSubscriptionAttributesError::InternalError(ref cause) => cause,
+SetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
+SetSubscriptionAttributesError::NotFound(ref cause) => cause,
+SetSubscriptionAttributesError::Validation(ref cause) => cause,
+SetSubscriptionAttributesError::Credentials(ref err) => err.description(),
+SetSubscriptionAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetSubscriptionAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4117,7 +4304,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => SetTopicAttributesError::InvalidParameter(String::from(parsed_error.message)),"InternalErrorException" => SetTopicAttributesError::InternalError(String::from(parsed_error.message)),"AuthorizationErrorException" => SetTopicAttributesError::AuthorizationError(String::from(parsed_error.message)),"NotFoundException" => SetTopicAttributesError::NotFound(String::from(parsed_error.message)),_ => SetTopicAttributesError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => SetTopicAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SetTopicAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SetTopicAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => SetTopicAttributesError::NotFound(String::from(parsed_error.message)),_ => SetTopicAttributesError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SetTopicAttributesError::Unknown(body.to_string())
@@ -4149,7 +4336,14 @@ Unknown(String)
                 impl Error for SetTopicAttributesError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetTopicAttributesError::AuthorizationError(ref cause) => cause,SetTopicAttributesError::InternalError(ref cause) => cause,SetTopicAttributesError::InvalidParameter(ref cause) => cause,SetTopicAttributesError::NotFound(ref cause) => cause,SetTopicAttributesError::Validation(ref cause) => cause,SetTopicAttributesError::Credentials(ref err) => err.description(),SetTopicAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetTopicAttributesError::Unknown(ref cause) => cause
+                            SetTopicAttributesError::AuthorizationError(ref cause) => cause,
+SetTopicAttributesError::InternalError(ref cause) => cause,
+SetTopicAttributesError::InvalidParameter(ref cause) => cause,
+SetTopicAttributesError::NotFound(ref cause) => cause,
+SetTopicAttributesError::Validation(ref cause) => cause,
+SetTopicAttributesError::Credentials(ref err) => err.description(),
+SetTopicAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetTopicAttributesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4159,14 +4353,14 @@ Unknown(String)
                     
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
-///<p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
-SubscriptionLimitExceeded(String),
+///<p>Indicates an internal service error.</p>
+InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
 InvalidParameter(String),
 ///<p>Indicates that the requested resource does not exist.</p>
 NotFound(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),/// An error occurred dispatching the HTTP request
+///<p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
+SubscriptionLimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4183,7 +4377,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "NotFoundException" => SubscribeError::NotFound(String::from(parsed_error.message)),"SubscriptionLimitExceededException" => SubscribeError::SubscriptionLimitExceeded(String::from(parsed_error.message)),"AuthorizationErrorException" => SubscribeError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SubscribeError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SubscribeError::InvalidParameter(String::from(parsed_error.message)),_ => SubscribeError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => SubscribeError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SubscribeError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SubscribeError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => SubscribeError::NotFound(String::from(parsed_error.message)),"SubscriptionLimitExceededException" => SubscribeError::SubscriptionLimitExceeded(String::from(parsed_error.message)),_ => SubscribeError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => SubscribeError::Unknown(body.to_string())
@@ -4215,7 +4409,15 @@ Unknown(String)
                 impl Error for SubscribeError {
                     fn description(&self) -> &str {
                         match *self {
-                            SubscribeError::InternalError(ref cause) => cause,SubscribeError::SubscriptionLimitExceeded(ref cause) => cause,SubscribeError::InvalidParameter(ref cause) => cause,SubscribeError::AuthorizationError(ref cause) => cause,SubscribeError::NotFound(ref cause) => cause,SubscribeError::Validation(ref cause) => cause,SubscribeError::Credentials(ref err) => err.description(),SubscribeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SubscribeError::Unknown(ref cause) => cause
+                            SubscribeError::AuthorizationError(ref cause) => cause,
+SubscribeError::InternalError(ref cause) => cause,
+SubscribeError::InvalidParameter(ref cause) => cause,
+SubscribeError::NotFound(ref cause) => cause,
+SubscribeError::SubscriptionLimitExceeded(ref cause) => cause,
+SubscribeError::Validation(ref cause) => cause,
+SubscribeError::Credentials(ref err) => err.description(),
+SubscribeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SubscribeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -4223,14 +4425,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UnsubscribeError {
                     
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
 ///<p>Indicates that the user has been denied access to the requested resource.</p>
 AuthorizationError(String),
+///<p>Indicates an internal service error.</p>
+InternalError(String),
 ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
+InvalidParameter(String),
+///<p>Indicates that the requested resource does not exist.</p>
+NotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -4247,7 +4449,7 @@ Unknown(String)
                         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterException" => UnsubscribeError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => UnsubscribeError::NotFound(String::from(parsed_error.message)),"AuthorizationErrorException" => UnsubscribeError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => UnsubscribeError::InternalError(String::from(parsed_error.message)),_ => UnsubscribeError::Unknown(String::from(body))
+                                    "AuthorizationErrorException" => UnsubscribeError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => UnsubscribeError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => UnsubscribeError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => UnsubscribeError::NotFound(String::from(parsed_error.message)),_ => UnsubscribeError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UnsubscribeError::Unknown(body.to_string())
@@ -4279,7 +4481,14 @@ Unknown(String)
                 impl Error for UnsubscribeError {
                     fn description(&self) -> &str {
                         match *self {
-                            UnsubscribeError::InternalError(ref cause) => cause,UnsubscribeError::NotFound(ref cause) => cause,UnsubscribeError::InvalidParameter(ref cause) => cause,UnsubscribeError::AuthorizationError(ref cause) => cause,UnsubscribeError::Validation(ref cause) => cause,UnsubscribeError::Credentials(ref err) => err.description(),UnsubscribeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UnsubscribeError::Unknown(ref cause) => cause
+                            UnsubscribeError::AuthorizationError(ref cause) => cause,
+UnsubscribeError::InternalError(ref cause) => cause,
+UnsubscribeError::InvalidParameter(ref cause) => cause,
+UnsubscribeError::NotFound(ref cause) => cause,
+UnsubscribeError::Validation(ref cause) => cause,
+UnsubscribeError::Credentials(ref err) => err.description(),
+UnsubscribeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UnsubscribeError::Unknown(ref cause) => cause
                         }
                     }
                  }

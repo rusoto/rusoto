@@ -1244,7 +1244,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidNonceException" => AcknowledgeJobError::InvalidNonce(String::from(error_message)),"JobNotFoundException" => AcknowledgeJobError::JobNotFound(String::from(error_message)),"ValidationException" => AcknowledgeJobError::Validation(error_message.to_string()),_ => AcknowledgeJobError::Unknown(String::from(body))
+                                    "InvalidNonceException" => AcknowledgeJobError::InvalidNonce(String::from(error_message)),
+"JobNotFoundException" => AcknowledgeJobError::JobNotFound(String::from(error_message)),
+"ValidationException" => AcknowledgeJobError::Validation(error_message.to_string()),
+_ => AcknowledgeJobError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AcknowledgeJobError::Unknown(String::from(body))
@@ -1275,7 +1278,12 @@ Unknown(String)
                 impl Error for AcknowledgeJobError {
                     fn description(&self) -> &str {
                         match *self {
-                            AcknowledgeJobError::InvalidNonce(ref cause) => cause,AcknowledgeJobError::JobNotFound(ref cause) => cause,AcknowledgeJobError::Validation(ref cause) => cause,AcknowledgeJobError::Credentials(ref err) => err.description(),AcknowledgeJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AcknowledgeJobError::Unknown(ref cause) => cause
+                            AcknowledgeJobError::InvalidNonce(ref cause) => cause,
+AcknowledgeJobError::JobNotFound(ref cause) => cause,
+AcknowledgeJobError::Validation(ref cause) => cause,
+AcknowledgeJobError::Credentials(ref err) => err.description(),
+AcknowledgeJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AcknowledgeJobError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1283,12 +1291,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AcknowledgeThirdPartyJobError {
                     
-///<p>The specified job was specified in an invalid format or cannot be found.</p>
-JobNotFound(String),
 ///<p>The client token was specified in an invalid format</p>
 InvalidClientToken(String),
 ///<p>The specified nonce was specified in an invalid format.</p>
-InvalidNonce(String),/// An error occurred dispatching the HTTP request
+InvalidNonce(String),
+///<p>The specified job was specified in an invalid format or cannot be found.</p>
+JobNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1307,7 +1315,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidNonceException" => AcknowledgeThirdPartyJobError::InvalidNonce(String::from(error_message)),"InvalidClientTokenException" => AcknowledgeThirdPartyJobError::InvalidClientToken(String::from(error_message)),"JobNotFoundException" => AcknowledgeThirdPartyJobError::JobNotFound(String::from(error_message)),"ValidationException" => AcknowledgeThirdPartyJobError::Validation(error_message.to_string()),_ => AcknowledgeThirdPartyJobError::Unknown(String::from(body))
+                                    "InvalidClientTokenException" => AcknowledgeThirdPartyJobError::InvalidClientToken(String::from(error_message)),
+"InvalidNonceException" => AcknowledgeThirdPartyJobError::InvalidNonce(String::from(error_message)),
+"JobNotFoundException" => AcknowledgeThirdPartyJobError::JobNotFound(String::from(error_message)),
+"ValidationException" => AcknowledgeThirdPartyJobError::Validation(error_message.to_string()),
+_ => AcknowledgeThirdPartyJobError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AcknowledgeThirdPartyJobError::Unknown(String::from(body))
@@ -1338,7 +1350,13 @@ Unknown(String)
                 impl Error for AcknowledgeThirdPartyJobError {
                     fn description(&self) -> &str {
                         match *self {
-                            AcknowledgeThirdPartyJobError::InvalidNonce(ref cause) => cause,AcknowledgeThirdPartyJobError::JobNotFound(ref cause) => cause,AcknowledgeThirdPartyJobError::InvalidClientToken(ref cause) => cause,AcknowledgeThirdPartyJobError::Validation(ref cause) => cause,AcknowledgeThirdPartyJobError::Credentials(ref err) => err.description(),AcknowledgeThirdPartyJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AcknowledgeThirdPartyJobError::Unknown(ref cause) => cause
+                            AcknowledgeThirdPartyJobError::InvalidClientToken(ref cause) => cause,
+AcknowledgeThirdPartyJobError::InvalidNonce(ref cause) => cause,
+AcknowledgeThirdPartyJobError::JobNotFound(ref cause) => cause,
+AcknowledgeThirdPartyJobError::Validation(ref cause) => cause,
+AcknowledgeThirdPartyJobError::Credentials(ref err) => err.description(),
+AcknowledgeThirdPartyJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AcknowledgeThirdPartyJobError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1366,7 +1384,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => CreateCustomActionTypeError::LimitExceeded(String::from(error_message)),"ValidationException" => CreateCustomActionTypeError::Validation(error_message.to_string()),_ => CreateCustomActionTypeError::Unknown(String::from(body))
+                                    "LimitExceededException" => CreateCustomActionTypeError::LimitExceeded(String::from(error_message)),
+"ValidationException" => CreateCustomActionTypeError::Validation(error_message.to_string()),
+_ => CreateCustomActionTypeError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateCustomActionTypeError::Unknown(String::from(body))
@@ -1397,7 +1417,11 @@ Unknown(String)
                 impl Error for CreateCustomActionTypeError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateCustomActionTypeError::LimitExceeded(ref cause) => cause,CreateCustomActionTypeError::Validation(ref cause) => cause,CreateCustomActionTypeError::Credentials(ref err) => err.description(),CreateCustomActionTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateCustomActionTypeError::Unknown(ref cause) => cause
+                            CreateCustomActionTypeError::LimitExceeded(ref cause) => cause,
+CreateCustomActionTypeError::Validation(ref cause) => cause,
+CreateCustomActionTypeError::Credentials(ref err) => err.description(),
+CreateCustomActionTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateCustomActionTypeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1405,18 +1429,18 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreatePipelineError {
                     
-///<p>Reserved for future use.</p>
-InvalidBlockerDeclaration(String),
-///<p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
-LimitExceeded(String),
 ///<p>The specified action declaration was specified in an invalid format.</p>
 InvalidActionDeclaration(String),
+///<p>Reserved for future use.</p>
+InvalidBlockerDeclaration(String),
+///<p>The specified stage declaration was specified in an invalid format.</p>
+InvalidStageDeclaration(String),
 ///<p>The specified structure was specified in an invalid format.</p>
 InvalidStructure(String),
+///<p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
+LimitExceeded(String),
 ///<p>The specified pipeline name is already in use.</p>
-PipelineNameInUse(String),
-///<p>The specified stage declaration was specified in an invalid format.</p>
-InvalidStageDeclaration(String),/// An error occurred dispatching the HTTP request
+PipelineNameInUse(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1435,7 +1459,14 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidBlockerDeclarationException" => CreatePipelineError::InvalidBlockerDeclaration(String::from(error_message)),"InvalidActionDeclarationException" => CreatePipelineError::InvalidActionDeclaration(String::from(error_message)),"LimitExceededException" => CreatePipelineError::LimitExceeded(String::from(error_message)),"InvalidStageDeclarationException" => CreatePipelineError::InvalidStageDeclaration(String::from(error_message)),"InvalidStructureException" => CreatePipelineError::InvalidStructure(String::from(error_message)),"PipelineNameInUseException" => CreatePipelineError::PipelineNameInUse(String::from(error_message)),"ValidationException" => CreatePipelineError::Validation(error_message.to_string()),_ => CreatePipelineError::Unknown(String::from(body))
+                                    "InvalidActionDeclarationException" => CreatePipelineError::InvalidActionDeclaration(String::from(error_message)),
+"InvalidBlockerDeclarationException" => CreatePipelineError::InvalidBlockerDeclaration(String::from(error_message)),
+"InvalidStageDeclarationException" => CreatePipelineError::InvalidStageDeclaration(String::from(error_message)),
+"InvalidStructureException" => CreatePipelineError::InvalidStructure(String::from(error_message)),
+"LimitExceededException" => CreatePipelineError::LimitExceeded(String::from(error_message)),
+"PipelineNameInUseException" => CreatePipelineError::PipelineNameInUse(String::from(error_message)),
+"ValidationException" => CreatePipelineError::Validation(error_message.to_string()),
+_ => CreatePipelineError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreatePipelineError::Unknown(String::from(body))
@@ -1466,7 +1497,16 @@ Unknown(String)
                 impl Error for CreatePipelineError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreatePipelineError::InvalidStructure(ref cause) => cause,CreatePipelineError::PipelineNameInUse(ref cause) => cause,CreatePipelineError::InvalidStageDeclaration(ref cause) => cause,CreatePipelineError::InvalidBlockerDeclaration(ref cause) => cause,CreatePipelineError::InvalidActionDeclaration(ref cause) => cause,CreatePipelineError::LimitExceeded(ref cause) => cause,CreatePipelineError::Validation(ref cause) => cause,CreatePipelineError::Credentials(ref err) => err.description(),CreatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreatePipelineError::Unknown(ref cause) => cause
+                            CreatePipelineError::InvalidActionDeclaration(ref cause) => cause,
+CreatePipelineError::InvalidBlockerDeclaration(ref cause) => cause,
+CreatePipelineError::InvalidStageDeclaration(ref cause) => cause,
+CreatePipelineError::InvalidStructure(ref cause) => cause,
+CreatePipelineError::LimitExceeded(ref cause) => cause,
+CreatePipelineError::PipelineNameInUse(ref cause) => cause,
+CreatePipelineError::Validation(ref cause) => cause,
+CreatePipelineError::Credentials(ref err) => err.description(),
+CreatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreatePipelineError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1492,7 +1532,8 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ValidationException" => DeleteCustomActionTypeError::Validation(error_message.to_string()),_ => DeleteCustomActionTypeError::Unknown(String::from(body))
+                                    "ValidationException" => DeleteCustomActionTypeError::Validation(error_message.to_string()),
+_ => DeleteCustomActionTypeError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteCustomActionTypeError::Unknown(String::from(body))
@@ -1523,7 +1564,10 @@ Unknown(String)
                 impl Error for DeleteCustomActionTypeError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteCustomActionTypeError::Validation(ref cause) => cause,DeleteCustomActionTypeError::Credentials(ref err) => err.description(),DeleteCustomActionTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteCustomActionTypeError::Unknown(ref cause) => cause
+                            DeleteCustomActionTypeError::Validation(ref cause) => cause,
+DeleteCustomActionTypeError::Credentials(ref err) => err.description(),
+DeleteCustomActionTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteCustomActionTypeError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1549,7 +1593,8 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ValidationException" => DeletePipelineError::Validation(error_message.to_string()),_ => DeletePipelineError::Unknown(String::from(body))
+                                    "ValidationException" => DeletePipelineError::Validation(error_message.to_string()),
+_ => DeletePipelineError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeletePipelineError::Unknown(String::from(body))
@@ -1580,7 +1625,10 @@ Unknown(String)
                 impl Error for DeletePipelineError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeletePipelineError::Validation(ref cause) => cause,DeletePipelineError::Credentials(ref err) => err.description(),DeletePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeletePipelineError::Unknown(ref cause) => cause
+                            DeletePipelineError::Validation(ref cause) => cause,
+DeletePipelineError::Credentials(ref err) => err.description(),
+DeletePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeletePipelineError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1610,7 +1658,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "PipelineNotFoundException" => DisableStageTransitionError::PipelineNotFound(String::from(error_message)),"StageNotFoundException" => DisableStageTransitionError::StageNotFound(String::from(error_message)),"ValidationException" => DisableStageTransitionError::Validation(error_message.to_string()),_ => DisableStageTransitionError::Unknown(String::from(body))
+                                    "PipelineNotFoundException" => DisableStageTransitionError::PipelineNotFound(String::from(error_message)),
+"StageNotFoundException" => DisableStageTransitionError::StageNotFound(String::from(error_message)),
+"ValidationException" => DisableStageTransitionError::Validation(error_message.to_string()),
+_ => DisableStageTransitionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DisableStageTransitionError::Unknown(String::from(body))
@@ -1641,7 +1692,12 @@ Unknown(String)
                 impl Error for DisableStageTransitionError {
                     fn description(&self) -> &str {
                         match *self {
-                            DisableStageTransitionError::PipelineNotFound(ref cause) => cause,DisableStageTransitionError::StageNotFound(ref cause) => cause,DisableStageTransitionError::Validation(ref cause) => cause,DisableStageTransitionError::Credentials(ref err) => err.description(),DisableStageTransitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DisableStageTransitionError::Unknown(ref cause) => cause
+                            DisableStageTransitionError::PipelineNotFound(ref cause) => cause,
+DisableStageTransitionError::StageNotFound(ref cause) => cause,
+DisableStageTransitionError::Validation(ref cause) => cause,
+DisableStageTransitionError::Credentials(ref err) => err.description(),
+DisableStageTransitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DisableStageTransitionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1649,10 +1705,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum EnableStageTransitionError {
                     
-///<p>The specified stage was specified in an invalid format or cannot be found.</p>
-StageNotFound(String),
 ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
-PipelineNotFound(String),/// An error occurred dispatching the HTTP request
+PipelineNotFound(String),
+///<p>The specified stage was specified in an invalid format or cannot be found.</p>
+StageNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1671,7 +1727,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "PipelineNotFoundException" => EnableStageTransitionError::PipelineNotFound(String::from(error_message)),"StageNotFoundException" => EnableStageTransitionError::StageNotFound(String::from(error_message)),"ValidationException" => EnableStageTransitionError::Validation(error_message.to_string()),_ => EnableStageTransitionError::Unknown(String::from(body))
+                                    "PipelineNotFoundException" => EnableStageTransitionError::PipelineNotFound(String::from(error_message)),
+"StageNotFoundException" => EnableStageTransitionError::StageNotFound(String::from(error_message)),
+"ValidationException" => EnableStageTransitionError::Validation(error_message.to_string()),
+_ => EnableStageTransitionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => EnableStageTransitionError::Unknown(String::from(body))
@@ -1702,7 +1761,12 @@ Unknown(String)
                 impl Error for EnableStageTransitionError {
                     fn description(&self) -> &str {
                         match *self {
-                            EnableStageTransitionError::PipelineNotFound(ref cause) => cause,EnableStageTransitionError::StageNotFound(ref cause) => cause,EnableStageTransitionError::Validation(ref cause) => cause,EnableStageTransitionError::Credentials(ref err) => err.description(),EnableStageTransitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),EnableStageTransitionError::Unknown(ref cause) => cause
+                            EnableStageTransitionError::PipelineNotFound(ref cause) => cause,
+EnableStageTransitionError::StageNotFound(ref cause) => cause,
+EnableStageTransitionError::Validation(ref cause) => cause,
+EnableStageTransitionError::Credentials(ref err) => err.description(),
+EnableStageTransitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+EnableStageTransitionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1730,7 +1794,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "JobNotFoundException" => GetJobDetailsError::JobNotFound(String::from(error_message)),"ValidationException" => GetJobDetailsError::Validation(error_message.to_string()),_ => GetJobDetailsError::Unknown(String::from(body))
+                                    "JobNotFoundException" => GetJobDetailsError::JobNotFound(String::from(error_message)),
+"ValidationException" => GetJobDetailsError::Validation(error_message.to_string()),
+_ => GetJobDetailsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetJobDetailsError::Unknown(String::from(body))
@@ -1761,7 +1827,11 @@ Unknown(String)
                 impl Error for GetJobDetailsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetJobDetailsError::JobNotFound(ref cause) => cause,GetJobDetailsError::Validation(ref cause) => cause,GetJobDetailsError::Credentials(ref err) => err.description(),GetJobDetailsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetJobDetailsError::Unknown(ref cause) => cause
+                            GetJobDetailsError::JobNotFound(ref cause) => cause,
+GetJobDetailsError::Validation(ref cause) => cause,
+GetJobDetailsError::Credentials(ref err) => err.description(),
+GetJobDetailsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetJobDetailsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1791,7 +1861,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "PipelineVersionNotFoundException" => GetPipelineError::PipelineVersionNotFound(String::from(error_message)),"PipelineNotFoundException" => GetPipelineError::PipelineNotFound(String::from(error_message)),"ValidationException" => GetPipelineError::Validation(error_message.to_string()),_ => GetPipelineError::Unknown(String::from(body))
+                                    "PipelineNotFoundException" => GetPipelineError::PipelineNotFound(String::from(error_message)),
+"PipelineVersionNotFoundException" => GetPipelineError::PipelineVersionNotFound(String::from(error_message)),
+"ValidationException" => GetPipelineError::Validation(error_message.to_string()),
+_ => GetPipelineError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetPipelineError::Unknown(String::from(body))
@@ -1822,7 +1895,12 @@ Unknown(String)
                 impl Error for GetPipelineError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetPipelineError::PipelineVersionNotFound(ref cause) => cause,GetPipelineError::PipelineNotFound(ref cause) => cause,GetPipelineError::Validation(ref cause) => cause,GetPipelineError::Credentials(ref err) => err.description(),GetPipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetPipelineError::Unknown(ref cause) => cause
+                            GetPipelineError::PipelineNotFound(ref cause) => cause,
+GetPipelineError::PipelineVersionNotFound(ref cause) => cause,
+GetPipelineError::Validation(ref cause) => cause,
+GetPipelineError::Credentials(ref err) => err.description(),
+GetPipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetPipelineError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1852,7 +1930,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "PipelineExecutionNotFoundException" => GetPipelineExecutionError::PipelineExecutionNotFound(String::from(error_message)),"PipelineNotFoundException" => GetPipelineExecutionError::PipelineNotFound(String::from(error_message)),"ValidationException" => GetPipelineExecutionError::Validation(error_message.to_string()),_ => GetPipelineExecutionError::Unknown(String::from(body))
+                                    "PipelineExecutionNotFoundException" => GetPipelineExecutionError::PipelineExecutionNotFound(String::from(error_message)),
+"PipelineNotFoundException" => GetPipelineExecutionError::PipelineNotFound(String::from(error_message)),
+"ValidationException" => GetPipelineExecutionError::Validation(error_message.to_string()),
+_ => GetPipelineExecutionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetPipelineExecutionError::Unknown(String::from(body))
@@ -1883,7 +1964,12 @@ Unknown(String)
                 impl Error for GetPipelineExecutionError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetPipelineExecutionError::PipelineNotFound(ref cause) => cause,GetPipelineExecutionError::PipelineExecutionNotFound(ref cause) => cause,GetPipelineExecutionError::Validation(ref cause) => cause,GetPipelineExecutionError::Credentials(ref err) => err.description(),GetPipelineExecutionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetPipelineExecutionError::Unknown(ref cause) => cause
+                            GetPipelineExecutionError::PipelineExecutionNotFound(ref cause) => cause,
+GetPipelineExecutionError::PipelineNotFound(ref cause) => cause,
+GetPipelineExecutionError::Validation(ref cause) => cause,
+GetPipelineExecutionError::Credentials(ref err) => err.description(),
+GetPipelineExecutionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetPipelineExecutionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1911,7 +1997,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "PipelineNotFoundException" => GetPipelineStateError::PipelineNotFound(String::from(error_message)),"ValidationException" => GetPipelineStateError::Validation(error_message.to_string()),_ => GetPipelineStateError::Unknown(String::from(body))
+                                    "PipelineNotFoundException" => GetPipelineStateError::PipelineNotFound(String::from(error_message)),
+"ValidationException" => GetPipelineStateError::Validation(error_message.to_string()),
+_ => GetPipelineStateError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetPipelineStateError::Unknown(String::from(body))
@@ -1942,7 +2030,11 @@ Unknown(String)
                 impl Error for GetPipelineStateError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetPipelineStateError::PipelineNotFound(ref cause) => cause,GetPipelineStateError::Validation(ref cause) => cause,GetPipelineStateError::Credentials(ref err) => err.description(),GetPipelineStateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetPipelineStateError::Unknown(ref cause) => cause
+                            GetPipelineStateError::PipelineNotFound(ref cause) => cause,
+GetPipelineStateError::Validation(ref cause) => cause,
+GetPipelineStateError::Credentials(ref err) => err.description(),
+GetPipelineStateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetPipelineStateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1950,12 +2042,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum GetThirdPartyJobDetailsError {
                     
-///<p>The specified job was specified in an invalid format or cannot be found.</p>
-JobNotFound(String),
+///<p>The client token was specified in an invalid format</p>
+InvalidClientToken(String),
 ///<p>The specified job was specified in an invalid format or cannot be found.</p>
 InvalidJob(String),
-///<p>The client token was specified in an invalid format</p>
-InvalidClientToken(String),/// An error occurred dispatching the HTTP request
+///<p>The specified job was specified in an invalid format or cannot be found.</p>
+JobNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1974,7 +2066,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "JobNotFoundException" => GetThirdPartyJobDetailsError::JobNotFound(String::from(error_message)),"InvalidClientTokenException" => GetThirdPartyJobDetailsError::InvalidClientToken(String::from(error_message)),"InvalidJobException" => GetThirdPartyJobDetailsError::InvalidJob(String::from(error_message)),"ValidationException" => GetThirdPartyJobDetailsError::Validation(error_message.to_string()),_ => GetThirdPartyJobDetailsError::Unknown(String::from(body))
+                                    "InvalidClientTokenException" => GetThirdPartyJobDetailsError::InvalidClientToken(String::from(error_message)),
+"InvalidJobException" => GetThirdPartyJobDetailsError::InvalidJob(String::from(error_message)),
+"JobNotFoundException" => GetThirdPartyJobDetailsError::JobNotFound(String::from(error_message)),
+"ValidationException" => GetThirdPartyJobDetailsError::Validation(error_message.to_string()),
+_ => GetThirdPartyJobDetailsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetThirdPartyJobDetailsError::Unknown(String::from(body))
@@ -2005,7 +2101,13 @@ Unknown(String)
                 impl Error for GetThirdPartyJobDetailsError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetThirdPartyJobDetailsError::JobNotFound(ref cause) => cause,GetThirdPartyJobDetailsError::InvalidClientToken(ref cause) => cause,GetThirdPartyJobDetailsError::InvalidJob(ref cause) => cause,GetThirdPartyJobDetailsError::Validation(ref cause) => cause,GetThirdPartyJobDetailsError::Credentials(ref err) => err.description(),GetThirdPartyJobDetailsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetThirdPartyJobDetailsError::Unknown(ref cause) => cause
+                            GetThirdPartyJobDetailsError::InvalidClientToken(ref cause) => cause,
+GetThirdPartyJobDetailsError::InvalidJob(ref cause) => cause,
+GetThirdPartyJobDetailsError::JobNotFound(ref cause) => cause,
+GetThirdPartyJobDetailsError::Validation(ref cause) => cause,
+GetThirdPartyJobDetailsError::Credentials(ref err) => err.description(),
+GetThirdPartyJobDetailsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetThirdPartyJobDetailsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2033,7 +2135,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidNextTokenException" => ListActionTypesError::InvalidNextToken(String::from(error_message)),"ValidationException" => ListActionTypesError::Validation(error_message.to_string()),_ => ListActionTypesError::Unknown(String::from(body))
+                                    "InvalidNextTokenException" => ListActionTypesError::InvalidNextToken(String::from(error_message)),
+"ValidationException" => ListActionTypesError::Validation(error_message.to_string()),
+_ => ListActionTypesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListActionTypesError::Unknown(String::from(body))
@@ -2064,7 +2168,11 @@ Unknown(String)
                 impl Error for ListActionTypesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListActionTypesError::InvalidNextToken(ref cause) => cause,ListActionTypesError::Validation(ref cause) => cause,ListActionTypesError::Credentials(ref err) => err.description(),ListActionTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListActionTypesError::Unknown(ref cause) => cause
+                            ListActionTypesError::InvalidNextToken(ref cause) => cause,
+ListActionTypesError::Validation(ref cause) => cause,
+ListActionTypesError::Credentials(ref err) => err.description(),
+ListActionTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListActionTypesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2092,7 +2200,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidNextTokenException" => ListPipelinesError::InvalidNextToken(String::from(error_message)),"ValidationException" => ListPipelinesError::Validation(error_message.to_string()),_ => ListPipelinesError::Unknown(String::from(body))
+                                    "InvalidNextTokenException" => ListPipelinesError::InvalidNextToken(String::from(error_message)),
+"ValidationException" => ListPipelinesError::Validation(error_message.to_string()),
+_ => ListPipelinesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListPipelinesError::Unknown(String::from(body))
@@ -2123,7 +2233,11 @@ Unknown(String)
                 impl Error for ListPipelinesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListPipelinesError::InvalidNextToken(ref cause) => cause,ListPipelinesError::Validation(ref cause) => cause,ListPipelinesError::Credentials(ref err) => err.description(),ListPipelinesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListPipelinesError::Unknown(ref cause) => cause
+                            ListPipelinesError::InvalidNextToken(ref cause) => cause,
+ListPipelinesError::Validation(ref cause) => cause,
+ListPipelinesError::Credentials(ref err) => err.description(),
+ListPipelinesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListPipelinesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2151,7 +2265,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ActionTypeNotFoundException" => PollForJobsError::ActionTypeNotFound(String::from(error_message)),"ValidationException" => PollForJobsError::Validation(error_message.to_string()),_ => PollForJobsError::Unknown(String::from(body))
+                                    "ActionTypeNotFoundException" => PollForJobsError::ActionTypeNotFound(String::from(error_message)),
+"ValidationException" => PollForJobsError::Validation(error_message.to_string()),
+_ => PollForJobsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PollForJobsError::Unknown(String::from(body))
@@ -2182,7 +2298,11 @@ Unknown(String)
                 impl Error for PollForJobsError {
                     fn description(&self) -> &str {
                         match *self {
-                            PollForJobsError::ActionTypeNotFound(ref cause) => cause,PollForJobsError::Validation(ref cause) => cause,PollForJobsError::Credentials(ref err) => err.description(),PollForJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PollForJobsError::Unknown(ref cause) => cause
+                            PollForJobsError::ActionTypeNotFound(ref cause) => cause,
+PollForJobsError::Validation(ref cause) => cause,
+PollForJobsError::Credentials(ref err) => err.description(),
+PollForJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PollForJobsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2210,7 +2330,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ActionTypeNotFoundException" => PollForThirdPartyJobsError::ActionTypeNotFound(String::from(error_message)),"ValidationException" => PollForThirdPartyJobsError::Validation(error_message.to_string()),_ => PollForThirdPartyJobsError::Unknown(String::from(body))
+                                    "ActionTypeNotFoundException" => PollForThirdPartyJobsError::ActionTypeNotFound(String::from(error_message)),
+"ValidationException" => PollForThirdPartyJobsError::Validation(error_message.to_string()),
+_ => PollForThirdPartyJobsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PollForThirdPartyJobsError::Unknown(String::from(body))
@@ -2241,7 +2363,11 @@ Unknown(String)
                 impl Error for PollForThirdPartyJobsError {
                     fn description(&self) -> &str {
                         match *self {
-                            PollForThirdPartyJobsError::ActionTypeNotFound(ref cause) => cause,PollForThirdPartyJobsError::Validation(ref cause) => cause,PollForThirdPartyJobsError::Credentials(ref err) => err.description(),PollForThirdPartyJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PollForThirdPartyJobsError::Unknown(ref cause) => cause
+                            PollForThirdPartyJobsError::ActionTypeNotFound(ref cause) => cause,
+PollForThirdPartyJobsError::Validation(ref cause) => cause,
+PollForThirdPartyJobsError::Credentials(ref err) => err.description(),
+PollForThirdPartyJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PollForThirdPartyJobsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2249,10 +2375,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutActionRevisionError {
                     
-///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
-PipelineNotFound(String),
 ///<p>The specified action cannot be found.</p>
 ActionNotFound(String),
+///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+PipelineNotFound(String),
 ///<p>The specified stage was specified in an invalid format or cannot be found.</p>
 StageNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2273,7 +2399,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "StageNotFoundException" => PutActionRevisionError::StageNotFound(String::from(error_message)),"ActionNotFoundException" => PutActionRevisionError::ActionNotFound(String::from(error_message)),"PipelineNotFoundException" => PutActionRevisionError::PipelineNotFound(String::from(error_message)),"ValidationException" => PutActionRevisionError::Validation(error_message.to_string()),_ => PutActionRevisionError::Unknown(String::from(body))
+                                    "ActionNotFoundException" => PutActionRevisionError::ActionNotFound(String::from(error_message)),
+"PipelineNotFoundException" => PutActionRevisionError::PipelineNotFound(String::from(error_message)),
+"StageNotFoundException" => PutActionRevisionError::StageNotFound(String::from(error_message)),
+"ValidationException" => PutActionRevisionError::Validation(error_message.to_string()),
+_ => PutActionRevisionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutActionRevisionError::Unknown(String::from(body))
@@ -2304,7 +2434,13 @@ Unknown(String)
                 impl Error for PutActionRevisionError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutActionRevisionError::PipelineNotFound(ref cause) => cause,PutActionRevisionError::ActionNotFound(ref cause) => cause,PutActionRevisionError::StageNotFound(ref cause) => cause,PutActionRevisionError::Validation(ref cause) => cause,PutActionRevisionError::Credentials(ref err) => err.description(),PutActionRevisionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutActionRevisionError::Unknown(ref cause) => cause
+                            PutActionRevisionError::ActionNotFound(ref cause) => cause,
+PutActionRevisionError::PipelineNotFound(ref cause) => cause,
+PutActionRevisionError::StageNotFound(ref cause) => cause,
+PutActionRevisionError::Validation(ref cause) => cause,
+PutActionRevisionError::Credentials(ref err) => err.description(),
+PutActionRevisionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutActionRevisionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2316,12 +2452,12 @@ Unknown(String)
 ActionNotFound(String),
 ///<p>The approval action has already been approved or rejected.</p>
 ApprovalAlreadyCompleted(String),
-///<p>The specified stage was specified in an invalid format or cannot be found.</p>
-StageNotFound(String),
+///<p>The approval request already received a response or has expired.</p>
+InvalidApprovalToken(String),
 ///<p>The specified pipeline was specified in an invalid format or cannot be found.</p>
 PipelineNotFound(String),
-///<p>The approval request already received a response or has expired.</p>
-InvalidApprovalToken(String),/// An error occurred dispatching the HTTP request
+///<p>The specified stage was specified in an invalid format or cannot be found.</p>
+StageNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2340,7 +2476,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "StageNotFoundException" => PutApprovalResultError::StageNotFound(String::from(error_message)),"InvalidApprovalTokenException" => PutApprovalResultError::InvalidApprovalToken(String::from(error_message)),"ApprovalAlreadyCompletedException" => PutApprovalResultError::ApprovalAlreadyCompleted(String::from(error_message)),"PipelineNotFoundException" => PutApprovalResultError::PipelineNotFound(String::from(error_message)),"ActionNotFoundException" => PutApprovalResultError::ActionNotFound(String::from(error_message)),"ValidationException" => PutApprovalResultError::Validation(error_message.to_string()),_ => PutApprovalResultError::Unknown(String::from(body))
+                                    "ActionNotFoundException" => PutApprovalResultError::ActionNotFound(String::from(error_message)),
+"ApprovalAlreadyCompletedException" => PutApprovalResultError::ApprovalAlreadyCompleted(String::from(error_message)),
+"InvalidApprovalTokenException" => PutApprovalResultError::InvalidApprovalToken(String::from(error_message)),
+"PipelineNotFoundException" => PutApprovalResultError::PipelineNotFound(String::from(error_message)),
+"StageNotFoundException" => PutApprovalResultError::StageNotFound(String::from(error_message)),
+"ValidationException" => PutApprovalResultError::Validation(error_message.to_string()),
+_ => PutApprovalResultError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutApprovalResultError::Unknown(String::from(body))
@@ -2371,7 +2513,15 @@ Unknown(String)
                 impl Error for PutApprovalResultError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutApprovalResultError::InvalidApprovalToken(ref cause) => cause,PutApprovalResultError::PipelineNotFound(ref cause) => cause,PutApprovalResultError::ActionNotFound(ref cause) => cause,PutApprovalResultError::StageNotFound(ref cause) => cause,PutApprovalResultError::ApprovalAlreadyCompleted(ref cause) => cause,PutApprovalResultError::Validation(ref cause) => cause,PutApprovalResultError::Credentials(ref err) => err.description(),PutApprovalResultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutApprovalResultError::Unknown(ref cause) => cause
+                            PutApprovalResultError::ActionNotFound(ref cause) => cause,
+PutApprovalResultError::ApprovalAlreadyCompleted(ref cause) => cause,
+PutApprovalResultError::InvalidApprovalToken(ref cause) => cause,
+PutApprovalResultError::PipelineNotFound(ref cause) => cause,
+PutApprovalResultError::StageNotFound(ref cause) => cause,
+PutApprovalResultError::Validation(ref cause) => cause,
+PutApprovalResultError::Credentials(ref err) => err.description(),
+PutApprovalResultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutApprovalResultError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2379,10 +2529,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutJobFailureResultError {
                     
-///<p>The specified job was specified in an invalid format or cannot be found.</p>
-JobNotFound(String),
 ///<p>The specified job state was specified in an invalid format.</p>
-InvalidJobState(String),/// An error occurred dispatching the HTTP request
+InvalidJobState(String),
+///<p>The specified job was specified in an invalid format or cannot be found.</p>
+JobNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2401,7 +2551,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidJobStateException" => PutJobFailureResultError::InvalidJobState(String::from(error_message)),"JobNotFoundException" => PutJobFailureResultError::JobNotFound(String::from(error_message)),"ValidationException" => PutJobFailureResultError::Validation(error_message.to_string()),_ => PutJobFailureResultError::Unknown(String::from(body))
+                                    "InvalidJobStateException" => PutJobFailureResultError::InvalidJobState(String::from(error_message)),
+"JobNotFoundException" => PutJobFailureResultError::JobNotFound(String::from(error_message)),
+"ValidationException" => PutJobFailureResultError::Validation(error_message.to_string()),
+_ => PutJobFailureResultError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutJobFailureResultError::Unknown(String::from(body))
@@ -2432,7 +2585,12 @@ Unknown(String)
                 impl Error for PutJobFailureResultError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutJobFailureResultError::InvalidJobState(ref cause) => cause,PutJobFailureResultError::JobNotFound(ref cause) => cause,PutJobFailureResultError::Validation(ref cause) => cause,PutJobFailureResultError::Credentials(ref err) => err.description(),PutJobFailureResultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutJobFailureResultError::Unknown(ref cause) => cause
+                            PutJobFailureResultError::InvalidJobState(ref cause) => cause,
+PutJobFailureResultError::JobNotFound(ref cause) => cause,
+PutJobFailureResultError::Validation(ref cause) => cause,
+PutJobFailureResultError::Credentials(ref err) => err.description(),
+PutJobFailureResultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutJobFailureResultError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2462,7 +2620,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidJobStateException" => PutJobSuccessResultError::InvalidJobState(String::from(error_message)),"JobNotFoundException" => PutJobSuccessResultError::JobNotFound(String::from(error_message)),"ValidationException" => PutJobSuccessResultError::Validation(error_message.to_string()),_ => PutJobSuccessResultError::Unknown(String::from(body))
+                                    "InvalidJobStateException" => PutJobSuccessResultError::InvalidJobState(String::from(error_message)),
+"JobNotFoundException" => PutJobSuccessResultError::JobNotFound(String::from(error_message)),
+"ValidationException" => PutJobSuccessResultError::Validation(error_message.to_string()),
+_ => PutJobSuccessResultError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutJobSuccessResultError::Unknown(String::from(body))
@@ -2493,7 +2654,12 @@ Unknown(String)
                 impl Error for PutJobSuccessResultError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutJobSuccessResultError::JobNotFound(ref cause) => cause,PutJobSuccessResultError::InvalidJobState(ref cause) => cause,PutJobSuccessResultError::Validation(ref cause) => cause,PutJobSuccessResultError::Credentials(ref err) => err.description(),PutJobSuccessResultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutJobSuccessResultError::Unknown(ref cause) => cause
+                            PutJobSuccessResultError::InvalidJobState(ref cause) => cause,
+PutJobSuccessResultError::JobNotFound(ref cause) => cause,
+PutJobSuccessResultError::Validation(ref cause) => cause,
+PutJobSuccessResultError::Credentials(ref err) => err.description(),
+PutJobSuccessResultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutJobSuccessResultError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2501,12 +2667,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum PutThirdPartyJobFailureResultError {
                     
-///<p>The specified job was specified in an invalid format or cannot be found.</p>
-JobNotFound(String),
 ///<p>The client token was specified in an invalid format</p>
 InvalidClientToken(String),
 ///<p>The specified job state was specified in an invalid format.</p>
-InvalidJobState(String),/// An error occurred dispatching the HTTP request
+InvalidJobState(String),
+///<p>The specified job was specified in an invalid format or cannot be found.</p>
+JobNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2525,7 +2691,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidClientTokenException" => PutThirdPartyJobFailureResultError::InvalidClientToken(String::from(error_message)),"InvalidJobStateException" => PutThirdPartyJobFailureResultError::InvalidJobState(String::from(error_message)),"JobNotFoundException" => PutThirdPartyJobFailureResultError::JobNotFound(String::from(error_message)),"ValidationException" => PutThirdPartyJobFailureResultError::Validation(error_message.to_string()),_ => PutThirdPartyJobFailureResultError::Unknown(String::from(body))
+                                    "InvalidClientTokenException" => PutThirdPartyJobFailureResultError::InvalidClientToken(String::from(error_message)),
+"InvalidJobStateException" => PutThirdPartyJobFailureResultError::InvalidJobState(String::from(error_message)),
+"JobNotFoundException" => PutThirdPartyJobFailureResultError::JobNotFound(String::from(error_message)),
+"ValidationException" => PutThirdPartyJobFailureResultError::Validation(error_message.to_string()),
+_ => PutThirdPartyJobFailureResultError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutThirdPartyJobFailureResultError::Unknown(String::from(body))
@@ -2556,7 +2726,13 @@ Unknown(String)
                 impl Error for PutThirdPartyJobFailureResultError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutThirdPartyJobFailureResultError::JobNotFound(ref cause) => cause,PutThirdPartyJobFailureResultError::InvalidJobState(ref cause) => cause,PutThirdPartyJobFailureResultError::InvalidClientToken(ref cause) => cause,PutThirdPartyJobFailureResultError::Validation(ref cause) => cause,PutThirdPartyJobFailureResultError::Credentials(ref err) => err.description(),PutThirdPartyJobFailureResultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutThirdPartyJobFailureResultError::Unknown(ref cause) => cause
+                            PutThirdPartyJobFailureResultError::InvalidClientToken(ref cause) => cause,
+PutThirdPartyJobFailureResultError::InvalidJobState(ref cause) => cause,
+PutThirdPartyJobFailureResultError::JobNotFound(ref cause) => cause,
+PutThirdPartyJobFailureResultError::Validation(ref cause) => cause,
+PutThirdPartyJobFailureResultError::Credentials(ref err) => err.description(),
+PutThirdPartyJobFailureResultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutThirdPartyJobFailureResultError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2566,10 +2742,10 @@ Unknown(String)
                     
 ///<p>The client token was specified in an invalid format</p>
 InvalidClientToken(String),
-///<p>The specified job was specified in an invalid format or cannot be found.</p>
-JobNotFound(String),
 ///<p>The specified job state was specified in an invalid format.</p>
-InvalidJobState(String),/// An error occurred dispatching the HTTP request
+InvalidJobState(String),
+///<p>The specified job was specified in an invalid format or cannot be found.</p>
+JobNotFound(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2588,7 +2764,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "JobNotFoundException" => PutThirdPartyJobSuccessResultError::JobNotFound(String::from(error_message)),"InvalidClientTokenException" => PutThirdPartyJobSuccessResultError::InvalidClientToken(String::from(error_message)),"InvalidJobStateException" => PutThirdPartyJobSuccessResultError::InvalidJobState(String::from(error_message)),"ValidationException" => PutThirdPartyJobSuccessResultError::Validation(error_message.to_string()),_ => PutThirdPartyJobSuccessResultError::Unknown(String::from(body))
+                                    "InvalidClientTokenException" => PutThirdPartyJobSuccessResultError::InvalidClientToken(String::from(error_message)),
+"InvalidJobStateException" => PutThirdPartyJobSuccessResultError::InvalidJobState(String::from(error_message)),
+"JobNotFoundException" => PutThirdPartyJobSuccessResultError::JobNotFound(String::from(error_message)),
+"ValidationException" => PutThirdPartyJobSuccessResultError::Validation(error_message.to_string()),
+_ => PutThirdPartyJobSuccessResultError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutThirdPartyJobSuccessResultError::Unknown(String::from(body))
@@ -2619,7 +2799,13 @@ Unknown(String)
                 impl Error for PutThirdPartyJobSuccessResultError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutThirdPartyJobSuccessResultError::JobNotFound(ref cause) => cause,PutThirdPartyJobSuccessResultError::InvalidClientToken(ref cause) => cause,PutThirdPartyJobSuccessResultError::InvalidJobState(ref cause) => cause,PutThirdPartyJobSuccessResultError::Validation(ref cause) => cause,PutThirdPartyJobSuccessResultError::Credentials(ref err) => err.description(),PutThirdPartyJobSuccessResultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutThirdPartyJobSuccessResultError::Unknown(ref cause) => cause
+                            PutThirdPartyJobSuccessResultError::InvalidClientToken(ref cause) => cause,
+PutThirdPartyJobSuccessResultError::InvalidJobState(ref cause) => cause,
+PutThirdPartyJobSuccessResultError::JobNotFound(ref cause) => cause,
+PutThirdPartyJobSuccessResultError::Validation(ref cause) => cause,
+PutThirdPartyJobSuccessResultError::Credentials(ref err) => err.description(),
+PutThirdPartyJobSuccessResultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutThirdPartyJobSuccessResultError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2653,7 +2839,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "PipelineNotFoundException" => RetryStageExecutionError::PipelineNotFound(String::from(error_message)),"StageNotFoundException" => RetryStageExecutionError::StageNotFound(String::from(error_message)),"NotLatestPipelineExecutionException" => RetryStageExecutionError::NotLatestPipelineExecution(String::from(error_message)),"StageNotRetryableException" => RetryStageExecutionError::StageNotRetryable(String::from(error_message)),"ValidationException" => RetryStageExecutionError::Validation(error_message.to_string()),_ => RetryStageExecutionError::Unknown(String::from(body))
+                                    "NotLatestPipelineExecutionException" => RetryStageExecutionError::NotLatestPipelineExecution(String::from(error_message)),
+"PipelineNotFoundException" => RetryStageExecutionError::PipelineNotFound(String::from(error_message)),
+"StageNotFoundException" => RetryStageExecutionError::StageNotFound(String::from(error_message)),
+"StageNotRetryableException" => RetryStageExecutionError::StageNotRetryable(String::from(error_message)),
+"ValidationException" => RetryStageExecutionError::Validation(error_message.to_string()),
+_ => RetryStageExecutionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RetryStageExecutionError::Unknown(String::from(body))
@@ -2684,7 +2875,14 @@ Unknown(String)
                 impl Error for RetryStageExecutionError {
                     fn description(&self) -> &str {
                         match *self {
-                            RetryStageExecutionError::NotLatestPipelineExecution(ref cause) => cause,RetryStageExecutionError::PipelineNotFound(ref cause) => cause,RetryStageExecutionError::StageNotFound(ref cause) => cause,RetryStageExecutionError::StageNotRetryable(ref cause) => cause,RetryStageExecutionError::Validation(ref cause) => cause,RetryStageExecutionError::Credentials(ref err) => err.description(),RetryStageExecutionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RetryStageExecutionError::Unknown(ref cause) => cause
+                            RetryStageExecutionError::NotLatestPipelineExecution(ref cause) => cause,
+RetryStageExecutionError::PipelineNotFound(ref cause) => cause,
+RetryStageExecutionError::StageNotFound(ref cause) => cause,
+RetryStageExecutionError::StageNotRetryable(ref cause) => cause,
+RetryStageExecutionError::Validation(ref cause) => cause,
+RetryStageExecutionError::Credentials(ref err) => err.description(),
+RetryStageExecutionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RetryStageExecutionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2712,7 +2910,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "PipelineNotFoundException" => StartPipelineExecutionError::PipelineNotFound(String::from(error_message)),"ValidationException" => StartPipelineExecutionError::Validation(error_message.to_string()),_ => StartPipelineExecutionError::Unknown(String::from(body))
+                                    "PipelineNotFoundException" => StartPipelineExecutionError::PipelineNotFound(String::from(error_message)),
+"ValidationException" => StartPipelineExecutionError::Validation(error_message.to_string()),
+_ => StartPipelineExecutionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StartPipelineExecutionError::Unknown(String::from(body))
@@ -2743,7 +2943,11 @@ Unknown(String)
                 impl Error for StartPipelineExecutionError {
                     fn description(&self) -> &str {
                         match *self {
-                            StartPipelineExecutionError::PipelineNotFound(ref cause) => cause,StartPipelineExecutionError::Validation(ref cause) => cause,StartPipelineExecutionError::Credentials(ref err) => err.description(),StartPipelineExecutionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StartPipelineExecutionError::Unknown(ref cause) => cause
+                            StartPipelineExecutionError::PipelineNotFound(ref cause) => cause,
+StartPipelineExecutionError::Validation(ref cause) => cause,
+StartPipelineExecutionError::Credentials(ref err) => err.description(),
+StartPipelineExecutionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StartPipelineExecutionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2751,14 +2955,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum UpdatePipelineError {
                     
-///<p>The specified structure was specified in an invalid format.</p>
-InvalidStructure(String),
-///<p>Reserved for future use.</p>
-InvalidBlockerDeclaration(String),
 ///<p>The specified action declaration was specified in an invalid format.</p>
 InvalidActionDeclaration(String),
+///<p>Reserved for future use.</p>
+InvalidBlockerDeclaration(String),
 ///<p>The specified stage declaration was specified in an invalid format.</p>
-InvalidStageDeclaration(String),/// An error occurred dispatching the HTTP request
+InvalidStageDeclaration(String),
+///<p>The specified structure was specified in an invalid format.</p>
+InvalidStructure(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2777,7 +2981,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidActionDeclarationException" => UpdatePipelineError::InvalidActionDeclaration(String::from(error_message)),"InvalidStageDeclarationException" => UpdatePipelineError::InvalidStageDeclaration(String::from(error_message)),"InvalidStructureException" => UpdatePipelineError::InvalidStructure(String::from(error_message)),"InvalidBlockerDeclarationException" => UpdatePipelineError::InvalidBlockerDeclaration(String::from(error_message)),"ValidationException" => UpdatePipelineError::Validation(error_message.to_string()),_ => UpdatePipelineError::Unknown(String::from(body))
+                                    "InvalidActionDeclarationException" => UpdatePipelineError::InvalidActionDeclaration(String::from(error_message)),
+"InvalidBlockerDeclarationException" => UpdatePipelineError::InvalidBlockerDeclaration(String::from(error_message)),
+"InvalidStageDeclarationException" => UpdatePipelineError::InvalidStageDeclaration(String::from(error_message)),
+"InvalidStructureException" => UpdatePipelineError::InvalidStructure(String::from(error_message)),
+"ValidationException" => UpdatePipelineError::Validation(error_message.to_string()),
+_ => UpdatePipelineError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdatePipelineError::Unknown(String::from(body))
@@ -2808,7 +3017,14 @@ Unknown(String)
                 impl Error for UpdatePipelineError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdatePipelineError::InvalidStageDeclaration(ref cause) => cause,UpdatePipelineError::InvalidBlockerDeclaration(ref cause) => cause,UpdatePipelineError::InvalidStructure(ref cause) => cause,UpdatePipelineError::InvalidActionDeclaration(ref cause) => cause,UpdatePipelineError::Validation(ref cause) => cause,UpdatePipelineError::Credentials(ref err) => err.description(),UpdatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdatePipelineError::Unknown(ref cause) => cause
+                            UpdatePipelineError::InvalidActionDeclaration(ref cause) => cause,
+UpdatePipelineError::InvalidBlockerDeclaration(ref cause) => cause,
+UpdatePipelineError::InvalidStageDeclaration(ref cause) => cause,
+UpdatePipelineError::InvalidStructure(ref cause) => cause,
+UpdatePipelineError::Validation(ref cause) => cause,
+UpdatePipelineError::Credentials(ref err) => err.description(),
+UpdatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdatePipelineError::Unknown(ref cause) => cause
                         }
                     }
                  }

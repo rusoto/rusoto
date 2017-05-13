@@ -1132,10 +1132,10 @@ pub type Version = String;
                     
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
 ///<p>Internal server error.</p>
 Internal(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
 NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -1156,7 +1156,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NoSuchEntityException" => AddAttributesToFindingsError::NoSuchEntity(String::from(error_message)),"InternalException" => AddAttributesToFindingsError::Internal(String::from(error_message)),"InvalidInputException" => AddAttributesToFindingsError::InvalidInput(String::from(error_message)),"AccessDeniedException" => AddAttributesToFindingsError::AccessDenied(String::from(error_message)),"ValidationException" => AddAttributesToFindingsError::Validation(error_message.to_string()),_ => AddAttributesToFindingsError::Unknown(String::from(body))
+                                    "AccessDeniedException" => AddAttributesToFindingsError::AccessDenied(String::from(error_message)),
+"InternalException" => AddAttributesToFindingsError::Internal(String::from(error_message)),
+"InvalidInputException" => AddAttributesToFindingsError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => AddAttributesToFindingsError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => AddAttributesToFindingsError::Validation(error_message.to_string()),
+_ => AddAttributesToFindingsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AddAttributesToFindingsError::Unknown(String::from(body))
@@ -1187,7 +1192,14 @@ Unknown(String)
                 impl Error for AddAttributesToFindingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddAttributesToFindingsError::AccessDenied(ref cause) => cause,AddAttributesToFindingsError::NoSuchEntity(ref cause) => cause,AddAttributesToFindingsError::Internal(ref cause) => cause,AddAttributesToFindingsError::InvalidInput(ref cause) => cause,AddAttributesToFindingsError::Validation(ref cause) => cause,AddAttributesToFindingsError::Credentials(ref err) => err.description(),AddAttributesToFindingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddAttributesToFindingsError::Unknown(ref cause) => cause
+                            AddAttributesToFindingsError::AccessDenied(ref cause) => cause,
+AddAttributesToFindingsError::Internal(ref cause) => cause,
+AddAttributesToFindingsError::InvalidInput(ref cause) => cause,
+AddAttributesToFindingsError::NoSuchEntity(ref cause) => cause,
+AddAttributesToFindingsError::Validation(ref cause) => cause,
+AddAttributesToFindingsError::Credentials(ref err) => err.description(),
+AddAttributesToFindingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddAttributesToFindingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1195,16 +1207,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateAssessmentTargetError {
                     
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
-LimitExceeded(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
 ///<p>Internal server error.</p>
-Internal(String),/// An error occurred dispatching the HTTP request
+Internal(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1223,7 +1235,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalException" => CreateAssessmentTargetError::Internal(String::from(error_message)),"InvalidInputException" => CreateAssessmentTargetError::InvalidInput(String::from(error_message)),"LimitExceededException" => CreateAssessmentTargetError::LimitExceeded(String::from(error_message)),"AccessDeniedException" => CreateAssessmentTargetError::AccessDenied(String::from(error_message)),"NoSuchEntityException" => CreateAssessmentTargetError::NoSuchEntity(String::from(error_message)),"ValidationException" => CreateAssessmentTargetError::Validation(error_message.to_string()),_ => CreateAssessmentTargetError::Unknown(String::from(body))
+                                    "AccessDeniedException" => CreateAssessmentTargetError::AccessDenied(String::from(error_message)),
+"InternalException" => CreateAssessmentTargetError::Internal(String::from(error_message)),
+"InvalidInputException" => CreateAssessmentTargetError::InvalidInput(String::from(error_message)),
+"LimitExceededException" => CreateAssessmentTargetError::LimitExceeded(String::from(error_message)),
+"NoSuchEntityException" => CreateAssessmentTargetError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => CreateAssessmentTargetError::Validation(error_message.to_string()),
+_ => CreateAssessmentTargetError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateAssessmentTargetError::Unknown(String::from(body))
@@ -1254,7 +1272,15 @@ Unknown(String)
                 impl Error for CreateAssessmentTargetError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateAssessmentTargetError::LimitExceeded(ref cause) => cause,CreateAssessmentTargetError::AccessDenied(ref cause) => cause,CreateAssessmentTargetError::InvalidInput(ref cause) => cause,CreateAssessmentTargetError::NoSuchEntity(ref cause) => cause,CreateAssessmentTargetError::Internal(ref cause) => cause,CreateAssessmentTargetError::Validation(ref cause) => cause,CreateAssessmentTargetError::Credentials(ref err) => err.description(),CreateAssessmentTargetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateAssessmentTargetError::Unknown(ref cause) => cause
+                            CreateAssessmentTargetError::AccessDenied(ref cause) => cause,
+CreateAssessmentTargetError::Internal(ref cause) => cause,
+CreateAssessmentTargetError::InvalidInput(ref cause) => cause,
+CreateAssessmentTargetError::LimitExceeded(ref cause) => cause,
+CreateAssessmentTargetError::NoSuchEntity(ref cause) => cause,
+CreateAssessmentTargetError::Validation(ref cause) => cause,
+CreateAssessmentTargetError::Credentials(ref err) => err.description(),
+CreateAssessmentTargetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateAssessmentTargetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1264,14 +1290,14 @@ Unknown(String)
                     
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
-LimitExceeded(String),
 ///<p>Internal server error.</p>
 Internal(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1290,7 +1316,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "AccessDeniedException" => CreateAssessmentTemplateError::AccessDenied(String::from(error_message)),"InvalidInputException" => CreateAssessmentTemplateError::InvalidInput(String::from(error_message)),"LimitExceededException" => CreateAssessmentTemplateError::LimitExceeded(String::from(error_message)),"NoSuchEntityException" => CreateAssessmentTemplateError::NoSuchEntity(String::from(error_message)),"InternalException" => CreateAssessmentTemplateError::Internal(String::from(error_message)),"ValidationException" => CreateAssessmentTemplateError::Validation(error_message.to_string()),_ => CreateAssessmentTemplateError::Unknown(String::from(body))
+                                    "AccessDeniedException" => CreateAssessmentTemplateError::AccessDenied(String::from(error_message)),
+"InternalException" => CreateAssessmentTemplateError::Internal(String::from(error_message)),
+"InvalidInputException" => CreateAssessmentTemplateError::InvalidInput(String::from(error_message)),
+"LimitExceededException" => CreateAssessmentTemplateError::LimitExceeded(String::from(error_message)),
+"NoSuchEntityException" => CreateAssessmentTemplateError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => CreateAssessmentTemplateError::Validation(error_message.to_string()),
+_ => CreateAssessmentTemplateError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateAssessmentTemplateError::Unknown(String::from(body))
@@ -1321,7 +1353,15 @@ Unknown(String)
                 impl Error for CreateAssessmentTemplateError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateAssessmentTemplateError::LimitExceeded(ref cause) => cause,CreateAssessmentTemplateError::NoSuchEntity(ref cause) => cause,CreateAssessmentTemplateError::InvalidInput(ref cause) => cause,CreateAssessmentTemplateError::Internal(ref cause) => cause,CreateAssessmentTemplateError::AccessDenied(ref cause) => cause,CreateAssessmentTemplateError::Validation(ref cause) => cause,CreateAssessmentTemplateError::Credentials(ref err) => err.description(),CreateAssessmentTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateAssessmentTemplateError::Unknown(ref cause) => cause
+                            CreateAssessmentTemplateError::AccessDenied(ref cause) => cause,
+CreateAssessmentTemplateError::Internal(ref cause) => cause,
+CreateAssessmentTemplateError::InvalidInput(ref cause) => cause,
+CreateAssessmentTemplateError::LimitExceeded(ref cause) => cause,
+CreateAssessmentTemplateError::NoSuchEntity(ref cause) => cause,
+CreateAssessmentTemplateError::Validation(ref cause) => cause,
+CreateAssessmentTemplateError::Credentials(ref err) => err.description(),
+CreateAssessmentTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateAssessmentTemplateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1331,12 +1371,12 @@ Unknown(String)
                     
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
-LimitExceeded(String),
 ///<p>Internal server error.</p>
 Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+LimitExceeded(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1355,7 +1395,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInputException" => CreateResourceGroupError::InvalidInput(String::from(error_message)),"AccessDeniedException" => CreateResourceGroupError::AccessDenied(String::from(error_message)),"LimitExceededException" => CreateResourceGroupError::LimitExceeded(String::from(error_message)),"InternalException" => CreateResourceGroupError::Internal(String::from(error_message)),"ValidationException" => CreateResourceGroupError::Validation(error_message.to_string()),_ => CreateResourceGroupError::Unknown(String::from(body))
+                                    "AccessDeniedException" => CreateResourceGroupError::AccessDenied(String::from(error_message)),
+"InternalException" => CreateResourceGroupError::Internal(String::from(error_message)),
+"InvalidInputException" => CreateResourceGroupError::InvalidInput(String::from(error_message)),
+"LimitExceededException" => CreateResourceGroupError::LimitExceeded(String::from(error_message)),
+"ValidationException" => CreateResourceGroupError::Validation(error_message.to_string()),
+_ => CreateResourceGroupError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateResourceGroupError::Unknown(String::from(body))
@@ -1386,7 +1431,14 @@ Unknown(String)
                 impl Error for CreateResourceGroupError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateResourceGroupError::LimitExceeded(ref cause) => cause,CreateResourceGroupError::Internal(ref cause) => cause,CreateResourceGroupError::InvalidInput(ref cause) => cause,CreateResourceGroupError::AccessDenied(ref cause) => cause,CreateResourceGroupError::Validation(ref cause) => cause,CreateResourceGroupError::Credentials(ref err) => err.description(),CreateResourceGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateResourceGroupError::Unknown(ref cause) => cause
+                            CreateResourceGroupError::AccessDenied(ref cause) => cause,
+CreateResourceGroupError::Internal(ref cause) => cause,
+CreateResourceGroupError::InvalidInput(ref cause) => cause,
+CreateResourceGroupError::LimitExceeded(ref cause) => cause,
+CreateResourceGroupError::Validation(ref cause) => cause,
+CreateResourceGroupError::Credentials(ref err) => err.description(),
+CreateResourceGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateResourceGroupError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1396,14 +1448,14 @@ Unknown(String)
                     
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
+///<p>You cannot perform a specified action if an assessment run is currently in progress.</p>
+AssessmentRunInProgress(String),
 ///<p>Internal server error.</p>
 Internal(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
-///<p>You cannot perform a specified action if an assessment run is currently in progress.</p>
-AssessmentRunInProgress(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1422,7 +1474,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalException" => DeleteAssessmentRunError::Internal(String::from(error_message)),"NoSuchEntityException" => DeleteAssessmentRunError::NoSuchEntity(String::from(error_message)),"AssessmentRunInProgressException" => DeleteAssessmentRunError::AssessmentRunInProgress(String::from(error_message)),"AccessDeniedException" => DeleteAssessmentRunError::AccessDenied(String::from(error_message)),"InvalidInputException" => DeleteAssessmentRunError::InvalidInput(String::from(error_message)),"ValidationException" => DeleteAssessmentRunError::Validation(error_message.to_string()),_ => DeleteAssessmentRunError::Unknown(String::from(body))
+                                    "AccessDeniedException" => DeleteAssessmentRunError::AccessDenied(String::from(error_message)),
+"AssessmentRunInProgressException" => DeleteAssessmentRunError::AssessmentRunInProgress(String::from(error_message)),
+"InternalException" => DeleteAssessmentRunError::Internal(String::from(error_message)),
+"InvalidInputException" => DeleteAssessmentRunError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => DeleteAssessmentRunError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => DeleteAssessmentRunError::Validation(error_message.to_string()),
+_ => DeleteAssessmentRunError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteAssessmentRunError::Unknown(String::from(body))
@@ -1453,7 +1511,15 @@ Unknown(String)
                 impl Error for DeleteAssessmentRunError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAssessmentRunError::InvalidInput(ref cause) => cause,DeleteAssessmentRunError::AccessDenied(ref cause) => cause,DeleteAssessmentRunError::Internal(ref cause) => cause,DeleteAssessmentRunError::NoSuchEntity(ref cause) => cause,DeleteAssessmentRunError::AssessmentRunInProgress(ref cause) => cause,DeleteAssessmentRunError::Validation(ref cause) => cause,DeleteAssessmentRunError::Credentials(ref err) => err.description(),DeleteAssessmentRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAssessmentRunError::Unknown(ref cause) => cause
+                            DeleteAssessmentRunError::AccessDenied(ref cause) => cause,
+DeleteAssessmentRunError::AssessmentRunInProgress(ref cause) => cause,
+DeleteAssessmentRunError::Internal(ref cause) => cause,
+DeleteAssessmentRunError::InvalidInput(ref cause) => cause,
+DeleteAssessmentRunError::NoSuchEntity(ref cause) => cause,
+DeleteAssessmentRunError::Validation(ref cause) => cause,
+DeleteAssessmentRunError::Credentials(ref err) => err.description(),
+DeleteAssessmentRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAssessmentRunError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1463,14 +1529,14 @@ Unknown(String)
                     
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
+///<p>You cannot perform a specified action if an assessment run is currently in progress.</p>
+AssessmentRunInProgress(String),
 ///<p>Internal server error.</p>
 Internal(String),
-///<p>You cannot perform a specified action if an assessment run is currently in progress.</p>
-AssessmentRunInProgress(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1489,7 +1555,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NoSuchEntityException" => DeleteAssessmentTargetError::NoSuchEntity(String::from(error_message)),"InvalidInputException" => DeleteAssessmentTargetError::InvalidInput(String::from(error_message)),"AssessmentRunInProgressException" => DeleteAssessmentTargetError::AssessmentRunInProgress(String::from(error_message)),"AccessDeniedException" => DeleteAssessmentTargetError::AccessDenied(String::from(error_message)),"InternalException" => DeleteAssessmentTargetError::Internal(String::from(error_message)),"ValidationException" => DeleteAssessmentTargetError::Validation(error_message.to_string()),_ => DeleteAssessmentTargetError::Unknown(String::from(body))
+                                    "AccessDeniedException" => DeleteAssessmentTargetError::AccessDenied(String::from(error_message)),
+"AssessmentRunInProgressException" => DeleteAssessmentTargetError::AssessmentRunInProgress(String::from(error_message)),
+"InternalException" => DeleteAssessmentTargetError::Internal(String::from(error_message)),
+"InvalidInputException" => DeleteAssessmentTargetError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => DeleteAssessmentTargetError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => DeleteAssessmentTargetError::Validation(error_message.to_string()),
+_ => DeleteAssessmentTargetError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteAssessmentTargetError::Unknown(String::from(body))
@@ -1520,7 +1592,15 @@ Unknown(String)
                 impl Error for DeleteAssessmentTargetError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAssessmentTargetError::NoSuchEntity(ref cause) => cause,DeleteAssessmentTargetError::AssessmentRunInProgress(ref cause) => cause,DeleteAssessmentTargetError::AccessDenied(ref cause) => cause,DeleteAssessmentTargetError::Internal(ref cause) => cause,DeleteAssessmentTargetError::InvalidInput(ref cause) => cause,DeleteAssessmentTargetError::Validation(ref cause) => cause,DeleteAssessmentTargetError::Credentials(ref err) => err.description(),DeleteAssessmentTargetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAssessmentTargetError::Unknown(ref cause) => cause
+                            DeleteAssessmentTargetError::AccessDenied(ref cause) => cause,
+DeleteAssessmentTargetError::AssessmentRunInProgress(ref cause) => cause,
+DeleteAssessmentTargetError::Internal(ref cause) => cause,
+DeleteAssessmentTargetError::InvalidInput(ref cause) => cause,
+DeleteAssessmentTargetError::NoSuchEntity(ref cause) => cause,
+DeleteAssessmentTargetError::Validation(ref cause) => cause,
+DeleteAssessmentTargetError::Credentials(ref err) => err.description(),
+DeleteAssessmentTargetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAssessmentTargetError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1528,16 +1608,16 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DeleteAssessmentTemplateError {
                     
-///<p>You cannot perform a specified action if an assessment run is currently in progress.</p>
-AssessmentRunInProgress(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
+///<p>You cannot perform a specified action if an assessment run is currently in progress.</p>
+AssessmentRunInProgress(String),
 ///<p>Internal server error.</p>
 Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1556,7 +1636,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NoSuchEntityException" => DeleteAssessmentTemplateError::NoSuchEntity(String::from(error_message)),"InvalidInputException" => DeleteAssessmentTemplateError::InvalidInput(String::from(error_message)),"AccessDeniedException" => DeleteAssessmentTemplateError::AccessDenied(String::from(error_message)),"AssessmentRunInProgressException" => DeleteAssessmentTemplateError::AssessmentRunInProgress(String::from(error_message)),"InternalException" => DeleteAssessmentTemplateError::Internal(String::from(error_message)),"ValidationException" => DeleteAssessmentTemplateError::Validation(error_message.to_string()),_ => DeleteAssessmentTemplateError::Unknown(String::from(body))
+                                    "AccessDeniedException" => DeleteAssessmentTemplateError::AccessDenied(String::from(error_message)),
+"AssessmentRunInProgressException" => DeleteAssessmentTemplateError::AssessmentRunInProgress(String::from(error_message)),
+"InternalException" => DeleteAssessmentTemplateError::Internal(String::from(error_message)),
+"InvalidInputException" => DeleteAssessmentTemplateError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => DeleteAssessmentTemplateError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => DeleteAssessmentTemplateError::Validation(error_message.to_string()),
+_ => DeleteAssessmentTemplateError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteAssessmentTemplateError::Unknown(String::from(body))
@@ -1587,7 +1673,15 @@ Unknown(String)
                 impl Error for DeleteAssessmentTemplateError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteAssessmentTemplateError::AssessmentRunInProgress(ref cause) => cause,DeleteAssessmentTemplateError::AccessDenied(ref cause) => cause,DeleteAssessmentTemplateError::InvalidInput(ref cause) => cause,DeleteAssessmentTemplateError::Internal(ref cause) => cause,DeleteAssessmentTemplateError::NoSuchEntity(ref cause) => cause,DeleteAssessmentTemplateError::Validation(ref cause) => cause,DeleteAssessmentTemplateError::Credentials(ref err) => err.description(),DeleteAssessmentTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteAssessmentTemplateError::Unknown(ref cause) => cause
+                            DeleteAssessmentTemplateError::AccessDenied(ref cause) => cause,
+DeleteAssessmentTemplateError::AssessmentRunInProgress(ref cause) => cause,
+DeleteAssessmentTemplateError::Internal(ref cause) => cause,
+DeleteAssessmentTemplateError::InvalidInput(ref cause) => cause,
+DeleteAssessmentTemplateError::NoSuchEntity(ref cause) => cause,
+DeleteAssessmentTemplateError::Validation(ref cause) => cause,
+DeleteAssessmentTemplateError::Credentials(ref err) => err.description(),
+DeleteAssessmentTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteAssessmentTemplateError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1595,10 +1689,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeAssessmentRunsError {
                     
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
 ///<p>Internal server error.</p>
-Internal(String),/// An error occurred dispatching the HTTP request
+Internal(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1617,7 +1711,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalException" => DescribeAssessmentRunsError::Internal(String::from(error_message)),"InvalidInputException" => DescribeAssessmentRunsError::InvalidInput(String::from(error_message)),"ValidationException" => DescribeAssessmentRunsError::Validation(error_message.to_string()),_ => DescribeAssessmentRunsError::Unknown(String::from(body))
+                                    "InternalException" => DescribeAssessmentRunsError::Internal(String::from(error_message)),
+"InvalidInputException" => DescribeAssessmentRunsError::InvalidInput(String::from(error_message)),
+"ValidationException" => DescribeAssessmentRunsError::Validation(error_message.to_string()),
+_ => DescribeAssessmentRunsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeAssessmentRunsError::Unknown(String::from(body))
@@ -1648,7 +1745,12 @@ Unknown(String)
                 impl Error for DescribeAssessmentRunsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAssessmentRunsError::InvalidInput(ref cause) => cause,DescribeAssessmentRunsError::Internal(ref cause) => cause,DescribeAssessmentRunsError::Validation(ref cause) => cause,DescribeAssessmentRunsError::Credentials(ref err) => err.description(),DescribeAssessmentRunsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAssessmentRunsError::Unknown(ref cause) => cause
+                            DescribeAssessmentRunsError::Internal(ref cause) => cause,
+DescribeAssessmentRunsError::InvalidInput(ref cause) => cause,
+DescribeAssessmentRunsError::Validation(ref cause) => cause,
+DescribeAssessmentRunsError::Credentials(ref err) => err.description(),
+DescribeAssessmentRunsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAssessmentRunsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1656,10 +1758,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeAssessmentTargetsError {
                     
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
 ///<p>Internal server error.</p>
-Internal(String),/// An error occurred dispatching the HTTP request
+Internal(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1678,7 +1780,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalException" => DescribeAssessmentTargetsError::Internal(String::from(error_message)),"InvalidInputException" => DescribeAssessmentTargetsError::InvalidInput(String::from(error_message)),"ValidationException" => DescribeAssessmentTargetsError::Validation(error_message.to_string()),_ => DescribeAssessmentTargetsError::Unknown(String::from(body))
+                                    "InternalException" => DescribeAssessmentTargetsError::Internal(String::from(error_message)),
+"InvalidInputException" => DescribeAssessmentTargetsError::InvalidInput(String::from(error_message)),
+"ValidationException" => DescribeAssessmentTargetsError::Validation(error_message.to_string()),
+_ => DescribeAssessmentTargetsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeAssessmentTargetsError::Unknown(String::from(body))
@@ -1709,7 +1814,12 @@ Unknown(String)
                 impl Error for DescribeAssessmentTargetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAssessmentTargetsError::Internal(ref cause) => cause,DescribeAssessmentTargetsError::InvalidInput(ref cause) => cause,DescribeAssessmentTargetsError::Validation(ref cause) => cause,DescribeAssessmentTargetsError::Credentials(ref err) => err.description(),DescribeAssessmentTargetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAssessmentTargetsError::Unknown(ref cause) => cause
+                            DescribeAssessmentTargetsError::Internal(ref cause) => cause,
+DescribeAssessmentTargetsError::InvalidInput(ref cause) => cause,
+DescribeAssessmentTargetsError::Validation(ref cause) => cause,
+DescribeAssessmentTargetsError::Credentials(ref err) => err.description(),
+DescribeAssessmentTargetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAssessmentTargetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1717,10 +1827,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeAssessmentTemplatesError {
                     
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
 ///<p>Internal server error.</p>
-Internal(String),/// An error occurred dispatching the HTTP request
+Internal(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1739,7 +1849,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalException" => DescribeAssessmentTemplatesError::Internal(String::from(error_message)),"InvalidInputException" => DescribeAssessmentTemplatesError::InvalidInput(String::from(error_message)),"ValidationException" => DescribeAssessmentTemplatesError::Validation(error_message.to_string()),_ => DescribeAssessmentTemplatesError::Unknown(String::from(body))
+                                    "InternalException" => DescribeAssessmentTemplatesError::Internal(String::from(error_message)),
+"InvalidInputException" => DescribeAssessmentTemplatesError::InvalidInput(String::from(error_message)),
+"ValidationException" => DescribeAssessmentTemplatesError::Validation(error_message.to_string()),
+_ => DescribeAssessmentTemplatesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeAssessmentTemplatesError::Unknown(String::from(body))
@@ -1770,7 +1883,12 @@ Unknown(String)
                 impl Error for DescribeAssessmentTemplatesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeAssessmentTemplatesError::Internal(ref cause) => cause,DescribeAssessmentTemplatesError::InvalidInput(ref cause) => cause,DescribeAssessmentTemplatesError::Validation(ref cause) => cause,DescribeAssessmentTemplatesError::Credentials(ref err) => err.description(),DescribeAssessmentTemplatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeAssessmentTemplatesError::Unknown(ref cause) => cause
+                            DescribeAssessmentTemplatesError::Internal(ref cause) => cause,
+DescribeAssessmentTemplatesError::InvalidInput(ref cause) => cause,
+DescribeAssessmentTemplatesError::Validation(ref cause) => cause,
+DescribeAssessmentTemplatesError::Credentials(ref err) => err.description(),
+DescribeAssessmentTemplatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeAssessmentTemplatesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1798,7 +1916,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalException" => DescribeCrossAccountAccessRoleError::Internal(String::from(error_message)),"ValidationException" => DescribeCrossAccountAccessRoleError::Validation(error_message.to_string()),_ => DescribeCrossAccountAccessRoleError::Unknown(String::from(body))
+                                    "InternalException" => DescribeCrossAccountAccessRoleError::Internal(String::from(error_message)),
+"ValidationException" => DescribeCrossAccountAccessRoleError::Validation(error_message.to_string()),
+_ => DescribeCrossAccountAccessRoleError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeCrossAccountAccessRoleError::Unknown(String::from(body))
@@ -1829,7 +1949,11 @@ Unknown(String)
                 impl Error for DescribeCrossAccountAccessRoleError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeCrossAccountAccessRoleError::Internal(ref cause) => cause,DescribeCrossAccountAccessRoleError::Validation(ref cause) => cause,DescribeCrossAccountAccessRoleError::Credentials(ref err) => err.description(),DescribeCrossAccountAccessRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeCrossAccountAccessRoleError::Unknown(ref cause) => cause
+                            DescribeCrossAccountAccessRoleError::Internal(ref cause) => cause,
+DescribeCrossAccountAccessRoleError::Validation(ref cause) => cause,
+DescribeCrossAccountAccessRoleError::Credentials(ref err) => err.description(),
+DescribeCrossAccountAccessRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeCrossAccountAccessRoleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1859,7 +1983,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalException" => DescribeFindingsError::Internal(String::from(error_message)),"InvalidInputException" => DescribeFindingsError::InvalidInput(String::from(error_message)),"ValidationException" => DescribeFindingsError::Validation(error_message.to_string()),_ => DescribeFindingsError::Unknown(String::from(body))
+                                    "InternalException" => DescribeFindingsError::Internal(String::from(error_message)),
+"InvalidInputException" => DescribeFindingsError::InvalidInput(String::from(error_message)),
+"ValidationException" => DescribeFindingsError::Validation(error_message.to_string()),
+_ => DescribeFindingsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeFindingsError::Unknown(String::from(body))
@@ -1890,7 +2017,12 @@ Unknown(String)
                 impl Error for DescribeFindingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeFindingsError::InvalidInput(ref cause) => cause,DescribeFindingsError::Internal(ref cause) => cause,DescribeFindingsError::Validation(ref cause) => cause,DescribeFindingsError::Credentials(ref err) => err.description(),DescribeFindingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeFindingsError::Unknown(ref cause) => cause
+                            DescribeFindingsError::Internal(ref cause) => cause,
+DescribeFindingsError::InvalidInput(ref cause) => cause,
+DescribeFindingsError::Validation(ref cause) => cause,
+DescribeFindingsError::Credentials(ref err) => err.description(),
+DescribeFindingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeFindingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1898,10 +2030,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeResourceGroupsError {
                     
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
 ///<p>Internal server error.</p>
-Internal(String),/// An error occurred dispatching the HTTP request
+Internal(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1920,7 +2052,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInputException" => DescribeResourceGroupsError::InvalidInput(String::from(error_message)),"InternalException" => DescribeResourceGroupsError::Internal(String::from(error_message)),"ValidationException" => DescribeResourceGroupsError::Validation(error_message.to_string()),_ => DescribeResourceGroupsError::Unknown(String::from(body))
+                                    "InternalException" => DescribeResourceGroupsError::Internal(String::from(error_message)),
+"InvalidInputException" => DescribeResourceGroupsError::InvalidInput(String::from(error_message)),
+"ValidationException" => DescribeResourceGroupsError::Validation(error_message.to_string()),
+_ => DescribeResourceGroupsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeResourceGroupsError::Unknown(String::from(body))
@@ -1951,7 +2086,12 @@ Unknown(String)
                 impl Error for DescribeResourceGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeResourceGroupsError::InvalidInput(ref cause) => cause,DescribeResourceGroupsError::Internal(ref cause) => cause,DescribeResourceGroupsError::Validation(ref cause) => cause,DescribeResourceGroupsError::Credentials(ref err) => err.description(),DescribeResourceGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeResourceGroupsError::Unknown(ref cause) => cause
+                            DescribeResourceGroupsError::Internal(ref cause) => cause,
+DescribeResourceGroupsError::InvalidInput(ref cause) => cause,
+DescribeResourceGroupsError::Validation(ref cause) => cause,
+DescribeResourceGroupsError::Credentials(ref err) => err.description(),
+DescribeResourceGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeResourceGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1981,7 +2121,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalException" => DescribeRulesPackagesError::Internal(String::from(error_message)),"InvalidInputException" => DescribeRulesPackagesError::InvalidInput(String::from(error_message)),"ValidationException" => DescribeRulesPackagesError::Validation(error_message.to_string()),_ => DescribeRulesPackagesError::Unknown(String::from(body))
+                                    "InternalException" => DescribeRulesPackagesError::Internal(String::from(error_message)),
+"InvalidInputException" => DescribeRulesPackagesError::InvalidInput(String::from(error_message)),
+"ValidationException" => DescribeRulesPackagesError::Validation(error_message.to_string()),
+_ => DescribeRulesPackagesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeRulesPackagesError::Unknown(String::from(body))
@@ -2012,7 +2155,12 @@ Unknown(String)
                 impl Error for DescribeRulesPackagesError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeRulesPackagesError::Internal(ref cause) => cause,DescribeRulesPackagesError::InvalidInput(ref cause) => cause,DescribeRulesPackagesError::Validation(ref cause) => cause,DescribeRulesPackagesError::Credentials(ref err) => err.description(),DescribeRulesPackagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeRulesPackagesError::Unknown(ref cause) => cause
+                            DescribeRulesPackagesError::Internal(ref cause) => cause,
+DescribeRulesPackagesError::InvalidInput(ref cause) => cause,
+DescribeRulesPackagesError::Validation(ref cause) => cause,
+DescribeRulesPackagesError::Credentials(ref err) => err.description(),
+DescribeRulesPackagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeRulesPackagesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2022,12 +2170,12 @@ Unknown(String)
                     
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
 ///<p>Internal server error.</p>
 Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2046,7 +2194,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NoSuchEntityException" => GetTelemetryMetadataError::NoSuchEntity(String::from(error_message)),"InvalidInputException" => GetTelemetryMetadataError::InvalidInput(String::from(error_message)),"AccessDeniedException" => GetTelemetryMetadataError::AccessDenied(String::from(error_message)),"InternalException" => GetTelemetryMetadataError::Internal(String::from(error_message)),"ValidationException" => GetTelemetryMetadataError::Validation(error_message.to_string()),_ => GetTelemetryMetadataError::Unknown(String::from(body))
+                                    "AccessDeniedException" => GetTelemetryMetadataError::AccessDenied(String::from(error_message)),
+"InternalException" => GetTelemetryMetadataError::Internal(String::from(error_message)),
+"InvalidInputException" => GetTelemetryMetadataError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => GetTelemetryMetadataError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => GetTelemetryMetadataError::Validation(error_message.to_string()),
+_ => GetTelemetryMetadataError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => GetTelemetryMetadataError::Unknown(String::from(body))
@@ -2077,7 +2230,14 @@ Unknown(String)
                 impl Error for GetTelemetryMetadataError {
                     fn description(&self) -> &str {
                         match *self {
-                            GetTelemetryMetadataError::Internal(ref cause) => cause,GetTelemetryMetadataError::InvalidInput(ref cause) => cause,GetTelemetryMetadataError::AccessDenied(ref cause) => cause,GetTelemetryMetadataError::NoSuchEntity(ref cause) => cause,GetTelemetryMetadataError::Validation(ref cause) => cause,GetTelemetryMetadataError::Credentials(ref err) => err.description(),GetTelemetryMetadataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),GetTelemetryMetadataError::Unknown(ref cause) => cause
+                            GetTelemetryMetadataError::AccessDenied(ref cause) => cause,
+GetTelemetryMetadataError::Internal(ref cause) => cause,
+GetTelemetryMetadataError::InvalidInput(ref cause) => cause,
+GetTelemetryMetadataError::NoSuchEntity(ref cause) => cause,
+GetTelemetryMetadataError::Validation(ref cause) => cause,
+GetTelemetryMetadataError::Credentials(ref err) => err.description(),
+GetTelemetryMetadataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetTelemetryMetadataError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2085,12 +2245,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListAssessmentRunAgentsError {
                     
+///<p>You do not have required permissions to access the requested resource.</p>
+AccessDenied(String),
 ///<p>Internal server error.</p>
 Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
-///<p>You do not have required permissions to access the requested resource.</p>
-AccessDenied(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
 NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2111,7 +2271,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "AccessDeniedException" => ListAssessmentRunAgentsError::AccessDenied(String::from(error_message)),"NoSuchEntityException" => ListAssessmentRunAgentsError::NoSuchEntity(String::from(error_message)),"InternalException" => ListAssessmentRunAgentsError::Internal(String::from(error_message)),"InvalidInputException" => ListAssessmentRunAgentsError::InvalidInput(String::from(error_message)),"ValidationException" => ListAssessmentRunAgentsError::Validation(error_message.to_string()),_ => ListAssessmentRunAgentsError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListAssessmentRunAgentsError::AccessDenied(String::from(error_message)),
+"InternalException" => ListAssessmentRunAgentsError::Internal(String::from(error_message)),
+"InvalidInputException" => ListAssessmentRunAgentsError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => ListAssessmentRunAgentsError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => ListAssessmentRunAgentsError::Validation(error_message.to_string()),
+_ => ListAssessmentRunAgentsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListAssessmentRunAgentsError::Unknown(String::from(body))
@@ -2142,7 +2307,14 @@ Unknown(String)
                 impl Error for ListAssessmentRunAgentsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAssessmentRunAgentsError::Internal(ref cause) => cause,ListAssessmentRunAgentsError::AccessDenied(ref cause) => cause,ListAssessmentRunAgentsError::InvalidInput(ref cause) => cause,ListAssessmentRunAgentsError::NoSuchEntity(ref cause) => cause,ListAssessmentRunAgentsError::Validation(ref cause) => cause,ListAssessmentRunAgentsError::Credentials(ref err) => err.description(),ListAssessmentRunAgentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAssessmentRunAgentsError::Unknown(ref cause) => cause
+                            ListAssessmentRunAgentsError::AccessDenied(ref cause) => cause,
+ListAssessmentRunAgentsError::Internal(ref cause) => cause,
+ListAssessmentRunAgentsError::InvalidInput(ref cause) => cause,
+ListAssessmentRunAgentsError::NoSuchEntity(ref cause) => cause,
+ListAssessmentRunAgentsError::Validation(ref cause) => cause,
+ListAssessmentRunAgentsError::Credentials(ref err) => err.description(),
+ListAssessmentRunAgentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAssessmentRunAgentsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2150,14 +2322,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListAssessmentRunsError {
                     
+///<p>You do not have required permissions to access the requested resource.</p>
+AccessDenied(String),
 ///<p>Internal server error.</p>
 Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
-///<p>You do not have required permissions to access the requested resource.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2176,7 +2348,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NoSuchEntityException" => ListAssessmentRunsError::NoSuchEntity(String::from(error_message)),"InvalidInputException" => ListAssessmentRunsError::InvalidInput(String::from(error_message)),"InternalException" => ListAssessmentRunsError::Internal(String::from(error_message)),"AccessDeniedException" => ListAssessmentRunsError::AccessDenied(String::from(error_message)),"ValidationException" => ListAssessmentRunsError::Validation(error_message.to_string()),_ => ListAssessmentRunsError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListAssessmentRunsError::AccessDenied(String::from(error_message)),
+"InternalException" => ListAssessmentRunsError::Internal(String::from(error_message)),
+"InvalidInputException" => ListAssessmentRunsError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => ListAssessmentRunsError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => ListAssessmentRunsError::Validation(error_message.to_string()),
+_ => ListAssessmentRunsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListAssessmentRunsError::Unknown(String::from(body))
@@ -2207,7 +2384,14 @@ Unknown(String)
                 impl Error for ListAssessmentRunsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAssessmentRunsError::InvalidInput(ref cause) => cause,ListAssessmentRunsError::AccessDenied(ref cause) => cause,ListAssessmentRunsError::NoSuchEntity(ref cause) => cause,ListAssessmentRunsError::Internal(ref cause) => cause,ListAssessmentRunsError::Validation(ref cause) => cause,ListAssessmentRunsError::Credentials(ref err) => err.description(),ListAssessmentRunsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAssessmentRunsError::Unknown(ref cause) => cause
+                            ListAssessmentRunsError::AccessDenied(ref cause) => cause,
+ListAssessmentRunsError::Internal(ref cause) => cause,
+ListAssessmentRunsError::InvalidInput(ref cause) => cause,
+ListAssessmentRunsError::NoSuchEntity(ref cause) => cause,
+ListAssessmentRunsError::Validation(ref cause) => cause,
+ListAssessmentRunsError::Credentials(ref err) => err.description(),
+ListAssessmentRunsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAssessmentRunsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2217,10 +2401,10 @@ Unknown(String)
                     
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
 ///<p>Internal server error.</p>
-Internal(String),/// An error occurred dispatching the HTTP request
+Internal(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2239,7 +2423,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInputException" => ListAssessmentTargetsError::InvalidInput(String::from(error_message)),"InternalException" => ListAssessmentTargetsError::Internal(String::from(error_message)),"AccessDeniedException" => ListAssessmentTargetsError::AccessDenied(String::from(error_message)),"ValidationException" => ListAssessmentTargetsError::Validation(error_message.to_string()),_ => ListAssessmentTargetsError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListAssessmentTargetsError::AccessDenied(String::from(error_message)),
+"InternalException" => ListAssessmentTargetsError::Internal(String::from(error_message)),
+"InvalidInputException" => ListAssessmentTargetsError::InvalidInput(String::from(error_message)),
+"ValidationException" => ListAssessmentTargetsError::Validation(error_message.to_string()),
+_ => ListAssessmentTargetsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListAssessmentTargetsError::Unknown(String::from(body))
@@ -2270,7 +2458,13 @@ Unknown(String)
                 impl Error for ListAssessmentTargetsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAssessmentTargetsError::InvalidInput(ref cause) => cause,ListAssessmentTargetsError::AccessDenied(ref cause) => cause,ListAssessmentTargetsError::Internal(ref cause) => cause,ListAssessmentTargetsError::Validation(ref cause) => cause,ListAssessmentTargetsError::Credentials(ref err) => err.description(),ListAssessmentTargetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAssessmentTargetsError::Unknown(ref cause) => cause
+                            ListAssessmentTargetsError::AccessDenied(ref cause) => cause,
+ListAssessmentTargetsError::Internal(ref cause) => cause,
+ListAssessmentTargetsError::InvalidInput(ref cause) => cause,
+ListAssessmentTargetsError::Validation(ref cause) => cause,
+ListAssessmentTargetsError::Credentials(ref err) => err.description(),
+ListAssessmentTargetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAssessmentTargetsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2278,14 +2472,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListAssessmentTemplatesError {
                     
-///<p>Internal server error.</p>
-Internal(String),
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
+///<p>Internal server error.</p>
+Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2304,7 +2498,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalException" => ListAssessmentTemplatesError::Internal(String::from(error_message)),"NoSuchEntityException" => ListAssessmentTemplatesError::NoSuchEntity(String::from(error_message)),"AccessDeniedException" => ListAssessmentTemplatesError::AccessDenied(String::from(error_message)),"InvalidInputException" => ListAssessmentTemplatesError::InvalidInput(String::from(error_message)),"ValidationException" => ListAssessmentTemplatesError::Validation(error_message.to_string()),_ => ListAssessmentTemplatesError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListAssessmentTemplatesError::AccessDenied(String::from(error_message)),
+"InternalException" => ListAssessmentTemplatesError::Internal(String::from(error_message)),
+"InvalidInputException" => ListAssessmentTemplatesError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => ListAssessmentTemplatesError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => ListAssessmentTemplatesError::Validation(error_message.to_string()),
+_ => ListAssessmentTemplatesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListAssessmentTemplatesError::Unknown(String::from(body))
@@ -2335,7 +2534,14 @@ Unknown(String)
                 impl Error for ListAssessmentTemplatesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListAssessmentTemplatesError::Internal(ref cause) => cause,ListAssessmentTemplatesError::NoSuchEntity(ref cause) => cause,ListAssessmentTemplatesError::AccessDenied(ref cause) => cause,ListAssessmentTemplatesError::InvalidInput(ref cause) => cause,ListAssessmentTemplatesError::Validation(ref cause) => cause,ListAssessmentTemplatesError::Credentials(ref err) => err.description(),ListAssessmentTemplatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListAssessmentTemplatesError::Unknown(ref cause) => cause
+                            ListAssessmentTemplatesError::AccessDenied(ref cause) => cause,
+ListAssessmentTemplatesError::Internal(ref cause) => cause,
+ListAssessmentTemplatesError::InvalidInput(ref cause) => cause,
+ListAssessmentTemplatesError::NoSuchEntity(ref cause) => cause,
+ListAssessmentTemplatesError::Validation(ref cause) => cause,
+ListAssessmentTemplatesError::Credentials(ref err) => err.description(),
+ListAssessmentTemplatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListAssessmentTemplatesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2343,14 +2549,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListEventSubscriptionsError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
+///<p>You do not have required permissions to access the requested resource.</p>
+AccessDenied(String),
 ///<p>Internal server error.</p>
 Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
-///<p>You do not have required permissions to access the requested resource.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2369,7 +2575,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInputException" => ListEventSubscriptionsError::InvalidInput(String::from(error_message)),"NoSuchEntityException" => ListEventSubscriptionsError::NoSuchEntity(String::from(error_message)),"InternalException" => ListEventSubscriptionsError::Internal(String::from(error_message)),"AccessDeniedException" => ListEventSubscriptionsError::AccessDenied(String::from(error_message)),"ValidationException" => ListEventSubscriptionsError::Validation(error_message.to_string()),_ => ListEventSubscriptionsError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListEventSubscriptionsError::AccessDenied(String::from(error_message)),
+"InternalException" => ListEventSubscriptionsError::Internal(String::from(error_message)),
+"InvalidInputException" => ListEventSubscriptionsError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => ListEventSubscriptionsError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => ListEventSubscriptionsError::Validation(error_message.to_string()),
+_ => ListEventSubscriptionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListEventSubscriptionsError::Unknown(String::from(body))
@@ -2400,7 +2611,14 @@ Unknown(String)
                 impl Error for ListEventSubscriptionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListEventSubscriptionsError::Internal(ref cause) => cause,ListEventSubscriptionsError::NoSuchEntity(ref cause) => cause,ListEventSubscriptionsError::AccessDenied(ref cause) => cause,ListEventSubscriptionsError::InvalidInput(ref cause) => cause,ListEventSubscriptionsError::Validation(ref cause) => cause,ListEventSubscriptionsError::Credentials(ref err) => err.description(),ListEventSubscriptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListEventSubscriptionsError::Unknown(ref cause) => cause
+                            ListEventSubscriptionsError::AccessDenied(ref cause) => cause,
+ListEventSubscriptionsError::Internal(ref cause) => cause,
+ListEventSubscriptionsError::InvalidInput(ref cause) => cause,
+ListEventSubscriptionsError::NoSuchEntity(ref cause) => cause,
+ListEventSubscriptionsError::Validation(ref cause) => cause,
+ListEventSubscriptionsError::Credentials(ref err) => err.description(),
+ListEventSubscriptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListEventSubscriptionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2410,12 +2628,12 @@ Unknown(String)
                     
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
 ///<p>Internal server error.</p>
 Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2434,7 +2652,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInputException" => ListFindingsError::InvalidInput(String::from(error_message)),"AccessDeniedException" => ListFindingsError::AccessDenied(String::from(error_message)),"InternalException" => ListFindingsError::Internal(String::from(error_message)),"NoSuchEntityException" => ListFindingsError::NoSuchEntity(String::from(error_message)),"ValidationException" => ListFindingsError::Validation(error_message.to_string()),_ => ListFindingsError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListFindingsError::AccessDenied(String::from(error_message)),
+"InternalException" => ListFindingsError::Internal(String::from(error_message)),
+"InvalidInputException" => ListFindingsError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => ListFindingsError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => ListFindingsError::Validation(error_message.to_string()),
+_ => ListFindingsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListFindingsError::Unknown(String::from(body))
@@ -2465,7 +2688,14 @@ Unknown(String)
                 impl Error for ListFindingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListFindingsError::InvalidInput(ref cause) => cause,ListFindingsError::NoSuchEntity(ref cause) => cause,ListFindingsError::AccessDenied(ref cause) => cause,ListFindingsError::Internal(ref cause) => cause,ListFindingsError::Validation(ref cause) => cause,ListFindingsError::Credentials(ref err) => err.description(),ListFindingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListFindingsError::Unknown(ref cause) => cause
+                            ListFindingsError::AccessDenied(ref cause) => cause,
+ListFindingsError::Internal(ref cause) => cause,
+ListFindingsError::InvalidInput(ref cause) => cause,
+ListFindingsError::NoSuchEntity(ref cause) => cause,
+ListFindingsError::Validation(ref cause) => cause,
+ListFindingsError::Credentials(ref err) => err.description(),
+ListFindingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListFindingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2473,12 +2703,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListRulesPackagesError {
                     
+///<p>You do not have required permissions to access the requested resource.</p>
+AccessDenied(String),
 ///<p>Internal server error.</p>
 Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
-///<p>You do not have required permissions to access the requested resource.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2497,7 +2727,11 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalException" => ListRulesPackagesError::Internal(String::from(error_message)),"InvalidInputException" => ListRulesPackagesError::InvalidInput(String::from(error_message)),"AccessDeniedException" => ListRulesPackagesError::AccessDenied(String::from(error_message)),"ValidationException" => ListRulesPackagesError::Validation(error_message.to_string()),_ => ListRulesPackagesError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListRulesPackagesError::AccessDenied(String::from(error_message)),
+"InternalException" => ListRulesPackagesError::Internal(String::from(error_message)),
+"InvalidInputException" => ListRulesPackagesError::InvalidInput(String::from(error_message)),
+"ValidationException" => ListRulesPackagesError::Validation(error_message.to_string()),
+_ => ListRulesPackagesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListRulesPackagesError::Unknown(String::from(body))
@@ -2528,7 +2762,13 @@ Unknown(String)
                 impl Error for ListRulesPackagesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListRulesPackagesError::InvalidInput(ref cause) => cause,ListRulesPackagesError::Internal(ref cause) => cause,ListRulesPackagesError::AccessDenied(ref cause) => cause,ListRulesPackagesError::Validation(ref cause) => cause,ListRulesPackagesError::Credentials(ref err) => err.description(),ListRulesPackagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListRulesPackagesError::Unknown(ref cause) => cause
+                            ListRulesPackagesError::AccessDenied(ref cause) => cause,
+ListRulesPackagesError::Internal(ref cause) => cause,
+ListRulesPackagesError::InvalidInput(ref cause) => cause,
+ListRulesPackagesError::Validation(ref cause) => cause,
+ListRulesPackagesError::Credentials(ref err) => err.description(),
+ListRulesPackagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListRulesPackagesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2536,14 +2776,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListTagsForResourceError {
                     
-///<p>Internal server error.</p>
-Internal(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
+///<p>Internal server error.</p>
+Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2562,7 +2802,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NoSuchEntityException" => ListTagsForResourceError::NoSuchEntity(String::from(error_message)),"AccessDeniedException" => ListTagsForResourceError::AccessDenied(String::from(error_message)),"InternalException" => ListTagsForResourceError::Internal(String::from(error_message)),"InvalidInputException" => ListTagsForResourceError::InvalidInput(String::from(error_message)),"ValidationException" => ListTagsForResourceError::Validation(error_message.to_string()),_ => ListTagsForResourceError::Unknown(String::from(body))
+                                    "AccessDeniedException" => ListTagsForResourceError::AccessDenied(String::from(error_message)),
+"InternalException" => ListTagsForResourceError::Internal(String::from(error_message)),
+"InvalidInputException" => ListTagsForResourceError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => ListTagsForResourceError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => ListTagsForResourceError::Validation(error_message.to_string()),
+_ => ListTagsForResourceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListTagsForResourceError::Unknown(String::from(body))
@@ -2593,7 +2838,14 @@ Unknown(String)
                 impl Error for ListTagsForResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListTagsForResourceError::InvalidInput(ref cause) => cause,ListTagsForResourceError::Internal(ref cause) => cause,ListTagsForResourceError::NoSuchEntity(ref cause) => cause,ListTagsForResourceError::AccessDenied(ref cause) => cause,ListTagsForResourceError::Validation(ref cause) => cause,ListTagsForResourceError::Credentials(ref err) => err.description(),ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListTagsForResourceError::Unknown(ref cause) => cause
+                            ListTagsForResourceError::AccessDenied(ref cause) => cause,
+ListTagsForResourceError::Internal(ref cause) => cause,
+ListTagsForResourceError::InvalidInput(ref cause) => cause,
+ListTagsForResourceError::NoSuchEntity(ref cause) => cause,
+ListTagsForResourceError::Validation(ref cause) => cause,
+ListTagsForResourceError::Credentials(ref err) => err.description(),
+ListTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListTagsForResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2603,12 +2855,12 @@ Unknown(String)
                     
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
-///<p>Amazon Inspector cannot assume the cross-account role that it needs to list your EC2 instances during the assessment run.</p>
-InvalidCrossAccountRole(String),
 ///<p>Internal server error.</p>
 Internal(String),
+///<p>Amazon Inspector cannot assume the cross-account role that it needs to list your EC2 instances during the assessment run.</p>
+InvalidCrossAccountRole(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
 NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2629,7 +2881,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NoSuchEntityException" => PreviewAgentsError::NoSuchEntity(String::from(error_message)),"InvalidInputException" => PreviewAgentsError::InvalidInput(String::from(error_message)),"AccessDeniedException" => PreviewAgentsError::AccessDenied(String::from(error_message)),"InvalidCrossAccountRoleException" => PreviewAgentsError::InvalidCrossAccountRole(String::from(error_message)),"InternalException" => PreviewAgentsError::Internal(String::from(error_message)),"ValidationException" => PreviewAgentsError::Validation(error_message.to_string()),_ => PreviewAgentsError::Unknown(String::from(body))
+                                    "AccessDeniedException" => PreviewAgentsError::AccessDenied(String::from(error_message)),
+"InternalException" => PreviewAgentsError::Internal(String::from(error_message)),
+"InvalidCrossAccountRoleException" => PreviewAgentsError::InvalidCrossAccountRole(String::from(error_message)),
+"InvalidInputException" => PreviewAgentsError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => PreviewAgentsError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => PreviewAgentsError::Validation(error_message.to_string()),
+_ => PreviewAgentsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PreviewAgentsError::Unknown(String::from(body))
@@ -2660,7 +2918,15 @@ Unknown(String)
                 impl Error for PreviewAgentsError {
                     fn description(&self) -> &str {
                         match *self {
-                            PreviewAgentsError::InvalidInput(ref cause) => cause,PreviewAgentsError::AccessDenied(ref cause) => cause,PreviewAgentsError::NoSuchEntity(ref cause) => cause,PreviewAgentsError::Internal(ref cause) => cause,PreviewAgentsError::InvalidCrossAccountRole(ref cause) => cause,PreviewAgentsError::Validation(ref cause) => cause,PreviewAgentsError::Credentials(ref err) => err.description(),PreviewAgentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PreviewAgentsError::Unknown(ref cause) => cause
+                            PreviewAgentsError::AccessDenied(ref cause) => cause,
+PreviewAgentsError::Internal(ref cause) => cause,
+PreviewAgentsError::InvalidCrossAccountRole(ref cause) => cause,
+PreviewAgentsError::InvalidInput(ref cause) => cause,
+PreviewAgentsError::NoSuchEntity(ref cause) => cause,
+PreviewAgentsError::Validation(ref cause) => cause,
+PreviewAgentsError::Credentials(ref err) => err.description(),
+PreviewAgentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PreviewAgentsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2668,10 +2934,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RegisterCrossAccountAccessRoleError {
                     
-///<p>Internal server error.</p>
-Internal(String),
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
+///<p>Internal server error.</p>
+Internal(String),
 ///<p>Amazon Inspector cannot assume the cross-account role that it needs to list your EC2 instances during the assessment run.</p>
 InvalidCrossAccountRole(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
@@ -2694,7 +2960,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalException" => RegisterCrossAccountAccessRoleError::Internal(String::from(error_message)),"AccessDeniedException" => RegisterCrossAccountAccessRoleError::AccessDenied(String::from(error_message)),"InvalidCrossAccountRoleException" => RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(String::from(error_message)),"InvalidInputException" => RegisterCrossAccountAccessRoleError::InvalidInput(String::from(error_message)),"ValidationException" => RegisterCrossAccountAccessRoleError::Validation(error_message.to_string()),_ => RegisterCrossAccountAccessRoleError::Unknown(String::from(body))
+                                    "AccessDeniedException" => RegisterCrossAccountAccessRoleError::AccessDenied(String::from(error_message)),
+"InternalException" => RegisterCrossAccountAccessRoleError::Internal(String::from(error_message)),
+"InvalidCrossAccountRoleException" => RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(String::from(error_message)),
+"InvalidInputException" => RegisterCrossAccountAccessRoleError::InvalidInput(String::from(error_message)),
+"ValidationException" => RegisterCrossAccountAccessRoleError::Validation(error_message.to_string()),
+_ => RegisterCrossAccountAccessRoleError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RegisterCrossAccountAccessRoleError::Unknown(String::from(body))
@@ -2725,7 +2996,14 @@ Unknown(String)
                 impl Error for RegisterCrossAccountAccessRoleError {
                     fn description(&self) -> &str {
                         match *self {
-                            RegisterCrossAccountAccessRoleError::InvalidInput(ref cause) => cause,RegisterCrossAccountAccessRoleError::AccessDenied(ref cause) => cause,RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(ref cause) => cause,RegisterCrossAccountAccessRoleError::Internal(ref cause) => cause,RegisterCrossAccountAccessRoleError::Validation(ref cause) => cause,RegisterCrossAccountAccessRoleError::Credentials(ref err) => err.description(),RegisterCrossAccountAccessRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RegisterCrossAccountAccessRoleError::Unknown(ref cause) => cause
+                            RegisterCrossAccountAccessRoleError::AccessDenied(ref cause) => cause,
+RegisterCrossAccountAccessRoleError::Internal(ref cause) => cause,
+RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(ref cause) => cause,
+RegisterCrossAccountAccessRoleError::InvalidInput(ref cause) => cause,
+RegisterCrossAccountAccessRoleError::Validation(ref cause) => cause,
+RegisterCrossAccountAccessRoleError::Credentials(ref err) => err.description(),
+RegisterCrossAccountAccessRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RegisterCrossAccountAccessRoleError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2733,14 +3011,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RemoveAttributesFromFindingsError {
                     
+///<p>You do not have required permissions to access the requested resource.</p>
+AccessDenied(String),
 ///<p>Internal server error.</p>
 Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
 InvalidInput(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
-///<p>You do not have required permissions to access the requested resource.</p>
-AccessDenied(String),/// An error occurred dispatching the HTTP request
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2759,7 +3037,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInputException" => RemoveAttributesFromFindingsError::InvalidInput(String::from(error_message)),"NoSuchEntityException" => RemoveAttributesFromFindingsError::NoSuchEntity(String::from(error_message)),"InternalException" => RemoveAttributesFromFindingsError::Internal(String::from(error_message)),"AccessDeniedException" => RemoveAttributesFromFindingsError::AccessDenied(String::from(error_message)),"ValidationException" => RemoveAttributesFromFindingsError::Validation(error_message.to_string()),_ => RemoveAttributesFromFindingsError::Unknown(String::from(body))
+                                    "AccessDeniedException" => RemoveAttributesFromFindingsError::AccessDenied(String::from(error_message)),
+"InternalException" => RemoveAttributesFromFindingsError::Internal(String::from(error_message)),
+"InvalidInputException" => RemoveAttributesFromFindingsError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => RemoveAttributesFromFindingsError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => RemoveAttributesFromFindingsError::Validation(error_message.to_string()),
+_ => RemoveAttributesFromFindingsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RemoveAttributesFromFindingsError::Unknown(String::from(body))
@@ -2790,7 +3073,14 @@ Unknown(String)
                 impl Error for RemoveAttributesFromFindingsError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveAttributesFromFindingsError::NoSuchEntity(ref cause) => cause,RemoveAttributesFromFindingsError::AccessDenied(ref cause) => cause,RemoveAttributesFromFindingsError::InvalidInput(ref cause) => cause,RemoveAttributesFromFindingsError::Internal(ref cause) => cause,RemoveAttributesFromFindingsError::Validation(ref cause) => cause,RemoveAttributesFromFindingsError::Credentials(ref err) => err.description(),RemoveAttributesFromFindingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveAttributesFromFindingsError::Unknown(ref cause) => cause
+                            RemoveAttributesFromFindingsError::AccessDenied(ref cause) => cause,
+RemoveAttributesFromFindingsError::Internal(ref cause) => cause,
+RemoveAttributesFromFindingsError::InvalidInput(ref cause) => cause,
+RemoveAttributesFromFindingsError::NoSuchEntity(ref cause) => cause,
+RemoveAttributesFromFindingsError::Validation(ref cause) => cause,
+RemoveAttributesFromFindingsError::Credentials(ref err) => err.description(),
+RemoveAttributesFromFindingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveAttributesFromFindingsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2798,14 +3088,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SetTagsForResourceError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
 ///<p>Internal server error.</p>
-Internal(String),/// An error occurred dispatching the HTTP request
+Internal(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2824,7 +3114,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidInputException" => SetTagsForResourceError::InvalidInput(String::from(error_message)),"InternalException" => SetTagsForResourceError::Internal(String::from(error_message)),"AccessDeniedException" => SetTagsForResourceError::AccessDenied(String::from(error_message)),"NoSuchEntityException" => SetTagsForResourceError::NoSuchEntity(String::from(error_message)),"ValidationException" => SetTagsForResourceError::Validation(error_message.to_string()),_ => SetTagsForResourceError::Unknown(String::from(body))
+                                    "AccessDeniedException" => SetTagsForResourceError::AccessDenied(String::from(error_message)),
+"InternalException" => SetTagsForResourceError::Internal(String::from(error_message)),
+"InvalidInputException" => SetTagsForResourceError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => SetTagsForResourceError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => SetTagsForResourceError::Validation(error_message.to_string()),
+_ => SetTagsForResourceError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SetTagsForResourceError::Unknown(String::from(body))
@@ -2855,7 +3150,14 @@ Unknown(String)
                 impl Error for SetTagsForResourceError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetTagsForResourceError::InvalidInput(ref cause) => cause,SetTagsForResourceError::Internal(ref cause) => cause,SetTagsForResourceError::NoSuchEntity(ref cause) => cause,SetTagsForResourceError::AccessDenied(ref cause) => cause,SetTagsForResourceError::Validation(ref cause) => cause,SetTagsForResourceError::Credentials(ref err) => err.description(),SetTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetTagsForResourceError::Unknown(ref cause) => cause
+                            SetTagsForResourceError::AccessDenied(ref cause) => cause,
+SetTagsForResourceError::Internal(ref cause) => cause,
+SetTagsForResourceError::InvalidInput(ref cause) => cause,
+SetTagsForResourceError::NoSuchEntity(ref cause) => cause,
+SetTagsForResourceError::Validation(ref cause) => cause,
+SetTagsForResourceError::Credentials(ref err) => err.description(),
+SetTagsForResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetTagsForResourceError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2863,20 +3165,20 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum StartAssessmentRunError {
                     
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>Internal server error.</p>
-Internal(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
-LimitExceeded(String),
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
 ///<p>You started an assessment run, but one of the instances is already participating in another assessment run.</p>
 AgentsAlreadyRunningAssessment(String),
+///<p>Internal server error.</p>
+Internal(String),
 ///<p>Amazon Inspector cannot assume the cross-account role that it needs to list your EC2 instances during the assessment run.</p>
-InvalidCrossAccountRole(String),/// An error occurred dispatching the HTTP request
+InvalidCrossAccountRole(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+LimitExceeded(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2895,7 +3197,15 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidCrossAccountRoleException" => StartAssessmentRunError::InvalidCrossAccountRole(String::from(error_message)),"InvalidInputException" => StartAssessmentRunError::InvalidInput(String::from(error_message)),"InternalException" => StartAssessmentRunError::Internal(String::from(error_message)),"NoSuchEntityException" => StartAssessmentRunError::NoSuchEntity(String::from(error_message)),"AgentsAlreadyRunningAssessmentException" => StartAssessmentRunError::AgentsAlreadyRunningAssessment(String::from(error_message)),"LimitExceededException" => StartAssessmentRunError::LimitExceeded(String::from(error_message)),"AccessDeniedException" => StartAssessmentRunError::AccessDenied(String::from(error_message)),"ValidationException" => StartAssessmentRunError::Validation(error_message.to_string()),_ => StartAssessmentRunError::Unknown(String::from(body))
+                                    "AccessDeniedException" => StartAssessmentRunError::AccessDenied(String::from(error_message)),
+"AgentsAlreadyRunningAssessmentException" => StartAssessmentRunError::AgentsAlreadyRunningAssessment(String::from(error_message)),
+"InternalException" => StartAssessmentRunError::Internal(String::from(error_message)),
+"InvalidCrossAccountRoleException" => StartAssessmentRunError::InvalidCrossAccountRole(String::from(error_message)),
+"InvalidInputException" => StartAssessmentRunError::InvalidInput(String::from(error_message)),
+"LimitExceededException" => StartAssessmentRunError::LimitExceeded(String::from(error_message)),
+"NoSuchEntityException" => StartAssessmentRunError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => StartAssessmentRunError::Validation(error_message.to_string()),
+_ => StartAssessmentRunError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StartAssessmentRunError::Unknown(String::from(body))
@@ -2926,7 +3236,17 @@ Unknown(String)
                 impl Error for StartAssessmentRunError {
                     fn description(&self) -> &str {
                         match *self {
-                            StartAssessmentRunError::AgentsAlreadyRunningAssessment(ref cause) => cause,StartAssessmentRunError::InvalidInput(ref cause) => cause,StartAssessmentRunError::Internal(ref cause) => cause,StartAssessmentRunError::InvalidCrossAccountRole(ref cause) => cause,StartAssessmentRunError::AccessDenied(ref cause) => cause,StartAssessmentRunError::LimitExceeded(ref cause) => cause,StartAssessmentRunError::NoSuchEntity(ref cause) => cause,StartAssessmentRunError::Validation(ref cause) => cause,StartAssessmentRunError::Credentials(ref err) => err.description(),StartAssessmentRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StartAssessmentRunError::Unknown(ref cause) => cause
+                            StartAssessmentRunError::AccessDenied(ref cause) => cause,
+StartAssessmentRunError::AgentsAlreadyRunningAssessment(ref cause) => cause,
+StartAssessmentRunError::Internal(ref cause) => cause,
+StartAssessmentRunError::InvalidCrossAccountRole(ref cause) => cause,
+StartAssessmentRunError::InvalidInput(ref cause) => cause,
+StartAssessmentRunError::LimitExceeded(ref cause) => cause,
+StartAssessmentRunError::NoSuchEntity(ref cause) => cause,
+StartAssessmentRunError::Validation(ref cause) => cause,
+StartAssessmentRunError::Credentials(ref err) => err.description(),
+StartAssessmentRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StartAssessmentRunError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2934,12 +3254,12 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum StopAssessmentRunError {
                     
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
 ///<p>Internal server error.</p>
 Internal(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
 NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -2960,7 +3280,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "AccessDeniedException" => StopAssessmentRunError::AccessDenied(String::from(error_message)),"NoSuchEntityException" => StopAssessmentRunError::NoSuchEntity(String::from(error_message)),"InternalException" => StopAssessmentRunError::Internal(String::from(error_message)),"InvalidInputException" => StopAssessmentRunError::InvalidInput(String::from(error_message)),"ValidationException" => StopAssessmentRunError::Validation(error_message.to_string()),_ => StopAssessmentRunError::Unknown(String::from(body))
+                                    "AccessDeniedException" => StopAssessmentRunError::AccessDenied(String::from(error_message)),
+"InternalException" => StopAssessmentRunError::Internal(String::from(error_message)),
+"InvalidInputException" => StopAssessmentRunError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => StopAssessmentRunError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => StopAssessmentRunError::Validation(error_message.to_string()),
+_ => StopAssessmentRunError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => StopAssessmentRunError::Unknown(String::from(body))
@@ -2991,7 +3316,14 @@ Unknown(String)
                 impl Error for StopAssessmentRunError {
                     fn description(&self) -> &str {
                         match *self {
-                            StopAssessmentRunError::InvalidInput(ref cause) => cause,StopAssessmentRunError::NoSuchEntity(ref cause) => cause,StopAssessmentRunError::AccessDenied(ref cause) => cause,StopAssessmentRunError::Internal(ref cause) => cause,StopAssessmentRunError::Validation(ref cause) => cause,StopAssessmentRunError::Credentials(ref err) => err.description(),StopAssessmentRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),StopAssessmentRunError::Unknown(ref cause) => cause
+                            StopAssessmentRunError::AccessDenied(ref cause) => cause,
+StopAssessmentRunError::Internal(ref cause) => cause,
+StopAssessmentRunError::InvalidInput(ref cause) => cause,
+StopAssessmentRunError::NoSuchEntity(ref cause) => cause,
+StopAssessmentRunError::Validation(ref cause) => cause,
+StopAssessmentRunError::Credentials(ref err) => err.description(),
+StopAssessmentRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+StopAssessmentRunError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2999,14 +3331,14 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum SubscribeToEventError {
                     
-///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),
-///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
-LimitExceeded(String),
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
 ///<p>Internal server error.</p>
 Internal(String),
+///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+InvalidInput(String),
+///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+LimitExceeded(String),
 ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
 NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
@@ -3027,7 +3359,13 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "LimitExceededException" => SubscribeToEventError::LimitExceeded(String::from(error_message)),"InternalException" => SubscribeToEventError::Internal(String::from(error_message)),"InvalidInputException" => SubscribeToEventError::InvalidInput(String::from(error_message)),"NoSuchEntityException" => SubscribeToEventError::NoSuchEntity(String::from(error_message)),"AccessDeniedException" => SubscribeToEventError::AccessDenied(String::from(error_message)),"ValidationException" => SubscribeToEventError::Validation(error_message.to_string()),_ => SubscribeToEventError::Unknown(String::from(body))
+                                    "AccessDeniedException" => SubscribeToEventError::AccessDenied(String::from(error_message)),
+"InternalException" => SubscribeToEventError::Internal(String::from(error_message)),
+"InvalidInputException" => SubscribeToEventError::InvalidInput(String::from(error_message)),
+"LimitExceededException" => SubscribeToEventError::LimitExceeded(String::from(error_message)),
+"NoSuchEntityException" => SubscribeToEventError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => SubscribeToEventError::Validation(error_message.to_string()),
+_ => SubscribeToEventError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SubscribeToEventError::Unknown(String::from(body))
@@ -3058,7 +3396,15 @@ Unknown(String)
                 impl Error for SubscribeToEventError {
                     fn description(&self) -> &str {
                         match *self {
-                            SubscribeToEventError::LimitExceeded(ref cause) => cause,SubscribeToEventError::AccessDenied(ref cause) => cause,SubscribeToEventError::NoSuchEntity(ref cause) => cause,SubscribeToEventError::InvalidInput(ref cause) => cause,SubscribeToEventError::Internal(ref cause) => cause,SubscribeToEventError::Validation(ref cause) => cause,SubscribeToEventError::Credentials(ref err) => err.description(),SubscribeToEventError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SubscribeToEventError::Unknown(ref cause) => cause
+                            SubscribeToEventError::AccessDenied(ref cause) => cause,
+SubscribeToEventError::Internal(ref cause) => cause,
+SubscribeToEventError::InvalidInput(ref cause) => cause,
+SubscribeToEventError::LimitExceeded(ref cause) => cause,
+SubscribeToEventError::NoSuchEntity(ref cause) => cause,
+SubscribeToEventError::Validation(ref cause) => cause,
+SubscribeToEventError::Credentials(ref err) => err.description(),
+SubscribeToEventError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SubscribeToEventError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3068,12 +3414,12 @@ Unknown(String)
                     
 ///<p>You do not have required permissions to access the requested resource.</p>
 AccessDenied(String),
-///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
-NoSuchEntity(String),
 ///<p>Internal server error.</p>
 Internal(String),
 ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
-InvalidInput(String),/// An error occurred dispatching the HTTP request
+InvalidInput(String),
+///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+NoSuchEntity(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -3092,7 +3438,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "NoSuchEntityException" => UnsubscribeFromEventError::NoSuchEntity(String::from(error_message)),"InvalidInputException" => UnsubscribeFromEventError::InvalidInput(String::from(error_message)),"InternalException" => UnsubscribeFromEventError::Internal(String::from(error_message)),"AccessDeniedException" => UnsubscribeFromEventError::AccessDenied(String::from(error_message)),"ValidationException" => UnsubscribeFromEventError::Validation(error_message.to_string()),_ => UnsubscribeFromEventError::Unknown(String::from(body))
+                                    "AccessDeniedException" => UnsubscribeFromEventError::AccessDenied(String::from(error_message)),
+"InternalException" => UnsubscribeFromEventError::Internal(String::from(error_message)),
+"InvalidInputException" => UnsubscribeFromEventError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => UnsubscribeFromEventError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => UnsubscribeFromEventError::Validation(error_message.to_string()),
+_ => UnsubscribeFromEventError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UnsubscribeFromEventError::Unknown(String::from(body))
@@ -3123,7 +3474,14 @@ Unknown(String)
                 impl Error for UnsubscribeFromEventError {
                     fn description(&self) -> &str {
                         match *self {
-                            UnsubscribeFromEventError::Internal(ref cause) => cause,UnsubscribeFromEventError::NoSuchEntity(ref cause) => cause,UnsubscribeFromEventError::AccessDenied(ref cause) => cause,UnsubscribeFromEventError::InvalidInput(ref cause) => cause,UnsubscribeFromEventError::Validation(ref cause) => cause,UnsubscribeFromEventError::Credentials(ref err) => err.description(),UnsubscribeFromEventError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UnsubscribeFromEventError::Unknown(ref cause) => cause
+                            UnsubscribeFromEventError::AccessDenied(ref cause) => cause,
+UnsubscribeFromEventError::Internal(ref cause) => cause,
+UnsubscribeFromEventError::InvalidInput(ref cause) => cause,
+UnsubscribeFromEventError::NoSuchEntity(ref cause) => cause,
+UnsubscribeFromEventError::Validation(ref cause) => cause,
+UnsubscribeFromEventError::Credentials(ref err) => err.description(),
+UnsubscribeFromEventError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UnsubscribeFromEventError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3157,7 +3515,12 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "AccessDeniedException" => UpdateAssessmentTargetError::AccessDenied(String::from(error_message)),"InvalidInputException" => UpdateAssessmentTargetError::InvalidInput(String::from(error_message)),"InternalException" => UpdateAssessmentTargetError::Internal(String::from(error_message)),"NoSuchEntityException" => UpdateAssessmentTargetError::NoSuchEntity(String::from(error_message)),"ValidationException" => UpdateAssessmentTargetError::Validation(error_message.to_string()),_ => UpdateAssessmentTargetError::Unknown(String::from(body))
+                                    "AccessDeniedException" => UpdateAssessmentTargetError::AccessDenied(String::from(error_message)),
+"InternalException" => UpdateAssessmentTargetError::Internal(String::from(error_message)),
+"InvalidInputException" => UpdateAssessmentTargetError::InvalidInput(String::from(error_message)),
+"NoSuchEntityException" => UpdateAssessmentTargetError::NoSuchEntity(String::from(error_message)),
+"ValidationException" => UpdateAssessmentTargetError::Validation(error_message.to_string()),
+_ => UpdateAssessmentTargetError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => UpdateAssessmentTargetError::Unknown(String::from(body))
@@ -3188,7 +3551,14 @@ Unknown(String)
                 impl Error for UpdateAssessmentTargetError {
                     fn description(&self) -> &str {
                         match *self {
-                            UpdateAssessmentTargetError::NoSuchEntity(ref cause) => cause,UpdateAssessmentTargetError::InvalidInput(ref cause) => cause,UpdateAssessmentTargetError::Internal(ref cause) => cause,UpdateAssessmentTargetError::AccessDenied(ref cause) => cause,UpdateAssessmentTargetError::Validation(ref cause) => cause,UpdateAssessmentTargetError::Credentials(ref err) => err.description(),UpdateAssessmentTargetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),UpdateAssessmentTargetError::Unknown(ref cause) => cause
+                            UpdateAssessmentTargetError::AccessDenied(ref cause) => cause,
+UpdateAssessmentTargetError::Internal(ref cause) => cause,
+UpdateAssessmentTargetError::InvalidInput(ref cause) => cause,
+UpdateAssessmentTargetError::NoSuchEntity(ref cause) => cause,
+UpdateAssessmentTargetError::Validation(ref cause) => cause,
+UpdateAssessmentTargetError::Credentials(ref err) => err.description(),
+UpdateAssessmentTargetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateAssessmentTargetError::Unknown(ref cause) => cause
                         }
                     }
                  }

@@ -1740,7 +1740,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerError" => AddInstanceGroupsError::InternalServerError(String::from(error_message)),"ValidationException" => AddInstanceGroupsError::Validation(error_message.to_string()),_ => AddInstanceGroupsError::Unknown(String::from(body))
+                                    "InternalServerError" => AddInstanceGroupsError::InternalServerError(String::from(error_message)),
+"ValidationException" => AddInstanceGroupsError::Validation(error_message.to_string()),
+_ => AddInstanceGroupsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AddInstanceGroupsError::Unknown(String::from(body))
@@ -1771,7 +1773,11 @@ Unknown(String)
                 impl Error for AddInstanceGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddInstanceGroupsError::InternalServerError(ref cause) => cause,AddInstanceGroupsError::Validation(ref cause) => cause,AddInstanceGroupsError::Credentials(ref err) => err.description(),AddInstanceGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddInstanceGroupsError::Unknown(ref cause) => cause
+                            AddInstanceGroupsError::InternalServerError(ref cause) => cause,
+AddInstanceGroupsError::Validation(ref cause) => cause,
+AddInstanceGroupsError::Credentials(ref err) => err.description(),
+AddInstanceGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddInstanceGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1799,7 +1805,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerError" => AddJobFlowStepsError::InternalServerError(String::from(error_message)),"ValidationException" => AddJobFlowStepsError::Validation(error_message.to_string()),_ => AddJobFlowStepsError::Unknown(String::from(body))
+                                    "InternalServerError" => AddJobFlowStepsError::InternalServerError(String::from(error_message)),
+"ValidationException" => AddJobFlowStepsError::Validation(error_message.to_string()),
+_ => AddJobFlowStepsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AddJobFlowStepsError::Unknown(String::from(body))
@@ -1830,7 +1838,11 @@ Unknown(String)
                 impl Error for AddJobFlowStepsError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddJobFlowStepsError::InternalServerError(ref cause) => cause,AddJobFlowStepsError::Validation(ref cause) => cause,AddJobFlowStepsError::Credentials(ref err) => err.description(),AddJobFlowStepsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddJobFlowStepsError::Unknown(ref cause) => cause
+                            AddJobFlowStepsError::InternalServerError(ref cause) => cause,
+AddJobFlowStepsError::Validation(ref cause) => cause,
+AddJobFlowStepsError::Credentials(ref err) => err.description(),
+AddJobFlowStepsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddJobFlowStepsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1838,10 +1850,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum AddTagsError {
                     
-///<p>This exception occurs when there is something wrong with user input.</p>
-InvalidRequest(String),
 ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
-InternalServer(String),/// An error occurred dispatching the HTTP request
+InternalServer(String),
+///<p>This exception occurs when there is something wrong with user input.</p>
+InvalidRequest(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1860,7 +1872,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerException" => AddTagsError::InternalServer(String::from(error_message)),"InvalidRequestException" => AddTagsError::InvalidRequest(String::from(error_message)),"ValidationException" => AddTagsError::Validation(error_message.to_string()),_ => AddTagsError::Unknown(String::from(body))
+                                    "InternalServerException" => AddTagsError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => AddTagsError::InvalidRequest(String::from(error_message)),
+"ValidationException" => AddTagsError::Validation(error_message.to_string()),
+_ => AddTagsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => AddTagsError::Unknown(String::from(body))
@@ -1891,7 +1906,12 @@ Unknown(String)
                 impl Error for AddTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            AddTagsError::InternalServer(ref cause) => cause,AddTagsError::InvalidRequest(ref cause) => cause,AddTagsError::Validation(ref cause) => cause,AddTagsError::Credentials(ref err) => err.description(),AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),AddTagsError::Unknown(ref cause) => cause
+                            AddTagsError::InternalServer(ref cause) => cause,
+AddTagsError::InvalidRequest(ref cause) => cause,
+AddTagsError::Validation(ref cause) => cause,
+AddTagsError::Credentials(ref err) => err.description(),
+AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+AddTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1899,10 +1919,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CancelStepsError {
                     
-///<p>This exception occurs when there is something wrong with user input.</p>
-InvalidRequest(String),
 ///<p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
-InternalServerError(String),/// An error occurred dispatching the HTTP request
+InternalServerError(String),
+///<p>This exception occurs when there is something wrong with user input.</p>
+InvalidRequest(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1921,7 +1941,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerError" => CancelStepsError::InternalServerError(String::from(error_message)),"InvalidRequestException" => CancelStepsError::InvalidRequest(String::from(error_message)),"ValidationException" => CancelStepsError::Validation(error_message.to_string()),_ => CancelStepsError::Unknown(String::from(body))
+                                    "InternalServerError" => CancelStepsError::InternalServerError(String::from(error_message)),
+"InvalidRequestException" => CancelStepsError::InvalidRequest(String::from(error_message)),
+"ValidationException" => CancelStepsError::Validation(error_message.to_string()),
+_ => CancelStepsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CancelStepsError::Unknown(String::from(body))
@@ -1952,7 +1975,12 @@ Unknown(String)
                 impl Error for CancelStepsError {
                     fn description(&self) -> &str {
                         match *self {
-                            CancelStepsError::InternalServerError(ref cause) => cause,CancelStepsError::InvalidRequest(ref cause) => cause,CancelStepsError::Validation(ref cause) => cause,CancelStepsError::Credentials(ref err) => err.description(),CancelStepsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CancelStepsError::Unknown(ref cause) => cause
+                            CancelStepsError::InternalServerError(ref cause) => cause,
+CancelStepsError::InvalidRequest(ref cause) => cause,
+CancelStepsError::Validation(ref cause) => cause,
+CancelStepsError::Credentials(ref err) => err.description(),
+CancelStepsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CancelStepsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -1960,10 +1988,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum CreateSecurityConfigurationError {
                     
-///<p>This exception occurs when there is something wrong with user input.</p>
-InvalidRequest(String),
 ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
-InternalServer(String),/// An error occurred dispatching the HTTP request
+InternalServer(String),
+///<p>This exception occurs when there is something wrong with user input.</p>
+InvalidRequest(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -1982,7 +2010,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerException" => CreateSecurityConfigurationError::InternalServer(String::from(error_message)),"InvalidRequestException" => CreateSecurityConfigurationError::InvalidRequest(String::from(error_message)),"ValidationException" => CreateSecurityConfigurationError::Validation(error_message.to_string()),_ => CreateSecurityConfigurationError::Unknown(String::from(body))
+                                    "InternalServerException" => CreateSecurityConfigurationError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => CreateSecurityConfigurationError::InvalidRequest(String::from(error_message)),
+"ValidationException" => CreateSecurityConfigurationError::Validation(error_message.to_string()),
+_ => CreateSecurityConfigurationError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => CreateSecurityConfigurationError::Unknown(String::from(body))
@@ -2013,7 +2044,12 @@ Unknown(String)
                 impl Error for CreateSecurityConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            CreateSecurityConfigurationError::InternalServer(ref cause) => cause,CreateSecurityConfigurationError::InvalidRequest(ref cause) => cause,CreateSecurityConfigurationError::Validation(ref cause) => cause,CreateSecurityConfigurationError::Credentials(ref err) => err.description(),CreateSecurityConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),CreateSecurityConfigurationError::Unknown(ref cause) => cause
+                            CreateSecurityConfigurationError::InternalServer(ref cause) => cause,
+CreateSecurityConfigurationError::InvalidRequest(ref cause) => cause,
+CreateSecurityConfigurationError::Validation(ref cause) => cause,
+CreateSecurityConfigurationError::Credentials(ref err) => err.description(),
+CreateSecurityConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateSecurityConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2043,7 +2079,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidRequestException" => DeleteSecurityConfigurationError::InvalidRequest(String::from(error_message)),"InternalServerException" => DeleteSecurityConfigurationError::InternalServer(String::from(error_message)),"ValidationException" => DeleteSecurityConfigurationError::Validation(error_message.to_string()),_ => DeleteSecurityConfigurationError::Unknown(String::from(body))
+                                    "InternalServerException" => DeleteSecurityConfigurationError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => DeleteSecurityConfigurationError::InvalidRequest(String::from(error_message)),
+"ValidationException" => DeleteSecurityConfigurationError::Validation(error_message.to_string()),
+_ => DeleteSecurityConfigurationError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DeleteSecurityConfigurationError::Unknown(String::from(body))
@@ -2074,7 +2113,12 @@ Unknown(String)
                 impl Error for DeleteSecurityConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DeleteSecurityConfigurationError::InvalidRequest(ref cause) => cause,DeleteSecurityConfigurationError::InternalServer(ref cause) => cause,DeleteSecurityConfigurationError::Validation(ref cause) => cause,DeleteSecurityConfigurationError::Credentials(ref err) => err.description(),DeleteSecurityConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DeleteSecurityConfigurationError::Unknown(ref cause) => cause
+                            DeleteSecurityConfigurationError::InternalServer(ref cause) => cause,
+DeleteSecurityConfigurationError::InvalidRequest(ref cause) => cause,
+DeleteSecurityConfigurationError::Validation(ref cause) => cause,
+DeleteSecurityConfigurationError::Credentials(ref err) => err.description(),
+DeleteSecurityConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DeleteSecurityConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2082,10 +2126,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum DescribeClusterError {
                     
-///<p>This exception occurs when there is something wrong with user input.</p>
-InvalidRequest(String),
 ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
-InternalServer(String),/// An error occurred dispatching the HTTP request
+InternalServer(String),
+///<p>This exception occurs when there is something wrong with user input.</p>
+InvalidRequest(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2104,7 +2148,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidRequestException" => DescribeClusterError::InvalidRequest(String::from(error_message)),"InternalServerException" => DescribeClusterError::InternalServer(String::from(error_message)),"ValidationException" => DescribeClusterError::Validation(error_message.to_string()),_ => DescribeClusterError::Unknown(String::from(body))
+                                    "InternalServerException" => DescribeClusterError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => DescribeClusterError::InvalidRequest(String::from(error_message)),
+"ValidationException" => DescribeClusterError::Validation(error_message.to_string()),
+_ => DescribeClusterError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeClusterError::Unknown(String::from(body))
@@ -2135,7 +2182,12 @@ Unknown(String)
                 impl Error for DescribeClusterError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeClusterError::InvalidRequest(ref cause) => cause,DescribeClusterError::InternalServer(ref cause) => cause,DescribeClusterError::Validation(ref cause) => cause,DescribeClusterError::Credentials(ref err) => err.description(),DescribeClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeClusterError::Unknown(ref cause) => cause
+                            DescribeClusterError::InternalServer(ref cause) => cause,
+DescribeClusterError::InvalidRequest(ref cause) => cause,
+DescribeClusterError::Validation(ref cause) => cause,
+DescribeClusterError::Credentials(ref err) => err.description(),
+DescribeClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeClusterError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2163,7 +2215,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerError" => DescribeJobFlowsError::InternalServerError(String::from(error_message)),"ValidationException" => DescribeJobFlowsError::Validation(error_message.to_string()),_ => DescribeJobFlowsError::Unknown(String::from(body))
+                                    "InternalServerError" => DescribeJobFlowsError::InternalServerError(String::from(error_message)),
+"ValidationException" => DescribeJobFlowsError::Validation(error_message.to_string()),
+_ => DescribeJobFlowsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeJobFlowsError::Unknown(String::from(body))
@@ -2194,7 +2248,11 @@ Unknown(String)
                 impl Error for DescribeJobFlowsError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeJobFlowsError::InternalServerError(ref cause) => cause,DescribeJobFlowsError::Validation(ref cause) => cause,DescribeJobFlowsError::Credentials(ref err) => err.description(),DescribeJobFlowsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeJobFlowsError::Unknown(ref cause) => cause
+                            DescribeJobFlowsError::InternalServerError(ref cause) => cause,
+DescribeJobFlowsError::Validation(ref cause) => cause,
+DescribeJobFlowsError::Credentials(ref err) => err.description(),
+DescribeJobFlowsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeJobFlowsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2224,7 +2282,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerException" => DescribeSecurityConfigurationError::InternalServer(String::from(error_message)),"InvalidRequestException" => DescribeSecurityConfigurationError::InvalidRequest(String::from(error_message)),"ValidationException" => DescribeSecurityConfigurationError::Validation(error_message.to_string()),_ => DescribeSecurityConfigurationError::Unknown(String::from(body))
+                                    "InternalServerException" => DescribeSecurityConfigurationError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => DescribeSecurityConfigurationError::InvalidRequest(String::from(error_message)),
+"ValidationException" => DescribeSecurityConfigurationError::Validation(error_message.to_string()),
+_ => DescribeSecurityConfigurationError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeSecurityConfigurationError::Unknown(String::from(body))
@@ -2255,7 +2316,12 @@ Unknown(String)
                 impl Error for DescribeSecurityConfigurationError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeSecurityConfigurationError::InternalServer(ref cause) => cause,DescribeSecurityConfigurationError::InvalidRequest(ref cause) => cause,DescribeSecurityConfigurationError::Validation(ref cause) => cause,DescribeSecurityConfigurationError::Credentials(ref err) => err.description(),DescribeSecurityConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeSecurityConfigurationError::Unknown(ref cause) => cause
+                            DescribeSecurityConfigurationError::InternalServer(ref cause) => cause,
+DescribeSecurityConfigurationError::InvalidRequest(ref cause) => cause,
+DescribeSecurityConfigurationError::Validation(ref cause) => cause,
+DescribeSecurityConfigurationError::Credentials(ref err) => err.description(),
+DescribeSecurityConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeSecurityConfigurationError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2285,7 +2351,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidRequestException" => DescribeStepError::InvalidRequest(String::from(error_message)),"InternalServerException" => DescribeStepError::InternalServer(String::from(error_message)),"ValidationException" => DescribeStepError::Validation(error_message.to_string()),_ => DescribeStepError::Unknown(String::from(body))
+                                    "InternalServerException" => DescribeStepError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => DescribeStepError::InvalidRequest(String::from(error_message)),
+"ValidationException" => DescribeStepError::Validation(error_message.to_string()),
+_ => DescribeStepError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => DescribeStepError::Unknown(String::from(body))
@@ -2316,7 +2385,12 @@ Unknown(String)
                 impl Error for DescribeStepError {
                     fn description(&self) -> &str {
                         match *self {
-                            DescribeStepError::InternalServer(ref cause) => cause,DescribeStepError::InvalidRequest(ref cause) => cause,DescribeStepError::Validation(ref cause) => cause,DescribeStepError::Credentials(ref err) => err.description(),DescribeStepError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),DescribeStepError::Unknown(ref cause) => cause
+                            DescribeStepError::InternalServer(ref cause) => cause,
+DescribeStepError::InvalidRequest(ref cause) => cause,
+DescribeStepError::Validation(ref cause) => cause,
+DescribeStepError::Credentials(ref err) => err.description(),
+DescribeStepError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+DescribeStepError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2324,10 +2398,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListBootstrapActionsError {
                     
-///<p>This exception occurs when there is something wrong with user input.</p>
-InvalidRequest(String),
 ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
-InternalServer(String),/// An error occurred dispatching the HTTP request
+InternalServer(String),
+///<p>This exception occurs when there is something wrong with user input.</p>
+InvalidRequest(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2346,7 +2420,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerException" => ListBootstrapActionsError::InternalServer(String::from(error_message)),"InvalidRequestException" => ListBootstrapActionsError::InvalidRequest(String::from(error_message)),"ValidationException" => ListBootstrapActionsError::Validation(error_message.to_string()),_ => ListBootstrapActionsError::Unknown(String::from(body))
+                                    "InternalServerException" => ListBootstrapActionsError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => ListBootstrapActionsError::InvalidRequest(String::from(error_message)),
+"ValidationException" => ListBootstrapActionsError::Validation(error_message.to_string()),
+_ => ListBootstrapActionsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListBootstrapActionsError::Unknown(String::from(body))
@@ -2377,7 +2454,12 @@ Unknown(String)
                 impl Error for ListBootstrapActionsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListBootstrapActionsError::InternalServer(ref cause) => cause,ListBootstrapActionsError::InvalidRequest(ref cause) => cause,ListBootstrapActionsError::Validation(ref cause) => cause,ListBootstrapActionsError::Credentials(ref err) => err.description(),ListBootstrapActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListBootstrapActionsError::Unknown(ref cause) => cause
+                            ListBootstrapActionsError::InternalServer(ref cause) => cause,
+ListBootstrapActionsError::InvalidRequest(ref cause) => cause,
+ListBootstrapActionsError::Validation(ref cause) => cause,
+ListBootstrapActionsError::Credentials(ref err) => err.description(),
+ListBootstrapActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListBootstrapActionsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2385,10 +2467,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum ListClustersError {
                     
-///<p>This exception occurs when there is something wrong with user input.</p>
-InvalidRequest(String),
 ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
-InternalServer(String),/// An error occurred dispatching the HTTP request
+InternalServer(String),
+///<p>This exception occurs when there is something wrong with user input.</p>
+InvalidRequest(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2407,7 +2489,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidRequestException" => ListClustersError::InvalidRequest(String::from(error_message)),"InternalServerException" => ListClustersError::InternalServer(String::from(error_message)),"ValidationException" => ListClustersError::Validation(error_message.to_string()),_ => ListClustersError::Unknown(String::from(body))
+                                    "InternalServerException" => ListClustersError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => ListClustersError::InvalidRequest(String::from(error_message)),
+"ValidationException" => ListClustersError::Validation(error_message.to_string()),
+_ => ListClustersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListClustersError::Unknown(String::from(body))
@@ -2438,7 +2523,12 @@ Unknown(String)
                 impl Error for ListClustersError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListClustersError::InternalServer(ref cause) => cause,ListClustersError::InvalidRequest(ref cause) => cause,ListClustersError::Validation(ref cause) => cause,ListClustersError::Credentials(ref err) => err.description(),ListClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListClustersError::Unknown(ref cause) => cause
+                            ListClustersError::InternalServer(ref cause) => cause,
+ListClustersError::InvalidRequest(ref cause) => cause,
+ListClustersError::Validation(ref cause) => cause,
+ListClustersError::Credentials(ref err) => err.description(),
+ListClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListClustersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2468,7 +2558,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidRequestException" => ListInstanceGroupsError::InvalidRequest(String::from(error_message)),"InternalServerException" => ListInstanceGroupsError::InternalServer(String::from(error_message)),"ValidationException" => ListInstanceGroupsError::Validation(error_message.to_string()),_ => ListInstanceGroupsError::Unknown(String::from(body))
+                                    "InternalServerException" => ListInstanceGroupsError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => ListInstanceGroupsError::InvalidRequest(String::from(error_message)),
+"ValidationException" => ListInstanceGroupsError::Validation(error_message.to_string()),
+_ => ListInstanceGroupsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListInstanceGroupsError::Unknown(String::from(body))
@@ -2499,7 +2592,12 @@ Unknown(String)
                 impl Error for ListInstanceGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListInstanceGroupsError::InternalServer(ref cause) => cause,ListInstanceGroupsError::InvalidRequest(ref cause) => cause,ListInstanceGroupsError::Validation(ref cause) => cause,ListInstanceGroupsError::Credentials(ref err) => err.description(),ListInstanceGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListInstanceGroupsError::Unknown(ref cause) => cause
+                            ListInstanceGroupsError::InternalServer(ref cause) => cause,
+ListInstanceGroupsError::InvalidRequest(ref cause) => cause,
+ListInstanceGroupsError::Validation(ref cause) => cause,
+ListInstanceGroupsError::Credentials(ref err) => err.description(),
+ListInstanceGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListInstanceGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2529,7 +2627,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidRequestException" => ListInstancesError::InvalidRequest(String::from(error_message)),"InternalServerException" => ListInstancesError::InternalServer(String::from(error_message)),"ValidationException" => ListInstancesError::Validation(error_message.to_string()),_ => ListInstancesError::Unknown(String::from(body))
+                                    "InternalServerException" => ListInstancesError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => ListInstancesError::InvalidRequest(String::from(error_message)),
+"ValidationException" => ListInstancesError::Validation(error_message.to_string()),
+_ => ListInstancesError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListInstancesError::Unknown(String::from(body))
@@ -2560,7 +2661,12 @@ Unknown(String)
                 impl Error for ListInstancesError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListInstancesError::InvalidRequest(ref cause) => cause,ListInstancesError::InternalServer(ref cause) => cause,ListInstancesError::Validation(ref cause) => cause,ListInstancesError::Credentials(ref err) => err.description(),ListInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListInstancesError::Unknown(ref cause) => cause
+                            ListInstancesError::InternalServer(ref cause) => cause,
+ListInstancesError::InvalidRequest(ref cause) => cause,
+ListInstancesError::Validation(ref cause) => cause,
+ListInstancesError::Credentials(ref err) => err.description(),
+ListInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListInstancesError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2590,7 +2696,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidRequestException" => ListSecurityConfigurationsError::InvalidRequest(String::from(error_message)),"InternalServerException" => ListSecurityConfigurationsError::InternalServer(String::from(error_message)),"ValidationException" => ListSecurityConfigurationsError::Validation(error_message.to_string()),_ => ListSecurityConfigurationsError::Unknown(String::from(body))
+                                    "InternalServerException" => ListSecurityConfigurationsError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => ListSecurityConfigurationsError::InvalidRequest(String::from(error_message)),
+"ValidationException" => ListSecurityConfigurationsError::Validation(error_message.to_string()),
+_ => ListSecurityConfigurationsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListSecurityConfigurationsError::Unknown(String::from(body))
@@ -2621,7 +2730,12 @@ Unknown(String)
                 impl Error for ListSecurityConfigurationsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListSecurityConfigurationsError::InvalidRequest(ref cause) => cause,ListSecurityConfigurationsError::InternalServer(ref cause) => cause,ListSecurityConfigurationsError::Validation(ref cause) => cause,ListSecurityConfigurationsError::Credentials(ref err) => err.description(),ListSecurityConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListSecurityConfigurationsError::Unknown(ref cause) => cause
+                            ListSecurityConfigurationsError::InternalServer(ref cause) => cause,
+ListSecurityConfigurationsError::InvalidRequest(ref cause) => cause,
+ListSecurityConfigurationsError::Validation(ref cause) => cause,
+ListSecurityConfigurationsError::Credentials(ref err) => err.description(),
+ListSecurityConfigurationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListSecurityConfigurationsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2651,7 +2765,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerException" => ListStepsError::InternalServer(String::from(error_message)),"InvalidRequestException" => ListStepsError::InvalidRequest(String::from(error_message)),"ValidationException" => ListStepsError::Validation(error_message.to_string()),_ => ListStepsError::Unknown(String::from(body))
+                                    "InternalServerException" => ListStepsError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => ListStepsError::InvalidRequest(String::from(error_message)),
+"ValidationException" => ListStepsError::Validation(error_message.to_string()),
+_ => ListStepsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ListStepsError::Unknown(String::from(body))
@@ -2682,7 +2799,12 @@ Unknown(String)
                 impl Error for ListStepsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ListStepsError::InternalServer(ref cause) => cause,ListStepsError::InvalidRequest(ref cause) => cause,ListStepsError::Validation(ref cause) => cause,ListStepsError::Credentials(ref err) => err.description(),ListStepsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ListStepsError::Unknown(ref cause) => cause
+                            ListStepsError::InternalServer(ref cause) => cause,
+ListStepsError::InvalidRequest(ref cause) => cause,
+ListStepsError::Validation(ref cause) => cause,
+ListStepsError::Credentials(ref err) => err.description(),
+ListStepsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ListStepsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2710,7 +2832,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerError" => ModifyInstanceGroupsError::InternalServerError(String::from(error_message)),"ValidationException" => ModifyInstanceGroupsError::Validation(error_message.to_string()),_ => ModifyInstanceGroupsError::Unknown(String::from(body))
+                                    "InternalServerError" => ModifyInstanceGroupsError::InternalServerError(String::from(error_message)),
+"ValidationException" => ModifyInstanceGroupsError::Validation(error_message.to_string()),
+_ => ModifyInstanceGroupsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => ModifyInstanceGroupsError::Unknown(String::from(body))
@@ -2741,7 +2865,11 @@ Unknown(String)
                 impl Error for ModifyInstanceGroupsError {
                     fn description(&self) -> &str {
                         match *self {
-                            ModifyInstanceGroupsError::InternalServerError(ref cause) => cause,ModifyInstanceGroupsError::Validation(ref cause) => cause,ModifyInstanceGroupsError::Credentials(ref err) => err.description(),ModifyInstanceGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),ModifyInstanceGroupsError::Unknown(ref cause) => cause
+                            ModifyInstanceGroupsError::InternalServerError(ref cause) => cause,
+ModifyInstanceGroupsError::Validation(ref cause) => cause,
+ModifyInstanceGroupsError::Credentials(ref err) => err.description(),
+ModifyInstanceGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+ModifyInstanceGroupsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2767,7 +2895,8 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ValidationException" => PutAutoScalingPolicyError::Validation(error_message.to_string()),_ => PutAutoScalingPolicyError::Unknown(String::from(body))
+                                    "ValidationException" => PutAutoScalingPolicyError::Validation(error_message.to_string()),
+_ => PutAutoScalingPolicyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => PutAutoScalingPolicyError::Unknown(String::from(body))
@@ -2798,7 +2927,10 @@ Unknown(String)
                 impl Error for PutAutoScalingPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            PutAutoScalingPolicyError::Validation(ref cause) => cause,PutAutoScalingPolicyError::Credentials(ref err) => err.description(),PutAutoScalingPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),PutAutoScalingPolicyError::Unknown(ref cause) => cause
+                            PutAutoScalingPolicyError::Validation(ref cause) => cause,
+PutAutoScalingPolicyError::Credentials(ref err) => err.description(),
+PutAutoScalingPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutAutoScalingPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2824,7 +2956,8 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "ValidationException" => RemoveAutoScalingPolicyError::Validation(error_message.to_string()),_ => RemoveAutoScalingPolicyError::Unknown(String::from(body))
+                                    "ValidationException" => RemoveAutoScalingPolicyError::Validation(error_message.to_string()),
+_ => RemoveAutoScalingPolicyError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RemoveAutoScalingPolicyError::Unknown(String::from(body))
@@ -2855,7 +2988,10 @@ Unknown(String)
                 impl Error for RemoveAutoScalingPolicyError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveAutoScalingPolicyError::Validation(ref cause) => cause,RemoveAutoScalingPolicyError::Credentials(ref err) => err.description(),RemoveAutoScalingPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveAutoScalingPolicyError::Unknown(ref cause) => cause
+                            RemoveAutoScalingPolicyError::Validation(ref cause) => cause,
+RemoveAutoScalingPolicyError::Credentials(ref err) => err.description(),
+RemoveAutoScalingPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveAutoScalingPolicyError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2863,10 +2999,10 @@ Unknown(String)
                 #[derive(Debug, PartialEq)]
                 pub enum RemoveTagsError {
                     
-///<p>This exception occurs when there is something wrong with user input.</p>
-InvalidRequest(String),
 ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
-InternalServer(String),/// An error occurred dispatching the HTTP request
+InternalServer(String),
+///<p>This exception occurs when there is something wrong with user input.</p>
+InvalidRequest(String),/// An error occurred dispatching the HTTP request
 HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
 Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
 Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
@@ -2885,7 +3021,10 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InvalidRequestException" => RemoveTagsError::InvalidRequest(String::from(error_message)),"InternalServerException" => RemoveTagsError::InternalServer(String::from(error_message)),"ValidationException" => RemoveTagsError::Validation(error_message.to_string()),_ => RemoveTagsError::Unknown(String::from(body))
+                                    "InternalServerException" => RemoveTagsError::InternalServer(String::from(error_message)),
+"InvalidRequestException" => RemoveTagsError::InvalidRequest(String::from(error_message)),
+"ValidationException" => RemoveTagsError::Validation(error_message.to_string()),
+_ => RemoveTagsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RemoveTagsError::Unknown(String::from(body))
@@ -2916,7 +3055,12 @@ Unknown(String)
                 impl Error for RemoveTagsError {
                     fn description(&self) -> &str {
                         match *self {
-                            RemoveTagsError::InternalServer(ref cause) => cause,RemoveTagsError::InvalidRequest(ref cause) => cause,RemoveTagsError::Validation(ref cause) => cause,RemoveTagsError::Credentials(ref err) => err.description(),RemoveTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RemoveTagsError::Unknown(ref cause) => cause
+                            RemoveTagsError::InternalServer(ref cause) => cause,
+RemoveTagsError::InvalidRequest(ref cause) => cause,
+RemoveTagsError::Validation(ref cause) => cause,
+RemoveTagsError::Credentials(ref err) => err.description(),
+RemoveTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RemoveTagsError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -2944,7 +3088,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerError" => RunJobFlowError::InternalServerError(String::from(error_message)),"ValidationException" => RunJobFlowError::Validation(error_message.to_string()),_ => RunJobFlowError::Unknown(String::from(body))
+                                    "InternalServerError" => RunJobFlowError::InternalServerError(String::from(error_message)),
+"ValidationException" => RunJobFlowError::Validation(error_message.to_string()),
+_ => RunJobFlowError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => RunJobFlowError::Unknown(String::from(body))
@@ -2975,7 +3121,11 @@ Unknown(String)
                 impl Error for RunJobFlowError {
                     fn description(&self) -> &str {
                         match *self {
-                            RunJobFlowError::InternalServerError(ref cause) => cause,RunJobFlowError::Validation(ref cause) => cause,RunJobFlowError::Credentials(ref err) => err.description(),RunJobFlowError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),RunJobFlowError::Unknown(ref cause) => cause
+                            RunJobFlowError::InternalServerError(ref cause) => cause,
+RunJobFlowError::Validation(ref cause) => cause,
+RunJobFlowError::Credentials(ref err) => err.description(),
+RunJobFlowError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+RunJobFlowError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3003,7 +3153,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerError" => SetTerminationProtectionError::InternalServerError(String::from(error_message)),"ValidationException" => SetTerminationProtectionError::Validation(error_message.to_string()),_ => SetTerminationProtectionError::Unknown(String::from(body))
+                                    "InternalServerError" => SetTerminationProtectionError::InternalServerError(String::from(error_message)),
+"ValidationException" => SetTerminationProtectionError::Validation(error_message.to_string()),
+_ => SetTerminationProtectionError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SetTerminationProtectionError::Unknown(String::from(body))
@@ -3034,7 +3186,11 @@ Unknown(String)
                 impl Error for SetTerminationProtectionError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetTerminationProtectionError::InternalServerError(ref cause) => cause,SetTerminationProtectionError::Validation(ref cause) => cause,SetTerminationProtectionError::Credentials(ref err) => err.description(),SetTerminationProtectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetTerminationProtectionError::Unknown(ref cause) => cause
+                            SetTerminationProtectionError::InternalServerError(ref cause) => cause,
+SetTerminationProtectionError::Validation(ref cause) => cause,
+SetTerminationProtectionError::Credentials(ref err) => err.description(),
+SetTerminationProtectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetTerminationProtectionError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3062,7 +3218,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerError" => SetVisibleToAllUsersError::InternalServerError(String::from(error_message)),"ValidationException" => SetVisibleToAllUsersError::Validation(error_message.to_string()),_ => SetVisibleToAllUsersError::Unknown(String::from(body))
+                                    "InternalServerError" => SetVisibleToAllUsersError::InternalServerError(String::from(error_message)),
+"ValidationException" => SetVisibleToAllUsersError::Validation(error_message.to_string()),
+_ => SetVisibleToAllUsersError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => SetVisibleToAllUsersError::Unknown(String::from(body))
@@ -3093,7 +3251,11 @@ Unknown(String)
                 impl Error for SetVisibleToAllUsersError {
                     fn description(&self) -> &str {
                         match *self {
-                            SetVisibleToAllUsersError::InternalServerError(ref cause) => cause,SetVisibleToAllUsersError::Validation(ref cause) => cause,SetVisibleToAllUsersError::Credentials(ref err) => err.description(),SetVisibleToAllUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),SetVisibleToAllUsersError::Unknown(ref cause) => cause
+                            SetVisibleToAllUsersError::InternalServerError(ref cause) => cause,
+SetVisibleToAllUsersError::Validation(ref cause) => cause,
+SetVisibleToAllUsersError::Credentials(ref err) => err.description(),
+SetVisibleToAllUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+SetVisibleToAllUsersError::Unknown(ref cause) => cause
                         }
                     }
                  }
@@ -3121,7 +3283,9 @@ Unknown(String)
                                 let error_type = pieces.last().expect("Expected error type");
 
                                 match *error_type {
-                                    "InternalServerError" => TerminateJobFlowsError::InternalServerError(String::from(error_message)),"ValidationException" => TerminateJobFlowsError::Validation(error_message.to_string()),_ => TerminateJobFlowsError::Unknown(String::from(body))
+                                    "InternalServerError" => TerminateJobFlowsError::InternalServerError(String::from(error_message)),
+"ValidationException" => TerminateJobFlowsError::Validation(error_message.to_string()),
+_ => TerminateJobFlowsError::Unknown(String::from(body))
                                 }
                             },
                             Err(_) => TerminateJobFlowsError::Unknown(String::from(body))
@@ -3152,7 +3316,11 @@ Unknown(String)
                 impl Error for TerminateJobFlowsError {
                     fn description(&self) -> &str {
                         match *self {
-                            TerminateJobFlowsError::InternalServerError(ref cause) => cause,TerminateJobFlowsError::Validation(ref cause) => cause,TerminateJobFlowsError::Credentials(ref err) => err.description(),TerminateJobFlowsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),TerminateJobFlowsError::Unknown(ref cause) => cause
+                            TerminateJobFlowsError::InternalServerError(ref cause) => cause,
+TerminateJobFlowsError::Validation(ref cause) => cause,
+TerminateJobFlowsError::Credentials(ref err) => err.description(),
+TerminateJobFlowsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+TerminateJobFlowsError::Unknown(ref cause) => cause
                         }
                     }
                  }
