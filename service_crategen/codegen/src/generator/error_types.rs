@@ -132,7 +132,7 @@ pub trait GenerateErrorTypes {
         type_matchers.push(format!("{error_type}::HttpDispatch(ref dispatch_error) => dispatch_error.description()", error_type = error_type));
         type_matchers.push(format!("{error_type}::Unknown(ref cause) => cause",
                                    error_type = error_type));
-        Some(type_matchers.join(","))
+        Some(type_matchers.join(",\n"))
     }
 
     fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation) -> String;
@@ -255,6 +255,6 @@ impl JsonErrorTypes {
         type_matchers.push(format!("\"ValidationException\" => {error_type}::Validation(error_message.to_string())", error_type = error_type));
         type_matchers.push(format!("_ => {error_type}::Unknown(String::from(body))",
                                    error_type = error_type));
-        type_matchers.join(",")
+        type_matchers.join(",\n")
     }
 }
