@@ -10,7 +10,6 @@ documentation = "http://rusoto.github.io/rusoto/rusoto/index.html"
 keywords = ["AWS", "Amazon"]
 license = "MIT"
 name = "rusoto_mock"
-readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
 version = "0.24.0"
 homepage = "https://www.rusoto.org/"
