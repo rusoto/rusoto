@@ -23,7 +23,7 @@ To use `rusoto_workspaces` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_workspaces = "0.24.0"
+rusoto_workspaces = "0.25.0"
 ```
 
 ## Contributing

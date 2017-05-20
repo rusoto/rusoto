@@ -155,7 +155,7 @@ fn main() {
                 ]),
                 description: Some(format!("AWS SDK for Rust - {} @ {}", &service.metadata.service_full_name, &service.metadata.api_version)),
                 documentation: Some("https://rusoto.github.io/rusoto/rusoto_core/index.html".into()),
-                keywords: Some(vec!["AWS".into(), "Amazon".into(), name.clone(), service.metadata.service_full_name.clone(), service.metadata.endpoint_prefix.clone()]),
+                keywords: Some(vec!["AWS".into(), "Amazon".into(), name.clone()]),
                 license: Some("MIT".into()),
                 name: crate_name.clone(),
                 readme: Some("README.md".into()),
@@ -168,7 +168,7 @@ fn main() {
             dev_dependencies: vec![
                 ("rusoto_mock".to_owned(), cargo::Dependency::Extended {
                     path: Some("../../../mock".into()),
-                    version: None,
+                    version: Some("0.24.0".into()),
                     optional: None,
                     default_features: None,
                     features: None

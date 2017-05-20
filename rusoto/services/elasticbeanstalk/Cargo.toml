@@ -2,12 +2,12 @@
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS Elastic Beanstalk @ 2010-12-01"
 documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
-keywords = ["AWS", "Amazon", "elasticbeanstalk", "AWS Elastic Beanstalk", "elasticbeanstalk"]
+keywords = ["AWS", "Amazon", "elasticbeanstalk"]
 license = "MIT"
 name = "rusoto_elasticbeanstalk"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.24.0"
+version = "0.25.0"
 homepage = "https://www.rusoto.org/"
 
 [build-dependencies]
@@ -17,7 +17,8 @@ hyper = "0.10.0"
 xml-rs = "0.3"
 
 [dependencies.rusoto_core]
-version = "0.24.0"
+version = "0.25.0"
 path = "../../core"
 [dev-dependencies.rusoto_mock]
+version = "0.24.0"
 path = "../../../mock"

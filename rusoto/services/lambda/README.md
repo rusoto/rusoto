@@ -23,7 +23,7 @@ To use `rusoto_lambda` in your application, add it as a dependency in your `Carg
 
 ```toml
 [dependencies]
-rusoto_lambda = "0.24.0"
+rusoto_lambda = "0.25.0"
 ```
 
 ## Contributing

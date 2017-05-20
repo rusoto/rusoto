@@ -23,7 +23,7 @@ To use `rusoto_directconnect` in your application, add it as a dependency in you
 
 ```toml
 [dependencies]
-rusoto_directconnect = "0.24.0"
+rusoto_directconnect = "0.25.0"
 ```
 
 ## Contributing
