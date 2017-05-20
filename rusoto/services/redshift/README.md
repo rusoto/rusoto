@@ -23,7 +23,7 @@ To use `rusoto_redshift` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_redshift = "0.24.0"
+rusoto_redshift = "0.25.0"
 ```
 
 ## Contributing
