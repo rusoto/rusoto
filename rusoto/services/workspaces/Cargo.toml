@@ -2,7 +2,7 @@
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon WorkSpaces @ 2015-04-08"
 documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
-keywords = ["AWS", "Amazon", "workspaces", "Amazon WorkSpaces", "workspaces"]
+keywords = ["AWS", "Amazon", "workspaces"]
 license = "MIT"
 name = "rusoto_workspaces"
 readme = "README.md"

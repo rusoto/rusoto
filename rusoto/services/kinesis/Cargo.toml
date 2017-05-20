@@ -2,7 +2,7 @@
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon Kinesis @ 2013-12-02"
 documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
-keywords = ["AWS", "Amazon", "kinesis", "Amazon Kinesis", "kinesis"]
+keywords = ["AWS", "Amazon", "kinesis"]
 license = "MIT"
 name = "rusoto_kinesis"
 readme = "README.md"

@@ -2,7 +2,7 @@
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS Data Pipeline @ 2012-10-29"
 documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
-keywords = ["AWS", "Amazon", "datapipeline", "AWS Data Pipeline", "datapipeline"]
+keywords = ["AWS", "Amazon", "datapipeline"]
 license = "MIT"
 name = "rusoto_datapipeline"
 readme = "README.md"

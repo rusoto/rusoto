@@ -2,7 +2,7 @@
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS Import/Export @ 2010-06-01"
 documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
-keywords = ["AWS", "Amazon", "importexport", "AWS Import/Export", "importexport"]
+keywords = ["AWS", "Amazon", "importexport"]
 license = "MIT"
 name = "rusoto_importexport"
 readme = "README.md"

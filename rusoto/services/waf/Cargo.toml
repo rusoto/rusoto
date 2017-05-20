@@ -2,7 +2,7 @@
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS WAF @ 2015-08-24"
 documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
-keywords = ["AWS", "Amazon", "waf", "AWS WAF", "waf"]
+keywords = ["AWS", "Amazon", "waf"]
 license = "MIT"
 name = "rusoto_waf"
 readme = "README.md"

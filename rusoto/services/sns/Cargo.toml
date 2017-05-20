@@ -2,7 +2,7 @@
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon Simple Notification Service @ 2010-03-31"
 documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
-keywords = ["AWS", "Amazon", "sns", "Amazon Simple Notification Service", "sns"]
+keywords = ["AWS", "Amazon", "sns"]
 license = "MIT"
 name = "rusoto_sns"
 readme = "README.md"

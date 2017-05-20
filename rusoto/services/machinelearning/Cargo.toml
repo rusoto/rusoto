@@ -2,7 +2,7 @@
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon Machine Learning @ 2014-12-12"
 documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
-keywords = ["AWS", "Amazon", "machinelearning", "Amazon Machine Learning", "machinelearning"]
+keywords = ["AWS", "Amazon", "machinelearning"]
 license = "MIT"
 name = "rusoto_machinelearning"
 readme = "README.md"

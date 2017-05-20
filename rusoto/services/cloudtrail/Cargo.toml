@@ -2,7 +2,7 @@
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS CloudTrail @ 2013-11-01"
 documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
-keywords = ["AWS", "Amazon", "cloudtrail", "AWS CloudTrail", "cloudtrail"]
+keywords = ["AWS", "Amazon", "cloudtrail"]
 license = "MIT"
 name = "rusoto_cloudtrail"
 readme = "README.md"

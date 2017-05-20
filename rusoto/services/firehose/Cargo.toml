@@ -2,7 +2,7 @@
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon Kinesis Firehose @ 2015-08-04"
 documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
-keywords = ["AWS", "Amazon", "firehose", "Amazon Kinesis Firehose", "firehose"]
+keywords = ["AWS", "Amazon", "firehose"]
 license = "MIT"
 name = "rusoto_firehose"
 readme = "README.md"
