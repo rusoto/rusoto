@@ -12,8 +12,8 @@
     <tr>
         <td colspan="2">
             <a href="https://rusoto.github.io/rusoto/" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
-            <a href="https://crates.io/crates/rusoto" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto.svg" alt="crates-io"></img></a>
-            <a href="#license" title="License: MIT"><img src="https://img.shields.io/crates/l/rusoto.svg" alt="license-badge"></img></a>
+            <a href="https://crates.io/crates/rusoto_core" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
+            <a href="#license" title="License: MIT"><img src="https://img.shields.io/crates/l/rusoto_core.svg" alt="license-badge"></img></a>
         </td>
     </tr>
 </table>
@@ -31,23 +31,23 @@ You may be looking for:
 
 ## Requirements
 
-Rust 1.15.0 or later is required.
+Rust 1.17.0 or later is required.
 
 On Linux, OpenSSL is required.
 
 ## Installation
 
-Rusoto is available on [crates.io](https://crates.io/crates/rusoto).
-To use Rusoto in your Rust program built with Cargo, add it as a dependency and enable the Cargo features for any AWS service you want to use.
+Rusoto is available on [crates.io](https://crates.io/crates/rusoto_core).
+To use Rusoto in your Rust program built with Cargo, add it as a dependency and `rusoto_$SERVICENAME` for any supported AWS service you want to use.
 
 For example, to include only S3 and SQS:
 
 ``` toml
 [dependencies]
-rusoto = {version = "0.24", features = ["s3", "sqs"]}
+rusoto_core = {version = "0.25.0"}
+rusoto_sqs = {version = "0.25.0"}
+rusoto_s3 = {version = "0.25.0"}
 ```
-
-You can use the Cargo feature "all" to build Rusoto with support for every available service. Warning: building with "all" can require upwards of 5 GB of memory. Most people do not need all 40+ services so use individual features to enable the services you use.
 
 ## Usage
 
@@ -92,9 +92,6 @@ fn main() {
 }
 ```
 
-Rusoto exposes relatively low level types for AWS's APIs.
-It may be convenient to use higher level types, which can be found in the [rusoto_helpers](helpers) crate.
-
 ### Credentials
 
 For more information on Rusoto's use of AWS credentials such as priority and refreshing, see [AWS Credentials](AWS-CREDENTIALS.md).
@@ -103,7 +100,7 @@ For more information on Rusoto's use of AWS credentials such as priority and ref
 
 Rusoto complies with [semantic versioning 2.0.0](http://semver.org/).
 Until reaching 1.0.0 the API is to be considered unstable.
-See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/rusoto) for current version.
+See [Cargo.toml](Cargo.toml) or [rusoto on crates.io](https://crates.io/crates/rusoto_core) for current version.
 
 ## Releases
 
