@@ -51,8 +51,8 @@ rusoto_s3 = {version = "0.25.0"}
 
 ## Usage
 
-Rusoto includes a public module for each AWS service it is compiled for containing Rust types for that service's API.
-A full list of these services and their Cargo feature names can be found [here][supported-aws-services].
+Rusoto has a crate for each AWS service, containing Rust types for that service's API.
+A full list of these services can be found [here][supported-aws-services].
 All other public types are reexported to the crate root.
 Consult the rustdoc documentation for full details by running `cargo doc` or visiting the online [documentation](https://rusoto.github.io/rusoto/rusoto/index.html) for the latest crates.io release.
 
