@@ -11,7 +11,7 @@ use std::fmt::{Display, Error as FmtError, Formatter};
 
 /// An AWS region.
 /// `CnNorth1` is currently untested due to Rusoto maintainers not having access to AWS China.
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum Region {
     ApNortheast1,
     ApNortheast2,
