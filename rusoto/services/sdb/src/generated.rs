@@ -138,7 +138,7 @@ struct AttributeListDeserializer;
             impl AttributeListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &AttributeList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 AttributeSerializer::serialize(params, &key, obj);
 }
                 }
@@ -151,7 +151,7 @@ pub type AttributeNameList = Vec<String>;
             impl AttributeNameListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &AttributeNameList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 params.put(&key, &obj);
 }
                 }
@@ -270,7 +270,7 @@ pub type DeletableItemList = Vec<DeletableItem>;
             impl DeletableItemListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &DeletableItemList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 DeletableItemSerializer::serialize(params, &key, obj);
 }
                 }
@@ -802,7 +802,7 @@ pub type ReplaceableAttributeList = Vec<ReplaceableAttribute>;
             impl ReplaceableAttributeListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &ReplaceableAttributeList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 ReplaceableAttributeSerializer::serialize(params, &key, obj);
 }
                 }
@@ -844,7 +844,7 @@ pub type ReplaceableItemList = Vec<ReplaceableItem>;
             impl ReplaceableItemListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &ReplaceableItemList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 ReplaceableItemSerializer::serialize(params, &key, obj);
 }
                 }
