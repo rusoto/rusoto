@@ -66,16 +66,29 @@ fn test_all_the_things() {
     // copy the object to change its settings
     test_copy_object(&client, &test_bucket, &filename);
 
-    // DELETE the object
-    test_delete_object(&client, &test_bucket, &filename);
-
     // Binary objects:
     test_put_object_with_filename(&client,
                                   &test_bucket,
                                   &binary_filename,
                                   &"tests/sample-data/binary-file");
     test_get_object(&client, &test_bucket, &binary_filename);
+
+    // paging test requires three items in the bucket, put another item there:
+    // PUT an object (no_credentials is an arbitrary choice)
+    let another_filename = format!("foo{}", filename);
+    test_put_object_with_filename(&client,
+                                  &test_bucket,
+                                  &another_filename,
+                                  &"tests/sample-data/no_credentials");
+
+    // list items with paging
+    list_items_in_bucket_paged(&client, &test_bucket);
+
     test_delete_object(&client, &test_bucket, &binary_filename);
+    test_delete_object(&client, &test_bucket, &another_filename);
+
+    // DELETE the object
+    test_delete_object(&client, &test_bucket, &filename);
 
     // delete the test bucket
     test_delete_bucket(&client, &test_bucket);
@@ -248,6 +261,24 @@ fn list_items_in_bucket(client: &TestClient, bucket: &str) {
     };
     let result = client.list_objects_v2(&list_obj_req).unwrap();
     println!("Items in bucket: {:#?}", result);
+}
+
+// Assuming there's already more than three item in our test bucket:
+fn list_items_in_bucket_paged(client: &TestClient, bucket: &str) {
+    let mut list_obj_req = ListObjectsV2Request {
+        bucket: bucket.to_owned(),
+        max_keys: Some(1),
+        ..Default::default()
+    };
+    let result = client.list_objects_v2(&list_obj_req).unwrap();
+    println!("Items in bucket, page 1: {:#?}", result);
+    assert!(result.next_continuation_token.is_some());
+
+    list_obj_req.continuation_token = result.next_continuation_token;
+    let result = client.list_objects_v2(&list_obj_req).unwrap();
+    println!("Items in bucket, page 2: {:#?}", result);
+    // For the second call it the token is in `continuation_token` not `next_continuation_token`
+    assert!(result.continuation_token.is_some());
 }
 
 fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
