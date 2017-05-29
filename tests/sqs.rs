@@ -6,7 +6,7 @@ extern crate env_logger;
 
 use rusoto::sqs::{Sqs, SqsClient};
 use rusoto::sqs::{ListQueuesRequest, CreateQueueRequest, GetQueueUrlRequest, SendMessageRequest};
-use rusoto::sqs::{ReceiveMessageRequest, DeleteMessageRequest, DeleteQueueRequest};
+use rusoto::sqs::{ReceiveMessageRequest, DeleteMessageRequest, DeleteQueueRequest, GetQueueAttributesRequest};
 use rusoto::{DefaultCredentialsProvider, Region};
 use rusoto::default_tls_client;
 
@@ -50,6 +50,16 @@ fn sqs_roundtrip_tests() {
 	let response = sqs.get_queue_url(&get_q_by_name_request).expect("Get queue by URL request failed");
 	let queue_url = &response.queue_url.expect("Queue url should be available from list queues");
 	println!("Verified queue url {} for queue name {}", queue_url.clone(), q_name);
+
+	// queue attributes
+	let queue_attributes_req = GetQueueAttributesRequest {
+		queue_url: queue_url.clone(),
+		attribute_names: Some(vec!["All".to_string()]),
+	};
+	match sqs.get_queue_attributes(&queue_attributes_req) {
+		Ok(result) => println!("Queue attributes: {:?}", result),
+		Err(e) => panic!("Error getting queue attributes: {:?}", e),
+	}
 
 	// send it a message
 	let msg_str = String::from("lorem ipsum dolor sit amet");
