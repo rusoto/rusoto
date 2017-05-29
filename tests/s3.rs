@@ -15,7 +15,7 @@ use rusoto::s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRe
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
-                 CompletedPart, CompletedPartList};
+                 CompletedPart, CompletedPartList, ListObjectsV2Request};
 use rusoto::default_tls_client;
 
 type TestClient = S3Client<DefaultCredentialsProvider, Client>;
@@ -31,7 +31,6 @@ fn test_all_the_things() {
                                DefaultCredentialsProvider::new().unwrap(),
                                Region::UsEast1);
 
-    // a random number should probably be appended here too
     let test_bucket = format!("rusoto_test_bucket_{}", get_time().sec);
     let filename = format!("test_file_{}", get_time().sec);
     let binary_filename = format!("test_file_b{}", get_time().sec);
@@ -42,6 +41,9 @@ fn test_all_the_things() {
 
     // create a bucket for these tests
     test_create_bucket(&client, &test_bucket);
+
+    // list items v2
+    list_items_in_bucket(&client, &test_bucket);
 
     // do a multipart upload
     test_multipart_upload(&client, &test_bucket, &multipart_filename);
@@ -235,7 +237,17 @@ fn test_delete_object(client: &TestClient, bucket: &str, filename: &str) {
 
 fn test_list_buckets(client: &TestClient) {
     let result = client.list_buckets().unwrap();
-    println!("{:#?}", result);
+    println!("\nbuckets available: {:#?}", result);
+}
+
+fn list_items_in_bucket(client: &TestClient, bucket: &str) {
+    let list_obj_req = ListObjectsV2Request {
+        bucket: bucket.to_owned(),
+        start_after: Some("foo".to_owned()),
+        ..Default::default()
+    };
+    let result = client.list_objects_v2(&list_obj_req).unwrap();
+    println!("Items in bucket: {:#?}", result);
 }
 
 fn test_put_bucket_cors(client: &TestClient, bucket: &str) {

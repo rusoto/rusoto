@@ -9703,7 +9703,7 @@ request_uri = request_uri.replace("{Id}", &input.id.to_string());
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/tagging".to_string();
 
-                    params.put_key("Operation=Tag");
+                    params.put("Operation", "Tag");
                     
 
                     let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
@@ -9736,7 +9736,7 @@ request.set_payload(Some(payload));
                     let mut params = Params::new();
                     let mut request_uri = "/2016-11-25/tagging".to_string();
 
-                    params.put_key("Operation=Untag");
+                    params.put("Operation", "Untag");
                     
 
                     let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);

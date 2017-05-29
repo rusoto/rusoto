@@ -18427,7 +18427,7 @@ if let Some(website_redirect_location) = response.headers.get("x-amz-website-red
                     let mut params = Params::new();
                     let mut request_uri = "/{Bucket}".to_string();
 
-                    params.put_key("list-type=2");
+                    params.put("list-type", "2");
                     request_uri = request_uri.replace("{Bucket}", &input.bucket.to_string());
 
                     let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
