@@ -30,7 +30,16 @@ impl GenerateProtocol for RestXmlGenerator {
             let (request_uri, maybe_params) = parse_query_string(&operation.http.request_uri);
 
             let add_uri_parameters = match maybe_params {
-                Some(key) => format!("params.put_key(\"{}\");", key),
+                Some(key) => {
+                    // Sometimes the key has the query param already set, like "list-type=2"
+                    match key.find("=") {
+                        Some(_) => {
+                            let key_val_vec: Vec<&str> = key.split("=").collect();
+                            format!("params.put(\"{}\", \"{}\");", key_val_vec[0], key_val_vec[1])
+                        },
+                        None => format!("params.put_key(\"{}\");", key),
+                    }
+                },
                 _ => "".to_owned(),
             };
 
