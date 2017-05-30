@@ -157,7 +157,7 @@ fn generate_list_serializer(service: &Service, shape: &Shape) -> String {
     let primitive = member_shape.is_primitive();
     let is_shape_flattened = match shape.flattened {
         None => false,
-        Some(_) => true,
+        Some(shape_defined_flatness) => shape_defined_flatness,
     };
     let mut parts = Vec::new();
 
