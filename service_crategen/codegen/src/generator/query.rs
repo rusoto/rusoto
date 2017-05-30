@@ -153,13 +153,15 @@ fn generate_serializer_signature(name: &str, shape: &Shape) -> String {
 }
 
 fn generate_list_serializer(service: &Service, shape: &Shape) -> String {
-
     let member_shape = service.shape_for_member(shape.member.as_ref().unwrap()).unwrap();
     let primitive = member_shape.is_primitive();
-
+    let is_shape_flattened = match shape.flattened {
+        None => false,
+        Some(shape_defined_flatness) => shape_defined_flatness,
+    };
     let mut parts = Vec::new();
 
-    let lmf = list_member_format(service);
+    let lmf = list_member_format(service, is_shape_flattened);
 
     parts.push(format!("for (index, obj) in obj.iter().enumerate() {{
                     let key = format!(\"{list_member_format}\", name, index+1);",
@@ -177,10 +179,15 @@ fn generate_list_serializer(service: &Service, shape: &Shape) -> String {
     parts.join("\n")
 }
 
-fn list_member_format(service: &Service) -> String {
+fn list_member_format(service: &Service, flattened: bool) -> String {
     match &service.metadata.protocol[..] {
         "ec2" => "{}.{}".to_owned(),
-        "query" => "{}.member.{}".to_owned(),
+        "query" => {
+            match flattened {
+                true => "{}.{}".to_owned(),
+                false => "{}.member.{}".to_owned(),
+            }
+        },
         _ => panic!("Unsupported protocol"),
     }
 }

@@ -31,7 +31,7 @@ pub type AWSAccountIdList = Vec<String>;
             impl AWSAccountIdListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &AWSAccountIdList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 params.put(&key, &obj);
 }
                 }
@@ -44,7 +44,7 @@ pub type ActionNameList = Vec<String>;
             impl ActionNameListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &ActionNameList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 params.put(&key, &obj);
 }
                 }
@@ -96,7 +96,7 @@ pub type AttributeNameList = Vec<QueueAttributeName>;
             impl AttributeNameListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &AttributeNameList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 params.put(&key, &obj);
 }
                 }
@@ -331,7 +331,7 @@ pub type ChangeMessageVisibilityBatchRequestEntryList = Vec<ChangeMessageVisibil
             impl ChangeMessageVisibilityBatchRequestEntryListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequestEntryList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 ChangeMessageVisibilityBatchRequestEntrySerializer::serialize(params, &key, obj);
 }
                 }
@@ -618,7 +618,7 @@ pub type DeleteMessageBatchRequestEntryList = Vec<DeleteMessageBatchRequestEntry
             impl DeleteMessageBatchRequestEntryListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequestEntryList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 DeleteMessageBatchRequestEntrySerializer::serialize(params, &key, obj);
 }
                 }
@@ -1148,7 +1148,7 @@ pub type MessageAttributeNameList = Vec<MessageAttributeName>;
             impl MessageAttributeNameListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeNameList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 params.put(&key, &obj);
 }
                 }
@@ -1661,7 +1661,7 @@ pub type SendMessageBatchRequestEntryList = Vec<SendMessageBatchRequestEntry>;
             impl SendMessageBatchRequestEntryListSerializer {
                 fn serialize(params: &mut Params, name: &str, obj: &SendMessageBatchRequestEntryList) {
                     for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
+                    let key = format!("{}.{}", name, index+1);
 SendMessageBatchRequestEntrySerializer::serialize(params, &key, obj);
 }
                 }
