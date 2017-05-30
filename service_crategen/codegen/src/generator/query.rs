@@ -180,7 +180,7 @@ fn generate_list_serializer(service: &Service, shape: &Shape) -> String {
 fn list_member_format(service: &Service) -> String {
     match &service.metadata.protocol[..] {
         "ec2" => "{}.{}".to_owned(),
-        "query" => "{}.member.{}".to_owned(),
+        "query" => "{}.{}".to_owned(),
         _ => panic!("Unsupported protocol"),
     }
 }
