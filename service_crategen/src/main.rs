@@ -2,6 +2,7 @@
 extern crate clap;
 extern crate rayon;
 extern crate rusoto_codegen;
+extern crate rustfmt;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
@@ -112,7 +113,7 @@ fn main() {
             println!("Failed to load service {}: {}. Make sure the botocore submodule has been initialized!", name, e);
             return;
         }
-        
+
         let service = service.as_ref().unwrap();
 
         let crate_dir = out_dir.join(&name);
@@ -144,7 +145,7 @@ fn main() {
             .create(true)
             .open(crate_dir.join("Cargo.toml"))
             .expect("Unable to write Cargo.toml");
-        
+
         let manifest = cargo::Manifest {
             package: cargo::Metadata {
                 authors: Some(vec![
@@ -185,7 +186,7 @@ fn main() {
             .create(true)
             .open(crate_dir.join("README.md"))
             .expect("Unable to write README.md");
-        
+
         let readme = format!(r#"
 # Rusoto {short_name}
 Rust SDK for {aws_name}
@@ -254,7 +255,7 @@ See [LICENSE][license] for details.
                 .create(true)
                 .open(&lib_file_path)
                 .expect("Unable to write lib.rs");
-            
+
             let lib_file_contents = format!(r#"
 //! {service_full_name}
 //!
@@ -277,7 +278,7 @@ pub use custom::*;
             lib_file.write_all(lib_file_contents.as_bytes()).unwrap();
 
             let gen_file_path = src_dir.join("generated.rs");
-            
+
             let gen_file = OpenOptions::new()
                 .create(true)
                 .write(true)
@@ -307,6 +308,17 @@ pub use custom::*;
         }
 
         {
+            let src_dir = crate_dir.join("src");
+            let gen_file_path = src_dir.join("generated.rs");
+
+            let _ = rustfmt::run(rustfmt::Input::File(gen_file_path), &rustfmt::config::Config {
+                write_mode: rustfmt::config::WriteMode::Overwrite,
+                error_on_line_overflow: false,
+                ..rustfmt::config::Config::default()
+            });
+        }
+
+        {
             let test_resources_dir = crate_dir.join("test_resources");
 
             if !test_resources_dir.exists() {
@@ -318,7 +330,7 @@ pub use custom::*;
             if !generated_test_resources_dir.exists() {
                 fs::create_dir(&generated_test_resources_dir).expect(&format!("Unable to create directory at {}", generated_test_resources_dir.display()));
             }
-            
+
             let test_valid_resources = rusoto_codegen::generator::tests::find_valid_responses_for_service(&service);
             if !test_valid_resources.is_empty() {
                 let test_valid_resources_dir = generated_test_resources_dir.join("valid");
