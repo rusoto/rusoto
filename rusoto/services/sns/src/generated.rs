@@ -1,181 +1,185 @@
 #[allow(warnings)]
-        use hyper::Client;
-        use hyper::status::StatusCode;
-        use rusoto_core::request::DispatchSignedRequest;
-        use rusoto_core::region;
+use hyper::Client;
+use hyper::status::StatusCode;
+use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::region;
 
-        use std::fmt;
-        use std::error::Error;
-        use rusoto_core::request::HttpDispatchError;
-        use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-    
+use std::fmt;
+use std::error::Error;
+use rusoto_core::request::HttpDispatchError;
+use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+
 use std::str::FromStr;
-            use xml::EventReader;
-            use xml::reader::ParserConfig;
-            use rusoto_core::param::{Params, ServiceParams};
-            use rusoto_core::signature::SignedRequest;
-            use xml::reader::XmlEvent;
-            use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-            use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
-            use rusoto_core::xmlerror::*;
+use xml::EventReader;
+use xml::reader::ParserConfig;
+use rusoto_core::param::{Params, ServiceParams};
+use rusoto_core::signature::SignedRequest;
+use xml::reader::XmlEvent;
+use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
+use rusoto_core::xmlerror::*;
 
-            enum DeserializerNext {
-                Close,
-                Skip,
-                Element(String),
-        }
+enum DeserializerNext {
+    Close,
+    Skip,
+    Element(String),
+}
 pub type Account = String;
 struct AccountDeserializer;
-            impl AccountDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<Account, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl AccountDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Account, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type Action = String;
 pub type ActionsList = Vec<Action>;
 
-            /// Serialize `ActionsList` contents to a `SignedRequest`.
-            struct ActionsListSerializer;
-            impl ActionsListSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ActionsList) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
-params.put(&key, &obj);
+/// Serialize `ActionsList` contents to a `SignedRequest`.
+struct ActionsListSerializer;
+impl ActionsListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ActionsList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
 }
-                }
-            }
-            
-#[derive(Default,Debug,Clone)]
-            pub struct AddPermissionInput {
-                #[doc="<p>The AWS account IDs of the users (principals) who will be given access to the specified actions. The users must have AWS accounts, but do not need to be signed up for this service.</p>"]
-pub aws_account_id: DelegatesList,
-#[doc="<p>The action you want to allow for the specified principal(s).</p> <p>Valid values: any Amazon SNS action name.</p>"]
-pub action_name: ActionsList,
-#[doc="<p>A unique identifier for the new policy statement.</p>"]
-pub label: Label,
-#[doc="<p>The ARN of the topic whose access control policy you wish to modify.</p>"]
-pub topic_arn: TopicARN,
-            }
-            
 
-            /// Serialize `AddPermissionInput` contents to a `SignedRequest`.
-            struct AddPermissionInputSerializer;
-            impl AddPermissionInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &AddPermissionInput) {
-                    let mut prefix = name.to_string();
+#[derive(Default,Debug,Clone)]
+pub struct AddPermissionInput {
+    #[doc="<p>The AWS account IDs of the users (principals) who will be given access to the specified actions. The users must have AWS accounts, but do not need to be signed up for this service.</p>"]
+    pub aws_account_id: DelegatesList,
+    #[doc="<p>The action you want to allow for the specified principal(s).</p> <p>Valid values: any Amazon SNS action name.</p>"]
+    pub action_name: ActionsList,
+    #[doc="<p>A unique identifier for the new policy statement.</p>"]
+    pub label: Label,
+    #[doc="<p>The ARN of the topic whose access control policy you wish to modify.</p>"]
+    pub topic_arn: TopicARN,
+}
+
+
+/// Serialize `AddPermissionInput` contents to a `SignedRequest`.
+struct AddPermissionInputSerializer;
+impl AddPermissionInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AddPermissionInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        DelegatesListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "AWSAccountId"),
-                &obj.aws_account_id,
-            );
-ActionsListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "ActionName"),
-                &obj.action_name,
-            );
-params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
-        
-                }
-            }
-            
+        DelegatesListSerializer::serialize(params,
+                                           &format!("{}{}", prefix, "AWSAccountId"),
+                                           &obj.aws_account_id);
+        ActionsListSerializer::serialize(params,
+                                         &format!("{}{}", prefix, "ActionName"),
+                                         &obj.action_name);
+        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
+        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+
+    }
+}
+
 pub type AttributeName = String;
 struct AttributeNameDeserializer;
-            impl AttributeNameDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<AttributeName, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl AttributeNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<AttributeName, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type AttributeValue = String;
 struct AttributeValueDeserializer;
-            impl AttributeValueDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<AttributeValue, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl AttributeValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<AttributeValue, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type AuthenticateOnUnsubscribe = String;
 pub type Binary = Vec<u8>;
 pub type Boolean = bool;
 struct BooleanDeserializer;
-            impl BooleanDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<Boolean, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl BooleanDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Boolean, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>The input for the <code>CheckIfPhoneNumberIsOptedOut</code> action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct CheckIfPhoneNumberIsOptedOutInput {
-                #[doc="<p>The phone number for which you want to check the opt out status.</p>"]
-pub phone_number: PhoneNumber,
-            }
-            
+pub struct CheckIfPhoneNumberIsOptedOutInput {
+    #[doc="<p>The phone number for which you want to check the opt out status.</p>"]
+    pub phone_number: PhoneNumber,
+}
 
-            /// Serialize `CheckIfPhoneNumberIsOptedOutInput` contents to a `SignedRequest`.
-            struct CheckIfPhoneNumberIsOptedOutInputSerializer;
-            impl CheckIfPhoneNumberIsOptedOutInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &CheckIfPhoneNumberIsOptedOutInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `CheckIfPhoneNumberIsOptedOutInput` contents to a `SignedRequest`.
+struct CheckIfPhoneNumberIsOptedOutInputSerializer;
+impl CheckIfPhoneNumberIsOptedOutInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CheckIfPhoneNumberIsOptedOutInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "phoneNumber"), &obj.phone_number);
-        
-                }
-            }
-            
+
+    }
+}
+
 #[doc="<p>The response from the <code>CheckIfPhoneNumberIsOptedOut</code> action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct CheckIfPhoneNumberIsOptedOutResponse {
-                #[doc="<p>Indicates whether the phone number is opted out:</p> <ul> <li> <p> <code>true</code> – The phone number is opted out, meaning you cannot publish SMS messages to it.</p> </li> <li> <p> <code>false</code> – The phone number is opted in, meaning you can publish SMS messages to it.</p> </li> </ul>"]
-pub is_opted_out: Option<Boolean>,
-            }
-            
+pub struct CheckIfPhoneNumberIsOptedOutResponse {
+    #[doc="<p>Indicates whether the phone number is opted out:</p> <ul> <li> <p> <code>true</code> – The phone number is opted out, meaning you cannot publish SMS messages to it.</p> </li> <li> <p> <code>false</code> – The phone number is opted in, meaning you can publish SMS messages to it.</p> </li> </ul>"]
+    pub is_opted_out: Option<Boolean>,
+}
+
 struct CheckIfPhoneNumberIsOptedOutResponseDeserializer;
-            impl CheckIfPhoneNumberIsOptedOutResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<CheckIfPhoneNumberIsOptedOutResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl CheckIfPhoneNumberIsOptedOutResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<CheckIfPhoneNumberIsOptedOutResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = CheckIfPhoneNumberIsOptedOutResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -183,72 +187,79 @@ struct CheckIfPhoneNumberIsOptedOutResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "isOptedOut" => {
-                obj.is_opted_out = Some(try!(BooleanDeserializer::deserialize("isOptedOut", stack)));
-            }
+                            obj.is_opted_out = Some(try!(BooleanDeserializer::deserialize("isOptedOut",
+                                                                                          stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for ConfirmSubscription action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ConfirmSubscriptionInput {
-                #[doc="<p>Disallows unauthenticated unsubscribes of the subscription. If the value of this parameter is <code>true</code> and the request has an AWS signature, then only the topic owner and the subscription owner can unsubscribe the endpoint. The unsubscribe action requires AWS authentication. </p>"]
-pub authenticate_on_unsubscribe: Option<AuthenticateOnUnsubscribe>,
-#[doc="<p>Short-lived token sent to an endpoint during the <code>Subscribe</code> action.</p>"]
-pub token: Token,
-#[doc="<p>The ARN of the topic for which you wish to confirm a subscription.</p>"]
-pub topic_arn: TopicARN,
-            }
-            
+pub struct ConfirmSubscriptionInput {
+    #[doc="<p>Disallows unauthenticated unsubscribes of the subscription. If the value of this parameter is <code>true</code> and the request has an AWS signature, then only the topic owner and the subscription owner can unsubscribe the endpoint. The unsubscribe action requires AWS authentication. </p>"]
+    pub authenticate_on_unsubscribe: Option<AuthenticateOnUnsubscribe>,
+    #[doc="<p>Short-lived token sent to an endpoint during the <code>Subscribe</code> action.</p>"]
+    pub token: Token,
+    #[doc="<p>The ARN of the topic for which you wish to confirm a subscription.</p>"]
+    pub topic_arn: TopicARN,
+}
 
-            /// Serialize `ConfirmSubscriptionInput` contents to a `SignedRequest`.
-            struct ConfirmSubscriptionInputSerializer;
-            impl ConfirmSubscriptionInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ConfirmSubscriptionInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `ConfirmSubscriptionInput` contents to a `SignedRequest`.
+struct ConfirmSubscriptionInputSerializer;
+impl ConfirmSubscriptionInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ConfirmSubscriptionInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.authenticate_on_unsubscribe {
-                params.put(&format!("{}{}", prefix, "AuthenticateOnUnsubscribe"), &field_value);
-            }
-params.put(&format!("{}{}", prefix, "Token"), &obj.token);
-params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "AuthenticateOnUnsubscribe"),
+                       &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "Token"), &obj.token);
+        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+
+    }
+}
+
 #[doc="<p>Response for ConfirmSubscriptions action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ConfirmSubscriptionResponse {
-                #[doc="<p>The ARN of the created subscription.</p>"]
-pub subscription_arn: Option<SubscriptionARN>,
-            }
-            
+pub struct ConfirmSubscriptionResponse {
+    #[doc="<p>The ARN of the created subscription.</p>"]
+    pub subscription_arn: Option<SubscriptionARN>,
+}
+
 struct ConfirmSubscriptionResponseDeserializer;
-            impl ConfirmSubscriptionResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ConfirmSubscriptionResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ConfirmSubscriptionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ConfirmSubscriptionResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ConfirmSubscriptionResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -256,42 +267,49 @@ struct ConfirmSubscriptionResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "SubscriptionArn" => {
-                obj.subscription_arn = Some(try!(SubscriptionARNDeserializer::deserialize("SubscriptionArn", stack)));
-            }
+                            obj.subscription_arn =
+                                Some(try!(SubscriptionARNDeserializer::deserialize("SubscriptionArn",
+                                                                                   stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Response from CreateEndpoint action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct CreateEndpointResponse {
-                #[doc="<p>EndpointArn returned from CreateEndpoint action.</p>"]
-pub endpoint_arn: Option<String>,
-            }
-            
+pub struct CreateEndpointResponse {
+    #[doc="<p>EndpointArn returned from CreateEndpoint action.</p>"]
+    pub endpoint_arn: Option<String>,
+}
+
 struct CreateEndpointResponseDeserializer;
-            impl CreateEndpointResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<CreateEndpointResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl CreateEndpointResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<CreateEndpointResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = CreateEndpointResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -299,74 +317,79 @@ struct CreateEndpointResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "EndpointArn" => {
-                obj.endpoint_arn = Some(try!(StringDeserializer::deserialize("EndpointArn", stack)));
-            }
+                            obj.endpoint_arn = Some(try!(StringDeserializer::deserialize("EndpointArn",
+                                                                                         stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for CreatePlatformApplication action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct CreatePlatformApplicationInput {
-                #[doc="<p>For a list of attributes, see <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_SetPlatformApplicationAttributes.html\">SetPlatformApplicationAttributes</a> </p>"]
-pub attributes: MapStringToString,
-#[doc="<p>Application names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, hyphens, and periods, and must be between 1 and 256 characters long.</p>"]
-pub name: String,
-#[doc="<p>The following platforms are supported: ADM (Amazon Device Messaging), APNS (Apple Push Notification Service), APNS_SANDBOX, and GCM (Google Cloud Messaging).</p>"]
-pub platform: String,
-            }
-            
+pub struct CreatePlatformApplicationInput {
+    #[doc="<p>For a list of attributes, see <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_SetPlatformApplicationAttributes.html\">SetPlatformApplicationAttributes</a> </p>"]
+    pub attributes: MapStringToString,
+    #[doc="<p>Application names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, hyphens, and periods, and must be between 1 and 256 characters long.</p>"]
+    pub name: String,
+    #[doc="<p>The following platforms are supported: ADM (Amazon Device Messaging), APNS (Apple Push Notification Service), APNS_SANDBOX, and GCM (Google Cloud Messaging).</p>"]
+    pub platform: String,
+}
 
-            /// Serialize `CreatePlatformApplicationInput` contents to a `SignedRequest`.
-            struct CreatePlatformApplicationInputSerializer;
-            impl CreatePlatformApplicationInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &CreatePlatformApplicationInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `CreatePlatformApplicationInput` contents to a `SignedRequest`.
+struct CreatePlatformApplicationInputSerializer;
+impl CreatePlatformApplicationInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreatePlatformApplicationInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        MapStringToStringSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "Attributes"),
-                &obj.attributes,
-            );
-params.put(&format!("{}{}", prefix, "Name"), &obj.name);
-params.put(&format!("{}{}", prefix, "Platform"), &obj.platform);
-        
-                }
-            }
-            
+        MapStringToStringSerializer::serialize(params,
+                                               &format!("{}{}", prefix, "Attributes"),
+                                               &obj.attributes);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Platform"), &obj.platform);
+
+    }
+}
+
 #[doc="<p>Response from CreatePlatformApplication action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct CreatePlatformApplicationResponse {
-                #[doc="<p>PlatformApplicationArn is returned.</p>"]
-pub platform_application_arn: Option<String>,
-            }
-            
+pub struct CreatePlatformApplicationResponse {
+    #[doc="<p>PlatformApplicationArn is returned.</p>"]
+    pub platform_application_arn: Option<String>,
+}
+
 struct CreatePlatformApplicationResponseDeserializer;
-            impl CreatePlatformApplicationResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<CreatePlatformApplicationResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl CreatePlatformApplicationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<CreatePlatformApplicationResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = CreatePlatformApplicationResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -374,103 +397,109 @@ struct CreatePlatformApplicationResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "PlatformApplicationArn" => {
-                obj.platform_application_arn = Some(try!(StringDeserializer::deserialize("PlatformApplicationArn", stack)));
-            }
+                            obj.platform_application_arn =
+                                Some(try!(StringDeserializer::deserialize("PlatformApplicationArn",
+                                                                          stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for CreatePlatformEndpoint action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct CreatePlatformEndpointInput {
-                #[doc="<p>For a list of attributes, see <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_SetEndpointAttributes.html\">SetEndpointAttributes</a>.</p>"]
-pub attributes: Option<MapStringToString>,
-#[doc="<p>Arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p>"]
-pub custom_user_data: Option<String>,
-#[doc="<p>PlatformApplicationArn returned from CreatePlatformApplication is used to create a an endpoint.</p>"]
-pub platform_application_arn: String,
-#[doc="<p>Unique identifier created by the notification service for an app on a device. The specific name for Token will vary, depending on which notification service is being used. For example, when using APNS as the notification service, you need the device token. Alternatively, when using GCM or ADM, the device token equivalent is called the registration ID.</p>"]
-pub token: String,
-            }
-            
+pub struct CreatePlatformEndpointInput {
+    #[doc="<p>For a list of attributes, see <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_SetEndpointAttributes.html\">SetEndpointAttributes</a>.</p>"]
+    pub attributes: Option<MapStringToString>,
+    #[doc="<p>Arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p>"]
+    pub custom_user_data: Option<String>,
+    #[doc="<p>PlatformApplicationArn returned from CreatePlatformApplication is used to create a an endpoint.</p>"]
+    pub platform_application_arn: String,
+    #[doc="<p>Unique identifier created by the notification service for an app on a device. The specific name for Token will vary, depending on which notification service is being used. For example, when using APNS as the notification service, you need the device token. Alternatively, when using GCM or ADM, the device token equivalent is called the registration ID.</p>"]
+    pub token: String,
+}
 
-            /// Serialize `CreatePlatformEndpointInput` contents to a `SignedRequest`.
-            struct CreatePlatformEndpointInputSerializer;
-            impl CreatePlatformEndpointInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &CreatePlatformEndpointInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `CreatePlatformEndpointInput` contents to a `SignedRequest`.
+struct CreatePlatformEndpointInputSerializer;
+impl CreatePlatformEndpointInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreatePlatformEndpointInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.attributes {
-                MapStringToStringSerializer::serialize(
-                    params,
-                    &format!("{}{}", prefix, "Attributes"),
-                    field_value,
-                );
-            }
-if let Some(ref field_value) = obj.custom_user_data {
-                params.put(&format!("{}{}", prefix, "CustomUserData"), &field_value);
-            }
-params.put(&format!("{}{}", prefix, "PlatformApplicationArn"), &obj.platform_application_arn);
-params.put(&format!("{}{}", prefix, "Token"), &obj.token);
-        
-                }
-            }
-            
+            MapStringToStringSerializer::serialize(params,
+                                                   &format!("{}{}", prefix, "Attributes"),
+                                                   field_value);
+        }
+        if let Some(ref field_value) = obj.custom_user_data {
+            params.put(&format!("{}{}", prefix, "CustomUserData"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "PlatformApplicationArn"),
+                   &obj.platform_application_arn);
+        params.put(&format!("{}{}", prefix, "Token"), &obj.token);
+
+    }
+}
+
 #[doc="<p>Input for CreateTopic action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct CreateTopicInput {
-                #[doc="<p>The name of the topic you want to create.</p> <p>Constraints: Topic names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long.</p>"]
-pub name: TopicName,
-            }
-            
+pub struct CreateTopicInput {
+    #[doc="<p>The name of the topic you want to create.</p> <p>Constraints: Topic names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long.</p>"]
+    pub name: TopicName,
+}
 
-            /// Serialize `CreateTopicInput` contents to a `SignedRequest`.
-            struct CreateTopicInputSerializer;
-            impl CreateTopicInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &CreateTopicInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `CreateTopicInput` contents to a `SignedRequest`.
+struct CreateTopicInputSerializer;
+impl CreateTopicInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateTopicInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
-        
-                }
-            }
-            
+
+    }
+}
+
 #[doc="<p>Response from CreateTopic action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct CreateTopicResponse {
-                #[doc="<p>The Amazon Resource Name (ARN) assigned to the created topic.</p>"]
-pub topic_arn: Option<TopicARN>,
-            }
-            
+pub struct CreateTopicResponse {
+    #[doc="<p>The Amazon Resource Name (ARN) assigned to the created topic.</p>"]
+    pub topic_arn: Option<TopicARN>,
+}
+
 struct CreateTopicResponseDeserializer;
-            impl CreateTopicResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<CreateTopicResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl CreateTopicResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<CreateTopicResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = CreateTopicResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -478,157 +507,165 @@ struct CreateTopicResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "TopicArn" => {
-                obj.topic_arn = Some(try!(TopicARNDeserializer::deserialize("TopicArn", stack)));
-            }
+                            obj.topic_arn = Some(try!(TopicARNDeserializer::deserialize("TopicArn",
+                                                                                        stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type Delegate = String;
 pub type DelegatesList = Vec<Delegate>;
 
-            /// Serialize `DelegatesList` contents to a `SignedRequest`.
-            struct DelegatesListSerializer;
-            impl DelegatesListSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &DelegatesList) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
-params.put(&key, &obj);
+/// Serialize `DelegatesList` contents to a `SignedRequest`.
+struct DelegatesListSerializer;
+impl DelegatesListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DelegatesList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
 }
-                }
-            }
-            
+
 #[doc="<p>Input for DeleteEndpoint action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct DeleteEndpointInput {
-                #[doc="<p>EndpointArn of endpoint to delete.</p>"]
-pub endpoint_arn: String,
-            }
-            
+pub struct DeleteEndpointInput {
+    #[doc="<p>EndpointArn of endpoint to delete.</p>"]
+    pub endpoint_arn: String,
+}
 
-            /// Serialize `DeleteEndpointInput` contents to a `SignedRequest`.
-            struct DeleteEndpointInputSerializer;
-            impl DeleteEndpointInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &DeleteEndpointInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `DeleteEndpointInput` contents to a `SignedRequest`.
+struct DeleteEndpointInputSerializer;
+impl DeleteEndpointInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteEndpointInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
-        
-                }
-            }
-            
+
+    }
+}
+
 #[doc="<p>Input for DeletePlatformApplication action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct DeletePlatformApplicationInput {
-                #[doc="<p>PlatformApplicationArn of platform application object to delete.</p>"]
-pub platform_application_arn: String,
-            }
-            
+pub struct DeletePlatformApplicationInput {
+    #[doc="<p>PlatformApplicationArn of platform application object to delete.</p>"]
+    pub platform_application_arn: String,
+}
 
-            /// Serialize `DeletePlatformApplicationInput` contents to a `SignedRequest`.
-            struct DeletePlatformApplicationInputSerializer;
-            impl DeletePlatformApplicationInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &DeletePlatformApplicationInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `DeletePlatformApplicationInput` contents to a `SignedRequest`.
+struct DeletePlatformApplicationInputSerializer;
+impl DeletePlatformApplicationInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeletePlatformApplicationInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PlatformApplicationArn"), &obj.platform_application_arn);
-        
-                }
-            }
-            
-#[derive(Default,Debug,Clone)]
-            pub struct DeleteTopicInput {
-                #[doc="<p>The ARN of the topic you want to delete.</p>"]
-pub topic_arn: TopicARN,
-            }
-            
+        params.put(&format!("{}{}", prefix, "PlatformApplicationArn"),
+                   &obj.platform_application_arn);
 
-            /// Serialize `DeleteTopicInput` contents to a `SignedRequest`.
-            struct DeleteTopicInputSerializer;
-            impl DeleteTopicInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &DeleteTopicInput) {
-                    let mut prefix = name.to_string();
+    }
+}
+
+#[derive(Default,Debug,Clone)]
+pub struct DeleteTopicInput {
+    #[doc="<p>The ARN of the topic you want to delete.</p>"]
+    pub topic_arn: TopicARN,
+}
+
+
+/// Serialize `DeleteTopicInput` contents to a `SignedRequest`.
+struct DeleteTopicInputSerializer;
+impl DeleteTopicInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteTopicInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
-        
-                }
-            }
-            
+
+    }
+}
+
 pub type Endpoint = String;
 struct EndpointDeserializer;
-            impl EndpointDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<Endpoint, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl EndpointDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Endpoint, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for GetEndpointAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetEndpointAttributesInput {
-                #[doc="<p>EndpointArn for GetEndpointAttributes input.</p>"]
-pub endpoint_arn: String,
-            }
-            
+pub struct GetEndpointAttributesInput {
+    #[doc="<p>EndpointArn for GetEndpointAttributes input.</p>"]
+    pub endpoint_arn: String,
+}
 
-            /// Serialize `GetEndpointAttributesInput` contents to a `SignedRequest`.
-            struct GetEndpointAttributesInputSerializer;
-            impl GetEndpointAttributesInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &GetEndpointAttributesInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `GetEndpointAttributesInput` contents to a `SignedRequest`.
+struct GetEndpointAttributesInputSerializer;
+impl GetEndpointAttributesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetEndpointAttributesInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
-        
-                }
-            }
-            
+
+    }
+}
+
 #[doc="<p>Response from GetEndpointAttributes of the EndpointArn.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetEndpointAttributesResponse {
-                #[doc="<p>Attributes include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul>"]
-pub attributes: Option<MapStringToString>,
-            }
-            
+pub struct GetEndpointAttributesResponse {
+    #[doc="<p>Attributes include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul>"]
+    pub attributes: Option<MapStringToString>,
+}
+
 struct GetEndpointAttributesResponseDeserializer;
-            impl GetEndpointAttributesResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<GetEndpointAttributesResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl GetEndpointAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<GetEndpointAttributesResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = GetEndpointAttributesResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -636,64 +673,73 @@ struct GetEndpointAttributesResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Attributes" => {
-                obj.attributes = Some(try!(MapStringToStringDeserializer::deserialize("Attributes", stack)));
-            }
+                            obj.attributes =
+                                Some(try!(MapStringToStringDeserializer::deserialize("Attributes",
+                                                                                     stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for GetPlatformApplicationAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetPlatformApplicationAttributesInput {
-                #[doc="<p>PlatformApplicationArn for GetPlatformApplicationAttributesInput.</p>"]
-pub platform_application_arn: String,
-            }
-            
+pub struct GetPlatformApplicationAttributesInput {
+    #[doc="<p>PlatformApplicationArn for GetPlatformApplicationAttributesInput.</p>"]
+    pub platform_application_arn: String,
+}
 
-            /// Serialize `GetPlatformApplicationAttributesInput` contents to a `SignedRequest`.
-            struct GetPlatformApplicationAttributesInputSerializer;
-            impl GetPlatformApplicationAttributesInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &GetPlatformApplicationAttributesInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `GetPlatformApplicationAttributesInput` contents to a `SignedRequest`.
+struct GetPlatformApplicationAttributesInputSerializer;
+impl GetPlatformApplicationAttributesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetPlatformApplicationAttributesInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "PlatformApplicationArn"), &obj.platform_application_arn);
-        
-                }
-            }
-            
+        params.put(&format!("{}{}", prefix, "PlatformApplicationArn"),
+                   &obj.platform_application_arn);
+
+    }
+}
+
 #[doc="<p>Response for GetPlatformApplicationAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetPlatformApplicationAttributesResponse {
-                #[doc="<p>Attributes include the following:</p> <ul> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application's endpoints.</p> </li> </ul>"]
-pub attributes: Option<MapStringToString>,
-            }
-            
+pub struct GetPlatformApplicationAttributesResponse {
+    #[doc="<p>Attributes include the following:</p> <ul> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application's endpoints.</p> </li> </ul>"]
+    pub attributes: Option<MapStringToString>,
+}
+
 struct GetPlatformApplicationAttributesResponseDeserializer;
-            impl GetPlatformApplicationAttributesResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<GetPlatformApplicationAttributesResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl GetPlatformApplicationAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<GetPlatformApplicationAttributesResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = GetPlatformApplicationAttributesResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -701,70 +747,75 @@ struct GetPlatformApplicationAttributesResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Attributes" => {
-                obj.attributes = Some(try!(MapStringToStringDeserializer::deserialize("Attributes", stack)));
-            }
+                            obj.attributes =
+                                Some(try!(MapStringToStringDeserializer::deserialize("Attributes",
+                                                                                     stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>The input for the <code>GetSMSAttributes</code> request.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetSMSAttributesInput {
-                #[doc="<p>A list of the individual attribute names, such as <code>MonthlySpendLimit</code>, for which you want values.</p> <p>For all attribute names, see <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_SetSMSAttributes.html\">SetSMSAttributes</a>.</p> <p>If you don't use this parameter, Amazon SNS returns all SMS attributes.</p>"]
-pub attributes: Option<ListString>,
-            }
-            
+pub struct GetSMSAttributesInput {
+    #[doc="<p>A list of the individual attribute names, such as <code>MonthlySpendLimit</code>, for which you want values.</p> <p>For all attribute names, see <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_SetSMSAttributes.html\">SetSMSAttributes</a>.</p> <p>If you don't use this parameter, Amazon SNS returns all SMS attributes.</p>"]
+    pub attributes: Option<ListString>,
+}
 
-            /// Serialize `GetSMSAttributesInput` contents to a `SignedRequest`.
-            struct GetSMSAttributesInputSerializer;
-            impl GetSMSAttributesInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &GetSMSAttributesInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `GetSMSAttributesInput` contents to a `SignedRequest`.
+struct GetSMSAttributesInputSerializer;
+impl GetSMSAttributesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetSMSAttributesInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.attributes {
-                ListStringSerializer::serialize(
-                    params,
-                    &format!("{}{}", prefix, "attributes"),
-                    field_value,
-                );
-            }
-        
-                }
-            }
-            
+            ListStringSerializer::serialize(params,
+                                            &format!("{}{}", prefix, "attributes"),
+                                            field_value);
+        }
+
+    }
+}
+
 #[doc="<p>The response from the <code>GetSMSAttributes</code> request.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetSMSAttributesResponse {
-                #[doc="<p>The SMS attribute names and their values.</p>"]
-pub attributes: Option<MapStringToString>,
-            }
-            
+pub struct GetSMSAttributesResponse {
+    #[doc="<p>The SMS attribute names and their values.</p>"]
+    pub attributes: Option<MapStringToString>,
+}
+
 struct GetSMSAttributesResponseDeserializer;
-            impl GetSMSAttributesResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<GetSMSAttributesResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl GetSMSAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<GetSMSAttributesResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = GetSMSAttributesResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -772,64 +823,73 @@ struct GetSMSAttributesResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "attributes" => {
-                obj.attributes = Some(try!(MapStringToStringDeserializer::deserialize("attributes", stack)));
-            }
+                            obj.attributes =
+                                Some(try!(MapStringToStringDeserializer::deserialize("attributes",
+                                                                                     stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for GetSubscriptionAttributes.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetSubscriptionAttributesInput {
-                #[doc="<p>The ARN of the subscription whose properties you want to get.</p>"]
-pub subscription_arn: SubscriptionARN,
-            }
-            
+pub struct GetSubscriptionAttributesInput {
+    #[doc="<p>The ARN of the subscription whose properties you want to get.</p>"]
+    pub subscription_arn: SubscriptionARN,
+}
 
-            /// Serialize `GetSubscriptionAttributesInput` contents to a `SignedRequest`.
-            struct GetSubscriptionAttributesInputSerializer;
-            impl GetSubscriptionAttributesInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &GetSubscriptionAttributesInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `GetSubscriptionAttributesInput` contents to a `SignedRequest`.
+struct GetSubscriptionAttributesInputSerializer;
+impl GetSubscriptionAttributesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetSubscriptionAttributesInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "SubscriptionArn"), &obj.subscription_arn);
-        
-                }
-            }
-            
+        params.put(&format!("{}{}", prefix, "SubscriptionArn"),
+                   &obj.subscription_arn);
+
+    }
+}
+
 #[doc="<p>Response for GetSubscriptionAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetSubscriptionAttributesResponse {
-                #[doc="<p>A map of the subscription's attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>SubscriptionArn</code> -- the subscription's ARN</p> </li> <li> <p> <code>TopicArn</code> -- the topic ARN that the subscription is associated with</p> </li> <li> <p> <code>Owner</code> -- the AWS account ID of the subscription's owner</p> </li> <li> <p> <code>ConfirmationWasAuthenticated</code> -- true if the subscription confirmation request was authenticated</p> </li> <li> <p> <code>DeliveryPolicy</code> -- the JSON serialization of the subscription's delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- the JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults</p> </li> </ul>"]
-pub attributes: Option<SubscriptionAttributesMap>,
-            }
-            
+pub struct GetSubscriptionAttributesResponse {
+    #[doc="<p>A map of the subscription's attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>SubscriptionArn</code> -- the subscription's ARN</p> </li> <li> <p> <code>TopicArn</code> -- the topic ARN that the subscription is associated with</p> </li> <li> <p> <code>Owner</code> -- the AWS account ID of the subscription's owner</p> </li> <li> <p> <code>ConfirmationWasAuthenticated</code> -- true if the subscription confirmation request was authenticated</p> </li> <li> <p> <code>DeliveryPolicy</code> -- the JSON serialization of the subscription's delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- the JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults</p> </li> </ul>"]
+    pub attributes: Option<SubscriptionAttributesMap>,
+}
+
 struct GetSubscriptionAttributesResponseDeserializer;
-            impl GetSubscriptionAttributesResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<GetSubscriptionAttributesResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl GetSubscriptionAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<GetSubscriptionAttributesResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = GetSubscriptionAttributesResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -837,64 +897,69 @@ struct GetSubscriptionAttributesResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Attributes" => {
-                obj.attributes = Some(try!(SubscriptionAttributesMapDeserializer::deserialize("Attributes", stack)));
-            }
+                            obj.attributes = Some(try!(SubscriptionAttributesMapDeserializer::deserialize("Attributes", stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for GetTopicAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetTopicAttributesInput {
-                #[doc="<p>The ARN of the topic whose properties you want to get.</p>"]
-pub topic_arn: TopicARN,
-            }
-            
+pub struct GetTopicAttributesInput {
+    #[doc="<p>The ARN of the topic whose properties you want to get.</p>"]
+    pub topic_arn: TopicARN,
+}
 
-            /// Serialize `GetTopicAttributesInput` contents to a `SignedRequest`.
-            struct GetTopicAttributesInputSerializer;
-            impl GetTopicAttributesInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &GetTopicAttributesInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `GetTopicAttributesInput` contents to a `SignedRequest`.
+struct GetTopicAttributesInputSerializer;
+impl GetTopicAttributesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetTopicAttributesInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
-        
-                }
-            }
-            
+
+    }
+}
+
 #[doc="<p>Response for GetTopicAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetTopicAttributesResponse {
-                #[doc="<p>A map of the topic's attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>TopicArn</code> -- the topic's ARN</p> </li> <li> <p> <code>Owner</code> -- the AWS account ID of the topic's owner</p> </li> <li> <p> <code>Policy</code> -- the JSON serialization of the topic's access control policy</p> </li> <li> <p> <code>DisplayName</code> -- the human-readable name used in the \"From\" field for notifications to email and email-json endpoints</p> </li> <li> <p> <code>SubscriptionsPending</code> -- the number of subscriptions pending confirmation on this topic</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> -- the number of confirmed subscriptions on this topic</p> </li> <li> <p> <code>SubscriptionsDeleted</code> -- the number of deleted subscriptions on this topic</p> </li> <li> <p> <code>DeliveryPolicy</code> -- the JSON serialization of the topic's delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- the JSON serialization of the effective delivery policy that takes into account system defaults</p> </li> </ul>"]
-pub attributes: Option<TopicAttributesMap>,
-            }
-            
+pub struct GetTopicAttributesResponse {
+    #[doc="<p>A map of the topic's attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>TopicArn</code> -- the topic's ARN</p> </li> <li> <p> <code>Owner</code> -- the AWS account ID of the topic's owner</p> </li> <li> <p> <code>Policy</code> -- the JSON serialization of the topic's access control policy</p> </li> <li> <p> <code>DisplayName</code> -- the human-readable name used in the \"From\" field for notifications to email and email-json endpoints</p> </li> <li> <p> <code>SubscriptionsPending</code> -- the number of subscriptions pending confirmation on this topic</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> -- the number of confirmed subscriptions on this topic</p> </li> <li> <p> <code>SubscriptionsDeleted</code> -- the number of deleted subscriptions on this topic</p> </li> <li> <p> <code>DeliveryPolicy</code> -- the JSON serialization of the topic's delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- the JSON serialization of the effective delivery policy that takes into account system defaults</p> </li> </ul>"]
+    pub attributes: Option<TopicAttributesMap>,
+}
+
 struct GetTopicAttributesResponseDeserializer;
-            impl GetTopicAttributesResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<GetTopicAttributesResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl GetTopicAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<GetTopicAttributesResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = GetTopicAttributesResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -902,72 +967,81 @@ struct GetTopicAttributesResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Attributes" => {
-                obj.attributes = Some(try!(TopicAttributesMapDeserializer::deserialize("Attributes", stack)));
-            }
+                            obj.attributes =
+                                Some(try!(TopicAttributesMapDeserializer::deserialize("Attributes",
+                                                                                      stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type Label = String;
 #[doc="<p>Input for ListEndpointsByPlatformApplication action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListEndpointsByPlatformApplicationInput {
-                #[doc="<p>NextToken string is used when calling ListEndpointsByPlatformApplication action to retrieve additional records that are available after the first page results.</p>"]
-pub next_token: Option<String>,
-#[doc="<p>PlatformApplicationArn for ListEndpointsByPlatformApplicationInput action.</p>"]
-pub platform_application_arn: String,
-            }
-            
+pub struct ListEndpointsByPlatformApplicationInput {
+    #[doc="<p>NextToken string is used when calling ListEndpointsByPlatformApplication action to retrieve additional records that are available after the first page results.</p>"]
+    pub next_token: Option<String>,
+    #[doc="<p>PlatformApplicationArn for ListEndpointsByPlatformApplicationInput action.</p>"]
+    pub platform_application_arn: String,
+}
 
-            /// Serialize `ListEndpointsByPlatformApplicationInput` contents to a `SignedRequest`.
-            struct ListEndpointsByPlatformApplicationInputSerializer;
-            impl ListEndpointsByPlatformApplicationInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ListEndpointsByPlatformApplicationInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `ListEndpointsByPlatformApplicationInput` contents to a `SignedRequest`.
+struct ListEndpointsByPlatformApplicationInputSerializer;
+impl ListEndpointsByPlatformApplicationInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListEndpointsByPlatformApplicationInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.next_token {
-                params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
-            }
-params.put(&format!("{}{}", prefix, "PlatformApplicationArn"), &obj.platform_application_arn);
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "PlatformApplicationArn"),
+                   &obj.platform_application_arn);
+
+    }
+}
+
 #[doc="<p>Response for ListEndpointsByPlatformApplication action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListEndpointsByPlatformApplicationResponse {
-                #[doc="<p>Endpoints returned for ListEndpointsByPlatformApplication action.</p>"]
-pub endpoints: Option<ListOfEndpoints>,
-#[doc="<p>NextToken string is returned when calling ListEndpointsByPlatformApplication action if additional records are available after the first page results.</p>"]
-pub next_token: Option<String>,
-            }
-            
+pub struct ListEndpointsByPlatformApplicationResponse {
+    #[doc="<p>Endpoints returned for ListEndpointsByPlatformApplication action.</p>"]
+    pub endpoints: Option<ListOfEndpoints>,
+    #[doc="<p>NextToken string is returned when calling ListEndpointsByPlatformApplication action if additional records are available after the first page results.</p>"]
+    pub next_token: Option<String>,
+}
+
 struct ListEndpointsByPlatformApplicationResponseDeserializer;
-            impl ListEndpointsByPlatformApplicationResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ListEndpointsByPlatformApplicationResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ListEndpointsByPlatformApplicationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<ListEndpointsByPlatformApplicationResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ListEndpointsByPlatformApplicationResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -975,39 +1049,47 @@ struct ListEndpointsByPlatformApplicationResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Endpoints" => {
-                obj.endpoints = Some(try!(ListOfEndpointsDeserializer::deserialize("Endpoints", stack)));
-            }
-"NextToken" => {
-                obj.next_token = Some(try!(StringDeserializer::deserialize("NextToken", stack)));
-            }
+                            obj.endpoints =
+                                Some(try!(ListOfEndpointsDeserializer::deserialize("Endpoints",
+                                                                                   stack)));
+                        }
+                        "NextToken" => {
+                            obj.next_token = Some(try!(StringDeserializer::deserialize("NextToken",
+                                                                                       stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type ListOfEndpoints = Vec<Endpoint>;
 struct ListOfEndpointsDeserializer;
-            impl ListOfEndpointsDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ListOfEndpoints, XmlParseError> {
-                    
+impl ListOfEndpointsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ListOfEndpoints, XmlParseError> {
+
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1018,102 +1100,114 @@ struct ListOfEndpointsDeserializer;
                     } else {
                         skip_tree(stack);
                     }
-                },
+                }
                 DeserializerNext::Close => {
                     try!(end_element(tag_name, stack));
                     break;
                 }
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type ListOfPlatformApplications = Vec<PlatformApplication>;
 struct ListOfPlatformApplicationsDeserializer;
-            impl ListOfPlatformApplicationsDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ListOfPlatformApplications, XmlParseError> {
-                    
+impl ListOfPlatformApplicationsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ListOfPlatformApplications, XmlParseError> {
+
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(PlatformApplicationDeserializer::deserialize("member", stack)));
+                        obj.push(try!(PlatformApplicationDeserializer::deserialize("member",
+                                                                                   stack)));
                     } else {
                         skip_tree(stack);
                     }
-                },
+                }
                 DeserializerNext::Close => {
                     try!(end_element(tag_name, stack));
                     break;
                 }
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>The input for the <code>ListPhoneNumbersOptedOut</code> action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListPhoneNumbersOptedOutInput {
-                #[doc="<p>A <code>NextToken</code> string is used when you call the <code>ListPhoneNumbersOptedOut</code> action to retrieve additional records that are available after the first page of results.</p>"]
-pub next_token: Option<String>,
-            }
-            
+pub struct ListPhoneNumbersOptedOutInput {
+    #[doc="<p>A <code>NextToken</code> string is used when you call the <code>ListPhoneNumbersOptedOut</code> action to retrieve additional records that are available after the first page of results.</p>"]
+    pub next_token: Option<String>,
+}
 
-            /// Serialize `ListPhoneNumbersOptedOutInput` contents to a `SignedRequest`.
-            struct ListPhoneNumbersOptedOutInputSerializer;
-            impl ListPhoneNumbersOptedOutInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ListPhoneNumbersOptedOutInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `ListPhoneNumbersOptedOutInput` contents to a `SignedRequest`.
+struct ListPhoneNumbersOptedOutInputSerializer;
+impl ListPhoneNumbersOptedOutInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListPhoneNumbersOptedOutInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.next_token {
-                params.put(&format!("{}{}", prefix, "nextToken"), &field_value);
-            }
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "nextToken"), &field_value);
+        }
+
+    }
+}
+
 #[doc="<p>The response from the <code>ListPhoneNumbersOptedOut</code> action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListPhoneNumbersOptedOutResponse {
-                #[doc="<p>A <code>NextToken</code> string is returned when you call the <code>ListPhoneNumbersOptedOut</code> action if additional records are available after the first page of results.</p>"]
-pub next_token: Option<String>,
-#[doc="<p>A list of phone numbers that are opted out of receiving SMS messages. The list is paginated, and each page can contain up to 100 phone numbers.</p>"]
-pub phone_numbers: Option<PhoneNumberList>,
-            }
-            
+pub struct ListPhoneNumbersOptedOutResponse {
+    #[doc="<p>A <code>NextToken</code> string is returned when you call the <code>ListPhoneNumbersOptedOut</code> action if additional records are available after the first page of results.</p>"]
+    pub next_token: Option<String>,
+    #[doc="<p>A list of phone numbers that are opted out of receiving SMS messages. The list is paginated, and each page can contain up to 100 phone numbers.</p>"]
+    pub phone_numbers: Option<PhoneNumberList>,
+}
+
 struct ListPhoneNumbersOptedOutResponseDeserializer;
-            impl ListPhoneNumbersOptedOutResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ListPhoneNumbersOptedOutResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ListPhoneNumbersOptedOutResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<ListPhoneNumbersOptedOutResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ListPhoneNumbersOptedOutResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1121,71 +1215,80 @@ struct ListPhoneNumbersOptedOutResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "nextToken" => {
-                obj.next_token = Some(try!(StringDeserializer::deserialize("nextToken", stack)));
-            }
-"phoneNumbers" => {
-                obj.phone_numbers = Some(try!(PhoneNumberListDeserializer::deserialize("phoneNumbers", stack)));
-            }
+                            obj.next_token = Some(try!(StringDeserializer::deserialize("nextToken",
+                                                                                       stack)));
+                        }
+                        "phoneNumbers" => {
+                            obj.phone_numbers =
+                                Some(try!(PhoneNumberListDeserializer::deserialize("phoneNumbers",
+                                                                                   stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for ListPlatformApplications action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListPlatformApplicationsInput {
-                #[doc="<p>NextToken string is used when calling ListPlatformApplications action to retrieve additional records that are available after the first page results.</p>"]
-pub next_token: Option<String>,
-            }
-            
+pub struct ListPlatformApplicationsInput {
+    #[doc="<p>NextToken string is used when calling ListPlatformApplications action to retrieve additional records that are available after the first page results.</p>"]
+    pub next_token: Option<String>,
+}
 
-            /// Serialize `ListPlatformApplicationsInput` contents to a `SignedRequest`.
-            struct ListPlatformApplicationsInputSerializer;
-            impl ListPlatformApplicationsInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ListPlatformApplicationsInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `ListPlatformApplicationsInput` contents to a `SignedRequest`.
+struct ListPlatformApplicationsInputSerializer;
+impl ListPlatformApplicationsInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListPlatformApplicationsInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.next_token {
-                params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
-            }
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+
+    }
+}
+
 #[doc="<p>Response for ListPlatformApplications action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListPlatformApplicationsResponse {
-                #[doc="<p>NextToken string is returned when calling ListPlatformApplications action if additional records are available after the first page results.</p>"]
-pub next_token: Option<String>,
-#[doc="<p>Platform applications returned when calling ListPlatformApplications action.</p>"]
-pub platform_applications: Option<ListOfPlatformApplications>,
-            }
-            
+pub struct ListPlatformApplicationsResponse {
+    #[doc="<p>NextToken string is returned when calling ListPlatformApplications action if additional records are available after the first page results.</p>"]
+    pub next_token: Option<String>,
+    #[doc="<p>Platform applications returned when calling ListPlatformApplications action.</p>"]
+    pub platform_applications: Option<ListOfPlatformApplications>,
+}
+
 struct ListPlatformApplicationsResponseDeserializer;
-            impl ListPlatformApplicationsResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ListPlatformApplicationsResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ListPlatformApplicationsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<ListPlatformApplicationsResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ListPlatformApplicationsResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1193,87 +1296,94 @@ struct ListPlatformApplicationsResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "NextToken" => {
-                obj.next_token = Some(try!(StringDeserializer::deserialize("NextToken", stack)));
-            }
-"PlatformApplications" => {
-                obj.platform_applications = Some(try!(ListOfPlatformApplicationsDeserializer::deserialize("PlatformApplications", stack)));
-            }
+                            obj.next_token = Some(try!(StringDeserializer::deserialize("NextToken",
+                                                                                       stack)));
+                        }
+                        "PlatformApplications" => {
+                            obj.platform_applications = Some(try!(ListOfPlatformApplicationsDeserializer::deserialize("PlatformApplications", stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type ListString = Vec<String>;
 
-            /// Serialize `ListString` contents to a `SignedRequest`.
-            struct ListStringSerializer;
-            impl ListStringSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ListString) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
-params.put(&key, &obj);
+/// Serialize `ListString` contents to a `SignedRequest`.
+struct ListStringSerializer;
+impl ListStringSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListString) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
 }
-                }
-            }
-            
+
 #[doc="<p>Input for ListSubscriptionsByTopic action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListSubscriptionsByTopicInput {
-                #[doc="<p>Token returned by the previous <code>ListSubscriptionsByTopic</code> request.</p>"]
-pub next_token: Option<NextToken>,
-#[doc="<p>The ARN of the topic for which you wish to find subscriptions.</p>"]
-pub topic_arn: TopicARN,
-            }
-            
+pub struct ListSubscriptionsByTopicInput {
+    #[doc="<p>Token returned by the previous <code>ListSubscriptionsByTopic</code> request.</p>"]
+    pub next_token: Option<NextToken>,
+    #[doc="<p>The ARN of the topic for which you wish to find subscriptions.</p>"]
+    pub topic_arn: TopicARN,
+}
 
-            /// Serialize `ListSubscriptionsByTopicInput` contents to a `SignedRequest`.
-            struct ListSubscriptionsByTopicInputSerializer;
-            impl ListSubscriptionsByTopicInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ListSubscriptionsByTopicInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `ListSubscriptionsByTopicInput` contents to a `SignedRequest`.
+struct ListSubscriptionsByTopicInputSerializer;
+impl ListSubscriptionsByTopicInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListSubscriptionsByTopicInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.next_token {
-                params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
-            }
-params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+
+    }
+}
+
 #[doc="<p>Response for ListSubscriptionsByTopic action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListSubscriptionsByTopicResponse {
-                #[doc="<p>Token to pass along to the next <code>ListSubscriptionsByTopic</code> request. This element is returned if there are more subscriptions to retrieve.</p>"]
-pub next_token: Option<NextToken>,
-#[doc="<p>A list of subscriptions.</p>"]
-pub subscriptions: Option<SubscriptionsList>,
-            }
-            
+pub struct ListSubscriptionsByTopicResponse {
+    #[doc="<p>Token to pass along to the next <code>ListSubscriptionsByTopic</code> request. This element is returned if there are more subscriptions to retrieve.</p>"]
+    pub next_token: Option<NextToken>,
+    #[doc="<p>A list of subscriptions.</p>"]
+    pub subscriptions: Option<SubscriptionsList>,
+}
+
 struct ListSubscriptionsByTopicResponseDeserializer;
-            impl ListSubscriptionsByTopicResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ListSubscriptionsByTopicResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ListSubscriptionsByTopicResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<ListSubscriptionsByTopicResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ListSubscriptionsByTopicResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1281,71 +1391,79 @@ struct ListSubscriptionsByTopicResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "NextToken" => {
-                obj.next_token = Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
-            }
-"Subscriptions" => {
-                obj.subscriptions = Some(try!(SubscriptionsListDeserializer::deserialize("Subscriptions", stack)));
-            }
+                            obj.next_token = Some(try!(NextTokenDeserializer::deserialize("NextToken",
+                                                                                          stack)));
+                        }
+                        "Subscriptions" => {
+                            obj.subscriptions =
+                                Some(try!(SubscriptionsListDeserializer::deserialize("Subscriptions",
+                                                                                     stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for ListSubscriptions action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListSubscriptionsInput {
-                #[doc="<p>Token returned by the previous <code>ListSubscriptions</code> request.</p>"]
-pub next_token: Option<NextToken>,
-            }
-            
+pub struct ListSubscriptionsInput {
+    #[doc="<p>Token returned by the previous <code>ListSubscriptions</code> request.</p>"]
+    pub next_token: Option<NextToken>,
+}
 
-            /// Serialize `ListSubscriptionsInput` contents to a `SignedRequest`.
-            struct ListSubscriptionsInputSerializer;
-            impl ListSubscriptionsInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ListSubscriptionsInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `ListSubscriptionsInput` contents to a `SignedRequest`.
+struct ListSubscriptionsInputSerializer;
+impl ListSubscriptionsInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListSubscriptionsInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.next_token {
-                params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
-            }
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+
+    }
+}
+
 #[doc="<p>Response for ListSubscriptions action</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListSubscriptionsResponse {
-                #[doc="<p>Token to pass along to the next <code>ListSubscriptions</code> request. This element is returned if there are more subscriptions to retrieve.</p>"]
-pub next_token: Option<NextToken>,
-#[doc="<p>A list of subscriptions.</p>"]
-pub subscriptions: Option<SubscriptionsList>,
-            }
-            
+pub struct ListSubscriptionsResponse {
+    #[doc="<p>Token to pass along to the next <code>ListSubscriptions</code> request. This element is returned if there are more subscriptions to retrieve.</p>"]
+    pub next_token: Option<NextToken>,
+    #[doc="<p>A list of subscriptions.</p>"]
+    pub subscriptions: Option<SubscriptionsList>,
+}
+
 struct ListSubscriptionsResponseDeserializer;
-            impl ListSubscriptionsResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ListSubscriptionsResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ListSubscriptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ListSubscriptionsResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ListSubscriptionsResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1353,70 +1471,78 @@ struct ListSubscriptionsResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "NextToken" => {
-                obj.next_token = Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
-            }
-"Subscriptions" => {
-                obj.subscriptions = Some(try!(SubscriptionsListDeserializer::deserialize("Subscriptions", stack)));
-            }
+                            obj.next_token = Some(try!(NextTokenDeserializer::deserialize("NextToken",
+                                                                                          stack)));
+                        }
+                        "Subscriptions" => {
+                            obj.subscriptions =
+                                Some(try!(SubscriptionsListDeserializer::deserialize("Subscriptions",
+                                                                                     stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
-#[derive(Default,Debug,Clone)]
-            pub struct ListTopicsInput {
-                #[doc="<p>Token returned by the previous <code>ListTopics</code> request.</p>"]
-pub next_token: Option<NextToken>,
-            }
-            
 
-            /// Serialize `ListTopicsInput` contents to a `SignedRequest`.
-            struct ListTopicsInputSerializer;
-            impl ListTopicsInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ListTopicsInput) {
-                    let mut prefix = name.to_string();
+    }
+}
+#[derive(Default,Debug,Clone)]
+pub struct ListTopicsInput {
+    #[doc="<p>Token returned by the previous <code>ListTopics</code> request.</p>"]
+    pub next_token: Option<NextToken>,
+}
+
+
+/// Serialize `ListTopicsInput` contents to a `SignedRequest`.
+struct ListTopicsInputSerializer;
+impl ListTopicsInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListTopicsInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.next_token {
-                params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
-            }
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+
+    }
+}
+
 #[doc="<p>Response for ListTopics action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListTopicsResponse {
-                #[doc="<p>Token to pass along to the next <code>ListTopics</code> request. This element is returned if there are additional topics to retrieve.</p>"]
-pub next_token: Option<NextToken>,
-#[doc="<p>A list of topic ARNs.</p>"]
-pub topics: Option<TopicsList>,
-            }
-            
+pub struct ListTopicsResponse {
+    #[doc="<p>Token to pass along to the next <code>ListTopics</code> request. This element is returned if there are additional topics to retrieve.</p>"]
+    pub next_token: Option<NextToken>,
+    #[doc="<p>A list of topic ARNs.</p>"]
+    pub topics: Option<TopicsList>,
+}
+
 struct ListTopicsResponseDeserializer;
-            impl ListTopicsResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ListTopicsResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ListTopicsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ListTopicsResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ListTopicsResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1424,33 +1550,38 @@ struct ListTopicsResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "NextToken" => {
-                obj.next_token = Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
-            }
-"Topics" => {
-                obj.topics = Some(try!(TopicsListDeserializer::deserialize("Topics", stack)));
-            }
+                            obj.next_token = Some(try!(NextTokenDeserializer::deserialize("NextToken",
+                                                                                          stack)));
+                        }
+                        "Topics" => {
+                            obj.topics = Some(try!(TopicsListDeserializer::deserialize("Topics",
+                                                                                       stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type MapStringToString = ::std::collections::HashMap<String, String>;
 struct MapStringToStringDeserializer;
-            impl MapStringToStringDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<MapStringToString, XmlParseError> {
-                    try!(start_element(tag_name, stack));
-                    
+impl MapStringToStringDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<MapStringToString, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
         let mut obj = ::std::collections::HashMap::new();
 
         while try!(peek_at_name(stack)) == "entry" {
@@ -1460,174 +1591,180 @@ struct MapStringToStringDeserializer;
             obj.insert(key, value);
             try!(end_element("entry", stack));
         }
-        
-                    try!(end_element(tag_name, stack));
-                    Ok(obj)
-                    
-                }
-            }
 
-            /// Serialize `MapStringToString` contents to a `SignedRequest`.
-            struct MapStringToStringSerializer;
-            impl MapStringToStringSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &MapStringToString) {
-                    for (index, (key, value)) in obj.iter().enumerate() {
-            let prefix = format!("{}.{}", name, index+1);
-            params.put(&format!("{}.{}", prefix, "key"), &key);
-params.put(&key, &value);
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+
+    }
 }
-                }
-            }
-            
+
+/// Serialize `MapStringToString` contents to a `SignedRequest`.
+struct MapStringToStringSerializer;
+impl MapStringToStringSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &MapStringToString) {
+        for (index, (key, value)) in obj.iter().enumerate() {
+            let prefix = format!("{}.{}", name, index + 1);
+            params.put(&format!("{}.{}", prefix, "key"), &key);
+            params.put(&key, &value);
+        }
+    }
+}
+
 pub type Message = String;
 pub type MessageAttributeMap = ::std::collections::HashMap<String, MessageAttributeValue>;
 
-            /// Serialize `MessageAttributeMap` contents to a `SignedRequest`.
-            struct MessageAttributeMapSerializer;
-            impl MessageAttributeMapSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeMap) {
-                    for (index, (key, value)) in obj.iter().enumerate() {
-            let prefix = format!("{}.{}", name, index+1);
+/// Serialize `MessageAttributeMap` contents to a `SignedRequest`.
+struct MessageAttributeMapSerializer;
+impl MessageAttributeMapSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeMap) {
+        for (index, (key, value)) in obj.iter().enumerate() {
+            let prefix = format!("{}.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "Name"), &key);
-MessageAttributeValueSerializer::serialize(
-                    params,
-                    &format!("{}.{}", prefix, "Value"),
-                    value,
-                );
+            MessageAttributeValueSerializer::serialize(params,
+                                                       &format!("{}.{}", prefix, "Value"),
+                                                       value);
+        }
+    }
 }
-                }
-            }
-            
+
 #[doc="<p>The user-specified message attribute value. For string data types, the value attribute has the same restrictions on the content as the message body. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_Publish.html\">Publish</a>.</p> <p>Name, type, and value must not be empty or null. In addition, the message body should not be empty or null. All parts of the message attribute, including name, type, and value, are included in the message size restriction, which is currently 256 KB (262,144 bytes). For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMessageAttributes.html\">Using Amazon SNS Message Attributes</a>.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct MessageAttributeValue {
-                #[doc="<p>Binary type attributes can store any binary data, for example, compressed data, encrypted data, or images.</p>"]
-pub binary_value: Option<Binary>,
-#[doc="<p>Amazon SNS supports the following logical data types: String, Number, and Binary. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMessageAttributes.html#SNSMessageAttributes.DataTypes\">Message Attribute Data Types</a>.</p>"]
-pub data_type: String,
-#[doc="<p>Strings are Unicode with UTF8 binary encoding. For a list of code values, see <a href=\"http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters\">http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters</a>.</p>"]
-pub string_value: Option<String>,
-            }
-            
+pub struct MessageAttributeValue {
+    #[doc="<p>Binary type attributes can store any binary data, for example, compressed data, encrypted data, or images.</p>"]
+    pub binary_value: Option<Binary>,
+    #[doc="<p>Amazon SNS supports the following logical data types: String, Number, and Binary. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMessageAttributes.html#SNSMessageAttributes.DataTypes\">Message Attribute Data Types</a>.</p>"]
+    pub data_type: String,
+    #[doc="<p>Strings are Unicode with UTF8 binary encoding. For a list of code values, see <a href=\"http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters\">http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters</a>.</p>"]
+    pub string_value: Option<String>,
+}
 
-            /// Serialize `MessageAttributeValue` contents to a `SignedRequest`.
-            struct MessageAttributeValueSerializer;
-            impl MessageAttributeValueSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `MessageAttributeValue` contents to a `SignedRequest`.
+struct MessageAttributeValueSerializer;
+impl MessageAttributeValueSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.binary_value {
-                params.put(&format!("{}{}", prefix, "BinaryValue"), ::std::str::from_utf8(&field_value).unwrap());
-            }
-params.put(&format!("{}{}", prefix, "DataType"), &obj.data_type);
-if let Some(ref field_value) = obj.string_value {
-                params.put(&format!("{}{}", prefix, "StringValue"), &field_value);
-            }
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "BinaryValue"),
+                       ::std::str::from_utf8(&field_value).unwrap());
+        }
+        params.put(&format!("{}{}", prefix, "DataType"), &obj.data_type);
+        if let Some(ref field_value) = obj.string_value {
+            params.put(&format!("{}{}", prefix, "StringValue"), &field_value);
+        }
+
+    }
+}
+
 pub type MessageId = String;
 struct MessageIdDeserializer;
-            impl MessageIdDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<MessageId, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl MessageIdDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<MessageId, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type MessageStructure = String;
 pub type NextToken = String;
 struct NextTokenDeserializer;
-            impl NextTokenDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<NextToken, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl NextTokenDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<NextToken, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for the OptInPhoneNumber action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct OptInPhoneNumberInput {
-                #[doc="<p>The phone number to opt in.</p>"]
-pub phone_number: PhoneNumber,
-            }
-            
+pub struct OptInPhoneNumberInput {
+    #[doc="<p>The phone number to opt in.</p>"]
+    pub phone_number: PhoneNumber,
+}
 
-            /// Serialize `OptInPhoneNumberInput` contents to a `SignedRequest`.
-            struct OptInPhoneNumberInputSerializer;
-            impl OptInPhoneNumberInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &OptInPhoneNumberInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `OptInPhoneNumberInput` contents to a `SignedRequest`.
+struct OptInPhoneNumberInputSerializer;
+impl OptInPhoneNumberInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &OptInPhoneNumberInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "phoneNumber"), &obj.phone_number);
-        
-                }
-            }
-            
+
+    }
+}
+
 #[doc="<p>The response for the OptInPhoneNumber action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct OptInPhoneNumberResponse;
-            
+pub struct OptInPhoneNumberResponse;
+
 struct OptInPhoneNumberResponseDeserializer;
-            impl OptInPhoneNumberResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<OptInPhoneNumberResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl OptInPhoneNumberResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<OptInPhoneNumberResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
-            let obj = OptInPhoneNumberResponse::default();
+        let obj = OptInPhoneNumberResponse::default();
 
-            try!(end_element(tag_name, stack));
+        try!(end_element(tag_name, stack));
 
-            Ok(obj)
-            
-                }
-            }
+        Ok(obj)
+
+    }
+}
 pub type PhoneNumber = String;
 struct PhoneNumberDeserializer;
-            impl PhoneNumberDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<PhoneNumber, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl PhoneNumberDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<PhoneNumber, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type PhoneNumberList = Vec<PhoneNumber>;
 struct PhoneNumberListDeserializer;
-            impl PhoneNumberListDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<PhoneNumberList, XmlParseError> {
-                    
+impl PhoneNumberListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<PhoneNumberList, XmlParseError> {
+
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1638,41 +1775,46 @@ struct PhoneNumberListDeserializer;
                     } else {
                         skip_tree(stack);
                     }
-                },
+                }
                 DeserializerNext::Close => {
                     try!(end_element(tag_name, stack));
                     break;
                 }
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Platform application object.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct PlatformApplication {
-                #[doc="<p>Attributes for platform application object.</p>"]
-pub attributes: Option<MapStringToString>,
-#[doc="<p>PlatformApplicationArn for platform application object.</p>"]
-pub platform_application_arn: Option<String>,
-            }
-            
+pub struct PlatformApplication {
+    #[doc="<p>Attributes for platform application object.</p>"]
+    pub attributes: Option<MapStringToString>,
+    #[doc="<p>PlatformApplicationArn for platform application object.</p>"]
+    pub platform_application_arn: Option<String>,
+}
+
 struct PlatformApplicationDeserializer;
-            impl PlatformApplicationDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<PlatformApplication, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl PlatformApplicationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<PlatformApplication, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = PlatformApplication::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1680,115 +1822,123 @@ struct PlatformApplicationDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Attributes" => {
-                obj.attributes = Some(try!(MapStringToStringDeserializer::deserialize("Attributes", stack)));
-            }
-"PlatformApplicationArn" => {
-                obj.platform_application_arn = Some(try!(StringDeserializer::deserialize("PlatformApplicationArn", stack)));
-            }
+                            obj.attributes =
+                                Some(try!(MapStringToStringDeserializer::deserialize("Attributes",
+                                                                                     stack)));
+                        }
+                        "PlatformApplicationArn" => {
+                            obj.platform_application_arn =
+                                Some(try!(StringDeserializer::deserialize("PlatformApplicationArn",
+                                                                          stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type Protocol = String;
 struct ProtocolDeserializer;
-            impl ProtocolDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<Protocol, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ProtocolDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Protocol, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for Publish action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct PublishInput {
-                #[doc="<p>The message you want to send to the topic.</p> <p>If you want to send the same message to all transport protocols, include the text of the message as a String value.</p> <p>If you want to send different messages for each transport protocol, set the value of the <code>MessageStructure</code> parameter to <code>json</code> and use a JSON object for the <code>Message</code> parameter. </p> <p>Constraints: Messages must be UTF-8 encoded strings at most 256 KB in size (262144 bytes, not 262144 characters).</p> <p>JSON-specific constraints:</p> <ul> <li> <p>Keys in the JSON object that correspond to supported transport protocols must have simple JSON string values.</p> </li> <li> <p>The values will be parsed (unescaped) before they are used in outgoing messages.</p> </li> <li> <p>Outbound notifications are JSON encoded (meaning that the characters will be reescaped for sending).</p> </li> <li> <p>Values have a minimum length of 0 (the empty string, \"\", is allowed).</p> </li> <li> <p>Values have a maximum length bounded by the overall message size (so, including multiple protocols may limit message sizes).</p> </li> <li> <p>Non-string values will cause the key to be ignored.</p> </li> <li> <p>Keys that do not correspond to supported transport protocols are ignored.</p> </li> <li> <p>Duplicate keys are not allowed.</p> </li> <li> <p>Failure to parse or validate any key or value in the message will cause the <code>Publish</code> call to return an error (no partial delivery).</p> </li> </ul>"]
-pub message: Message,
-#[doc="<p>Message attributes for Publish action.</p>"]
-pub message_attributes: Option<MessageAttributeMap>,
-#[doc="<p>Set <code>MessageStructure</code> to <code>json</code> if you want to send a different message for each protocol. For example, using one publish action, you can send a short message to your SMS subscribers and a longer message to your email subscribers. If you set <code>MessageStructure</code> to <code>json</code>, the value of the <code>Message</code> parameter must: </p> <ul> <li> <p>be a syntactically valid JSON object; and</p> </li> <li> <p>contain at least a top-level JSON key of \"default\" with a value that is a string.</p> </li> </ul> <p>You can define other top-level keys that define the message you want to send to a specific transport protocol (e.g., \"http\").</p> <p>For information about sending different messages for each protocol using the AWS Management Console, go to <a href=\"http://docs.aws.amazon.com/sns/latest/gsg/Publish.html#sns-message-formatting-by-protocol\">Create Different Messages for Each Protocol</a> in the <i>Amazon Simple Notification Service Getting Started Guide</i>. </p> <p>Valid value: <code>json</code> </p>"]
-pub message_structure: Option<MessageStructure>,
-#[doc="<p>The phone number to which you want to deliver an SMS message. Use E.164 format.</p> <p>If you don't specify a value for the <code>PhoneNumber</code> parameter, you must specify a value for the <code>TargetArn</code> or <code>TopicArn</code> parameters.</p>"]
-pub phone_number: Option<String>,
-#[doc="<p>Optional parameter to be used as the \"Subject\" line when the message is delivered to email endpoints. This field will also be included, if present, in the standard JSON messages delivered to other endpoints.</p> <p>Constraints: Subjects must be ASCII text that begins with a letter, number, or punctuation mark; must not include line breaks or control characters; and must be less than 100 characters long.</p>"]
-pub subject: Option<Subject>,
-#[doc="<p>Either TopicArn or EndpointArn, but not both.</p> <p>If you don't specify a value for the <code>TargetArn</code> parameter, you must specify a value for the <code>PhoneNumber</code> or <code>TopicArn</code> parameters.</p>"]
-pub target_arn: Option<String>,
-#[doc="<p>The topic you want to publish to.</p> <p>If you don't specify a value for the <code>TopicArn</code> parameter, you must specify a value for the <code>PhoneNumber</code> or <code>TargetArn</code> parameters.</p>"]
-pub topic_arn: Option<TopicARN>,
-            }
-            
+pub struct PublishInput {
+    #[doc="<p>The message you want to send to the topic.</p> <p>If you want to send the same message to all transport protocols, include the text of the message as a String value.</p> <p>If you want to send different messages for each transport protocol, set the value of the <code>MessageStructure</code> parameter to <code>json</code> and use a JSON object for the <code>Message</code> parameter. </p> <p>Constraints: Messages must be UTF-8 encoded strings at most 256 KB in size (262144 bytes, not 262144 characters).</p> <p>JSON-specific constraints:</p> <ul> <li> <p>Keys in the JSON object that correspond to supported transport protocols must have simple JSON string values.</p> </li> <li> <p>The values will be parsed (unescaped) before they are used in outgoing messages.</p> </li> <li> <p>Outbound notifications are JSON encoded (meaning that the characters will be reescaped for sending).</p> </li> <li> <p>Values have a minimum length of 0 (the empty string, \"\", is allowed).</p> </li> <li> <p>Values have a maximum length bounded by the overall message size (so, including multiple protocols may limit message sizes).</p> </li> <li> <p>Non-string values will cause the key to be ignored.</p> </li> <li> <p>Keys that do not correspond to supported transport protocols are ignored.</p> </li> <li> <p>Duplicate keys are not allowed.</p> </li> <li> <p>Failure to parse or validate any key or value in the message will cause the <code>Publish</code> call to return an error (no partial delivery).</p> </li> </ul>"]
+    pub message: Message,
+    #[doc="<p>Message attributes for Publish action.</p>"]
+    pub message_attributes: Option<MessageAttributeMap>,
+    #[doc="<p>Set <code>MessageStructure</code> to <code>json</code> if you want to send a different message for each protocol. For example, using one publish action, you can send a short message to your SMS subscribers and a longer message to your email subscribers. If you set <code>MessageStructure</code> to <code>json</code>, the value of the <code>Message</code> parameter must: </p> <ul> <li> <p>be a syntactically valid JSON object; and</p> </li> <li> <p>contain at least a top-level JSON key of \"default\" with a value that is a string.</p> </li> </ul> <p>You can define other top-level keys that define the message you want to send to a specific transport protocol (e.g., \"http\").</p> <p>For information about sending different messages for each protocol using the AWS Management Console, go to <a href=\"http://docs.aws.amazon.com/sns/latest/gsg/Publish.html#sns-message-formatting-by-protocol\">Create Different Messages for Each Protocol</a> in the <i>Amazon Simple Notification Service Getting Started Guide</i>. </p> <p>Valid value: <code>json</code> </p>"]
+    pub message_structure: Option<MessageStructure>,
+    #[doc="<p>The phone number to which you want to deliver an SMS message. Use E.164 format.</p> <p>If you don't specify a value for the <code>PhoneNumber</code> parameter, you must specify a value for the <code>TargetArn</code> or <code>TopicArn</code> parameters.</p>"]
+    pub phone_number: Option<String>,
+    #[doc="<p>Optional parameter to be used as the \"Subject\" line when the message is delivered to email endpoints. This field will also be included, if present, in the standard JSON messages delivered to other endpoints.</p> <p>Constraints: Subjects must be ASCII text that begins with a letter, number, or punctuation mark; must not include line breaks or control characters; and must be less than 100 characters long.</p>"]
+    pub subject: Option<Subject>,
+    #[doc="<p>Either TopicArn or EndpointArn, but not both.</p> <p>If you don't specify a value for the <code>TargetArn</code> parameter, you must specify a value for the <code>PhoneNumber</code> or <code>TopicArn</code> parameters.</p>"]
+    pub target_arn: Option<String>,
+    #[doc="<p>The topic you want to publish to.</p> <p>If you don't specify a value for the <code>TopicArn</code> parameter, you must specify a value for the <code>PhoneNumber</code> or <code>TargetArn</code> parameters.</p>"]
+    pub topic_arn: Option<TopicARN>,
+}
 
-            /// Serialize `PublishInput` contents to a `SignedRequest`.
-            struct PublishInputSerializer;
-            impl PublishInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &PublishInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `PublishInput` contents to a `SignedRequest`.
+struct PublishInputSerializer;
+impl PublishInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PublishInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "Message"), &obj.message);
-if let Some(ref field_value) = obj.message_attributes {
-                MessageAttributeMapSerializer::serialize(
-                    params,
-                    &format!("{}{}", prefix, "MessageAttributes"),
-                    field_value,
-                );
-            }
-if let Some(ref field_value) = obj.message_structure {
-                params.put(&format!("{}{}", prefix, "MessageStructure"), &field_value);
-            }
-if let Some(ref field_value) = obj.phone_number {
-                params.put(&format!("{}{}", prefix, "PhoneNumber"), &field_value);
-            }
-if let Some(ref field_value) = obj.subject {
-                params.put(&format!("{}{}", prefix, "Subject"), &field_value);
-            }
-if let Some(ref field_value) = obj.target_arn {
-                params.put(&format!("{}{}", prefix, "TargetArn"), &field_value);
-            }
-if let Some(ref field_value) = obj.topic_arn {
-                params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
-            }
-        
-                }
-            }
-            
+        if let Some(ref field_value) = obj.message_attributes {
+            MessageAttributeMapSerializer::serialize(params,
+                                                     &format!("{}{}", prefix, "MessageAttributes"),
+                                                     field_value);
+        }
+        if let Some(ref field_value) = obj.message_structure {
+            params.put(&format!("{}{}", prefix, "MessageStructure"), &field_value);
+        }
+        if let Some(ref field_value) = obj.phone_number {
+            params.put(&format!("{}{}", prefix, "PhoneNumber"), &field_value);
+        }
+        if let Some(ref field_value) = obj.subject {
+            params.put(&format!("{}{}", prefix, "Subject"), &field_value);
+        }
+        if let Some(ref field_value) = obj.target_arn {
+            params.put(&format!("{}{}", prefix, "TargetArn"), &field_value);
+        }
+        if let Some(ref field_value) = obj.topic_arn {
+            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
+        }
+
+    }
+}
+
 #[doc="<p>Response for Publish action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct PublishResponse {
-                #[doc="<p>Unique identifier assigned to the published message.</p> <p>Length Constraint: Maximum 100 characters</p>"]
-pub message_id: Option<MessageId>,
-            }
-            
+pub struct PublishResponse {
+    #[doc="<p>Unique identifier assigned to the published message.</p> <p>Length Constraint: Maximum 100 characters</p>"]
+    pub message_id: Option<MessageId>,
+}
+
 struct PublishResponseDeserializer;
-            impl PublishResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<PublishResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl PublishResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<PublishResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = PublishResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1796,274 +1946,280 @@ struct PublishResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "MessageId" => {
-                obj.message_id = Some(try!(MessageIdDeserializer::deserialize("MessageId", stack)));
-            }
+                            obj.message_id = Some(try!(MessageIdDeserializer::deserialize("MessageId",
+                                                                                          stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for RemovePermission action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct RemovePermissionInput {
-                #[doc="<p>The unique label of the statement you want to remove.</p>"]
-pub label: Label,
-#[doc="<p>The ARN of the topic whose access control policy you wish to modify.</p>"]
-pub topic_arn: TopicARN,
-            }
-            
+pub struct RemovePermissionInput {
+    #[doc="<p>The unique label of the statement you want to remove.</p>"]
+    pub label: Label,
+    #[doc="<p>The ARN of the topic whose access control policy you wish to modify.</p>"]
+    pub topic_arn: TopicARN,
+}
 
-            /// Serialize `RemovePermissionInput` contents to a `SignedRequest`.
-            struct RemovePermissionInputSerializer;
-            impl RemovePermissionInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &RemovePermissionInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `RemovePermissionInput` contents to a `SignedRequest`.
+struct RemovePermissionInputSerializer;
+impl RemovePermissionInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RemovePermissionInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
-        
-                }
-            }
-            
+        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+
+    }
+}
+
 #[doc="<p>Input for SetEndpointAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SetEndpointAttributesInput {
-                #[doc="<p>A map of the endpoint attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul>"]
-pub attributes: MapStringToString,
-#[doc="<p>EndpointArn used for SetEndpointAttributes action.</p>"]
-pub endpoint_arn: String,
-            }
-            
+pub struct SetEndpointAttributesInput {
+    #[doc="<p>A map of the endpoint attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul>"]
+    pub attributes: MapStringToString,
+    #[doc="<p>EndpointArn used for SetEndpointAttributes action.</p>"]
+    pub endpoint_arn: String,
+}
 
-            /// Serialize `SetEndpointAttributesInput` contents to a `SignedRequest`.
-            struct SetEndpointAttributesInputSerializer;
-            impl SetEndpointAttributesInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &SetEndpointAttributesInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `SetEndpointAttributesInput` contents to a `SignedRequest`.
+struct SetEndpointAttributesInputSerializer;
+impl SetEndpointAttributesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SetEndpointAttributesInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        MapStringToStringSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "Attributes"),
-                &obj.attributes,
-            );
-params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
-        
-                }
-            }
-            
+        MapStringToStringSerializer::serialize(params,
+                                               &format!("{}{}", prefix, "Attributes"),
+                                               &obj.attributes);
+        params.put(&format!("{}{}", prefix, "EndpointArn"), &obj.endpoint_arn);
+
+    }
+}
+
 #[doc="<p>Input for SetPlatformApplicationAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SetPlatformApplicationAttributesInput {
-                #[doc="<p>A map of the platform application attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>PlatformCredential</code> -- The credential received from the notification service. For APNS/APNS_SANDBOX, PlatformCredential is private key. For GCM, PlatformCredential is \"API key\". For ADM, PlatformCredential is \"client secret\".</p> </li> <li> <p> <code>PlatformPrincipal</code> -- The principal received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is SSL certificate. For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is \"client id\".</p> </li> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application's endpoints.</p> </li> <li> <p> <code>SuccessFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>FailureFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>SuccessFeedbackSampleRate</code> -- Sample rate percentage (0-100) of successfully delivered messages.</p> </li> </ul>"]
-pub attributes: MapStringToString,
-#[doc="<p>PlatformApplicationArn for SetPlatformApplicationAttributes action.</p>"]
-pub platform_application_arn: String,
-            }
-            
+pub struct SetPlatformApplicationAttributesInput {
+    #[doc="<p>A map of the platform application attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>PlatformCredential</code> -- The credential received from the notification service. For APNS/APNS_SANDBOX, PlatformCredential is private key. For GCM, PlatformCredential is \"API key\". For ADM, PlatformCredential is \"client secret\".</p> </li> <li> <p> <code>PlatformPrincipal</code> -- The principal received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is SSL certificate. For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is \"client id\".</p> </li> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application's endpoints.</p> </li> <li> <p> <code>SuccessFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>FailureFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>SuccessFeedbackSampleRate</code> -- Sample rate percentage (0-100) of successfully delivered messages.</p> </li> </ul>"]
+    pub attributes: MapStringToString,
+    #[doc="<p>PlatformApplicationArn for SetPlatformApplicationAttributes action.</p>"]
+    pub platform_application_arn: String,
+}
 
-            /// Serialize `SetPlatformApplicationAttributesInput` contents to a `SignedRequest`.
-            struct SetPlatformApplicationAttributesInputSerializer;
-            impl SetPlatformApplicationAttributesInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &SetPlatformApplicationAttributesInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `SetPlatformApplicationAttributesInput` contents to a `SignedRequest`.
+struct SetPlatformApplicationAttributesInputSerializer;
+impl SetPlatformApplicationAttributesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SetPlatformApplicationAttributesInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        MapStringToStringSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "Attributes"),
-                &obj.attributes,
-            );
-params.put(&format!("{}{}", prefix, "PlatformApplicationArn"), &obj.platform_application_arn);
-        
-                }
-            }
-            
+        MapStringToStringSerializer::serialize(params,
+                                               &format!("{}{}", prefix, "Attributes"),
+                                               &obj.attributes);
+        params.put(&format!("{}{}", prefix, "PlatformApplicationArn"),
+                   &obj.platform_application_arn);
+
+    }
+}
+
 #[doc="<p>The input for the SetSMSAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SetSMSAttributesInput {
-                #[doc="<p>The default settings for sending SMS messages from your account. You can set values for the following attribute names:</p> <p> <code>MonthlySpendLimit</code> – The maximum amount in USD that you are willing to spend each month to send SMS messages. When Amazon SNS determines that sending an SMS message would incur a cost that exceeds this limit, it stops sending SMS messages within minutes.</p> <important> <p>Amazon SNS stops sending SMS messages within minutes of the limit being crossed. During that interval, if you continue to send SMS messages, you will incur costs that exceed your limit.</p> </important> <p>By default, the spend limit is set to the maximum allowed by Amazon SNS. If you want to exceed the maximum, contact <a href=\"https://aws.amazon.com/premiumsupport/\">AWS Support</a> or your AWS sales representative for a service limit increase.</p> <p> <code>DeliveryStatusIAMRole</code> – The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs. For each SMS message that you send, Amazon SNS writes a log that includes the message price, the success or failure status, the reason for failure (if the message failed), the message dwell time, and other information.</p> <p> <code>DeliveryStatusSuccessSamplingRate</code> – The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value can be an integer from 0 - 100. For example, to write logs only for failed deliveries, set this value to <code>0</code>. To write logs for 10% of your successful deliveries, set it to <code>10</code>.</p> <p> <code>DefaultSenderID</code> – A string, such as your business brand, that is displayed as the sender on the receiving device. Support for sender IDs varies by country. The sender ID can be 1 - 11 alphanumeric characters, and it must contain at least one letter.</p> <p> <code>DefaultSMSType</code> – The type of SMS message that you will send by default. You can assign the following values:</p> <ul> <li> <p> <code>Promotional</code> – (Default) Noncritical messages, such as marketing messages. Amazon SNS optimizes the message delivery to incur the lowest cost.</p> </li> <li> <p> <code>Transactional</code> – Critical messages that support customer transactions, such as one-time passcodes for multi-factor authentication. Amazon SNS optimizes the message delivery to achieve the highest reliability.</p> </li> </ul> <p> <code>UsageReportS3Bucket</code> – The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS. Each day, Amazon SNS will deliver a usage report as a CSV file to the bucket. The report includes the following information for each SMS message that was successfully delivered by your account:</p> <ul> <li> <p>Time that the message was published (in UTC)</p> </li> <li> <p>Message ID</p> </li> <li> <p>Destination phone number</p> </li> <li> <p>Message type</p> </li> <li> <p>Delivery status</p> </li> <li> <p>Message price (in USD)</p> </li> <li> <p>Part number (a message is split into multiple parts if it is too long for a single message)</p> </li> <li> <p>Total number of parts</p> </li> </ul> <p>To receive the report, the bucket must have a policy that allows the Amazon SNS service principle to perform the <code>s3:PutObject</code> and <code>s3:GetBucketLocation</code> actions.</p> <p>For an example bucket policy and usage report, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sms_stats.html\">Monitoring SMS Activity</a> in the <i>Amazon SNS Developer Guide</i>.</p>"]
-pub attributes: MapStringToString,
-            }
-            
+pub struct SetSMSAttributesInput {
+    #[doc="<p>The default settings for sending SMS messages from your account. You can set values for the following attribute names:</p> <p> <code>MonthlySpendLimit</code> – The maximum amount in USD that you are willing to spend each month to send SMS messages. When Amazon SNS determines that sending an SMS message would incur a cost that exceeds this limit, it stops sending SMS messages within minutes.</p> <important> <p>Amazon SNS stops sending SMS messages within minutes of the limit being crossed. During that interval, if you continue to send SMS messages, you will incur costs that exceed your limit.</p> </important> <p>By default, the spend limit is set to the maximum allowed by Amazon SNS. If you want to exceed the maximum, contact <a href=\"https://aws.amazon.com/premiumsupport/\">AWS Support</a> or your AWS sales representative for a service limit increase.</p> <p> <code>DeliveryStatusIAMRole</code> – The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs. For each SMS message that you send, Amazon SNS writes a log that includes the message price, the success or failure status, the reason for failure (if the message failed), the message dwell time, and other information.</p> <p> <code>DeliveryStatusSuccessSamplingRate</code> – The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value can be an integer from 0 - 100. For example, to write logs only for failed deliveries, set this value to <code>0</code>. To write logs for 10% of your successful deliveries, set it to <code>10</code>.</p> <p> <code>DefaultSenderID</code> – A string, such as your business brand, that is displayed as the sender on the receiving device. Support for sender IDs varies by country. The sender ID can be 1 - 11 alphanumeric characters, and it must contain at least one letter.</p> <p> <code>DefaultSMSType</code> – The type of SMS message that you will send by default. You can assign the following values:</p> <ul> <li> <p> <code>Promotional</code> – (Default) Noncritical messages, such as marketing messages. Amazon SNS optimizes the message delivery to incur the lowest cost.</p> </li> <li> <p> <code>Transactional</code> – Critical messages that support customer transactions, such as one-time passcodes for multi-factor authentication. Amazon SNS optimizes the message delivery to achieve the highest reliability.</p> </li> </ul> <p> <code>UsageReportS3Bucket</code> – The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS. Each day, Amazon SNS will deliver a usage report as a CSV file to the bucket. The report includes the following information for each SMS message that was successfully delivered by your account:</p> <ul> <li> <p>Time that the message was published (in UTC)</p> </li> <li> <p>Message ID</p> </li> <li> <p>Destination phone number</p> </li> <li> <p>Message type</p> </li> <li> <p>Delivery status</p> </li> <li> <p>Message price (in USD)</p> </li> <li> <p>Part number (a message is split into multiple parts if it is too long for a single message)</p> </li> <li> <p>Total number of parts</p> </li> </ul> <p>To receive the report, the bucket must have a policy that allows the Amazon SNS service principle to perform the <code>s3:PutObject</code> and <code>s3:GetBucketLocation</code> actions.</p> <p>For an example bucket policy and usage report, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sms_stats.html\">Monitoring SMS Activity</a> in the <i>Amazon SNS Developer Guide</i>.</p>"]
+    pub attributes: MapStringToString,
+}
 
-            /// Serialize `SetSMSAttributesInput` contents to a `SignedRequest`.
-            struct SetSMSAttributesInputSerializer;
-            impl SetSMSAttributesInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &SetSMSAttributesInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `SetSMSAttributesInput` contents to a `SignedRequest`.
+struct SetSMSAttributesInputSerializer;
+impl SetSMSAttributesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SetSMSAttributesInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        MapStringToStringSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "attributes"),
-                &obj.attributes,
-            );
-        
-                }
-            }
-            
+        MapStringToStringSerializer::serialize(params,
+                                               &format!("{}{}", prefix, "attributes"),
+                                               &obj.attributes);
+
+    }
+}
+
 #[doc="<p>The response for the SetSMSAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SetSMSAttributesResponse;
-            
+pub struct SetSMSAttributesResponse;
+
 struct SetSMSAttributesResponseDeserializer;
-            impl SetSMSAttributesResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<SetSMSAttributesResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl SetSMSAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<SetSMSAttributesResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
-            let obj = SetSMSAttributesResponse::default();
+        let obj = SetSMSAttributesResponse::default();
 
-            try!(end_element(tag_name, stack));
+        try!(end_element(tag_name, stack));
 
-            Ok(obj)
-            
-                }
-            }
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Input for SetSubscriptionAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SetSubscriptionAttributesInput {
-                #[doc="<p>The name of the attribute you want to set. Only a subset of the subscriptions attributes are mutable.</p> <p>Valid values: <code>DeliveryPolicy</code> | <code>RawMessageDelivery</code> </p>"]
-pub attribute_name: AttributeName,
-#[doc="<p>The new value for the attribute in JSON format.</p>"]
-pub attribute_value: Option<AttributeValue>,
-#[doc="<p>The ARN of the subscription to modify.</p>"]
-pub subscription_arn: SubscriptionARN,
-            }
-            
+pub struct SetSubscriptionAttributesInput {
+    #[doc="<p>The name of the attribute you want to set. Only a subset of the subscriptions attributes are mutable.</p> <p>Valid values: <code>DeliveryPolicy</code> | <code>RawMessageDelivery</code> </p>"]
+    pub attribute_name: AttributeName,
+    #[doc="<p>The new value for the attribute in JSON format.</p>"]
+    pub attribute_value: Option<AttributeValue>,
+    #[doc="<p>The ARN of the subscription to modify.</p>"]
+    pub subscription_arn: SubscriptionARN,
+}
 
-            /// Serialize `SetSubscriptionAttributesInput` contents to a `SignedRequest`.
-            struct SetSubscriptionAttributesInputSerializer;
-            impl SetSubscriptionAttributesInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &SetSubscriptionAttributesInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `SetSubscriptionAttributesInput` contents to a `SignedRequest`.
+struct SetSubscriptionAttributesInputSerializer;
+impl SetSubscriptionAttributesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SetSubscriptionAttributesInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AttributeName"), &obj.attribute_name);
-if let Some(ref field_value) = obj.attribute_value {
-                params.put(&format!("{}{}", prefix, "AttributeValue"), &field_value);
-            }
-params.put(&format!("{}{}", prefix, "SubscriptionArn"), &obj.subscription_arn);
-        
-                }
-            }
-            
+        params.put(&format!("{}{}", prefix, "AttributeName"),
+                   &obj.attribute_name);
+        if let Some(ref field_value) = obj.attribute_value {
+            params.put(&format!("{}{}", prefix, "AttributeValue"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "SubscriptionArn"),
+                   &obj.subscription_arn);
+
+    }
+}
+
 #[doc="<p>Input for SetTopicAttributes action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SetTopicAttributesInput {
-                #[doc="<p>The name of the attribute you want to set. Only a subset of the topic's attributes are mutable.</p> <p>Valid values: <code>Policy</code> | <code>DisplayName</code> | <code>DeliveryPolicy</code> </p>"]
-pub attribute_name: AttributeName,
-#[doc="<p>The new value for the attribute.</p>"]
-pub attribute_value: Option<AttributeValue>,
-#[doc="<p>The ARN of the topic to modify.</p>"]
-pub topic_arn: TopicARN,
-            }
-            
+pub struct SetTopicAttributesInput {
+    #[doc="<p>The name of the attribute you want to set. Only a subset of the topic's attributes are mutable.</p> <p>Valid values: <code>Policy</code> | <code>DisplayName</code> | <code>DeliveryPolicy</code> </p>"]
+    pub attribute_name: AttributeName,
+    #[doc="<p>The new value for the attribute.</p>"]
+    pub attribute_value: Option<AttributeValue>,
+    #[doc="<p>The ARN of the topic to modify.</p>"]
+    pub topic_arn: TopicARN,
+}
 
-            /// Serialize `SetTopicAttributesInput` contents to a `SignedRequest`.
-            struct SetTopicAttributesInputSerializer;
-            impl SetTopicAttributesInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &SetTopicAttributesInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `SetTopicAttributesInput` contents to a `SignedRequest`.
+struct SetTopicAttributesInputSerializer;
+impl SetTopicAttributesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SetTopicAttributesInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AttributeName"), &obj.attribute_name);
-if let Some(ref field_value) = obj.attribute_value {
-                params.put(&format!("{}{}", prefix, "AttributeValue"), &field_value);
-            }
-params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
-        
-                }
-            }
-            
+        params.put(&format!("{}{}", prefix, "AttributeName"),
+                   &obj.attribute_name);
+        if let Some(ref field_value) = obj.attribute_value {
+            params.put(&format!("{}{}", prefix, "AttributeValue"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+
+    }
+}
+
 struct StringDeserializer;
-            impl StringDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<String, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl StringDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type Subject = String;
 #[doc="<p>Input for Subscribe action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SubscribeInput {
-                #[doc="<p>The endpoint that you want to receive notifications. Endpoints vary by protocol:</p> <ul> <li> <p>For the <code>http</code> protocol, the endpoint is an URL beginning with \"http://\"</p> </li> <li> <p>For the <code>https</code> protocol, the endpoint is a URL beginning with \"https://\"</p> </li> <li> <p>For the <code>email</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>email-json</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>sms</code> protocol, the endpoint is a phone number of an SMS-enabled device</p> </li> <li> <p>For the <code>sqs</code> protocol, the endpoint is the ARN of an Amazon SQS queue</p> </li> <li> <p>For the <code>application</code> protocol, the endpoint is the EndpointArn of a mobile app and device.</p> </li> <li> <p>For the <code>lambda</code> protocol, the endpoint is the ARN of an AWS Lambda function.</p> </li> </ul>"]
-pub endpoint: Option<Endpoint>,
-#[doc="<p>The protocol you want to use. Supported protocols include:</p> <ul> <li> <p> <code>http</code> -- delivery of JSON-encoded message via HTTP POST</p> </li> <li> <p> <code>https</code> -- delivery of JSON-encoded message via HTTPS POST</p> </li> <li> <p> <code>email</code> -- delivery of message via SMTP</p> </li> <li> <p> <code>email-json</code> -- delivery of JSON-encoded message via SMTP</p> </li> <li> <p> <code>sms</code> -- delivery of message via SMS</p> </li> <li> <p> <code>sqs</code> -- delivery of JSON-encoded message to an Amazon SQS queue</p> </li> <li> <p> <code>application</code> -- delivery of JSON-encoded message to an EndpointArn for a mobile app and device.</p> </li> <li> <p> <code>lambda</code> -- delivery of JSON-encoded message to an AWS Lambda function.</p> </li> </ul>"]
-pub protocol: Protocol,
-#[doc="<p>The ARN of the topic you want to subscribe to.</p>"]
-pub topic_arn: TopicARN,
-            }
-            
+pub struct SubscribeInput {
+    #[doc="<p>The endpoint that you want to receive notifications. Endpoints vary by protocol:</p> <ul> <li> <p>For the <code>http</code> protocol, the endpoint is an URL beginning with \"http://\"</p> </li> <li> <p>For the <code>https</code> protocol, the endpoint is a URL beginning with \"https://\"</p> </li> <li> <p>For the <code>email</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>email-json</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>sms</code> protocol, the endpoint is a phone number of an SMS-enabled device</p> </li> <li> <p>For the <code>sqs</code> protocol, the endpoint is the ARN of an Amazon SQS queue</p> </li> <li> <p>For the <code>application</code> protocol, the endpoint is the EndpointArn of a mobile app and device.</p> </li> <li> <p>For the <code>lambda</code> protocol, the endpoint is the ARN of an AWS Lambda function.</p> </li> </ul>"]
+    pub endpoint: Option<Endpoint>,
+    #[doc="<p>The protocol you want to use. Supported protocols include:</p> <ul> <li> <p> <code>http</code> -- delivery of JSON-encoded message via HTTP POST</p> </li> <li> <p> <code>https</code> -- delivery of JSON-encoded message via HTTPS POST</p> </li> <li> <p> <code>email</code> -- delivery of message via SMTP</p> </li> <li> <p> <code>email-json</code> -- delivery of JSON-encoded message via SMTP</p> </li> <li> <p> <code>sms</code> -- delivery of message via SMS</p> </li> <li> <p> <code>sqs</code> -- delivery of JSON-encoded message to an Amazon SQS queue</p> </li> <li> <p> <code>application</code> -- delivery of JSON-encoded message to an EndpointArn for a mobile app and device.</p> </li> <li> <p> <code>lambda</code> -- delivery of JSON-encoded message to an AWS Lambda function.</p> </li> </ul>"]
+    pub protocol: Protocol,
+    #[doc="<p>The ARN of the topic you want to subscribe to.</p>"]
+    pub topic_arn: TopicARN,
+}
 
-            /// Serialize `SubscribeInput` contents to a `SignedRequest`.
-            struct SubscribeInputSerializer;
-            impl SubscribeInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &SubscribeInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `SubscribeInput` contents to a `SignedRequest`.
+struct SubscribeInputSerializer;
+impl SubscribeInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SubscribeInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.endpoint {
-                params.put(&format!("{}{}", prefix, "Endpoint"), &field_value);
-            }
-params.put(&format!("{}{}", prefix, "Protocol"), &obj.protocol);
-params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "Endpoint"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "Protocol"), &obj.protocol);
+        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+
+    }
+}
+
 #[doc="<p>Response for Subscribe action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SubscribeResponse {
-                #[doc="<p>The ARN of the subscription, if the service was able to create a subscription immediately (without requiring endpoint owner confirmation).</p>"]
-pub subscription_arn: Option<SubscriptionARN>,
-            }
-            
+pub struct SubscribeResponse {
+    #[doc="<p>The ARN of the subscription, if the service was able to create a subscription immediately (without requiring endpoint owner confirmation).</p>"]
+    pub subscription_arn: Option<SubscriptionARN>,
+}
+
 struct SubscribeResponseDeserializer;
-            impl SubscribeResponseDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<SubscribeResponse, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl SubscribeResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<SubscribeResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = SubscribeResponse::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -2071,50 +2227,57 @@ struct SubscribeResponseDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "SubscriptionArn" => {
-                obj.subscription_arn = Some(try!(SubscriptionARNDeserializer::deserialize("SubscriptionArn", stack)));
-            }
+                            obj.subscription_arn =
+                                Some(try!(SubscriptionARNDeserializer::deserialize("SubscriptionArn",
+                                                                                   stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>A wrapper type for the attributes of an Amazon SNS subscription.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct Subscription {
-                #[doc="<p>The subscription's endpoint (format depends on the protocol).</p>"]
-pub endpoint: Option<Endpoint>,
-#[doc="<p>The subscription's owner.</p>"]
-pub owner: Option<Account>,
-#[doc="<p>The subscription's protocol.</p>"]
-pub protocol: Option<Protocol>,
-#[doc="<p>The subscription's ARN.</p>"]
-pub subscription_arn: Option<SubscriptionARN>,
-#[doc="<p>The ARN of the subscription's topic.</p>"]
-pub topic_arn: Option<TopicARN>,
-            }
-            
+pub struct Subscription {
+    #[doc="<p>The subscription's endpoint (format depends on the protocol).</p>"]
+    pub endpoint: Option<Endpoint>,
+    #[doc="<p>The subscription's owner.</p>"]
+    pub owner: Option<Account>,
+    #[doc="<p>The subscription's protocol.</p>"]
+    pub protocol: Option<Protocol>,
+    #[doc="<p>The subscription's ARN.</p>"]
+    pub subscription_arn: Option<SubscriptionARN>,
+    #[doc="<p>The ARN of the subscription's topic.</p>"]
+    pub topic_arn: Option<TopicARN>,
+}
+
 struct SubscriptionDeserializer;
-            impl SubscriptionDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<Subscription, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl SubscriptionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Subscription, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = Subscription::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -2122,56 +2285,66 @@ struct SubscriptionDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Endpoint" => {
-                obj.endpoint = Some(try!(EndpointDeserializer::deserialize("Endpoint", stack)));
-            }
-"Owner" => {
-                obj.owner = Some(try!(AccountDeserializer::deserialize("Owner", stack)));
-            }
-"Protocol" => {
-                obj.protocol = Some(try!(ProtocolDeserializer::deserialize("Protocol", stack)));
-            }
-"SubscriptionArn" => {
-                obj.subscription_arn = Some(try!(SubscriptionARNDeserializer::deserialize("SubscriptionArn", stack)));
-            }
-"TopicArn" => {
-                obj.topic_arn = Some(try!(TopicARNDeserializer::deserialize("TopicArn", stack)));
-            }
+                            obj.endpoint = Some(try!(EndpointDeserializer::deserialize("Endpoint",
+                                                                                       stack)));
+                        }
+                        "Owner" => {
+                            obj.owner = Some(try!(AccountDeserializer::deserialize("Owner",
+                                                                                   stack)));
+                        }
+                        "Protocol" => {
+                            obj.protocol = Some(try!(ProtocolDeserializer::deserialize("Protocol",
+                                                                                       stack)));
+                        }
+                        "SubscriptionArn" => {
+                            obj.subscription_arn =
+                                Some(try!(SubscriptionARNDeserializer::deserialize("SubscriptionArn",
+                                                                                   stack)));
+                        }
+                        "TopicArn" => {
+                            obj.topic_arn = Some(try!(TopicARNDeserializer::deserialize("TopicArn",
+                                                                                        stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type SubscriptionARN = String;
 struct SubscriptionARNDeserializer;
-            impl SubscriptionARNDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<SubscriptionARN, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl SubscriptionARNDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<SubscriptionARN, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type SubscriptionAttributesMap = ::std::collections::HashMap<AttributeName, AttributeValue>;
 struct SubscriptionAttributesMapDeserializer;
-            impl SubscriptionAttributesMapDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<SubscriptionAttributesMap, XmlParseError> {
-                    try!(start_element(tag_name, stack));
-                    
+impl SubscriptionAttributesMapDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<SubscriptionAttributesMap, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
         let mut obj = ::std::collections::HashMap::new();
 
         while try!(peek_at_name(stack)) == "entry" {
@@ -2181,26 +2354,29 @@ struct SubscriptionAttributesMapDeserializer;
             obj.insert(key, value);
             try!(end_element("entry", stack));
         }
-        
-                    try!(end_element(tag_name, stack));
-                    Ok(obj)
-                    
-                }
-            }
+
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+
+    }
+}
 pub type SubscriptionsList = Vec<Subscription>;
 struct SubscriptionsListDeserializer;
-            impl SubscriptionsListDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<SubscriptionsList, XmlParseError> {
-                    
+impl SubscriptionsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<SubscriptionsList, XmlParseError> {
+
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -2211,40 +2387,45 @@ struct SubscriptionsListDeserializer;
                     } else {
                         skip_tree(stack);
                     }
-                },
+                }
                 DeserializerNext::Close => {
                     try!(end_element(tag_name, stack));
                     break;
                 }
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type Token = String;
 #[doc="<p>A wrapper type for the topic's Amazon Resource Name (ARN). To retrieve a topic's attributes, use <code>GetTopicAttributes</code>.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct Topic {
-                #[doc="<p>The topic's ARN.</p>"]
-pub topic_arn: Option<TopicARN>,
-            }
-            
+pub struct Topic {
+    #[doc="<p>The topic's ARN.</p>"]
+    pub topic_arn: Option<TopicARN>,
+}
+
 struct TopicDeserializer;
-            impl TopicDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<Topic, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl TopicDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Topic, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = Topic::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -2252,44 +2433,49 @@ struct TopicDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "TopicArn" => {
-                obj.topic_arn = Some(try!(TopicARNDeserializer::deserialize("TopicArn", stack)));
-            }
+                            obj.topic_arn = Some(try!(TopicARNDeserializer::deserialize("TopicArn",
+                                                                                        stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type TopicARN = String;
 struct TopicARNDeserializer;
-            impl TopicARNDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<TopicARN, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl TopicARNDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<TopicARN, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type TopicAttributesMap = ::std::collections::HashMap<AttributeName, AttributeValue>;
 struct TopicAttributesMapDeserializer;
-            impl TopicAttributesMapDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<TopicAttributesMap, XmlParseError> {
-                    try!(start_element(tag_name, stack));
-                    
+impl TopicAttributesMapDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<TopicAttributesMap, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
         let mut obj = ::std::collections::HashMap::new();
 
         while try!(peek_at_name(stack)) == "entry" {
@@ -2299,27 +2485,30 @@ struct TopicAttributesMapDeserializer;
             obj.insert(key, value);
             try!(end_element("entry", stack));
         }
-        
-                    try!(end_element(tag_name, stack));
-                    Ok(obj)
-                    
-                }
-            }
+
+        try!(end_element(tag_name, stack));
+        Ok(obj)
+
+    }
+}
 pub type TopicName = String;
 pub type TopicsList = Vec<Topic>;
 struct TopicsListDeserializer;
-            impl TopicsListDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<TopicsList, XmlParseError> {
-                    
+impl TopicsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<TopicsList, XmlParseError> {
+
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -2330,3500 +2519,3990 @@ struct TopicsListDeserializer;
                     } else {
                         skip_tree(stack);
                     }
-                },
+                }
                 DeserializerNext::Close => {
                     try!(end_element(tag_name, stack));
                     break;
                 }
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Input for Unsubscribe action.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct UnsubscribeInput {
-                #[doc="<p>The ARN of the subscription to be deleted.</p>"]
-pub subscription_arn: SubscriptionARN,
-            }
-            
+pub struct UnsubscribeInput {
+    #[doc="<p>The ARN of the subscription to be deleted.</p>"]
+    pub subscription_arn: SubscriptionARN,
+}
 
-            /// Serialize `UnsubscribeInput` contents to a `SignedRequest`.
-            struct UnsubscribeInputSerializer;
-            impl UnsubscribeInputSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &UnsubscribeInput) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `UnsubscribeInput` contents to a `SignedRequest`.
+struct UnsubscribeInputSerializer;
+impl UnsubscribeInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UnsubscribeInput) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "SubscriptionArn"), &obj.subscription_arn);
-        
+        params.put(&format!("{}{}", prefix, "SubscriptionArn"),
+                   &obj.subscription_arn);
+
+    }
+}
+
+/// Errors returned by AddPermission
+#[derive(Debug, PartialEq)]
+pub enum AddPermissionError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl AddPermissionError {
+    pub fn from_body(body: &str) -> AddPermissionError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => {
+                        AddPermissionError::AuthorizationError(String::from(parsed_error.message))
+                    }
+                    "InternalErrorException" => {
+                        AddPermissionError::InternalError(String::from(parsed_error.message))
+                    }
+                    "InvalidParameterException" => {
+                        AddPermissionError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "NotFoundException" => {
+                        AddPermissionError::NotFound(String::from(parsed_error.message))
+                    }
+                    _ => AddPermissionError::Unknown(String::from(body)),
                 }
             }
-            
-/// Errors returned by AddPermission
-                #[derive(Debug, PartialEq)]
-                pub enum AddPermissionError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+            Err(_) => AddPermissionError::Unknown(body.to_string()),
+        }
+    }
+}
 
-                
-                impl AddPermissionError {
-                    pub fn from_body(body: &str) -> AddPermissionError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => AddPermissionError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => AddPermissionError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => AddPermissionError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => AddPermissionError::NotFound(String::from(parsed_error.message)),_ => AddPermissionError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => AddPermissionError::Unknown(body.to_string())
-                       }
-                    }
-                }
-                
-                impl From<XmlParseError> for AddPermissionError {
-                    fn from(err: XmlParseError) -> AddPermissionError {
-                        let XmlParseError(message) = err;
-                        AddPermissionError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for AddPermissionError {
-                    fn from(err: CredentialsError) -> AddPermissionError {
-                        AddPermissionError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for AddPermissionError {
-                    fn from(err: HttpDispatchError) -> AddPermissionError {
-                        AddPermissionError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for AddPermissionError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for AddPermissionError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            AddPermissionError::AuthorizationError(ref cause) => cause,
-AddPermissionError::InternalError(ref cause) => cause,
-AddPermissionError::InvalidParameter(ref cause) => cause,
-AddPermissionError::NotFound(ref cause) => cause,
-AddPermissionError::Validation(ref cause) => cause,
-AddPermissionError::Credentials(ref err) => err.description(),
-AddPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-AddPermissionError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+impl From<XmlParseError> for AddPermissionError {
+    fn from(err: XmlParseError) -> AddPermissionError {
+        let XmlParseError(message) = err;
+        AddPermissionError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for AddPermissionError {
+    fn from(err: CredentialsError) -> AddPermissionError {
+        AddPermissionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AddPermissionError {
+    fn from(err: HttpDispatchError) -> AddPermissionError {
+        AddPermissionError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for AddPermissionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AddPermissionError {
+    fn description(&self) -> &str {
+        match *self {
+            AddPermissionError::AuthorizationError(ref cause) => cause,
+            AddPermissionError::InternalError(ref cause) => cause,
+            AddPermissionError::InvalidParameter(ref cause) => cause,
+            AddPermissionError::NotFound(ref cause) => cause,
+            AddPermissionError::Validation(ref cause) => cause,
+            AddPermissionError::Credentials(ref err) => err.description(),
+            AddPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            AddPermissionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CheckIfPhoneNumberIsOptedOut
-                #[derive(Debug, PartialEq)]
-                pub enum CheckIfPhoneNumberIsOptedOutError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
-Throttled(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum CheckIfPhoneNumberIsOptedOutError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl CheckIfPhoneNumberIsOptedOutError {
-                    pub fn from_body(body: &str) -> CheckIfPhoneNumberIsOptedOutError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => CheckIfPhoneNumberIsOptedOutError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => CheckIfPhoneNumberIsOptedOutError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => CheckIfPhoneNumberIsOptedOutError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => CheckIfPhoneNumberIsOptedOutError::Throttled(String::from(parsed_error.message)),_ => CheckIfPhoneNumberIsOptedOutError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => CheckIfPhoneNumberIsOptedOutError::Unknown(body.to_string())
-                       }
-                    }
+
+impl CheckIfPhoneNumberIsOptedOutError {
+    pub fn from_body(body: &str) -> CheckIfPhoneNumberIsOptedOutError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => CheckIfPhoneNumberIsOptedOutError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => CheckIfPhoneNumberIsOptedOutError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => CheckIfPhoneNumberIsOptedOutError::InvalidParameter(String::from(parsed_error.message)),
+                    "ThrottledException" => CheckIfPhoneNumberIsOptedOutError::Throttled(String::from(parsed_error.message)),
+                    _ => CheckIfPhoneNumberIsOptedOutError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for CheckIfPhoneNumberIsOptedOutError {
-                    fn from(err: XmlParseError) -> CheckIfPhoneNumberIsOptedOutError {
-                        let XmlParseError(message) = err;
-                        CheckIfPhoneNumberIsOptedOutError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for CheckIfPhoneNumberIsOptedOutError {
-                    fn from(err: CredentialsError) -> CheckIfPhoneNumberIsOptedOutError {
-                        CheckIfPhoneNumberIsOptedOutError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for CheckIfPhoneNumberIsOptedOutError {
-                    fn from(err: HttpDispatchError) -> CheckIfPhoneNumberIsOptedOutError {
-                        CheckIfPhoneNumberIsOptedOutError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for CheckIfPhoneNumberIsOptedOutError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for CheckIfPhoneNumberIsOptedOutError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            CheckIfPhoneNumberIsOptedOutError::AuthorizationError(ref cause) => cause,
-CheckIfPhoneNumberIsOptedOutError::InternalError(ref cause) => cause,
-CheckIfPhoneNumberIsOptedOutError::InvalidParameter(ref cause) => cause,
-CheckIfPhoneNumberIsOptedOutError::Throttled(ref cause) => cause,
-CheckIfPhoneNumberIsOptedOutError::Validation(ref cause) => cause,
-CheckIfPhoneNumberIsOptedOutError::Credentials(ref err) => err.description(),
-CheckIfPhoneNumberIsOptedOutError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-CheckIfPhoneNumberIsOptedOutError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => CheckIfPhoneNumberIsOptedOutError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CheckIfPhoneNumberIsOptedOutError {
+    fn from(err: XmlParseError) -> CheckIfPhoneNumberIsOptedOutError {
+        let XmlParseError(message) = err;
+        CheckIfPhoneNumberIsOptedOutError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CheckIfPhoneNumberIsOptedOutError {
+    fn from(err: CredentialsError) -> CheckIfPhoneNumberIsOptedOutError {
+        CheckIfPhoneNumberIsOptedOutError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CheckIfPhoneNumberIsOptedOutError {
+    fn from(err: HttpDispatchError) -> CheckIfPhoneNumberIsOptedOutError {
+        CheckIfPhoneNumberIsOptedOutError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for CheckIfPhoneNumberIsOptedOutError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CheckIfPhoneNumberIsOptedOutError {
+    fn description(&self) -> &str {
+        match *self {
+            CheckIfPhoneNumberIsOptedOutError::AuthorizationError(ref cause) => cause,
+            CheckIfPhoneNumberIsOptedOutError::InternalError(ref cause) => cause,
+            CheckIfPhoneNumberIsOptedOutError::InvalidParameter(ref cause) => cause,
+            CheckIfPhoneNumberIsOptedOutError::Throttled(ref cause) => cause,
+            CheckIfPhoneNumberIsOptedOutError::Validation(ref cause) => cause,
+            CheckIfPhoneNumberIsOptedOutError::Credentials(ref err) => err.description(),
+            CheckIfPhoneNumberIsOptedOutError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CheckIfPhoneNumberIsOptedOutError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ConfirmSubscription
-                #[derive(Debug, PartialEq)]
-                pub enum ConfirmSubscriptionError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
-SubscriptionLimitExceeded(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ConfirmSubscriptionError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    ///<p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
+    SubscriptionLimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ConfirmSubscriptionError {
-                    pub fn from_body(body: &str) -> ConfirmSubscriptionError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => ConfirmSubscriptionError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ConfirmSubscriptionError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ConfirmSubscriptionError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => ConfirmSubscriptionError::NotFound(String::from(parsed_error.message)),"SubscriptionLimitExceededException" => ConfirmSubscriptionError::SubscriptionLimitExceeded(String::from(parsed_error.message)),_ => ConfirmSubscriptionError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ConfirmSubscriptionError::Unknown(body.to_string())
-                       }
+
+impl ConfirmSubscriptionError {
+    pub fn from_body(body: &str) -> ConfirmSubscriptionError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => ConfirmSubscriptionError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => {
+                        ConfirmSubscriptionError::InternalError(String::from(parsed_error.message))
                     }
+                    "InvalidParameterException" => ConfirmSubscriptionError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => {
+                        ConfirmSubscriptionError::NotFound(String::from(parsed_error.message))
+                    }
+                    "SubscriptionLimitExceededException" => ConfirmSubscriptionError::SubscriptionLimitExceeded(String::from(parsed_error.message)),
+                    _ => ConfirmSubscriptionError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ConfirmSubscriptionError {
-                    fn from(err: XmlParseError) -> ConfirmSubscriptionError {
-                        let XmlParseError(message) = err;
-                        ConfirmSubscriptionError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ConfirmSubscriptionError {
-                    fn from(err: CredentialsError) -> ConfirmSubscriptionError {
-                        ConfirmSubscriptionError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ConfirmSubscriptionError {
-                    fn from(err: HttpDispatchError) -> ConfirmSubscriptionError {
-                        ConfirmSubscriptionError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ConfirmSubscriptionError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ConfirmSubscriptionError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ConfirmSubscriptionError::AuthorizationError(ref cause) => cause,
-ConfirmSubscriptionError::InternalError(ref cause) => cause,
-ConfirmSubscriptionError::InvalidParameter(ref cause) => cause,
-ConfirmSubscriptionError::NotFound(ref cause) => cause,
-ConfirmSubscriptionError::SubscriptionLimitExceeded(ref cause) => cause,
-ConfirmSubscriptionError::Validation(ref cause) => cause,
-ConfirmSubscriptionError::Credentials(ref err) => err.description(),
-ConfirmSubscriptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ConfirmSubscriptionError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ConfirmSubscriptionError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ConfirmSubscriptionError {
+    fn from(err: XmlParseError) -> ConfirmSubscriptionError {
+        let XmlParseError(message) = err;
+        ConfirmSubscriptionError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ConfirmSubscriptionError {
+    fn from(err: CredentialsError) -> ConfirmSubscriptionError {
+        ConfirmSubscriptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ConfirmSubscriptionError {
+    fn from(err: HttpDispatchError) -> ConfirmSubscriptionError {
+        ConfirmSubscriptionError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ConfirmSubscriptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ConfirmSubscriptionError {
+    fn description(&self) -> &str {
+        match *self {
+            ConfirmSubscriptionError::AuthorizationError(ref cause) => cause,
+            ConfirmSubscriptionError::InternalError(ref cause) => cause,
+            ConfirmSubscriptionError::InvalidParameter(ref cause) => cause,
+            ConfirmSubscriptionError::NotFound(ref cause) => cause,
+            ConfirmSubscriptionError::SubscriptionLimitExceeded(ref cause) => cause,
+            ConfirmSubscriptionError::Validation(ref cause) => cause,
+            ConfirmSubscriptionError::Credentials(ref err) => err.description(),
+            ConfirmSubscriptionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ConfirmSubscriptionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreatePlatformApplication
-                #[derive(Debug, PartialEq)]
-                pub enum CreatePlatformApplicationError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum CreatePlatformApplicationError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl CreatePlatformApplicationError {
-                    pub fn from_body(body: &str) -> CreatePlatformApplicationError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => CreatePlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => CreatePlatformApplicationError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => CreatePlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),_ => CreatePlatformApplicationError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => CreatePlatformApplicationError::Unknown(body.to_string())
-                       }
-                    }
+
+impl CreatePlatformApplicationError {
+    pub fn from_body(body: &str) -> CreatePlatformApplicationError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => CreatePlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => CreatePlatformApplicationError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => CreatePlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),
+                    _ => CreatePlatformApplicationError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for CreatePlatformApplicationError {
-                    fn from(err: XmlParseError) -> CreatePlatformApplicationError {
-                        let XmlParseError(message) = err;
-                        CreatePlatformApplicationError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for CreatePlatformApplicationError {
-                    fn from(err: CredentialsError) -> CreatePlatformApplicationError {
-                        CreatePlatformApplicationError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for CreatePlatformApplicationError {
-                    fn from(err: HttpDispatchError) -> CreatePlatformApplicationError {
-                        CreatePlatformApplicationError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for CreatePlatformApplicationError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for CreatePlatformApplicationError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            CreatePlatformApplicationError::AuthorizationError(ref cause) => cause,
-CreatePlatformApplicationError::InternalError(ref cause) => cause,
-CreatePlatformApplicationError::InvalidParameter(ref cause) => cause,
-CreatePlatformApplicationError::Validation(ref cause) => cause,
-CreatePlatformApplicationError::Credentials(ref err) => err.description(),
-CreatePlatformApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-CreatePlatformApplicationError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => CreatePlatformApplicationError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreatePlatformApplicationError {
+    fn from(err: XmlParseError) -> CreatePlatformApplicationError {
+        let XmlParseError(message) = err;
+        CreatePlatformApplicationError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreatePlatformApplicationError {
+    fn from(err: CredentialsError) -> CreatePlatformApplicationError {
+        CreatePlatformApplicationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreatePlatformApplicationError {
+    fn from(err: HttpDispatchError) -> CreatePlatformApplicationError {
+        CreatePlatformApplicationError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for CreatePlatformApplicationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreatePlatformApplicationError {
+    fn description(&self) -> &str {
+        match *self {
+            CreatePlatformApplicationError::AuthorizationError(ref cause) => cause,
+            CreatePlatformApplicationError::InternalError(ref cause) => cause,
+            CreatePlatformApplicationError::InvalidParameter(ref cause) => cause,
+            CreatePlatformApplicationError::Validation(ref cause) => cause,
+            CreatePlatformApplicationError::Credentials(ref err) => err.description(),
+            CreatePlatformApplicationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreatePlatformApplicationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreatePlatformEndpoint
-                #[derive(Debug, PartialEq)]
-                pub enum CreatePlatformEndpointError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum CreatePlatformEndpointError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl CreatePlatformEndpointError {
-                    pub fn from_body(body: &str) -> CreatePlatformEndpointError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => CreatePlatformEndpointError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => CreatePlatformEndpointError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => CreatePlatformEndpointError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => CreatePlatformEndpointError::NotFound(String::from(parsed_error.message)),_ => CreatePlatformEndpointError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => CreatePlatformEndpointError::Unknown(body.to_string())
-                       }
+
+impl CreatePlatformEndpointError {
+    pub fn from_body(body: &str) -> CreatePlatformEndpointError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => CreatePlatformEndpointError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => CreatePlatformEndpointError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => CreatePlatformEndpointError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => {
+                        CreatePlatformEndpointError::NotFound(String::from(parsed_error.message))
                     }
+                    _ => CreatePlatformEndpointError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for CreatePlatformEndpointError {
-                    fn from(err: XmlParseError) -> CreatePlatformEndpointError {
-                        let XmlParseError(message) = err;
-                        CreatePlatformEndpointError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for CreatePlatformEndpointError {
-                    fn from(err: CredentialsError) -> CreatePlatformEndpointError {
-                        CreatePlatformEndpointError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for CreatePlatformEndpointError {
-                    fn from(err: HttpDispatchError) -> CreatePlatformEndpointError {
-                        CreatePlatformEndpointError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for CreatePlatformEndpointError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for CreatePlatformEndpointError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            CreatePlatformEndpointError::AuthorizationError(ref cause) => cause,
-CreatePlatformEndpointError::InternalError(ref cause) => cause,
-CreatePlatformEndpointError::InvalidParameter(ref cause) => cause,
-CreatePlatformEndpointError::NotFound(ref cause) => cause,
-CreatePlatformEndpointError::Validation(ref cause) => cause,
-CreatePlatformEndpointError::Credentials(ref err) => err.description(),
-CreatePlatformEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-CreatePlatformEndpointError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => CreatePlatformEndpointError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreatePlatformEndpointError {
+    fn from(err: XmlParseError) -> CreatePlatformEndpointError {
+        let XmlParseError(message) = err;
+        CreatePlatformEndpointError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreatePlatformEndpointError {
+    fn from(err: CredentialsError) -> CreatePlatformEndpointError {
+        CreatePlatformEndpointError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreatePlatformEndpointError {
+    fn from(err: HttpDispatchError) -> CreatePlatformEndpointError {
+        CreatePlatformEndpointError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for CreatePlatformEndpointError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreatePlatformEndpointError {
+    fn description(&self) -> &str {
+        match *self {
+            CreatePlatformEndpointError::AuthorizationError(ref cause) => cause,
+            CreatePlatformEndpointError::InternalError(ref cause) => cause,
+            CreatePlatformEndpointError::InvalidParameter(ref cause) => cause,
+            CreatePlatformEndpointError::NotFound(ref cause) => cause,
+            CreatePlatformEndpointError::Validation(ref cause) => cause,
+            CreatePlatformEndpointError::Credentials(ref err) => err.description(),
+            CreatePlatformEndpointError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreatePlatformEndpointError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateTopic
-                #[derive(Debug, PartialEq)]
-                pub enum CreateTopicError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the customer already owns the maximum allowed number of topics.</p>
-TopicLimitExceeded(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum CreateTopicError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the customer already owns the maximum allowed number of topics.</p>
+    TopicLimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl CreateTopicError {
-                    pub fn from_body(body: &str) -> CreateTopicError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => CreateTopicError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => CreateTopicError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => CreateTopicError::InvalidParameter(String::from(parsed_error.message)),"TopicLimitExceededException" => CreateTopicError::TopicLimitExceeded(String::from(parsed_error.message)),_ => CreateTopicError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => CreateTopicError::Unknown(body.to_string())
-                       }
+
+impl CreateTopicError {
+    pub fn from_body(body: &str) -> CreateTopicError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => {
+                        CreateTopicError::AuthorizationError(String::from(parsed_error.message))
                     }
+                    "InternalErrorException" => {
+                        CreateTopicError::InternalError(String::from(parsed_error.message))
+                    }
+                    "InvalidParameterException" => {
+                        CreateTopicError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "TopicLimitExceededException" => {
+                        CreateTopicError::TopicLimitExceeded(String::from(parsed_error.message))
+                    }
+                    _ => CreateTopicError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for CreateTopicError {
-                    fn from(err: XmlParseError) -> CreateTopicError {
-                        let XmlParseError(message) = err;
-                        CreateTopicError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for CreateTopicError {
-                    fn from(err: CredentialsError) -> CreateTopicError {
-                        CreateTopicError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for CreateTopicError {
-                    fn from(err: HttpDispatchError) -> CreateTopicError {
-                        CreateTopicError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for CreateTopicError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for CreateTopicError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            CreateTopicError::AuthorizationError(ref cause) => cause,
-CreateTopicError::InternalError(ref cause) => cause,
-CreateTopicError::InvalidParameter(ref cause) => cause,
-CreateTopicError::TopicLimitExceeded(ref cause) => cause,
-CreateTopicError::Validation(ref cause) => cause,
-CreateTopicError::Credentials(ref err) => err.description(),
-CreateTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-CreateTopicError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => CreateTopicError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateTopicError {
+    fn from(err: XmlParseError) -> CreateTopicError {
+        let XmlParseError(message) = err;
+        CreateTopicError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateTopicError {
+    fn from(err: CredentialsError) -> CreateTopicError {
+        CreateTopicError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateTopicError {
+    fn from(err: HttpDispatchError) -> CreateTopicError {
+        CreateTopicError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for CreateTopicError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateTopicError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateTopicError::AuthorizationError(ref cause) => cause,
+            CreateTopicError::InternalError(ref cause) => cause,
+            CreateTopicError::InvalidParameter(ref cause) => cause,
+            CreateTopicError::TopicLimitExceeded(ref cause) => cause,
+            CreateTopicError::Validation(ref cause) => cause,
+            CreateTopicError::Credentials(ref err) => err.description(),
+            CreateTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateTopicError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteEndpoint
-                #[derive(Debug, PartialEq)]
-                pub enum DeleteEndpointError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum DeleteEndpointError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl DeleteEndpointError {
-                    pub fn from_body(body: &str) -> DeleteEndpointError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => DeleteEndpointError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => DeleteEndpointError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => DeleteEndpointError::InvalidParameter(String::from(parsed_error.message)),_ => DeleteEndpointError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => DeleteEndpointError::Unknown(body.to_string())
-                       }
+
+impl DeleteEndpointError {
+    pub fn from_body(body: &str) -> DeleteEndpointError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => {
+                        DeleteEndpointError::AuthorizationError(String::from(parsed_error.message))
                     }
+                    "InternalErrorException" => {
+                        DeleteEndpointError::InternalError(String::from(parsed_error.message))
+                    }
+                    "InvalidParameterException" => {
+                        DeleteEndpointError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    _ => DeleteEndpointError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for DeleteEndpointError {
-                    fn from(err: XmlParseError) -> DeleteEndpointError {
-                        let XmlParseError(message) = err;
-                        DeleteEndpointError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for DeleteEndpointError {
-                    fn from(err: CredentialsError) -> DeleteEndpointError {
-                        DeleteEndpointError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for DeleteEndpointError {
-                    fn from(err: HttpDispatchError) -> DeleteEndpointError {
-                        DeleteEndpointError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for DeleteEndpointError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for DeleteEndpointError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            DeleteEndpointError::AuthorizationError(ref cause) => cause,
-DeleteEndpointError::InternalError(ref cause) => cause,
-DeleteEndpointError::InvalidParameter(ref cause) => cause,
-DeleteEndpointError::Validation(ref cause) => cause,
-DeleteEndpointError::Credentials(ref err) => err.description(),
-DeleteEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-DeleteEndpointError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => DeleteEndpointError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteEndpointError {
+    fn from(err: XmlParseError) -> DeleteEndpointError {
+        let XmlParseError(message) = err;
+        DeleteEndpointError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteEndpointError {
+    fn from(err: CredentialsError) -> DeleteEndpointError {
+        DeleteEndpointError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteEndpointError {
+    fn from(err: HttpDispatchError) -> DeleteEndpointError {
+        DeleteEndpointError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DeleteEndpointError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteEndpointError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteEndpointError::AuthorizationError(ref cause) => cause,
+            DeleteEndpointError::InternalError(ref cause) => cause,
+            DeleteEndpointError::InvalidParameter(ref cause) => cause,
+            DeleteEndpointError::Validation(ref cause) => cause,
+            DeleteEndpointError::Credentials(ref err) => err.description(),
+            DeleteEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteEndpointError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeletePlatformApplication
-                #[derive(Debug, PartialEq)]
-                pub enum DeletePlatformApplicationError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum DeletePlatformApplicationError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl DeletePlatformApplicationError {
-                    pub fn from_body(body: &str) -> DeletePlatformApplicationError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => DeletePlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => DeletePlatformApplicationError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => DeletePlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),_ => DeletePlatformApplicationError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => DeletePlatformApplicationError::Unknown(body.to_string())
-                       }
-                    }
+
+impl DeletePlatformApplicationError {
+    pub fn from_body(body: &str) -> DeletePlatformApplicationError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => DeletePlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => DeletePlatformApplicationError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => DeletePlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),
+                    _ => DeletePlatformApplicationError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for DeletePlatformApplicationError {
-                    fn from(err: XmlParseError) -> DeletePlatformApplicationError {
-                        let XmlParseError(message) = err;
-                        DeletePlatformApplicationError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for DeletePlatformApplicationError {
-                    fn from(err: CredentialsError) -> DeletePlatformApplicationError {
-                        DeletePlatformApplicationError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for DeletePlatformApplicationError {
-                    fn from(err: HttpDispatchError) -> DeletePlatformApplicationError {
-                        DeletePlatformApplicationError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for DeletePlatformApplicationError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for DeletePlatformApplicationError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            DeletePlatformApplicationError::AuthorizationError(ref cause) => cause,
-DeletePlatformApplicationError::InternalError(ref cause) => cause,
-DeletePlatformApplicationError::InvalidParameter(ref cause) => cause,
-DeletePlatformApplicationError::Validation(ref cause) => cause,
-DeletePlatformApplicationError::Credentials(ref err) => err.description(),
-DeletePlatformApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-DeletePlatformApplicationError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => DeletePlatformApplicationError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeletePlatformApplicationError {
+    fn from(err: XmlParseError) -> DeletePlatformApplicationError {
+        let XmlParseError(message) = err;
+        DeletePlatformApplicationError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeletePlatformApplicationError {
+    fn from(err: CredentialsError) -> DeletePlatformApplicationError {
+        DeletePlatformApplicationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeletePlatformApplicationError {
+    fn from(err: HttpDispatchError) -> DeletePlatformApplicationError {
+        DeletePlatformApplicationError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DeletePlatformApplicationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeletePlatformApplicationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeletePlatformApplicationError::AuthorizationError(ref cause) => cause,
+            DeletePlatformApplicationError::InternalError(ref cause) => cause,
+            DeletePlatformApplicationError::InvalidParameter(ref cause) => cause,
+            DeletePlatformApplicationError::Validation(ref cause) => cause,
+            DeletePlatformApplicationError::Credentials(ref err) => err.description(),
+            DeletePlatformApplicationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeletePlatformApplicationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteTopic
-                #[derive(Debug, PartialEq)]
-                pub enum DeleteTopicError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum DeleteTopicError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl DeleteTopicError {
-                    pub fn from_body(body: &str) -> DeleteTopicError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => DeleteTopicError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => DeleteTopicError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => DeleteTopicError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => DeleteTopicError::NotFound(String::from(parsed_error.message)),_ => DeleteTopicError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => DeleteTopicError::Unknown(body.to_string())
-                       }
+
+impl DeleteTopicError {
+    pub fn from_body(body: &str) -> DeleteTopicError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => {
+                        DeleteTopicError::AuthorizationError(String::from(parsed_error.message))
                     }
+                    "InternalErrorException" => {
+                        DeleteTopicError::InternalError(String::from(parsed_error.message))
+                    }
+                    "InvalidParameterException" => {
+                        DeleteTopicError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "NotFoundException" => {
+                        DeleteTopicError::NotFound(String::from(parsed_error.message))
+                    }
+                    _ => DeleteTopicError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for DeleteTopicError {
-                    fn from(err: XmlParseError) -> DeleteTopicError {
-                        let XmlParseError(message) = err;
-                        DeleteTopicError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for DeleteTopicError {
-                    fn from(err: CredentialsError) -> DeleteTopicError {
-                        DeleteTopicError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for DeleteTopicError {
-                    fn from(err: HttpDispatchError) -> DeleteTopicError {
-                        DeleteTopicError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for DeleteTopicError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for DeleteTopicError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            DeleteTopicError::AuthorizationError(ref cause) => cause,
-DeleteTopicError::InternalError(ref cause) => cause,
-DeleteTopicError::InvalidParameter(ref cause) => cause,
-DeleteTopicError::NotFound(ref cause) => cause,
-DeleteTopicError::Validation(ref cause) => cause,
-DeleteTopicError::Credentials(ref err) => err.description(),
-DeleteTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-DeleteTopicError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => DeleteTopicError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteTopicError {
+    fn from(err: XmlParseError) -> DeleteTopicError {
+        let XmlParseError(message) = err;
+        DeleteTopicError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteTopicError {
+    fn from(err: CredentialsError) -> DeleteTopicError {
+        DeleteTopicError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteTopicError {
+    fn from(err: HttpDispatchError) -> DeleteTopicError {
+        DeleteTopicError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DeleteTopicError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTopicError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteTopicError::AuthorizationError(ref cause) => cause,
+            DeleteTopicError::InternalError(ref cause) => cause,
+            DeleteTopicError::InvalidParameter(ref cause) => cause,
+            DeleteTopicError::NotFound(ref cause) => cause,
+            DeleteTopicError::Validation(ref cause) => cause,
+            DeleteTopicError::Credentials(ref err) => err.description(),
+            DeleteTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteTopicError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetEndpointAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum GetEndpointAttributesError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum GetEndpointAttributesError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl GetEndpointAttributesError {
-                    pub fn from_body(body: &str) -> GetEndpointAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => GetEndpointAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => GetEndpointAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => GetEndpointAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => GetEndpointAttributesError::NotFound(String::from(parsed_error.message)),_ => GetEndpointAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => GetEndpointAttributesError::Unknown(body.to_string())
-                       }
+
+impl GetEndpointAttributesError {
+    pub fn from_body(body: &str) -> GetEndpointAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => GetEndpointAttributesError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => GetEndpointAttributesError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => GetEndpointAttributesError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => {
+                        GetEndpointAttributesError::NotFound(String::from(parsed_error.message))
                     }
+                    _ => GetEndpointAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for GetEndpointAttributesError {
-                    fn from(err: XmlParseError) -> GetEndpointAttributesError {
-                        let XmlParseError(message) = err;
-                        GetEndpointAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for GetEndpointAttributesError {
-                    fn from(err: CredentialsError) -> GetEndpointAttributesError {
-                        GetEndpointAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for GetEndpointAttributesError {
-                    fn from(err: HttpDispatchError) -> GetEndpointAttributesError {
-                        GetEndpointAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for GetEndpointAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for GetEndpointAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            GetEndpointAttributesError::AuthorizationError(ref cause) => cause,
-GetEndpointAttributesError::InternalError(ref cause) => cause,
-GetEndpointAttributesError::InvalidParameter(ref cause) => cause,
-GetEndpointAttributesError::NotFound(ref cause) => cause,
-GetEndpointAttributesError::Validation(ref cause) => cause,
-GetEndpointAttributesError::Credentials(ref err) => err.description(),
-GetEndpointAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-GetEndpointAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => GetEndpointAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetEndpointAttributesError {
+    fn from(err: XmlParseError) -> GetEndpointAttributesError {
+        let XmlParseError(message) = err;
+        GetEndpointAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetEndpointAttributesError {
+    fn from(err: CredentialsError) -> GetEndpointAttributesError {
+        GetEndpointAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetEndpointAttributesError {
+    fn from(err: HttpDispatchError) -> GetEndpointAttributesError {
+        GetEndpointAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetEndpointAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetEndpointAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetEndpointAttributesError::AuthorizationError(ref cause) => cause,
+            GetEndpointAttributesError::InternalError(ref cause) => cause,
+            GetEndpointAttributesError::InvalidParameter(ref cause) => cause,
+            GetEndpointAttributesError::NotFound(ref cause) => cause,
+            GetEndpointAttributesError::Validation(ref cause) => cause,
+            GetEndpointAttributesError::Credentials(ref err) => err.description(),
+            GetEndpointAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetEndpointAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetPlatformApplicationAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum GetPlatformApplicationAttributesError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum GetPlatformApplicationAttributesError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl GetPlatformApplicationAttributesError {
-                    pub fn from_body(body: &str) -> GetPlatformApplicationAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => GetPlatformApplicationAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => GetPlatformApplicationAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => GetPlatformApplicationAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => GetPlatformApplicationAttributesError::NotFound(String::from(parsed_error.message)),_ => GetPlatformApplicationAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => GetPlatformApplicationAttributesError::Unknown(body.to_string())
-                       }
-                    }
+
+impl GetPlatformApplicationAttributesError {
+    pub fn from_body(body: &str) -> GetPlatformApplicationAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => GetPlatformApplicationAttributesError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => GetPlatformApplicationAttributesError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => GetPlatformApplicationAttributesError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => GetPlatformApplicationAttributesError::NotFound(String::from(parsed_error.message)),
+                    _ => GetPlatformApplicationAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for GetPlatformApplicationAttributesError {
-                    fn from(err: XmlParseError) -> GetPlatformApplicationAttributesError {
-                        let XmlParseError(message) = err;
-                        GetPlatformApplicationAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for GetPlatformApplicationAttributesError {
-                    fn from(err: CredentialsError) -> GetPlatformApplicationAttributesError {
-                        GetPlatformApplicationAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for GetPlatformApplicationAttributesError {
-                    fn from(err: HttpDispatchError) -> GetPlatformApplicationAttributesError {
-                        GetPlatformApplicationAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for GetPlatformApplicationAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for GetPlatformApplicationAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            GetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
-GetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
-GetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
-GetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
-GetPlatformApplicationAttributesError::Validation(ref cause) => cause,
-GetPlatformApplicationAttributesError::Credentials(ref err) => err.description(),
-GetPlatformApplicationAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-GetPlatformApplicationAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => GetPlatformApplicationAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetPlatformApplicationAttributesError {
+    fn from(err: XmlParseError) -> GetPlatformApplicationAttributesError {
+        let XmlParseError(message) = err;
+        GetPlatformApplicationAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetPlatformApplicationAttributesError {
+    fn from(err: CredentialsError) -> GetPlatformApplicationAttributesError {
+        GetPlatformApplicationAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetPlatformApplicationAttributesError {
+    fn from(err: HttpDispatchError) -> GetPlatformApplicationAttributesError {
+        GetPlatformApplicationAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetPlatformApplicationAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetPlatformApplicationAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
+            GetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
+            GetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
+            GetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
+            GetPlatformApplicationAttributesError::Validation(ref cause) => cause,
+            GetPlatformApplicationAttributesError::Credentials(ref err) => err.description(),
+            GetPlatformApplicationAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetPlatformApplicationAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetSMSAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum GetSMSAttributesError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
-Throttled(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum GetSMSAttributesError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl GetSMSAttributesError {
-                    pub fn from_body(body: &str) -> GetSMSAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => GetSMSAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => GetSMSAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => GetSMSAttributesError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => GetSMSAttributesError::Throttled(String::from(parsed_error.message)),_ => GetSMSAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => GetSMSAttributesError::Unknown(body.to_string())
-                       }
+
+impl GetSMSAttributesError {
+    pub fn from_body(body: &str) -> GetSMSAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => GetSMSAttributesError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => {
+                        GetSMSAttributesError::InternalError(String::from(parsed_error.message))
                     }
+                    "InvalidParameterException" => {
+                        GetSMSAttributesError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "ThrottledException" => {
+                        GetSMSAttributesError::Throttled(String::from(parsed_error.message))
+                    }
+                    _ => GetSMSAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for GetSMSAttributesError {
-                    fn from(err: XmlParseError) -> GetSMSAttributesError {
-                        let XmlParseError(message) = err;
-                        GetSMSAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for GetSMSAttributesError {
-                    fn from(err: CredentialsError) -> GetSMSAttributesError {
-                        GetSMSAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for GetSMSAttributesError {
-                    fn from(err: HttpDispatchError) -> GetSMSAttributesError {
-                        GetSMSAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for GetSMSAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for GetSMSAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            GetSMSAttributesError::AuthorizationError(ref cause) => cause,
-GetSMSAttributesError::InternalError(ref cause) => cause,
-GetSMSAttributesError::InvalidParameter(ref cause) => cause,
-GetSMSAttributesError::Throttled(ref cause) => cause,
-GetSMSAttributesError::Validation(ref cause) => cause,
-GetSMSAttributesError::Credentials(ref err) => err.description(),
-GetSMSAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-GetSMSAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => GetSMSAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetSMSAttributesError {
+    fn from(err: XmlParseError) -> GetSMSAttributesError {
+        let XmlParseError(message) = err;
+        GetSMSAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetSMSAttributesError {
+    fn from(err: CredentialsError) -> GetSMSAttributesError {
+        GetSMSAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetSMSAttributesError {
+    fn from(err: HttpDispatchError) -> GetSMSAttributesError {
+        GetSMSAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetSMSAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSMSAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSMSAttributesError::AuthorizationError(ref cause) => cause,
+            GetSMSAttributesError::InternalError(ref cause) => cause,
+            GetSMSAttributesError::InvalidParameter(ref cause) => cause,
+            GetSMSAttributesError::Throttled(ref cause) => cause,
+            GetSMSAttributesError::Validation(ref cause) => cause,
+            GetSMSAttributesError::Credentials(ref err) => err.description(),
+            GetSMSAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetSMSAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetSubscriptionAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum GetSubscriptionAttributesError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum GetSubscriptionAttributesError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl GetSubscriptionAttributesError {
-                    pub fn from_body(body: &str) -> GetSubscriptionAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => GetSubscriptionAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => GetSubscriptionAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => GetSubscriptionAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => GetSubscriptionAttributesError::NotFound(String::from(parsed_error.message)),_ => GetSubscriptionAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => GetSubscriptionAttributesError::Unknown(body.to_string())
-                       }
+
+impl GetSubscriptionAttributesError {
+    pub fn from_body(body: &str) -> GetSubscriptionAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => GetSubscriptionAttributesError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => GetSubscriptionAttributesError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => GetSubscriptionAttributesError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => {
+                        GetSubscriptionAttributesError::NotFound(String::from(parsed_error.message))
                     }
+                    _ => GetSubscriptionAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for GetSubscriptionAttributesError {
-                    fn from(err: XmlParseError) -> GetSubscriptionAttributesError {
-                        let XmlParseError(message) = err;
-                        GetSubscriptionAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for GetSubscriptionAttributesError {
-                    fn from(err: CredentialsError) -> GetSubscriptionAttributesError {
-                        GetSubscriptionAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for GetSubscriptionAttributesError {
-                    fn from(err: HttpDispatchError) -> GetSubscriptionAttributesError {
-                        GetSubscriptionAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for GetSubscriptionAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for GetSubscriptionAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            GetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
-GetSubscriptionAttributesError::InternalError(ref cause) => cause,
-GetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
-GetSubscriptionAttributesError::NotFound(ref cause) => cause,
-GetSubscriptionAttributesError::Validation(ref cause) => cause,
-GetSubscriptionAttributesError::Credentials(ref err) => err.description(),
-GetSubscriptionAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-GetSubscriptionAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => GetSubscriptionAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetSubscriptionAttributesError {
+    fn from(err: XmlParseError) -> GetSubscriptionAttributesError {
+        let XmlParseError(message) = err;
+        GetSubscriptionAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetSubscriptionAttributesError {
+    fn from(err: CredentialsError) -> GetSubscriptionAttributesError {
+        GetSubscriptionAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetSubscriptionAttributesError {
+    fn from(err: HttpDispatchError) -> GetSubscriptionAttributesError {
+        GetSubscriptionAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetSubscriptionAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSubscriptionAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
+            GetSubscriptionAttributesError::InternalError(ref cause) => cause,
+            GetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
+            GetSubscriptionAttributesError::NotFound(ref cause) => cause,
+            GetSubscriptionAttributesError::Validation(ref cause) => cause,
+            GetSubscriptionAttributesError::Credentials(ref err) => err.description(),
+            GetSubscriptionAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetSubscriptionAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetTopicAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum GetTopicAttributesError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum GetTopicAttributesError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl GetTopicAttributesError {
-                    pub fn from_body(body: &str) -> GetTopicAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => GetTopicAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => GetTopicAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => GetTopicAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => GetTopicAttributesError::NotFound(String::from(parsed_error.message)),_ => GetTopicAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => GetTopicAttributesError::Unknown(body.to_string())
-                       }
+
+impl GetTopicAttributesError {
+    pub fn from_body(body: &str) -> GetTopicAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => GetTopicAttributesError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => {
+                        GetTopicAttributesError::InternalError(String::from(parsed_error.message))
                     }
+                    "InvalidParameterException" => GetTopicAttributesError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => {
+                        GetTopicAttributesError::NotFound(String::from(parsed_error.message))
+                    }
+                    _ => GetTopicAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for GetTopicAttributesError {
-                    fn from(err: XmlParseError) -> GetTopicAttributesError {
-                        let XmlParseError(message) = err;
-                        GetTopicAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for GetTopicAttributesError {
-                    fn from(err: CredentialsError) -> GetTopicAttributesError {
-                        GetTopicAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for GetTopicAttributesError {
-                    fn from(err: HttpDispatchError) -> GetTopicAttributesError {
-                        GetTopicAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for GetTopicAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for GetTopicAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            GetTopicAttributesError::AuthorizationError(ref cause) => cause,
-GetTopicAttributesError::InternalError(ref cause) => cause,
-GetTopicAttributesError::InvalidParameter(ref cause) => cause,
-GetTopicAttributesError::NotFound(ref cause) => cause,
-GetTopicAttributesError::Validation(ref cause) => cause,
-GetTopicAttributesError::Credentials(ref err) => err.description(),
-GetTopicAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-GetTopicAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => GetTopicAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetTopicAttributesError {
+    fn from(err: XmlParseError) -> GetTopicAttributesError {
+        let XmlParseError(message) = err;
+        GetTopicAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetTopicAttributesError {
+    fn from(err: CredentialsError) -> GetTopicAttributesError {
+        GetTopicAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetTopicAttributesError {
+    fn from(err: HttpDispatchError) -> GetTopicAttributesError {
+        GetTopicAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetTopicAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetTopicAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetTopicAttributesError::AuthorizationError(ref cause) => cause,
+            GetTopicAttributesError::InternalError(ref cause) => cause,
+            GetTopicAttributesError::InvalidParameter(ref cause) => cause,
+            GetTopicAttributesError::NotFound(ref cause) => cause,
+            GetTopicAttributesError::Validation(ref cause) => cause,
+            GetTopicAttributesError::Credentials(ref err) => err.description(),
+            GetTopicAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetTopicAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListEndpointsByPlatformApplication
-                #[derive(Debug, PartialEq)]
-                pub enum ListEndpointsByPlatformApplicationError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ListEndpointsByPlatformApplicationError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ListEndpointsByPlatformApplicationError {
-                    pub fn from_body(body: &str) -> ListEndpointsByPlatformApplicationError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => ListEndpointsByPlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListEndpointsByPlatformApplicationError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListEndpointsByPlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => ListEndpointsByPlatformApplicationError::NotFound(String::from(parsed_error.message)),_ => ListEndpointsByPlatformApplicationError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ListEndpointsByPlatformApplicationError::Unknown(body.to_string())
-                       }
-                    }
+
+impl ListEndpointsByPlatformApplicationError {
+    pub fn from_body(body: &str) -> ListEndpointsByPlatformApplicationError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => ListEndpointsByPlatformApplicationError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => ListEndpointsByPlatformApplicationError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => ListEndpointsByPlatformApplicationError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => ListEndpointsByPlatformApplicationError::NotFound(String::from(parsed_error.message)),
+                    _ => ListEndpointsByPlatformApplicationError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ListEndpointsByPlatformApplicationError {
-                    fn from(err: XmlParseError) -> ListEndpointsByPlatformApplicationError {
-                        let XmlParseError(message) = err;
-                        ListEndpointsByPlatformApplicationError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ListEndpointsByPlatformApplicationError {
-                    fn from(err: CredentialsError) -> ListEndpointsByPlatformApplicationError {
-                        ListEndpointsByPlatformApplicationError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ListEndpointsByPlatformApplicationError {
-                    fn from(err: HttpDispatchError) -> ListEndpointsByPlatformApplicationError {
-                        ListEndpointsByPlatformApplicationError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ListEndpointsByPlatformApplicationError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ListEndpointsByPlatformApplicationError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ListEndpointsByPlatformApplicationError::AuthorizationError(ref cause) => cause,
-ListEndpointsByPlatformApplicationError::InternalError(ref cause) => cause,
-ListEndpointsByPlatformApplicationError::InvalidParameter(ref cause) => cause,
-ListEndpointsByPlatformApplicationError::NotFound(ref cause) => cause,
-ListEndpointsByPlatformApplicationError::Validation(ref cause) => cause,
-ListEndpointsByPlatformApplicationError::Credentials(ref err) => err.description(),
-ListEndpointsByPlatformApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ListEndpointsByPlatformApplicationError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ListEndpointsByPlatformApplicationError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListEndpointsByPlatformApplicationError {
+    fn from(err: XmlParseError) -> ListEndpointsByPlatformApplicationError {
+        let XmlParseError(message) = err;
+        ListEndpointsByPlatformApplicationError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListEndpointsByPlatformApplicationError {
+    fn from(err: CredentialsError) -> ListEndpointsByPlatformApplicationError {
+        ListEndpointsByPlatformApplicationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListEndpointsByPlatformApplicationError {
+    fn from(err: HttpDispatchError) -> ListEndpointsByPlatformApplicationError {
+        ListEndpointsByPlatformApplicationError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListEndpointsByPlatformApplicationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListEndpointsByPlatformApplicationError {
+    fn description(&self) -> &str {
+        match *self {
+            ListEndpointsByPlatformApplicationError::AuthorizationError(ref cause) => cause,
+            ListEndpointsByPlatformApplicationError::InternalError(ref cause) => cause,
+            ListEndpointsByPlatformApplicationError::InvalidParameter(ref cause) => cause,
+            ListEndpointsByPlatformApplicationError::NotFound(ref cause) => cause,
+            ListEndpointsByPlatformApplicationError::Validation(ref cause) => cause,
+            ListEndpointsByPlatformApplicationError::Credentials(ref err) => err.description(),
+            ListEndpointsByPlatformApplicationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListEndpointsByPlatformApplicationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListPhoneNumbersOptedOut
-                #[derive(Debug, PartialEq)]
-                pub enum ListPhoneNumbersOptedOutError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
-Throttled(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ListPhoneNumbersOptedOutError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ListPhoneNumbersOptedOutError {
-                    pub fn from_body(body: &str) -> ListPhoneNumbersOptedOutError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => ListPhoneNumbersOptedOutError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListPhoneNumbersOptedOutError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListPhoneNumbersOptedOutError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => ListPhoneNumbersOptedOutError::Throttled(String::from(parsed_error.message)),_ => ListPhoneNumbersOptedOutError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ListPhoneNumbersOptedOutError::Unknown(body.to_string())
-                       }
+
+impl ListPhoneNumbersOptedOutError {
+    pub fn from_body(body: &str) -> ListPhoneNumbersOptedOutError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => ListPhoneNumbersOptedOutError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => ListPhoneNumbersOptedOutError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => ListPhoneNumbersOptedOutError::InvalidParameter(String::from(parsed_error.message)),
+                    "ThrottledException" => {
+                        ListPhoneNumbersOptedOutError::Throttled(String::from(parsed_error.message))
                     }
+                    _ => ListPhoneNumbersOptedOutError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ListPhoneNumbersOptedOutError {
-                    fn from(err: XmlParseError) -> ListPhoneNumbersOptedOutError {
-                        let XmlParseError(message) = err;
-                        ListPhoneNumbersOptedOutError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ListPhoneNumbersOptedOutError {
-                    fn from(err: CredentialsError) -> ListPhoneNumbersOptedOutError {
-                        ListPhoneNumbersOptedOutError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ListPhoneNumbersOptedOutError {
-                    fn from(err: HttpDispatchError) -> ListPhoneNumbersOptedOutError {
-                        ListPhoneNumbersOptedOutError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ListPhoneNumbersOptedOutError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ListPhoneNumbersOptedOutError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ListPhoneNumbersOptedOutError::AuthorizationError(ref cause) => cause,
-ListPhoneNumbersOptedOutError::InternalError(ref cause) => cause,
-ListPhoneNumbersOptedOutError::InvalidParameter(ref cause) => cause,
-ListPhoneNumbersOptedOutError::Throttled(ref cause) => cause,
-ListPhoneNumbersOptedOutError::Validation(ref cause) => cause,
-ListPhoneNumbersOptedOutError::Credentials(ref err) => err.description(),
-ListPhoneNumbersOptedOutError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ListPhoneNumbersOptedOutError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ListPhoneNumbersOptedOutError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListPhoneNumbersOptedOutError {
+    fn from(err: XmlParseError) -> ListPhoneNumbersOptedOutError {
+        let XmlParseError(message) = err;
+        ListPhoneNumbersOptedOutError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListPhoneNumbersOptedOutError {
+    fn from(err: CredentialsError) -> ListPhoneNumbersOptedOutError {
+        ListPhoneNumbersOptedOutError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListPhoneNumbersOptedOutError {
+    fn from(err: HttpDispatchError) -> ListPhoneNumbersOptedOutError {
+        ListPhoneNumbersOptedOutError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListPhoneNumbersOptedOutError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListPhoneNumbersOptedOutError {
+    fn description(&self) -> &str {
+        match *self {
+            ListPhoneNumbersOptedOutError::AuthorizationError(ref cause) => cause,
+            ListPhoneNumbersOptedOutError::InternalError(ref cause) => cause,
+            ListPhoneNumbersOptedOutError::InvalidParameter(ref cause) => cause,
+            ListPhoneNumbersOptedOutError::Throttled(ref cause) => cause,
+            ListPhoneNumbersOptedOutError::Validation(ref cause) => cause,
+            ListPhoneNumbersOptedOutError::Credentials(ref err) => err.description(),
+            ListPhoneNumbersOptedOutError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListPhoneNumbersOptedOutError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListPlatformApplications
-                #[derive(Debug, PartialEq)]
-                pub enum ListPlatformApplicationsError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ListPlatformApplicationsError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ListPlatformApplicationsError {
-                    pub fn from_body(body: &str) -> ListPlatformApplicationsError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => ListPlatformApplicationsError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListPlatformApplicationsError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListPlatformApplicationsError::InvalidParameter(String::from(parsed_error.message)),_ => ListPlatformApplicationsError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ListPlatformApplicationsError::Unknown(body.to_string())
-                       }
-                    }
+
+impl ListPlatformApplicationsError {
+    pub fn from_body(body: &str) -> ListPlatformApplicationsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => ListPlatformApplicationsError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => ListPlatformApplicationsError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => ListPlatformApplicationsError::InvalidParameter(String::from(parsed_error.message)),
+                    _ => ListPlatformApplicationsError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ListPlatformApplicationsError {
-                    fn from(err: XmlParseError) -> ListPlatformApplicationsError {
-                        let XmlParseError(message) = err;
-                        ListPlatformApplicationsError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ListPlatformApplicationsError {
-                    fn from(err: CredentialsError) -> ListPlatformApplicationsError {
-                        ListPlatformApplicationsError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ListPlatformApplicationsError {
-                    fn from(err: HttpDispatchError) -> ListPlatformApplicationsError {
-                        ListPlatformApplicationsError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ListPlatformApplicationsError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ListPlatformApplicationsError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ListPlatformApplicationsError::AuthorizationError(ref cause) => cause,
-ListPlatformApplicationsError::InternalError(ref cause) => cause,
-ListPlatformApplicationsError::InvalidParameter(ref cause) => cause,
-ListPlatformApplicationsError::Validation(ref cause) => cause,
-ListPlatformApplicationsError::Credentials(ref err) => err.description(),
-ListPlatformApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ListPlatformApplicationsError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ListPlatformApplicationsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListPlatformApplicationsError {
+    fn from(err: XmlParseError) -> ListPlatformApplicationsError {
+        let XmlParseError(message) = err;
+        ListPlatformApplicationsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListPlatformApplicationsError {
+    fn from(err: CredentialsError) -> ListPlatformApplicationsError {
+        ListPlatformApplicationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListPlatformApplicationsError {
+    fn from(err: HttpDispatchError) -> ListPlatformApplicationsError {
+        ListPlatformApplicationsError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListPlatformApplicationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListPlatformApplicationsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListPlatformApplicationsError::AuthorizationError(ref cause) => cause,
+            ListPlatformApplicationsError::InternalError(ref cause) => cause,
+            ListPlatformApplicationsError::InvalidParameter(ref cause) => cause,
+            ListPlatformApplicationsError::Validation(ref cause) => cause,
+            ListPlatformApplicationsError::Credentials(ref err) => err.description(),
+            ListPlatformApplicationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListPlatformApplicationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListSubscriptions
-                #[derive(Debug, PartialEq)]
-                pub enum ListSubscriptionsError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ListSubscriptionsError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ListSubscriptionsError {
-                    pub fn from_body(body: &str) -> ListSubscriptionsError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => ListSubscriptionsError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListSubscriptionsError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListSubscriptionsError::InvalidParameter(String::from(parsed_error.message)),_ => ListSubscriptionsError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ListSubscriptionsError::Unknown(body.to_string())
-                       }
+
+impl ListSubscriptionsError {
+    pub fn from_body(body: &str) -> ListSubscriptionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => ListSubscriptionsError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => {
+                        ListSubscriptionsError::InternalError(String::from(parsed_error.message))
                     }
+                    "InvalidParameterException" => {
+                        ListSubscriptionsError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    _ => ListSubscriptionsError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ListSubscriptionsError {
-                    fn from(err: XmlParseError) -> ListSubscriptionsError {
-                        let XmlParseError(message) = err;
-                        ListSubscriptionsError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ListSubscriptionsError {
-                    fn from(err: CredentialsError) -> ListSubscriptionsError {
-                        ListSubscriptionsError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ListSubscriptionsError {
-                    fn from(err: HttpDispatchError) -> ListSubscriptionsError {
-                        ListSubscriptionsError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ListSubscriptionsError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ListSubscriptionsError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ListSubscriptionsError::AuthorizationError(ref cause) => cause,
-ListSubscriptionsError::InternalError(ref cause) => cause,
-ListSubscriptionsError::InvalidParameter(ref cause) => cause,
-ListSubscriptionsError::Validation(ref cause) => cause,
-ListSubscriptionsError::Credentials(ref err) => err.description(),
-ListSubscriptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ListSubscriptionsError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ListSubscriptionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListSubscriptionsError {
+    fn from(err: XmlParseError) -> ListSubscriptionsError {
+        let XmlParseError(message) = err;
+        ListSubscriptionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListSubscriptionsError {
+    fn from(err: CredentialsError) -> ListSubscriptionsError {
+        ListSubscriptionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListSubscriptionsError {
+    fn from(err: HttpDispatchError) -> ListSubscriptionsError {
+        ListSubscriptionsError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListSubscriptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListSubscriptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListSubscriptionsError::AuthorizationError(ref cause) => cause,
+            ListSubscriptionsError::InternalError(ref cause) => cause,
+            ListSubscriptionsError::InvalidParameter(ref cause) => cause,
+            ListSubscriptionsError::Validation(ref cause) => cause,
+            ListSubscriptionsError::Credentials(ref err) => err.description(),
+            ListSubscriptionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListSubscriptionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListSubscriptionsByTopic
-                #[derive(Debug, PartialEq)]
-                pub enum ListSubscriptionsByTopicError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ListSubscriptionsByTopicError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ListSubscriptionsByTopicError {
-                    pub fn from_body(body: &str) -> ListSubscriptionsByTopicError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => ListSubscriptionsByTopicError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListSubscriptionsByTopicError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListSubscriptionsByTopicError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => ListSubscriptionsByTopicError::NotFound(String::from(parsed_error.message)),_ => ListSubscriptionsByTopicError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ListSubscriptionsByTopicError::Unknown(body.to_string())
-                       }
+
+impl ListSubscriptionsByTopicError {
+    pub fn from_body(body: &str) -> ListSubscriptionsByTopicError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => ListSubscriptionsByTopicError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => ListSubscriptionsByTopicError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => ListSubscriptionsByTopicError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => {
+                        ListSubscriptionsByTopicError::NotFound(String::from(parsed_error.message))
                     }
+                    _ => ListSubscriptionsByTopicError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ListSubscriptionsByTopicError {
-                    fn from(err: XmlParseError) -> ListSubscriptionsByTopicError {
-                        let XmlParseError(message) = err;
-                        ListSubscriptionsByTopicError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ListSubscriptionsByTopicError {
-                    fn from(err: CredentialsError) -> ListSubscriptionsByTopicError {
-                        ListSubscriptionsByTopicError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ListSubscriptionsByTopicError {
-                    fn from(err: HttpDispatchError) -> ListSubscriptionsByTopicError {
-                        ListSubscriptionsByTopicError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ListSubscriptionsByTopicError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ListSubscriptionsByTopicError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ListSubscriptionsByTopicError::AuthorizationError(ref cause) => cause,
-ListSubscriptionsByTopicError::InternalError(ref cause) => cause,
-ListSubscriptionsByTopicError::InvalidParameter(ref cause) => cause,
-ListSubscriptionsByTopicError::NotFound(ref cause) => cause,
-ListSubscriptionsByTopicError::Validation(ref cause) => cause,
-ListSubscriptionsByTopicError::Credentials(ref err) => err.description(),
-ListSubscriptionsByTopicError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ListSubscriptionsByTopicError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ListSubscriptionsByTopicError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListSubscriptionsByTopicError {
+    fn from(err: XmlParseError) -> ListSubscriptionsByTopicError {
+        let XmlParseError(message) = err;
+        ListSubscriptionsByTopicError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListSubscriptionsByTopicError {
+    fn from(err: CredentialsError) -> ListSubscriptionsByTopicError {
+        ListSubscriptionsByTopicError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListSubscriptionsByTopicError {
+    fn from(err: HttpDispatchError) -> ListSubscriptionsByTopicError {
+        ListSubscriptionsByTopicError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListSubscriptionsByTopicError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListSubscriptionsByTopicError {
+    fn description(&self) -> &str {
+        match *self {
+            ListSubscriptionsByTopicError::AuthorizationError(ref cause) => cause,
+            ListSubscriptionsByTopicError::InternalError(ref cause) => cause,
+            ListSubscriptionsByTopicError::InvalidParameter(ref cause) => cause,
+            ListSubscriptionsByTopicError::NotFound(ref cause) => cause,
+            ListSubscriptionsByTopicError::Validation(ref cause) => cause,
+            ListSubscriptionsByTopicError::Credentials(ref err) => err.description(),
+            ListSubscriptionsByTopicError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListSubscriptionsByTopicError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListTopics
-                #[derive(Debug, PartialEq)]
-                pub enum ListTopicsError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ListTopicsError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ListTopicsError {
-                    pub fn from_body(body: &str) -> ListTopicsError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => ListTopicsError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => ListTopicsError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => ListTopicsError::InvalidParameter(String::from(parsed_error.message)),_ => ListTopicsError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ListTopicsError::Unknown(body.to_string())
-                       }
+
+impl ListTopicsError {
+    pub fn from_body(body: &str) -> ListTopicsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => {
+                        ListTopicsError::AuthorizationError(String::from(parsed_error.message))
                     }
+                    "InternalErrorException" => {
+                        ListTopicsError::InternalError(String::from(parsed_error.message))
+                    }
+                    "InvalidParameterException" => {
+                        ListTopicsError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    _ => ListTopicsError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ListTopicsError {
-                    fn from(err: XmlParseError) -> ListTopicsError {
-                        let XmlParseError(message) = err;
-                        ListTopicsError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ListTopicsError {
-                    fn from(err: CredentialsError) -> ListTopicsError {
-                        ListTopicsError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ListTopicsError {
-                    fn from(err: HttpDispatchError) -> ListTopicsError {
-                        ListTopicsError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ListTopicsError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ListTopicsError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ListTopicsError::AuthorizationError(ref cause) => cause,
-ListTopicsError::InternalError(ref cause) => cause,
-ListTopicsError::InvalidParameter(ref cause) => cause,
-ListTopicsError::Validation(ref cause) => cause,
-ListTopicsError::Credentials(ref err) => err.description(),
-ListTopicsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ListTopicsError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ListTopicsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListTopicsError {
+    fn from(err: XmlParseError) -> ListTopicsError {
+        let XmlParseError(message) = err;
+        ListTopicsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListTopicsError {
+    fn from(err: CredentialsError) -> ListTopicsError {
+        ListTopicsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTopicsError {
+    fn from(err: HttpDispatchError) -> ListTopicsError {
+        ListTopicsError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListTopicsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTopicsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTopicsError::AuthorizationError(ref cause) => cause,
+            ListTopicsError::InternalError(ref cause) => cause,
+            ListTopicsError::InvalidParameter(ref cause) => cause,
+            ListTopicsError::Validation(ref cause) => cause,
+            ListTopicsError::Credentials(ref err) => err.description(),
+            ListTopicsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListTopicsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by OptInPhoneNumber
-                #[derive(Debug, PartialEq)]
-                pub enum OptInPhoneNumberError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
-Throttled(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum OptInPhoneNumberError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl OptInPhoneNumberError {
-                    pub fn from_body(body: &str) -> OptInPhoneNumberError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => OptInPhoneNumberError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => OptInPhoneNumberError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => OptInPhoneNumberError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => OptInPhoneNumberError::Throttled(String::from(parsed_error.message)),_ => OptInPhoneNumberError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => OptInPhoneNumberError::Unknown(body.to_string())
-                       }
+
+impl OptInPhoneNumberError {
+    pub fn from_body(body: &str) -> OptInPhoneNumberError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => OptInPhoneNumberError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => {
+                        OptInPhoneNumberError::InternalError(String::from(parsed_error.message))
                     }
+                    "InvalidParameterException" => {
+                        OptInPhoneNumberError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "ThrottledException" => {
+                        OptInPhoneNumberError::Throttled(String::from(parsed_error.message))
+                    }
+                    _ => OptInPhoneNumberError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for OptInPhoneNumberError {
-                    fn from(err: XmlParseError) -> OptInPhoneNumberError {
-                        let XmlParseError(message) = err;
-                        OptInPhoneNumberError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for OptInPhoneNumberError {
-                    fn from(err: CredentialsError) -> OptInPhoneNumberError {
-                        OptInPhoneNumberError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for OptInPhoneNumberError {
-                    fn from(err: HttpDispatchError) -> OptInPhoneNumberError {
-                        OptInPhoneNumberError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for OptInPhoneNumberError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for OptInPhoneNumberError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            OptInPhoneNumberError::AuthorizationError(ref cause) => cause,
-OptInPhoneNumberError::InternalError(ref cause) => cause,
-OptInPhoneNumberError::InvalidParameter(ref cause) => cause,
-OptInPhoneNumberError::Throttled(ref cause) => cause,
-OptInPhoneNumberError::Validation(ref cause) => cause,
-OptInPhoneNumberError::Credentials(ref err) => err.description(),
-OptInPhoneNumberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-OptInPhoneNumberError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => OptInPhoneNumberError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for OptInPhoneNumberError {
+    fn from(err: XmlParseError) -> OptInPhoneNumberError {
+        let XmlParseError(message) = err;
+        OptInPhoneNumberError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for OptInPhoneNumberError {
+    fn from(err: CredentialsError) -> OptInPhoneNumberError {
+        OptInPhoneNumberError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for OptInPhoneNumberError {
+    fn from(err: HttpDispatchError) -> OptInPhoneNumberError {
+        OptInPhoneNumberError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for OptInPhoneNumberError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for OptInPhoneNumberError {
+    fn description(&self) -> &str {
+        match *self {
+            OptInPhoneNumberError::AuthorizationError(ref cause) => cause,
+            OptInPhoneNumberError::InternalError(ref cause) => cause,
+            OptInPhoneNumberError::InvalidParameter(ref cause) => cause,
+            OptInPhoneNumberError::Throttled(ref cause) => cause,
+            OptInPhoneNumberError::Validation(ref cause) => cause,
+            OptInPhoneNumberError::Credentials(ref err) => err.description(),
+            OptInPhoneNumberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            OptInPhoneNumberError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by Publish
-                #[derive(Debug, PartialEq)]
-                pub enum PublishError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Exception error indicating endpoint disabled.</p>
-EndpointDisabled(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameterValue(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Exception error indicating platform application disabled.</p>
-PlatformApplicationDisabled(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum PublishError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Exception error indicating endpoint disabled.</p>
+    EndpointDisabled(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameterValue(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    ///<p>Exception error indicating platform application disabled.</p>
+    PlatformApplicationDisabled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl PublishError {
-                    pub fn from_body(body: &str) -> PublishError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => PublishError::AuthorizationError(String::from(parsed_error.message)),"EndpointDisabledException" => PublishError::EndpointDisabled(String::from(parsed_error.message)),"InternalErrorException" => PublishError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => PublishError::InvalidParameter(String::from(parsed_error.message)),"InvalidParameterValueException" => PublishError::InvalidParameterValue(String::from(parsed_error.message)),"NotFoundException" => PublishError::NotFound(String::from(parsed_error.message)),"PlatformApplicationDisabledException" => PublishError::PlatformApplicationDisabled(String::from(parsed_error.message)),_ => PublishError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => PublishError::Unknown(body.to_string())
-                       }
+
+impl PublishError {
+    pub fn from_body(body: &str) -> PublishError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => {
+                        PublishError::AuthorizationError(String::from(parsed_error.message))
                     }
+                    "EndpointDisabledException" => {
+                        PublishError::EndpointDisabled(String::from(parsed_error.message))
+                    }
+                    "InternalErrorException" => {
+                        PublishError::InternalError(String::from(parsed_error.message))
+                    }
+                    "InvalidParameterException" => {
+                        PublishError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "InvalidParameterValueException" => {
+                        PublishError::InvalidParameterValue(String::from(parsed_error.message))
+                    }
+                    "NotFoundException" => {
+                        PublishError::NotFound(String::from(parsed_error.message))
+                    }
+                    "PlatformApplicationDisabledException" => PublishError::PlatformApplicationDisabled(String::from(parsed_error.message)),
+                    _ => PublishError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for PublishError {
-                    fn from(err: XmlParseError) -> PublishError {
-                        let XmlParseError(message) = err;
-                        PublishError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for PublishError {
-                    fn from(err: CredentialsError) -> PublishError {
-                        PublishError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for PublishError {
-                    fn from(err: HttpDispatchError) -> PublishError {
-                        PublishError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for PublishError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for PublishError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            PublishError::AuthorizationError(ref cause) => cause,
-PublishError::EndpointDisabled(ref cause) => cause,
-PublishError::InternalError(ref cause) => cause,
-PublishError::InvalidParameter(ref cause) => cause,
-PublishError::InvalidParameterValue(ref cause) => cause,
-PublishError::NotFound(ref cause) => cause,
-PublishError::PlatformApplicationDisabled(ref cause) => cause,
-PublishError::Validation(ref cause) => cause,
-PublishError::Credentials(ref err) => err.description(),
-PublishError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-PublishError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => PublishError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for PublishError {
+    fn from(err: XmlParseError) -> PublishError {
+        let XmlParseError(message) = err;
+        PublishError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for PublishError {
+    fn from(err: CredentialsError) -> PublishError {
+        PublishError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PublishError {
+    fn from(err: HttpDispatchError) -> PublishError {
+        PublishError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for PublishError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PublishError {
+    fn description(&self) -> &str {
+        match *self {
+            PublishError::AuthorizationError(ref cause) => cause,
+            PublishError::EndpointDisabled(ref cause) => cause,
+            PublishError::InternalError(ref cause) => cause,
+            PublishError::InvalidParameter(ref cause) => cause,
+            PublishError::InvalidParameterValue(ref cause) => cause,
+            PublishError::NotFound(ref cause) => cause,
+            PublishError::PlatformApplicationDisabled(ref cause) => cause,
+            PublishError::Validation(ref cause) => cause,
+            PublishError::Credentials(ref err) => err.description(),
+            PublishError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            PublishError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by RemovePermission
-                #[derive(Debug, PartialEq)]
-                pub enum RemovePermissionError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum RemovePermissionError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl RemovePermissionError {
-                    pub fn from_body(body: &str) -> RemovePermissionError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => RemovePermissionError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => RemovePermissionError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => RemovePermissionError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => RemovePermissionError::NotFound(String::from(parsed_error.message)),_ => RemovePermissionError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => RemovePermissionError::Unknown(body.to_string())
-                       }
+
+impl RemovePermissionError {
+    pub fn from_body(body: &str) -> RemovePermissionError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => RemovePermissionError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => {
+                        RemovePermissionError::InternalError(String::from(parsed_error.message))
                     }
+                    "InvalidParameterException" => {
+                        RemovePermissionError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "NotFoundException" => {
+                        RemovePermissionError::NotFound(String::from(parsed_error.message))
+                    }
+                    _ => RemovePermissionError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for RemovePermissionError {
-                    fn from(err: XmlParseError) -> RemovePermissionError {
-                        let XmlParseError(message) = err;
-                        RemovePermissionError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for RemovePermissionError {
-                    fn from(err: CredentialsError) -> RemovePermissionError {
-                        RemovePermissionError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for RemovePermissionError {
-                    fn from(err: HttpDispatchError) -> RemovePermissionError {
-                        RemovePermissionError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for RemovePermissionError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for RemovePermissionError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            RemovePermissionError::AuthorizationError(ref cause) => cause,
-RemovePermissionError::InternalError(ref cause) => cause,
-RemovePermissionError::InvalidParameter(ref cause) => cause,
-RemovePermissionError::NotFound(ref cause) => cause,
-RemovePermissionError::Validation(ref cause) => cause,
-RemovePermissionError::Credentials(ref err) => err.description(),
-RemovePermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-RemovePermissionError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => RemovePermissionError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for RemovePermissionError {
+    fn from(err: XmlParseError) -> RemovePermissionError {
+        let XmlParseError(message) = err;
+        RemovePermissionError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for RemovePermissionError {
+    fn from(err: CredentialsError) -> RemovePermissionError {
+        RemovePermissionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RemovePermissionError {
+    fn from(err: HttpDispatchError) -> RemovePermissionError {
+        RemovePermissionError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for RemovePermissionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RemovePermissionError {
+    fn description(&self) -> &str {
+        match *self {
+            RemovePermissionError::AuthorizationError(ref cause) => cause,
+            RemovePermissionError::InternalError(ref cause) => cause,
+            RemovePermissionError::InvalidParameter(ref cause) => cause,
+            RemovePermissionError::NotFound(ref cause) => cause,
+            RemovePermissionError::Validation(ref cause) => cause,
+            RemovePermissionError::Credentials(ref err) => err.description(),
+            RemovePermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            RemovePermissionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SetEndpointAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum SetEndpointAttributesError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum SetEndpointAttributesError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl SetEndpointAttributesError {
-                    pub fn from_body(body: &str) -> SetEndpointAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => SetEndpointAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SetEndpointAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SetEndpointAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => SetEndpointAttributesError::NotFound(String::from(parsed_error.message)),_ => SetEndpointAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => SetEndpointAttributesError::Unknown(body.to_string())
-                       }
+
+impl SetEndpointAttributesError {
+    pub fn from_body(body: &str) -> SetEndpointAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => SetEndpointAttributesError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => SetEndpointAttributesError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => SetEndpointAttributesError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => {
+                        SetEndpointAttributesError::NotFound(String::from(parsed_error.message))
                     }
+                    _ => SetEndpointAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for SetEndpointAttributesError {
-                    fn from(err: XmlParseError) -> SetEndpointAttributesError {
-                        let XmlParseError(message) = err;
-                        SetEndpointAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for SetEndpointAttributesError {
-                    fn from(err: CredentialsError) -> SetEndpointAttributesError {
-                        SetEndpointAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for SetEndpointAttributesError {
-                    fn from(err: HttpDispatchError) -> SetEndpointAttributesError {
-                        SetEndpointAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for SetEndpointAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for SetEndpointAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            SetEndpointAttributesError::AuthorizationError(ref cause) => cause,
-SetEndpointAttributesError::InternalError(ref cause) => cause,
-SetEndpointAttributesError::InvalidParameter(ref cause) => cause,
-SetEndpointAttributesError::NotFound(ref cause) => cause,
-SetEndpointAttributesError::Validation(ref cause) => cause,
-SetEndpointAttributesError::Credentials(ref err) => err.description(),
-SetEndpointAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-SetEndpointAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => SetEndpointAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SetEndpointAttributesError {
+    fn from(err: XmlParseError) -> SetEndpointAttributesError {
+        let XmlParseError(message) = err;
+        SetEndpointAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SetEndpointAttributesError {
+    fn from(err: CredentialsError) -> SetEndpointAttributesError {
+        SetEndpointAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetEndpointAttributesError {
+    fn from(err: HttpDispatchError) -> SetEndpointAttributesError {
+        SetEndpointAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for SetEndpointAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetEndpointAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            SetEndpointAttributesError::AuthorizationError(ref cause) => cause,
+            SetEndpointAttributesError::InternalError(ref cause) => cause,
+            SetEndpointAttributesError::InvalidParameter(ref cause) => cause,
+            SetEndpointAttributesError::NotFound(ref cause) => cause,
+            SetEndpointAttributesError::Validation(ref cause) => cause,
+            SetEndpointAttributesError::Credentials(ref err) => err.description(),
+            SetEndpointAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetEndpointAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SetPlatformApplicationAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum SetPlatformApplicationAttributesError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum SetPlatformApplicationAttributesError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl SetPlatformApplicationAttributesError {
-                    pub fn from_body(body: &str) -> SetPlatformApplicationAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => SetPlatformApplicationAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SetPlatformApplicationAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SetPlatformApplicationAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => SetPlatformApplicationAttributesError::NotFound(String::from(parsed_error.message)),_ => SetPlatformApplicationAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => SetPlatformApplicationAttributesError::Unknown(body.to_string())
-                       }
-                    }
+
+impl SetPlatformApplicationAttributesError {
+    pub fn from_body(body: &str) -> SetPlatformApplicationAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => SetPlatformApplicationAttributesError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => SetPlatformApplicationAttributesError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => SetPlatformApplicationAttributesError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => SetPlatformApplicationAttributesError::NotFound(String::from(parsed_error.message)),
+                    _ => SetPlatformApplicationAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for SetPlatformApplicationAttributesError {
-                    fn from(err: XmlParseError) -> SetPlatformApplicationAttributesError {
-                        let XmlParseError(message) = err;
-                        SetPlatformApplicationAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for SetPlatformApplicationAttributesError {
-                    fn from(err: CredentialsError) -> SetPlatformApplicationAttributesError {
-                        SetPlatformApplicationAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for SetPlatformApplicationAttributesError {
-                    fn from(err: HttpDispatchError) -> SetPlatformApplicationAttributesError {
-                        SetPlatformApplicationAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for SetPlatformApplicationAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for SetPlatformApplicationAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            SetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
-SetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
-SetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
-SetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
-SetPlatformApplicationAttributesError::Validation(ref cause) => cause,
-SetPlatformApplicationAttributesError::Credentials(ref err) => err.description(),
-SetPlatformApplicationAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-SetPlatformApplicationAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => SetPlatformApplicationAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SetPlatformApplicationAttributesError {
+    fn from(err: XmlParseError) -> SetPlatformApplicationAttributesError {
+        let XmlParseError(message) = err;
+        SetPlatformApplicationAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SetPlatformApplicationAttributesError {
+    fn from(err: CredentialsError) -> SetPlatformApplicationAttributesError {
+        SetPlatformApplicationAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetPlatformApplicationAttributesError {
+    fn from(err: HttpDispatchError) -> SetPlatformApplicationAttributesError {
+        SetPlatformApplicationAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for SetPlatformApplicationAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetPlatformApplicationAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            SetPlatformApplicationAttributesError::AuthorizationError(ref cause) => cause,
+            SetPlatformApplicationAttributesError::InternalError(ref cause) => cause,
+            SetPlatformApplicationAttributesError::InvalidParameter(ref cause) => cause,
+            SetPlatformApplicationAttributesError::NotFound(ref cause) => cause,
+            SetPlatformApplicationAttributesError::Validation(ref cause) => cause,
+            SetPlatformApplicationAttributesError::Credentials(ref err) => err.description(),
+            SetPlatformApplicationAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetPlatformApplicationAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SetSMSAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum SetSMSAttributesError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
-Throttled(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum SetSMSAttributesError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl SetSMSAttributesError {
-                    pub fn from_body(body: &str) -> SetSMSAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => SetSMSAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SetSMSAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SetSMSAttributesError::InvalidParameter(String::from(parsed_error.message)),"ThrottledException" => SetSMSAttributesError::Throttled(String::from(parsed_error.message)),_ => SetSMSAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => SetSMSAttributesError::Unknown(body.to_string())
-                       }
+
+impl SetSMSAttributesError {
+    pub fn from_body(body: &str) -> SetSMSAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => SetSMSAttributesError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => {
+                        SetSMSAttributesError::InternalError(String::from(parsed_error.message))
                     }
+                    "InvalidParameterException" => {
+                        SetSMSAttributesError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "ThrottledException" => {
+                        SetSMSAttributesError::Throttled(String::from(parsed_error.message))
+                    }
+                    _ => SetSMSAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for SetSMSAttributesError {
-                    fn from(err: XmlParseError) -> SetSMSAttributesError {
-                        let XmlParseError(message) = err;
-                        SetSMSAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for SetSMSAttributesError {
-                    fn from(err: CredentialsError) -> SetSMSAttributesError {
-                        SetSMSAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for SetSMSAttributesError {
-                    fn from(err: HttpDispatchError) -> SetSMSAttributesError {
-                        SetSMSAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for SetSMSAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for SetSMSAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            SetSMSAttributesError::AuthorizationError(ref cause) => cause,
-SetSMSAttributesError::InternalError(ref cause) => cause,
-SetSMSAttributesError::InvalidParameter(ref cause) => cause,
-SetSMSAttributesError::Throttled(ref cause) => cause,
-SetSMSAttributesError::Validation(ref cause) => cause,
-SetSMSAttributesError::Credentials(ref err) => err.description(),
-SetSMSAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-SetSMSAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => SetSMSAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SetSMSAttributesError {
+    fn from(err: XmlParseError) -> SetSMSAttributesError {
+        let XmlParseError(message) = err;
+        SetSMSAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SetSMSAttributesError {
+    fn from(err: CredentialsError) -> SetSMSAttributesError {
+        SetSMSAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetSMSAttributesError {
+    fn from(err: HttpDispatchError) -> SetSMSAttributesError {
+        SetSMSAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for SetSMSAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetSMSAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            SetSMSAttributesError::AuthorizationError(ref cause) => cause,
+            SetSMSAttributesError::InternalError(ref cause) => cause,
+            SetSMSAttributesError::InvalidParameter(ref cause) => cause,
+            SetSMSAttributesError::Throttled(ref cause) => cause,
+            SetSMSAttributesError::Validation(ref cause) => cause,
+            SetSMSAttributesError::Credentials(ref err) => err.description(),
+            SetSMSAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            SetSMSAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SetSubscriptionAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum SetSubscriptionAttributesError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum SetSubscriptionAttributesError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl SetSubscriptionAttributesError {
-                    pub fn from_body(body: &str) -> SetSubscriptionAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => SetSubscriptionAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SetSubscriptionAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SetSubscriptionAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => SetSubscriptionAttributesError::NotFound(String::from(parsed_error.message)),_ => SetSubscriptionAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => SetSubscriptionAttributesError::Unknown(body.to_string())
-                       }
+
+impl SetSubscriptionAttributesError {
+    pub fn from_body(body: &str) -> SetSubscriptionAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => SetSubscriptionAttributesError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => SetSubscriptionAttributesError::InternalError(String::from(parsed_error.message)),
+                    "InvalidParameterException" => SetSubscriptionAttributesError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => {
+                        SetSubscriptionAttributesError::NotFound(String::from(parsed_error.message))
                     }
+                    _ => SetSubscriptionAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for SetSubscriptionAttributesError {
-                    fn from(err: XmlParseError) -> SetSubscriptionAttributesError {
-                        let XmlParseError(message) = err;
-                        SetSubscriptionAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for SetSubscriptionAttributesError {
-                    fn from(err: CredentialsError) -> SetSubscriptionAttributesError {
-                        SetSubscriptionAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for SetSubscriptionAttributesError {
-                    fn from(err: HttpDispatchError) -> SetSubscriptionAttributesError {
-                        SetSubscriptionAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for SetSubscriptionAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for SetSubscriptionAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            SetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
-SetSubscriptionAttributesError::InternalError(ref cause) => cause,
-SetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
-SetSubscriptionAttributesError::NotFound(ref cause) => cause,
-SetSubscriptionAttributesError::Validation(ref cause) => cause,
-SetSubscriptionAttributesError::Credentials(ref err) => err.description(),
-SetSubscriptionAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-SetSubscriptionAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => SetSubscriptionAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SetSubscriptionAttributesError {
+    fn from(err: XmlParseError) -> SetSubscriptionAttributesError {
+        let XmlParseError(message) = err;
+        SetSubscriptionAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SetSubscriptionAttributesError {
+    fn from(err: CredentialsError) -> SetSubscriptionAttributesError {
+        SetSubscriptionAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetSubscriptionAttributesError {
+    fn from(err: HttpDispatchError) -> SetSubscriptionAttributesError {
+        SetSubscriptionAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for SetSubscriptionAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetSubscriptionAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            SetSubscriptionAttributesError::AuthorizationError(ref cause) => cause,
+            SetSubscriptionAttributesError::InternalError(ref cause) => cause,
+            SetSubscriptionAttributesError::InvalidParameter(ref cause) => cause,
+            SetSubscriptionAttributesError::NotFound(ref cause) => cause,
+            SetSubscriptionAttributesError::Validation(ref cause) => cause,
+            SetSubscriptionAttributesError::Credentials(ref err) => err.description(),
+            SetSubscriptionAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetSubscriptionAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SetTopicAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum SetTopicAttributesError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum SetTopicAttributesError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl SetTopicAttributesError {
-                    pub fn from_body(body: &str) -> SetTopicAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => SetTopicAttributesError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SetTopicAttributesError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SetTopicAttributesError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => SetTopicAttributesError::NotFound(String::from(parsed_error.message)),_ => SetTopicAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => SetTopicAttributesError::Unknown(body.to_string())
-                       }
+
+impl SetTopicAttributesError {
+    pub fn from_body(body: &str) -> SetTopicAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => SetTopicAttributesError::AuthorizationError(String::from(parsed_error.message)),
+                    "InternalErrorException" => {
+                        SetTopicAttributesError::InternalError(String::from(parsed_error.message))
                     }
+                    "InvalidParameterException" => SetTopicAttributesError::InvalidParameter(String::from(parsed_error.message)),
+                    "NotFoundException" => {
+                        SetTopicAttributesError::NotFound(String::from(parsed_error.message))
+                    }
+                    _ => SetTopicAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for SetTopicAttributesError {
-                    fn from(err: XmlParseError) -> SetTopicAttributesError {
-                        let XmlParseError(message) = err;
-                        SetTopicAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for SetTopicAttributesError {
-                    fn from(err: CredentialsError) -> SetTopicAttributesError {
-                        SetTopicAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for SetTopicAttributesError {
-                    fn from(err: HttpDispatchError) -> SetTopicAttributesError {
-                        SetTopicAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for SetTopicAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for SetTopicAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            SetTopicAttributesError::AuthorizationError(ref cause) => cause,
-SetTopicAttributesError::InternalError(ref cause) => cause,
-SetTopicAttributesError::InvalidParameter(ref cause) => cause,
-SetTopicAttributesError::NotFound(ref cause) => cause,
-SetTopicAttributesError::Validation(ref cause) => cause,
-SetTopicAttributesError::Credentials(ref err) => err.description(),
-SetTopicAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-SetTopicAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => SetTopicAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SetTopicAttributesError {
+    fn from(err: XmlParseError) -> SetTopicAttributesError {
+        let XmlParseError(message) = err;
+        SetTopicAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SetTopicAttributesError {
+    fn from(err: CredentialsError) -> SetTopicAttributesError {
+        SetTopicAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetTopicAttributesError {
+    fn from(err: HttpDispatchError) -> SetTopicAttributesError {
+        SetTopicAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for SetTopicAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetTopicAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            SetTopicAttributesError::AuthorizationError(ref cause) => cause,
+            SetTopicAttributesError::InternalError(ref cause) => cause,
+            SetTopicAttributesError::InvalidParameter(ref cause) => cause,
+            SetTopicAttributesError::NotFound(ref cause) => cause,
+            SetTopicAttributesError::Validation(ref cause) => cause,
+            SetTopicAttributesError::Credentials(ref err) => err.description(),
+            SetTopicAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetTopicAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by Subscribe
-                #[derive(Debug, PartialEq)]
-                pub enum SubscribeError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),
-///<p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
-SubscriptionLimitExceeded(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum SubscribeError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    ///<p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
+    SubscriptionLimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl SubscribeError {
-                    pub fn from_body(body: &str) -> SubscribeError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => SubscribeError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => SubscribeError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => SubscribeError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => SubscribeError::NotFound(String::from(parsed_error.message)),"SubscriptionLimitExceededException" => SubscribeError::SubscriptionLimitExceeded(String::from(parsed_error.message)),_ => SubscribeError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => SubscribeError::Unknown(body.to_string())
-                       }
+
+impl SubscribeError {
+    pub fn from_body(body: &str) -> SubscribeError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => {
+                        SubscribeError::AuthorizationError(String::from(parsed_error.message))
                     }
+                    "InternalErrorException" => {
+                        SubscribeError::InternalError(String::from(parsed_error.message))
+                    }
+                    "InvalidParameterException" => {
+                        SubscribeError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "NotFoundException" => {
+                        SubscribeError::NotFound(String::from(parsed_error.message))
+                    }
+                    "SubscriptionLimitExceededException" => SubscribeError::SubscriptionLimitExceeded(String::from(parsed_error.message)),
+                    _ => SubscribeError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for SubscribeError {
-                    fn from(err: XmlParseError) -> SubscribeError {
-                        let XmlParseError(message) = err;
-                        SubscribeError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for SubscribeError {
-                    fn from(err: CredentialsError) -> SubscribeError {
-                        SubscribeError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for SubscribeError {
-                    fn from(err: HttpDispatchError) -> SubscribeError {
-                        SubscribeError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for SubscribeError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for SubscribeError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            SubscribeError::AuthorizationError(ref cause) => cause,
-SubscribeError::InternalError(ref cause) => cause,
-SubscribeError::InvalidParameter(ref cause) => cause,
-SubscribeError::NotFound(ref cause) => cause,
-SubscribeError::SubscriptionLimitExceeded(ref cause) => cause,
-SubscribeError::Validation(ref cause) => cause,
-SubscribeError::Credentials(ref err) => err.description(),
-SubscribeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-SubscribeError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => SubscribeError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SubscribeError {
+    fn from(err: XmlParseError) -> SubscribeError {
+        let XmlParseError(message) = err;
+        SubscribeError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SubscribeError {
+    fn from(err: CredentialsError) -> SubscribeError {
+        SubscribeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SubscribeError {
+    fn from(err: HttpDispatchError) -> SubscribeError {
+        SubscribeError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for SubscribeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SubscribeError {
+    fn description(&self) -> &str {
+        match *self {
+            SubscribeError::AuthorizationError(ref cause) => cause,
+            SubscribeError::InternalError(ref cause) => cause,
+            SubscribeError::InvalidParameter(ref cause) => cause,
+            SubscribeError::NotFound(ref cause) => cause,
+            SubscribeError::SubscriptionLimitExceeded(ref cause) => cause,
+            SubscribeError::Validation(ref cause) => cause,
+            SubscribeError::Credentials(ref err) => err.description(),
+            SubscribeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            SubscribeError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by Unsubscribe
-                #[derive(Debug, PartialEq)]
-                pub enum UnsubscribeError {
-                    
-///<p>Indicates that the user has been denied access to the requested resource.</p>
-AuthorizationError(String),
-///<p>Indicates an internal service error.</p>
-InternalError(String),
-///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
-InvalidParameter(String),
-///<p>Indicates that the requested resource does not exist.</p>
-NotFound(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum UnsubscribeError {
+    ///<p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    ///<p>Indicates an internal service error.</p>
+    InternalError(String),
+    ///<p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    ///<p>Indicates that the requested resource does not exist.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl UnsubscribeError {
-                    pub fn from_body(body: &str) -> UnsubscribeError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationErrorException" => UnsubscribeError::AuthorizationError(String::from(parsed_error.message)),"InternalErrorException" => UnsubscribeError::InternalError(String::from(parsed_error.message)),"InvalidParameterException" => UnsubscribeError::InvalidParameter(String::from(parsed_error.message)),"NotFoundException" => UnsubscribeError::NotFound(String::from(parsed_error.message)),_ => UnsubscribeError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => UnsubscribeError::Unknown(body.to_string())
-                       }
+
+impl UnsubscribeError {
+    pub fn from_body(body: &str) -> UnsubscribeError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "AuthorizationErrorException" => {
+                        UnsubscribeError::AuthorizationError(String::from(parsed_error.message))
                     }
+                    "InternalErrorException" => {
+                        UnsubscribeError::InternalError(String::from(parsed_error.message))
+                    }
+                    "InvalidParameterException" => {
+                        UnsubscribeError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "NotFoundException" => {
+                        UnsubscribeError::NotFound(String::from(parsed_error.message))
+                    }
+                    _ => UnsubscribeError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for UnsubscribeError {
-                    fn from(err: XmlParseError) -> UnsubscribeError {
-                        let XmlParseError(message) = err;
-                        UnsubscribeError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for UnsubscribeError {
-                    fn from(err: CredentialsError) -> UnsubscribeError {
-                        UnsubscribeError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for UnsubscribeError {
-                    fn from(err: HttpDispatchError) -> UnsubscribeError {
-                        UnsubscribeError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for UnsubscribeError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for UnsubscribeError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            UnsubscribeError::AuthorizationError(ref cause) => cause,
-UnsubscribeError::InternalError(ref cause) => cause,
-UnsubscribeError::InvalidParameter(ref cause) => cause,
-UnsubscribeError::NotFound(ref cause) => cause,
-UnsubscribeError::Validation(ref cause) => cause,
-UnsubscribeError::Credentials(ref err) => err.description(),
-UnsubscribeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-UnsubscribeError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => UnsubscribeError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for UnsubscribeError {
+    fn from(err: XmlParseError) -> UnsubscribeError {
+        let XmlParseError(message) = err;
+        UnsubscribeError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UnsubscribeError {
+    fn from(err: CredentialsError) -> UnsubscribeError {
+        UnsubscribeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UnsubscribeError {
+    fn from(err: HttpDispatchError) -> UnsubscribeError {
+        UnsubscribeError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for UnsubscribeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UnsubscribeError {
+    fn description(&self) -> &str {
+        match *self {
+            UnsubscribeError::AuthorizationError(ref cause) => cause,
+            UnsubscribeError::InternalError(ref cause) => cause,
+            UnsubscribeError::InvalidParameter(ref cause) => cause,
+            UnsubscribeError::NotFound(ref cause) => cause,
+            UnsubscribeError::Validation(ref cause) => cause,
+            UnsubscribeError::Credentials(ref err) => err.description(),
+            UnsubscribeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UnsubscribeError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon SNS API. Amazon SNS clients implement this trait.
-        pub trait Sns {
-        
+pub trait Sns {
+    #[doc="<p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>"]
+    fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AddPermissionError>;
 
-                #[doc="<p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>"]
-                fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AddPermissionError>;
-                
 
-                #[doc="<p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>"]
-                fn check_if_phone_number_is_opted_out(&self, input: &CheckIfPhoneNumberIsOptedOutInput) -> Result<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError>;
-                
+    #[doc="<p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>"]
+    fn check_if_phone_number_is_opted_out
+        (&self,
+         input: &CheckIfPhoneNumberIsOptedOutInput)
+         -> Result<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError>;
 
-                #[doc="<p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to \"true\".</p>"]
-                fn confirm_subscription(&self, input: &ConfirmSubscriptionInput) -> Result<ConfirmSubscriptionResponse, ConfirmSubscriptionError>;
-                
 
-                #[doc="<p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is \"SSL certificate\". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is \"client id\". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is \"Package Security Identifier\". For MPNS, PlatformPrincipal is \"TLS certificate\". For Baidu, PlatformPrincipal is \"API key\".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is \"private key\". For GCM, PlatformCredential is \"API key\". For ADM, PlatformCredential is \"client secret\". For WNS, PlatformCredential is \"secret key\". For MPNS, PlatformCredential is \"private key\". For Baidu, PlatformCredential is \"secret key\". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html\">Getting Started with Apple Push Notification Service</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html\">Getting Started with Amazon Device Messaging</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html\">Getting Started with Baidu Cloud Push</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html\">Getting Started with Google Cloud Messaging for Android</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html\">Getting Started with MPNS</a>, or <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html\">Getting Started with WNS</a>. </p>"]
-                fn create_platform_application(&self, input: &CreatePlatformApplicationInput) -> Result<CreatePlatformApplicationResponse, CreatePlatformApplicationError>;
-                
+    #[doc="<p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to \"true\".</p>"]
+    fn confirm_subscription(&self,
+                            input: &ConfirmSubscriptionInput)
+                            -> Result<ConfirmSubscriptionResponse, ConfirmSubscriptionError>;
 
-                #[doc="<p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html\">Creating an Amazon SNS Endpoint for Baidu</a>. </p>"]
-                fn create_platform_endpoint(&self, input: &CreatePlatformEndpointInput) -> Result<CreateEndpointResponse, CreatePlatformEndpointError>;
-                
 
-                #[doc="<p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href=\"http://aws.amazon.com/sns/\">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>"]
-                fn create_topic(&self, input: &CreateTopicInput) -> Result<CreateTopicResponse, CreateTopicError>;
-                
+    #[doc="<p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is \"SSL certificate\". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is \"client id\". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is \"Package Security Identifier\". For MPNS, PlatformPrincipal is \"TLS certificate\". For Baidu, PlatformPrincipal is \"API key\".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is \"private key\". For GCM, PlatformCredential is \"API key\". For ADM, PlatformCredential is \"client secret\". For WNS, PlatformCredential is \"secret key\". For MPNS, PlatformCredential is \"private key\". For Baidu, PlatformCredential is \"secret key\". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html\">Getting Started with Apple Push Notification Service</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html\">Getting Started with Amazon Device Messaging</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html\">Getting Started with Baidu Cloud Push</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html\">Getting Started with Google Cloud Messaging for Android</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html\">Getting Started with MPNS</a>, or <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html\">Getting Started with WNS</a>. </p>"]
+    fn create_platform_application
+        (&self,
+         input: &CreatePlatformApplicationInput)
+         -> Result<CreatePlatformApplicationResponse, CreatePlatformApplicationError>;
 
-                #[doc="<p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>"]
-                fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), DeleteEndpointError>;
-                
 
-                #[doc="<p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn delete_platform_application(&self, input: &DeletePlatformApplicationInput) -> Result<(), DeletePlatformApplicationError>;
-                
+    #[doc="<p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html\">Creating an Amazon SNS Endpoint for Baidu</a>. </p>"]
+    fn create_platform_endpoint(&self,
+                                input: &CreatePlatformEndpointInput)
+                                -> Result<CreateEndpointResponse, CreatePlatformEndpointError>;
 
-                #[doc="<p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>"]
-                fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), DeleteTopicError>;
-                
 
-                #[doc="<p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn get_endpoint_attributes(&self, input: &GetEndpointAttributesInput) -> Result<GetEndpointAttributesResponse, GetEndpointAttributesError>;
-                
+    #[doc="<p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href=\"http://aws.amazon.com/sns/\">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>"]
+    fn create_topic(&self,
+                    input: &CreateTopicInput)
+                    -> Result<CreateTopicResponse, CreateTopicError>;
 
-                #[doc="<p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn get_platform_application_attributes(&self, input: &GetPlatformApplicationAttributesInput) -> Result<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>;
-                
 
-                #[doc="<p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>"]
-                fn get_sms_attributes(&self, input: &GetSMSAttributesInput) -> Result<GetSMSAttributesResponse, GetSMSAttributesError>;
-                
+    #[doc="<p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>"]
+    fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), DeleteEndpointError>;
 
-                #[doc="<p>Returns all of the properties of a subscription.</p>"]
-                fn get_subscription_attributes(&self, input: &GetSubscriptionAttributesInput) -> Result<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError>;
-                
 
-                #[doc="<p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>"]
-                fn get_topic_attributes(&self, input: &GetTopicAttributesInput) -> Result<GetTopicAttributesResponse, GetTopicAttributesError>;
-                
+    #[doc="<p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn delete_platform_application(&self,
+                                   input: &DeletePlatformApplicationInput)
+                                   -> Result<(), DeletePlatformApplicationError>;
 
-                #[doc="<p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn list_endpoints_by_platform_application(&self, input: &ListEndpointsByPlatformApplicationInput) -> Result<ListEndpointsByPlatformApplicationResponse, ListEndpointsByPlatformApplicationError>;
-                
 
-                #[doc="<p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>"]
-                fn list_phone_numbers_opted_out(&self, input: &ListPhoneNumbersOptedOutInput) -> Result<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError>;
-                
+    #[doc="<p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>"]
+    fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), DeleteTopicError>;
 
-                #[doc="<p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn list_platform_applications(&self, input: &ListPlatformApplicationsInput) -> Result<ListPlatformApplicationsResponse, ListPlatformApplicationsError>;
-                
 
-                #[doc="<p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>"]
-                fn list_subscriptions(&self, input: &ListSubscriptionsInput) -> Result<ListSubscriptionsResponse, ListSubscriptionsError>;
-                
+    #[doc="<p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn get_endpoint_attributes
+        (&self,
+         input: &GetEndpointAttributesInput)
+         -> Result<GetEndpointAttributesResponse, GetEndpointAttributesError>;
 
-                #[doc="<p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>"]
-                fn list_subscriptions_by_topic(&self, input: &ListSubscriptionsByTopicInput) -> Result<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError>;
-                
 
-                #[doc="<p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>"]
-                fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, ListTopicsError>;
-                
+    #[doc="<p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn get_platform_application_attributes
+        (&self,
+         input: &GetPlatformApplicationAttributesInput)
+         -> Result<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>;
 
-                #[doc="<p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>"]
-                fn opt_in_phone_number(&self, input: &OptInPhoneNumberInput) -> Result<OptInPhoneNumberResponse, OptInPhoneNumberError>;
-                
 
-                #[doc="<p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html\">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>"]
-                fn publish(&self, input: &PublishInput) -> Result<PublishResponse, PublishError>;
-                
+    #[doc="<p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>"]
+    fn get_sms_attributes(&self,
+                          input: &GetSMSAttributesInput)
+                          -> Result<GetSMSAttributesResponse, GetSMSAttributesError>;
 
-                #[doc="<p>Removes a statement from a topic's access control policy.</p>"]
-                fn remove_permission(&self, input: &RemovePermissionInput) -> Result<(), RemovePermissionError>;
-                
 
-                #[doc="<p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn set_endpoint_attributes(&self, input: &SetEndpointAttributesInput) -> Result<(), SetEndpointAttributesError>;
-                
+    #[doc="<p>Returns all of the properties of a subscription.</p>"]
+    fn get_subscription_attributes
+        (&self,
+         input: &GetSubscriptionAttributesInput)
+         -> Result<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError>;
 
-                #[doc="<p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html\">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>"]
-                fn set_platform_application_attributes(&self, input: &SetPlatformApplicationAttributesInput) -> Result<(), SetPlatformApplicationAttributesError>;
-                
 
-                #[doc="<p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html\">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>"]
-                fn set_sms_attributes(&self, input: &SetSMSAttributesInput) -> Result<SetSMSAttributesResponse, SetSMSAttributesError>;
-                
+    #[doc="<p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>"]
+    fn get_topic_attributes(&self,
+                            input: &GetTopicAttributesInput)
+                            -> Result<GetTopicAttributesResponse, GetTopicAttributesError>;
 
-                #[doc="<p>Allows a subscription owner to set an attribute of the topic to a new value.</p>"]
-                fn set_subscription_attributes(&self, input: &SetSubscriptionAttributesInput) -> Result<(), SetSubscriptionAttributesError>;
-                
 
-                #[doc="<p>Allows a topic owner to set an attribute of the topic to a new value.</p>"]
-                fn set_topic_attributes(&self, input: &SetTopicAttributesInput) -> Result<(), SetTopicAttributesError>;
-                
+    #[doc="<p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn list_endpoints_by_platform_application
+        (&self,
+         input: &ListEndpointsByPlatformApplicationInput)
+         -> Result<ListEndpointsByPlatformApplicationResponse,
+                   ListEndpointsByPlatformApplicationError>;
 
-                #[doc="<p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>"]
-                fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, SubscribeError>;
-                
 
-                #[doc="<p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>"]
-                fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), UnsubscribeError>;
-                
+    #[doc="<p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>"]
+    fn list_phone_numbers_opted_out
+        (&self,
+         input: &ListPhoneNumbersOptedOutInput)
+         -> Result<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError>;
+
+
+    #[doc="<p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn list_platform_applications
+        (&self,
+         input: &ListPlatformApplicationsInput)
+         -> Result<ListPlatformApplicationsResponse, ListPlatformApplicationsError>;
+
+
+    #[doc="<p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>"]
+    fn list_subscriptions(&self,
+                          input: &ListSubscriptionsInput)
+                          -> Result<ListSubscriptionsResponse, ListSubscriptionsError>;
+
+
+    #[doc="<p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>"]
+    fn list_subscriptions_by_topic
+        (&self,
+         input: &ListSubscriptionsByTopicInput)
+         -> Result<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError>;
+
+
+    #[doc="<p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>"]
+    fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, ListTopicsError>;
+
+
+    #[doc="<p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>"]
+    fn opt_in_phone_number(&self,
+                           input: &OptInPhoneNumberInput)
+                           -> Result<OptInPhoneNumberResponse, OptInPhoneNumberError>;
+
+
+    #[doc="<p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html\">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>"]
+    fn publish(&self, input: &PublishInput) -> Result<PublishResponse, PublishError>;
+
+
+    #[doc="<p>Removes a statement from a topic's access control policy.</p>"]
+    fn remove_permission(&self,
+                         input: &RemovePermissionInput)
+                         -> Result<(), RemovePermissionError>;
+
+
+    #[doc="<p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn set_endpoint_attributes(&self,
+                               input: &SetEndpointAttributesInput)
+                               -> Result<(), SetEndpointAttributesError>;
+
+
+    #[doc="<p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html\">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>"]
+    fn set_platform_application_attributes(&self,
+                                           input: &SetPlatformApplicationAttributesInput)
+                                           -> Result<(), SetPlatformApplicationAttributesError>;
+
+
+    #[doc="<p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html\">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>"]
+    fn set_sms_attributes(&self,
+                          input: &SetSMSAttributesInput)
+                          -> Result<SetSMSAttributesResponse, SetSMSAttributesError>;
+
+
+    #[doc="<p>Allows a subscription owner to set an attribute of the topic to a new value.</p>"]
+    fn set_subscription_attributes(&self,
+                                   input: &SetSubscriptionAttributesInput)
+                                   -> Result<(), SetSubscriptionAttributesError>;
+
+
+    #[doc="<p>Allows a topic owner to set an attribute of the topic to a new value.</p>"]
+    fn set_topic_attributes(&self,
+                            input: &SetTopicAttributesInput)
+                            -> Result<(), SetTopicAttributesError>;
+
+
+    #[doc="<p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>"]
+    fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, SubscribeError>;
+
+
+    #[doc="<p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>"]
+    fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), UnsubscribeError>;
 }
 /// A client for the Amazon SNS API.
-        pub struct SnsClient<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {
-            credentials_provider: P,
-            region: region::Region,
-            dispatcher: D,
-        }
-
-        impl<P, D> SnsClient<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {
-            pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
-                  SnsClient {
-                    credentials_provider: credentials_provider,
-                    region: region,
-                    dispatcher: request_dispatcher
-                }
-            }
-        }
-
-        impl<P, D> Sns for SnsClient<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {
-        
-
-                #[doc="<p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>"]
-                fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AddPermissionError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "AddPermission");
-                    params.put("Version", "2010-03-31");
-                    AddPermissionInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AddPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>"]
-                fn check_if_phone_number_is_opted_out(&self, input: &CheckIfPhoneNumberIsOptedOutInput) -> Result<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "CheckIfPhoneNumberIsOptedOut");
-                    params.put("Version", "2010-03-31");
-                    CheckIfPhoneNumberIsOptedOutInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = CheckIfPhoneNumberIsOptedOutResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CheckIfPhoneNumberIsOptedOutResponseDeserializer::deserialize("CheckIfPhoneNumberIsOptedOutResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CheckIfPhoneNumberIsOptedOutError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to \"true\".</p>"]
-                fn confirm_subscription(&self, input: &ConfirmSubscriptionInput) -> Result<ConfirmSubscriptionResponse, ConfirmSubscriptionError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ConfirmSubscription");
-                    params.put("Version", "2010-03-31");
-                    ConfirmSubscriptionInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = ConfirmSubscriptionResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ConfirmSubscriptionResponseDeserializer::deserialize("ConfirmSubscriptionResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ConfirmSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is \"SSL certificate\". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is \"client id\". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is \"Package Security Identifier\". For MPNS, PlatformPrincipal is \"TLS certificate\". For Baidu, PlatformPrincipal is \"API key\".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is \"private key\". For GCM, PlatformCredential is \"API key\". For ADM, PlatformCredential is \"client secret\". For WNS, PlatformCredential is \"secret key\". For MPNS, PlatformCredential is \"private key\". For Baidu, PlatformCredential is \"secret key\". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html\">Getting Started with Apple Push Notification Service</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html\">Getting Started with Amazon Device Messaging</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html\">Getting Started with Baidu Cloud Push</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html\">Getting Started with Google Cloud Messaging for Android</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html\">Getting Started with MPNS</a>, or <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html\">Getting Started with WNS</a>. </p>"]
-                fn create_platform_application(&self, input: &CreatePlatformApplicationInput) -> Result<CreatePlatformApplicationResponse, CreatePlatformApplicationError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "CreatePlatformApplication");
-                    params.put("Version", "2010-03-31");
-                    CreatePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = CreatePlatformApplicationResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreatePlatformApplicationResponseDeserializer::deserialize("CreatePlatformApplicationResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreatePlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html\">Creating an Amazon SNS Endpoint for Baidu</a>. </p>"]
-                fn create_platform_endpoint(&self, input: &CreatePlatformEndpointInput) -> Result<CreateEndpointResponse, CreatePlatformEndpointError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "CreatePlatformEndpoint");
-                    params.put("Version", "2010-03-31");
-                    CreatePlatformEndpointInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = CreateEndpointResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateEndpointResponseDeserializer::deserialize("CreatePlatformEndpointResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreatePlatformEndpointError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href=\"http://aws.amazon.com/sns/\">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>"]
-                fn create_topic(&self, input: &CreateTopicInput) -> Result<CreateTopicResponse, CreateTopicError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "CreateTopic");
-                    params.put("Version", "2010-03-31");
-                    CreateTopicInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = CreateTopicResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateTopicResponseDeserializer::deserialize("CreateTopicResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>"]
-                fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), DeleteEndpointError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "DeleteEndpoint");
-                    params.put("Version", "2010-03-31");
-                    DeleteEndpointInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteEndpointError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn delete_platform_application(&self, input: &DeletePlatformApplicationInput) -> Result<(), DeletePlatformApplicationError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "DeletePlatformApplication");
-                    params.put("Version", "2010-03-31");
-                    DeletePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeletePlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>"]
-                fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), DeleteTopicError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "DeleteTopic");
-                    params.put("Version", "2010-03-31");
-                    DeleteTopicInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn get_endpoint_attributes(&self, input: &GetEndpointAttributesInput) -> Result<GetEndpointAttributesResponse, GetEndpointAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "GetEndpointAttributes");
-                    params.put("Version", "2010-03-31");
-                    GetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = GetEndpointAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetEndpointAttributesResponseDeserializer::deserialize("GetEndpointAttributesResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetEndpointAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn get_platform_application_attributes(&self, input: &GetPlatformApplicationAttributesInput) -> Result<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "GetPlatformApplicationAttributes");
-                    params.put("Version", "2010-03-31");
-                    GetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = GetPlatformApplicationAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetPlatformApplicationAttributesResponseDeserializer::deserialize("GetPlatformApplicationAttributesResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>"]
-                fn get_sms_attributes(&self, input: &GetSMSAttributesInput) -> Result<GetSMSAttributesResponse, GetSMSAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "GetSMSAttributes");
-                    params.put("Version", "2010-03-31");
-                    GetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = GetSMSAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetSMSAttributesResponseDeserializer::deserialize("GetSMSAttributesResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetSMSAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Returns all of the properties of a subscription.</p>"]
-                fn get_subscription_attributes(&self, input: &GetSubscriptionAttributesInput) -> Result<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "GetSubscriptionAttributes");
-                    params.put("Version", "2010-03-31");
-                    GetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = GetSubscriptionAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetSubscriptionAttributesResponseDeserializer::deserialize("GetSubscriptionAttributesResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>"]
-                fn get_topic_attributes(&self, input: &GetTopicAttributesInput) -> Result<GetTopicAttributesResponse, GetTopicAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "GetTopicAttributes");
-                    params.put("Version", "2010-03-31");
-                    GetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = GetTopicAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetTopicAttributesResponseDeserializer::deserialize("GetTopicAttributesResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetTopicAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn list_endpoints_by_platform_application(&self, input: &ListEndpointsByPlatformApplicationInput) -> Result<ListEndpointsByPlatformApplicationResponse, ListEndpointsByPlatformApplicationError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ListEndpointsByPlatformApplication");
-                    params.put("Version", "2010-03-31");
-                    ListEndpointsByPlatformApplicationInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = ListEndpointsByPlatformApplicationResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListEndpointsByPlatformApplicationResponseDeserializer::deserialize("ListEndpointsByPlatformApplicationResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListEndpointsByPlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>"]
-                fn list_phone_numbers_opted_out(&self, input: &ListPhoneNumbersOptedOutInput) -> Result<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ListPhoneNumbersOptedOut");
-                    params.put("Version", "2010-03-31");
-                    ListPhoneNumbersOptedOutInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = ListPhoneNumbersOptedOutResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListPhoneNumbersOptedOutResponseDeserializer::deserialize("ListPhoneNumbersOptedOutResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListPhoneNumbersOptedOutError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn list_platform_applications(&self, input: &ListPlatformApplicationsInput) -> Result<ListPlatformApplicationsResponse, ListPlatformApplicationsError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ListPlatformApplications");
-                    params.put("Version", "2010-03-31");
-                    ListPlatformApplicationsInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = ListPlatformApplicationsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListPlatformApplicationsResponseDeserializer::deserialize("ListPlatformApplicationsResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListPlatformApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>"]
-                fn list_subscriptions(&self, input: &ListSubscriptionsInput) -> Result<ListSubscriptionsResponse, ListSubscriptionsError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ListSubscriptions");
-                    params.put("Version", "2010-03-31");
-                    ListSubscriptionsInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = ListSubscriptionsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListSubscriptionsResponseDeserializer::deserialize("ListSubscriptionsResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListSubscriptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>"]
-                fn list_subscriptions_by_topic(&self, input: &ListSubscriptionsByTopicInput) -> Result<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ListSubscriptionsByTopic");
-                    params.put("Version", "2010-03-31");
-                    ListSubscriptionsByTopicInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = ListSubscriptionsByTopicResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListSubscriptionsByTopicResponseDeserializer::deserialize("ListSubscriptionsByTopicResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListSubscriptionsByTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>"]
-                fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, ListTopicsError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ListTopics");
-                    params.put("Version", "2010-03-31");
-                    ListTopicsInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = ListTopicsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListTopicsResponseDeserializer::deserialize("ListTopicsResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListTopicsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>"]
-                fn opt_in_phone_number(&self, input: &OptInPhoneNumberInput) -> Result<OptInPhoneNumberResponse, OptInPhoneNumberError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "OptInPhoneNumber");
-                    params.put("Version", "2010-03-31");
-                    OptInPhoneNumberInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = OptInPhoneNumberResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(OptInPhoneNumberResponseDeserializer::deserialize("OptInPhoneNumberResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(OptInPhoneNumberError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html\">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>"]
-                fn publish(&self, input: &PublishInput) -> Result<PublishResponse, PublishError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "Publish");
-                    params.put("Version", "2010-03-31");
-                    PublishInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = PublishResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(PublishResponseDeserializer::deserialize("PublishResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PublishError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Removes a statement from a topic's access control policy.</p>"]
-                fn remove_permission(&self, input: &RemovePermissionInput) -> Result<(), RemovePermissionError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "RemovePermission");
-                    params.put("Version", "2010-03-31");
-                    RemovePermissionInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RemovePermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
-                fn set_endpoint_attributes(&self, input: &SetEndpointAttributesInput) -> Result<(), SetEndpointAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "SetEndpointAttributes");
-                    params.put("Version", "2010-03-31");
-                    SetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetEndpointAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html\">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>"]
-                fn set_platform_application_attributes(&self, input: &SetPlatformApplicationAttributesInput) -> Result<(), SetPlatformApplicationAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "SetPlatformApplicationAttributes");
-                    params.put("Version", "2010-03-31");
-                    SetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html\">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>"]
-                fn set_sms_attributes(&self, input: &SetSMSAttributesInput) -> Result<SetSMSAttributesResponse, SetSMSAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "SetSMSAttributes");
-                    params.put("Version", "2010-03-31");
-                    SetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = SetSMSAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SetSMSAttributesResponseDeserializer::deserialize("SetSMSAttributesResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetSMSAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Allows a subscription owner to set an attribute of the topic to a new value.</p>"]
-                fn set_subscription_attributes(&self, input: &SetSubscriptionAttributesInput) -> Result<(), SetSubscriptionAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "SetSubscriptionAttributes");
-                    params.put("Version", "2010-03-31");
-                    SetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Allows a topic owner to set an attribute of the topic to a new value.</p>"]
-                fn set_topic_attributes(&self, input: &SetTopicAttributesInput) -> Result<(), SetTopicAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "SetTopicAttributes");
-                    params.put("Version", "2010-03-31");
-                    SetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetTopicAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>"]
-                fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, SubscribeError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "Subscribe");
-                    params.put("Version", "2010-03-31");
-                    SubscribeInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = SubscribeResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SubscribeResponseDeserializer::deserialize("SubscribeResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SubscribeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>"]
-                fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), UnsubscribeError> {
-                    let mut request = SignedRequest::new("POST", "sns", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "Unsubscribe");
-                    params.put("Version", "2010-03-31");
-                    UnsubscribeInputSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(UnsubscribeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
+pub struct SnsClient<P, D>
+    where P: ProvideAwsCredentials,
+          D: DispatchSignedRequest
+{
+    credentials_provider: P,
+    region: region::Region,
+    dispatcher: D,
 }
 
-            #[cfg(test)]
-            mod protocol_tests {
-                
-            extern crate rusoto_mock;
-
-            use super::*;
-            use self::rusoto_mock::*;
-            use rusoto_core::Region as rusoto_region;
-
-            
-        #[test]
-        fn test_parse_error_sns_delete_topic() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/error", "sns-delete-topic.xml");
-            let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DeleteTopicInput::default();
-            let result = client.delete_topic(&request);
-            assert!(!result.is_ok(), "parse error: {:?}", result);
+impl<P, D> SnsClient<P, D>
+    where P: ProvideAwsCredentials,
+          D: DispatchSignedRequest
+{
+    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+        SnsClient {
+            credentials_provider: credentials_provider,
+            region: region,
+            dispatcher: request_dispatcher,
         }
-            
-        #[test]
-        fn test_parse_valid_sns_add_permission() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-add-permission.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = AddPermissionInput::default();
-            let result = client.add_permission(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
+    }
+}
 
+impl<P, D> Sns for SnsClient<P, D>
+    where P: ProvideAwsCredentials,
+          D: DispatchSignedRequest
+{
+    #[doc="<p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>"]
+    fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AddPermissionError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
 
-        #[test]
-        fn test_parse_valid_sns_confirm_subscription() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-confirm-subscription.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ConfirmSubscriptionInput::default();
-            let result = client.confirm_subscription(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
+        params.put("Action", "AddPermission");
+        params.put("Version", "2010-03-31");
+        AddPermissionInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
 
-
-        #[test]
-        fn test_parse_valid_sns_create_topic() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-create-topic.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateTopicInput::default();
-            let result = client.create_topic(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sns_get_subscription_attributes() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-get-subscription-attributes.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetSubscriptionAttributesInput::default();
-            let result = client.get_subscription_attributes(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sns_get_topic_attributes() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-get-topic-attributes.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetTopicAttributesInput::default();
-            let result = client.get_topic_attributes(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sns_list_subscriptions_by_topic() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-list-subscriptions-by-topic.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListSubscriptionsByTopicInput::default();
-            let result = client.list_subscriptions_by_topic(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sns_list_subscriptions() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-list-subscriptions.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListSubscriptionsInput::default();
-            let result = client.list_subscriptions(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sns_list_topics() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-list-topics.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListTopicsInput::default();
-            let result = client.list_topics(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sns_publish() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-publish.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = PublishInput::default();
-            let result = client.publish(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sns_subscribe() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sns-subscribe.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = SubscribeInput::default();
-            let result = client.subscribe(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
             }
-            
+            _ => {
+                Err(AddPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>"]
+    fn check_if_phone_number_is_opted_out
+        (&self,
+         input: &CheckIfPhoneNumberIsOptedOutInput)
+         -> Result<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CheckIfPhoneNumberIsOptedOut");
+        params.put("Version", "2010-03-31");
+        CheckIfPhoneNumberIsOptedOutInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = CheckIfPhoneNumberIsOptedOutResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(CheckIfPhoneNumberIsOptedOutResponseDeserializer::deserialize("CheckIfPhoneNumberIsOptedOutResult", &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(CheckIfPhoneNumberIsOptedOutError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to \"true\".</p>"]
+    fn confirm_subscription(&self,
+                            input: &ConfirmSubscriptionInput)
+                            -> Result<ConfirmSubscriptionResponse, ConfirmSubscriptionError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ConfirmSubscription");
+        params.put("Version", "2010-03-31");
+        ConfirmSubscriptionInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ConfirmSubscriptionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ConfirmSubscriptionResponseDeserializer::deserialize("ConfirmSubscriptionResult",
+                                                                                       &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(ConfirmSubscriptionError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is \"SSL certificate\". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is \"client id\". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is \"Package Security Identifier\". For MPNS, PlatformPrincipal is \"TLS certificate\". For Baidu, PlatformPrincipal is \"API key\".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is \"private key\". For GCM, PlatformCredential is \"API key\". For ADM, PlatformCredential is \"client secret\". For WNS, PlatformCredential is \"secret key\". For MPNS, PlatformCredential is \"private key\". For Baidu, PlatformCredential is \"secret key\". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html\">Getting Started with Apple Push Notification Service</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html\">Getting Started with Amazon Device Messaging</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html\">Getting Started with Baidu Cloud Push</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html\">Getting Started with Google Cloud Messaging for Android</a>, <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html\">Getting Started with MPNS</a>, or <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html\">Getting Started with WNS</a>. </p>"]
+    fn create_platform_application
+        (&self,
+         input: &CreatePlatformApplicationInput)
+         -> Result<CreatePlatformApplicationResponse, CreatePlatformApplicationError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreatePlatformApplication");
+        params.put("Version", "2010-03-31");
+        CreatePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreatePlatformApplicationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(CreatePlatformApplicationResponseDeserializer::deserialize("CreatePlatformApplicationResult", &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(CreatePlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html\">Creating an Amazon SNS Endpoint for Baidu</a>. </p>"]
+    fn create_platform_endpoint(&self,
+                                input: &CreatePlatformEndpointInput)
+                                -> Result<CreateEndpointResponse, CreatePlatformEndpointError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreatePlatformEndpoint");
+        params.put("Version", "2010-03-31");
+        CreatePlatformEndpointInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateEndpointResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(CreateEndpointResponseDeserializer::deserialize("CreatePlatformEndpointResult",
+                                                                                  &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(CreatePlatformEndpointError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href=\"http://aws.amazon.com/sns/\">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>"]
+    fn create_topic(&self,
+                    input: &CreateTopicInput)
+                    -> Result<CreateTopicResponse, CreateTopicError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateTopic");
+        params.put("Version", "2010-03-31");
+        CreateTopicInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateTopicResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(CreateTopicResponseDeserializer::deserialize("CreateTopicResult",
+                                                                               &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => Err(CreateTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>"]
+    fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), DeleteEndpointError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteEndpoint");
+        params.put("Version", "2010-03-31");
+        DeleteEndpointInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                Err(DeleteEndpointError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn delete_platform_application(&self,
+                                   input: &DeletePlatformApplicationInput)
+                                   -> Result<(), DeletePlatformApplicationError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeletePlatformApplication");
+        params.put("Version", "2010-03-31");
+        DeletePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                            Err(DeletePlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>"]
+    fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), DeleteTopicError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteTopic");
+        params.put("Version", "2010-03-31");
+        DeleteTopicInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => Err(DeleteTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn get_endpoint_attributes
+        (&self,
+         input: &GetEndpointAttributesInput)
+         -> Result<GetEndpointAttributesResponse, GetEndpointAttributesError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetEndpointAttributes");
+        params.put("Version", "2010-03-31");
+        GetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetEndpointAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result =
+                        try!(GetEndpointAttributesResponseDeserializer::deserialize("GetEndpointAttributesResult",
+                                                                                    &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(GetEndpointAttributesError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn get_platform_application_attributes
+        (&self,
+         input: &GetPlatformApplicationAttributesInput)
+         -> Result<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetPlatformApplicationAttributes");
+        params.put("Version", "2010-03-31");
+        GetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetPlatformApplicationAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(GetPlatformApplicationAttributesResponseDeserializer::deserialize("GetPlatformApplicationAttributesResult", &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(GetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>"]
+    fn get_sms_attributes(&self,
+                          input: &GetSMSAttributesInput)
+                          -> Result<GetSMSAttributesResponse, GetSMSAttributesError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetSMSAttributes");
+        params.put("Version", "2010-03-31");
+        GetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetSMSAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(GetSMSAttributesResponseDeserializer::deserialize("GetSMSAttributesResult",
+                                                                                    &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(GetSMSAttributesError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Returns all of the properties of a subscription.</p>"]
+    fn get_subscription_attributes
+        (&self,
+         input: &GetSubscriptionAttributesInput)
+         -> Result<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetSubscriptionAttributes");
+        params.put("Version", "2010-03-31");
+        GetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetSubscriptionAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(GetSubscriptionAttributesResponseDeserializer::deserialize("GetSubscriptionAttributesResult", &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(GetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>"]
+    fn get_topic_attributes(&self,
+                            input: &GetTopicAttributesInput)
+                            -> Result<GetTopicAttributesResponse, GetTopicAttributesError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetTopicAttributes");
+        params.put("Version", "2010-03-31");
+        GetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetTopicAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(GetTopicAttributesResponseDeserializer::deserialize("GetTopicAttributesResult",
+                                                                                      &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(GetTopicAttributesError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn list_endpoints_by_platform_application
+        (&self,
+         input: &ListEndpointsByPlatformApplicationInput)
+         -> Result<ListEndpointsByPlatformApplicationResponse,
+                   ListEndpointsByPlatformApplicationError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListEndpointsByPlatformApplication");
+        params.put("Version", "2010-03-31");
+        ListEndpointsByPlatformApplicationInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ListEndpointsByPlatformApplicationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ListEndpointsByPlatformApplicationResponseDeserializer::deserialize("ListEndpointsByPlatformApplicationResult", &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(ListEndpointsByPlatformApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>"]
+    fn list_phone_numbers_opted_out
+        (&self,
+         input: &ListPhoneNumbersOptedOutInput)
+         -> Result<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListPhoneNumbersOptedOut");
+        params.put("Version", "2010-03-31");
+        ListPhoneNumbersOptedOutInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ListPhoneNumbersOptedOutResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result =
+                        try!(ListPhoneNumbersOptedOutResponseDeserializer::deserialize("ListPhoneNumbersOptedOutResult",
+                                                                                       &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(ListPhoneNumbersOptedOutError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn list_platform_applications
+        (&self,
+         input: &ListPlatformApplicationsInput)
+         -> Result<ListPlatformApplicationsResponse, ListPlatformApplicationsError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListPlatformApplications");
+        params.put("Version", "2010-03-31");
+        ListPlatformApplicationsInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ListPlatformApplicationsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result =
+                        try!(ListPlatformApplicationsResponseDeserializer::deserialize("ListPlatformApplicationsResult",
+                                                                                       &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(ListPlatformApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>"]
+    fn list_subscriptions(&self,
+                          input: &ListSubscriptionsInput)
+                          -> Result<ListSubscriptionsResponse, ListSubscriptionsError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListSubscriptions");
+        params.put("Version", "2010-03-31");
+        ListSubscriptionsInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ListSubscriptionsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ListSubscriptionsResponseDeserializer::deserialize("ListSubscriptionsResult",
+                                                                                     &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(ListSubscriptionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>"]
+    fn list_subscriptions_by_topic
+        (&self,
+         input: &ListSubscriptionsByTopicInput)
+         -> Result<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListSubscriptionsByTopic");
+        params.put("Version", "2010-03-31");
+        ListSubscriptionsByTopicInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ListSubscriptionsByTopicResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result =
+                        try!(ListSubscriptionsByTopicResponseDeserializer::deserialize("ListSubscriptionsByTopicResult",
+                                                                                       &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(ListSubscriptionsByTopicError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>"]
+    fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, ListTopicsError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListTopics");
+        params.put("Version", "2010-03-31");
+        ListTopicsInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ListTopicsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ListTopicsResponseDeserializer::deserialize("ListTopicsResult",
+                                                                              &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => Err(ListTopicsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>"]
+    fn opt_in_phone_number(&self,
+                           input: &OptInPhoneNumberInput)
+                           -> Result<OptInPhoneNumberResponse, OptInPhoneNumberError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "OptInPhoneNumber");
+        params.put("Version", "2010-03-31");
+        OptInPhoneNumberInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = OptInPhoneNumberResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(OptInPhoneNumberResponseDeserializer::deserialize("OptInPhoneNumberResult",
+                                                                                    &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(OptInPhoneNumberError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html\">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>"]
+    fn publish(&self, input: &PublishInput) -> Result<PublishResponse, PublishError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "Publish");
+        params.put("Version", "2010-03-31");
+        PublishInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = PublishResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(PublishResponseDeserializer::deserialize("PublishResult",
+                                                                           &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => Err(PublishError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Removes a statement from a topic's access control policy.</p>"]
+    fn remove_permission(&self,
+                         input: &RemovePermissionInput)
+                         -> Result<(), RemovePermissionError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "RemovePermission");
+        params.put("Version", "2010-03-31");
+        RemovePermissionInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. </p>"]
+    fn set_endpoint_attributes(&self,
+                               input: &SetEndpointAttributesInput)
+                               -> Result<(), SetEndpointAttributesError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SetEndpointAttributes");
+        params.put("Version", "2010-03-31");
+        SetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                Err(SetEndpointAttributesError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html\">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html\">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>"]
+    fn set_platform_application_attributes(&self,
+                                           input: &SetPlatformApplicationAttributesInput)
+                                           -> Result<(), SetPlatformApplicationAttributesError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SetPlatformApplicationAttributes");
+        params.put("Version", "2010-03-31");
+        SetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                            Err(SetPlatformApplicationAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html\">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>"]
+    fn set_sms_attributes(&self,
+                          input: &SetSMSAttributesInput)
+                          -> Result<SetSMSAttributesResponse, SetSMSAttributesError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SetSMSAttributes");
+        params.put("Version", "2010-03-31");
+        SetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = SetSMSAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(SetSMSAttributesResponseDeserializer::deserialize("SetSMSAttributesResult",
+                                                                                    &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(SetSMSAttributesError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Allows a subscription owner to set an attribute of the topic to a new value.</p>"]
+    fn set_subscription_attributes(&self,
+                                   input: &SetSubscriptionAttributesInput)
+                                   -> Result<(), SetSubscriptionAttributesError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SetSubscriptionAttributes");
+        params.put("Version", "2010-03-31");
+        SetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                            Err(SetSubscriptionAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Allows a topic owner to set an attribute of the topic to a new value.</p>"]
+    fn set_topic_attributes(&self,
+                            input: &SetTopicAttributesInput)
+                            -> Result<(), SetTopicAttributesError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SetTopicAttributes");
+        params.put("Version", "2010-03-31");
+        SetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                Err(SetTopicAttributesError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>"]
+    fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, SubscribeError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "Subscribe");
+        params.put("Version", "2010-03-31");
+        SubscribeInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = SubscribeResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(SubscribeResponseDeserializer::deserialize("SubscribeResult",
+                                                                             &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => Err(SubscribeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>"]
+    fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), UnsubscribeError> {
+        let mut request = SignedRequest::new("POST", "sns", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "Unsubscribe");
+        params.put("Version", "2010-03-31");
+        UnsubscribeInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => Err(UnsubscribeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+}
+
+#[cfg(test)]
+mod protocol_tests {
+
+    extern crate rusoto_mock;
+
+    use super::*;
+    use self::rusoto_mock::*;
+    use rusoto_core::Region as rusoto_region;
+
+
+    #[test]
+    fn test_parse_error_sns_delete_topic() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/error",
+                                                              "sns-delete-topic.xml");
+        let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = DeleteTopicInput::default();
+        let result = client.delete_topic(&request);
+        assert!(!result.is_ok(), "parse error: {:?}", result);
+    }
+
+    #[test]
+    fn test_parse_valid_sns_list_topics() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-list-topics.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ListTopicsInput::default();
+        let result = client.list_topics(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sns_list_subscriptions() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-list-subscriptions.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ListSubscriptionsInput::default();
+        let result = client.list_subscriptions(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sns_get_topic_attributes() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-get-topic-attributes.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = GetTopicAttributesInput::default();
+        let result = client.get_topic_attributes(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sns_publish() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-publish.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = PublishInput::default();
+        let result = client.publish(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sns_get_subscription_attributes() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-get-subscription-attributes.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = GetSubscriptionAttributesInput::default();
+        let result = client.get_subscription_attributes(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sns_create_topic() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-create-topic.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = CreateTopicInput::default();
+        let result = client.create_topic(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sns_add_permission() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-add-permission.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = AddPermissionInput::default();
+        let result = client.add_permission(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sns_list_subscriptions_by_topic() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-list-subscriptions-by-topic.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ListSubscriptionsByTopicInput::default();
+        let result = client.list_subscriptions_by_topic(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sns_confirm_subscription() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-confirm-subscription.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ConfirmSubscriptionInput::default();
+        let result = client.confirm_subscription(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sns_subscribe() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-subscribe.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = SubscribeInput::default();
+        let result = client.subscribe(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+}
