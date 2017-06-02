@@ -1,133 +1,132 @@
 #[allow(warnings)]
-        use hyper::Client;
-        use hyper::status::StatusCode;
-        use rusoto_core::request::DispatchSignedRequest;
-        use rusoto_core::region;
+use hyper::Client;
+use hyper::status::StatusCode;
+use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::region;
 
-        use std::fmt;
-        use std::error::Error;
-        use rusoto_core::request::HttpDispatchError;
-        use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-    
+use std::fmt;
+use std::error::Error;
+use rusoto_core::request::HttpDispatchError;
+use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+
 use std::str::FromStr;
-            use xml::EventReader;
-            use xml::reader::ParserConfig;
-            use rusoto_core::param::{Params, ServiceParams};
-            use rusoto_core::signature::SignedRequest;
-            use xml::reader::XmlEvent;
-            use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-            use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
-            use rusoto_core::xmlerror::*;
+use xml::EventReader;
+use xml::reader::ParserConfig;
+use rusoto_core::param::{Params, ServiceParams};
+use rusoto_core::signature::SignedRequest;
+use xml::reader::XmlEvent;
+use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
+use rusoto_core::xmlerror::*;
 
-            enum DeserializerNext {
-                Close,
-                Skip,
-                Element(String),
-        }
+enum DeserializerNext {
+    Close,
+    Skip,
+    Element(String),
+}
 pub type AWSAccountIdList = Vec<String>;
 
-            /// Serialize `AWSAccountIdList` contents to a `SignedRequest`.
-            struct AWSAccountIdListSerializer;
-            impl AWSAccountIdListSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &AWSAccountIdList) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.{}", name, index+1);
-params.put(&key, &obj);
+/// Serialize `AWSAccountIdList` contents to a `SignedRequest`.
+struct AWSAccountIdListSerializer;
+impl AWSAccountIdListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AWSAccountIdList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
 }
-                }
-            }
-            
+
 pub type ActionNameList = Vec<String>;
 
-            /// Serialize `ActionNameList` contents to a `SignedRequest`.
-            struct ActionNameListSerializer;
-            impl ActionNameListSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ActionNameList) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.{}", name, index+1);
-params.put(&key, &obj);
+/// Serialize `ActionNameList` contents to a `SignedRequest`.
+struct ActionNameListSerializer;
+impl ActionNameListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ActionNameList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
 }
-                }
-            }
-            
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct AddPermissionRequest {
-                #[doc="<p>The AWS account number of the <a href=\"http://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P\">principal</a> who is given permission. The principal must have an AWS account, but does not need to be signed up for Amazon SQS. For information about locating the AWS account identification, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AWSCredentials.html\">Your AWS Identifiers</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
-pub aws_account_ids: AWSAccountIdList,
-#[doc="<p>The action the client wants to allow for the specified principal. The following values are valid:</p> <ul> <li> <p> <code>*</code> </p> </li> <li> <p> <code>ChangeMessageVisibility</code> </p> </li> <li> <p> <code>DeleteMessage</code> </p> </li> <li> <p> <code>GetQueueAttributes</code> </p> </li> <li> <p> <code>GetQueueUrl</code> </p> </li> <li> <p> <code>ReceiveMessage</code> </p> </li> <li> <p> <code>SendMessage</code> </p> </li> </ul> <p>For more information about these actions, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html#PermissionTypes\">Understanding Permissions</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>Specifying <code>SendMessage</code>, <code>DeleteMessage</code>, or <code>ChangeMessageVisibility</code> for <code>ActionName.n</code> also grants permissions for the corresponding batch versions of those actions: <code>SendMessageBatch</code>, <code>DeleteMessageBatch</code>, and <code>ChangeMessageVisibilityBatch</code>.</p>"]
-pub actions: ActionNameList,
-#[doc="<p>The unique identification of the permission you're setting (for example, <code>AliceSendMessage</code>). Maximum 80 characters. Allowed characters include alphanumeric characters, hyphens (<code>-</code>), and underscores (<code>_</code>).</p>"]
-pub label: String,
-#[doc="<p>The URL of the Amazon SQS queue to which permissions are added.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-            }
-            
+pub struct AddPermissionRequest {
+    #[doc="<p>The AWS account number of the <a href=\"http://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P\">principal</a> who is given permission. The principal must have an AWS account, but does not need to be signed up for Amazon SQS. For information about locating the AWS account identification, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AWSCredentials.html\">Your AWS Identifiers</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
+    pub aws_account_ids: AWSAccountIdList,
+    #[doc="<p>The action the client wants to allow for the specified principal. The following values are valid:</p> <ul> <li> <p> <code>*</code> </p> </li> <li> <p> <code>ChangeMessageVisibility</code> </p> </li> <li> <p> <code>DeleteMessage</code> </p> </li> <li> <p> <code>GetQueueAttributes</code> </p> </li> <li> <p> <code>GetQueueUrl</code> </p> </li> <li> <p> <code>ReceiveMessage</code> </p> </li> <li> <p> <code>SendMessage</code> </p> </li> </ul> <p>For more information about these actions, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html#PermissionTypes\">Understanding Permissions</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>Specifying <code>SendMessage</code>, <code>DeleteMessage</code>, or <code>ChangeMessageVisibility</code> for <code>ActionName.n</code> also grants permissions for the corresponding batch versions of those actions: <code>SendMessageBatch</code>, <code>DeleteMessageBatch</code>, and <code>ChangeMessageVisibilityBatch</code>.</p>"]
+    pub actions: ActionNameList,
+    #[doc="<p>The unique identification of the permission you're setting (for example, <code>AliceSendMessage</code>). Maximum 80 characters. Allowed characters include alphanumeric characters, hyphens (<code>-</code>), and underscores (<code>_</code>).</p>"]
+    pub label: String,
+    #[doc="<p>The URL of the Amazon SQS queue to which permissions are added.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+}
 
-            /// Serialize `AddPermissionRequest` contents to a `SignedRequest`.
-            struct AddPermissionRequestSerializer;
-            impl AddPermissionRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &AddPermissionRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `AddPermissionRequest` contents to a `SignedRequest`.
+struct AddPermissionRequestSerializer;
+impl AddPermissionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AddPermissionRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        AWSAccountIdListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "AWSAccountIds"),
-                &obj.aws_account_ids,
-            );
-ActionNameListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "Actions"),
-                &obj.actions,
-            );
-params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-        
-                }
-            }
-            
+        AWSAccountIdListSerializer::serialize(params,
+                                              &format!("{}{}", prefix, "AWSAccountIds"),
+                                              &obj.aws_account_ids);
+        ActionNameListSerializer::serialize(params,
+                                            &format!("{}{}", prefix, "Actions"),
+                                            &obj.actions);
+        params.put(&format!("{}{}", prefix, "Label"), &obj.label);
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+
+    }
+}
+
 pub type AttributeNameList = Vec<QueueAttributeName>;
 
-            /// Serialize `AttributeNameList` contents to a `SignedRequest`.
-            struct AttributeNameListSerializer;
-            impl AttributeNameListSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &AttributeNameList) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.{}", name, index+1);
-params.put(&key, &obj);
+/// Serialize `AttributeNameList` contents to a `SignedRequest`.
+struct AttributeNameListSerializer;
+impl AttributeNameListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AttributeNameList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
 }
-                }
-            }
-            
+
 #[doc="<p>This is used in the responses of batch API to give a detailed description of the result of an action on each entry in the request.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct BatchResultErrorEntry {
-                #[doc="<p>An error code representing why the action failed on this entry.</p>"]
-pub code: String,
-#[doc="<p>The <code>Id</code> of an entry in a batch request.</p>"]
-pub id: String,
-#[doc="<p>A message explaining why the action failed on this entry.</p>"]
-pub message: Option<String>,
-#[doc="<p>Specifies whether the error happened due to the sender's fault.</p>"]
-pub sender_fault: Boolean,
-            }
-            
+pub struct BatchResultErrorEntry {
+    #[doc="<p>An error code representing why the action failed on this entry.</p>"]
+    pub code: String,
+    #[doc="<p>The <code>Id</code> of an entry in a batch request.</p>"]
+    pub id: String,
+    #[doc="<p>A message explaining why the action failed on this entry.</p>"]
+    pub message: Option<String>,
+    #[doc="<p>Specifies whether the error happened due to the sender's fault.</p>"]
+    pub sender_fault: Boolean,
+}
+
 struct BatchResultErrorEntryDeserializer;
-            impl BatchResultErrorEntryDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<BatchResultErrorEntry, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl BatchResultErrorEntryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<BatchResultErrorEntry, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = BatchResultErrorEntry::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -135,87 +134,96 @@ struct BatchResultErrorEntryDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Code" => {
-                obj.code = try!(StringDeserializer::deserialize("Code", stack));
-            }
-"Id" => {
-                obj.id = try!(StringDeserializer::deserialize("Id", stack));
-            }
-"Message" => {
-                obj.message = Some(try!(StringDeserializer::deserialize("Message", stack)));
-            }
-"SenderFault" => {
-                obj.sender_fault = try!(BooleanDeserializer::deserialize("SenderFault", stack));
-            }
+                            obj.code = try!(StringDeserializer::deserialize("Code", stack));
+                        }
+                        "Id" => {
+                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                        }
+                        "Message" => {
+                            obj.message = Some(try!(StringDeserializer::deserialize("Message",
+                                                                                    stack)));
+                        }
+                        "SenderFault" => {
+                            obj.sender_fault = try!(BooleanDeserializer::deserialize("SenderFault",
+                                                                                     stack));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type BatchResultErrorEntryList = Vec<BatchResultErrorEntry>;
 struct BatchResultErrorEntryListDeserializer;
-            impl BatchResultErrorEntryListDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<BatchResultErrorEntryList, XmlParseError> {
-                    
+impl BatchResultErrorEntryListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<BatchResultErrorEntryList, XmlParseError> {
+
         let mut obj = vec![];
 
         loop {
 
             let consume_next_tag = match stack.peek() {
                 Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
-                _ => false
+                _ => false,
             };
 
             if consume_next_tag {
                 obj.push(try!(BatchResultErrorEntryDeserializer::deserialize(tag_name, stack)));
             } else {
-                break
+                break;
             }
 
         }
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type Binary = Vec<u8>;
 struct BinaryDeserializer;
-            impl BinaryDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<Binary, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl BinaryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Binary, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack)).into_bytes();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type BinaryList = Vec<Binary>;
 struct BinaryListDeserializer;
-            impl BinaryListDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<BinaryList, XmlParseError> {
-                    
+impl BinaryListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<BinaryList, XmlParseError> {
+
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -226,139 +234,151 @@ struct BinaryListDeserializer;
                     } else {
                         skip_tree(stack);
                     }
-                },
+                }
                 DeserializerNext::Close => {
                     try!(end_element(tag_name, stack));
                     break;
                 }
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         Ok(obj)
-        
-                }
-            }
 
-            /// Serialize `BinaryList` contents to a `SignedRequest`.
-            struct BinaryListSerializer;
-            impl BinaryListSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &BinaryList) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
-params.put(&key, ::std::str::from_utf8(&obj).unwrap());
+    }
 }
-                }
-            }
-            
+
+/// Serialize `BinaryList` contents to a `SignedRequest`.
+struct BinaryListSerializer;
+impl BinaryListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &BinaryList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, ::std::str::from_utf8(&obj).unwrap());
+        }
+    }
+}
+
 pub type Boolean = bool;
 struct BooleanDeserializer;
-            impl BooleanDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<Boolean, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl BooleanDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Boolean, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ChangeMessageVisibilityBatchRequest {
-                #[doc="<p>A list of receipt handles of the messages for which the visibility timeout must be changed.</p>"]
-pub entries: ChangeMessageVisibilityBatchRequestEntryList,
-#[doc="<p>The URL of the Amazon SQS queue whose messages' visibility is changed.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-            }
-            
+pub struct ChangeMessageVisibilityBatchRequest {
+    #[doc="<p>A list of receipt handles of the messages for which the visibility timeout must be changed.</p>"]
+    pub entries: ChangeMessageVisibilityBatchRequestEntryList,
+    #[doc="<p>The URL of the Amazon SQS queue whose messages' visibility is changed.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+}
 
-            /// Serialize `ChangeMessageVisibilityBatchRequest` contents to a `SignedRequest`.
-            struct ChangeMessageVisibilityBatchRequestSerializer;
-            impl ChangeMessageVisibilityBatchRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `ChangeMessageVisibilityBatchRequest` contents to a `SignedRequest`.
+struct ChangeMessageVisibilityBatchRequestSerializer;
+impl ChangeMessageVisibilityBatchRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        ChangeMessageVisibilityBatchRequestEntryListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "Entries"),
-                &obj.entries,
-            );
-params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-        
-                }
-            }
-            
+        ChangeMessageVisibilityBatchRequestEntryListSerializer::serialize(params,
+                                                                          &format!("{}{}",
+                                                                                  prefix,
+                                                                                  "Entries"),
+                                                                          &obj.entries);
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+
+    }
+}
+
 #[doc="<p>Encloses a receipt handle and an entry id for each message in <code> <a>ChangeMessageVisibilityBatch</a> </code>.</p> <important> <p>All of the following list parameters must be prefixed with <code>ChangeMessageVisibilityBatchRequestEntry.n</code>, where <code>n</code> is an integer value starting with <code>1</code>. For example, a parameter list for this action might look like this:</p> </important> <p> <code>&amp;amp;ChangeMessageVisibilityBatchRequestEntry.1.Id=change_visibility_msg_2</code> </p> <p> <code>&amp;amp;ChangeMessageVisibilityBatchRequestEntry.1.ReceiptHandle=&lt;replaceable&gt;Your_Receipt_Handle&lt;/replaceable&gt;</code> </p> <p> <code>&amp;amp;ChangeMessageVisibilityBatchRequestEntry.1.VisibilityTimeout=45</code> </p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ChangeMessageVisibilityBatchRequestEntry {
-                #[doc="<p>An identifier for this particular receipt handle used to communicate the result.</p> <note> <p>The <code>Id</code>s of a batch request need to be unique within a request</p> </note>"]
-pub id: String,
-#[doc="<p>A receipt handle.</p>"]
-pub receipt_handle: String,
-#[doc="<p>The new value (in seconds) for the message's visibility timeout.</p>"]
-pub visibility_timeout: Option<Integer>,
-            }
-            
+pub struct ChangeMessageVisibilityBatchRequestEntry {
+    #[doc="<p>An identifier for this particular receipt handle used to communicate the result.</p> <note> <p>The <code>Id</code>s of a batch request need to be unique within a request</p> </note>"]
+    pub id: String,
+    #[doc="<p>A receipt handle.</p>"]
+    pub receipt_handle: String,
+    #[doc="<p>The new value (in seconds) for the message's visibility timeout.</p>"]
+    pub visibility_timeout: Option<Integer>,
+}
 
-            /// Serialize `ChangeMessageVisibilityBatchRequestEntry` contents to a `SignedRequest`.
-            struct ChangeMessageVisibilityBatchRequestEntrySerializer;
-            impl ChangeMessageVisibilityBatchRequestEntrySerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequestEntry) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `ChangeMessageVisibilityBatchRequestEntry` contents to a `SignedRequest`.
+struct ChangeMessageVisibilityBatchRequestEntrySerializer;
+impl ChangeMessageVisibilityBatchRequestEntrySerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequestEntry) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "Id"), &obj.id);
-params.put(&format!("{}{}", prefix, "ReceiptHandle"), &obj.receipt_handle);
-if let Some(ref field_value) = obj.visibility_timeout {
-                params.put(&format!("{}{}", prefix, "VisibilityTimeout"), &field_value.to_string());
-            }
-        
-                }
-            }
-            
-pub type ChangeMessageVisibilityBatchRequestEntryList = Vec<ChangeMessageVisibilityBatchRequestEntry>;
+        params.put(&format!("{}{}", prefix, "ReceiptHandle"),
+                   &obj.receipt_handle);
+        if let Some(ref field_value) = obj.visibility_timeout {
+            params.put(&format!("{}{}", prefix, "VisibilityTimeout"),
+                       &field_value.to_string());
+        }
 
-            /// Serialize `ChangeMessageVisibilityBatchRequestEntryList` contents to a `SignedRequest`.
-            struct ChangeMessageVisibilityBatchRequestEntryListSerializer;
-            impl ChangeMessageVisibilityBatchRequestEntryListSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityBatchRequestEntryList) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.{}", name, index+1);
-ChangeMessageVisibilityBatchRequestEntrySerializer::serialize(params, &key, obj);
+    }
 }
-                }
-            }
-            
+
+pub type ChangeMessageVisibilityBatchRequestEntryList =
+    Vec<ChangeMessageVisibilityBatchRequestEntry>;
+
+/// Serialize `ChangeMessageVisibilityBatchRequestEntryList` contents to a `SignedRequest`.
+struct ChangeMessageVisibilityBatchRequestEntryListSerializer;
+impl ChangeMessageVisibilityBatchRequestEntryListSerializer {
+    fn serialize(params: &mut Params,
+                 name: &str,
+                 obj: &ChangeMessageVisibilityBatchRequestEntryList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            ChangeMessageVisibilityBatchRequestEntrySerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
 #[doc="<p>For each message in the batch, the response contains a <code> <a>ChangeMessageVisibilityBatchResultEntry</a> </code> tag if the message succeeds or a <code> <a>BatchResultErrorEntry</a> </code> tag if the message fails.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ChangeMessageVisibilityBatchResult {
-                #[doc="<p>A list of <code> <a>BatchResultErrorEntry</a> </code> items.</p>"]
-pub failed: BatchResultErrorEntryList,
-#[doc="<p>A list of <code> <a>ChangeMessageVisibilityBatchResultEntry</a> </code> items.</p>"]
-pub successful: ChangeMessageVisibilityBatchResultEntryList,
-            }
-            
+pub struct ChangeMessageVisibilityBatchResult {
+    #[doc="<p>A list of <code> <a>BatchResultErrorEntry</a> </code> items.</p>"]
+    pub failed: BatchResultErrorEntryList,
+    #[doc="<p>A list of <code> <a>ChangeMessageVisibilityBatchResultEntry</a> </code> items.</p>"]
+    pub successful: ChangeMessageVisibilityBatchResultEntryList,
+}
+
 struct ChangeMessageVisibilityBatchResultDeserializer;
-            impl ChangeMessageVisibilityBatchResultDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ChangeMessageVisibilityBatchResult, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ChangeMessageVisibilityBatchResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<ChangeMessageVisibilityBatchResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ChangeMessageVisibilityBatchResult::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -366,45 +386,53 @@ struct ChangeMessageVisibilityBatchResultDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "BatchResultErrorEntry" => {
-                obj.failed = try!(BatchResultErrorEntryListDeserializer::deserialize("BatchResultErrorEntry", stack));
-            }
-"ChangeMessageVisibilityBatchResultEntry" => {
-                obj.successful = try!(ChangeMessageVisibilityBatchResultEntryListDeserializer::deserialize("ChangeMessageVisibilityBatchResultEntry", stack));
-            }
+                            obj.failed =
+                                try!(BatchResultErrorEntryListDeserializer::deserialize("BatchResultErrorEntry",
+                                                                                        stack));
+                        }
+                        "ChangeMessageVisibilityBatchResultEntry" => {
+                            obj.successful = try!(ChangeMessageVisibilityBatchResultEntryListDeserializer::deserialize("ChangeMessageVisibilityBatchResultEntry", stack));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Encloses the <code>Id</code> of an entry in <code> <a>ChangeMessageVisibilityBatch</a> </code>.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ChangeMessageVisibilityBatchResultEntry {
-                #[doc="<p>Represents a message whose visibility timeout has been changed successfully.</p>"]
-pub id: String,
-            }
-            
+pub struct ChangeMessageVisibilityBatchResultEntry {
+    #[doc="<p>Represents a message whose visibility timeout has been changed successfully.</p>"]
+    pub id: String,
+}
+
 struct ChangeMessageVisibilityBatchResultEntryDeserializer;
-            impl ChangeMessageVisibilityBatchResultEntryDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ChangeMessageVisibilityBatchResultEntry, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ChangeMessageVisibilityBatchResultEntryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<ChangeMessageVisibilityBatchResultEntry, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ChangeMessageVisibilityBatchResultEntry::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -412,128 +440,135 @@ struct ChangeMessageVisibilityBatchResultEntryDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Id" => {
-                obj.id = try!(StringDeserializer::deserialize("Id", stack));
-            }
+                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type ChangeMessageVisibilityBatchResultEntryList = Vec<ChangeMessageVisibilityBatchResultEntry>;
 struct ChangeMessageVisibilityBatchResultEntryListDeserializer;
-            impl ChangeMessageVisibilityBatchResultEntryListDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ChangeMessageVisibilityBatchResultEntryList, XmlParseError> {
-                    
+impl ChangeMessageVisibilityBatchResultEntryListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<ChangeMessageVisibilityBatchResultEntryList, XmlParseError> {
+
         let mut obj = vec![];
 
         loop {
 
             let consume_next_tag = match stack.peek() {
                 Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
-                _ => false
+                _ => false,
             };
 
             if consume_next_tag {
                 obj.push(try!(ChangeMessageVisibilityBatchResultEntryDeserializer::deserialize(tag_name, stack)));
             } else {
-                break
+                break;
             }
 
         }
 
         Ok(obj)
-        
-                }
-            }
-#[derive(Default,Debug,Clone)]
-            pub struct ChangeMessageVisibilityRequest {
-                #[doc="<p>The URL of the Amazon SQS queue whose message's visibility is changed.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-#[doc="<p>The receipt handle associated with the message whose visibility timeout is changed. This parameter is returned by the <code> <a>ReceiveMessage</a> </code> action.</p>"]
-pub receipt_handle: String,
-#[doc="<p>The new value for the message's visibility timeout (in seconds). Values values: <code>0</code> to <code>43200</code>. Maximum: 12 hours.</p>"]
-pub visibility_timeout: Integer,
-            }
-            
 
-            /// Serialize `ChangeMessageVisibilityRequest` contents to a `SignedRequest`.
-            struct ChangeMessageVisibilityRequestSerializer;
-            impl ChangeMessageVisibilityRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityRequest) {
-                    let mut prefix = name.to_string();
+    }
+}
+#[derive(Default,Debug,Clone)]
+pub struct ChangeMessageVisibilityRequest {
+    #[doc="<p>The URL of the Amazon SQS queue whose message's visibility is changed.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+    #[doc="<p>The receipt handle associated with the message whose visibility timeout is changed. This parameter is returned by the <code> <a>ReceiveMessage</a> </code> action.</p>"]
+    pub receipt_handle: String,
+    #[doc="<p>The new value for the message's visibility timeout (in seconds). Values values: <code>0</code> to <code>43200</code>. Maximum: 12 hours.</p>"]
+    pub visibility_timeout: Integer,
+}
+
+
+/// Serialize `ChangeMessageVisibilityRequest` contents to a `SignedRequest`.
+struct ChangeMessageVisibilityRequestSerializer;
+impl ChangeMessageVisibilityRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ChangeMessageVisibilityRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-params.put(&format!("{}{}", prefix, "ReceiptHandle"), &obj.receipt_handle);
-params.put(&format!("{}{}", prefix, "VisibilityTimeout"), &obj.visibility_timeout.to_string());
-        
-                }
-            }
-            
+        params.put(&format!("{}{}", prefix, "ReceiptHandle"),
+                   &obj.receipt_handle);
+        params.put(&format!("{}{}", prefix, "VisibilityTimeout"),
+                   &obj.visibility_timeout.to_string());
+
+    }
+}
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct CreateQueueRequest {
-                #[doc="<p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>CreateQueue</code> action uses:</p> <ul> <li> <p> <code>DelaySeconds</code> - The number of seconds for which the delivery of all messages in the queue is delayed. Valid values: An integer from 0 to 900 seconds (15 minutes). The default is 0 (zero). </p> </li> <li> <p> <code>MaximumMessageSize</code> - The limit of how many bytes a message can contain before Amazon SQS rejects it. Valid values: An integer from 1,024 bytes (1 KiB) to 262,144 bytes (256 KiB). The default is 262,144 (256 KiB). </p> </li> <li> <p> <code>MessageRetentionPeriod</code> - The number of seconds for which Amazon SQS retains a message. Valid values: An integer from 60 seconds (1 minute) to 1,209,600 seconds (14 days). The default is 345,600 (4 days). </p> </li> <li> <p> <code>Policy</code> - The queue's policy. A valid AWS policy. For more information about policy structure, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PoliciesOverview.html\">Overview of AWS IAM Policies</a> in the <i>Amazon IAM User Guide</i>. </p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> - The number of seconds for which a <code> <a>ReceiveMessage</a> </code> action waits for a message to arrive. Valid values: An integer from 0 to 20 (seconds). The default is 0 (zero). </p> </li> <li> <p> <code>RedrivePolicy</code> - The parameters for the dead letter queue functionality of the source queue. For more information about the redrive policy and dead letter queues, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html\">Using Amazon SQS Dead Letter Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p> <note> <p>The dead letter queue of a FIFO queue must also be a FIFO queue. Similarly, the dead letter queue of a standard queue must also be a standard queue.</p> </note> </li> <li> <p> <code>VisibilityTimeout</code> - The visibility timeout for the queue. Valid values: An integer from 0 to 43,200 (12 hours). The default is 30. For more information about the visibility timeout, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> </li> </ul> <p>The following attributes apply only to <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html\">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>FifoQueue</code> - Designates a queue as FIFO. You can provide this attribute only during queue creation. You can't change it for an existing queue. When you set this attribute, you must provide a <code>MessageGroupId</code> explicitly.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-understanding-logic\">FIFO Queue Logic</a> in the <i>Amazon SQS Developer Guide</i>.</p> </li> <li> <p> <code>ContentBasedDeduplication</code> - Enables content-based deduplication. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing\">Exactly-Once Processing</a> in the <i>Amazon SQS Developer Guide</i>. </p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>,</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren't able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don't provide a <code>MessageDeduplicationId</code> and the queue doesn't have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>You can also use <code>ContentBasedDeduplication</code> for messages with identical content to be treated as duplicates.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> </li> </ul> <p>Any other valid special request parameters (such as the following) are ignored:</p> <ul> <li> <p> <code>ApproximateNumberOfMessages</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesDelayed</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesNotVisible</code> </p> </li> <li> <p> <code>CreatedTimestamp</code> </p> </li> <li> <p> <code>LastModifiedTimestamp</code> </p> </li> <li> <p> <code>QueueArn</code> </p> </li> </ul>"]
-pub attributes: Option<QueueAttributeMap>,
-#[doc="<p>The name of the new queue. The following limits apply to this name:</p> <ul> <li> <p>A queue name can have up to 80 characters.</p> </li> <li> <p>Valid values: alphanumeric characters, hyphens (<code>-</code>), and underscores (<code>_</code>).</p> </li> <li> <p>A FIFO queue name must end with the <code>.fifo</code> suffix.</p> </li> </ul> <p>Queue names are case-sensitive.</p>"]
-pub queue_name: String,
-            }
-            
+pub struct CreateQueueRequest {
+    #[doc="<p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>CreateQueue</code> action uses:</p> <ul> <li> <p> <code>DelaySeconds</code> - The number of seconds for which the delivery of all messages in the queue is delayed. Valid values: An integer from 0 to 900 seconds (15 minutes). The default is 0 (zero). </p> </li> <li> <p> <code>MaximumMessageSize</code> - The limit of how many bytes a message can contain before Amazon SQS rejects it. Valid values: An integer from 1,024 bytes (1 KiB) to 262,144 bytes (256 KiB). The default is 262,144 (256 KiB). </p> </li> <li> <p> <code>MessageRetentionPeriod</code> - The number of seconds for which Amazon SQS retains a message. Valid values: An integer from 60 seconds (1 minute) to 1,209,600 seconds (14 days). The default is 345,600 (4 days). </p> </li> <li> <p> <code>Policy</code> - The queue's policy. A valid AWS policy. For more information about policy structure, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PoliciesOverview.html\">Overview of AWS IAM Policies</a> in the <i>Amazon IAM User Guide</i>. </p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> - The number of seconds for which a <code> <a>ReceiveMessage</a> </code> action waits for a message to arrive. Valid values: An integer from 0 to 20 (seconds). The default is 0 (zero). </p> </li> <li> <p> <code>RedrivePolicy</code> - The parameters for the dead letter queue functionality of the source queue. For more information about the redrive policy and dead letter queues, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html\">Using Amazon SQS Dead Letter Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p> <note> <p>The dead letter queue of a FIFO queue must also be a FIFO queue. Similarly, the dead letter queue of a standard queue must also be a standard queue.</p> </note> </li> <li> <p> <code>VisibilityTimeout</code> - The visibility timeout for the queue. Valid values: An integer from 0 to 43,200 (12 hours). The default is 30. For more information about the visibility timeout, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> </li> </ul> <p>The following attributes apply only to <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html\">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>FifoQueue</code> - Designates a queue as FIFO. You can provide this attribute only during queue creation. You can't change it for an existing queue. When you set this attribute, you must provide a <code>MessageGroupId</code> explicitly.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-understanding-logic\">FIFO Queue Logic</a> in the <i>Amazon SQS Developer Guide</i>.</p> </li> <li> <p> <code>ContentBasedDeduplication</code> - Enables content-based deduplication. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing\">Exactly-Once Processing</a> in the <i>Amazon SQS Developer Guide</i>. </p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>,</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren't able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don't provide a <code>MessageDeduplicationId</code> and the queue doesn't have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>You can also use <code>ContentBasedDeduplication</code> for messages with identical content to be treated as duplicates.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> </li> </ul> <p>Any other valid special request parameters (such as the following) are ignored:</p> <ul> <li> <p> <code>ApproximateNumberOfMessages</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesDelayed</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesNotVisible</code> </p> </li> <li> <p> <code>CreatedTimestamp</code> </p> </li> <li> <p> <code>LastModifiedTimestamp</code> </p> </li> <li> <p> <code>QueueArn</code> </p> </li> </ul>"]
+    pub attributes: Option<QueueAttributeMap>,
+    #[doc="<p>The name of the new queue. The following limits apply to this name:</p> <ul> <li> <p>A queue name can have up to 80 characters.</p> </li> <li> <p>Valid values: alphanumeric characters, hyphens (<code>-</code>), and underscores (<code>_</code>).</p> </li> <li> <p>A FIFO queue name must end with the <code>.fifo</code> suffix.</p> </li> </ul> <p>Queue names are case-sensitive.</p>"]
+    pub queue_name: String,
+}
 
-            /// Serialize `CreateQueueRequest` contents to a `SignedRequest`.
-            struct CreateQueueRequestSerializer;
-            impl CreateQueueRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &CreateQueueRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `CreateQueueRequest` contents to a `SignedRequest`.
+struct CreateQueueRequestSerializer;
+impl CreateQueueRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateQueueRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.attributes {
-                QueueAttributeMapSerializer::serialize(
-                    params,
-                    &format!("{}{}", prefix, "Attribute"),
-                    field_value,
-                );
-            }
-params.put(&format!("{}{}", prefix, "QueueName"), &obj.queue_name);
-        
-                }
-            }
-            
+            QueueAttributeMapSerializer::serialize(params,
+                                                   &format!("{}{}", prefix, "Attribute"),
+                                                   field_value);
+        }
+        params.put(&format!("{}{}", prefix, "QueueName"), &obj.queue_name);
+
+    }
+}
+
 #[doc="<p>Returns the <code>QueueUrl</code> attribute of the created queue.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct CreateQueueResult {
-                #[doc="<p>The URL of the created Amazon SQS queue.</p>"]
-pub queue_url: Option<String>,
-            }
-            
+pub struct CreateQueueResult {
+    #[doc="<p>The URL of the created Amazon SQS queue.</p>"]
+    pub queue_url: Option<String>,
+}
+
 struct CreateQueueResultDeserializer;
-            impl CreateQueueResultDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<CreateQueueResult, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl CreateQueueResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<CreateQueueResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = CreateQueueResult::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -541,111 +576,118 @@ struct CreateQueueResultDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "QueueUrl" => {
-                obj.queue_url = Some(try!(StringDeserializer::deserialize("QueueUrl", stack)));
-            }
+                            obj.queue_url = Some(try!(StringDeserializer::deserialize("QueueUrl",
+                                                                                      stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct DeleteMessageBatchRequest {
-                #[doc="<p>A list of receipt handles for the messages to be deleted.</p>"]
-pub entries: DeleteMessageBatchRequestEntryList,
-#[doc="<p>The URL of the Amazon SQS queue from which messages are deleted.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-            }
-            
+pub struct DeleteMessageBatchRequest {
+    #[doc="<p>A list of receipt handles for the messages to be deleted.</p>"]
+    pub entries: DeleteMessageBatchRequestEntryList,
+    #[doc="<p>The URL of the Amazon SQS queue from which messages are deleted.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+}
 
-            /// Serialize `DeleteMessageBatchRequest` contents to a `SignedRequest`.
-            struct DeleteMessageBatchRequestSerializer;
-            impl DeleteMessageBatchRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `DeleteMessageBatchRequest` contents to a `SignedRequest`.
+struct DeleteMessageBatchRequestSerializer;
+impl DeleteMessageBatchRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        DeleteMessageBatchRequestEntryListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "Entries"),
-                &obj.entries,
-            );
-params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-        
-                }
-            }
-            
+        DeleteMessageBatchRequestEntryListSerializer::serialize(params,
+                                                                &format!("{}{}",
+                                                                        prefix,
+                                                                        "Entries"),
+                                                                &obj.entries);
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+
+    }
+}
+
 #[doc="<p>Encloses a receipt handle and an identifier for it.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct DeleteMessageBatchRequestEntry {
-                #[doc="<p>An identifier for this particular receipt handle. This is used to communicate the result.</p> <note> <p>The <code>Id</code>s of a batch request need to be unique within a request</p> </note>"]
-pub id: String,
-#[doc="<p>A receipt handle.</p>"]
-pub receipt_handle: String,
-            }
-            
+pub struct DeleteMessageBatchRequestEntry {
+    #[doc="<p>An identifier for this particular receipt handle. This is used to communicate the result.</p> <note> <p>The <code>Id</code>s of a batch request need to be unique within a request</p> </note>"]
+    pub id: String,
+    #[doc="<p>A receipt handle.</p>"]
+    pub receipt_handle: String,
+}
 
-            /// Serialize `DeleteMessageBatchRequestEntry` contents to a `SignedRequest`.
-            struct DeleteMessageBatchRequestEntrySerializer;
-            impl DeleteMessageBatchRequestEntrySerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequestEntry) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `DeleteMessageBatchRequestEntry` contents to a `SignedRequest`.
+struct DeleteMessageBatchRequestEntrySerializer;
+impl DeleteMessageBatchRequestEntrySerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequestEntry) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "Id"), &obj.id);
-params.put(&format!("{}{}", prefix, "ReceiptHandle"), &obj.receipt_handle);
-        
-                }
-            }
-            
+        params.put(&format!("{}{}", prefix, "ReceiptHandle"),
+                   &obj.receipt_handle);
+
+    }
+}
+
 pub type DeleteMessageBatchRequestEntryList = Vec<DeleteMessageBatchRequestEntry>;
 
-            /// Serialize `DeleteMessageBatchRequestEntryList` contents to a `SignedRequest`.
-            struct DeleteMessageBatchRequestEntryListSerializer;
-            impl DeleteMessageBatchRequestEntryListSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequestEntryList) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.{}", name, index+1);
-DeleteMessageBatchRequestEntrySerializer::serialize(params, &key, obj);
+/// Serialize `DeleteMessageBatchRequestEntryList` contents to a `SignedRequest`.
+struct DeleteMessageBatchRequestEntryListSerializer;
+impl DeleteMessageBatchRequestEntryListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageBatchRequestEntryList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            DeleteMessageBatchRequestEntrySerializer::serialize(params, &key, obj);
+        }
+    }
 }
-                }
-            }
-            
+
 #[doc="<p>For each message in the batch, the response contains a <code> <a>DeleteMessageBatchResultEntry</a> </code> tag if the message is deleted or a <code> <a>BatchResultErrorEntry</a> </code> tag if the message can't be deleted.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct DeleteMessageBatchResult {
-                #[doc="<p>A list of <code> <a>BatchResultErrorEntry</a> </code> items.</p>"]
-pub failed: BatchResultErrorEntryList,
-#[doc="<p>A list of <code> <a>DeleteMessageBatchResultEntry</a> </code> items.</p>"]
-pub successful: DeleteMessageBatchResultEntryList,
-            }
-            
+pub struct DeleteMessageBatchResult {
+    #[doc="<p>A list of <code> <a>BatchResultErrorEntry</a> </code> items.</p>"]
+    pub failed: BatchResultErrorEntryList,
+    #[doc="<p>A list of <code> <a>DeleteMessageBatchResultEntry</a> </code> items.</p>"]
+    pub successful: DeleteMessageBatchResultEntryList,
+}
+
 struct DeleteMessageBatchResultDeserializer;
-            impl DeleteMessageBatchResultDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<DeleteMessageBatchResult, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl DeleteMessageBatchResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<DeleteMessageBatchResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = DeleteMessageBatchResult::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -653,45 +695,52 @@ struct DeleteMessageBatchResultDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "BatchResultErrorEntry" => {
-                obj.failed = try!(BatchResultErrorEntryListDeserializer::deserialize("BatchResultErrorEntry", stack));
-            }
-"DeleteMessageBatchResultEntry" => {
-                obj.successful = try!(DeleteMessageBatchResultEntryListDeserializer::deserialize("DeleteMessageBatchResultEntry", stack));
-            }
+                            obj.failed =
+                                try!(BatchResultErrorEntryListDeserializer::deserialize("BatchResultErrorEntry",
+                                                                                        stack));
+                        }
+                        "DeleteMessageBatchResultEntry" => {
+                            obj.successful = try!(DeleteMessageBatchResultEntryListDeserializer::deserialize("DeleteMessageBatchResultEntry", stack));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Encloses the <code>Id</code> of an entry in <code> <a>DeleteMessageBatch</a> </code>.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct DeleteMessageBatchResultEntry {
-                #[doc="<p>Represents a successfully deleted message.</p>"]
-pub id: String,
-            }
-            
+pub struct DeleteMessageBatchResultEntry {
+    #[doc="<p>Represents a successfully deleted message.</p>"]
+    pub id: String,
+}
+
 struct DeleteMessageBatchResultEntryDeserializer;
-            impl DeleteMessageBatchResultEntryDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<DeleteMessageBatchResultEntry, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl DeleteMessageBatchResultEntryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<DeleteMessageBatchResultEntry, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = DeleteMessageBatchResultEntry::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -699,148 +748,155 @@ struct DeleteMessageBatchResultEntryDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Id" => {
-                obj.id = try!(StringDeserializer::deserialize("Id", stack));
-            }
+                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type DeleteMessageBatchResultEntryList = Vec<DeleteMessageBatchResultEntry>;
 struct DeleteMessageBatchResultEntryListDeserializer;
-            impl DeleteMessageBatchResultEntryListDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<DeleteMessageBatchResultEntryList, XmlParseError> {
-                    
+impl DeleteMessageBatchResultEntryListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<DeleteMessageBatchResultEntryList, XmlParseError> {
+
         let mut obj = vec![];
 
         loop {
 
             let consume_next_tag = match stack.peek() {
                 Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
-                _ => false
+                _ => false,
             };
 
             if consume_next_tag {
-                obj.push(try!(DeleteMessageBatchResultEntryDeserializer::deserialize(tag_name, stack)));
+                obj.push(try!(DeleteMessageBatchResultEntryDeserializer::deserialize(tag_name,
+                                                                                     stack)));
             } else {
-                break
+                break;
             }
 
         }
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct DeleteMessageRequest {
-                #[doc="<p>The URL of the Amazon SQS queue from which messages are deleted.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-#[doc="<p>The receipt handle associated with the message to delete.</p>"]
-pub receipt_handle: String,
-            }
-            
+pub struct DeleteMessageRequest {
+    #[doc="<p>The URL of the Amazon SQS queue from which messages are deleted.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+    #[doc="<p>The receipt handle associated with the message to delete.</p>"]
+    pub receipt_handle: String,
+}
 
-            /// Serialize `DeleteMessageRequest` contents to a `SignedRequest`.
-            struct DeleteMessageRequestSerializer;
-            impl DeleteMessageRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `DeleteMessageRequest` contents to a `SignedRequest`.
+struct DeleteMessageRequestSerializer;
+impl DeleteMessageRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteMessageRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-params.put(&format!("{}{}", prefix, "ReceiptHandle"), &obj.receipt_handle);
-        
-                }
-            }
-            
+        params.put(&format!("{}{}", prefix, "ReceiptHandle"),
+                   &obj.receipt_handle);
+
+    }
+}
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct DeleteQueueRequest {
-                #[doc="<p>The URL of the Amazon SQS queue to delete.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-            }
-            
+pub struct DeleteQueueRequest {
+    #[doc="<p>The URL of the Amazon SQS queue to delete.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+}
 
-            /// Serialize `DeleteQueueRequest` contents to a `SignedRequest`.
-            struct DeleteQueueRequestSerializer;
-            impl DeleteQueueRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &DeleteQueueRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `DeleteQueueRequest` contents to a `SignedRequest`.
+struct DeleteQueueRequestSerializer;
+impl DeleteQueueRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteQueueRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-        
-                }
-            }
-            
+
+    }
+}
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetQueueAttributesRequest {
-                #[doc="<p>A list of attributes for which to retrieve information.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note> <p>The following attributes are supported:</p> <ul> <li> <p> <code>All</code> - Returns all values. </p> </li> <li> <p> <code>ApproximateNumberOfMessages</code> - Returns the approximate number of visible messages in a queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-resources-required-process-messages.html\">Resources Required to Process Messages</a> in the <i>Amazon SQS Developer Guide</i>. </p> </li> <li> <p> <code>ApproximateNumberOfMessagesDelayed</code> - Returns the approximate number of messages that are waiting to be added to the queue. </p> </li> <li> <p> <code>ApproximateNumberOfMessagesNotVisible</code> - Returns the approximate number of messages that have not timed-out and aren't deleted. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-resources-required-process-messages.html\">Resources Required to Process Messages</a> in the <i>Amazon SQS Developer Guide</i>. </p> </li> <li> <p> <code>CreatedTimestamp</code> - Returns the time when the queue was created in seconds (<a href=\"http://en.wikipedia.org/wiki/Unix_time\">epoch time</a>).</p> </li> <li> <p> <code>DelaySeconds</code> - Returns the default delay on the queue in seconds.</p> </li> <li> <p> <code>LastModifiedTimestamp</code> - Returns the time when the queue was last changed in seconds (<a href=\"http://en.wikipedia.org/wiki/Unix_time\">epoch time</a>).</p> </li> <li> <p> <code>MaximumMessageSize</code> - Returns the limit of how many bytes a message can contain before Amazon SQS rejects it.</p> </li> <li> <p> <code>MessageRetentionPeriod</code> - Returns the number of seconds for which Amazon SQS retains a message.</p> </li> <li> <p> <code>Policy</code> - Returns the policy of the queue.</p> </li> <li> <p> <code>QueueArn</code> - Returns the Amazon resource name (ARN) of the queue.</p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> - Returns the number of seconds for which the <code>ReceiveMessage</code> action waits for a message to arrive. </p> </li> <li> <p> <code>RedrivePolicy</code> - Returns the parameters for dead letter queue functionality of the source queue. For more information about the redrive policy and dead letter queues, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html\">Using Amazon SQS Dead Letter Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p> </li> <li> <p> <code>VisibilityTimeout</code> - Returns the visibility timeout for the queue. For more information about the visibility timeout, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>. </p> </li> </ul> <p>The following attributes apply only to <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html\">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>FifoQueue</code> - Returns whether the queue is FIFO. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-understanding-logic\">FIFO Queue Logic</a> in the <i>Amazon SQS Developer Guide</i>.</p> </li> <li> <p> <code>ContentBasedDeduplication</code> - Returns whether content-based deduplication is enabled for the queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing\">Exactly-Once Processing</a> in the <i>Amazon SQS Developer Guide</i>. </p> </li> </ul>"]
-pub attribute_names: Option<AttributeNameList>,
-#[doc="<p>The URL of the Amazon SQS queue whose attribute information is retrieved.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-            }
-            
+pub struct GetQueueAttributesRequest {
+    #[doc="<p>A list of attributes for which to retrieve information.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note> <p>The following attributes are supported:</p> <ul> <li> <p> <code>All</code> - Returns all values. </p> </li> <li> <p> <code>ApproximateNumberOfMessages</code> - Returns the approximate number of visible messages in a queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-resources-required-process-messages.html\">Resources Required to Process Messages</a> in the <i>Amazon SQS Developer Guide</i>. </p> </li> <li> <p> <code>ApproximateNumberOfMessagesDelayed</code> - Returns the approximate number of messages that are waiting to be added to the queue. </p> </li> <li> <p> <code>ApproximateNumberOfMessagesNotVisible</code> - Returns the approximate number of messages that have not timed-out and aren't deleted. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-resources-required-process-messages.html\">Resources Required to Process Messages</a> in the <i>Amazon SQS Developer Guide</i>. </p> </li> <li> <p> <code>CreatedTimestamp</code> - Returns the time when the queue was created in seconds (<a href=\"http://en.wikipedia.org/wiki/Unix_time\">epoch time</a>).</p> </li> <li> <p> <code>DelaySeconds</code> - Returns the default delay on the queue in seconds.</p> </li> <li> <p> <code>LastModifiedTimestamp</code> - Returns the time when the queue was last changed in seconds (<a href=\"http://en.wikipedia.org/wiki/Unix_time\">epoch time</a>).</p> </li> <li> <p> <code>MaximumMessageSize</code> - Returns the limit of how many bytes a message can contain before Amazon SQS rejects it.</p> </li> <li> <p> <code>MessageRetentionPeriod</code> - Returns the number of seconds for which Amazon SQS retains a message.</p> </li> <li> <p> <code>Policy</code> - Returns the policy of the queue.</p> </li> <li> <p> <code>QueueArn</code> - Returns the Amazon resource name (ARN) of the queue.</p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> - Returns the number of seconds for which the <code>ReceiveMessage</code> action waits for a message to arrive. </p> </li> <li> <p> <code>RedrivePolicy</code> - Returns the parameters for dead letter queue functionality of the source queue. For more information about the redrive policy and dead letter queues, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html\">Using Amazon SQS Dead Letter Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p> </li> <li> <p> <code>VisibilityTimeout</code> - Returns the visibility timeout for the queue. For more information about the visibility timeout, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>. </p> </li> </ul> <p>The following attributes apply only to <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html\">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>FifoQueue</code> - Returns whether the queue is FIFO. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-understanding-logic\">FIFO Queue Logic</a> in the <i>Amazon SQS Developer Guide</i>.</p> </li> <li> <p> <code>ContentBasedDeduplication</code> - Returns whether content-based deduplication is enabled for the queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing\">Exactly-Once Processing</a> in the <i>Amazon SQS Developer Guide</i>. </p> </li> </ul>"]
+    pub attribute_names: Option<AttributeNameList>,
+    #[doc="<p>The URL of the Amazon SQS queue whose attribute information is retrieved.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+}
 
-            /// Serialize `GetQueueAttributesRequest` contents to a `SignedRequest`.
-            struct GetQueueAttributesRequestSerializer;
-            impl GetQueueAttributesRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &GetQueueAttributesRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `GetQueueAttributesRequest` contents to a `SignedRequest`.
+struct GetQueueAttributesRequestSerializer;
+impl GetQueueAttributesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetQueueAttributesRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.attribute_names {
-                AttributeNameListSerializer::serialize(
-                    params,
-                    &format!("{}{}", prefix, "AttributeNames"),
-                    field_value,
-                );
-            }
-params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-        
-                }
-            }
-            
+            AttributeNameListSerializer::serialize(params,
+                                                   &format!("{}{}", prefix, "AttributeNames"),
+                                                   field_value);
+        }
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+
+    }
+}
+
 #[doc="<p>A list of returned queue attributes.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetQueueAttributesResult {
-                #[doc="<p>A map of attributes to their respective values.</p>"]
-pub attributes: Option<QueueAttributeMap>,
-            }
-            
+pub struct GetQueueAttributesResult {
+    #[doc="<p>A map of attributes to their respective values.</p>"]
+    pub attributes: Option<QueueAttributeMap>,
+}
+
 struct GetQueueAttributesResultDeserializer;
-            impl GetQueueAttributesResultDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<GetQueueAttributesResult, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl GetQueueAttributesResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<GetQueueAttributesResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = GetQueueAttributesResult::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -848,69 +904,77 @@ struct GetQueueAttributesResultDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Attribute" => {
-                obj.attributes = Some(try!(QueueAttributeMapDeserializer::deserialize("Attribute", stack)));
-            }
+                            obj.attributes =
+                                Some(try!(QueueAttributeMapDeserializer::deserialize("Attribute",
+                                                                                     stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetQueueUrlRequest {
-                #[doc="<p>The name of the queue whose URL must be fetched. Maximum 80 characters. Valid values: alphanumeric characters, hyphens (<code>-</code>), and underscores (<code>_</code>).</p> <p>Queue names are case-sensitive.</p>"]
-pub queue_name: String,
-#[doc="<p>The AWS account ID of the account that created the queue.</p>"]
-pub queue_owner_aws_account_id: Option<String>,
-            }
-            
+pub struct GetQueueUrlRequest {
+    #[doc="<p>The name of the queue whose URL must be fetched. Maximum 80 characters. Valid values: alphanumeric characters, hyphens (<code>-</code>), and underscores (<code>_</code>).</p> <p>Queue names are case-sensitive.</p>"]
+    pub queue_name: String,
+    #[doc="<p>The AWS account ID of the account that created the queue.</p>"]
+    pub queue_owner_aws_account_id: Option<String>,
+}
 
-            /// Serialize `GetQueueUrlRequest` contents to a `SignedRequest`.
-            struct GetQueueUrlRequestSerializer;
-            impl GetQueueUrlRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &GetQueueUrlRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `GetQueueUrlRequest` contents to a `SignedRequest`.
+struct GetQueueUrlRequestSerializer;
+impl GetQueueUrlRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetQueueUrlRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "QueueName"), &obj.queue_name);
-if let Some(ref field_value) = obj.queue_owner_aws_account_id {
-                params.put(&format!("{}{}", prefix, "QueueOwnerAWSAccountId"), &field_value);
-            }
-        
-                }
-            }
-            
+        if let Some(ref field_value) = obj.queue_owner_aws_account_id {
+            params.put(&format!("{}{}", prefix, "QueueOwnerAWSAccountId"),
+                       &field_value);
+        }
+
+    }
+}
+
 #[doc="<p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/UnderstandingResponses.html\">Responses</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct GetQueueUrlResult {
-                #[doc="<p>The URL of the queue.</p>"]
-pub queue_url: Option<String>,
-            }
-            
+pub struct GetQueueUrlResult {
+    #[doc="<p>The URL of the queue.</p>"]
+    pub queue_url: Option<String>,
+}
+
 struct GetQueueUrlResultDeserializer;
-            impl GetQueueUrlResultDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<GetQueueUrlResult, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl GetQueueUrlResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<GetQueueUrlResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = GetQueueUrlResult::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -918,65 +982,72 @@ struct GetQueueUrlResultDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "QueueUrl" => {
-                obj.queue_url = Some(try!(StringDeserializer::deserialize("QueueUrl", stack)));
-            }
+                            obj.queue_url = Some(try!(StringDeserializer::deserialize("QueueUrl",
+                                                                                      stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type Integer = i64;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListDeadLetterSourceQueuesRequest {
-                #[doc="<p>The URL of a dead letter queue.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-            }
-            
+pub struct ListDeadLetterSourceQueuesRequest {
+    #[doc="<p>The URL of a dead letter queue.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+}
 
-            /// Serialize `ListDeadLetterSourceQueuesRequest` contents to a `SignedRequest`.
-            struct ListDeadLetterSourceQueuesRequestSerializer;
-            impl ListDeadLetterSourceQueuesRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ListDeadLetterSourceQueuesRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `ListDeadLetterSourceQueuesRequest` contents to a `SignedRequest`.
+struct ListDeadLetterSourceQueuesRequestSerializer;
+impl ListDeadLetterSourceQueuesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListDeadLetterSourceQueuesRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-        
-                }
-            }
-            
+
+    }
+}
+
 #[doc="<p>A list of your dead letter source queues.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListDeadLetterSourceQueuesResult {
-                #[doc="<p>A list of source queue URLs that have the <code>RedrivePolicy</code> queue attribute configured with a dead letter queue.</p>"]
-pub queue_urls: QueueUrlList,
-            }
-            
+pub struct ListDeadLetterSourceQueuesResult {
+    #[doc="<p>A list of source queue URLs that have the <code>RedrivePolicy</code> queue attribute configured with a dead letter queue.</p>"]
+    pub queue_urls: QueueUrlList,
+}
+
 struct ListDeadLetterSourceQueuesResultDeserializer;
-            impl ListDeadLetterSourceQueuesResultDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ListDeadLetterSourceQueuesResult, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ListDeadLetterSourceQueuesResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<ListDeadLetterSourceQueuesResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ListDeadLetterSourceQueuesResult::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -984,66 +1055,72 @@ struct ListDeadLetterSourceQueuesResultDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "QueueUrl" => {
-                obj.queue_urls = try!(QueueUrlListDeserializer::deserialize("QueueUrl", stack));
-            }
+                            obj.queue_urls = try!(QueueUrlListDeserializer::deserialize("QueueUrl",
+                                                                                        stack));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListQueuesRequest {
-                #[doc="<p>A string to use for filtering the list results. Only those queues whose name begins with the specified string are returned.</p> <p>Queue names are case-sensitive.</p>"]
-pub queue_name_prefix: Option<String>,
-            }
-            
+pub struct ListQueuesRequest {
+    #[doc="<p>A string to use for filtering the list results. Only those queues whose name begins with the specified string are returned.</p> <p>Queue names are case-sensitive.</p>"]
+    pub queue_name_prefix: Option<String>,
+}
 
-            /// Serialize `ListQueuesRequest` contents to a `SignedRequest`.
-            struct ListQueuesRequestSerializer;
-            impl ListQueuesRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ListQueuesRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `ListQueuesRequest` contents to a `SignedRequest`.
+struct ListQueuesRequestSerializer;
+impl ListQueuesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListQueuesRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.queue_name_prefix {
-                params.put(&format!("{}{}", prefix, "QueueNamePrefix"), &field_value);
-            }
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "QueueNamePrefix"), &field_value);
+        }
+
+    }
+}
+
 #[doc="<p>A list of your queues.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ListQueuesResult {
-                #[doc="<p>A list of queue URLs, up to 1,000 entries.</p>"]
-pub queue_urls: Option<QueueUrlList>,
-            }
-            
+pub struct ListQueuesResult {
+    #[doc="<p>A list of queue URLs, up to 1,000 entries.</p>"]
+    pub queue_urls: Option<QueueUrlList>,
+}
+
 struct ListQueuesResultDeserializer;
-            impl ListQueuesResultDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ListQueuesResult, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ListQueuesResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ListQueuesResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ListQueuesResult::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1051,54 +1128,61 @@ struct ListQueuesResultDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "QueueUrl" => {
-                obj.queue_urls = Some(try!(QueueUrlListDeserializer::deserialize("QueueUrl", stack)));
-            }
+                            obj.queue_urls =
+                                Some(try!(QueueUrlListDeserializer::deserialize("QueueUrl",
+                                                                                stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>An Amazon SQS message.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct Message {
-                #[doc="<p> <code>SenderId</code>, <code>SentTimestamp</code>, <code>ApproximateReceiveCount</code>, and/or <code>ApproximateFirstReceiveTimestamp</code>. <code>SentTimestamp</code> and <code>ApproximateFirstReceiveTimestamp</code> are each returned as an integer representing the <a href=\"http://en.wikipedia.org/wiki/Unix_time\">epoch time</a> in milliseconds.</p>"]
-pub attributes: Option<MessageSystemAttributeMap>,
-#[doc="<p>The message's contents (not URL-encoded).</p>"]
-pub body: Option<String>,
-#[doc="<p>An MD5 digest of the non-URL-encoded message body string.</p>"]
-pub md5_of_body: Option<String>,
-#[doc="<p>An MD5 digest of the non-URL-encoded message attribute string. You can use this attribute to verify that Amazon SQS received the message correctly. Amazon SQS URL-decodes the message before creating the MD5 digest. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p>"]
-pub md5_of_message_attributes: Option<String>,
-#[doc="<p>Each message attribute consists of a <code>Name</code>, <code>Type</code>, and <code>Value</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-attributes.html#message-attributes-items-validation\">Message Attribute Items and Validation</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
-pub message_attributes: Option<MessageBodyAttributeMap>,
-#[doc="<p>A unique identifier for the message. A <code>MessageId</code>is considered unique across all AWS accounts for an extended period of time.</p>"]
-pub message_id: Option<String>,
-#[doc="<p>An identifier associated with the act of receiving the message. A new receipt handle is returned every time you receive a message. When deleting a message, you provide the last received receipt handle to delete the message.</p>"]
-pub receipt_handle: Option<String>,
-            }
-            
+pub struct Message {
+    #[doc="<p> <code>SenderId</code>, <code>SentTimestamp</code>, <code>ApproximateReceiveCount</code>, and/or <code>ApproximateFirstReceiveTimestamp</code>. <code>SentTimestamp</code> and <code>ApproximateFirstReceiveTimestamp</code> are each returned as an integer representing the <a href=\"http://en.wikipedia.org/wiki/Unix_time\">epoch time</a> in milliseconds.</p>"]
+    pub attributes: Option<MessageSystemAttributeMap>,
+    #[doc="<p>The message's contents (not URL-encoded).</p>"]
+    pub body: Option<String>,
+    #[doc="<p>An MD5 digest of the non-URL-encoded message body string.</p>"]
+    pub md5_of_body: Option<String>,
+    #[doc="<p>An MD5 digest of the non-URL-encoded message attribute string. You can use this attribute to verify that Amazon SQS received the message correctly. Amazon SQS URL-decodes the message before creating the MD5 digest. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p>"]
+    pub md5_of_message_attributes: Option<String>,
+    #[doc="<p>Each message attribute consists of a <code>Name</code>, <code>Type</code>, and <code>Value</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-attributes.html#message-attributes-items-validation\">Message Attribute Items and Validation</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
+    pub message_attributes: Option<MessageBodyAttributeMap>,
+    #[doc="<p>A unique identifier for the message. A <code>MessageId</code>is considered unique across all AWS accounts for an extended period of time.</p>"]
+    pub message_id: Option<String>,
+    #[doc="<p>An identifier associated with the act of receiving the message. A new receipt handle is returned every time you receive a message. When deleting a message, you provide the last received receipt handle to delete the message.</p>"]
+    pub receipt_handle: Option<String>,
+}
+
 struct MessageDeserializer;
-            impl MessageDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<Message, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl MessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Message, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = Message::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1106,82 +1190,94 @@ struct MessageDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Attribute" => {
-                obj.attributes = Some(try!(MessageSystemAttributeMapDeserializer::deserialize("Attribute", stack)));
-            }
-"Body" => {
-                obj.body = Some(try!(StringDeserializer::deserialize("Body", stack)));
-            }
-"MD5OfBody" => {
-                obj.md5_of_body = Some(try!(StringDeserializer::deserialize("MD5OfBody", stack)));
-            }
-"MD5OfMessageAttributes" => {
-                obj.md5_of_message_attributes = Some(try!(StringDeserializer::deserialize("MD5OfMessageAttributes", stack)));
-            }
-"MessageAttribute" => {
-                obj.message_attributes = Some(try!(MessageBodyAttributeMapDeserializer::deserialize("MessageAttribute", stack)));
-            }
-"MessageId" => {
-                obj.message_id = Some(try!(StringDeserializer::deserialize("MessageId", stack)));
-            }
-"ReceiptHandle" => {
-                obj.receipt_handle = Some(try!(StringDeserializer::deserialize("ReceiptHandle", stack)));
-            }
+                            obj.attributes = Some(try!(MessageSystemAttributeMapDeserializer::deserialize("Attribute", stack)));
+                        }
+                        "Body" => {
+                            obj.body = Some(try!(StringDeserializer::deserialize("Body", stack)));
+                        }
+                        "MD5OfBody" => {
+                            obj.md5_of_body = Some(try!(StringDeserializer::deserialize("MD5OfBody",
+                                                                                        stack)));
+                        }
+                        "MD5OfMessageAttributes" => {
+                            obj.md5_of_message_attributes =
+                                Some(try!(StringDeserializer::deserialize("MD5OfMessageAttributes",
+                                                                          stack)));
+                        }
+                        "MessageAttribute" => {
+                            obj.message_attributes =
+                                Some(try!(MessageBodyAttributeMapDeserializer::deserialize("MessageAttribute",
+                                                                                           stack)));
+                        }
+                        "MessageId" => {
+                            obj.message_id = Some(try!(StringDeserializer::deserialize("MessageId",
+                                                                                       stack)));
+                        }
+                        "ReceiptHandle" => {
+                            obj.receipt_handle = Some(try!(StringDeserializer::deserialize("ReceiptHandle",
+                                                                                           stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type MessageAttributeName = String;
 pub type MessageAttributeNameList = Vec<MessageAttributeName>;
 
-            /// Serialize `MessageAttributeNameList` contents to a `SignedRequest`.
-            struct MessageAttributeNameListSerializer;
-            impl MessageAttributeNameListSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeNameList) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.{}", name, index+1);
-params.put(&key, &obj);
+/// Serialize `MessageAttributeNameList` contents to a `SignedRequest`.
+struct MessageAttributeNameListSerializer;
+impl MessageAttributeNameListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeNameList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
 }
-                }
-            }
-            
+
 #[doc="<p>The user-specified message attribute value. For string data types, the <code>Value</code> attribute has the same restrictions on the content as the message body. For more information, see <code> <a>SendMessage</a> </code>.</p> <p> <code>Name</code>, <code>type</code>, <code>value</code> and the message body must not be empty or null. All parts of the message attribute, including <code>Name</code>, <code>Type</code>, and <code>Value</code>, are part of the message size restriction (256 KB or 262,144 bytes).</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct MessageAttributeValue {
-                #[doc="<p>Not implemented. Reserved for future use.</p>"]
-pub binary_list_values: Option<BinaryList>,
-#[doc="<p>Binary type attributes can store any binary data, such as compressed data, encrypted data, or images.</p>"]
-pub binary_value: Option<Binary>,
-#[doc="<p>Amazon SQS supports the following logical data types: <code>String</code>, <code>Number</code>, and <code>Binary</code>. For the <code>Number</code> data type, you must use <code>StringValue</code>.</p> <p>You can also append custom labels. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-attributes.html#message-attributes-data-types-validation\">Message Attribute Data Types and Validation</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
-pub data_type: String,
-#[doc="<p>Not implemented. Reserved for future use.</p>"]
-pub string_list_values: Option<StringList>,
-#[doc="<p>Strings are Unicode with UTF-8 binary encoding. For a list of code values, see <a href=\"http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters\">ASCII Printable Characters</a>.</p>"]
-pub string_value: Option<String>,
-            }
-            
+pub struct MessageAttributeValue {
+    #[doc="<p>Not implemented. Reserved for future use.</p>"]
+    pub binary_list_values: Option<BinaryList>,
+    #[doc="<p>Binary type attributes can store any binary data, such as compressed data, encrypted data, or images.</p>"]
+    pub binary_value: Option<Binary>,
+    #[doc="<p>Amazon SQS supports the following logical data types: <code>String</code>, <code>Number</code>, and <code>Binary</code>. For the <code>Number</code> data type, you must use <code>StringValue</code>.</p> <p>You can also append custom labels. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-attributes.html#message-attributes-data-types-validation\">Message Attribute Data Types and Validation</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
+    pub data_type: String,
+    #[doc="<p>Not implemented. Reserved for future use.</p>"]
+    pub string_list_values: Option<StringList>,
+    #[doc="<p>Strings are Unicode with UTF-8 binary encoding. For a list of code values, see <a href=\"http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters\">ASCII Printable Characters</a>.</p>"]
+    pub string_value: Option<String>,
+}
+
 struct MessageAttributeValueDeserializer;
-            impl MessageAttributeValueDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<MessageAttributeValue, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl MessageAttributeValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<MessageAttributeValue, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = MessageAttributeValue::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1189,76 +1285,83 @@ struct MessageAttributeValueDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "BinaryListValue" => {
-                obj.binary_list_values = Some(try!(BinaryListDeserializer::deserialize("BinaryListValue", stack)));
-            }
-"BinaryValue" => {
-                obj.binary_value = Some(try!(BinaryDeserializer::deserialize("BinaryValue", stack)));
-            }
-"DataType" => {
-                obj.data_type = try!(StringDeserializer::deserialize("DataType", stack));
-            }
-"StringListValue" => {
-                obj.string_list_values = Some(try!(StringListDeserializer::deserialize("StringListValue", stack)));
-            }
-"StringValue" => {
-                obj.string_value = Some(try!(StringDeserializer::deserialize("StringValue", stack)));
-            }
+                            obj.binary_list_values =
+                                Some(try!(BinaryListDeserializer::deserialize("BinaryListValue",
+                                                                              stack)));
+                        }
+                        "BinaryValue" => {
+                            obj.binary_value = Some(try!(BinaryDeserializer::deserialize("BinaryValue",
+                                                                                         stack)));
+                        }
+                        "DataType" => {
+                            obj.data_type = try!(StringDeserializer::deserialize("DataType",
+                                                                                 stack));
+                        }
+                        "StringListValue" => {
+                            obj.string_list_values =
+                                Some(try!(StringListDeserializer::deserialize("StringListValue",
+                                                                              stack)));
+                        }
+                        "StringValue" => {
+                            obj.string_value = Some(try!(StringDeserializer::deserialize("StringValue",
+                                                                                         stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
 
-            /// Serialize `MessageAttributeValue` contents to a `SignedRequest`.
-            struct MessageAttributeValueSerializer;
-            impl MessageAttributeValueSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
-                    let mut prefix = name.to_string();
+    }
+}
+
+/// Serialize `MessageAttributeValue` contents to a `SignedRequest`.
+struct MessageAttributeValueSerializer;
+impl MessageAttributeValueSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &MessageAttributeValue) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.binary_list_values {
-                BinaryListSerializer::serialize(
-                    params,
-                    &format!("{}{}", prefix, "BinaryListValue"),
-                    field_value,
-                );
-            }
-if let Some(ref field_value) = obj.binary_value {
-                params.put(&format!("{}{}", prefix, "BinaryValue"), ::std::str::from_utf8(&field_value).unwrap());
-            }
-params.put(&format!("{}{}", prefix, "DataType"), &obj.data_type);
-if let Some(ref field_value) = obj.string_list_values {
-                StringListSerializer::serialize(
-                    params,
-                    &format!("{}{}", prefix, "StringListValue"),
-                    field_value,
-                );
-            }
-if let Some(ref field_value) = obj.string_value {
-                params.put(&format!("{}{}", prefix, "StringValue"), &field_value);
-            }
-        
-                }
-            }
-            
+            BinaryListSerializer::serialize(params,
+                                            &format!("{}{}", prefix, "BinaryListValue"),
+                                            field_value);
+        }
+        if let Some(ref field_value) = obj.binary_value {
+            params.put(&format!("{}{}", prefix, "BinaryValue"),
+                       ::std::str::from_utf8(&field_value).unwrap());
+        }
+        params.put(&format!("{}{}", prefix, "DataType"), &obj.data_type);
+        if let Some(ref field_value) = obj.string_list_values {
+            StringListSerializer::serialize(params,
+                                            &format!("{}{}", prefix, "StringListValue"),
+                                            field_value);
+        }
+        if let Some(ref field_value) = obj.string_value {
+            params.put(&format!("{}{}", prefix, "StringValue"), &field_value);
+        }
+
+    }
+}
+
 pub type MessageBodyAttributeMap = ::std::collections::HashMap<String, MessageAttributeValue>;
 struct MessageBodyAttributeMapDeserializer;
-            impl MessageBodyAttributeMapDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<MessageBodyAttributeMap, XmlParseError> {
-                    
+impl MessageBodyAttributeMapDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<MessageBodyAttributeMap, XmlParseError> {
+
         let mut obj = ::std::collections::HashMap::new();
 
         while try!(peek_at_name(stack)) == "entry" {
@@ -1268,62 +1371,63 @@ struct MessageBodyAttributeMapDeserializer;
             obj.insert(key, value);
             try!(end_element("entry", stack));
         }
-        
-                               Ok(obj)
-                }
-            }
 
-            /// Serialize `MessageBodyAttributeMap` contents to a `SignedRequest`.
-            struct MessageBodyAttributeMapSerializer;
-            impl MessageBodyAttributeMapSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &MessageBodyAttributeMap) {
-                    for (index, (key, value)) in obj.iter().enumerate() {
-            let prefix = format!("{}.{}", name, index+1);
-            params.put(&format!("{}.{}", prefix, "Name"), &key);
-MessageAttributeValueSerializer::serialize(
-                    params,
-                    &format!("{}.{}", prefix, "Value"),
-                    value,
-                );
+        Ok(obj)
+    }
 }
-                }
-            }
-            
+
+/// Serialize `MessageBodyAttributeMap` contents to a `SignedRequest`.
+struct MessageBodyAttributeMapSerializer;
+impl MessageBodyAttributeMapSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &MessageBodyAttributeMap) {
+        for (index, (key, value)) in obj.iter().enumerate() {
+            let prefix = format!("{}.{}", name, index + 1);
+            params.put(&format!("{}.{}", prefix, "Name"), &key);
+            MessageAttributeValueSerializer::serialize(params,
+                                                       &format!("{}.{}", prefix, "Value"),
+                                                       value);
+        }
+    }
+}
+
 pub type MessageList = Vec<Message>;
 struct MessageListDeserializer;
-            impl MessageListDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<MessageList, XmlParseError> {
-                    
+impl MessageListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<MessageList, XmlParseError> {
+
         let mut obj = vec![];
 
         loop {
 
             let consume_next_tag = match stack.peek() {
                 Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
-                _ => false
+                _ => false,
             };
 
             if consume_next_tag {
                 obj.push(try!(MessageDeserializer::deserialize(tag_name, stack)));
             } else {
-                break
+                break;
             }
 
         }
 
         Ok(obj)
-        
-                }
-            }
-pub type MessageSystemAttributeMap = ::std::collections::HashMap<MessageSystemAttributeName, String>;
+
+    }
+}
+pub type MessageSystemAttributeMap = ::std::collections::HashMap<MessageSystemAttributeName,
+                                                                 String>;
 struct MessageSystemAttributeMapDeserializer;
-            impl MessageSystemAttributeMapDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<MessageSystemAttributeMap, XmlParseError> {
-                    
+impl MessageSystemAttributeMapDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<MessageSystemAttributeMap, XmlParseError> {
+
         let mut obj = ::std::collections::HashMap::new();
 
         while try!(peek_at_name(stack)) == "Attribute" {
@@ -1333,53 +1437,55 @@ struct MessageSystemAttributeMapDeserializer;
             obj.insert(key, value);
             try!(end_element("Attribute", stack));
         }
-        
-                               Ok(obj)
-                }
-            }
+
+        Ok(obj)
+    }
+}
 pub type MessageSystemAttributeName = String;
 struct MessageSystemAttributeNameDeserializer;
-            impl MessageSystemAttributeNameDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<MessageSystemAttributeName, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl MessageSystemAttributeNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<MessageSystemAttributeName, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct PurgeQueueRequest {
-                #[doc="<p>The URL of the queue from which the <code>PurgeQueue</code> action deletes messages.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-            }
-            
+pub struct PurgeQueueRequest {
+    #[doc="<p>The URL of the queue from which the <code>PurgeQueue</code> action deletes messages.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+}
 
-            /// Serialize `PurgeQueueRequest` contents to a `SignedRequest`.
-            struct PurgeQueueRequestSerializer;
-            impl PurgeQueueRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &PurgeQueueRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `PurgeQueueRequest` contents to a `SignedRequest`.
+struct PurgeQueueRequestSerializer;
+impl PurgeQueueRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PurgeQueueRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-        
-                }
-            }
-            
+
+    }
+}
+
 pub type QueueAttributeMap = ::std::collections::HashMap<QueueAttributeName, String>;
 struct QueueAttributeMapDeserializer;
-            impl QueueAttributeMapDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<QueueAttributeMap, XmlParseError> {
-                    
+impl QueueAttributeMapDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<QueueAttributeMap, XmlParseError> {
+
         let mut obj = ::std::collections::HashMap::new();
 
         while try!(peek_at_name(stack)) == "Attribute" {
@@ -1389,145 +1495,152 @@ struct QueueAttributeMapDeserializer;
             obj.insert(key, value);
             try!(end_element("Attribute", stack));
         }
-        
-                               Ok(obj)
-                }
-            }
 
-            /// Serialize `QueueAttributeMap` contents to a `SignedRequest`.
-            struct QueueAttributeMapSerializer;
-            impl QueueAttributeMapSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &QueueAttributeMap) {
-                    for (index, (key, value)) in obj.iter().enumerate() {
-            let prefix = format!("{}.{}", name, index+1);
-            params.put(&format!("{}.{}", prefix, "Name"), &key);
-params.put(&key, &value);
+        Ok(obj)
+    }
 }
-                }
-            }
-            
+
+/// Serialize `QueueAttributeMap` contents to a `SignedRequest`.
+struct QueueAttributeMapSerializer;
+impl QueueAttributeMapSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &QueueAttributeMap) {
+        for (index, (key, value)) in obj.iter().enumerate() {
+            let prefix = format!("{}.{}", name, index + 1);
+            params.put(&format!("{}.{}", prefix, "Name"), &key);
+            params.put(&key, &value);
+        }
+    }
+}
+
 pub type QueueAttributeName = String;
 struct QueueAttributeNameDeserializer;
-            impl QueueAttributeNameDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<QueueAttributeName, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl QueueAttributeNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<QueueAttributeName, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type QueueUrlList = Vec<String>;
 struct QueueUrlListDeserializer;
-            impl QueueUrlListDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<QueueUrlList, XmlParseError> {
-                    
+impl QueueUrlListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<QueueUrlList, XmlParseError> {
+
         let mut obj = vec![];
 
         loop {
 
             let consume_next_tag = match stack.peek() {
                 Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
-                _ => false
+                _ => false,
             };
 
             if consume_next_tag {
                 obj.push(try!(StringDeserializer::deserialize(tag_name, stack)));
             } else {
-                break
+                break;
             }
 
         }
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ReceiveMessageRequest {
-                #[doc="<p>A list of attributes that need to be returned along with each message. These attributes include:</p> <ul> <li> <p> <code>All</code> - Returns all values.</p> </li> <li> <p> <code>ApproximateFirstReceiveTimestamp</code> - Returns the time the message was first received from the queue (<a href=\"http://en.wikipedia.org/wiki/Unix_time\">epoch time</a> in milliseconds).</p> </li> <li> <p> <code>ApproximateReceiveCount</code> - Returns the number of times a message has been received from the queue but not deleted.</p> </li> <li> <p> <code>SenderId</code> </p> <ul> <li> <p>For an IAM user, returns the IAM user ID, for example <code>ABCDEFGHI1JKLMNOPQ23R</code>.</p> </li> <li> <p>For an IAM role, returns the IAM role ID, for example <code>ABCDE1F2GH3I4JK5LMNOP:i-a123b456</code>.</p> </li> </ul> </li> <li> <p> <code>SentTimestamp</code> - Returns the time the message was sent to the queue (<a href=\"http://en.wikipedia.org/wiki/Unix_time\">epoch time</a> in milliseconds).</p> </li> <li> <p> <code>MessageDeduplicationId</code> - Returns the value provided by the sender that calls the <code> <a>SendMessage</a> </code> action.</p> </li> <li> <p> <code>MessageGroupId</code> - Returns the value provided by the sender that calls the <code> <a>SendMessage</a> </code> action. Messages with the same <code>MessageGroupId</code> are returned in sequence.</p> </li> <li> <p> <code>SequenceNumber</code> - Returns the value provided by Amazon SQS.</p> </li> </ul> <p>Any other valid special request parameters (such as the following) are ignored:</p> <ul> <li> <p> <code>ApproximateNumberOfMessages</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesDelayed</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesNotVisible</code> </p> </li> <li> <p> <code>CreatedTimestamp</code> </p> </li> <li> <p> <code>ContentBasedDeduplication</code> </p> </li> <li> <p> <code>DelaySeconds</code> </p> </li> <li> <p> <code>FifoQueue</code> </p> </li> <li> <p> <code>LastModifiedTimestamp</code> </p> </li> <li> <p> <code>MaximumMessageSize</code> </p> </li> <li> <p> <code>MessageRetentionPeriod</code> </p> </li> <li> <p> <code>Policy</code> </p> </li> <li> <p> <code>QueueArn</code>, </p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> </p> </li> <li> <p> <code>RedrivePolicy</code> </p> </li> <li> <p> <code>VisibilityTimeout</code> </p> </li> </ul>"]
-pub attribute_names: Option<AttributeNameList>,
-#[doc="<p>The maximum number of messages to return. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values are 1 to 10. Default is 1.</p>"]
-pub max_number_of_messages: Option<Integer>,
-#[doc="<p>The name of the message attribute, where <i>N</i> is the index.</p> <ul> <li> <p>The name can contain alphanumeric characters and the underscore (<code>_</code>), hyphen (<code>-</code>), and period (<code>.</code>).</p> </li> <li> <p>The name is case-sensitive and must be unique among all attribute names for the message.</p> </li> <li> <p>The name must not start with AWS-reserved prefixes such as <code>AWS.</code> or <code>Amazon.</code> (or any casing variants).</p> </li> <li> <p>The name must not start or end with a period (<code>.</code>), and it should not have periods in succession (<code>..</code>).</p> </li> <li> <p>The name can be up to 256 characters long.</p> </li> </ul> <p>When using <code>ReceiveMessage</code>, you can send a list of attribute names to receive, or you can return all of the attributes by specifying <code>All</code> or <code>.*</code> in your request. You can also use all message attributes starting with a prefix, for example <code>bar.*</code>.</p>"]
-pub message_attribute_names: Option<MessageAttributeNameList>,
-#[doc="<p>The URL of the Amazon SQS queue from which messages are received.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-#[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The token used for deduplication of <code>ReceiveMessage</code> calls. If a networking issue occurs after a <code>ReceiveMessage</code> action, and instead of a response you receive a generic error, you can retry the same action with an identical <code>ReceiveRequestAttemptId</code> to retrieve the same set of messages, even if their visibility timeout has not yet expired.</p> <ul> <li> <p>You can use <code>ReceiveRequestAttemptId</code> only for 5 minutes after a <code>ReceiveMessage</code> action.</p> </li> <li> <p>When you set <code>FifoQueue</code>, a caller of the <code>ReceiveMessage</code> action can provide a <code>ReceiveRequestAttemptId</code> explicitly.</p> </li> <li> <p>If a caller of the <code>ReceiveMessage</code> action doesn't provide a <code>ReceiveRequestAttemptId</code>, Amazon SQS generates a <code>ReceiveRequestAttemptId</code>.</p> </li> <li> <p>You can retry the <code>ReceiveMessage</code> action with the same <code>ReceiveRequestAttemptId</code> if none of the messages have been modified (deleted or had their visibility changes).</p> </li> <li> <p>During a visibility timeout, subsequent calls with the same <code>ReceiveRequestAttemptId</code> return the same messages and receipt handles. If a retry occurs within the deduplication interval, it resets the visibility timeout. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <important> <p>If a caller of the <code>ReceiveMessage</code> action is still processing messages when the visibility timeout expires and messages become visible, another worker reading from the same queue can receive the same messages and therefore process duplicates. Also, if a reader whose message processing time is longer than the visibility timeout tries to delete the processed messages, the action fails with an error.</p> <p>To mitigate this effect, ensure that your application observes a safe threshold before the visibility timeout expires and extend the visibility timeout as necessary.</p> </important> </li> <li> <p>While messages with a particular <code>MessageGroupId</code> are invisible, no more messages belonging to the same <code>MessageGroupId</code> are returned until the visibility timeout expires. You can still receive messages with another <code>MessageGroupId</code> as long as it is also visible.</p> </li> <li> <p>If a caller of <code>ReceiveMessage</code> can't track the <code>ReceiveRequestAttemptId</code>, no retries work until the original visibility timeout expires. As a result, delays might occur but the messages in the queue remain in a strict order.</p> </li> </ul> <p>The length of <code>ReceiveRequestAttemptId</code> is 128 characters. <code>ReceiveRequestAttemptId</code> can contain alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>) and punctuation (<code>!\"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~</code>).</p> <p>For best practices of using <code>ReceiveRequestAttemptId</code>, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html#using-receiverequestattemptid-request-parameter\">Using the ReceiveRequestAttemptId Request Parameter</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>"]
-pub receive_request_attempt_id: Option<String>,
-#[doc="<p>The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a <code>ReceiveMessage</code> request.</p>"]
-pub visibility_timeout: Option<Integer>,
-#[doc="<p>The duration (in seconds) for which the call waits for a message to arrive in the queue before returning. If a message is available, the call returns sooner than <code>WaitTimeSeconds</code>.</p>"]
-pub wait_time_seconds: Option<Integer>,
-            }
-            
+pub struct ReceiveMessageRequest {
+    #[doc="<p>A list of attributes that need to be returned along with each message. These attributes include:</p> <ul> <li> <p> <code>All</code> - Returns all values.</p> </li> <li> <p> <code>ApproximateFirstReceiveTimestamp</code> - Returns the time the message was first received from the queue (<a href=\"http://en.wikipedia.org/wiki/Unix_time\">epoch time</a> in milliseconds).</p> </li> <li> <p> <code>ApproximateReceiveCount</code> - Returns the number of times a message has been received from the queue but not deleted.</p> </li> <li> <p> <code>SenderId</code> </p> <ul> <li> <p>For an IAM user, returns the IAM user ID, for example <code>ABCDEFGHI1JKLMNOPQ23R</code>.</p> </li> <li> <p>For an IAM role, returns the IAM role ID, for example <code>ABCDE1F2GH3I4JK5LMNOP:i-a123b456</code>.</p> </li> </ul> </li> <li> <p> <code>SentTimestamp</code> - Returns the time the message was sent to the queue (<a href=\"http://en.wikipedia.org/wiki/Unix_time\">epoch time</a> in milliseconds).</p> </li> <li> <p> <code>MessageDeduplicationId</code> - Returns the value provided by the sender that calls the <code> <a>SendMessage</a> </code> action.</p> </li> <li> <p> <code>MessageGroupId</code> - Returns the value provided by the sender that calls the <code> <a>SendMessage</a> </code> action. Messages with the same <code>MessageGroupId</code> are returned in sequence.</p> </li> <li> <p> <code>SequenceNumber</code> - Returns the value provided by Amazon SQS.</p> </li> </ul> <p>Any other valid special request parameters (such as the following) are ignored:</p> <ul> <li> <p> <code>ApproximateNumberOfMessages</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesDelayed</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesNotVisible</code> </p> </li> <li> <p> <code>CreatedTimestamp</code> </p> </li> <li> <p> <code>ContentBasedDeduplication</code> </p> </li> <li> <p> <code>DelaySeconds</code> </p> </li> <li> <p> <code>FifoQueue</code> </p> </li> <li> <p> <code>LastModifiedTimestamp</code> </p> </li> <li> <p> <code>MaximumMessageSize</code> </p> </li> <li> <p> <code>MessageRetentionPeriod</code> </p> </li> <li> <p> <code>Policy</code> </p> </li> <li> <p> <code>QueueArn</code>, </p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> </p> </li> <li> <p> <code>RedrivePolicy</code> </p> </li> <li> <p> <code>VisibilityTimeout</code> </p> </li> </ul>"]
+    pub attribute_names: Option<AttributeNameList>,
+    #[doc="<p>The maximum number of messages to return. Amazon SQS never returns more messages than this value (however, fewer messages might be returned). Valid values are 1 to 10. Default is 1.</p>"]
+    pub max_number_of_messages: Option<Integer>,
+    #[doc="<p>The name of the message attribute, where <i>N</i> is the index.</p> <ul> <li> <p>The name can contain alphanumeric characters and the underscore (<code>_</code>), hyphen (<code>-</code>), and period (<code>.</code>).</p> </li> <li> <p>The name is case-sensitive and must be unique among all attribute names for the message.</p> </li> <li> <p>The name must not start with AWS-reserved prefixes such as <code>AWS.</code> or <code>Amazon.</code> (or any casing variants).</p> </li> <li> <p>The name must not start or end with a period (<code>.</code>), and it should not have periods in succession (<code>..</code>).</p> </li> <li> <p>The name can be up to 256 characters long.</p> </li> </ul> <p>When using <code>ReceiveMessage</code>, you can send a list of attribute names to receive, or you can return all of the attributes by specifying <code>All</code> or <code>.*</code> in your request. You can also use all message attributes starting with a prefix, for example <code>bar.*</code>.</p>"]
+    pub message_attribute_names: Option<MessageAttributeNameList>,
+    #[doc="<p>The URL of the Amazon SQS queue from which messages are received.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+    #[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The token used for deduplication of <code>ReceiveMessage</code> calls. If a networking issue occurs after a <code>ReceiveMessage</code> action, and instead of a response you receive a generic error, you can retry the same action with an identical <code>ReceiveRequestAttemptId</code> to retrieve the same set of messages, even if their visibility timeout has not yet expired.</p> <ul> <li> <p>You can use <code>ReceiveRequestAttemptId</code> only for 5 minutes after a <code>ReceiveMessage</code> action.</p> </li> <li> <p>When you set <code>FifoQueue</code>, a caller of the <code>ReceiveMessage</code> action can provide a <code>ReceiveRequestAttemptId</code> explicitly.</p> </li> <li> <p>If a caller of the <code>ReceiveMessage</code> action doesn't provide a <code>ReceiveRequestAttemptId</code>, Amazon SQS generates a <code>ReceiveRequestAttemptId</code>.</p> </li> <li> <p>You can retry the <code>ReceiveMessage</code> action with the same <code>ReceiveRequestAttemptId</code> if none of the messages have been modified (deleted or had their visibility changes).</p> </li> <li> <p>During a visibility timeout, subsequent calls with the same <code>ReceiveRequestAttemptId</code> return the same messages and receipt handles. If a retry occurs within the deduplication interval, it resets the visibility timeout. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <important> <p>If a caller of the <code>ReceiveMessage</code> action is still processing messages when the visibility timeout expires and messages become visible, another worker reading from the same queue can receive the same messages and therefore process duplicates. Also, if a reader whose message processing time is longer than the visibility timeout tries to delete the processed messages, the action fails with an error.</p> <p>To mitigate this effect, ensure that your application observes a safe threshold before the visibility timeout expires and extend the visibility timeout as necessary.</p> </important> </li> <li> <p>While messages with a particular <code>MessageGroupId</code> are invisible, no more messages belonging to the same <code>MessageGroupId</code> are returned until the visibility timeout expires. You can still receive messages with another <code>MessageGroupId</code> as long as it is also visible.</p> </li> <li> <p>If a caller of <code>ReceiveMessage</code> can't track the <code>ReceiveRequestAttemptId</code>, no retries work until the original visibility timeout expires. As a result, delays might occur but the messages in the queue remain in a strict order.</p> </li> </ul> <p>The length of <code>ReceiveRequestAttemptId</code> is 128 characters. <code>ReceiveRequestAttemptId</code> can contain alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>) and punctuation (<code>!\"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~</code>).</p> <p>For best practices of using <code>ReceiveRequestAttemptId</code>, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html#using-receiverequestattemptid-request-parameter\">Using the ReceiveRequestAttemptId Request Parameter</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>"]
+    pub receive_request_attempt_id: Option<String>,
+    #[doc="<p>The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a <code>ReceiveMessage</code> request.</p>"]
+    pub visibility_timeout: Option<Integer>,
+    #[doc="<p>The duration (in seconds) for which the call waits for a message to arrive in the queue before returning. If a message is available, the call returns sooner than <code>WaitTimeSeconds</code>.</p>"]
+    pub wait_time_seconds: Option<Integer>,
+}
 
-            /// Serialize `ReceiveMessageRequest` contents to a `SignedRequest`.
-            struct ReceiveMessageRequestSerializer;
-            impl ReceiveMessageRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &ReceiveMessageRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `ReceiveMessageRequest` contents to a `SignedRequest`.
+struct ReceiveMessageRequestSerializer;
+impl ReceiveMessageRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ReceiveMessageRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.attribute_names {
-                AttributeNameListSerializer::serialize(
-                    params,
-                    &format!("{}{}", prefix, "AttributeNames"),
-                    field_value,
-                );
-            }
-if let Some(ref field_value) = obj.max_number_of_messages {
-                params.put(&format!("{}{}", prefix, "MaxNumberOfMessages"), &field_value.to_string());
-            }
-if let Some(ref field_value) = obj.message_attribute_names {
-                MessageAttributeNameListSerializer::serialize(
-                    params,
-                    &format!("{}{}", prefix, "MessageAttributeNames"),
-                    field_value,
-                );
-            }
-params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-if let Some(ref field_value) = obj.receive_request_attempt_id {
-                params.put(&format!("{}{}", prefix, "ReceiveRequestAttemptId"), &field_value);
-            }
-if let Some(ref field_value) = obj.visibility_timeout {
-                params.put(&format!("{}{}", prefix, "VisibilityTimeout"), &field_value.to_string());
-            }
-if let Some(ref field_value) = obj.wait_time_seconds {
-                params.put(&format!("{}{}", prefix, "WaitTimeSeconds"), &field_value.to_string());
-            }
-        
-                }
-            }
-            
+            AttributeNameListSerializer::serialize(params,
+                                                   &format!("{}{}", prefix, "AttributeNames"),
+                                                   field_value);
+        }
+        if let Some(ref field_value) = obj.max_number_of_messages {
+            params.put(&format!("{}{}", prefix, "MaxNumberOfMessages"),
+                       &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.message_attribute_names {
+            MessageAttributeNameListSerializer::serialize(params,
+                                                          &format!("{}{}",
+                                                                  prefix,
+                                                                  "MessageAttributeNames"),
+                                                          field_value);
+        }
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+        if let Some(ref field_value) = obj.receive_request_attempt_id {
+            params.put(&format!("{}{}", prefix, "ReceiveRequestAttemptId"),
+                       &field_value);
+        }
+        if let Some(ref field_value) = obj.visibility_timeout {
+            params.put(&format!("{}{}", prefix, "VisibilityTimeout"),
+                       &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.wait_time_seconds {
+            params.put(&format!("{}{}", prefix, "WaitTimeSeconds"),
+                       &field_value.to_string());
+        }
+
+    }
+}
+
 #[doc="<p>A list of received messages.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct ReceiveMessageResult {
-                #[doc="<p>A list of messages.</p>"]
-pub messages: Option<MessageList>,
-            }
-            
+pub struct ReceiveMessageResult {
+    #[doc="<p>A list of messages.</p>"]
+    pub messages: Option<MessageList>,
+}
+
 struct ReceiveMessageResultDeserializer;
-            impl ReceiveMessageResultDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<ReceiveMessageResult, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl ReceiveMessageResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ReceiveMessageResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = ReceiveMessageResult::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1535,160 +1648,166 @@ struct ReceiveMessageResultDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Message" => {
-                obj.messages = Some(try!(MessageListDeserializer::deserialize("Message", stack)));
-            }
+                            obj.messages = Some(try!(MessageListDeserializer::deserialize("Message",
+                                                                                          stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct RemovePermissionRequest {
-                #[doc="<p>The identification of the permission to remove. This is the label added using the <code> <a>AddPermission</a> </code> action.</p>"]
-pub label: String,
-#[doc="<p>The URL of the Amazon SQS queue from which permissions are removed.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-            }
-            
+pub struct RemovePermissionRequest {
+    #[doc="<p>The identification of the permission to remove. This is the label added using the <code> <a>AddPermission</a> </code> action.</p>"]
+    pub label: String,
+    #[doc="<p>The URL of the Amazon SQS queue from which permissions are removed.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+}
 
-            /// Serialize `RemovePermissionRequest` contents to a `SignedRequest`.
-            struct RemovePermissionRequestSerializer;
-            impl RemovePermissionRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &RemovePermissionRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `RemovePermissionRequest` contents to a `SignedRequest`.
+struct RemovePermissionRequestSerializer;
+impl RemovePermissionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RemovePermissionRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         params.put(&format!("{}{}", prefix, "Label"), &obj.label);
-params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-        
-                }
-            }
-            
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+
+    }
+}
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SendMessageBatchRequest {
-                #[doc="<p>A list of <code> <a>SendMessageBatchRequestEntry</a> </code> items.</p>"]
-pub entries: SendMessageBatchRequestEntryList,
-#[doc="<p>The URL of the Amazon SQS queue to which batched messages are sent.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-            }
-            
+pub struct SendMessageBatchRequest {
+    #[doc="<p>A list of <code> <a>SendMessageBatchRequestEntry</a> </code> items.</p>"]
+    pub entries: SendMessageBatchRequestEntryList,
+    #[doc="<p>The URL of the Amazon SQS queue to which batched messages are sent.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+}
 
-            /// Serialize `SendMessageBatchRequest` contents to a `SignedRequest`.
-            struct SendMessageBatchRequestSerializer;
-            impl SendMessageBatchRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &SendMessageBatchRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `SendMessageBatchRequest` contents to a `SignedRequest`.
+struct SendMessageBatchRequestSerializer;
+impl SendMessageBatchRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SendMessageBatchRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        SendMessageBatchRequestEntryListSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "Entries"),
-                &obj.entries,
-            );
-params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-        
-                }
-            }
-            
+        SendMessageBatchRequestEntryListSerializer::serialize(params,
+                                                              &format!("{}{}", prefix, "Entries"),
+                                                              &obj.entries);
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+
+    }
+}
+
 #[doc="<p>Contains the details of a single Amazon SQS message along with an <code>Id</code>.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SendMessageBatchRequestEntry {
-                #[doc="<p>The number of seconds for which a specific message is delayed. Valid values: 0 to 900. Maximum: 15 minutes. Messages with a positive <code>DelaySeconds</code> value become available for processing after the delay period is finished. If you don't specify a value, the default value for the queue is applied. </p> <note> <p>When you set <code>FifoQueue</code>, you can't set <code>DelaySeconds</code> per message. You can set this parameter only on a queue level.</p> </note>"]
-pub delay_seconds: Option<Integer>,
-#[doc="<p>An identifier for a message in this batch used to communicate the result.</p> <note> <p>The <code>Id</code>s of a batch request need to be unique within a request</p> </note>"]
-pub id: String,
-#[doc="<p>Each message attribute consists of a <code>Name</code>, <code>Type</code>, and <code>Value</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-attributes.html#message-attributes-items-validation\">Message Attribute Items and Validation</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
-pub message_attributes: Option<MessageBodyAttributeMap>,
-#[doc="<p>The body of the message.</p>"]
-pub message_body: String,
-#[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The token used for deduplication of messages within a 5-minute minimum deduplication interval. If a message with a particular <code>MessageDeduplicationId</code> is sent successfully, subsequent messages with the same <code>MessageDeduplicationId</code> are accepted successfully but aren't delivered. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing\"> Exactly-Once Processing</a> in the <i>Amazon SQS Developer Guide</i>.</p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>,</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren't able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don't provide a <code>MessageDeduplicationId</code> and the queue doesn't have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>You can also use <code>ContentBasedDeduplication</code> for messages with identical content to be treated as duplicates.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> <note> <p>The <code>MessageDeduplicationId</code> is available to the recipient of the message (this can be useful for troubleshooting delivery issues).</p> <p>If a message is sent successfully but the acknowledgement is lost and the message is resent with the same <code>MessageDeduplicationId</code> after the deduplication interval, Amazon SQS can't detect duplicate messages.</p> </note> <p>The length of <code>MessageDeduplicationId</code> is 128 characters. <code>MessageDeduplicationId</code> can contain alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>) and punctuation (<code>!\"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~</code>).</p> <p>For best practices of using <code>MessageDeduplicationId</code>, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html#using-messagededuplicationid-property\">Using the MessageDeduplicationId Property</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>"]
-pub message_deduplication_id: Option<String>,
-#[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The tag that specifies that a message belongs to a specific message group. Messages that belong to the same message group are processed in a FIFO manner (however, messages in different message groups might be processed out of order). To interleave multiple ordered streams within a single queue, use <code>MessageGroupId</code> values (for example, session data for multiple users). In this scenario, multiple readers can process the queue, but the session data of each user is processed in a FIFO fashion.</p> <ul> <li> <p>You must associate a non-empty <code>MessageGroupId</code> with a message. If you don't provide a <code>MessageGroupId</code>, the action fails.</p> </li> <li> <p> <code>ReceiveMessage</code> might return messages with multiple <code>MessageGroupId</code> values. For each <code>MessageGroupId</code>, the messages are sorted by time sent. The caller can't specify a <code>MessageGroupId</code>.</p> </li> </ul> <p>The length of <code>MessageGroupId</code> is 128 characters. Valid values are alphanumeric characters and punctuation <code>(!\"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~)</code>.</p> <p>For best practices of using <code>MessageGroupId</code>, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html#using-messagegroupid-property\">Using the MessageGroupId Property</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>"]
-pub message_group_id: Option<String>,
-            }
-            
+pub struct SendMessageBatchRequestEntry {
+    #[doc="<p>The number of seconds for which a specific message is delayed. Valid values: 0 to 900. Maximum: 15 minutes. Messages with a positive <code>DelaySeconds</code> value become available for processing after the delay period is finished. If you don't specify a value, the default value for the queue is applied. </p> <note> <p>When you set <code>FifoQueue</code>, you can't set <code>DelaySeconds</code> per message. You can set this parameter only on a queue level.</p> </note>"]
+    pub delay_seconds: Option<Integer>,
+    #[doc="<p>An identifier for a message in this batch used to communicate the result.</p> <note> <p>The <code>Id</code>s of a batch request need to be unique within a request</p> </note>"]
+    pub id: String,
+    #[doc="<p>Each message attribute consists of a <code>Name</code>, <code>Type</code>, and <code>Value</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-attributes.html#message-attributes-items-validation\">Message Attribute Items and Validation</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
+    pub message_attributes: Option<MessageBodyAttributeMap>,
+    #[doc="<p>The body of the message.</p>"]
+    pub message_body: String,
+    #[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The token used for deduplication of messages within a 5-minute minimum deduplication interval. If a message with a particular <code>MessageDeduplicationId</code> is sent successfully, subsequent messages with the same <code>MessageDeduplicationId</code> are accepted successfully but aren't delivered. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing\"> Exactly-Once Processing</a> in the <i>Amazon SQS Developer Guide</i>.</p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>,</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren't able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don't provide a <code>MessageDeduplicationId</code> and the queue doesn't have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>You can also use <code>ContentBasedDeduplication</code> for messages with identical content to be treated as duplicates.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> <note> <p>The <code>MessageDeduplicationId</code> is available to the recipient of the message (this can be useful for troubleshooting delivery issues).</p> <p>If a message is sent successfully but the acknowledgement is lost and the message is resent with the same <code>MessageDeduplicationId</code> after the deduplication interval, Amazon SQS can't detect duplicate messages.</p> </note> <p>The length of <code>MessageDeduplicationId</code> is 128 characters. <code>MessageDeduplicationId</code> can contain alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>) and punctuation (<code>!\"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~</code>).</p> <p>For best practices of using <code>MessageDeduplicationId</code>, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html#using-messagededuplicationid-property\">Using the MessageDeduplicationId Property</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>"]
+    pub message_deduplication_id: Option<String>,
+    #[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The tag that specifies that a message belongs to a specific message group. Messages that belong to the same message group are processed in a FIFO manner (however, messages in different message groups might be processed out of order). To interleave multiple ordered streams within a single queue, use <code>MessageGroupId</code> values (for example, session data for multiple users). In this scenario, multiple readers can process the queue, but the session data of each user is processed in a FIFO fashion.</p> <ul> <li> <p>You must associate a non-empty <code>MessageGroupId</code> with a message. If you don't provide a <code>MessageGroupId</code>, the action fails.</p> </li> <li> <p> <code>ReceiveMessage</code> might return messages with multiple <code>MessageGroupId</code> values. For each <code>MessageGroupId</code>, the messages are sorted by time sent. The caller can't specify a <code>MessageGroupId</code>.</p> </li> </ul> <p>The length of <code>MessageGroupId</code> is 128 characters. Valid values are alphanumeric characters and punctuation <code>(!\"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~)</code>.</p> <p>For best practices of using <code>MessageGroupId</code>, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html#using-messagegroupid-property\">Using the MessageGroupId Property</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>"]
+    pub message_group_id: Option<String>,
+}
 
-            /// Serialize `SendMessageBatchRequestEntry` contents to a `SignedRequest`.
-            struct SendMessageBatchRequestEntrySerializer;
-            impl SendMessageBatchRequestEntrySerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &SendMessageBatchRequestEntry) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `SendMessageBatchRequestEntry` contents to a `SignedRequest`.
+struct SendMessageBatchRequestEntrySerializer;
+impl SendMessageBatchRequestEntrySerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SendMessageBatchRequestEntry) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.delay_seconds {
-                params.put(&format!("{}{}", prefix, "DelaySeconds"), &field_value.to_string());
-            }
-params.put(&format!("{}{}", prefix, "Id"), &obj.id);
-if let Some(ref field_value) = obj.message_attributes {
-                MessageBodyAttributeMapSerializer::serialize(
-                    params,
-                    &format!("{}{}", prefix, "MessageAttribute"),
-                    field_value,
-                );
-            }
-params.put(&format!("{}{}", prefix, "MessageBody"), &obj.message_body);
-if let Some(ref field_value) = obj.message_deduplication_id {
-                params.put(&format!("{}{}", prefix, "MessageDeduplicationId"), &field_value);
-            }
-if let Some(ref field_value) = obj.message_group_id {
-                params.put(&format!("{}{}", prefix, "MessageGroupId"), &field_value);
-            }
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "DelaySeconds"),
+                       &field_value.to_string());
+        }
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
+        if let Some(ref field_value) = obj.message_attributes {
+            MessageBodyAttributeMapSerializer::serialize(params,
+                                                         &format!("{}{}",
+                                                                 prefix,
+                                                                 "MessageAttribute"),
+                                                         field_value);
+        }
+        params.put(&format!("{}{}", prefix, "MessageBody"), &obj.message_body);
+        if let Some(ref field_value) = obj.message_deduplication_id {
+            params.put(&format!("{}{}", prefix, "MessageDeduplicationId"),
+                       &field_value);
+        }
+        if let Some(ref field_value) = obj.message_group_id {
+            params.put(&format!("{}{}", prefix, "MessageGroupId"), &field_value);
+        }
+
+    }
+}
+
 pub type SendMessageBatchRequestEntryList = Vec<SendMessageBatchRequestEntry>;
 
-            /// Serialize `SendMessageBatchRequestEntryList` contents to a `SignedRequest`.
-            struct SendMessageBatchRequestEntryListSerializer;
-            impl SendMessageBatchRequestEntryListSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &SendMessageBatchRequestEntryList) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.{}", name, index+1);
-SendMessageBatchRequestEntrySerializer::serialize(params, &key, obj);
+/// Serialize `SendMessageBatchRequestEntryList` contents to a `SignedRequest`.
+struct SendMessageBatchRequestEntryListSerializer;
+impl SendMessageBatchRequestEntryListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SendMessageBatchRequestEntryList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            SendMessageBatchRequestEntrySerializer::serialize(params, &key, obj);
+        }
+    }
 }
-                }
-            }
-            
+
 #[doc="<p>For each message in the batch, the response contains a <code> <a>SendMessageBatchResultEntry</a> </code> tag if the message succeeds or a <code> <a>BatchResultErrorEntry</a> </code> tag if the message fails.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SendMessageBatchResult {
-                #[doc="<p>A list of <code> <a>BatchResultErrorEntry</a> </code> items with error details about each message that can't be enqueued.</p>"]
-pub failed: BatchResultErrorEntryList,
-#[doc="<p>A list of <code> <a>SendMessageBatchResultEntry</a> </code> items.</p>"]
-pub successful: SendMessageBatchResultEntryList,
-            }
-            
+pub struct SendMessageBatchResult {
+    #[doc="<p>A list of <code> <a>BatchResultErrorEntry</a> </code> items with error details about each message that can't be enqueued.</p>"]
+    pub failed: BatchResultErrorEntryList,
+    #[doc="<p>A list of <code> <a>SendMessageBatchResultEntry</a> </code> items.</p>"]
+    pub successful: SendMessageBatchResultEntryList,
+}
+
 struct SendMessageBatchResultDeserializer;
-            impl SendMessageBatchResultDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<SendMessageBatchResult, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl SendMessageBatchResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<SendMessageBatchResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = SendMessageBatchResult::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1696,53 +1815,60 @@ struct SendMessageBatchResultDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "BatchResultErrorEntry" => {
-                obj.failed = try!(BatchResultErrorEntryListDeserializer::deserialize("BatchResultErrorEntry", stack));
-            }
-"SendMessageBatchResultEntry" => {
-                obj.successful = try!(SendMessageBatchResultEntryListDeserializer::deserialize("SendMessageBatchResultEntry", stack));
-            }
+                            obj.failed =
+                                try!(BatchResultErrorEntryListDeserializer::deserialize("BatchResultErrorEntry",
+                                                                                        stack));
+                        }
+                        "SendMessageBatchResultEntry" => {
+                            obj.successful = try!(SendMessageBatchResultEntryListDeserializer::deserialize("SendMessageBatchResultEntry", stack));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p>Encloses a <code>MessageId</code> for a successfully-enqueued message in a <code> <a>SendMessageBatch</a> </code>.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SendMessageBatchResultEntry {
-                #[doc="<p>An identifier for the message in this batch.</p>"]
-pub id: String,
-#[doc="<p>An MD5 digest of the non-URL-encoded message attribute string. You can use this attribute to verify that Amazon SQS received the message correctly. Amazon SQS URL-decodes the message before creating the MD5 digest. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p>"]
-pub md5_of_message_attributes: Option<String>,
-#[doc="<p>An MD5 digest of the non-URL-encoded message attribute string. You can use this attribute to verify that Amazon SQS received the message correctly. Amazon SQS URL-decodes the message before creating the MD5 digest. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p>"]
-pub md5_of_message_body: String,
-#[doc="<p>An identifier for the message.</p>"]
-pub message_id: String,
-#[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>A large, non-consecutive number that Amazon SQS assigns to each message.</p> <p>The length of <code>SequenceNumber</code> is 128 bits. As <code>SequenceNumber</code> continues to increase for a particular <code>MessageGroupId</code>.</p>"]
-pub sequence_number: Option<String>,
-            }
-            
+pub struct SendMessageBatchResultEntry {
+    #[doc="<p>An identifier for the message in this batch.</p>"]
+    pub id: String,
+    #[doc="<p>An MD5 digest of the non-URL-encoded message attribute string. You can use this attribute to verify that Amazon SQS received the message correctly. Amazon SQS URL-decodes the message before creating the MD5 digest. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p>"]
+    pub md5_of_message_attributes: Option<String>,
+    #[doc="<p>An MD5 digest of the non-URL-encoded message attribute string. You can use this attribute to verify that Amazon SQS received the message correctly. Amazon SQS URL-decodes the message before creating the MD5 digest. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p>"]
+    pub md5_of_message_body: String,
+    #[doc="<p>An identifier for the message.</p>"]
+    pub message_id: String,
+    #[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>A large, non-consecutive number that Amazon SQS assigns to each message.</p> <p>The length of <code>SequenceNumber</code> is 128 bits. As <code>SequenceNumber</code> continues to increase for a particular <code>MessageGroupId</code>.</p>"]
+    pub sequence_number: Option<String>,
+}
+
 struct SendMessageBatchResultEntryDeserializer;
-            impl SendMessageBatchResultEntryDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<SendMessageBatchResultEntry, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl SendMessageBatchResultEntryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<SendMessageBatchResultEntry, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = SendMessageBatchResultEntry::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1750,137 +1876,153 @@ struct SendMessageBatchResultEntryDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "Id" => {
-                obj.id = try!(StringDeserializer::deserialize("Id", stack));
-            }
-"MD5OfMessageAttributes" => {
-                obj.md5_of_message_attributes = Some(try!(StringDeserializer::deserialize("MD5OfMessageAttributes", stack)));
-            }
-"MD5OfMessageBody" => {
-                obj.md5_of_message_body = try!(StringDeserializer::deserialize("MD5OfMessageBody", stack));
-            }
-"MessageId" => {
-                obj.message_id = try!(StringDeserializer::deserialize("MessageId", stack));
-            }
-"SequenceNumber" => {
-                obj.sequence_number = Some(try!(StringDeserializer::deserialize("SequenceNumber", stack)));
-            }
+                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                        }
+                        "MD5OfMessageAttributes" => {
+                            obj.md5_of_message_attributes =
+                                Some(try!(StringDeserializer::deserialize("MD5OfMessageAttributes",
+                                                                          stack)));
+                        }
+                        "MD5OfMessageBody" => {
+                            obj.md5_of_message_body = try!(StringDeserializer::deserialize("MD5OfMessageBody",
+                                                                                           stack));
+                        }
+                        "MessageId" => {
+                            obj.message_id = try!(StringDeserializer::deserialize("MessageId",
+                                                                                  stack));
+                        }
+                        "SequenceNumber" => {
+                            obj.sequence_number =
+                                Some(try!(StringDeserializer::deserialize("SequenceNumber",
+                                                                          stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type SendMessageBatchResultEntryList = Vec<SendMessageBatchResultEntry>;
 struct SendMessageBatchResultEntryListDeserializer;
-            impl SendMessageBatchResultEntryListDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<SendMessageBatchResultEntryList, XmlParseError> {
-                    
+impl SendMessageBatchResultEntryListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<SendMessageBatchResultEntryList, XmlParseError> {
+
         let mut obj = vec![];
 
         loop {
 
             let consume_next_tag = match stack.peek() {
                 Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
-                _ => false
+                _ => false,
             };
 
             if consume_next_tag {
-                obj.push(try!(SendMessageBatchResultEntryDeserializer::deserialize(tag_name, stack)));
+                obj.push(try!(SendMessageBatchResultEntryDeserializer::deserialize(tag_name,
+                                                                                   stack)));
             } else {
-                break
+                break;
             }
 
         }
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SendMessageRequest {
-                #[doc="<p> The number of seconds to delay a specific message. Valid values: 0 to 900. Maximum: 15 minutes. Messages with a positive <code>DelaySeconds</code> value become available for processing after the delay period is finished. If you don't specify a value, the default value for the queue applies. </p> <note> <p>When you set <code>FifoQueue</code>, you can't set <code>DelaySeconds</code> per message. You can set this parameter only on a queue level.</p> </note>"]
-pub delay_seconds: Option<Integer>,
-#[doc="<p>Each message attribute consists of a <code>Name</code>, <code>Type</code>, and <code>Value</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-attributes.html#message-attributes-items-validation\">Message Attribute Items and Validation</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
-pub message_attributes: Option<MessageBodyAttributeMap>,
-#[doc="<p>The message to send. The maximum string size is 256 KB.</p> <important> <p>The following list shows the characters (in Unicode) that are allowed in your message, according to the W3C XML specification:</p> <ul> <li> <p> <code>#x9</code> </p> </li> <li> <p> <code>#xA</code> </p> </li> <li> <p> <code>#xD</code> </p> </li> <li> <p> <code>#x20</code> to <code>#xD7FF</code> </p> </li> <li> <p> <code>#xE000</code> to <code>#xFFFD</code> </p> </li> <li> <p> <code>#x10000</code> to <code>#x10FFFF</code> </p> </li> </ul> <p>For more information, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>. If you send any characters that aren't included in this list, your request is rejected.</p> </important>"]
-pub message_body: String,
-#[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The token used for deduplication of sent messages. If a message with a particular <code>MessageDeduplicationId</code> is sent successfully, any messages sent with the same <code>MessageDeduplicationId</code> are accepted successfully but aren't delivered during the 5-minute deduplication interval. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing\"> Exactly-Once Processing</a> in the <i>Amazon SQS Developer Guide</i>.</p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>,</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren't able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don't provide a <code>MessageDeduplicationId</code> and the queue doesn't have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>You can also use <code>ContentBasedDeduplication</code> for messages with identical content to be treated as duplicates.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> <note> <p>The <code>MessageDeduplicationId</code> is available to the recipient of the message (this can be useful for troubleshooting delivery issues).</p> <p>If a message is sent successfully but the acknowledgement is lost and the message is resent with the same <code>MessageDeduplicationId</code> after the deduplication interval, Amazon SQS can't detect duplicate messages.</p> </note> <p>The length of <code>MessageDeduplicationId</code> is 128 characters. <code>MessageDeduplicationId</code> can contain alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>) and punctuation (<code>!\"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~</code>).</p> <p>For best practices of using <code>MessageDeduplicationId</code>, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html#using-messagededuplicationid-property\">Using the MessageDeduplicationId Property</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>"]
-pub message_deduplication_id: Option<String>,
-#[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The tag that specifies that a message belongs to a specific message group. Messages that belong to the same message group are processed in a FIFO manner (however, messages in different message groups might be processed out of order). To interleave multiple ordered streams within a single queue, use <code>MessageGroupId</code> values (for example, session data for multiple users). In this scenario, multiple readers can process the queue, but the session data of each user is processed in a FIFO fashion.</p> <ul> <li> <p>You must associate a non-empty <code>MessageGroupId</code> with a message. If you don't provide a <code>MessageGroupId</code>, the action fails.</p> </li> <li> <p> <code>ReceiveMessage</code> might return messages with multiple <code>MessageGroupId</code> values. For each <code>MessageGroupId</code>, the messages are sorted by time sent. The caller can't specify a <code>MessageGroupId</code>.</p> </li> </ul> <p>The length of <code>MessageGroupId</code> is 128 characters. Valid values are alphanumeric characters and punctuation <code>(!\"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~)</code>.</p> <p>For best practices of using <code>MessageGroupId</code>, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html#using-messagegroupid-property\">Using the MessageGroupId Property</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>"]
-pub message_group_id: Option<String>,
-#[doc="<p>The URL of the Amazon SQS queue to which a message is sent.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-            }
-            
+pub struct SendMessageRequest {
+    #[doc="<p> The number of seconds to delay a specific message. Valid values: 0 to 900. Maximum: 15 minutes. Messages with a positive <code>DelaySeconds</code> value become available for processing after the delay period is finished. If you don't specify a value, the default value for the queue applies. </p> <note> <p>When you set <code>FifoQueue</code>, you can't set <code>DelaySeconds</code> per message. You can set this parameter only on a queue level.</p> </note>"]
+    pub delay_seconds: Option<Integer>,
+    #[doc="<p>Each message attribute consists of a <code>Name</code>, <code>Type</code>, and <code>Value</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-attributes.html#message-attributes-items-validation\">Message Attribute Items and Validation</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
+    pub message_attributes: Option<MessageBodyAttributeMap>,
+    #[doc="<p>The message to send. The maximum string size is 256 KB.</p> <important> <p>The following list shows the characters (in Unicode) that are allowed in your message, according to the W3C XML specification:</p> <ul> <li> <p> <code>#x9</code> </p> </li> <li> <p> <code>#xA</code> </p> </li> <li> <p> <code>#xD</code> </p> </li> <li> <p> <code>#x20</code> to <code>#xD7FF</code> </p> </li> <li> <p> <code>#xE000</code> to <code>#xFFFD</code> </p> </li> <li> <p> <code>#x10000</code> to <code>#x10FFFF</code> </p> </li> </ul> <p>For more information, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>. If you send any characters that aren't included in this list, your request is rejected.</p> </important>"]
+    pub message_body: String,
+    #[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The token used for deduplication of sent messages. If a message with a particular <code>MessageDeduplicationId</code> is sent successfully, any messages sent with the same <code>MessageDeduplicationId</code> are accepted successfully but aren't delivered during the 5-minute deduplication interval. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing\"> Exactly-Once Processing</a> in the <i>Amazon SQS Developer Guide</i>.</p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>,</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren't able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don't provide a <code>MessageDeduplicationId</code> and the queue doesn't have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>You can also use <code>ContentBasedDeduplication</code> for messages with identical content to be treated as duplicates.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> <note> <p>The <code>MessageDeduplicationId</code> is available to the recipient of the message (this can be useful for troubleshooting delivery issues).</p> <p>If a message is sent successfully but the acknowledgement is lost and the message is resent with the same <code>MessageDeduplicationId</code> after the deduplication interval, Amazon SQS can't detect duplicate messages.</p> </note> <p>The length of <code>MessageDeduplicationId</code> is 128 characters. <code>MessageDeduplicationId</code> can contain alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>) and punctuation (<code>!\"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~</code>).</p> <p>For best practices of using <code>MessageDeduplicationId</code>, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html#using-messagededuplicationid-property\">Using the MessageDeduplicationId Property</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>"]
+    pub message_deduplication_id: Option<String>,
+    #[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>The tag that specifies that a message belongs to a specific message group. Messages that belong to the same message group are processed in a FIFO manner (however, messages in different message groups might be processed out of order). To interleave multiple ordered streams within a single queue, use <code>MessageGroupId</code> values (for example, session data for multiple users). In this scenario, multiple readers can process the queue, but the session data of each user is processed in a FIFO fashion.</p> <ul> <li> <p>You must associate a non-empty <code>MessageGroupId</code> with a message. If you don't provide a <code>MessageGroupId</code>, the action fails.</p> </li> <li> <p> <code>ReceiveMessage</code> might return messages with multiple <code>MessageGroupId</code> values. For each <code>MessageGroupId</code>, the messages are sorted by time sent. The caller can't specify a <code>MessageGroupId</code>.</p> </li> </ul> <p>The length of <code>MessageGroupId</code> is 128 characters. Valid values are alphanumeric characters and punctuation <code>(!\"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~)</code>.</p> <p>For best practices of using <code>MessageGroupId</code>, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queue-recommendations.html#using-messagegroupid-property\">Using the MessageGroupId Property</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p>"]
+    pub message_group_id: Option<String>,
+    #[doc="<p>The URL of the Amazon SQS queue to which a message is sent.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+}
 
-            /// Serialize `SendMessageRequest` contents to a `SignedRequest`.
-            struct SendMessageRequestSerializer;
-            impl SendMessageRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &SendMessageRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `SendMessageRequest` contents to a `SignedRequest`.
+struct SendMessageRequestSerializer;
+impl SendMessageRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SendMessageRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
         if let Some(ref field_value) = obj.delay_seconds {
-                params.put(&format!("{}{}", prefix, "DelaySeconds"), &field_value.to_string());
-            }
-if let Some(ref field_value) = obj.message_attributes {
-                MessageBodyAttributeMapSerializer::serialize(
-                    params,
-                    &format!("{}{}", prefix, "MessageAttribute"),
-                    field_value,
-                );
-            }
-params.put(&format!("{}{}", prefix, "MessageBody"), &obj.message_body);
-if let Some(ref field_value) = obj.message_deduplication_id {
-                params.put(&format!("{}{}", prefix, "MessageDeduplicationId"), &field_value);
-            }
-if let Some(ref field_value) = obj.message_group_id {
-                params.put(&format!("{}{}", prefix, "MessageGroupId"), &field_value);
-            }
-params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-        
-                }
-            }
-            
+            params.put(&format!("{}{}", prefix, "DelaySeconds"),
+                       &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.message_attributes {
+            MessageBodyAttributeMapSerializer::serialize(params,
+                                                         &format!("{}{}",
+                                                                 prefix,
+                                                                 "MessageAttribute"),
+                                                         field_value);
+        }
+        params.put(&format!("{}{}", prefix, "MessageBody"), &obj.message_body);
+        if let Some(ref field_value) = obj.message_deduplication_id {
+            params.put(&format!("{}{}", prefix, "MessageDeduplicationId"),
+                       &field_value);
+        }
+        if let Some(ref field_value) = obj.message_group_id {
+            params.put(&format!("{}{}", prefix, "MessageGroupId"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+
+    }
+}
+
 #[doc="<p>The <code>MD5OfMessageBody</code> and <code>MessageId</code> elements.</p>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SendMessageResult {
-                #[doc="<p>An MD5 digest of the non-URL-encoded message attribute string. You can use this attribute to verify that Amazon SQS received the message correctly. Amazon SQS URL-decodes the message before creating the MD5 digest. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p>"]
-pub md5_of_message_attributes: Option<String>,
-#[doc="<p>An MD5 digest of the non-URL-encoded message attribute string. You can use this attribute to verify that Amazon SQS received the message correctly. Amazon SQS URL-decodes the message before creating the MD5 digest. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p>"]
-pub md5_of_message_body: Option<String>,
-#[doc="<p>An attribute containing the <code>MessageId</code> of the message sent to the queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-message-identifiers.html\">Queue and Message Identifiers</a> in the <i>Amazon SQS Developer Guide</i>. </p>"]
-pub message_id: Option<String>,
-#[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>A large, non-consecutive number that Amazon SQS assigns to each message.</p> <p>The length of <code>SequenceNumber</code> is 128 bits. <code>SequenceNumber</code> continues to increase for a particular <code>MessageGroupId</code>.</p>"]
-pub sequence_number: Option<String>,
-            }
-            
+pub struct SendMessageResult {
+    #[doc="<p>An MD5 digest of the non-URL-encoded message attribute string. You can use this attribute to verify that Amazon SQS received the message correctly. Amazon SQS URL-decodes the message before creating the MD5 digest. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p>"]
+    pub md5_of_message_attributes: Option<String>,
+    #[doc="<p>An MD5 digest of the non-URL-encoded message attribute string. You can use this attribute to verify that Amazon SQS received the message correctly. Amazon SQS URL-decodes the message before creating the MD5 digest. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p>"]
+    pub md5_of_message_body: Option<String>,
+    #[doc="<p>An attribute containing the <code>MessageId</code> of the message sent to the queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-message-identifiers.html\">Queue and Message Identifiers</a> in the <i>Amazon SQS Developer Guide</i>. </p>"]
+    pub message_id: Option<String>,
+    #[doc="<p>This parameter applies only to FIFO (first-in-first-out) queues.</p> <p>A large, non-consecutive number that Amazon SQS assigns to each message.</p> <p>The length of <code>SequenceNumber</code> is 128 bits. <code>SequenceNumber</code> continues to increase for a particular <code>MessageGroupId</code>.</p>"]
+    pub sequence_number: Option<String>,
+}
+
 struct SendMessageResultDeserializer;
-            impl SendMessageResultDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<SendMessageResult, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl SendMessageResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<SendMessageResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
 
         let mut obj = SendMessageResult::default();
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1888,87 +2030,98 @@ struct SendMessageResultDeserializer;
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "MD5OfMessageAttributes" => {
-                obj.md5_of_message_attributes = Some(try!(StringDeserializer::deserialize("MD5OfMessageAttributes", stack)));
-            }
-"MD5OfMessageBody" => {
-                obj.md5_of_message_body = Some(try!(StringDeserializer::deserialize("MD5OfMessageBody", stack)));
-            }
-"MessageId" => {
-                obj.message_id = Some(try!(StringDeserializer::deserialize("MessageId", stack)));
-            }
-"SequenceNumber" => {
-                obj.sequence_number = Some(try!(StringDeserializer::deserialize("SequenceNumber", stack)));
-            }
+                            obj.md5_of_message_attributes =
+                                Some(try!(StringDeserializer::deserialize("MD5OfMessageAttributes",
+                                                                          stack)));
+                        }
+                        "MD5OfMessageBody" => {
+                            obj.md5_of_message_body =
+                                Some(try!(StringDeserializer::deserialize("MD5OfMessageBody",
+                                                                          stack)));
+                        }
+                        "MessageId" => {
+                            obj.message_id = Some(try!(StringDeserializer::deserialize("MessageId",
+                                                                                       stack)));
+                        }
+                        "SequenceNumber" => {
+                            obj.sequence_number =
+                                Some(try!(StringDeserializer::deserialize("SequenceNumber",
+                                                                          stack)));
+                        }
                         _ => skip_tree(stack),
                     }
-                },
+                }
                 DeserializerNext::Close => break,
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
-            pub struct SetQueueAttributesRequest {
-                #[doc="<p>A map of attributes to set.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetQueueAttributes</code> action uses:</p> <ul> <li> <p> <code>DelaySeconds</code> - The number of seconds for which the delivery of all messages in the queue is delayed. Valid values: An integer from 0 to 900 (15 minutes). The default is 0 (zero). </p> </li> <li> <p> <code>MaximumMessageSize</code> - The limit of how many bytes a message can contain before Amazon SQS rejects it. Valid values: An integer from 1,024 bytes (1 KiB) up to 262,144 bytes (256 KiB). The default is 262,144 (256 KiB). </p> </li> <li> <p> <code>MessageRetentionPeriod</code> - The number of seconds for which Amazon SQS retains a message. Valid values: An integer representing seconds, from 60 (1 minute) to 1,209,600 (14 days). The default is 345,600 (4 days). </p> </li> <li> <p> <code>Policy</code> - The queue's policy. A valid AWS policy. For more information about policy structure, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PoliciesOverview.html\">Overview of AWS IAM Policies</a> in the <i>Amazon IAM User Guide</i>. </p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> - The number of seconds for which a <code> <a>ReceiveMessage</a> </code> action waits for a message to arrive. Valid values: an integer from 0 to 20 (seconds). The default is 0. </p> </li> <li> <p> <code>RedrivePolicy</code> - The parameters for the dead letter queue functionality of the source queue. For more information about the redrive policy and dead letter queues, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html\">Using Amazon SQS Dead Letter Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p> <note> <p>The dead letter queue of a FIFO queue must also be a FIFO queue. Similarly, the dead letter queue of a standard queue must also be a standard queue.</p> </note> </li> <li> <p> <code>VisibilityTimeout</code> - The visibility timeout for the queue. Valid values: an integer from 0 to 43,200 (12 hours). The default is 30. For more information about the visibility timeout, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> </li> </ul> <p>The following attribute applies only to <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html\">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>ContentBasedDeduplication</code> - Enables content-based deduplication. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing\">Exactly-Once Processing</a> in the <i>Amazon SQS Developer Guide</i>. </p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>,</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren't able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don't provide a <code>MessageDeduplicationId</code> and the queue doesn't have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>You can also use <code>ContentBasedDeduplication</code> for messages with identical content to be treated as duplicates.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> </li> </ul> <p>Any other valid special request parameters (such as the following) are ignored:</p> <ul> <li> <p> <code>ApproximateNumberOfMessages</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesDelayed</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesNotVisible</code> </p> </li> <li> <p> <code>CreatedTimestamp</code> </p> </li> <li> <p> <code>LastModifiedTimestamp</code> </p> </li> <li> <p> <code>QueueArn</code> </p> </li> </ul>"]
-pub attributes: QueueAttributeMap,
-#[doc="<p>The URL of the Amazon SQS queue whose attributes are set.</p> <p>Queue URLs are case-sensitive.</p>"]
-pub queue_url: String,
-            }
-            
+pub struct SetQueueAttributesRequest {
+    #[doc="<p>A map of attributes to set.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetQueueAttributes</code> action uses:</p> <ul> <li> <p> <code>DelaySeconds</code> - The number of seconds for which the delivery of all messages in the queue is delayed. Valid values: An integer from 0 to 900 (15 minutes). The default is 0 (zero). </p> </li> <li> <p> <code>MaximumMessageSize</code> - The limit of how many bytes a message can contain before Amazon SQS rejects it. Valid values: An integer from 1,024 bytes (1 KiB) up to 262,144 bytes (256 KiB). The default is 262,144 (256 KiB). </p> </li> <li> <p> <code>MessageRetentionPeriod</code> - The number of seconds for which Amazon SQS retains a message. Valid values: An integer representing seconds, from 60 (1 minute) to 1,209,600 (14 days). The default is 345,600 (4 days). </p> </li> <li> <p> <code>Policy</code> - The queue's policy. A valid AWS policy. For more information about policy structure, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PoliciesOverview.html\">Overview of AWS IAM Policies</a> in the <i>Amazon IAM User Guide</i>. </p> </li> <li> <p> <code>ReceiveMessageWaitTimeSeconds</code> - The number of seconds for which a <code> <a>ReceiveMessage</a> </code> action waits for a message to arrive. Valid values: an integer from 0 to 20 (seconds). The default is 0. </p> </li> <li> <p> <code>RedrivePolicy</code> - The parameters for the dead letter queue functionality of the source queue. For more information about the redrive policy and dead letter queues, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html\">Using Amazon SQS Dead Letter Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p> <note> <p>The dead letter queue of a FIFO queue must also be a FIFO queue. Similarly, the dead letter queue of a standard queue must also be a standard queue.</p> </note> </li> <li> <p> <code>VisibilityTimeout</code> - The visibility timeout for the queue. Valid values: an integer from 0 to 43,200 (12 hours). The default is 30. For more information about the visibility timeout, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> </li> </ul> <p>The following attribute applies only to <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html\">FIFO (first-in-first-out) queues</a>:</p> <ul> <li> <p> <code>ContentBasedDeduplication</code> - Enables content-based deduplication. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing\">Exactly-Once Processing</a> in the <i>Amazon SQS Developer Guide</i>. </p> <ul> <li> <p>Every message must have a unique <code>MessageDeduplicationId</code>,</p> <ul> <li> <p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p> </li> <li> <p>If you aren't able to provide a <code>MessageDeduplicationId</code> and you enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message). </p> </li> <li> <p>If you don't provide a <code>MessageDeduplicationId</code> and the queue doesn't have <code>ContentBasedDeduplication</code> set, the action fails with an error.</p> </li> <li> <p>If the queue has <code>ContentBasedDeduplication</code> set, your <code>MessageDeduplicationId</code> overrides the generated one.</p> </li> </ul> </li> <li> <p>When <code>ContentBasedDeduplication</code> is in effect, messages with identical content sent within the deduplication interval are treated as duplicates and only one copy of the message is delivered.</p> </li> <li> <p>You can also use <code>ContentBasedDeduplication</code> for messages with identical content to be treated as duplicates.</p> </li> <li> <p>If you send one message with <code>ContentBasedDeduplication</code> enabled and then another message with a <code>MessageDeduplicationId</code> that is the same as the one generated for the first <code>MessageDeduplicationId</code>, the two messages are treated as duplicates and only one copy of the message is delivered. </p> </li> </ul> </li> </ul> <p>Any other valid special request parameters (such as the following) are ignored:</p> <ul> <li> <p> <code>ApproximateNumberOfMessages</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesDelayed</code> </p> </li> <li> <p> <code>ApproximateNumberOfMessagesNotVisible</code> </p> </li> <li> <p> <code>CreatedTimestamp</code> </p> </li> <li> <p> <code>LastModifiedTimestamp</code> </p> </li> <li> <p> <code>QueueArn</code> </p> </li> </ul>"]
+    pub attributes: QueueAttributeMap,
+    #[doc="<p>The URL of the Amazon SQS queue whose attributes are set.</p> <p>Queue URLs are case-sensitive.</p>"]
+    pub queue_url: String,
+}
 
-            /// Serialize `SetQueueAttributesRequest` contents to a `SignedRequest`.
-            struct SetQueueAttributesRequestSerializer;
-            impl SetQueueAttributesRequestSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &SetQueueAttributesRequest) {
-                    let mut prefix = name.to_string();
+
+/// Serialize `SetQueueAttributesRequest` contents to a `SignedRequest`.
+struct SetQueueAttributesRequestSerializer;
+impl SetQueueAttributesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SetQueueAttributesRequest) {
+        let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
-        QueueAttributeMapSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "Attribute"),
-                &obj.attributes,
-            );
-params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
-        
-                }
-            }
-            
+        QueueAttributeMapSerializer::serialize(params,
+                                               &format!("{}{}", prefix, "Attribute"),
+                                               &obj.attributes);
+        params.put(&format!("{}{}", prefix, "QueueUrl"), &obj.queue_url);
+
+    }
+}
+
 struct StringDeserializer;
-            impl StringDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<String, XmlParseError> {
-                    try!(start_element(tag_name, stack));
+impl StringDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-        
-                }
-            }
+
+    }
+}
 pub type StringList = Vec<String>;
 struct StringListDeserializer;
-            impl StringListDeserializer {
-                #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
-                -> Result<StringList, XmlParseError> {
-                    
+impl StringListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<StringList, XmlParseError> {
+
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
         loop {
             let next_event = match stack.peek() {
                 Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
                 _ => DeserializerNext::Skip,
             };
 
@@ -1979,1922 +2132,2098 @@ struct StringListDeserializer;
                     } else {
                         skip_tree(stack);
                     }
-                },
+                }
                 DeserializerNext::Close => {
                     try!(end_element(tag_name, stack));
                     break;
                 }
-                DeserializerNext::Skip => { stack.next(); },
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
             }
         }
 
         Ok(obj)
-        
-                }
-            }
 
-            /// Serialize `StringList` contents to a `SignedRequest`.
-            struct StringListSerializer;
-            impl StringListSerializer {
-                fn serialize(params: &mut Params, name: &str, obj: &StringList) {
-                    for (index, obj) in obj.iter().enumerate() {
-                    let key = format!("{}.member.{}", name, index+1);
-params.put(&key, &obj);
+    }
 }
+
+/// Serialize `StringList` contents to a `SignedRequest`.
+struct StringListSerializer;
+impl StringListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StringList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+/// Errors returned by AddPermission
+#[derive(Debug, PartialEq)]
+pub enum AddPermissionError {
+    ///<p>The action that you requested would violate a limit. For example, <code>ReceiveMessage</code> returns this error if the maximum number of inflight messages is reached. <code> <a>AddPermission</a> </code> returns this error if the maximum number of permissions for the queue is reached.</p>
+    OverLimit(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl AddPermissionError {
+    pub fn from_body(body: &str) -> AddPermissionError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "OverLimit" => {
+                        AddPermissionError::OverLimit(String::from(parsed_error.message))
+                    }
+                    _ => AddPermissionError::Unknown(String::from(body)),
                 }
             }
-            
-/// Errors returned by AddPermission
-                #[derive(Debug, PartialEq)]
-                pub enum AddPermissionError {
-                    
-///<p>The action that you requested would violate a limit. For example, <code>ReceiveMessage</code> returns this error if the maximum number of inflight messages is reached. <code> <a>AddPermission</a> </code> returns this error if the maximum number of permissions for the queue is reached.</p>
-OverLimit(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+            Err(_) => AddPermissionError::Unknown(body.to_string()),
+        }
+    }
+}
 
-                
-                impl AddPermissionError {
-                    pub fn from_body(body: &str) -> AddPermissionError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "OverLimit" => AddPermissionError::OverLimit(String::from(parsed_error.message)),_ => AddPermissionError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => AddPermissionError::Unknown(body.to_string())
-                       }
-                    }
-                }
-                
-                impl From<XmlParseError> for AddPermissionError {
-                    fn from(err: XmlParseError) -> AddPermissionError {
-                        let XmlParseError(message) = err;
-                        AddPermissionError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for AddPermissionError {
-                    fn from(err: CredentialsError) -> AddPermissionError {
-                        AddPermissionError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for AddPermissionError {
-                    fn from(err: HttpDispatchError) -> AddPermissionError {
-                        AddPermissionError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for AddPermissionError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for AddPermissionError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            AddPermissionError::OverLimit(ref cause) => cause,
-AddPermissionError::Validation(ref cause) => cause,
-AddPermissionError::Credentials(ref err) => err.description(),
-AddPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-AddPermissionError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+impl From<XmlParseError> for AddPermissionError {
+    fn from(err: XmlParseError) -> AddPermissionError {
+        let XmlParseError(message) = err;
+        AddPermissionError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for AddPermissionError {
+    fn from(err: CredentialsError) -> AddPermissionError {
+        AddPermissionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AddPermissionError {
+    fn from(err: HttpDispatchError) -> AddPermissionError {
+        AddPermissionError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for AddPermissionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AddPermissionError {
+    fn description(&self) -> &str {
+        match *self {
+            AddPermissionError::OverLimit(ref cause) => cause,
+            AddPermissionError::Validation(ref cause) => cause,
+            AddPermissionError::Credentials(ref err) => err.description(),
+            AddPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            AddPermissionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ChangeMessageVisibility
-                #[derive(Debug, PartialEq)]
-                pub enum ChangeMessageVisibilityError {
-                    
-///<p>The message referred to isn't in flight.</p>
-MessageNotInflight(String),
-///<p>The receipt handle provided isn't valid.</p>
-ReceiptHandleIsInvalid(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ChangeMessageVisibilityError {
+    ///<p>The message referred to isn't in flight.</p>
+    MessageNotInflight(String),
+    ///<p>The receipt handle provided isn't valid.</p>
+    ReceiptHandleIsInvalid(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ChangeMessageVisibilityError {
-                    pub fn from_body(body: &str) -> ChangeMessageVisibilityError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "MessageNotInflight" => ChangeMessageVisibilityError::MessageNotInflight(String::from(parsed_error.message)),"ReceiptHandleIsInvalid" => ChangeMessageVisibilityError::ReceiptHandleIsInvalid(String::from(parsed_error.message)),_ => ChangeMessageVisibilityError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ChangeMessageVisibilityError::Unknown(body.to_string())
-                       }
-                    }
+
+impl ChangeMessageVisibilityError {
+    pub fn from_body(body: &str) -> ChangeMessageVisibilityError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "MessageNotInflight" => ChangeMessageVisibilityError::MessageNotInflight(String::from(parsed_error.message)),
+                    "ReceiptHandleIsInvalid" => ChangeMessageVisibilityError::ReceiptHandleIsInvalid(String::from(parsed_error.message)),
+                    _ => ChangeMessageVisibilityError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ChangeMessageVisibilityError {
-                    fn from(err: XmlParseError) -> ChangeMessageVisibilityError {
-                        let XmlParseError(message) = err;
-                        ChangeMessageVisibilityError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ChangeMessageVisibilityError {
-                    fn from(err: CredentialsError) -> ChangeMessageVisibilityError {
-                        ChangeMessageVisibilityError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ChangeMessageVisibilityError {
-                    fn from(err: HttpDispatchError) -> ChangeMessageVisibilityError {
-                        ChangeMessageVisibilityError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ChangeMessageVisibilityError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ChangeMessageVisibilityError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ChangeMessageVisibilityError::MessageNotInflight(ref cause) => cause,
-ChangeMessageVisibilityError::ReceiptHandleIsInvalid(ref cause) => cause,
-ChangeMessageVisibilityError::Validation(ref cause) => cause,
-ChangeMessageVisibilityError::Credentials(ref err) => err.description(),
-ChangeMessageVisibilityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ChangeMessageVisibilityError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ChangeMessageVisibilityError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ChangeMessageVisibilityError {
+    fn from(err: XmlParseError) -> ChangeMessageVisibilityError {
+        let XmlParseError(message) = err;
+        ChangeMessageVisibilityError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ChangeMessageVisibilityError {
+    fn from(err: CredentialsError) -> ChangeMessageVisibilityError {
+        ChangeMessageVisibilityError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ChangeMessageVisibilityError {
+    fn from(err: HttpDispatchError) -> ChangeMessageVisibilityError {
+        ChangeMessageVisibilityError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ChangeMessageVisibilityError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ChangeMessageVisibilityError {
+    fn description(&self) -> &str {
+        match *self {
+            ChangeMessageVisibilityError::MessageNotInflight(ref cause) => cause,
+            ChangeMessageVisibilityError::ReceiptHandleIsInvalid(ref cause) => cause,
+            ChangeMessageVisibilityError::Validation(ref cause) => cause,
+            ChangeMessageVisibilityError::Credentials(ref err) => err.description(),
+            ChangeMessageVisibilityError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ChangeMessageVisibilityError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ChangeMessageVisibilityBatch
-                #[derive(Debug, PartialEq)]
-                pub enum ChangeMessageVisibilityBatchError {
-                    
-///<p>Two or more batch entries in the request have the same <code>Id</code>.</p>
-BatchEntryIdsNotDistinct(String),
-///<p>The batch request doesn't contain any entries.</p>
-EmptyBatchRequest(String),
-///<p>The <code>Id</code> of a batch entry in a batch request doesn't abide by the specification.</p>
-InvalidBatchEntryId(String),
-///<p>The batch request contains more entries than permissible.</p>
-TooManyEntriesInBatchRequest(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ChangeMessageVisibilityBatchError {
+    ///<p>Two or more batch entries in the request have the same <code>Id</code>.</p>
+    BatchEntryIdsNotDistinct(String),
+    ///<p>The batch request doesn't contain any entries.</p>
+    EmptyBatchRequest(String),
+    ///<p>The <code>Id</code> of a batch entry in a batch request doesn't abide by the specification.</p>
+    InvalidBatchEntryId(String),
+    ///<p>The batch request contains more entries than permissible.</p>
+    TooManyEntriesInBatchRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ChangeMessageVisibilityBatchError {
-                    pub fn from_body(body: &str) -> ChangeMessageVisibilityBatchError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "BatchEntryIdsNotDistinct" => ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(String::from(parsed_error.message)),"EmptyBatchRequest" => ChangeMessageVisibilityBatchError::EmptyBatchRequest(String::from(parsed_error.message)),"InvalidBatchEntryId" => ChangeMessageVisibilityBatchError::InvalidBatchEntryId(String::from(parsed_error.message)),"TooManyEntriesInBatchRequest" => ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(String::from(parsed_error.message)),_ => ChangeMessageVisibilityBatchError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ChangeMessageVisibilityBatchError::Unknown(body.to_string())
-                       }
-                    }
+
+impl ChangeMessageVisibilityBatchError {
+    pub fn from_body(body: &str) -> ChangeMessageVisibilityBatchError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "BatchEntryIdsNotDistinct" => ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(String::from(parsed_error.message)),
+                    "EmptyBatchRequest" => ChangeMessageVisibilityBatchError::EmptyBatchRequest(String::from(parsed_error.message)),
+                    "InvalidBatchEntryId" => ChangeMessageVisibilityBatchError::InvalidBatchEntryId(String::from(parsed_error.message)),
+                    "TooManyEntriesInBatchRequest" => ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(String::from(parsed_error.message)),
+                    _ => ChangeMessageVisibilityBatchError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ChangeMessageVisibilityBatchError {
-                    fn from(err: XmlParseError) -> ChangeMessageVisibilityBatchError {
-                        let XmlParseError(message) = err;
-                        ChangeMessageVisibilityBatchError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ChangeMessageVisibilityBatchError {
-                    fn from(err: CredentialsError) -> ChangeMessageVisibilityBatchError {
-                        ChangeMessageVisibilityBatchError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ChangeMessageVisibilityBatchError {
-                    fn from(err: HttpDispatchError) -> ChangeMessageVisibilityBatchError {
-                        ChangeMessageVisibilityBatchError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ChangeMessageVisibilityBatchError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ChangeMessageVisibilityBatchError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
-ChangeMessageVisibilityBatchError::EmptyBatchRequest(ref cause) => cause,
-ChangeMessageVisibilityBatchError::InvalidBatchEntryId(ref cause) => cause,
-ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
-ChangeMessageVisibilityBatchError::Validation(ref cause) => cause,
-ChangeMessageVisibilityBatchError::Credentials(ref err) => err.description(),
-ChangeMessageVisibilityBatchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ChangeMessageVisibilityBatchError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ChangeMessageVisibilityBatchError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ChangeMessageVisibilityBatchError {
+    fn from(err: XmlParseError) -> ChangeMessageVisibilityBatchError {
+        let XmlParseError(message) = err;
+        ChangeMessageVisibilityBatchError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ChangeMessageVisibilityBatchError {
+    fn from(err: CredentialsError) -> ChangeMessageVisibilityBatchError {
+        ChangeMessageVisibilityBatchError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ChangeMessageVisibilityBatchError {
+    fn from(err: HttpDispatchError) -> ChangeMessageVisibilityBatchError {
+        ChangeMessageVisibilityBatchError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ChangeMessageVisibilityBatchError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ChangeMessageVisibilityBatchError {
+    fn description(&self) -> &str {
+        match *self {
+            ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
+            ChangeMessageVisibilityBatchError::EmptyBatchRequest(ref cause) => cause,
+            ChangeMessageVisibilityBatchError::InvalidBatchEntryId(ref cause) => cause,
+            ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
+            ChangeMessageVisibilityBatchError::Validation(ref cause) => cause,
+            ChangeMessageVisibilityBatchError::Credentials(ref err) => err.description(),
+            ChangeMessageVisibilityBatchError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ChangeMessageVisibilityBatchError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateQueue
-                #[derive(Debug, PartialEq)]
-                pub enum CreateQueueError {
-                    
-///<p>You must wait 60 seconds after deleting a queue before you can create another one with the same name.</p>
-QueueDeletedRecently(String),
-///<p>A queue already exists with this name. Amazon SQS returns this error only if the request includes attributes whose values differ from those of the existing queue.</p>
-QueueNameExists(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum CreateQueueError {
+    ///<p>You must wait 60 seconds after deleting a queue before you can create another one with the same name.</p>
+    QueueDeletedRecently(String),
+    ///<p>A queue already exists with this name. Amazon SQS returns this error only if the request includes attributes whose values differ from those of the existing queue.</p>
+    QueueNameExists(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl CreateQueueError {
-                    pub fn from_body(body: &str) -> CreateQueueError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "QueueDeletedRecently" => CreateQueueError::QueueDeletedRecently(String::from(parsed_error.message)),"QueueNameExists" => CreateQueueError::QueueNameExists(String::from(parsed_error.message)),_ => CreateQueueError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => CreateQueueError::Unknown(body.to_string())
-                       }
+
+impl CreateQueueError {
+    pub fn from_body(body: &str) -> CreateQueueError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "QueueDeletedRecently" => {
+                        CreateQueueError::QueueDeletedRecently(String::from(parsed_error.message))
                     }
+                    "QueueNameExists" => {
+                        CreateQueueError::QueueNameExists(String::from(parsed_error.message))
+                    }
+                    _ => CreateQueueError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for CreateQueueError {
-                    fn from(err: XmlParseError) -> CreateQueueError {
-                        let XmlParseError(message) = err;
-                        CreateQueueError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for CreateQueueError {
-                    fn from(err: CredentialsError) -> CreateQueueError {
-                        CreateQueueError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for CreateQueueError {
-                    fn from(err: HttpDispatchError) -> CreateQueueError {
-                        CreateQueueError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for CreateQueueError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for CreateQueueError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            CreateQueueError::QueueDeletedRecently(ref cause) => cause,
-CreateQueueError::QueueNameExists(ref cause) => cause,
-CreateQueueError::Validation(ref cause) => cause,
-CreateQueueError::Credentials(ref err) => err.description(),
-CreateQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-CreateQueueError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => CreateQueueError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateQueueError {
+    fn from(err: XmlParseError) -> CreateQueueError {
+        let XmlParseError(message) = err;
+        CreateQueueError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateQueueError {
+    fn from(err: CredentialsError) -> CreateQueueError {
+        CreateQueueError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateQueueError {
+    fn from(err: HttpDispatchError) -> CreateQueueError {
+        CreateQueueError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for CreateQueueError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateQueueError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateQueueError::QueueDeletedRecently(ref cause) => cause,
+            CreateQueueError::QueueNameExists(ref cause) => cause,
+            CreateQueueError::Validation(ref cause) => cause,
+            CreateQueueError::Credentials(ref err) => err.description(),
+            CreateQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateQueueError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteMessage
-                #[derive(Debug, PartialEq)]
-                pub enum DeleteMessageError {
-                    
-///<p>The receipt handle isn't valid for the current version.</p>
-InvalidIdFormat(String),
-///<p>The receipt handle provided isn't valid.</p>
-ReceiptHandleIsInvalid(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum DeleteMessageError {
+    ///<p>The receipt handle isn't valid for the current version.</p>
+    InvalidIdFormat(String),
+    ///<p>The receipt handle provided isn't valid.</p>
+    ReceiptHandleIsInvalid(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl DeleteMessageError {
-                    pub fn from_body(body: &str) -> DeleteMessageError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "InvalidIdFormat" => DeleteMessageError::InvalidIdFormat(String::from(parsed_error.message)),"ReceiptHandleIsInvalid" => DeleteMessageError::ReceiptHandleIsInvalid(String::from(parsed_error.message)),_ => DeleteMessageError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => DeleteMessageError::Unknown(body.to_string())
-                       }
+
+impl DeleteMessageError {
+    pub fn from_body(body: &str) -> DeleteMessageError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "InvalidIdFormat" => {
+                        DeleteMessageError::InvalidIdFormat(String::from(parsed_error.message))
                     }
+                    "ReceiptHandleIsInvalid" => DeleteMessageError::ReceiptHandleIsInvalid(String::from(parsed_error.message)),
+                    _ => DeleteMessageError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for DeleteMessageError {
-                    fn from(err: XmlParseError) -> DeleteMessageError {
-                        let XmlParseError(message) = err;
-                        DeleteMessageError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for DeleteMessageError {
-                    fn from(err: CredentialsError) -> DeleteMessageError {
-                        DeleteMessageError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for DeleteMessageError {
-                    fn from(err: HttpDispatchError) -> DeleteMessageError {
-                        DeleteMessageError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for DeleteMessageError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for DeleteMessageError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            DeleteMessageError::InvalidIdFormat(ref cause) => cause,
-DeleteMessageError::ReceiptHandleIsInvalid(ref cause) => cause,
-DeleteMessageError::Validation(ref cause) => cause,
-DeleteMessageError::Credentials(ref err) => err.description(),
-DeleteMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-DeleteMessageError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => DeleteMessageError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteMessageError {
+    fn from(err: XmlParseError) -> DeleteMessageError {
+        let XmlParseError(message) = err;
+        DeleteMessageError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteMessageError {
+    fn from(err: CredentialsError) -> DeleteMessageError {
+        DeleteMessageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteMessageError {
+    fn from(err: HttpDispatchError) -> DeleteMessageError {
+        DeleteMessageError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DeleteMessageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteMessageError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteMessageError::InvalidIdFormat(ref cause) => cause,
+            DeleteMessageError::ReceiptHandleIsInvalid(ref cause) => cause,
+            DeleteMessageError::Validation(ref cause) => cause,
+            DeleteMessageError::Credentials(ref err) => err.description(),
+            DeleteMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteMessageError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteMessageBatch
-                #[derive(Debug, PartialEq)]
-                pub enum DeleteMessageBatchError {
-                    
-///<p>Two or more batch entries in the request have the same <code>Id</code>.</p>
-BatchEntryIdsNotDistinct(String),
-///<p>The batch request doesn't contain any entries.</p>
-EmptyBatchRequest(String),
-///<p>The <code>Id</code> of a batch entry in a batch request doesn't abide by the specification.</p>
-InvalidBatchEntryId(String),
-///<p>The batch request contains more entries than permissible.</p>
-TooManyEntriesInBatchRequest(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum DeleteMessageBatchError {
+    ///<p>Two or more batch entries in the request have the same <code>Id</code>.</p>
+    BatchEntryIdsNotDistinct(String),
+    ///<p>The batch request doesn't contain any entries.</p>
+    EmptyBatchRequest(String),
+    ///<p>The <code>Id</code> of a batch entry in a batch request doesn't abide by the specification.</p>
+    InvalidBatchEntryId(String),
+    ///<p>The batch request contains more entries than permissible.</p>
+    TooManyEntriesInBatchRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl DeleteMessageBatchError {
-                    pub fn from_body(body: &str) -> DeleteMessageBatchError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "BatchEntryIdsNotDistinct" => DeleteMessageBatchError::BatchEntryIdsNotDistinct(String::from(parsed_error.message)),"EmptyBatchRequest" => DeleteMessageBatchError::EmptyBatchRequest(String::from(parsed_error.message)),"InvalidBatchEntryId" => DeleteMessageBatchError::InvalidBatchEntryId(String::from(parsed_error.message)),"TooManyEntriesInBatchRequest" => DeleteMessageBatchError::TooManyEntriesInBatchRequest(String::from(parsed_error.message)),_ => DeleteMessageBatchError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => DeleteMessageBatchError::Unknown(body.to_string())
-                       }
-                    }
+
+impl DeleteMessageBatchError {
+    pub fn from_body(body: &str) -> DeleteMessageBatchError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "BatchEntryIdsNotDistinct" => DeleteMessageBatchError::BatchEntryIdsNotDistinct(String::from(parsed_error.message)),
+                    "EmptyBatchRequest" => DeleteMessageBatchError::EmptyBatchRequest(String::from(parsed_error.message)),
+                    "InvalidBatchEntryId" => DeleteMessageBatchError::InvalidBatchEntryId(String::from(parsed_error.message)),
+                    "TooManyEntriesInBatchRequest" => DeleteMessageBatchError::TooManyEntriesInBatchRequest(String::from(parsed_error.message)),
+                    _ => DeleteMessageBatchError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for DeleteMessageBatchError {
-                    fn from(err: XmlParseError) -> DeleteMessageBatchError {
-                        let XmlParseError(message) = err;
-                        DeleteMessageBatchError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for DeleteMessageBatchError {
-                    fn from(err: CredentialsError) -> DeleteMessageBatchError {
-                        DeleteMessageBatchError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for DeleteMessageBatchError {
-                    fn from(err: HttpDispatchError) -> DeleteMessageBatchError {
-                        DeleteMessageBatchError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for DeleteMessageBatchError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for DeleteMessageBatchError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            DeleteMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
-DeleteMessageBatchError::EmptyBatchRequest(ref cause) => cause,
-DeleteMessageBatchError::InvalidBatchEntryId(ref cause) => cause,
-DeleteMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
-DeleteMessageBatchError::Validation(ref cause) => cause,
-DeleteMessageBatchError::Credentials(ref err) => err.description(),
-DeleteMessageBatchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-DeleteMessageBatchError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => DeleteMessageBatchError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteMessageBatchError {
+    fn from(err: XmlParseError) -> DeleteMessageBatchError {
+        let XmlParseError(message) = err;
+        DeleteMessageBatchError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteMessageBatchError {
+    fn from(err: CredentialsError) -> DeleteMessageBatchError {
+        DeleteMessageBatchError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteMessageBatchError {
+    fn from(err: HttpDispatchError) -> DeleteMessageBatchError {
+        DeleteMessageBatchError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DeleteMessageBatchError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteMessageBatchError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
+            DeleteMessageBatchError::EmptyBatchRequest(ref cause) => cause,
+            DeleteMessageBatchError::InvalidBatchEntryId(ref cause) => cause,
+            DeleteMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
+            DeleteMessageBatchError::Validation(ref cause) => cause,
+            DeleteMessageBatchError::Credentials(ref err) => err.description(),
+            DeleteMessageBatchError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteMessageBatchError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteQueue
-                #[derive(Debug, PartialEq)]
-                pub enum DeleteQueueError {
-                    /// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum DeleteQueueError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl DeleteQueueError {
-                    pub fn from_body(body: &str) -> DeleteQueueError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    _ => DeleteQueueError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => DeleteQueueError::Unknown(body.to_string())
-                       }
-                    }
+
+impl DeleteQueueError {
+    pub fn from_body(body: &str) -> DeleteQueueError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => DeleteQueueError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for DeleteQueueError {
-                    fn from(err: XmlParseError) -> DeleteQueueError {
-                        let XmlParseError(message) = err;
-                        DeleteQueueError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for DeleteQueueError {
-                    fn from(err: CredentialsError) -> DeleteQueueError {
-                        DeleteQueueError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for DeleteQueueError {
-                    fn from(err: HttpDispatchError) -> DeleteQueueError {
-                        DeleteQueueError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for DeleteQueueError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for DeleteQueueError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            DeleteQueueError::Validation(ref cause) => cause,
-DeleteQueueError::Credentials(ref err) => err.description(),
-DeleteQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-DeleteQueueError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => DeleteQueueError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteQueueError {
+    fn from(err: XmlParseError) -> DeleteQueueError {
+        let XmlParseError(message) = err;
+        DeleteQueueError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteQueueError {
+    fn from(err: CredentialsError) -> DeleteQueueError {
+        DeleteQueueError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteQueueError {
+    fn from(err: HttpDispatchError) -> DeleteQueueError {
+        DeleteQueueError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DeleteQueueError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteQueueError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteQueueError::Validation(ref cause) => cause,
+            DeleteQueueError::Credentials(ref err) => err.description(),
+            DeleteQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteQueueError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetQueueAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum GetQueueAttributesError {
-                    
-///<p>The attribute referred to doesn't exist.</p>
-InvalidAttributeName(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum GetQueueAttributesError {
+    ///<p>The attribute referred to doesn't exist.</p>
+    InvalidAttributeName(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl GetQueueAttributesError {
-                    pub fn from_body(body: &str) -> GetQueueAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "InvalidAttributeName" => GetQueueAttributesError::InvalidAttributeName(String::from(parsed_error.message)),_ => GetQueueAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => GetQueueAttributesError::Unknown(body.to_string())
-                       }
-                    }
+
+impl GetQueueAttributesError {
+    pub fn from_body(body: &str) -> GetQueueAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "InvalidAttributeName" => GetQueueAttributesError::InvalidAttributeName(String::from(parsed_error.message)),
+                    _ => GetQueueAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for GetQueueAttributesError {
-                    fn from(err: XmlParseError) -> GetQueueAttributesError {
-                        let XmlParseError(message) = err;
-                        GetQueueAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for GetQueueAttributesError {
-                    fn from(err: CredentialsError) -> GetQueueAttributesError {
-                        GetQueueAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for GetQueueAttributesError {
-                    fn from(err: HttpDispatchError) -> GetQueueAttributesError {
-                        GetQueueAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for GetQueueAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for GetQueueAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            GetQueueAttributesError::InvalidAttributeName(ref cause) => cause,
-GetQueueAttributesError::Validation(ref cause) => cause,
-GetQueueAttributesError::Credentials(ref err) => err.description(),
-GetQueueAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-GetQueueAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => GetQueueAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetQueueAttributesError {
+    fn from(err: XmlParseError) -> GetQueueAttributesError {
+        let XmlParseError(message) = err;
+        GetQueueAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetQueueAttributesError {
+    fn from(err: CredentialsError) -> GetQueueAttributesError {
+        GetQueueAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetQueueAttributesError {
+    fn from(err: HttpDispatchError) -> GetQueueAttributesError {
+        GetQueueAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetQueueAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetQueueAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetQueueAttributesError::InvalidAttributeName(ref cause) => cause,
+            GetQueueAttributesError::Validation(ref cause) => cause,
+            GetQueueAttributesError::Credentials(ref err) => err.description(),
+            GetQueueAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetQueueAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetQueueUrl
-                #[derive(Debug, PartialEq)]
-                pub enum GetQueueUrlError {
-                    
-///<p>The queue referred to doesn't exist.</p>
-QueueDoesNotExist(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum GetQueueUrlError {
+    ///<p>The queue referred to doesn't exist.</p>
+    QueueDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl GetQueueUrlError {
-                    pub fn from_body(body: &str) -> GetQueueUrlError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "QueueDoesNotExist" => GetQueueUrlError::QueueDoesNotExist(String::from(parsed_error.message)),_ => GetQueueUrlError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => GetQueueUrlError::Unknown(body.to_string())
-                       }
+
+impl GetQueueUrlError {
+    pub fn from_body(body: &str) -> GetQueueUrlError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "QueueDoesNotExist" => {
+                        GetQueueUrlError::QueueDoesNotExist(String::from(parsed_error.message))
                     }
+                    _ => GetQueueUrlError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for GetQueueUrlError {
-                    fn from(err: XmlParseError) -> GetQueueUrlError {
-                        let XmlParseError(message) = err;
-                        GetQueueUrlError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for GetQueueUrlError {
-                    fn from(err: CredentialsError) -> GetQueueUrlError {
-                        GetQueueUrlError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for GetQueueUrlError {
-                    fn from(err: HttpDispatchError) -> GetQueueUrlError {
-                        GetQueueUrlError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for GetQueueUrlError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for GetQueueUrlError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            GetQueueUrlError::QueueDoesNotExist(ref cause) => cause,
-GetQueueUrlError::Validation(ref cause) => cause,
-GetQueueUrlError::Credentials(ref err) => err.description(),
-GetQueueUrlError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-GetQueueUrlError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => GetQueueUrlError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetQueueUrlError {
+    fn from(err: XmlParseError) -> GetQueueUrlError {
+        let XmlParseError(message) = err;
+        GetQueueUrlError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetQueueUrlError {
+    fn from(err: CredentialsError) -> GetQueueUrlError {
+        GetQueueUrlError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetQueueUrlError {
+    fn from(err: HttpDispatchError) -> GetQueueUrlError {
+        GetQueueUrlError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetQueueUrlError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetQueueUrlError {
+    fn description(&self) -> &str {
+        match *self {
+            GetQueueUrlError::QueueDoesNotExist(ref cause) => cause,
+            GetQueueUrlError::Validation(ref cause) => cause,
+            GetQueueUrlError::Credentials(ref err) => err.description(),
+            GetQueueUrlError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetQueueUrlError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListDeadLetterSourceQueues
-                #[derive(Debug, PartialEq)]
-                pub enum ListDeadLetterSourceQueuesError {
-                    
-///<p>The queue referred to doesn't exist.</p>
-QueueDoesNotExist(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ListDeadLetterSourceQueuesError {
+    ///<p>The queue referred to doesn't exist.</p>
+    QueueDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ListDeadLetterSourceQueuesError {
-                    pub fn from_body(body: &str) -> ListDeadLetterSourceQueuesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "QueueDoesNotExist" => ListDeadLetterSourceQueuesError::QueueDoesNotExist(String::from(parsed_error.message)),_ => ListDeadLetterSourceQueuesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ListDeadLetterSourceQueuesError::Unknown(body.to_string())
-                       }
-                    }
+
+impl ListDeadLetterSourceQueuesError {
+    pub fn from_body(body: &str) -> ListDeadLetterSourceQueuesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "QueueDoesNotExist" => ListDeadLetterSourceQueuesError::QueueDoesNotExist(String::from(parsed_error.message)),
+                    _ => ListDeadLetterSourceQueuesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ListDeadLetterSourceQueuesError {
-                    fn from(err: XmlParseError) -> ListDeadLetterSourceQueuesError {
-                        let XmlParseError(message) = err;
-                        ListDeadLetterSourceQueuesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ListDeadLetterSourceQueuesError {
-                    fn from(err: CredentialsError) -> ListDeadLetterSourceQueuesError {
-                        ListDeadLetterSourceQueuesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ListDeadLetterSourceQueuesError {
-                    fn from(err: HttpDispatchError) -> ListDeadLetterSourceQueuesError {
-                        ListDeadLetterSourceQueuesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ListDeadLetterSourceQueuesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ListDeadLetterSourceQueuesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ListDeadLetterSourceQueuesError::QueueDoesNotExist(ref cause) => cause,
-ListDeadLetterSourceQueuesError::Validation(ref cause) => cause,
-ListDeadLetterSourceQueuesError::Credentials(ref err) => err.description(),
-ListDeadLetterSourceQueuesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ListDeadLetterSourceQueuesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ListDeadLetterSourceQueuesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListDeadLetterSourceQueuesError {
+    fn from(err: XmlParseError) -> ListDeadLetterSourceQueuesError {
+        let XmlParseError(message) = err;
+        ListDeadLetterSourceQueuesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListDeadLetterSourceQueuesError {
+    fn from(err: CredentialsError) -> ListDeadLetterSourceQueuesError {
+        ListDeadLetterSourceQueuesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListDeadLetterSourceQueuesError {
+    fn from(err: HttpDispatchError) -> ListDeadLetterSourceQueuesError {
+        ListDeadLetterSourceQueuesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListDeadLetterSourceQueuesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListDeadLetterSourceQueuesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListDeadLetterSourceQueuesError::QueueDoesNotExist(ref cause) => cause,
+            ListDeadLetterSourceQueuesError::Validation(ref cause) => cause,
+            ListDeadLetterSourceQueuesError::Credentials(ref err) => err.description(),
+            ListDeadLetterSourceQueuesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListDeadLetterSourceQueuesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListQueues
-                #[derive(Debug, PartialEq)]
-                pub enum ListQueuesError {
-                    /// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ListQueuesError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ListQueuesError {
-                    pub fn from_body(body: &str) -> ListQueuesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    _ => ListQueuesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ListQueuesError::Unknown(body.to_string())
-                       }
-                    }
+
+impl ListQueuesError {
+    pub fn from_body(body: &str) -> ListQueuesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => ListQueuesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ListQueuesError {
-                    fn from(err: XmlParseError) -> ListQueuesError {
-                        let XmlParseError(message) = err;
-                        ListQueuesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ListQueuesError {
-                    fn from(err: CredentialsError) -> ListQueuesError {
-                        ListQueuesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ListQueuesError {
-                    fn from(err: HttpDispatchError) -> ListQueuesError {
-                        ListQueuesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ListQueuesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ListQueuesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ListQueuesError::Validation(ref cause) => cause,
-ListQueuesError::Credentials(ref err) => err.description(),
-ListQueuesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ListQueuesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ListQueuesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListQueuesError {
+    fn from(err: XmlParseError) -> ListQueuesError {
+        let XmlParseError(message) = err;
+        ListQueuesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListQueuesError {
+    fn from(err: CredentialsError) -> ListQueuesError {
+        ListQueuesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListQueuesError {
+    fn from(err: HttpDispatchError) -> ListQueuesError {
+        ListQueuesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListQueuesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListQueuesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListQueuesError::Validation(ref cause) => cause,
+            ListQueuesError::Credentials(ref err) => err.description(),
+            ListQueuesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListQueuesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PurgeQueue
-                #[derive(Debug, PartialEq)]
-                pub enum PurgeQueueError {
-                    
-///<p>Indicates that the specified queue previously received a <code>PurgeQueue</code> request within the last 60 seconds (the time it can take to delete the messages in the queue).</p>
-PurgeQueueInProgress(String),
-///<p>The queue referred to doesn't exist.</p>
-QueueDoesNotExist(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum PurgeQueueError {
+    ///<p>Indicates that the specified queue previously received a <code>PurgeQueue</code> request within the last 60 seconds (the time it can take to delete the messages in the queue).</p>
+    PurgeQueueInProgress(String),
+    ///<p>The queue referred to doesn't exist.</p>
+    QueueDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl PurgeQueueError {
-                    pub fn from_body(body: &str) -> PurgeQueueError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "PurgeQueueInProgress" => PurgeQueueError::PurgeQueueInProgress(String::from(parsed_error.message)),"QueueDoesNotExist" => PurgeQueueError::QueueDoesNotExist(String::from(parsed_error.message)),_ => PurgeQueueError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => PurgeQueueError::Unknown(body.to_string())
-                       }
+
+impl PurgeQueueError {
+    pub fn from_body(body: &str) -> PurgeQueueError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "PurgeQueueInProgress" => {
+                        PurgeQueueError::PurgeQueueInProgress(String::from(parsed_error.message))
                     }
+                    "QueueDoesNotExist" => {
+                        PurgeQueueError::QueueDoesNotExist(String::from(parsed_error.message))
+                    }
+                    _ => PurgeQueueError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for PurgeQueueError {
-                    fn from(err: XmlParseError) -> PurgeQueueError {
-                        let XmlParseError(message) = err;
-                        PurgeQueueError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for PurgeQueueError {
-                    fn from(err: CredentialsError) -> PurgeQueueError {
-                        PurgeQueueError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for PurgeQueueError {
-                    fn from(err: HttpDispatchError) -> PurgeQueueError {
-                        PurgeQueueError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for PurgeQueueError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for PurgeQueueError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            PurgeQueueError::PurgeQueueInProgress(ref cause) => cause,
-PurgeQueueError::QueueDoesNotExist(ref cause) => cause,
-PurgeQueueError::Validation(ref cause) => cause,
-PurgeQueueError::Credentials(ref err) => err.description(),
-PurgeQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-PurgeQueueError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => PurgeQueueError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for PurgeQueueError {
+    fn from(err: XmlParseError) -> PurgeQueueError {
+        let XmlParseError(message) = err;
+        PurgeQueueError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for PurgeQueueError {
+    fn from(err: CredentialsError) -> PurgeQueueError {
+        PurgeQueueError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PurgeQueueError {
+    fn from(err: HttpDispatchError) -> PurgeQueueError {
+        PurgeQueueError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for PurgeQueueError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PurgeQueueError {
+    fn description(&self) -> &str {
+        match *self {
+            PurgeQueueError::PurgeQueueInProgress(ref cause) => cause,
+            PurgeQueueError::QueueDoesNotExist(ref cause) => cause,
+            PurgeQueueError::Validation(ref cause) => cause,
+            PurgeQueueError::Credentials(ref err) => err.description(),
+            PurgeQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            PurgeQueueError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ReceiveMessage
-                #[derive(Debug, PartialEq)]
-                pub enum ReceiveMessageError {
-                    
-///<p>The action that you requested would violate a limit. For example, <code>ReceiveMessage</code> returns this error if the maximum number of inflight messages is reached. <code> <a>AddPermission</a> </code> returns this error if the maximum number of permissions for the queue is reached.</p>
-OverLimit(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum ReceiveMessageError {
+    ///<p>The action that you requested would violate a limit. For example, <code>ReceiveMessage</code> returns this error if the maximum number of inflight messages is reached. <code> <a>AddPermission</a> </code> returns this error if the maximum number of permissions for the queue is reached.</p>
+    OverLimit(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl ReceiveMessageError {
-                    pub fn from_body(body: &str) -> ReceiveMessageError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "OverLimit" => ReceiveMessageError::OverLimit(String::from(parsed_error.message)),_ => ReceiveMessageError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => ReceiveMessageError::Unknown(body.to_string())
-                       }
+
+impl ReceiveMessageError {
+    pub fn from_body(body: &str) -> ReceiveMessageError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "OverLimit" => {
+                        ReceiveMessageError::OverLimit(String::from(parsed_error.message))
                     }
+                    _ => ReceiveMessageError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for ReceiveMessageError {
-                    fn from(err: XmlParseError) -> ReceiveMessageError {
-                        let XmlParseError(message) = err;
-                        ReceiveMessageError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for ReceiveMessageError {
-                    fn from(err: CredentialsError) -> ReceiveMessageError {
-                        ReceiveMessageError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for ReceiveMessageError {
-                    fn from(err: HttpDispatchError) -> ReceiveMessageError {
-                        ReceiveMessageError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for ReceiveMessageError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for ReceiveMessageError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            ReceiveMessageError::OverLimit(ref cause) => cause,
-ReceiveMessageError::Validation(ref cause) => cause,
-ReceiveMessageError::Credentials(ref err) => err.description(),
-ReceiveMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ReceiveMessageError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => ReceiveMessageError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ReceiveMessageError {
+    fn from(err: XmlParseError) -> ReceiveMessageError {
+        let XmlParseError(message) = err;
+        ReceiveMessageError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ReceiveMessageError {
+    fn from(err: CredentialsError) -> ReceiveMessageError {
+        ReceiveMessageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ReceiveMessageError {
+    fn from(err: HttpDispatchError) -> ReceiveMessageError {
+        ReceiveMessageError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ReceiveMessageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ReceiveMessageError {
+    fn description(&self) -> &str {
+        match *self {
+            ReceiveMessageError::OverLimit(ref cause) => cause,
+            ReceiveMessageError::Validation(ref cause) => cause,
+            ReceiveMessageError::Credentials(ref err) => err.description(),
+            ReceiveMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ReceiveMessageError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by RemovePermission
-                #[derive(Debug, PartialEq)]
-                pub enum RemovePermissionError {
-                    /// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum RemovePermissionError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl RemovePermissionError {
-                    pub fn from_body(body: &str) -> RemovePermissionError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    _ => RemovePermissionError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => RemovePermissionError::Unknown(body.to_string())
-                       }
-                    }
+
+impl RemovePermissionError {
+    pub fn from_body(body: &str) -> RemovePermissionError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => RemovePermissionError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for RemovePermissionError {
-                    fn from(err: XmlParseError) -> RemovePermissionError {
-                        let XmlParseError(message) = err;
-                        RemovePermissionError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for RemovePermissionError {
-                    fn from(err: CredentialsError) -> RemovePermissionError {
-                        RemovePermissionError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for RemovePermissionError {
-                    fn from(err: HttpDispatchError) -> RemovePermissionError {
-                        RemovePermissionError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for RemovePermissionError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for RemovePermissionError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            RemovePermissionError::Validation(ref cause) => cause,
-RemovePermissionError::Credentials(ref err) => err.description(),
-RemovePermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-RemovePermissionError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => RemovePermissionError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for RemovePermissionError {
+    fn from(err: XmlParseError) -> RemovePermissionError {
+        let XmlParseError(message) = err;
+        RemovePermissionError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for RemovePermissionError {
+    fn from(err: CredentialsError) -> RemovePermissionError {
+        RemovePermissionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RemovePermissionError {
+    fn from(err: HttpDispatchError) -> RemovePermissionError {
+        RemovePermissionError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for RemovePermissionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RemovePermissionError {
+    fn description(&self) -> &str {
+        match *self {
+            RemovePermissionError::Validation(ref cause) => cause,
+            RemovePermissionError::Credentials(ref err) => err.description(),
+            RemovePermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            RemovePermissionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SendMessage
-                #[derive(Debug, PartialEq)]
-                pub enum SendMessageError {
-                    
-///<p>The message contains characters outside the allowed set.</p>
-InvalidMessageContents(String),
-///<p>Error code 400. Unsupported operation.</p>
-UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum SendMessageError {
+    ///<p>The message contains characters outside the allowed set.</p>
+    InvalidMessageContents(String),
+    ///<p>Error code 400. Unsupported operation.</p>
+    UnsupportedOperation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl SendMessageError {
-                    pub fn from_body(body: &str) -> SendMessageError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "InvalidMessageContents" => SendMessageError::InvalidMessageContents(String::from(parsed_error.message)),"UnsupportedOperation" => SendMessageError::UnsupportedOperation(String::from(parsed_error.message)),_ => SendMessageError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => SendMessageError::Unknown(body.to_string())
-                       }
+
+impl SendMessageError {
+    pub fn from_body(body: &str) -> SendMessageError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "InvalidMessageContents" => {
+                        SendMessageError::InvalidMessageContents(String::from(parsed_error.message))
                     }
+                    "UnsupportedOperation" => {
+                        SendMessageError::UnsupportedOperation(String::from(parsed_error.message))
+                    }
+                    _ => SendMessageError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for SendMessageError {
-                    fn from(err: XmlParseError) -> SendMessageError {
-                        let XmlParseError(message) = err;
-                        SendMessageError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for SendMessageError {
-                    fn from(err: CredentialsError) -> SendMessageError {
-                        SendMessageError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for SendMessageError {
-                    fn from(err: HttpDispatchError) -> SendMessageError {
-                        SendMessageError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for SendMessageError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for SendMessageError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            SendMessageError::InvalidMessageContents(ref cause) => cause,
-SendMessageError::UnsupportedOperation(ref cause) => cause,
-SendMessageError::Validation(ref cause) => cause,
-SendMessageError::Credentials(ref err) => err.description(),
-SendMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-SendMessageError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => SendMessageError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SendMessageError {
+    fn from(err: XmlParseError) -> SendMessageError {
+        let XmlParseError(message) = err;
+        SendMessageError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SendMessageError {
+    fn from(err: CredentialsError) -> SendMessageError {
+        SendMessageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SendMessageError {
+    fn from(err: HttpDispatchError) -> SendMessageError {
+        SendMessageError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for SendMessageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SendMessageError {
+    fn description(&self) -> &str {
+        match *self {
+            SendMessageError::InvalidMessageContents(ref cause) => cause,
+            SendMessageError::UnsupportedOperation(ref cause) => cause,
+            SendMessageError::Validation(ref cause) => cause,
+            SendMessageError::Credentials(ref err) => err.description(),
+            SendMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            SendMessageError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SendMessageBatch
-                #[derive(Debug, PartialEq)]
-                pub enum SendMessageBatchError {
-                    
-///<p>Two or more batch entries in the request have the same <code>Id</code>.</p>
-BatchEntryIdsNotDistinct(String),
-///<p>The length of all the messages put together is more than the limit.</p>
-BatchRequestTooLong(String),
-///<p>The batch request doesn't contain any entries.</p>
-EmptyBatchRequest(String),
-///<p>The <code>Id</code> of a batch entry in a batch request doesn't abide by the specification.</p>
-InvalidBatchEntryId(String),
-///<p>The batch request contains more entries than permissible.</p>
-TooManyEntriesInBatchRequest(String),
-///<p>Error code 400. Unsupported operation.</p>
-UnsupportedOperation(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum SendMessageBatchError {
+    ///<p>Two or more batch entries in the request have the same <code>Id</code>.</p>
+    BatchEntryIdsNotDistinct(String),
+    ///<p>The length of all the messages put together is more than the limit.</p>
+    BatchRequestTooLong(String),
+    ///<p>The batch request doesn't contain any entries.</p>
+    EmptyBatchRequest(String),
+    ///<p>The <code>Id</code> of a batch entry in a batch request doesn't abide by the specification.</p>
+    InvalidBatchEntryId(String),
+    ///<p>The batch request contains more entries than permissible.</p>
+    TooManyEntriesInBatchRequest(String),
+    ///<p>Error code 400. Unsupported operation.</p>
+    UnsupportedOperation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl SendMessageBatchError {
-                    pub fn from_body(body: &str) -> SendMessageBatchError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "BatchEntryIdsNotDistinct" => SendMessageBatchError::BatchEntryIdsNotDistinct(String::from(parsed_error.message)),"BatchRequestTooLong" => SendMessageBatchError::BatchRequestTooLong(String::from(parsed_error.message)),"EmptyBatchRequest" => SendMessageBatchError::EmptyBatchRequest(String::from(parsed_error.message)),"InvalidBatchEntryId" => SendMessageBatchError::InvalidBatchEntryId(String::from(parsed_error.message)),"TooManyEntriesInBatchRequest" => SendMessageBatchError::TooManyEntriesInBatchRequest(String::from(parsed_error.message)),"UnsupportedOperation" => SendMessageBatchError::UnsupportedOperation(String::from(parsed_error.message)),_ => SendMessageBatchError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => SendMessageBatchError::Unknown(body.to_string())
-                       }
+
+impl SendMessageBatchError {
+    pub fn from_body(body: &str) -> SendMessageBatchError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "BatchEntryIdsNotDistinct" => SendMessageBatchError::BatchEntryIdsNotDistinct(String::from(parsed_error.message)),
+                    "BatchRequestTooLong" => SendMessageBatchError::BatchRequestTooLong(String::from(parsed_error.message)),
+                    "EmptyBatchRequest" => {
+                        SendMessageBatchError::EmptyBatchRequest(String::from(parsed_error.message))
                     }
+                    "InvalidBatchEntryId" => SendMessageBatchError::InvalidBatchEntryId(String::from(parsed_error.message)),
+                    "TooManyEntriesInBatchRequest" => SendMessageBatchError::TooManyEntriesInBatchRequest(String::from(parsed_error.message)),
+                    "UnsupportedOperation" => SendMessageBatchError::UnsupportedOperation(String::from(parsed_error.message)),
+                    _ => SendMessageBatchError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for SendMessageBatchError {
-                    fn from(err: XmlParseError) -> SendMessageBatchError {
-                        let XmlParseError(message) = err;
-                        SendMessageBatchError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for SendMessageBatchError {
-                    fn from(err: CredentialsError) -> SendMessageBatchError {
-                        SendMessageBatchError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for SendMessageBatchError {
-                    fn from(err: HttpDispatchError) -> SendMessageBatchError {
-                        SendMessageBatchError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for SendMessageBatchError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for SendMessageBatchError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            SendMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
-SendMessageBatchError::BatchRequestTooLong(ref cause) => cause,
-SendMessageBatchError::EmptyBatchRequest(ref cause) => cause,
-SendMessageBatchError::InvalidBatchEntryId(ref cause) => cause,
-SendMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
-SendMessageBatchError::UnsupportedOperation(ref cause) => cause,
-SendMessageBatchError::Validation(ref cause) => cause,
-SendMessageBatchError::Credentials(ref err) => err.description(),
-SendMessageBatchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-SendMessageBatchError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => SendMessageBatchError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SendMessageBatchError {
+    fn from(err: XmlParseError) -> SendMessageBatchError {
+        let XmlParseError(message) = err;
+        SendMessageBatchError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SendMessageBatchError {
+    fn from(err: CredentialsError) -> SendMessageBatchError {
+        SendMessageBatchError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SendMessageBatchError {
+    fn from(err: HttpDispatchError) -> SendMessageBatchError {
+        SendMessageBatchError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for SendMessageBatchError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SendMessageBatchError {
+    fn description(&self) -> &str {
+        match *self {
+            SendMessageBatchError::BatchEntryIdsNotDistinct(ref cause) => cause,
+            SendMessageBatchError::BatchRequestTooLong(ref cause) => cause,
+            SendMessageBatchError::EmptyBatchRequest(ref cause) => cause,
+            SendMessageBatchError::InvalidBatchEntryId(ref cause) => cause,
+            SendMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
+            SendMessageBatchError::UnsupportedOperation(ref cause) => cause,
+            SendMessageBatchError::Validation(ref cause) => cause,
+            SendMessageBatchError::Credentials(ref err) => err.description(),
+            SendMessageBatchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            SendMessageBatchError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SetQueueAttributes
-                #[derive(Debug, PartialEq)]
-                pub enum SetQueueAttributesError {
-                    
-///<p>The attribute referred to doesn't exist.</p>
-InvalidAttributeName(String),/// An error occurred dispatching the HTTP request
-HttpDispatch(HttpDispatchError),/// An error was encountered with AWS credentials.
-Credentials(CredentialsError),/// A validation error occurred.  Details from AWS are provided.
-Validation(String),/// An unknown error occurred.  The raw HTTP response is provided.
-Unknown(String)
-                }
+#[derive(Debug, PartialEq)]
+pub enum SetQueueAttributesError {
+    ///<p>The attribute referred to doesn't exist.</p>
+    InvalidAttributeName(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
 
-                
-                impl SetQueueAttributesError {
-                    pub fn from_body(body: &str) -> SetQueueAttributesError {
-                        let reader = EventReader::new(body.as_bytes());
-                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                        let _start_document = stack.next();
-                        let _response_envelope = stack.next();
-                        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "InvalidAttributeName" => SetQueueAttributesError::InvalidAttributeName(String::from(parsed_error.message)),_ => SetQueueAttributesError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => SetQueueAttributesError::Unknown(body.to_string())
-                       }
-                    }
+
+impl SetQueueAttributesError {
+    pub fn from_body(body: &str) -> SetQueueAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "InvalidAttributeName" => SetQueueAttributesError::InvalidAttributeName(String::from(parsed_error.message)),
+                    _ => SetQueueAttributesError::Unknown(String::from(body)),
                 }
-                
-                impl From<XmlParseError> for SetQueueAttributesError {
-                    fn from(err: XmlParseError) -> SetQueueAttributesError {
-                        let XmlParseError(message) = err;
-                        SetQueueAttributesError::Unknown(message.to_string())
-                    }
-                }
-                impl From<CredentialsError> for SetQueueAttributesError {
-                    fn from(err: CredentialsError) -> SetQueueAttributesError {
-                        SetQueueAttributesError::Credentials(err)
-                    }
-                }
-                impl From<HttpDispatchError> for SetQueueAttributesError {
-                    fn from(err: HttpDispatchError) -> SetQueueAttributesError {
-                        SetQueueAttributesError::HttpDispatch(err)
-                    }
-                }
-                impl fmt::Display for SetQueueAttributesError {
-                    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                        write!(f, "{}", self.description())
-                    }
-                }
-                impl Error for SetQueueAttributesError {
-                    fn description(&self) -> &str {
-                        match *self {
-                            SetQueueAttributesError::InvalidAttributeName(ref cause) => cause,
-SetQueueAttributesError::Validation(ref cause) => cause,
-SetQueueAttributesError::Credentials(ref err) => err.description(),
-SetQueueAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-SetQueueAttributesError::Unknown(ref cause) => cause
-                        }
-                    }
-                 }
+            }
+            Err(_) => SetQueueAttributesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SetQueueAttributesError {
+    fn from(err: XmlParseError) -> SetQueueAttributesError {
+        let XmlParseError(message) = err;
+        SetQueueAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SetQueueAttributesError {
+    fn from(err: CredentialsError) -> SetQueueAttributesError {
+        SetQueueAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetQueueAttributesError {
+    fn from(err: HttpDispatchError) -> SetQueueAttributesError {
+        SetQueueAttributesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for SetQueueAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetQueueAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            SetQueueAttributesError::InvalidAttributeName(ref cause) => cause,
+            SetQueueAttributesError::Validation(ref cause) => cause,
+            SetQueueAttributesError::Credentials(ref err) => err.description(),
+            SetQueueAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetQueueAttributesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon SQS API. Amazon SQS clients implement this trait.
-        pub trait Sqs {
-        
+pub trait Sqs {
+    #[doc="<p>Adds a permission to a queue for a specific <a href=\"http://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P\">principal</a>. This allows sharing access to the queue.</p> <p>When you create a queue, you have full control access rights for the queue. Only you, the owner of the queue, can grant or deny permissions to the queue. For more information about these permissions, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p> <note> <p> <code>AddPermission</code> writes an Amazon-SQS-generated policy. If you want to write your own policy, use <code> <a>SetQueueAttributes</a> </code> to upload your policy. For more information about writing your own policy, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AccessPolicyLanguage.html\">Using The Access Policy Language</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn add_permission(&self, input: &AddPermissionRequest) -> Result<(), AddPermissionError>;
 
-                #[doc="<p>Adds a permission to a queue for a specific <a href=\"http://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P\">principal</a>. This allows sharing access to the queue.</p> <p>When you create a queue, you have full control access rights for the queue. Only you, the owner of the queue, can grant or deny permissions to the queue. For more information about these permissions, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p> <note> <p> <code>AddPermission</code> writes an Amazon-SQS-generated policy. If you want to write your own policy, use <code> <a>SetQueueAttributes</a> </code> to upload your policy. For more information about writing your own policy, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AccessPolicyLanguage.html\">Using The Access Policy Language</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn add_permission(&self, input: &AddPermissionRequest) -> Result<(), AddPermissionError>;
-                
 
-                #[doc="<p>Changes the visibility timeout of a specified message in a queue to a new value. The maximum allowed timeout value is 12 hours. Thus, you can't extend the timeout of a message in an existing queue to more than a total visibility timeout of 12 hours. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>For example, you have a message and with the default visibility timeout of 5 minutes. After 3 minutes, you call <code>ChangeMessageVisiblity</code> with a timeout of 10 minutes. At that time, the timeout for the message is extended by 10 minutes beyond the time of the <code>ChangeMessageVisibility</code> action. This results in a total visibility timeout of 13 minutes. You can continue to call the <code>ChangeMessageVisibility</code> to extend the visibility timeout to a maximum of 12 hours. If you try to extend the visibility timeout beyond 12 hours, your request is rejected.</p> <p>A message is considered to be <i>in flight</i> after it's received from a queue by a consumer, but not yet deleted from the queue.</p> <p>For standard queues, there can be a maximum of 120,000 inflight messages per queue. If you reach this limit, Amazon SQS returns the <code>OverLimit</code> error message. To avoid reaching the limit, you should delete messages from the queue after they're processed. You can also increase the number of queues you use to process your messages.</p> <p>For FIFO queues, there can be a maximum of 20,000 inflight messages per queue. If you reach this limit, Amazon SQS returns no error messages.</p> <important> <p>If you attempt to set the <code>VisibilityTimeout</code> to a value greater than the maximum time left, Amazon SQS returns an error. Amazon SQS doesn't automatically recalculate and increase the timeout to the maximum remaining time.</p> <p>Unlike with a queue, when you change the visibility timeout for a specific message the timeout value is applied immediately but isn't saved in memory for that message. If you don't delete a message after it is received, the visibility timeout for the message reverts to the original timeout value (not to the value you set using the <code>ChangeMessageVisibility</code> action) the next time the message is received.</p> </important>"]
-                fn change_message_visibility(&self, input: &ChangeMessageVisibilityRequest) -> Result<(), ChangeMessageVisibilityError>;
-                
+    #[doc="<p>Changes the visibility timeout of a specified message in a queue to a new value. The maximum allowed timeout value is 12 hours. Thus, you can't extend the timeout of a message in an existing queue to more than a total visibility timeout of 12 hours. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>For example, you have a message and with the default visibility timeout of 5 minutes. After 3 minutes, you call <code>ChangeMessageVisiblity</code> with a timeout of 10 minutes. At that time, the timeout for the message is extended by 10 minutes beyond the time of the <code>ChangeMessageVisibility</code> action. This results in a total visibility timeout of 13 minutes. You can continue to call the <code>ChangeMessageVisibility</code> to extend the visibility timeout to a maximum of 12 hours. If you try to extend the visibility timeout beyond 12 hours, your request is rejected.</p> <p>A message is considered to be <i>in flight</i> after it's received from a queue by a consumer, but not yet deleted from the queue.</p> <p>For standard queues, there can be a maximum of 120,000 inflight messages per queue. If you reach this limit, Amazon SQS returns the <code>OverLimit</code> error message. To avoid reaching the limit, you should delete messages from the queue after they're processed. You can also increase the number of queues you use to process your messages.</p> <p>For FIFO queues, there can be a maximum of 20,000 inflight messages per queue. If you reach this limit, Amazon SQS returns no error messages.</p> <important> <p>If you attempt to set the <code>VisibilityTimeout</code> to a value greater than the maximum time left, Amazon SQS returns an error. Amazon SQS doesn't automatically recalculate and increase the timeout to the maximum remaining time.</p> <p>Unlike with a queue, when you change the visibility timeout for a specific message the timeout value is applied immediately but isn't saved in memory for that message. If you don't delete a message after it is received, the visibility timeout for the message reverts to the original timeout value (not to the value you set using the <code>ChangeMessageVisibility</code> action) the next time the message is received.</p> </important>"]
+    fn change_message_visibility(&self,
+                                 input: &ChangeMessageVisibilityRequest)
+                                 -> Result<(), ChangeMessageVisibilityError>;
 
-                #[doc="<p>Changes the visibility timeout of multiple messages. This is a batch version of <code> <a>ChangeMessageVisibility</a> </code>. The result of the action on each message is reported individually in the response. You can send up to 10 <code> <a>ChangeMessageVisibility</a> </code> requests with each <code>ChangeMessageVisibilityBatch</code> action.</p> <important> <p>Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> </important> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn change_message_visibility_batch(&self, input: &ChangeMessageVisibilityBatchRequest) -> Result<ChangeMessageVisibilityBatchResult, ChangeMessageVisibilityBatchError>;
-                
 
-                #[doc="<p>Creates a new standard or FIFO queue or returns the URL of an existing queue. You can pass one or more attributes in the request. Keep the following caveats in mind:</p> <ul> <li> <p>If you don't specify the <code>FifoQueue</code> attribute, Amazon SQS creates a standard queue.</p> <note> <p> You can't change the queue type after you create it and you can't convert an existing standard queue into a FIFO queue. You must either create a new FIFO queue for your application or delete your existing standard queue and recreate it as a FIFO queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-moving\"> Moving From a Standard Queue to a FIFO Queue</a> in the <i>Amazon SQS Developer Guide</i>. </p> </note> </li> <li> <p>If you don't provide a value for an attribute, the queue is created with the default value for the attribute.</p> </li> <li> <p>If you delete a queue, you must wait at least 60 seconds before creating a queue with the same name.</p> </li> </ul> <p>To successfully create a new queue, you must provide a queue name that adheres to the <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/limits-queues.html\">limits related to queues</a> and is unique within the scope of your queues.</p> <p>To get the queue URL, use the <code> <a>GetQueueUrl</a> </code> action. <code> <a>GetQueueUrl</a> </code> requires only the <code>QueueName</code> parameter. be aware of existing queue names:</p> <ul> <li> <p>If you provide the name of an existing queue along with the exact names and values of all the queue's attributes, <code>CreateQueue</code> returns the queue URL for the existing queue.</p> </li> <li> <p>If the queue name, attribute names, or attribute values don't match an existing queue, <code>CreateQueue</code> returns an error.</p> </li> </ul> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn create_queue(&self, input: &CreateQueueRequest) -> Result<CreateQueueResult, CreateQueueError>;
-                
+    #[doc="<p>Changes the visibility timeout of multiple messages. This is a batch version of <code> <a>ChangeMessageVisibility</a> </code>. The result of the action on each message is reported individually in the response. You can send up to 10 <code> <a>ChangeMessageVisibility</a> </code> requests with each <code>ChangeMessageVisibilityBatch</code> action.</p> <important> <p>Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> </important> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn change_message_visibility_batch
+        (&self,
+         input: &ChangeMessageVisibilityBatchRequest)
+         -> Result<ChangeMessageVisibilityBatchResult, ChangeMessageVisibilityBatchError>;
 
-                #[doc="<p>Deletes the specified message from the specified queue. You specify the message by using the message's <i>receipt handle</i> and not the <i>MessageId</i> you receive when you send the message. Even if the message is locked by another reader due to the visibility timeout setting, it is still deleted from the queue. If you leave a message in the queue for longer than the queue's configured retention period, Amazon SQS automatically deletes the message. </p> <note> <p> The receipt handle is associated with a specific instance of receiving the message. If you receive a message more than once, the receipt handle you get each time you receive the message is different. If you don't provide the most recently received receipt handle for the message when you use the <code>DeleteMessage</code> action, the request succeeds, but the message might not be deleted.</p> <p>For standard queues, it is possible to receive a message even after you deleting it. This might happen on rare occasions if one of the servers storing a copy of the message is unavailable when you send the request to delete the message. The copy remains on the server and might be returned to you on a subsequent receive request. You should ensure that your application is idempotent, so that receiving a message more than once does not cause issues.</p> </note>"]
-                fn delete_message(&self, input: &DeleteMessageRequest) -> Result<(), DeleteMessageError>;
-                
 
-                #[doc="<p>Deletes up to ten messages from the specified queue. This is a batch version of <code> <a>DeleteMessage</a> </code>. The result of the action on each message is reported individually in the response.</p> <important> <p>Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> </important> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn delete_message_batch(&self, input: &DeleteMessageBatchRequest) -> Result<DeleteMessageBatchResult, DeleteMessageBatchError>;
-                
+    #[doc="<p>Creates a new standard or FIFO queue or returns the URL of an existing queue. You can pass one or more attributes in the request. Keep the following caveats in mind:</p> <ul> <li> <p>If you don't specify the <code>FifoQueue</code> attribute, Amazon SQS creates a standard queue.</p> <note> <p> You can't change the queue type after you create it and you can't convert an existing standard queue into a FIFO queue. You must either create a new FIFO queue for your application or delete your existing standard queue and recreate it as a FIFO queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-moving\"> Moving From a Standard Queue to a FIFO Queue</a> in the <i>Amazon SQS Developer Guide</i>. </p> </note> </li> <li> <p>If you don't provide a value for an attribute, the queue is created with the default value for the attribute.</p> </li> <li> <p>If you delete a queue, you must wait at least 60 seconds before creating a queue with the same name.</p> </li> </ul> <p>To successfully create a new queue, you must provide a queue name that adheres to the <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/limits-queues.html\">limits related to queues</a> and is unique within the scope of your queues.</p> <p>To get the queue URL, use the <code> <a>GetQueueUrl</a> </code> action. <code> <a>GetQueueUrl</a> </code> requires only the <code>QueueName</code> parameter. be aware of existing queue names:</p> <ul> <li> <p>If you provide the name of an existing queue along with the exact names and values of all the queue's attributes, <code>CreateQueue</code> returns the queue URL for the existing queue.</p> </li> <li> <p>If the queue name, attribute names, or attribute values don't match an existing queue, <code>CreateQueue</code> returns an error.</p> </li> </ul> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn create_queue(&self,
+                    input: &CreateQueueRequest)
+                    -> Result<CreateQueueResult, CreateQueueError>;
 
-                #[doc="<p>Deletes the queue specified by the <code>QueueUrl</code>, even if the queue is empty. If the specified queue doesn't exist, Amazon SQS returns a successful response.</p> <important> <p>Be careful with the <code>DeleteQueue</code> action: When you delete a queue, any messages in the queue are no longer available. </p> </important> <p>When you delete a queue, the deletion process takes up to 60 seconds. Requests you send involving that queue during the 60 seconds might succeed. For example, a <code> <a>SendMessage</a> </code> request might succeed, but after 60 seconds the queue and the message you sent no longer exist.</p> <p>When you delete a queue, you must wait at least 60 seconds before creating a queue with the same name. </p>"]
-                fn delete_queue(&self, input: &DeleteQueueRequest) -> Result<(), DeleteQueueError>;
-                
 
-                #[doc="<p>Gets attributes for the specified queue.</p> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn get_queue_attributes(&self, input: &GetQueueAttributesRequest) -> Result<GetQueueAttributesResult, GetQueueAttributesError>;
-                
+    #[doc="<p>Deletes the specified message from the specified queue. You specify the message by using the message's <i>receipt handle</i> and not the <i>MessageId</i> you receive when you send the message. Even if the message is locked by another reader due to the visibility timeout setting, it is still deleted from the queue. If you leave a message in the queue for longer than the queue's configured retention period, Amazon SQS automatically deletes the message. </p> <note> <p> The receipt handle is associated with a specific instance of receiving the message. If you receive a message more than once, the receipt handle you get each time you receive the message is different. If you don't provide the most recently received receipt handle for the message when you use the <code>DeleteMessage</code> action, the request succeeds, but the message might not be deleted.</p> <p>For standard queues, it is possible to receive a message even after you deleting it. This might happen on rare occasions if one of the servers storing a copy of the message is unavailable when you send the request to delete the message. The copy remains on the server and might be returned to you on a subsequent receive request. You should ensure that your application is idempotent, so that receiving a message more than once does not cause issues.</p> </note>"]
+    fn delete_message(&self, input: &DeleteMessageRequest) -> Result<(), DeleteMessageError>;
 
-                #[doc="<p>Returns the URL of an existing queue. This action provides a simple way to retrieve the URL of an Amazon SQS queue.</p> <p>To access a queue that belongs to another AWS account, use the <code>QueueOwnerAWSAccountId</code> parameter to specify the account ID of the queue's owner. The queue's owner must grant you permission to access the queue. For more information about shared queue access, see <code> <a>AddPermission</a> </code> or see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p>"]
-                fn get_queue_url(&self, input: &GetQueueUrlRequest) -> Result<GetQueueUrlResult, GetQueueUrlError>;
-                
 
-                #[doc="<p>Returns a list of your queues that have the <code>RedrivePolicy</code> queue attribute configured with a dead letter queue.</p> <p>For more information about using dead letter queues, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html\">Using Amazon SQS Dead Letter Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
-                fn list_dead_letter_source_queues(&self, input: &ListDeadLetterSourceQueuesRequest) -> Result<ListDeadLetterSourceQueuesResult, ListDeadLetterSourceQueuesError>;
-                
+    #[doc="<p>Deletes up to ten messages from the specified queue. This is a batch version of <code> <a>DeleteMessage</a> </code>. The result of the action on each message is reported individually in the response.</p> <important> <p>Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> </important> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn delete_message_batch(&self,
+                            input: &DeleteMessageBatchRequest)
+                            -> Result<DeleteMessageBatchResult, DeleteMessageBatchError>;
 
-                #[doc="<p>Returns a list of your queues. The maximum number of queues that can be returned is 1,000. If you specify a value for the optional <code>QueueNamePrefix</code> parameter, only queues with a name that begins with the specified value are returned.</p>"]
-                fn list_queues(&self, input: &ListQueuesRequest) -> Result<ListQueuesResult, ListQueuesError>;
-                
 
-                #[doc="<p>Deletes the messages in a queue specified by the <code>QueueURL</code> parameter.</p> <important> <p>When you use the <code>PurgeQueue</code> action, you can't retrieve a message deleted from a queue.</p> </important> <p>When you purge a queue, the message deletion process takes up to 60 seconds. All messages sent to the queue before calling the <code>PurgeQueue</code> action are deleted. Messages sent to the queue while it is being purged might be deleted. While the queue is being purged, messages sent to the queue before <code>PurgeQueue</code> is called might be received, but are deleted within the next minute.</p>"]
-                fn purge_queue(&self, input: &PurgeQueueRequest) -> Result<(), PurgeQueueError>;
-                
+    #[doc="<p>Deletes the queue specified by the <code>QueueUrl</code>, even if the queue is empty. If the specified queue doesn't exist, Amazon SQS returns a successful response.</p> <important> <p>Be careful with the <code>DeleteQueue</code> action: When you delete a queue, any messages in the queue are no longer available. </p> </important> <p>When you delete a queue, the deletion process takes up to 60 seconds. Requests you send involving that queue during the 60 seconds might succeed. For example, a <code> <a>SendMessage</a> </code> request might succeed, but after 60 seconds the queue and the message you sent no longer exist.</p> <p>When you delete a queue, you must wait at least 60 seconds before creating a queue with the same name. </p>"]
+    fn delete_queue(&self, input: &DeleteQueueRequest) -> Result<(), DeleteQueueError>;
 
-                #[doc="<p>Retrieves one or more messages (up to 10), from the specified queue. Using the <code>WaitTimeSeconds</code> parameter enables long-poll support. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html\">Amazon SQS Long Polling</a> in the <i>Amazon SQS Developer Guide</i>. </p> <p>Short poll is the default behavior where a weighted random set of machines is sampled on a <code>ReceiveMessage</code> call. Thus, only the messages on the sampled machines are returned. If the number of messages in the queue is small (fewer than 1,000), you most likely get fewer messages than you requested per <code>ReceiveMessage</code> call. If the number of messages in the queue is extremely small, you might not receive any messages in a particular <code>ReceiveMessage</code> response. If this happens, repeat the request. </p> <p>For each message returned, the response includes the following:</p> <ul> <li> <p>The message body.</p> </li> <li> <p>An MD5 digest of the message body. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p> </li> <li> <p>The <code>MessageId</code> you received when you sent the message to the queue.</p> </li> <li> <p>The receipt handle.</p> </li> <li> <p>The message attributes.</p> </li> <li> <p>An MD5 digest of the message attributes.</p> </li> </ul> <p>The receipt handle is the identifier you must provide when deleting the message. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-message-identifiers.html\">Queue and Message Identifiers</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>You can provide the <code>VisibilityTimeout</code> parameter in your request. The parameter is applied to the messages that Amazon SQS returns in the response. If you don't include the parameter, the overall visibility timeout for the queue is used for the returned messages. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>A message that isn't deleted or a message whose visibility isn't extended before the visibility timeout expires counts as a failed receive. Depending on the configuration of the queue, the message might be sent to the dead letter queue.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
-                fn receive_message(&self, input: &ReceiveMessageRequest) -> Result<ReceiveMessageResult, ReceiveMessageError>;
-                
 
-                #[doc="<p>Revokes any permissions in the queue policy that matches the specified <code>Label</code> parameter. Only the owner of the queue can remove permissions.</p>"]
-                fn remove_permission(&self, input: &RemovePermissionRequest) -> Result<(), RemovePermissionError>;
-                
+    #[doc="<p>Gets attributes for the specified queue.</p> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn get_queue_attributes(&self,
+                            input: &GetQueueAttributesRequest)
+                            -> Result<GetQueueAttributesResult, GetQueueAttributesError>;
 
-                #[doc="<p>Delivers a message to the specified queue.</p> <important> <p>The following list shows the characters (in Unicode) that are allowed in your message, according to the W3C XML specification:</p> <ul> <li> <p> <code>#x9</code> </p> </li> <li> <p> <code>#xA</code> </p> </li> <li> <p> <code>#xD</code> </p> </li> <li> <p> <code>#x20</code> to <code>#xD7FF</code> </p> </li> <li> <p> <code>#xE000</code> to <code>#xFFFD</code> </p> </li> <li> <p> <code>#x10000</code> to <code>#x10FFFF</code> </p> </li> </ul> <p>For more information, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>. If you send any characters that aren't included in this list, your request is rejected.</p> </important>"]
-                fn send_message(&self, input: &SendMessageRequest) -> Result<SendMessageResult, SendMessageError>;
-                
 
-                #[doc="<p>Delivers up to ten messages to the specified queue. This is a batch version of <code> <a>SendMessage</a> </code>. For a FIFO queue, multiple messages within a single batch are enqueued in the order they are sent.</p> <p>The result of sending each message is reported individually in the response. Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> <p>The maximum allowed individual message size and the maximum total payload size (the sum of the individual lengths of all of the batched messages) are both 256 KB (262,144 bytes).</p> <important> <p>The following list shows the characters (in Unicode) that are allowed in your message, according to the W3C XML specification:</p> <ul> <li> <p> <code>#x9</code> </p> </li> <li> <p> <code>#xA</code> </p> </li> <li> <p> <code>#xD</code> </p> </li> <li> <p> <code>#x20</code> to <code>#xD7FF</code> </p> </li> <li> <p> <code>#xE000</code> to <code>#xFFFD</code> </p> </li> <li> <p> <code>#x10000</code> to <code>#x10FFFF</code> </p> </li> </ul> <p>For more information, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>. If you send any characters that aren't included in this list, your request is rejected.</p> </important> <p>If you don't specify the <code>DelaySeconds</code> parameter for an entry, Amazon SQS uses the default value for the queue.</p> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn send_message_batch(&self, input: &SendMessageBatchRequest) -> Result<SendMessageBatchResult, SendMessageBatchError>;
-                
+    #[doc="<p>Returns the URL of an existing queue. This action provides a simple way to retrieve the URL of an Amazon SQS queue.</p> <p>To access a queue that belongs to another AWS account, use the <code>QueueOwnerAWSAccountId</code> parameter to specify the account ID of the queue's owner. The queue's owner must grant you permission to access the queue. For more information about shared queue access, see <code> <a>AddPermission</a> </code> or see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p>"]
+    fn get_queue_url(&self,
+                     input: &GetQueueUrlRequest)
+                     -> Result<GetQueueUrlResult, GetQueueUrlError>;
 
-                #[doc="<p>Sets the value of one or more queue attributes. When you change a queue's attributes, the change can take up to 60 seconds for most of the attributes to propagate throughout the Amazon SQS system. Changes made to the <code>MessageRetentionPeriod</code> attribute can take up to 15 minutes.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
-                fn set_queue_attributes(&self, input: &SetQueueAttributesRequest) -> Result<(), SetQueueAttributesError>;
-                
+
+    #[doc="<p>Returns a list of your queues that have the <code>RedrivePolicy</code> queue attribute configured with a dead letter queue.</p> <p>For more information about using dead letter queues, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html\">Using Amazon SQS Dead Letter Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
+    fn list_dead_letter_source_queues
+        (&self,
+         input: &ListDeadLetterSourceQueuesRequest)
+         -> Result<ListDeadLetterSourceQueuesResult, ListDeadLetterSourceQueuesError>;
+
+
+    #[doc="<p>Returns a list of your queues. The maximum number of queues that can be returned is 1,000. If you specify a value for the optional <code>QueueNamePrefix</code> parameter, only queues with a name that begins with the specified value are returned.</p>"]
+    fn list_queues(&self, input: &ListQueuesRequest) -> Result<ListQueuesResult, ListQueuesError>;
+
+
+    #[doc="<p>Deletes the messages in a queue specified by the <code>QueueURL</code> parameter.</p> <important> <p>When you use the <code>PurgeQueue</code> action, you can't retrieve a message deleted from a queue.</p> </important> <p>When you purge a queue, the message deletion process takes up to 60 seconds. All messages sent to the queue before calling the <code>PurgeQueue</code> action are deleted. Messages sent to the queue while it is being purged might be deleted. While the queue is being purged, messages sent to the queue before <code>PurgeQueue</code> is called might be received, but are deleted within the next minute.</p>"]
+    fn purge_queue(&self, input: &PurgeQueueRequest) -> Result<(), PurgeQueueError>;
+
+
+    #[doc="<p>Retrieves one or more messages (up to 10), from the specified queue. Using the <code>WaitTimeSeconds</code> parameter enables long-poll support. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html\">Amazon SQS Long Polling</a> in the <i>Amazon SQS Developer Guide</i>. </p> <p>Short poll is the default behavior where a weighted random set of machines is sampled on a <code>ReceiveMessage</code> call. Thus, only the messages on the sampled machines are returned. If the number of messages in the queue is small (fewer than 1,000), you most likely get fewer messages than you requested per <code>ReceiveMessage</code> call. If the number of messages in the queue is extremely small, you might not receive any messages in a particular <code>ReceiveMessage</code> response. If this happens, repeat the request. </p> <p>For each message returned, the response includes the following:</p> <ul> <li> <p>The message body.</p> </li> <li> <p>An MD5 digest of the message body. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p> </li> <li> <p>The <code>MessageId</code> you received when you sent the message to the queue.</p> </li> <li> <p>The receipt handle.</p> </li> <li> <p>The message attributes.</p> </li> <li> <p>An MD5 digest of the message attributes.</p> </li> </ul> <p>The receipt handle is the identifier you must provide when deleting the message. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-message-identifiers.html\">Queue and Message Identifiers</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>You can provide the <code>VisibilityTimeout</code> parameter in your request. The parameter is applied to the messages that Amazon SQS returns in the response. If you don't include the parameter, the overall visibility timeout for the queue is used for the returned messages. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>A message that isn't deleted or a message whose visibility isn't extended before the visibility timeout expires counts as a failed receive. Depending on the configuration of the queue, the message might be sent to the dead letter queue.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
+    fn receive_message(&self,
+                       input: &ReceiveMessageRequest)
+                       -> Result<ReceiveMessageResult, ReceiveMessageError>;
+
+
+    #[doc="<p>Revokes any permissions in the queue policy that matches the specified <code>Label</code> parameter. Only the owner of the queue can remove permissions.</p>"]
+    fn remove_permission(&self,
+                         input: &RemovePermissionRequest)
+                         -> Result<(), RemovePermissionError>;
+
+
+    #[doc="<p>Delivers a message to the specified queue.</p> <important> <p>The following list shows the characters (in Unicode) that are allowed in your message, according to the W3C XML specification:</p> <ul> <li> <p> <code>#x9</code> </p> </li> <li> <p> <code>#xA</code> </p> </li> <li> <p> <code>#xD</code> </p> </li> <li> <p> <code>#x20</code> to <code>#xD7FF</code> </p> </li> <li> <p> <code>#xE000</code> to <code>#xFFFD</code> </p> </li> <li> <p> <code>#x10000</code> to <code>#x10FFFF</code> </p> </li> </ul> <p>For more information, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>. If you send any characters that aren't included in this list, your request is rejected.</p> </important>"]
+    fn send_message(&self,
+                    input: &SendMessageRequest)
+                    -> Result<SendMessageResult, SendMessageError>;
+
+
+    #[doc="<p>Delivers up to ten messages to the specified queue. This is a batch version of <code> <a>SendMessage</a> </code>. For a FIFO queue, multiple messages within a single batch are enqueued in the order they are sent.</p> <p>The result of sending each message is reported individually in the response. Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> <p>The maximum allowed individual message size and the maximum total payload size (the sum of the individual lengths of all of the batched messages) are both 256 KB (262,144 bytes).</p> <important> <p>The following list shows the characters (in Unicode) that are allowed in your message, according to the W3C XML specification:</p> <ul> <li> <p> <code>#x9</code> </p> </li> <li> <p> <code>#xA</code> </p> </li> <li> <p> <code>#xD</code> </p> </li> <li> <p> <code>#x20</code> to <code>#xD7FF</code> </p> </li> <li> <p> <code>#xE000</code> to <code>#xFFFD</code> </p> </li> <li> <p> <code>#x10000</code> to <code>#x10FFFF</code> </p> </li> </ul> <p>For more information, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>. If you send any characters that aren't included in this list, your request is rejected.</p> </important> <p>If you don't specify the <code>DelaySeconds</code> parameter for an entry, Amazon SQS uses the default value for the queue.</p> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn send_message_batch(&self,
+                          input: &SendMessageBatchRequest)
+                          -> Result<SendMessageBatchResult, SendMessageBatchError>;
+
+
+    #[doc="<p>Sets the value of one or more queue attributes. When you change a queue's attributes, the change can take up to 60 seconds for most of the attributes to propagate throughout the Amazon SQS system. Changes made to the <code>MessageRetentionPeriod</code> attribute can take up to 15 minutes.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
+    fn set_queue_attributes(&self,
+                            input: &SetQueueAttributesRequest)
+                            -> Result<(), SetQueueAttributesError>;
 }
 /// A client for the Amazon SQS API.
-        pub struct SqsClient<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {
-            credentials_provider: P,
-            region: region::Region,
-            dispatcher: D,
-        }
-
-        impl<P, D> SqsClient<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {
-            pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
-                  SqsClient {
-                    credentials_provider: credentials_provider,
-                    region: region,
-                    dispatcher: request_dispatcher
-                }
-            }
-        }
-
-        impl<P, D> Sqs for SqsClient<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {
-        
-
-                #[doc="<p>Adds a permission to a queue for a specific <a href=\"http://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P\">principal</a>. This allows sharing access to the queue.</p> <p>When you create a queue, you have full control access rights for the queue. Only you, the owner of the queue, can grant or deny permissions to the queue. For more information about these permissions, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p> <note> <p> <code>AddPermission</code> writes an Amazon-SQS-generated policy. If you want to write your own policy, use <code> <a>SetQueueAttributes</a> </code> to upload your policy. For more information about writing your own policy, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AccessPolicyLanguage.html\">Using The Access Policy Language</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn add_permission(&self, input: &AddPermissionRequest) -> Result<(), AddPermissionError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "AddPermission");
-                    params.put("Version", "2012-11-05");
-                    AddPermissionRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(AddPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Changes the visibility timeout of a specified message in a queue to a new value. The maximum allowed timeout value is 12 hours. Thus, you can't extend the timeout of a message in an existing queue to more than a total visibility timeout of 12 hours. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>For example, you have a message and with the default visibility timeout of 5 minutes. After 3 minutes, you call <code>ChangeMessageVisiblity</code> with a timeout of 10 minutes. At that time, the timeout for the message is extended by 10 minutes beyond the time of the <code>ChangeMessageVisibility</code> action. This results in a total visibility timeout of 13 minutes. You can continue to call the <code>ChangeMessageVisibility</code> to extend the visibility timeout to a maximum of 12 hours. If you try to extend the visibility timeout beyond 12 hours, your request is rejected.</p> <p>A message is considered to be <i>in flight</i> after it's received from a queue by a consumer, but not yet deleted from the queue.</p> <p>For standard queues, there can be a maximum of 120,000 inflight messages per queue. If you reach this limit, Amazon SQS returns the <code>OverLimit</code> error message. To avoid reaching the limit, you should delete messages from the queue after they're processed. You can also increase the number of queues you use to process your messages.</p> <p>For FIFO queues, there can be a maximum of 20,000 inflight messages per queue. If you reach this limit, Amazon SQS returns no error messages.</p> <important> <p>If you attempt to set the <code>VisibilityTimeout</code> to a value greater than the maximum time left, Amazon SQS returns an error. Amazon SQS doesn't automatically recalculate and increase the timeout to the maximum remaining time.</p> <p>Unlike with a queue, when you change the visibility timeout for a specific message the timeout value is applied immediately but isn't saved in memory for that message. If you don't delete a message after it is received, the visibility timeout for the message reverts to the original timeout value (not to the value you set using the <code>ChangeMessageVisibility</code> action) the next time the message is received.</p> </important>"]
-                fn change_message_visibility(&self, input: &ChangeMessageVisibilityRequest) -> Result<(), ChangeMessageVisibilityError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ChangeMessageVisibility");
-                    params.put("Version", "2012-11-05");
-                    ChangeMessageVisibilityRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ChangeMessageVisibilityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Changes the visibility timeout of multiple messages. This is a batch version of <code> <a>ChangeMessageVisibility</a> </code>. The result of the action on each message is reported individually in the response. You can send up to 10 <code> <a>ChangeMessageVisibility</a> </code> requests with each <code>ChangeMessageVisibilityBatch</code> action.</p> <important> <p>Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> </important> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn change_message_visibility_batch(&self, input: &ChangeMessageVisibilityBatchRequest) -> Result<ChangeMessageVisibilityBatchResult, ChangeMessageVisibilityBatchError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ChangeMessageVisibilityBatch");
-                    params.put("Version", "2012-11-05");
-                    ChangeMessageVisibilityBatchRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = ChangeMessageVisibilityBatchResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ChangeMessageVisibilityBatchResultDeserializer::deserialize("ChangeMessageVisibilityBatchResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ChangeMessageVisibilityBatchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Creates a new standard or FIFO queue or returns the URL of an existing queue. You can pass one or more attributes in the request. Keep the following caveats in mind:</p> <ul> <li> <p>If you don't specify the <code>FifoQueue</code> attribute, Amazon SQS creates a standard queue.</p> <note> <p> You can't change the queue type after you create it and you can't convert an existing standard queue into a FIFO queue. You must either create a new FIFO queue for your application or delete your existing standard queue and recreate it as a FIFO queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-moving\"> Moving From a Standard Queue to a FIFO Queue</a> in the <i>Amazon SQS Developer Guide</i>. </p> </note> </li> <li> <p>If you don't provide a value for an attribute, the queue is created with the default value for the attribute.</p> </li> <li> <p>If you delete a queue, you must wait at least 60 seconds before creating a queue with the same name.</p> </li> </ul> <p>To successfully create a new queue, you must provide a queue name that adheres to the <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/limits-queues.html\">limits related to queues</a> and is unique within the scope of your queues.</p> <p>To get the queue URL, use the <code> <a>GetQueueUrl</a> </code> action. <code> <a>GetQueueUrl</a> </code> requires only the <code>QueueName</code> parameter. be aware of existing queue names:</p> <ul> <li> <p>If you provide the name of an existing queue along with the exact names and values of all the queue's attributes, <code>CreateQueue</code> returns the queue URL for the existing queue.</p> </li> <li> <p>If the queue name, attribute names, or attribute values don't match an existing queue, <code>CreateQueue</code> returns an error.</p> </li> </ul> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn create_queue(&self, input: &CreateQueueRequest) -> Result<CreateQueueResult, CreateQueueError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "CreateQueue");
-                    params.put("Version", "2012-11-05");
-                    CreateQueueRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = CreateQueueResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(CreateQueueResultDeserializer::deserialize("CreateQueueResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(CreateQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Deletes the specified message from the specified queue. You specify the message by using the message's <i>receipt handle</i> and not the <i>MessageId</i> you receive when you send the message. Even if the message is locked by another reader due to the visibility timeout setting, it is still deleted from the queue. If you leave a message in the queue for longer than the queue's configured retention period, Amazon SQS automatically deletes the message. </p> <note> <p> The receipt handle is associated with a specific instance of receiving the message. If you receive a message more than once, the receipt handle you get each time you receive the message is different. If you don't provide the most recently received receipt handle for the message when you use the <code>DeleteMessage</code> action, the request succeeds, but the message might not be deleted.</p> <p>For standard queues, it is possible to receive a message even after you deleting it. This might happen on rare occasions if one of the servers storing a copy of the message is unavailable when you send the request to delete the message. The copy remains on the server and might be returned to you on a subsequent receive request. You should ensure that your application is idempotent, so that receiving a message more than once does not cause issues.</p> </note>"]
-                fn delete_message(&self, input: &DeleteMessageRequest) -> Result<(), DeleteMessageError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "DeleteMessage");
-                    params.put("Version", "2012-11-05");
-                    DeleteMessageRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Deletes up to ten messages from the specified queue. This is a batch version of <code> <a>DeleteMessage</a> </code>. The result of the action on each message is reported individually in the response.</p> <important> <p>Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> </important> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn delete_message_batch(&self, input: &DeleteMessageBatchRequest) -> Result<DeleteMessageBatchResult, DeleteMessageBatchError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "DeleteMessageBatch");
-                    params.put("Version", "2012-11-05");
-                    DeleteMessageBatchRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = DeleteMessageBatchResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(DeleteMessageBatchResultDeserializer::deserialize("DeleteMessageBatchResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteMessageBatchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Deletes the queue specified by the <code>QueueUrl</code>, even if the queue is empty. If the specified queue doesn't exist, Amazon SQS returns a successful response.</p> <important> <p>Be careful with the <code>DeleteQueue</code> action: When you delete a queue, any messages in the queue are no longer available. </p> </important> <p>When you delete a queue, the deletion process takes up to 60 seconds. Requests you send involving that queue during the 60 seconds might succeed. For example, a <code> <a>SendMessage</a> </code> request might succeed, but after 60 seconds the queue and the message you sent no longer exist.</p> <p>When you delete a queue, you must wait at least 60 seconds before creating a queue with the same name. </p>"]
-                fn delete_queue(&self, input: &DeleteQueueRequest) -> Result<(), DeleteQueueError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "DeleteQueue");
-                    params.put("Version", "2012-11-05");
-                    DeleteQueueRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(DeleteQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Gets attributes for the specified queue.</p> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn get_queue_attributes(&self, input: &GetQueueAttributesRequest) -> Result<GetQueueAttributesResult, GetQueueAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "GetQueueAttributes");
-                    params.put("Version", "2012-11-05");
-                    GetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = GetQueueAttributesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetQueueAttributesResultDeserializer::deserialize("GetQueueAttributesResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetQueueAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Returns the URL of an existing queue. This action provides a simple way to retrieve the URL of an Amazon SQS queue.</p> <p>To access a queue that belongs to another AWS account, use the <code>QueueOwnerAWSAccountId</code> parameter to specify the account ID of the queue's owner. The queue's owner must grant you permission to access the queue. For more information about shared queue access, see <code> <a>AddPermission</a> </code> or see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p>"]
-                fn get_queue_url(&self, input: &GetQueueUrlRequest) -> Result<GetQueueUrlResult, GetQueueUrlError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "GetQueueUrl");
-                    params.put("Version", "2012-11-05");
-                    GetQueueUrlRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = GetQueueUrlResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(GetQueueUrlResultDeserializer::deserialize("GetQueueUrlResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(GetQueueUrlError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Returns a list of your queues that have the <code>RedrivePolicy</code> queue attribute configured with a dead letter queue.</p> <p>For more information about using dead letter queues, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html\">Using Amazon SQS Dead Letter Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
-                fn list_dead_letter_source_queues(&self, input: &ListDeadLetterSourceQueuesRequest) -> Result<ListDeadLetterSourceQueuesResult, ListDeadLetterSourceQueuesError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ListDeadLetterSourceQueues");
-                    params.put("Version", "2012-11-05");
-                    ListDeadLetterSourceQueuesRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = ListDeadLetterSourceQueuesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListDeadLetterSourceQueuesResultDeserializer::deserialize("ListDeadLetterSourceQueuesResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListDeadLetterSourceQueuesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Returns a list of your queues. The maximum number of queues that can be returned is 1,000. If you specify a value for the optional <code>QueueNamePrefix</code> parameter, only queues with a name that begins with the specified value are returned.</p>"]
-                fn list_queues(&self, input: &ListQueuesRequest) -> Result<ListQueuesResult, ListQueuesError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ListQueues");
-                    params.put("Version", "2012-11-05");
-                    ListQueuesRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = ListQueuesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ListQueuesResultDeserializer::deserialize("ListQueuesResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ListQueuesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Deletes the messages in a queue specified by the <code>QueueURL</code> parameter.</p> <important> <p>When you use the <code>PurgeQueue</code> action, you can't retrieve a message deleted from a queue.</p> </important> <p>When you purge a queue, the message deletion process takes up to 60 seconds. All messages sent to the queue before calling the <code>PurgeQueue</code> action are deleted. Messages sent to the queue while it is being purged might be deleted. While the queue is being purged, messages sent to the queue before <code>PurgeQueue</code> is called might be received, but are deleted within the next minute.</p>"]
-                fn purge_queue(&self, input: &PurgeQueueRequest) -> Result<(), PurgeQueueError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "PurgeQueue");
-                    params.put("Version", "2012-11-05");
-                    PurgeQueueRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(PurgeQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Retrieves one or more messages (up to 10), from the specified queue. Using the <code>WaitTimeSeconds</code> parameter enables long-poll support. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html\">Amazon SQS Long Polling</a> in the <i>Amazon SQS Developer Guide</i>. </p> <p>Short poll is the default behavior where a weighted random set of machines is sampled on a <code>ReceiveMessage</code> call. Thus, only the messages on the sampled machines are returned. If the number of messages in the queue is small (fewer than 1,000), you most likely get fewer messages than you requested per <code>ReceiveMessage</code> call. If the number of messages in the queue is extremely small, you might not receive any messages in a particular <code>ReceiveMessage</code> response. If this happens, repeat the request. </p> <p>For each message returned, the response includes the following:</p> <ul> <li> <p>The message body.</p> </li> <li> <p>An MD5 digest of the message body. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p> </li> <li> <p>The <code>MessageId</code> you received when you sent the message to the queue.</p> </li> <li> <p>The receipt handle.</p> </li> <li> <p>The message attributes.</p> </li> <li> <p>An MD5 digest of the message attributes.</p> </li> </ul> <p>The receipt handle is the identifier you must provide when deleting the message. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-message-identifiers.html\">Queue and Message Identifiers</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>You can provide the <code>VisibilityTimeout</code> parameter in your request. The parameter is applied to the messages that Amazon SQS returns in the response. If you don't include the parameter, the overall visibility timeout for the queue is used for the returned messages. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>A message that isn't deleted or a message whose visibility isn't extended before the visibility timeout expires counts as a failed receive. Depending on the configuration of the queue, the message might be sent to the dead letter queue.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
-                fn receive_message(&self, input: &ReceiveMessageRequest) -> Result<ReceiveMessageResult, ReceiveMessageError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "ReceiveMessage");
-                    params.put("Version", "2012-11-05");
-                    ReceiveMessageRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = ReceiveMessageResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(ReceiveMessageResultDeserializer::deserialize("ReceiveMessageResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(ReceiveMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Revokes any permissions in the queue policy that matches the specified <code>Label</code> parameter. Only the owner of the queue can remove permissions.</p>"]
-                fn remove_permission(&self, input: &RemovePermissionRequest) -> Result<(), RemovePermissionError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "RemovePermission");
-                    params.put("Version", "2012-11-05");
-                    RemovePermissionRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(RemovePermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Delivers a message to the specified queue.</p> <important> <p>The following list shows the characters (in Unicode) that are allowed in your message, according to the W3C XML specification:</p> <ul> <li> <p> <code>#x9</code> </p> </li> <li> <p> <code>#xA</code> </p> </li> <li> <p> <code>#xD</code> </p> </li> <li> <p> <code>#x20</code> to <code>#xD7FF</code> </p> </li> <li> <p> <code>#xE000</code> to <code>#xFFFD</code> </p> </li> <li> <p> <code>#x10000</code> to <code>#x10FFFF</code> </p> </li> </ul> <p>For more information, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>. If you send any characters that aren't included in this list, your request is rejected.</p> </important>"]
-                fn send_message(&self, input: &SendMessageRequest) -> Result<SendMessageResult, SendMessageError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "SendMessage");
-                    params.put("Version", "2012-11-05");
-                    SendMessageRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = SendMessageResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SendMessageResultDeserializer::deserialize("SendMessageResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SendMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Delivers up to ten messages to the specified queue. This is a batch version of <code> <a>SendMessage</a> </code>. For a FIFO queue, multiple messages within a single batch are enqueued in the order they are sent.</p> <p>The result of sending each message is reported individually in the response. Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> <p>The maximum allowed individual message size and the maximum total payload size (the sum of the individual lengths of all of the batched messages) are both 256 KB (262,144 bytes).</p> <important> <p>The following list shows the characters (in Unicode) that are allowed in your message, according to the W3C XML specification:</p> <ul> <li> <p> <code>#x9</code> </p> </li> <li> <p> <code>#xA</code> </p> </li> <li> <p> <code>#xD</code> </p> </li> <li> <p> <code>#x20</code> to <code>#xD7FF</code> </p> </li> <li> <p> <code>#xE000</code> to <code>#xFFFD</code> </p> </li> <li> <p> <code>#x10000</code> to <code>#x10FFFF</code> </p> </li> </ul> <p>For more information, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>. If you send any characters that aren't included in this list, your request is rejected.</p> </important> <p>If you don't specify the <code>DelaySeconds</code> parameter for an entry, Amazon SQS uses the default value for the queue.</p> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
-                fn send_message_batch(&self, input: &SendMessageBatchRequest) -> Result<SendMessageBatchResult, SendMessageBatchError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "SendMessageBatch");
-                    params.put("Version", "2012-11-05");
-                    SendMessageBatchRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            
-        let result;
-
-        if response.body.is_empty() {
-            result = SendMessageBatchResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                response.body.as_slice(),
-                ParserConfig::new().trim_whitespace(true)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = try!(peek_at_name(&mut stack));
-            try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!(SendMessageBatchResultDeserializer::deserialize("SendMessageBatchResult", &mut stack));
-                     skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));
-        }
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SendMessageBatchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
-
-                #[doc="<p>Sets the value of one or more queue attributes. When you change a queue's attributes, the change can take up to 60 seconds for most of the attributes to propagate throughout the Amazon SQS system. Changes made to the <code>MessageRetentionPeriod</code> attribute can take up to 15 minutes.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
-                fn set_queue_attributes(&self, input: &SetQueueAttributesRequest) -> Result<(), SetQueueAttributesError> {
-                    let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
-                    let mut params = Params::new();
-
-                    params.put("Action", "SetQueueAttributes");
-                    params.put("Version", "2012-11-05");
-                    SetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
-                    request.set_params(params);
-
-                    request.sign(&try!(self.credentials_provider.credentials()));
-                    let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {
-                        StatusCode::Ok => {
-                            let result = ();
-                            Ok(result)
-                        }
-                        _ => {
-                            Err(SetQueueAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
-                    }
-                }
-                
+pub struct SqsClient<P, D>
+    where P: ProvideAwsCredentials,
+          D: DispatchSignedRequest
+{
+    credentials_provider: P,
+    region: region::Region,
+    dispatcher: D,
 }
 
-            #[cfg(test)]
-            mod protocol_tests {
-                
-            extern crate rusoto_mock;
-
-            use super::*;
-            use self::rusoto_mock::*;
-            use rusoto_core::Region as rusoto_region;
-
-            
-        #[test]
-        fn test_parse_error_sqs_delete_queue() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/error", "sqs-delete-queue.xml");
-            let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
-            let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DeleteQueueRequest::default();
-            let result = client.delete_queue(&request);
-            assert!(!result.is_ok(), "parse error: {:?}", result);
+impl<P, D> SqsClient<P, D>
+    where P: ProvideAwsCredentials,
+          D: DispatchSignedRequest
+{
+    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+        SqsClient {
+            credentials_provider: credentials_provider,
+            region: region,
+            dispatcher: request_dispatcher,
         }
-            
-        #[test]
-        fn test_parse_valid_sqs_add_permission() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sqs-add-permission.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = AddPermissionRequest::default();
-            let result = client.add_permission(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
+    }
+}
 
+impl<P, D> Sqs for SqsClient<P, D>
+    where P: ProvideAwsCredentials,
+          D: DispatchSignedRequest
+{
+    #[doc="<p>Adds a permission to a queue for a specific <a href=\"http://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P\">principal</a>. This allows sharing access to the queue.</p> <p>When you create a queue, you have full control access rights for the queue. Only you, the owner of the queue, can grant or deny permissions to the queue. For more information about these permissions, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p> <note> <p> <code>AddPermission</code> writes an Amazon-SQS-generated policy. If you want to write your own policy, use <code> <a>SetQueueAttributes</a> </code> to upload your policy. For more information about writing your own policy, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AccessPolicyLanguage.html\">Using The Access Policy Language</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn add_permission(&self, input: &AddPermissionRequest) -> Result<(), AddPermissionError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
 
-        #[test]
-        fn test_parse_valid_sqs_change_message_visibility_batch() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sqs-change-message-visibility-batch.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ChangeMessageVisibilityBatchRequest::default();
-            let result = client.change_message_visibility_batch(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
+        params.put("Action", "AddPermission");
+        params.put("Version", "2012-11-05");
+        AddPermissionRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
 
-
-        #[test]
-        fn test_parse_valid_sqs_create_queue() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sqs-create-queue.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = CreateQueueRequest::default();
-            let result = client.create_queue(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sqs_delete_message_batch() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sqs-delete-message-batch.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = DeleteMessageBatchRequest::default();
-            let result = client.delete_message_batch(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sqs_get_queue_attributes() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sqs-get-queue-attributes.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetQueueAttributesRequest::default();
-            let result = client.get_queue_attributes(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sqs_get_queue_url() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sqs-get-queue-url.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = GetQueueUrlRequest::default();
-            let result = client.get_queue_url(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sqs_list_queues() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sqs-list-queues.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ListQueuesRequest::default();
-            let result = client.list_queues(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sqs_receive_message() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sqs-receive-message.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = ReceiveMessageRequest::default();
-            let result = client.receive_message(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sqs_send_message_batch() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sqs-send-message-batch.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = SendMessageBatchRequest::default();
-            let result = client.send_message_batch(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
-
-
-        #[test]
-        fn test_parse_valid_sqs_send_message() {
-            let mock_response =  MockResponseReader::read_response("test_resources/generated/valid", "sqs-send-message.xml");
-            let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-            let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-            let request = SendMessageRequest::default();
-            let result = client.send_message(&request);
-            assert!(result.is_ok(), "parse error: {:?}", result);
-        }
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
             }
-            
+            _ => {
+                Err(AddPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Changes the visibility timeout of a specified message in a queue to a new value. The maximum allowed timeout value is 12 hours. Thus, you can't extend the timeout of a message in an existing queue to more than a total visibility timeout of 12 hours. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>For example, you have a message and with the default visibility timeout of 5 minutes. After 3 minutes, you call <code>ChangeMessageVisiblity</code> with a timeout of 10 minutes. At that time, the timeout for the message is extended by 10 minutes beyond the time of the <code>ChangeMessageVisibility</code> action. This results in a total visibility timeout of 13 minutes. You can continue to call the <code>ChangeMessageVisibility</code> to extend the visibility timeout to a maximum of 12 hours. If you try to extend the visibility timeout beyond 12 hours, your request is rejected.</p> <p>A message is considered to be <i>in flight</i> after it's received from a queue by a consumer, but not yet deleted from the queue.</p> <p>For standard queues, there can be a maximum of 120,000 inflight messages per queue. If you reach this limit, Amazon SQS returns the <code>OverLimit</code> error message. To avoid reaching the limit, you should delete messages from the queue after they're processed. You can also increase the number of queues you use to process your messages.</p> <p>For FIFO queues, there can be a maximum of 20,000 inflight messages per queue. If you reach this limit, Amazon SQS returns no error messages.</p> <important> <p>If you attempt to set the <code>VisibilityTimeout</code> to a value greater than the maximum time left, Amazon SQS returns an error. Amazon SQS doesn't automatically recalculate and increase the timeout to the maximum remaining time.</p> <p>Unlike with a queue, when you change the visibility timeout for a specific message the timeout value is applied immediately but isn't saved in memory for that message. If you don't delete a message after it is received, the visibility timeout for the message reverts to the original timeout value (not to the value you set using the <code>ChangeMessageVisibility</code> action) the next time the message is received.</p> </important>"]
+    fn change_message_visibility(&self,
+                                 input: &ChangeMessageVisibilityRequest)
+                                 -> Result<(), ChangeMessageVisibilityError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ChangeMessageVisibility");
+        params.put("Version", "2012-11-05");
+        ChangeMessageVisibilityRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                            Err(ChangeMessageVisibilityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Changes the visibility timeout of multiple messages. This is a batch version of <code> <a>ChangeMessageVisibility</a> </code>. The result of the action on each message is reported individually in the response. You can send up to 10 <code> <a>ChangeMessageVisibility</a> </code> requests with each <code>ChangeMessageVisibilityBatch</code> action.</p> <important> <p>Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> </important> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn change_message_visibility_batch
+        (&self,
+         input: &ChangeMessageVisibilityBatchRequest)
+         -> Result<ChangeMessageVisibilityBatchResult, ChangeMessageVisibilityBatchError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ChangeMessageVisibilityBatch");
+        params.put("Version", "2012-11-05");
+        ChangeMessageVisibilityBatchRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ChangeMessageVisibilityBatchResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ChangeMessageVisibilityBatchResultDeserializer::deserialize("ChangeMessageVisibilityBatchResult", &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(ChangeMessageVisibilityBatchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Creates a new standard or FIFO queue or returns the URL of an existing queue. You can pass one or more attributes in the request. Keep the following caveats in mind:</p> <ul> <li> <p>If you don't specify the <code>FifoQueue</code> attribute, Amazon SQS creates a standard queue.</p> <note> <p> You can't change the queue type after you create it and you can't convert an existing standard queue into a FIFO queue. You must either create a new FIFO queue for your application or delete your existing standard queue and recreate it as a FIFO queue. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-moving\"> Moving From a Standard Queue to a FIFO Queue</a> in the <i>Amazon SQS Developer Guide</i>. </p> </note> </li> <li> <p>If you don't provide a value for an attribute, the queue is created with the default value for the attribute.</p> </li> <li> <p>If you delete a queue, you must wait at least 60 seconds before creating a queue with the same name.</p> </li> </ul> <p>To successfully create a new queue, you must provide a queue name that adheres to the <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/limits-queues.html\">limits related to queues</a> and is unique within the scope of your queues.</p> <p>To get the queue URL, use the <code> <a>GetQueueUrl</a> </code> action. <code> <a>GetQueueUrl</a> </code> requires only the <code>QueueName</code> parameter. be aware of existing queue names:</p> <ul> <li> <p>If you provide the name of an existing queue along with the exact names and values of all the queue's attributes, <code>CreateQueue</code> returns the queue URL for the existing queue.</p> </li> <li> <p>If the queue name, attribute names, or attribute values don't match an existing queue, <code>CreateQueue</code> returns an error.</p> </li> </ul> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn create_queue(&self,
+                    input: &CreateQueueRequest)
+                    -> Result<CreateQueueResult, CreateQueueError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateQueue");
+        params.put("Version", "2012-11-05");
+        CreateQueueRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateQueueResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(CreateQueueResultDeserializer::deserialize("CreateQueueResult",
+                                                                             &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => Err(CreateQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Deletes the specified message from the specified queue. You specify the message by using the message's <i>receipt handle</i> and not the <i>MessageId</i> you receive when you send the message. Even if the message is locked by another reader due to the visibility timeout setting, it is still deleted from the queue. If you leave a message in the queue for longer than the queue's configured retention period, Amazon SQS automatically deletes the message. </p> <note> <p> The receipt handle is associated with a specific instance of receiving the message. If you receive a message more than once, the receipt handle you get each time you receive the message is different. If you don't provide the most recently received receipt handle for the message when you use the <code>DeleteMessage</code> action, the request succeeds, but the message might not be deleted.</p> <p>For standard queues, it is possible to receive a message even after you deleting it. This might happen on rare occasions if one of the servers storing a copy of the message is unavailable when you send the request to delete the message. The copy remains on the server and might be returned to you on a subsequent receive request. You should ensure that your application is idempotent, so that receiving a message more than once does not cause issues.</p> </note>"]
+    fn delete_message(&self, input: &DeleteMessageRequest) -> Result<(), DeleteMessageError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteMessage");
+        params.put("Version", "2012-11-05");
+        DeleteMessageRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                Err(DeleteMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Deletes up to ten messages from the specified queue. This is a batch version of <code> <a>DeleteMessage</a> </code>. The result of the action on each message is reported individually in the response.</p> <important> <p>Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> </important> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn delete_message_batch(&self,
+                            input: &DeleteMessageBatchRequest)
+                            -> Result<DeleteMessageBatchResult, DeleteMessageBatchError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteMessageBatch");
+        params.put("Version", "2012-11-05");
+        DeleteMessageBatchRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteMessageBatchResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(DeleteMessageBatchResultDeserializer::deserialize("DeleteMessageBatchResult",
+                                                                                    &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(DeleteMessageBatchError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Deletes the queue specified by the <code>QueueUrl</code>, even if the queue is empty. If the specified queue doesn't exist, Amazon SQS returns a successful response.</p> <important> <p>Be careful with the <code>DeleteQueue</code> action: When you delete a queue, any messages in the queue are no longer available. </p> </important> <p>When you delete a queue, the deletion process takes up to 60 seconds. Requests you send involving that queue during the 60 seconds might succeed. For example, a <code> <a>SendMessage</a> </code> request might succeed, but after 60 seconds the queue and the message you sent no longer exist.</p> <p>When you delete a queue, you must wait at least 60 seconds before creating a queue with the same name. </p>"]
+    fn delete_queue(&self, input: &DeleteQueueRequest) -> Result<(), DeleteQueueError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteQueue");
+        params.put("Version", "2012-11-05");
+        DeleteQueueRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => Err(DeleteQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Gets attributes for the specified queue.</p> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn get_queue_attributes(&self,
+                            input: &GetQueueAttributesRequest)
+                            -> Result<GetQueueAttributesResult, GetQueueAttributesError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetQueueAttributes");
+        params.put("Version", "2012-11-05");
+        GetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetQueueAttributesResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(GetQueueAttributesResultDeserializer::deserialize("GetQueueAttributesResult",
+                                                                                    &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(GetQueueAttributesError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Returns the URL of an existing queue. This action provides a simple way to retrieve the URL of an Amazon SQS queue.</p> <p>To access a queue that belongs to another AWS account, use the <code>QueueOwnerAWSAccountId</code> parameter to specify the account ID of the queue's owner. The queue's owner must grant you permission to access the queue. For more information about shared queue access, see <code> <a>AddPermission</a> </code> or see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/acp-overview.html\">Shared Queues</a> in the <i>Amazon SQS Developer Guide</i>. </p>"]
+    fn get_queue_url(&self,
+                     input: &GetQueueUrlRequest)
+                     -> Result<GetQueueUrlResult, GetQueueUrlError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetQueueUrl");
+        params.put("Version", "2012-11-05");
+        GetQueueUrlRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetQueueUrlResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(GetQueueUrlResultDeserializer::deserialize("GetQueueUrlResult",
+                                                                             &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => Err(GetQueueUrlError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Returns a list of your queues that have the <code>RedrivePolicy</code> queue attribute configured with a dead letter queue.</p> <p>For more information about using dead letter queues, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html\">Using Amazon SQS Dead Letter Queues</a> in the <i>Amazon SQS Developer Guide</i>.</p>"]
+    fn list_dead_letter_source_queues
+        (&self,
+         input: &ListDeadLetterSourceQueuesRequest)
+         -> Result<ListDeadLetterSourceQueuesResult, ListDeadLetterSourceQueuesError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListDeadLetterSourceQueues");
+        params.put("Version", "2012-11-05");
+        ListDeadLetterSourceQueuesRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ListDeadLetterSourceQueuesResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result =
+                        try!(ListDeadLetterSourceQueuesResultDeserializer::deserialize("ListDeadLetterSourceQueuesResult",
+                                                                                       &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(ListDeadLetterSourceQueuesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
+    #[doc="<p>Returns a list of your queues. The maximum number of queues that can be returned is 1,000. If you specify a value for the optional <code>QueueNamePrefix</code> parameter, only queues with a name that begins with the specified value are returned.</p>"]
+    fn list_queues(&self, input: &ListQueuesRequest) -> Result<ListQueuesResult, ListQueuesError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListQueues");
+        params.put("Version", "2012-11-05");
+        ListQueuesRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ListQueuesResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ListQueuesResultDeserializer::deserialize("ListQueuesResult",
+                                                                            &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => Err(ListQueuesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Deletes the messages in a queue specified by the <code>QueueURL</code> parameter.</p> <important> <p>When you use the <code>PurgeQueue</code> action, you can't retrieve a message deleted from a queue.</p> </important> <p>When you purge a queue, the message deletion process takes up to 60 seconds. All messages sent to the queue before calling the <code>PurgeQueue</code> action are deleted. Messages sent to the queue while it is being purged might be deleted. While the queue is being purged, messages sent to the queue before <code>PurgeQueue</code> is called might be received, but are deleted within the next minute.</p>"]
+    fn purge_queue(&self, input: &PurgeQueueRequest) -> Result<(), PurgeQueueError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "PurgeQueue");
+        params.put("Version", "2012-11-05");
+        PurgeQueueRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => Err(PurgeQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Retrieves one or more messages (up to 10), from the specified queue. Using the <code>WaitTimeSeconds</code> parameter enables long-poll support. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html\">Amazon SQS Long Polling</a> in the <i>Amazon SQS Developer Guide</i>. </p> <p>Short poll is the default behavior where a weighted random set of machines is sampled on a <code>ReceiveMessage</code> call. Thus, only the messages on the sampled machines are returned. If the number of messages in the queue is small (fewer than 1,000), you most likely get fewer messages than you requested per <code>ReceiveMessage</code> call. If the number of messages in the queue is extremely small, you might not receive any messages in a particular <code>ReceiveMessage</code> response. If this happens, repeat the request. </p> <p>For each message returned, the response includes the following:</p> <ul> <li> <p>The message body.</p> </li> <li> <p>An MD5 digest of the message body. For information on MD5, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>.</p> </li> <li> <p>The <code>MessageId</code> you received when you sent the message to the queue.</p> </li> <li> <p>The receipt handle.</p> </li> <li> <p>The message attributes.</p> </li> <li> <p>An MD5 digest of the message attributes.</p> </li> </ul> <p>The receipt handle is the identifier you must provide when deleting the message. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-message-identifiers.html\">Queue and Message Identifiers</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>You can provide the <code>VisibilityTimeout</code> parameter in your request. The parameter is applied to the messages that Amazon SQS returns in the response. If you don't include the parameter, the overall visibility timeout for the queue is used for the returned messages. For more information, see <a href=\"http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html\">Visibility Timeout</a> in the <i>Amazon SQS Developer Guide</i>.</p> <p>A message that isn't deleted or a message whose visibility isn't extended before the visibility timeout expires counts as a failed receive. Depending on the configuration of the queue, the message might be sent to the dead letter queue.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
+    fn receive_message(&self,
+                       input: &ReceiveMessageRequest)
+                       -> Result<ReceiveMessageResult, ReceiveMessageError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ReceiveMessage");
+        params.put("Version", "2012-11-05");
+        ReceiveMessageRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ReceiveMessageResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ReceiveMessageResultDeserializer::deserialize("ReceiveMessageResult",
+                                                                                &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(ReceiveMessageError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Revokes any permissions in the queue policy that matches the specified <code>Label</code> parameter. Only the owner of the queue can remove permissions.</p>"]
+    fn remove_permission(&self,
+                         input: &RemovePermissionRequest)
+                         -> Result<(), RemovePermissionError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "RemovePermission");
+        params.put("Version", "2012-11-05");
+        RemovePermissionRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Delivers a message to the specified queue.</p> <important> <p>The following list shows the characters (in Unicode) that are allowed in your message, according to the W3C XML specification:</p> <ul> <li> <p> <code>#x9</code> </p> </li> <li> <p> <code>#xA</code> </p> </li> <li> <p> <code>#xD</code> </p> </li> <li> <p> <code>#x20</code> to <code>#xD7FF</code> </p> </li> <li> <p> <code>#xE000</code> to <code>#xFFFD</code> </p> </li> <li> <p> <code>#x10000</code> to <code>#x10FFFF</code> </p> </li> </ul> <p>For more information, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>. If you send any characters that aren't included in this list, your request is rejected.</p> </important>"]
+    fn send_message(&self,
+                    input: &SendMessageRequest)
+                    -> Result<SendMessageResult, SendMessageError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SendMessage");
+        params.put("Version", "2012-11-05");
+        SendMessageRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = SendMessageResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(SendMessageResultDeserializer::deserialize("SendMessageResult",
+                                                                             &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => Err(SendMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Delivers up to ten messages to the specified queue. This is a batch version of <code> <a>SendMessage</a> </code>. For a FIFO queue, multiple messages within a single batch are enqueued in the order they are sent.</p> <p>The result of sending each message is reported individually in the response. Because the batch request can result in a combination of successful and unsuccessful actions, you should check for batch errors even when the call returns an HTTP status code of <code>200</code>.</p> <p>The maximum allowed individual message size and the maximum total payload size (the sum of the individual lengths of all of the batched messages) are both 256 KB (262,144 bytes).</p> <important> <p>The following list shows the characters (in Unicode) that are allowed in your message, according to the W3C XML specification:</p> <ul> <li> <p> <code>#x9</code> </p> </li> <li> <p> <code>#xA</code> </p> </li> <li> <p> <code>#xD</code> </p> </li> <li> <p> <code>#x20</code> to <code>#xD7FF</code> </p> </li> <li> <p> <code>#xE000</code> to <code>#xFFFD</code> </p> </li> <li> <p> <code>#x10000</code> to <code>#x10FFFF</code> </p> </li> </ul> <p>For more information, see <a href=\"https://www.ietf.org/rfc/rfc1321.txt\">RFC1321</a>. If you send any characters that aren't included in this list, your request is rejected.</p> </important> <p>If you don't specify the <code>DelaySeconds</code> parameter for an entry, Amazon SQS uses the default value for the queue.</p> <note> <p>Some actions take lists of parameters. These lists are specified using the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For example, a parameter list with two elements looks like this:</p> <p> <code>&amp;Attribute.1=this</code> </p> <p> <code>&amp;Attribute.2=that</code> </p> </note>"]
+    fn send_message_batch(&self,
+                          input: &SendMessageBatchRequest)
+                          -> Result<SendMessageBatchResult, SendMessageBatchError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SendMessageBatch");
+        params.put("Version", "2012-11-05");
+        SendMessageBatchRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = SendMessageBatchResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(SendMessageBatchResultDeserializer::deserialize("SendMessageBatchResult",
+                                                                                  &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(SendMessageBatchError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Sets the value of one or more queue attributes. When you change a queue's attributes, the change can take up to 60 seconds for most of the attributes to propagate throughout the Amazon SQS system. Changes made to the <code>MessageRetentionPeriod</code> attribute can take up to 15 minutes.</p> <note> <p>In the future, new attributes might be added. If you write code that calls this action, we recommend that you structure your code so that it can handle new attributes gracefully.</p> </note>"]
+    fn set_queue_attributes(&self,
+                            input: &SetQueueAttributesRequest)
+                            -> Result<(), SetQueueAttributesError> {
+        let mut request = SignedRequest::new("POST", "sqs", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SetQueueAttributes");
+        params.put("Version", "2012-11-05");
+        SetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                Err(SetQueueAttributesError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod protocol_tests {
+
+    extern crate rusoto_mock;
+
+    use super::*;
+    use self::rusoto_mock::*;
+    use rusoto_core::Region as rusoto_region;
+
+
+    #[test]
+    fn test_parse_error_sqs_delete_queue() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/error",
+                                                              "sqs-delete-queue.xml");
+        let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = DeleteQueueRequest::default();
+        let result = client.delete_queue(&request);
+        assert!(!result.is_ok(), "parse error: {:?}", result);
+    }
+
+    #[test]
+    fn test_parse_valid_sqs_list_queues() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-list-queues.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ListQueuesRequest::default();
+        let result = client.list_queues(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sqs_send_message_batch() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-send-message-batch.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = SendMessageBatchRequest::default();
+        let result = client.send_message_batch(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sqs_send_message() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-send-message.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = SendMessageRequest::default();
+        let result = client.send_message(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sqs_create_queue() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-create-queue.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = CreateQueueRequest::default();
+        let result = client.create_queue(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sqs_change_message_visibility_batch() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-change-message-visibility-batch.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ChangeMessageVisibilityBatchRequest::default();
+        let result = client.change_message_visibility_batch(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sqs_get_queue_attributes() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-get-queue-attributes.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = GetQueueAttributesRequest::default();
+        let result = client.get_queue_attributes(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sqs_get_queue_url() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-get-queue-url.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = GetQueueUrlRequest::default();
+        let result = client.get_queue_url(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sqs_add_permission() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-add-permission.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = AddPermissionRequest::default();
+        let result = client.add_permission(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sqs_delete_message_batch() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-delete-message-batch.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = DeleteMessageBatchRequest::default();
+        let result = client.delete_message_batch(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sqs_receive_message() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-receive-message.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ReceiveMessageRequest::default();
+        let result = client.receive_message(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+}
