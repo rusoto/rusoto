@@ -13374,61 +13374,13 @@ mod protocol_tests {
     }
 
     #[test]
-    fn test_parse_valid_autoscaling_describe_notification_configurations() {
+    fn test_parse_valid_autoscaling_describe_adjustment_types() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "autoscaling-describe-notification-configurations.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeNotificationConfigurationsType::default();
-        let result = client.describe_notification_configurations(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_autoscaling_describe_scaling_activities() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "autoscaling-describe-scaling-activities.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeScalingActivitiesType::default();
-        let result = client.describe_scaling_activities(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_autoscaling_describe_metric_collection_types() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "autoscaling-describe-metric-collection-types.xml");
+                                                              "autoscaling-describe-adjustment-types.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_metric_collection_types();
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_autoscaling_describe_tags() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "autoscaling-describe-tags.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeTagsType::default();
-        let result = client.describe_tags(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_autoscaling_describe_launch_configurations() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "autoscaling-describe-launch-configurations.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = LaunchConfigurationNamesType::default();
-        let result = client.describe_launch_configurations(&request);
+        let result = client.describe_adjustment_types();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -13458,6 +13410,18 @@ mod protocol_tests {
 
 
     #[test]
+    fn test_parse_valid_autoscaling_describe_scaling_process_types() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "autoscaling-describe-scaling-process-types.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+
+        let result = client.describe_scaling_process_types();
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
     fn test_parse_valid_autoscaling_describe_policies() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "autoscaling-describe-policies.xml");
@@ -13470,25 +13434,25 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_autoscaling_describe_auto_scaling_instances() {
+    fn test_parse_valid_autoscaling_describe_scaling_activities() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "autoscaling-describe-auto-scaling-instances.xml");
+                                                              "autoscaling-describe-scaling-activities.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeAutoScalingInstancesType::default();
-        let result = client.describe_auto_scaling_instances(&request);
+        let request = DescribeScalingActivitiesType::default();
+        let result = client.describe_scaling_activities(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
 
     #[test]
-    fn test_parse_valid_autoscaling_describe_adjustment_types() {
+    fn test_parse_valid_autoscaling_describe_metric_collection_types() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "autoscaling-describe-adjustment-types.xml");
+                                                              "autoscaling-describe-metric-collection-types.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.describe_adjustment_types();
+        let result = client.describe_metric_collection_types();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -13506,6 +13470,18 @@ mod protocol_tests {
 
 
     #[test]
+    fn test_parse_valid_autoscaling_describe_auto_scaling_instances() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "autoscaling-describe-auto-scaling-instances.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = DescribeAutoScalingInstancesType::default();
+        let result = client.describe_auto_scaling_instances(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
     fn test_parse_valid_autoscaling_describe_auto_scaling_groups() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "autoscaling-describe-auto-scaling-groups.xml");
@@ -13518,13 +13494,37 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_autoscaling_describe_scaling_process_types() {
+    fn test_parse_valid_autoscaling_describe_launch_configurations() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "autoscaling-describe-scaling-process-types.xml");
+                                                              "autoscaling-describe-launch-configurations.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = LaunchConfigurationNamesType::default();
+        let result = client.describe_launch_configurations(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
 
-        let result = client.describe_scaling_process_types();
+
+    #[test]
+    fn test_parse_valid_autoscaling_describe_notification_configurations() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "autoscaling-describe-notification-configurations.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = DescribeNotificationConfigurationsType::default();
+        let result = client.describe_notification_configurations(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_autoscaling_describe_tags() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "autoscaling-describe-tags.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = AutoscalingClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = DescribeTagsType::default();
+        let result = client.describe_tags(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

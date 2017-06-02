@@ -22013,30 +22013,6 @@ mod protocol_tests {
     }
 
     #[test]
-    fn test_parse_valid_s3_list_buckets() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "s3-list-buckets.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.list_buckets();
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_s3_get_bucket_logging() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "s3-get-bucket-logging.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetBucketLoggingRequest::default();
-        let result = client.get_bucket_logging(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
     fn test_parse_valid_s3_list_multipart_uploads() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "s3-list-multipart-uploads.xml");
@@ -22044,6 +22020,18 @@ mod protocol_tests {
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListMultipartUploadsRequest::default();
         let result = client.list_multipart_uploads(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_s3_get_bucket_policy() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "s3-get-bucket-policy.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = GetBucketPolicyRequest::default();
+        let result = client.get_bucket_policy(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -22073,6 +22061,18 @@ mod protocol_tests {
 
 
     #[test]
+    fn test_parse_valid_s3_get_bucket_logging() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "s3-get-bucket-logging.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = GetBucketLoggingRequest::default();
+        let result = client.get_bucket_logging(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
     fn test_parse_valid_s3_get_bucket_acl() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "s3-get-bucket-acl.xml");
@@ -22097,13 +22097,13 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_s3_get_bucket_policy() {
+    fn test_parse_valid_s3_list_buckets() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "s3-get-bucket-policy.xml");
+                                                              "s3-list-buckets.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetBucketPolicyRequest::default();
-        let result = client.get_bucket_policy(&request);
+
+        let result = client.list_buckets();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

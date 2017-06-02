@@ -8854,13 +8854,13 @@ mod protocol_tests {
     }
 
     #[test]
-    fn test_parse_valid_elb_describe_load_balancer_policy_types() {
+    fn test_parse_valid_elb_describe_load_balancers() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "elb-describe-load-balancer-policy-types.xml");
+                                                              "elb-describe-load-balancers.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeLoadBalancerPolicyTypesInput::default();
-        let result = client.describe_load_balancer_policy_types(&request);
+        let request = DescribeAccessPointsInput::default();
+        let result = client.describe_load_balancers(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -8878,13 +8878,13 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_elb_describe_load_balancers() {
+    fn test_parse_valid_elb_describe_load_balancer_policy_types() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "elb-describe-load-balancers.xml");
+                                                              "elb-describe-load-balancer-policy-types.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeAccessPointsInput::default();
-        let result = client.describe_load_balancers(&request);
+        let request = DescribeLoadBalancerPolicyTypesInput::default();
+        let result = client.describe_load_balancer_policy_types(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }
