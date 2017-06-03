@@ -43,6 +43,14 @@ pub struct HttpResponse {
 }
 
 impl HttpResponse {
+    pub fn new(status: u16) -> HttpResponse {
+        HttpResponse {
+            status: StatusCode::from_u16(status),
+            body: vec![],
+            headers: HashMap::new()
+        }
+    }
+
     pub fn check_status(&self, code: u16) -> bool {
         self.status == StatusCode::Unregistered(code)
     }

@@ -1,17 +1,14 @@
 //! Mock request dispatcher and credentials for unit testing services
 
 extern crate chrono;
-extern crate hyper;
 extern crate rusoto_core;
 
 use std::fs::File;
 use std::io::Read;
-use std::collections::HashMap;
 
 use rusoto_core::{DispatchSignedRequest, HttpResponse, HttpDispatchError, SignedRequest};
 use rusoto_core::credential::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
 use chrono::{Duration, UTC};
-use hyper::status::StatusCode;
 
 const ONE_DAY: i64 = 86400;
 
@@ -33,11 +30,7 @@ pub struct MockRequestDispatcher {
 
 impl MockRequestDispatcher {
     pub fn with_status(status: u16) -> MockRequestDispatcher {
-        let response = HttpResponse {
-            status: StatusCode::from_u16(status),
-            body: b"".to_vec(),
-            headers: HashMap::new(),
-        };
+        let response = HttpResponse::new(status);
 
         MockRequestDispatcher {
             mock_response: response,
