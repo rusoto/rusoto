@@ -13,287 +13,287 @@ repository = "https://github.com/rusoto/rusoto"
 homepage = "https://www.rusoto.org/"
 
 [dependencies.rusoto_core]
-path = "rusoto/core"
+path = "../rusoto/core"
 version = "0.25.0"
 
 [dependencies.rusoto_acm]
 optional = true
-path = "rusoto/services/acm"
+path = "../rusoto/services/acm"
 version = "0.25.0"
 
 [dependencies.rusoto_autoscaling]
 optional = true
-path = "rusoto/services/autoscaling"
+path = "../rusoto/services/autoscaling"
 version = "0.25.0"
 
 [dependencies.rusoto_cloudformation]
 optional = true
-path = "rusoto/services/cloudformation"
+path = "../rusoto/services/cloudformation"
 version = "0.25.0"
 
 [dependencies.rusoto_cloudfront]
 optional = true
-path = "rusoto/services/cloudfront"
+path = "../rusoto/services/cloudfront"
 version = "0.25.0"
 
 [dependencies.rusoto_cloudhsm]
 optional = true
-path = "rusoto/services/cloudhsm"
+path = "../rusoto/services/cloudhsm"
 version = "0.25.0"
 
 [dependencies.rusoto_cloudsearch]
 optional = true
-path = "rusoto/services/cloudsearch"
+path = "../rusoto/services/cloudsearch"
 version = "0.25.0"
 
 [dependencies.rusoto_cloudtrail]
 optional = true
-path = "rusoto/services/cloudtrail"
+path = "../rusoto/services/cloudtrail"
 version = "0.25.0"
 
 [dependencies.rusoto_cloudwatch]
 optional = true
-path = "rusoto/services/cloudwatch"
+path = "../rusoto/services/cloudwatch"
 version = "0.25.0"
 
 [dependencies.rusoto_codecommit]
 optional = true
-path = "rusoto/services/codecommit"
+path = "../rusoto/services/codecommit"
 version = "0.25.0"
 
 [dependencies.rusoto_codedeploy]
 optional = true
-path = "rusoto/services/codedeploy"
+path = "../rusoto/services/codedeploy"
 version = "0.25.0"
 
 [dependencies.rusoto_codepipeline]
 optional = true
-path = "rusoto/services/codepipeline"
+path = "../rusoto/services/codepipeline"
 version = "0.25.0"
 
 [dependencies.rusoto_cognito_identity]
 optional = true
-path = "rusoto/services/cognito-identity"
+path = "../rusoto/services/cognito-identity"
 version = "0.25.0"
 
 [dependencies.rusoto_config]
 optional = true
-path = "rusoto/services/config"
+path = "../rusoto/services/config"
 version = "0.25.0"
 
 [dependencies.rusoto_datapipeline]
 optional = true
-path = "rusoto/services/datapipeline"
+path = "../rusoto/services/datapipeline"
 version = "0.25.0"
 
 [dependencies.rusoto_devicefarm]
 optional = true
-path = "rusoto/services/devicefarm"
+path = "../rusoto/services/devicefarm"
 version = "0.25.0"
 
 [dependencies.rusoto_directconnect]
 optional = true
-path = "rusoto/services/directconnect"
+path = "../rusoto/services/directconnect"
 version = "0.25.0"
 
 [dependencies.rusoto_ds]
 optional = true
-path = "rusoto/services/ds"
+path = "../rusoto/services/ds"
 version = "0.25.0"
 
 [dependencies.rusoto_dynamodb]
 optional = true
-path = "rusoto/services/dynamodb"
+path = "../rusoto/services/dynamodb"
 version = "0.25.0"
 
 [dependencies.rusoto_dynamodbstreams]
 optional = true
-path = "rusoto/services/dynamodbstreams"
+path = "../rusoto/services/dynamodbstreams"
 version = "0.25.0"
 
 [dependencies.rusoto_ec2]
 optional = true
-path = "rusoto/services/ec2"
+path = "../rusoto/services/ec2"
 version = "0.25.0"
 
 [dependencies.rusoto_ecr]
 optional = true
-path = "rusoto/services/ecr"
+path = "../rusoto/services/ecr"
 version = "0.25.0"
 
 [dependencies.rusoto_ecs]
 optional = true
-path = "rusoto/services/ecs"
+path = "../rusoto/services/ecs"
 version = "0.25.0"
 
 [dependencies.rusoto_elasticache]
 optional = true
-path = "rusoto/services/elasticache"
+path = "../rusoto/services/elasticache"
 version = "0.25.0"
 
 [dependencies.rusoto_elasticbeanstalk]
 optional = true
-path = "rusoto/services/elasticbeanstalk"
+path = "../rusoto/services/elasticbeanstalk"
 version = "0.25.0"
 
 [dependencies.rusoto_elastictranscoder]
 optional = true
-path = "rusoto/services/elastictranscoder"
+path = "../rusoto/services/elastictranscoder"
 version = "0.25.0"
 
 [dependencies.rusoto_elb]
 optional = true
-path = "rusoto/services/elb"
+path = "../rusoto/services/elb"
 version = "0.25.0"
 
 [dependencies.rusoto_elbv2]
 optional = true
-path = "rusoto/services/elbv2"
+path = "../rusoto/services/elbv2"
 version = "0.25.0"
 
 [dependencies.rusoto_emr]
 optional = true
-path = "rusoto/services/emr"
+path = "../rusoto/services/emr"
 version = "0.25.0"
 
 [dependencies.rusoto_events]
 optional = true
-path = "rusoto/services/events"
+path = "../rusoto/services/events"
 version = "0.25.0"
 
 [dependencies.rusoto_firehose]
 optional = true
-path = "rusoto/services/firehose"
+path = "../rusoto/services/firehose"
 version = "0.25.0"
 
 [dependencies.rusoto_iam]
 optional = true
-path = "rusoto/services/iam"
+path = "../rusoto/services/iam"
 version = "0.25.0"
 
 [dependencies.rusoto_importexport]
 optional = true
-path = "rusoto/services/importexport"
+path = "../rusoto/services/importexport"
 version = "0.25.0"
 
 [dependencies.rusoto_inspector]
 optional = true
-path = "rusoto/services/inspector"
+path = "../rusoto/services/inspector"
 version = "0.25.0"
 
 [dependencies.rusoto_iot]
 optional = true
-path = "rusoto/services/iot"
+path = "../rusoto/services/iot"
 version = "0.25.0"
 
 [dependencies.rusoto_kinesis]
 optional = true
-path = "rusoto/services/kinesis"
+path = "../rusoto/services/kinesis"
 version = "0.25.0"
 
 [dependencies.rusoto_kms]
 optional = true
-path = "rusoto/services/kms"
+path = "../rusoto/services/kms"
 version = "0.25.0"
 
 [dependencies.rusoto_lambda]
 optional = true
-path = "rusoto/services/lambda"
+path = "../rusoto/services/lambda"
 version = "0.25.0"
 
 [dependencies.rusoto_logs]
 optional = true
-path = "rusoto/services/logs"
+path = "../rusoto/services/logs"
 version = "0.25.0"
 
 [dependencies.rusoto_machinelearning]
 optional = true
-path = "rusoto/services/machinelearning"
+path = "../rusoto/services/machinelearning"
 version = "0.25.0"
 
 [dependencies.rusoto_marketplacecommerceanalytics]
 optional = true
-path = "rusoto/services/marketplacecommerceanalytics"
+path = "../rusoto/services/marketplacecommerceanalytics"
 version = "0.25.0"
 
 [dependencies.rusoto_opsworks]
 optional = true
-path = "rusoto/services/opsworks"
+path = "../rusoto/services/opsworks"
 version = "0.25.0"
 
 [dependencies.rusoto_redshift]
 optional = true
-path = "rusoto/services/redshift"
+path = "../rusoto/services/redshift"
 version = "0.25.0"
 
 [dependencies.rusoto_rds]
 optional = true
-path = "rusoto/services/rds"
+path = "../rusoto/services/rds"
 version = "0.25.0"
 
 [dependencies.rusoto_route53]
 optional = true
-path = "rusoto/services/route53"
+path = "../rusoto/services/route53"
 version = "0.25.0"
 
 [dependencies.rusoto_route53domains]
 optional = true
-path = "rusoto/services/route53domains"
+path = "../rusoto/services/route53domains"
 version = "0.25.0"
 
 [dependencies.rusoto_s3]
 optional = true
-path = "rusoto/services/s3"
+path = "../rusoto/services/s3"
 version = "0.25.0"
 
 [dependencies.rusoto_sdb]
 optional = true
-path = "rusoto/services/sdb"
+path = "../rusoto/services/sdb"
 version = "0.25.0"
 
 [dependencies.rusoto_ses]
 optional = true
-path = "rusoto/services/ses"
+path = "../rusoto/services/ses"
 version = "0.25.0"
 
 [dependencies.rusoto_sns]
 optional = true
-path = "rusoto/services/sns"
+path = "../rusoto/services/sns"
 version = "0.25.0"
 
 [dependencies.rusoto_sqs]
 optional = true
-path = "rusoto/services/sqs"
+path = "../rusoto/services/sqs"
 version = "0.25.0"
 
 [dependencies.rusoto_ssm]
 optional = true
-path = "rusoto/services/ssm"
+path = "../rusoto/services/ssm"
 version = "0.25.0"
 
 [dependencies.rusoto_storagegateway]
 optional = true
-path = "rusoto/services/storagegateway"
+path = "../rusoto/services/storagegateway"
 version = "0.25.0"
 
 [dependencies.rusoto_sts]
 optional = true
-path = "rusoto/services/sts"
+path = "../rusoto/services/sts"
 version = "0.25.0"
 
 [dependencies.rusoto_swf]
 optional = true
-path = "rusoto/services/swf"
+path = "../rusoto/services/swf"
 version = "0.25.0"
 
 [dependencies.rusoto_waf]
 optional = true
-path = "rusoto/services/waf"
+path = "../rusoto/services/waf"
 version = "0.25.0"
 
 [dependencies.rusoto_workspaces]
 optional = true
-path = "rusoto/services/workspaces"
+path = "../rusoto/services/workspaces"
 version = "0.25.0"
 
 [dev-dependencies]
