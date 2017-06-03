@@ -14,7 +14,6 @@ homepage = "https://www.rusoto.org/"
 
 [dependencies]
 chrono = "0.2.25"
-hyper = "0.10.0"
 xml-rs = "0.6"
 
 [dependencies.rusoto_core]

@@ -37,9 +37,15 @@ lazy_static! {
 
 #[derive(Clone)]
 pub struct HttpResponse {
-    pub status: StatusCode,
+    status: StatusCode,
     pub body: Vec<u8>,
     pub headers: HashMap<String, String>,
+}
+
+impl HttpResponse {
+    pub fn check_status(&self, code: u16) -> bool {
+        self.status == StatusCode::Unregistered(code)
+    }
 }
 
 #[derive(Debug, PartialEq)]

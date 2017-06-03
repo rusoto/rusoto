@@ -3,7 +3,6 @@
 //!
 //! If you're using the service, you're probably looking for [KinesisFirehoseClient](struct.KinesisFirehoseClient.html) and [KinesisFirehose](trait.KinesisFirehose.html).
 
-extern crate hyper;
 extern crate rusoto_core;
 extern crate serde;
 #[macro_use]

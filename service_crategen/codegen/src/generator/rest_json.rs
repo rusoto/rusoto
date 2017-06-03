@@ -1,7 +1,6 @@
 use std::io::Write;
 use inflector::Inflector;
 use regex::{Captures, Regex};
-use hyper::status::StatusCode;
 use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::{GenerateProtocol, error_type_name, FileWriter, IoResult};
 
@@ -73,23 +72,19 @@ impl GenerateProtocol for RestJsonGenerator {
                     request.sign(&try!(self.credentials_provider.credentials()));
 
                     let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    let body = if &result.body == b\"{{}}\" {{
+                        // `serde-json` serializes field-less structs as \"null\", but AWS returns
+                        // \"{{}}\" for a field-less response, so we must check for this result
+                        // and convert it if necessary.
+                        &b\"null\"[..]
+                    }} else {{
+                        &result.body
+                    }};
 
-                    // `serde-json` serializes field-less structs as \"null\", but AWS returns
-                    // \"{{}}\" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b\"{{}}\" {{
-                        body = b\"null\".to_vec();
-                    }}
-
-                    debug!(\"Response body: {{:?}}\", body);
-                    debug!(\"Response status: {{}}\", result.status);
-
-                    match result.status {{
-                        {status_code} => {{
-                            {ok_response}
-                        }}
-                         _ => Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref())),
+                    if result.check_status({status_code}) {{
+                        {ok_response}
+                    }} else {{
+                        Err({error_type}::from_body(String::from_utf8_lossy(body).as_ref()))
                     }}
                 }}
                 ",
@@ -99,7 +94,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or("".to_owned()),
                 http_method = operation.http.method,
                 error_type = error_type_name(operation_name),
-                status_code = http_code_to_status_code(operation.http.response_code),
+                status_code = operation.http.response_code.unwrap_or(200),
                 ok_response = generate_ok_response(operation, output_type),
                 output_type = output_type,
                 request_uri_formatter = generate_uri_formatter(
@@ -143,28 +138,6 @@ impl GenerateProtocol for RestJsonGenerator {
 
     fn timestamp_type(&self) -> &'static str {
         "f64"
-    }
-}
-
-// Used to print the enum value rather than the status code and the canonical reason.
-// For codegen purposes, leaving existing StatusCode Display trait implementation intact.
-// StatusCode::Ok.to_string() prints "200 OK"
-// StatusCode::Ok.enum_as_string() prints "StatusCode::Ok"
-trait CodegenString {
-    fn enum_as_string(&self) -> String;
-}
-impl CodegenString for StatusCode {
-    fn enum_as_string(&self) -> String {
-        format!("StatusCode::{:?}", self)
-    }
-}
-
-fn http_code_to_status_code(code: Option<i32>) -> String {
-    match code {
-        Some(actual_code) => StatusCode::from_u16(actual_code as u16).enum_as_string(),
-        // Some service definitions such as elastictranscoder don't specify
-        // the response code, we'll assume this:
-        None => "StatusCode::Ok".to_string(),
     }
 }
 
@@ -364,7 +337,7 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!("Ok(serde_json::from_str::<{}>(String::from_utf8_lossy(&body).as_ref()).unwrap())",
+        format!("Ok(serde_json::from_str::<{}>(String::from_utf8_lossy(body).as_ref()).unwrap())",
                 output_type)
     } else {
         "Ok(())".to_owned()

@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -3743,25 +3741,21 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Created => {
-                Ok(serde_json::from_str::<AddPermissionResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
-            }
-            _ => Err(AddPermissionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(201) {
+            Ok(serde_json::from_str::<AddPermissionResponse>(String::from_utf8_lossy(body)
+                                                                 .as_ref())
+                       .unwrap())
+        } else {
+            Err(AddPermissionError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -3784,25 +3778,20 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Created => {
-                Ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
-            }
-            _ => Err(CreateAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(201) {
+            Ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(body).as_ref())
+                   .unwrap())
+        } else {
+            Err(CreateAliasError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -3825,26 +3814,19 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Accepted => {
-                            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateEventSourceMappingError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
-            }
+        if result.check_status(202) {
+            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(body).as_ref()).unwrap())
+        } else {
+            Err(CreateEventSourceMappingError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -3866,25 +3848,21 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Created => {
-                Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
-            }
-            _ => Err(CreateFunctionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(201) {
+            Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(body)
+                                                                 .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateFunctionError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -3906,21 +3884,19 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::NoContent => Ok(()),
-            _ => Err(DeleteAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(204) {
+            Ok(())
+        } else {
+            Err(DeleteAliasError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -3944,26 +3920,19 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Accepted => {
-                            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteEventSourceMappingError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
-            }
+        if result.check_status(202) {
+            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(body).as_ref()).unwrap())
+        } else {
+            Err(DeleteEventSourceMappingError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -3988,21 +3957,19 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::NoContent => Ok(()),
-            _ => Err(DeleteFunctionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(204) {
+            Ok(())
+        } else {
+            Err(DeleteFunctionError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4022,23 +3989,21 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAccountSettingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<GetAccountSettingsResponse>(String::from_utf8_lossy(body)
+                                                                      .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetAccountSettingsError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4060,25 +4025,20 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(body).as_ref())
+                   .unwrap())
+        } else {
+            Err(GetAliasError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4102,25 +4062,19 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetEventSourceMappingError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(body).as_ref()).unwrap())
+        } else {
+            Err(GetEventSourceMappingError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4147,25 +4101,20 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetFunctionResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetFunctionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<GetFunctionResponse>(String::from_utf8_lossy(body).as_ref())
+                   .unwrap())
+        } else {
+            Err(GetFunctionError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4193,28 +4142,21 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(GetFunctionConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
-            }
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(body)
+                                                                 .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetFunctionConfigurationError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4239,25 +4181,20 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetPolicyResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetPolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<GetPolicyResponse>(String::from_utf8_lossy(body).as_ref())
+                   .unwrap())
+        } else {
+            Err(GetPolicyError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4282,25 +4219,20 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<InvocationResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
-            }
-            _ => Err(InvokeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<InvocationResponse>(String::from_utf8_lossy(body).as_ref())
+                   .unwrap())
+        } else {
+            Err(InvokeError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4323,25 +4255,20 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Accepted => {
-                Ok(serde_json::from_str::<InvokeAsyncResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
-            }
-            _ => Err(InvokeAsyncError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(202) {
+            Ok(serde_json::from_str::<InvokeAsyncResponse>(String::from_utf8_lossy(body).as_ref())
+                   .unwrap())
+        } else {
+            Err(InvokeAsyncError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4374,25 +4301,20 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListAliasesResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
-            }
-            _ => Err(ListAliasesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<ListAliasesResponse>(String::from_utf8_lossy(body).as_ref())
+                   .unwrap())
+        } else {
+            Err(ListAliasesError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4428,26 +4350,19 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListEventSourceMappingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListEventSourceMappingsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
-            }
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<ListEventSourceMappingsResponse>(String::from_utf8_lossy(body).as_ref()).unwrap())
+        } else {
+            Err(ListEventSourceMappingsError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4476,25 +4391,21 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListFunctionsResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
-            }
-            _ => Err(ListFunctionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<ListFunctionsResponse>(String::from_utf8_lossy(body)
+                                                                 .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListFunctionsError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4514,25 +4425,20 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
-            }
-            _ => Err(ListTagsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(body).as_ref())
+                   .unwrap())
+        } else {
+            Err(ListTagsError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4563,25 +4469,19 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListVersionsByFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListVersionsByFunctionError::from_body(String::from_utf8_lossy(&body).as_ref()))
-            }
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<ListVersionsByFunctionResponse>(String::from_utf8_lossy(body).as_ref()).unwrap())
+        } else {
+            Err(ListVersionsByFunctionError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4604,25 +4504,21 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Created => {
-                Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
-            }
-            _ => Err(PublishVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(201) {
+            Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(body)
+                                                                 .as_ref())
+                       .unwrap())
+        } else {
+            Err(PublishVersionError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4650,21 +4546,19 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::NoContent => Ok(()),
-            _ => Err(RemovePermissionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(204) {
+            Ok(())
+        } else {
+            Err(RemovePermissionError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4684,21 +4578,19 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::NoContent => Ok(()),
-            _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(204) {
+            Ok(())
+        } else {
+            Err(TagResourceError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4722,21 +4614,19 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::NoContent => Ok(()),
-            _ => Err(UntagResourceError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(204) {
+            Ok(())
+        } else {
+            Err(UntagResourceError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4760,25 +4650,20 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
-            }
-            _ => Err(UpdateAliasError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(body).as_ref())
+                   .unwrap())
+        } else {
+            Err(UpdateAliasError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4802,26 +4687,19 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Accepted => {
-                            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateEventSourceMappingError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
-            }
+        if result.check_status(202) {
+            Ok(serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(body).as_ref()).unwrap())
+        } else {
+            Err(UpdateEventSourceMappingError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4844,25 +4722,21 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
-            }
-            _ => Err(UpdateFunctionCodeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(body)
+                                                                 .as_ref())
+                       .unwrap())
+        } else {
+            Err(UpdateFunctionCodeError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 
@@ -4886,28 +4760,21 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
 
         let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let body = if &result.body == b"{}" {
+            // `serde-json` serializes field-less structs as "null", but AWS returns
+            // "{}" for a field-less response, so we must check for this result
+            // and convert it if necessary.
+            &b"null"[..]
+        } else {
+            &result.body
+        };
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(UpdateFunctionConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
-            }
+        if result.check_status(200) {
+            Ok(serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(body)
+                                                                 .as_ref())
+                       .unwrap())
+        } else {
+            Err(UpdateFunctionConfigurationError::from_body(String::from_utf8_lossy(body).as_ref()))
         }
     }
 }

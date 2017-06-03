@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -11896,28 +11894,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = AssociateVPCWithHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(AssociateVPCWithHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = AssociateVPCWithHostedZoneResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(AssociateVPCWithHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(AssociateVPCWithHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(AssociateVPCWithHostedZoneError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -11944,28 +11940,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ChangeResourceRecordSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ChangeResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ChangeResourceRecordSetsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ChangeResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ChangeResourceRecordSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ChangeResourceRecordSetsError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -11993,31 +11987,28 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ChangeTagsForResourceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ChangeTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ChangeTagsForResourceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(ChangeTagsForResourceResponseDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(ChangeTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ChangeTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -12043,34 +12034,27 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(CreateHealthCheckResponseDeserializer::deserialize(&actual_tag_name,
-                                                                                &mut stack));
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value;
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateHealthCheckResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateHealthCheckResponseDeserializer::deserialize(&actual_tag_name,
+                                                                                 &mut stack));
             }
-            _ => {
-                Err(CreateHealthCheckError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+            let value = response.headers.get("Location").unwrap().to_owned();
+            result.location = value;
+            Ok(result)
+        } else {
+            Err(CreateHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12096,34 +12080,27 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(CreateHostedZoneResponseDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value;
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateHostedZoneResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateHostedZoneResponseDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(CreateHostedZoneError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            let value = response.headers.get("Location").unwrap().to_owned();
+            result.location = value;
+            Ok(result)
+        } else {
+            Err(CreateHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12150,29 +12127,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value;
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateReusableDelegationSetResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            let value = response.headers.get("Location").unwrap().to_owned();
+            result.location = value;
+            Ok(result)
+        } else {
+            Err(CreateReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12198,32 +12172,29 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateTrafficPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value;
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateTrafficPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(CreateTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(CreateTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+            let value = response.headers.get("Location").unwrap().to_owned();
+            result.location = value;
+            Ok(result)
+        } else {
+            Err(CreateTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -12250,29 +12221,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value;
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateTrafficPolicyInstanceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            let value = response.headers.get("Location").unwrap().to_owned();
+            result.location = value;
+            Ok(result)
+        } else {
+            Err(CreateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12299,29 +12267,27 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateTrafficPolicyVersionResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateTrafficPolicyVersionResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value;
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateTrafficPolicyVersionResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateTrafficPolicyVersionResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateTrafficPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            let value = response.headers.get("Location").unwrap().to_owned();
+            result.location = value;
+            Ok(result)
+        } else {
+            Err(CreateTrafficPolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -12349,28 +12315,25 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateVPCAssociationAuthorizationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateVPCAssociationAuthorizationResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(CreateVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12396,33 +12359,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(DeleteHealthCheckResponseDeserializer::deserialize(&actual_tag_name,
-                                                                                &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = DeleteHealthCheckResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteHealthCheckResponseDeserializer::deserialize(&actual_tag_name,
+                                                                                 &mut stack));
             }
-            _ => {
-                Err(DeleteHealthCheckError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(DeleteHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12448,33 +12404,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(DeleteHostedZoneResponseDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = DeleteHostedZoneResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteHostedZoneResponseDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(DeleteHostedZoneError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(DeleteHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12501,28 +12450,25 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DeleteReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = DeleteReusableDelegationSetResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(DeleteReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(DeleteReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12549,31 +12495,28 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteTrafficPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DeleteTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = DeleteTrafficPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(DeleteTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(DeleteTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(DeleteTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -12600,28 +12543,25 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DeleteTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = DeleteTrafficPolicyInstanceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(DeleteTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(DeleteTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12649,28 +12589,25 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteVPCAssociationAuthorizationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DeleteVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = DeleteVPCAssociationAuthorizationResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteVPCAssociationAuthorizationResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(DeleteVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(DeleteVPCAssociationAuthorizationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12697,28 +12634,25 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = DisassociateVPCFromHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = DisassociateVPCFromHostedZoneResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(DisassociateVPCFromHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(DisassociateVPCFromHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12742,29 +12676,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetChangeResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetChangeResponseDeserializer::deserialize(&actual_tag_name,
-                                                                             &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetChangeResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetChangeResponseDeserializer::deserialize(&actual_tag_name,
+                                                                         &mut stack));
             }
-            _ => Err(GetChangeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetChangeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12790,33 +12721,28 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetCheckerIpRangesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetCheckerIpRangesResponseDeserializer::deserialize(&actual_tag_name,
-                                                                                 &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetCheckerIpRangesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(GetCheckerIpRangesResponseDeserializer::deserialize(&actual_tag_name,
+                                                                             &mut stack));
             }
-            _ => {
-                Err(GetCheckerIpRangesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetCheckerIpRangesError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -12853,33 +12779,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetGeoLocationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetGeoLocationResponseDeserializer::deserialize(&actual_tag_name,
-                                                                             &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetGeoLocationResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetGeoLocationResponseDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(GetGeoLocationError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetGeoLocationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12905,33 +12824,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetHealthCheckResponseDeserializer::deserialize(&actual_tag_name,
-                                                                             &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetHealthCheckResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetHealthCheckResponseDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(GetHealthCheckError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12957,31 +12869,28 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckCountResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetHealthCheckCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetHealthCheckCountResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(GetHealthCheckCountResponseDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(GetHealthCheckCountError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetHealthCheckCountError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -13009,28 +12918,25 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckLastFailureReasonResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetHealthCheckLastFailureReasonResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetHealthCheckLastFailureReasonError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetHealthCheckLastFailureReasonError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13057,31 +12963,28 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckStatusResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetHealthCheckStatusResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetHealthCheckStatusResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(GetHealthCheckStatusResponseDeserializer::deserialize(&actual_tag_name,
+                                                                               &mut stack));
             }
-            _ => {
-                Err(GetHealthCheckStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetHealthCheckStatusError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -13107,31 +13010,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetHostedZoneResponseDeserializer::deserialize(&actual_tag_name,
-                                                                                 &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetHostedZoneResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetHostedZoneResponseDeserializer::deserialize(&actual_tag_name,
+                                                                             &mut stack));
             }
-            _ => {
-                Err(GetHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13157,33 +13055,28 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHostedZoneCountResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetHostedZoneCountResponseDeserializer::deserialize(&actual_tag_name,
-                                                                                 &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetHostedZoneCountResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(GetHostedZoneCountResponseDeserializer::deserialize(&actual_tag_name,
+                                                                             &mut stack));
             }
-            _ => {
-                Err(GetHostedZoneCountError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetHostedZoneCountError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -13210,28 +13103,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetReusableDelegationSetResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetReusableDelegationSetResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetReusableDelegationSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -13258,33 +13149,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetTrafficPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetTrafficPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(GetTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetTrafficPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13311,28 +13195,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetTrafficPolicyInstanceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -13359,28 +13241,25 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetTrafficPolicyInstanceCountResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetTrafficPolicyInstanceCountResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetTrafficPolicyInstanceCountError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetTrafficPolicyInstanceCountError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13421,33 +13300,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListGeoLocationsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(ListGeoLocationsResponseDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListGeoLocationsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListGeoLocationsResponseDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(ListGeoLocationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListGeoLocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13480,33 +13352,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListHealthChecksResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(ListHealthChecksResponseDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListHealthChecksResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListHealthChecksResponseDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(ListHealthChecksError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListHealthChecksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13543,33 +13408,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListHostedZonesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(ListHostedZonesResponseDeserializer::deserialize(&actual_tag_name,
-                                                                              &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListHostedZonesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListHostedZonesResponseDeserializer::deserialize(&actual_tag_name,
+                                                                               &mut stack));
             }
-            _ => {
-                Err(ListHostedZonesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListHostedZonesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13607,31 +13465,28 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListHostedZonesByNameResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListHostedZonesByNameResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListHostedZonesByNameResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(ListHostedZonesByNameResponseDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(ListHostedZonesByNameError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListHostedZonesByNameError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -13673,31 +13528,28 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListResourceRecordSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListResourceRecordSetsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(ListResourceRecordSetsResponseDeserializer::deserialize(&actual_tag_name,
+                                                                                 &mut stack));
             }
-            _ => {
-                Err(ListResourceRecordSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListResourceRecordSetsError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -13731,28 +13583,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListReusableDelegationSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListReusableDelegationSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListReusableDelegationSetsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListReusableDelegationSetsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListReusableDelegationSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListReusableDelegationSetsError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -13779,31 +13629,28 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTagsForResourceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListTagsForResourceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(ListTagsForResourceResponseDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -13830,31 +13677,28 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTagsForResourcesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTagsForResourcesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListTagsForResourcesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(ListTagsForResourcesResponseDeserializer::deserialize(&actual_tag_name,
+                                                                               &mut stack));
             }
-            _ => {
-                Err(ListTagsForResourcesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListTagsForResourcesError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -13887,31 +13731,28 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTrafficPoliciesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListTrafficPoliciesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(ListTrafficPoliciesResponseDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(ListTrafficPoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListTrafficPoliciesError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -13957,28 +13798,26 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyInstancesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTrafficPolicyInstancesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListTrafficPolicyInstancesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTrafficPolicyInstancesResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListTrafficPolicyInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListTrafficPolicyInstancesError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -14018,28 +13857,25 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyInstancesByHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListTrafficPolicyInstancesByHostedZoneResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListTrafficPolicyInstancesByHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListTrafficPolicyInstancesByHostedZoneError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -14088,28 +13924,25 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyInstancesByPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListTrafficPolicyInstancesByPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListTrafficPolicyInstancesByPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListTrafficPolicyInstancesByPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -14143,28 +13976,26 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyVersionsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListTrafficPolicyVersionsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListTrafficPolicyVersionsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTrafficPolicyVersionsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListTrafficPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListTrafficPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -14198,28 +14029,25 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListVPCAssociationAuthorizationsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListVPCAssociationAuthorizationsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListVPCAssociationAuthorizationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListVPCAssociationAuthorizationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -14259,31 +14087,26 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = TestDNSAnswerResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(TestDNSAnswerResponseDeserializer::deserialize(&actual_tag_name,
-                                                                                 &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = TestDNSAnswerResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(TestDNSAnswerResponseDeserializer::deserialize(&actual_tag_name,
+                                                                             &mut stack));
             }
-            _ => {
-                Err(TestDNSAnswerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(TestDNSAnswerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -14309,33 +14132,26 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(UpdateHealthCheckResponseDeserializer::deserialize(&actual_tag_name,
-                                                                                &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = UpdateHealthCheckResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UpdateHealthCheckResponseDeserializer::deserialize(&actual_tag_name,
+                                                                                 &mut stack));
             }
-            _ => {
-                Err(UpdateHealthCheckError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(UpdateHealthCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -14362,28 +14178,26 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateHostedZoneCommentResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UpdateHostedZoneCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = UpdateHostedZoneCommentResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UpdateHostedZoneCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(UpdateHostedZoneCommentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(UpdateHostedZoneCommentError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -14411,28 +14225,26 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateTrafficPolicyCommentResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UpdateTrafficPolicyCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = UpdateTrafficPolicyCommentResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UpdateTrafficPolicyCommentResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(UpdateTrafficPolicyCommentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(UpdateTrafficPolicyCommentError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -14459,28 +14271,25 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = UpdateTrafficPolicyInstanceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(UpdateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(UpdateTrafficPolicyInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

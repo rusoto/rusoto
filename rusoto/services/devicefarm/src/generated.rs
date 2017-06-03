@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -6665,14 +6663,10 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateDevicePoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6692,14 +6686,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -6719,13 +6710,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateProjectResult>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6747,11 +6737,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -6771,13 +6761,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateUploadResult>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6797,14 +6786,10 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteDevicePoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6824,14 +6809,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -6851,13 +6833,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteProjectResult>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6879,11 +6860,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -6901,13 +6882,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<DeleteRunResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(DeleteRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteRunResult>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteRunError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6927,13 +6907,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteUploadResult>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6953,14 +6932,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAccountSettingsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetAccountSettingsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -6978,13 +6954,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetDeviceResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetDeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDeviceResult>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetDeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7004,13 +6979,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDevicePoolResult>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7032,11 +7006,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDevicePoolCompatibilityResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetDevicePoolCompatibilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDevicePoolCompatibilityResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetDevicePoolCompatibilityError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -7054,13 +7028,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetJobResult>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetJobResult>(String::from_utf8_lossy(&response.body)
+                                                        .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetJobError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7080,14 +7053,10 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetNetworkProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7107,14 +7076,10 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOfferingStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetOfferingStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetOfferingStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetOfferingStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7132,11 +7097,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetProjectResult>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7157,14 +7123,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -7182,13 +7145,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetRunResult>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetRunResult>(String::from_utf8_lossy(&response.body)
+                                                        .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetRunError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7206,13 +7168,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetSuiteResult>(String::from_utf8_lossy(&response.body)
-                                                              .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetSuiteError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetSuiteResult>(String::from_utf8_lossy(&response.body)
+                                                          .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetSuiteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7230,13 +7191,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetTestResult>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetTestError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetTestResult>(String::from_utf8_lossy(&response.body)
+                                                         .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetTestError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7254,13 +7214,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetUploadResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetUploadResult>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7282,11 +7241,10 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<InstallToRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(InstallToRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<InstallToRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(InstallToRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7306,13 +7264,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListArtifactsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListArtifactsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListArtifactsResult>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListArtifactsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7332,14 +7289,10 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDevicePoolsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListDevicePoolsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListDevicePoolsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListDevicePoolsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7359,11 +7312,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDevicesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListDevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListDevicesResult>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListDevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7381,13 +7335,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&response.body)
-                                                              .as_ref())
-                           .unwrap())
-            }
-            _ => Err(ListJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&response.body)
+                                                          .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7407,14 +7360,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListNetworkProfilesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListNetworkProfilesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListNetworkProfilesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListNetworkProfilesError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -7435,14 +7385,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOfferingPromotionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListOfferingPromotionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListOfferingPromotionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListOfferingPromotionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -7464,11 +7411,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOfferingTransactionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListOfferingTransactionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListOfferingTransactionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListOfferingTransactionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -7488,13 +7435,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOfferingsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListOfferingsResult>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7514,13 +7460,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListProjectsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListProjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListProjectsResult>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListProjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7542,11 +7487,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRemoteAccessSessionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListRemoteAccessSessionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListRemoteAccessSessionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListRemoteAccessSessionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -7564,13 +7509,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListRunsResult>(String::from_utf8_lossy(&response.body)
-                                                              .as_ref())
-                           .unwrap())
-            }
-            _ => Err(ListRunsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListRunsResult>(String::from_utf8_lossy(&response.body)
+                                                          .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListRunsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7590,11 +7534,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSamplesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListSamplesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListSamplesResult>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListSamplesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7612,11 +7557,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSuitesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListSuitesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListSuitesResult>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListSuitesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7634,13 +7580,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListTestsResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(ListTestsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListTestsResult>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListTestsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7660,14 +7605,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListUniqueProblemsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListUniqueProblemsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListUniqueProblemsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListUniqueProblemsError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -7687,11 +7629,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListUploadsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListUploadsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListUploadsResult>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListUploadsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7711,14 +7654,10 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PurchaseOfferingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(PurchaseOfferingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PurchaseOfferingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(PurchaseOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7738,13 +7677,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RenewOfferingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RenewOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RenewOfferingResult>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(RenewOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7764,11 +7702,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ScheduleRunResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ScheduleRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ScheduleRunResult>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(ScheduleRunError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7790,11 +7729,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StopRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<StopRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(StopRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -7812,13 +7751,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<StopRunResult>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
-            }
-            _ => Err(StopRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<StopRunResult>(String::from_utf8_lossy(&response.body)
+                                                         .as_ref())
+                       .unwrap())
+        } else {
+            Err(StopRunError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7838,14 +7776,10 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateDevicePoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateDevicePoolError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7865,14 +7799,11 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -7892,13 +7823,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateProjectResult>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(UpdateProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -4143,13 +4141,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
-            }
-            _ => Err(AllocateConnectionOnInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(AllocateConnectionOnInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4169,13 +4165,12 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
-            }
-            _ => Err(AllocateHostedConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(AllocateHostedConnectionError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -4197,11 +4192,12 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AllocatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(AllocatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4223,11 +4219,12 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AllocatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(AllocatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4247,13 +4244,12 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
-            }
-            _ => Err(AssociateConnectionWithLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(AssociateConnectionWithLagError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -4273,13 +4269,12 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
-            }
-            _ => Err(AssociateHostedConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(AssociateHostedConnectionError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -4299,11 +4294,13 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(AssociateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(AssociateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -4323,14 +4320,10 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ConfirmConnectionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ConfirmConnectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ConfirmConnectionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ConfirmConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4352,11 +4345,10 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ConfirmPrivateVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ConfirmPrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ConfirmPrivateVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ConfirmPrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4378,11 +4370,10 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ConfirmPublicVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ConfirmPublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ConfirmPublicVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ConfirmPublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4402,13 +4393,10 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateBGPPeerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateBGPPeerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateBGPPeerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateBGPPeerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4428,16 +4416,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(CreateConnectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(CreateConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4457,16 +4440,13 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Interconnect>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(CreateInterconnectError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Interconnect>(String::from_utf8_lossy(&response.body)
+                                                        .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateInterconnectError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -4484,12 +4464,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
-            }
-            _ => Err(CreateLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(CreateLagError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4511,11 +4490,12 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreatePrivateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4537,11 +4517,12 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4561,13 +4542,10 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteBGPPeerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteBGPPeerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteBGPPeerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteBGPPeerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4587,16 +4565,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(DeleteConnectionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(DeleteConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4616,14 +4589,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteInterconnectResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteInterconnectError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteInterconnectResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteInterconnectError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -4641,12 +4611,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
-            }
-            _ => Err(DeleteLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(DeleteLagError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4667,14 +4636,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteVirtualInterfaceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -4695,14 +4661,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeConnectionLoaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeConnectionLoaError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeConnectionLoaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeConnectionLoaError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -4722,16 +4685,13 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body)
-                                                           .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(DescribeConnectionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body)
+                                                       .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeConnectionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -4753,13 +4713,12 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body)
-                                                           .as_ref())
-                           .unwrap())
-            }
-            _ => Err(DescribeConnectionsOnInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body)
+                                                       .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeConnectionsOnInterconnectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4779,13 +4738,13 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body)
-                                                           .as_ref())
-                           .unwrap())
-            }
-            _ => Err(DescribeHostedConnectionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body)
+                                                       .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeHostedConnectionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -4806,11 +4765,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInterconnectLoaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInterconnectLoaError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeInterconnectLoaResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeInterconnectLoaError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -4830,16 +4789,13 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Interconnects>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(DescribeInterconnectsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Interconnects>(String::from_utf8_lossy(&response.body)
+                                                         .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeInterconnectsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -4857,14 +4813,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Lags>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
-            }
-            _ => {
-                Err(DescribeLagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Lags>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(DescribeLagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4882,12 +4835,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Loa>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
-            }
-            _ => Err(DescribeLoaError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Loa>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(DescribeLoaError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4903,16 +4855,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Locations>(String::from_utf8_lossy(&response.body)
-                                                         .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(DescribeLocationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Locations>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(DescribeLocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4932,13 +4879,10 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4954,13 +4898,13 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<VirtualGateways>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(DescribeVirtualGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<VirtualGateways>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeVirtualGatewaysError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -4980,11 +4924,13 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<VirtualInterfaces>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeVirtualInterfacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<VirtualInterfaces>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeVirtualInterfacesError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -5006,13 +4952,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
-            }
-            _ => Err(DisassociateConnectionFromLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(DisassociateConnectionFromLagError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5032,11 +4976,12 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5056,13 +5001,10 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5080,12 +5022,11 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
-            }
-            _ => Err(UpdateLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(UpdateLagError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

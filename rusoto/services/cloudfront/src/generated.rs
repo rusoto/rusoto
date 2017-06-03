@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -10129,35 +10127,32 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateCloudFrontOriginAccessIdentityResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateCloudFrontOriginAccessIdentityResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            if let Some(location) = response.headers.get("Location") {
+                let value = location.to_owned();
+                result.location = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(CreateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -10188,40 +10183,34 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(CreateDistributionResultDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateDistributionResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateDistributionResultDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(CreateDistributionError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            if let Some(location) = response.headers.get("Location") {
+                let value = location.to_owned();
+                result.location = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(CreateDistributionError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -10251,35 +10240,33 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateDistributionWithTagsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateDistributionWithTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateDistributionWithTagsResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateDistributionWithTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateDistributionWithTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            if let Some(location) = response.headers.get("Location") {
+                let value = location.to_owned();
+                result.location = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(CreateDistributionWithTagsError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -10310,36 +10297,30 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateInvalidationResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(CreateInvalidationResultDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateInvalidationResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateInvalidationResultDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(CreateInvalidationError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            if let Some(location) = response.headers.get("Location") {
+                let value = location.to_owned();
+                result.location = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(CreateInvalidationError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -10369,35 +10350,32 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateStreamingDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateStreamingDistributionResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            if let Some(location) = response.headers.get("Location") {
+                let value = location.to_owned();
+                result.location = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(CreateStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -10428,35 +10406,32 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateStreamingDistributionWithTagsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateStreamingDistributionWithTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateStreamingDistributionWithTagsResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateStreamingDistributionWithTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateStreamingDistributionWithTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            if let Some(location) = response.headers.get("Location") {
+                let value = location.to_owned();
+                result.location = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(CreateStreamingDistributionWithTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -10486,15 +10461,12 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(DeleteCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(DeleteCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -10523,18 +10495,13 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteDistributionError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteDistributionError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -10563,15 +10530,12 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(DeleteStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(DeleteStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -10598,31 +10562,28 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetCloudFrontOriginAccessIdentityResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetCloudFrontOriginAccessIdentityResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(GetCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -10647,31 +10608,28 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetCloudFrontOriginAccessIdentityConfigResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetCloudFrontOriginAccessIdentityConfigResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetCloudFrontOriginAccessIdentityConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(GetCloudFrontOriginAccessIdentityConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -10697,35 +10655,29 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetDistributionResultDeserializer::deserialize(&actual_tag_name,
-                                                                                 &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetDistributionResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetDistributionResultDeserializer::deserialize(&actual_tag_name,
+                                                                             &mut stack));
             }
-            _ => {
-                Err(GetDistributionError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(GetDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -10752,34 +10704,31 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetDistributionConfigResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetDistributionConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetDistributionConfigResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(GetDistributionConfigResultDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(GetDistributionConfigError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(GetDistributionConfigError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -10807,32 +10756,26 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetInvalidationResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetInvalidationResultDeserializer::deserialize(&actual_tag_name,
-                                                                                 &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetInvalidationResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetInvalidationResultDeserializer::deserialize(&actual_tag_name,
+                                                                             &mut stack));
             }
-            _ => {
-                Err(GetInvalidationError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetInvalidationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -10859,31 +10802,31 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetStreamingDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetStreamingDistributionResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(GetStreamingDistributionResultDeserializer::deserialize(&actual_tag_name,
+                                                                                 &mut stack));
             }
-            _ => Err(GetStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(GetStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -10910,31 +10853,28 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetStreamingDistributionConfigResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetStreamingDistributionConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetStreamingDistributionConfigResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetStreamingDistributionConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetStreamingDistributionConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(GetStreamingDistributionConfigError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -10969,28 +10909,25 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListCloudFrontOriginAccessIdentitiesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListCloudFrontOriginAccessIdentitiesResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListCloudFrontOriginAccessIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListCloudFrontOriginAccessIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11023,33 +10960,26 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListDistributionsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(ListDistributionsResultDeserializer::deserialize(&actual_tag_name,
-                                                                              &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListDistributionsResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListDistributionsResultDeserializer::deserialize(&actual_tag_name,
+                                                                               &mut stack));
             }
-            _ => {
-                Err(ListDistributionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListDistributionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11083,28 +11013,25 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListDistributionsByWebACLIdResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListDistributionsByWebACLIdResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListDistributionsByWebACLIdResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListDistributionsByWebACLIdResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListDistributionsByWebACLIdError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListDistributionsByWebACLIdError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11137,33 +11064,26 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListInvalidationsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(ListInvalidationsResultDeserializer::deserialize(&actual_tag_name,
-                                                                              &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListInvalidationsResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListInvalidationsResultDeserializer::deserialize(&actual_tag_name,
+                                                                               &mut stack));
             }
-            _ => {
-                Err(ListInvalidationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListInvalidationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11197,28 +11117,26 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListStreamingDistributionsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListStreamingDistributionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListStreamingDistributionsResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListStreamingDistributionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListStreamingDistributionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListStreamingDistributionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -11244,33 +11162,27 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTagsForResourceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(ListTagsForResourceResultDeserializer::deserialize(&actual_tag_name,
-                                                                                &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListTagsForResourceResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListTagsForResourceResultDeserializer::deserialize(&actual_tag_name,
+                                                                                 &mut stack));
             }
-            _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -11297,15 +11209,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11332,17 +11241,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11377,31 +11281,28 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateCloudFrontOriginAccessIdentityResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = UpdateCloudFrontOriginAccessIdentityResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(UpdateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(UpdateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11435,36 +11336,30 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(UpdateDistributionResultDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = UpdateDistributionResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UpdateDistributionResultDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(UpdateDistributionError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(UpdateDistributionError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -11497,31 +11392,28 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateStreamingDistributionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UpdateStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = UpdateStreamingDistributionResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UpdateStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(UpdateStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(UpdateStreamingDistributionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

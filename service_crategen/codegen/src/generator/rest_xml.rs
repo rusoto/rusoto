@@ -64,13 +64,12 @@ impl GenerateProtocol for RestXmlGenerator {
 
                     let response = try!(self.dispatcher.dispatch(&request));
 
-                    match response.status {{
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {{
-                            {parse_response_body}
-                            {parse_non_payload}
-                            Ok(result)
-                        }},
-                        _ => Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                    if response.check_status(200) || response.check_status(204) || response.check_status(209) {{
+                        {parse_response_body}
+                        {parse_non_payload}
+                        Ok(result)
+                    }} else {{
+                        Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
                     }}
                 }}
                 ",

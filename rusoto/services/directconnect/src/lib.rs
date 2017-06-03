@@ -3,7 +3,6 @@
 //!
 //! If you're using the service, you're probably looking for [DirectConnectClient](struct.DirectConnectClient.html) and [DirectConnect](trait.DirectConnect.html).
 
-extern crate hyper;
 extern crate rusoto_core;
 extern crate serde;
 #[macro_use]

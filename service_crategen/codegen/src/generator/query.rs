@@ -38,14 +38,12 @@ impl GenerateProtocol for QueryGenerator {
 
                     request.sign(&try!(self.credentials_provider.credentials()));
                     let response = try!(self.dispatcher.dispatch(&request));
-                    match response.status {{
-                        StatusCode::Ok => {{
-                            {parse_payload}
-                            Ok(result)
-                        }}
-                        _ => {{
-                            Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }}
+
+                    if response.check_status(200) {{
+                        {parse_payload}
+                        Ok(result)
+                    }} else {{
+                        Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
                     }}
                 }}
                 ",

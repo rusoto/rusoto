@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -5218,11 +5216,10 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowExecutionCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CountClosedWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<WorkflowExecutionCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CountClosedWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5244,11 +5241,10 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowExecutionCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CountOpenWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<WorkflowExecutionCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CountOpenWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5269,11 +5265,13 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PendingTaskCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CountPendingActivityTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PendingTaskCount>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(CountPendingActivityTasksError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -5294,11 +5292,13 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PendingTaskCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CountPendingDecisionTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PendingTaskCount>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(CountPendingDecisionTasksError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -5319,12 +5319,11 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeprecateActivityTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeprecateActivityTypeError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -5342,12 +5341,10 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeprecateDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeprecateDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5368,12 +5365,11 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeprecateWorkflowTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeprecateWorkflowTypeError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -5393,14 +5389,13 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ActivityTypeDetail>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeActivityTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ActivityTypeDetail>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeActivityTypeError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -5420,16 +5415,12 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<DomainDetail>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(DescribeDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DomainDetail>(String::from_utf8_lossy(&response.body)
+                                                        .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5451,11 +5442,11 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowExecutionDetail>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<WorkflowExecutionDetail>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -5475,14 +5466,13 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowTypeDetail>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeWorkflowTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<WorkflowTypeDetail>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeWorkflowTypeError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -5503,13 +5493,11 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<History>(String::from_utf8_lossy(&response.body)
-                                                       .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetWorkflowExecutionHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<History>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(GetWorkflowExecutionHistoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5529,14 +5517,12 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ActivityTypeInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListActivityTypesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ActivityTypeInfos>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListActivityTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5558,11 +5544,10 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowExecutionInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListClosedWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<WorkflowExecutionInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListClosedWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5580,13 +5565,12 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<DomainInfos>(String::from_utf8_lossy(&response.body)
-                                                           .as_ref())
-                           .unwrap())
-            }
-            _ => Err(ListDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DomainInfos>(String::from_utf8_lossy(&response.body)
+                                                       .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5608,11 +5592,11 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowExecutionInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListOpenWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<WorkflowExecutionInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListOpenWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -5632,14 +5616,12 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<WorkflowTypeInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListWorkflowTypesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<WorkflowTypeInfos>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListWorkflowTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5659,16 +5641,13 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<ActivityTask>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(PollForActivityTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ActivityTask>(String::from_utf8_lossy(&response.body)
+                                                        .as_ref())
+                       .unwrap())
+        } else {
+            Err(PollForActivityTaskError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -5688,16 +5667,13 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<DecisionTask>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(PollForDecisionTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DecisionTask>(String::from_utf8_lossy(&response.body)
+                                                        .as_ref())
+                       .unwrap())
+        } else {
+            Err(PollForDecisionTaskError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -5719,11 +5695,12 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ActivityTaskStatus>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RecordActivityTaskHeartbeatError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ActivityTaskStatus>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(RecordActivityTaskHeartbeatError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5743,12 +5720,11 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(RegisterActivityTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RegisterActivityTypeError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -5766,12 +5742,10 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(RegisterDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RegisterDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5791,12 +5765,11 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(RegisterWorkflowTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RegisterWorkflowTypeError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -5817,9 +5790,10 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(RequestCancelWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RequestCancelWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5840,9 +5814,10 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(RespondActivityTaskCanceledError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RespondActivityTaskCanceledError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5863,9 +5838,10 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(RespondActivityTaskCompletedError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RespondActivityTaskCompletedError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5886,9 +5862,11 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(RespondActivityTaskFailedError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RespondActivityTaskFailedError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -5909,9 +5887,10 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(RespondDecisionTaskCompletedError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RespondDecisionTaskCompletedError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5932,9 +5911,11 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(SignalWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(SignalWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -5955,15 +5936,12 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<Run>(String::from_utf8_lossy(&response.body).as_ref())
-                       .unwrap())
-            }
-            _ => {
-                Err(StartWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<Run>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(StartWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -5984,9 +5962,11 @@ impl<P, D> Swf for SwfClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(TerminateWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(TerminateWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 }
