@@ -237,24 +237,24 @@ fn generate_shape_member_param_strings(shape: &Shape) -> Vec<String> {
         .unwrap()
         .iter()
         .filter_map(|(member_name, member)| if !member.deprecated() {
-            generate_param_load_string(member_name, member, shape)
+            generate_param_load_string(member_name, member, shape.required(member_name))
         } else {
             None
         })
         .collect::<Vec<String>>()
 }
 
-fn generate_param_load_string(member_name: &str, member: &Member, shape: &Shape) -> Option<String> {
+fn generate_param_load_string(member_name: &str, member: &Member, is_required: bool) -> Option<String> {
     match member.location {
         Some(ref x) if x == "querystring" => {
-            if shape.required(member_name) {
-                Some(format!("params.put(\"{member_name}\", &input.{field_name}.to_string());",
-                             member_name = member_name,
-                             field_name = member_name.to_snake_case()))
+            if is_required {
+                Some(format!("params.put(\"{member_name}\", &input.{field_name});",
+                        member_name = member_name,
+                        field_name = member_name.to_snake_case()))
             } else {
                 Some(format!(
                     "match input.{field_name} {{
-                        Some(ref x) => params.put(\"{member_name}\", &x.to_string()),
+                        Some(ref x) => params.put(\"{member_name}\", x),
                         None => {{}},
                     }}",
                     member_name = member_name,
