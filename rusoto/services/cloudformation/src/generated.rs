@@ -8702,19 +8702,6 @@ mod protocol_tests {
     }
 
     #[test]
-    fn test_parse_valid_cloudformation_list_stacks() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "cloudformation-list-stacks.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client =
-            CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListStacksInput::default();
-        let result = client.list_stacks(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
     fn test_parse_valid_cloudformation_describe_stacks() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "cloudformation-describe-stacks.xml");
@@ -8736,6 +8723,19 @@ mod protocol_tests {
             CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetTemplateInput::default();
         let result = client.get_template(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_cloudformation_list_stacks() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "cloudformation-list-stacks.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client =
+            CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ListStacksInput::default();
+        let result = client.list_stacks(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

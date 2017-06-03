@@ -18323,49 +18323,61 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_redshift_describe_cluster_snapshots() {
+    fn test_parse_valid_redshift_authorize_cluster_security_group_ingress() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-describe-cluster-snapshots.xml");
+                                                              "redshift-authorize-cluster-security-group-ingress.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeClusterSnapshotsMessage::default();
-        let result = client.describe_cluster_snapshots(&request);
+        let request = AuthorizeClusterSecurityGroupIngressMessage::default();
+        let result = client.authorize_cluster_security_group_ingress(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
 
     #[test]
-    fn test_parse_valid_redshift_describe_events() {
+    fn test_parse_valid_redshift_copy_cluster_snapshot() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-describe-events.xml");
+                                                              "redshift-copy-cluster-snapshot.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeEventsMessage::default();
-        let result = client.describe_events(&request);
+        let request = CopyClusterSnapshotMessage::default();
+        let result = client.copy_cluster_snapshot(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
 
     #[test]
-    fn test_parse_valid_redshift_describe_reserved_nodes() {
+    fn test_parse_valid_redshift_create_cluster_parameter_group() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-describe-reserved-nodes.xml");
+                                                              "redshift-create-cluster-parameter-group.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeReservedNodesMessage::default();
-        let result = client.describe_reserved_nodes(&request);
+        let request = CreateClusterParameterGroupMessage::default();
+        let result = client.create_cluster_parameter_group(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
 
     #[test]
-    fn test_parse_valid_redshift_revoke_cluster_security_group_ingress() {
+    fn test_parse_valid_redshift_create_cluster_security_group() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-revoke-cluster-security-group-ingress.xml");
+                                                              "redshift-create-cluster-security-group.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = RevokeClusterSecurityGroupIngressMessage::default();
-        let result = client.revoke_cluster_security_group_ingress(&request);
+        let request = CreateClusterSecurityGroupMessage::default();
+        let result = client.create_cluster_security_group(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_redshift_create_cluster_snapshot() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "redshift-create-cluster-snapshot.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = CreateClusterSnapshotMessage::default();
+        let result = client.create_cluster_snapshot(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -18383,49 +18395,37 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_redshift_describe_cluster_subnet_groups() {
+    fn test_parse_valid_redshift_create_cluster() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-describe-cluster-subnet-groups.xml");
+                                                              "redshift-create-cluster.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeClusterSubnetGroupsMessage::default();
-        let result = client.describe_cluster_subnet_groups(&request);
+        let request = CreateClusterMessage::default();
+        let result = client.create_cluster(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
 
     #[test]
-    fn test_parse_valid_redshift_describe_reserved_node_offerings() {
+    fn test_parse_valid_redshift_delete_cluster_parameter_group() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-describe-reserved-node-offerings.xml");
+                                                              "redshift-delete-cluster-parameter-group.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeReservedNodeOfferingsMessage::default();
-        let result = client.describe_reserved_node_offerings(&request);
+        let request = DeleteClusterParameterGroupMessage::default();
+        let result = client.delete_cluster_parameter_group(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
 
     #[test]
-    fn test_parse_valid_redshift_reset_cluster_parameter_group() {
+    fn test_parse_valid_redshift_delete_cluster_snapshot() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-reset-cluster-parameter-group.xml");
+                                                              "redshift-delete-cluster-snapshot.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ResetClusterParameterGroupMessage::default();
-        let result = client.reset_cluster_parameter_group(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_redshift_create_cluster_security_group() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-create-cluster-security-group.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateClusterSecurityGroupMessage::default();
-        let result = client.create_cluster_security_group(&request);
+        let request = DeleteClusterSnapshotMessage::default();
+        let result = client.delete_cluster_snapshot(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -18455,6 +18455,18 @@ mod protocol_tests {
 
 
     #[test]
+    fn test_parse_valid_redshift_describe_cluster_parameters() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "redshift-describe-cluster-parameters.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = DescribeClusterParametersMessage::default();
+        let result = client.describe_cluster_parameters(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
     fn test_parse_valid_redshift_describe_cluster_security_groups() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "redshift-describe-cluster-security-groups.xml");
@@ -18462,6 +18474,30 @@ mod protocol_tests {
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeClusterSecurityGroupsMessage::default();
         let result = client.describe_cluster_security_groups(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_redshift_describe_cluster_snapshots() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "redshift-describe-cluster-snapshots.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = DescribeClusterSnapshotsMessage::default();
+        let result = client.describe_cluster_snapshots(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_redshift_describe_cluster_subnet_groups() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "redshift-describe-cluster-subnet-groups.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = DescribeClusterSubnetGroupsMessage::default();
+        let result = client.describe_cluster_subnet_groups(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -18479,42 +18515,6 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_redshift_create_cluster() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-create-cluster.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateClusterMessage::default();
-        let result = client.create_cluster(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_redshift_create_cluster_snapshot() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-create-cluster-snapshot.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateClusterSnapshotMessage::default();
-        let result = client.create_cluster_snapshot(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_redshift_modify_cluster_parameter_group() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-modify-cluster-parameter-group.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ModifyClusterParameterGroupMessage::default();
-        let result = client.modify_cluster_parameter_group(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
     fn test_parse_valid_redshift_describe_clusters() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "redshift-describe-clusters.xml");
@@ -18527,49 +18527,13 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_redshift_purchase_reserved_node_offering() {
+    fn test_parse_valid_redshift_describe_events() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-purchase-reserved-node-offering.xml");
+                                                              "redshift-describe-events.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = PurchaseReservedNodeOfferingMessage::default();
-        let result = client.purchase_reserved_node_offering(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_redshift_create_cluster_parameter_group() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-create-cluster-parameter-group.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateClusterParameterGroupMessage::default();
-        let result = client.create_cluster_parameter_group(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_redshift_delete_cluster_parameter_group() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-delete-cluster-parameter-group.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DeleteClusterParameterGroupMessage::default();
-        let result = client.delete_cluster_parameter_group(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_redshift_reboot_cluster() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-reboot-cluster.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = RebootClusterMessage::default();
-        let result = client.reboot_cluster(&request);
+        let request = DescribeEventsMessage::default();
+        let result = client.describe_events(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -18587,25 +18551,25 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_redshift_authorize_cluster_security_group_ingress() {
+    fn test_parse_valid_redshift_describe_reserved_node_offerings() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-authorize-cluster-security-group-ingress.xml");
+                                                              "redshift-describe-reserved-node-offerings.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = AuthorizeClusterSecurityGroupIngressMessage::default();
-        let result = client.authorize_cluster_security_group_ingress(&request);
+        let request = DescribeReservedNodeOfferingsMessage::default();
+        let result = client.describe_reserved_node_offerings(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
 
     #[test]
-    fn test_parse_valid_redshift_copy_cluster_snapshot() {
+    fn test_parse_valid_redshift_describe_reserved_nodes() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-copy-cluster-snapshot.xml");
+                                                              "redshift-describe-reserved-nodes.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CopyClusterSnapshotMessage::default();
-        let result = client.copy_cluster_snapshot(&request);
+        let request = DescribeReservedNodesMessage::default();
+        let result = client.describe_reserved_nodes(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -18623,25 +18587,49 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_redshift_describe_cluster_parameters() {
+    fn test_parse_valid_redshift_modify_cluster_parameter_group() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-describe-cluster-parameters.xml");
+                                                              "redshift-modify-cluster-parameter-group.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeClusterParametersMessage::default();
-        let result = client.describe_cluster_parameters(&request);
+        let request = ModifyClusterParameterGroupMessage::default();
+        let result = client.modify_cluster_parameter_group(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
 
     #[test]
-    fn test_parse_valid_redshift_delete_cluster_snapshot() {
+    fn test_parse_valid_redshift_purchase_reserved_node_offering() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "redshift-delete-cluster-snapshot.xml");
+                                                              "redshift-purchase-reserved-node-offering.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DeleteClusterSnapshotMessage::default();
-        let result = client.delete_cluster_snapshot(&request);
+        let request = PurchaseReservedNodeOfferingMessage::default();
+        let result = client.purchase_reserved_node_offering(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_redshift_reboot_cluster() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "redshift-reboot-cluster.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = RebootClusterMessage::default();
+        let result = client.reboot_cluster(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_redshift_reset_cluster_parameter_group() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "redshift-reset-cluster-parameter-group.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ResetClusterParameterGroupMessage::default();
+        let result = client.reset_cluster_parameter_group(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -18654,6 +18642,18 @@ mod protocol_tests {
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = RestoreFromClusterSnapshotMessage::default();
         let result = client.restore_from_cluster_snapshot(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_redshift_revoke_cluster_security_group_ingress() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "redshift-revoke-cluster-security-group-ingress.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = RevokeClusterSecurityGroupIngressMessage::default();
+        let result = client.revoke_cluster_security_group_ingress(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

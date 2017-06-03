@@ -12419,6 +12419,30 @@ mod protocol_tests {
     }
 
     #[test]
+    fn test_parse_valid_ses_delete_identity() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "ses-delete-identity.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = DeleteIdentityRequest::default();
+        let result = client.delete_identity(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_ses_get_identity_dkim_attributes() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "ses-get-identity-dkim-attributes.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = GetIdentityDkimAttributesRequest::default();
+        let result = client.get_identity_dkim_attributes(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
     fn test_parse_valid_ses_get_identity_notification_attributes() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "ses-get-identity-notification-attributes.xml");
@@ -12431,25 +12455,37 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_ses_set_identity_dkim_enabled() {
+    fn test_parse_valid_ses_get_identity_verification_attributes() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "ses-set-identity-dkim-enabled.xml");
+                                                              "ses-get-identity-verification-attributes.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = SetIdentityDkimEnabledRequest::default();
-        let result = client.set_identity_dkim_enabled(&request);
+        let request = GetIdentityVerificationAttributesRequest::default();
+        let result = client.get_identity_verification_attributes(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
 
     #[test]
-    fn test_parse_valid_ses_delete_identity() {
+    fn test_parse_valid_ses_get_send_quota() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "ses-delete-identity.xml");
+                                                              "ses-get-send-quota.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DeleteIdentityRequest::default();
-        let result = client.delete_identity(&request);
+
+        let result = client.get_send_quota();
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_ses_get_send_statistics() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "ses-get-send-statistics.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+
+        let result = client.get_send_statistics();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -12491,37 +12527,13 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_ses_verify_domain_identity() {
+    fn test_parse_valid_ses_set_identity_dkim_enabled() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "ses-verify-domain-identity.xml");
+                                                              "ses-set-identity-dkim-enabled.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = VerifyDomainIdentityRequest::default();
-        let result = client.verify_domain_identity(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_ses_get_identity_dkim_attributes() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "ses-get-identity-dkim-attributes.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetIdentityDkimAttributesRequest::default();
-        let result = client.get_identity_dkim_attributes(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_ses_get_identity_verification_attributes() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "ses-get-identity-verification-attributes.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetIdentityVerificationAttributesRequest::default();
-        let result = client.get_identity_verification_attributes(&request);
+        let request = SetIdentityDkimEnabledRequest::default();
+        let result = client.set_identity_dkim_enabled(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -12539,25 +12551,13 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_ses_get_send_statistics() {
+    fn test_parse_valid_ses_verify_domain_identity() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "ses-get-send-statistics.xml");
+                                                              "ses-verify-domain-identity.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.get_send_statistics();
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_ses_get_send_quota() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "ses-get-send-quota.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = SesClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.get_send_quota();
+        let request = VerifyDomainIdentityRequest::default();
+        let result = client.verify_domain_identity(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

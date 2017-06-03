@@ -26215,6 +26215,66 @@ mod protocol_tests {
     }
 
     #[test]
+    fn test_parse_valid_iam_create_virtual_mfa_device() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "iam-create-virtual-mfa-device.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = CreateVirtualMFADeviceRequest::default();
+        let result = client.create_virtual_mfa_device(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_iam_get_account_summary() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "iam-get-account-summary.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+
+        let result = client.get_account_summary();
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_iam_get_group() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "iam-get-group.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = GetGroupRequest::default();
+        let result = client.get_group(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_iam_get_user_policy() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "iam-get-user-policy.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = GetUserPolicyRequest::default();
+        let result = client.get_user_policy(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_iam_get_user() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "iam-get-user.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = GetUserRequest::default();
+        let result = client.get_user(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
     fn test_parse_valid_iam_list_access_keys() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "iam-list-access-keys.xml");
@@ -26227,13 +26287,13 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_iam_list_virtual_mfa_devices() {
+    fn test_parse_valid_iam_list_account_aliases() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "iam-list-virtual-mfa-devices.xml");
+                                                              "iam-list-account-aliases.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListVirtualMFADevicesRequest::default();
-        let result = client.list_virtual_mfa_devices(&request);
+        let request = ListAccountAliasesRequest::default();
+        let result = client.list_account_aliases(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -26246,6 +26306,30 @@ mod protocol_tests {
         let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListGroupsRequest::default();
         let result = client.list_groups(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_iam_list_instance_profiles() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "iam-list-instance-profiles.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ListInstanceProfilesRequest::default();
+        let result = client.list_instance_profiles(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_iam_list_mfa_devices() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "iam-list-mfa-devices.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ListMFADevicesRequest::default();
+        let result = client.list_mfa_devices(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -26275,13 +26359,13 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_iam_list_account_aliases() {
+    fn test_parse_valid_iam_list_signing_certificates() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "iam-list-account-aliases.xml");
+                                                              "iam-list-signing-certificates.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListAccountAliasesRequest::default();
-        let result = client.list_account_aliases(&request);
+        let request = ListSigningCertificatesRequest::default();
+        let result = client.list_signing_certificates(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -26299,97 +26383,13 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_iam_get_user_policy() {
+    fn test_parse_valid_iam_list_virtual_mfa_devices() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "iam-get-user-policy.xml");
+                                                              "iam-list-virtual-mfa-devices.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetUserPolicyRequest::default();
-        let result = client.get_user_policy(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_iam_get_account_summary() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "iam-get-account-summary.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.get_account_summary();
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_iam_list_signing_certificates() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "iam-list-signing-certificates.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListSigningCertificatesRequest::default();
-        let result = client.list_signing_certificates(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_iam_get_group() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "iam-get-group.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetGroupRequest::default();
-        let result = client.get_group(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_iam_list_mfa_devices() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "iam-list-mfa-devices.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListMFADevicesRequest::default();
-        let result = client.list_mfa_devices(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_iam_get_user() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "iam-get-user.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetUserRequest::default();
-        let result = client.get_user(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_iam_list_instance_profiles() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "iam-list-instance-profiles.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListInstanceProfilesRequest::default();
-        let result = client.list_instance_profiles(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_iam_create_virtual_mfa_device() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "iam-create-virtual-mfa-device.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = IamClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateVirtualMFADeviceRequest::default();
-        let result = client.create_virtual_mfa_device(&request);
+        let request = ListVirtualMFADevicesRequest::default();
+        let result = client.list_virtual_mfa_devices(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }
