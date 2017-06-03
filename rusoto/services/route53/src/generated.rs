@@ -29,7 +29,7 @@ enum DeserializerNext {
 pub struct AlarmIdentifier {
     #[doc="<p>The name of the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether this health check is healthy.</p>"]
     pub name: AlarmName,
-    #[doc="<p>A complex type that identifies the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether this health check is healthy.</p> <p>For the current list of CloudWatch regions, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#cw_region\">Amazon CloudWatch</a> in <i>AWS Regions and Endpoints</i> in the <i>Amazon Web Services General Reference</i>.</p>"]
+    #[doc="<p>A complex type that identifies the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether this health check is healthy.</p> <p>For the current list of CloudWatch regions, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#cw_region\">Amazon CloudWatch</a> in the <i>AWS Regions and Endpoints</i> chapter of the <i>Amazon Web Services General Reference</i>.</p>"]
     pub region: CloudWatchRegion,
 }
 
@@ -143,14 +143,14 @@ impl AliasHealthEnabledSerializer {
     }
 }
 
-#[doc="<p> <i>Alias resource record sets only:</i> Information about the CloudFront distribution, Elastic Beanstalk environment, ELB load balancer, Amazon S3 bucket, or Amazon Route 53 resource record set that you're redirecting queries to. The Elastic Beanstalk environment must have a regionalized subdomain.</p> <p>When creating resource record sets for a private hosted zone, note the following:</p> <ul> <li> <p>Resource record sets can't be created for CloudFront distributions in a private hosted zone.</p> </li> <li> <p>Creating geolocation alias resource record sets or latency alias resource record sets in a private hosted zone is unsupported.</p> </li> <li> <p>For information about creating failover resource record sets in a private hosted zone, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html\">Configuring Failover in a Private Hosted Zone</a>.</p> </li> </ul>"]
+#[doc="<p> <i>Alias resource record sets only:</i> Information about the CloudFront distribution, Elastic Beanstalk environment, ELB load balancer, Amazon S3 bucket, or Amazon Route 53 resource record set that you're redirecting queries to. An Elastic Beanstalk environment must have a regionalized subdomain.</p> <p>When creating resource record sets for a private hosted zone, note the following:</p> <ul> <li> <p>Resource record sets can't be created for CloudFront distributions in a private hosted zone.</p> </li> <li> <p>Creating geolocation alias resource record sets or latency alias resource record sets in a private hosted zone is unsupported.</p> </li> <li> <p>For information about creating failover resource record sets in a private hosted zone, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html\">Configuring Failover in a Private Hosted Zone</a>.</p> </li> </ul>"]
 #[derive(Default,Clone,Debug)]
 pub struct AliasTarget {
-    #[doc="<p> <i>Alias resource record sets only:</i> The value that you specify depends on where you want to route queries:</p> <ul> <li> <p> <b>A CloudFront distribution:</b> Specify the domain name that CloudFront assigned when you created your distribution.</p> <p>Your CloudFront distribution must include an alternate domain name that matches the name of the resource record set. For example, if the name of the resource record set is <i>acme.example.com</i>, your CloudFront distribution must include <i>acme.example.com</i> as one of the alternate domain names. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html\">Using Alternate Domain Names (CNAMEs)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </li> <li> <p> <b>Elastic Beanstalk environment</b>: Specify the <code>CNAME</code> attribute for the environment. (The environment must have a regionalized domain name.) You can use the following methods to get the value of the CNAME attribute:</p> <ul> <li> <p> <i>AWS Management Console</i>: For information about how to get the value by using the console, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customdomains.html\">Using Custom Domains with AWS Elastic Beanstalk</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> </li> <li> <p> <i>Elastic Beanstalk API</i>: Use the <code>DescribeEnvironments</code> action to get the value of the <code>CNAME</code> attribute. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/api/API_DescribeEnvironments.html\">DescribeEnvironments</a> in the <i>AWS Elastic Beanstalk API Reference</i>.</p> </li> <li> <p> <i>AWS CLI</i>: Use the <code>describe-environments</code> command to get the value of the <code>CNAME</code> attribute. For more information, see <a href=\"http://docs.aws.amazon.com/cli/latest/reference/elasticbeanstalk/describe-environments.html\">describe-environments</a> in the <i>AWS Command Line Interface Reference</i>.</p> </li> </ul> </li> <li> <p> <b>An ELB load balancer:</b> Specify the DNS name that is associated with the load balancer. Get the DNS name by using the AWS Management Console, the ELB API, or the AWS CLI. Use the same method to get values for <code>HostedZoneId</code> and <code>DNSName</code>. If you get one value from the console and the other value from the API or the CLI, creating the resource record set will fail.</p> <ul> <li> <p> <i>AWS Management Console</i>: Go to the EC2 page, click <b>Load Balancers</b> in the navigation pane, choose the load balancer, choose the <b>Description</b> tab, and get the value of the <b>DNS name</b> field. (If you're routing traffic to a Classic Load Balancer, get the value that begins with <b>dualstack</b>.) Use the same process to get the value of the <b>Hosted zone</b> field. See <a>AliasTarget$HostedZoneId</a>.</p> </li> <li> <p> <i>Elastic Load Balancing API</i>: Use <code>DescribeLoadBalancers</code> to get the value of <code>DNSName</code> and <code>CanonicalHostedZoneNameId</code>. (You specify the value of <code>CanonicalHostedZoneNameId</code> for <a>AliasTarget$HostedZoneId</a>.) For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancer: <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html\">DescribeLoadBalancers</a> </p> </li> <li> <p>Application Load Balancer: <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html\">DescribeLoadBalancers</a> </p> </li> </ul> </li> <li> <p> <i>AWS CLI</i>: Use <code> <a href=\"http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html\">describe-load-balancers</a> </code> to get the value of <code>DNSName</code> and <code>CanonicalHostedZoneNameId</code>. (You specify the value of <code>CanonicalHostedZoneNameId</code> for <a>AliasTarget$HostedZoneId</a>.)</p> </li> </ul> </li> <li> <p> <b>An Amazon S3 bucket that is configured as a static website:</b> Specify the domain name of the Amazon S3 website endpoint in which you created the bucket, for example, <code>s3-website-us-east-1.amazonaws.com</code>. For more information about valid values, see the table <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region\">Amazon Simple Storage Service (S3) Website Endpoints</a> in the <i>Amazon Web Services General Reference</i>. For more information about using S3 buckets for websites, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/getting-started.html\">Getting Started with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide.</i> </p> </li> <li> <p> <b>Another Amazon Route 53 resource record set</b>: Specify the value of the <code>Name</code> element for a resource record set in the current hosted zone.</p> </li> </ul>"]
+    #[doc="<p> <i>Alias resource record sets only:</i> The value that you specify depends on where you want to route queries:</p> <dl> <dt>CloudFront distribution</dt> <dd> <p>Specify the domain name that CloudFront assigned when you created your distribution.</p> <p>Your CloudFront distribution must include an alternate domain name that matches the name of the resource record set. For example, if the name of the resource record set is <i>acme.example.com</i>, your CloudFront distribution must include <i>acme.example.com</i> as one of the alternate domain names. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html\">Using Alternate Domain Names (CNAMEs)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </dd> <dt>Elastic Beanstalk environment</dt> <dd> <p>Specify the <code>CNAME</code> attribute for the environment. (The environment must have a regionalized domain name.) You can use the following methods to get the value of the CNAME attribute:</p> <ul> <li> <p> <i>AWS Management Console</i>: For information about how to get the value by using the console, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customdomains.html\">Using Custom Domains with AWS Elastic Beanstalk</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> </li> <li> <p> <i>Elastic Beanstalk API</i>: Use the <code>DescribeEnvironments</code> action to get the value of the <code>CNAME</code> attribute. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/api/API_DescribeEnvironments.html\">DescribeEnvironments</a> in the <i>AWS Elastic Beanstalk API Reference</i>.</p> </li> <li> <p> <i>AWS CLI</i>: Use the <code>describe-environments</code> command to get the value of the <code>CNAME</code> attribute. For more information, see <a href=\"http://docs.aws.amazon.com/cli/latest/reference/elasticbeanstalk/describe-environments.html\">describe-environments</a> in the <i>AWS Command Line Interface Reference</i>.</p> </li> </ul> </dd> <dt>ELB load balancer</dt> <dd> <p>Specify the DNS name that is associated with the load balancer. Get the DNS name by using the AWS Management Console, the ELB API, or the AWS CLI. </p> <ul> <li> <p> <b>AWS Management Console</b>: Go to the EC2 page, choose <b>Load Balancers</b> in the navigation pane, choose the load balancer, choose the <b>Description</b> tab, and get the value of the <b>DNS name</b> field. (If you're routing traffic to a Classic Load Balancer, get the value that begins with <b>dualstack</b>.) </p> </li> <li> <p> <b>Elastic Load Balancing API</b>: Use <code>DescribeLoadBalancers</code> to get the value of <code>DNSName</code>. For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancer: <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html\">DescribeLoadBalancers</a> </p> </li> <li> <p>Application Load Balancer: <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html\">DescribeLoadBalancers</a> </p> </li> </ul> </li> <li> <p> <b>AWS CLI</b>: Use <code> <a href=\"http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html\">describe-load-balancers</a> </code> to get the value of <code>DNSName</code>.</p> </li> </ul> </dd> <dt>Amazon S3 bucket that is configured as a static website</dt> <dd> <p>Specify the domain name of the Amazon S3 website endpoint in which you created the bucket, for example, <code>s3-website-us-east-2.amazonaws.com</code>. For more information about valid values, see the table <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region\">Amazon Simple Storage Service (S3) Website Endpoints</a> in the <i>Amazon Web Services General Reference</i>. For more information about using S3 buckets for websites, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/getting-started.html\">Getting Started with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide.</i> </p> </dd> <dt>Another Amazon Route 53 resource record set</dt> <dd> <p>Specify the value of the <code>Name</code> element for a resource record set in the current hosted zone.</p> </dd> </dl>"]
     pub dns_name: DNSName,
-    #[doc="<p> <i>Applies only to alias, weighted alias, latency alias, and failover alias record sets:</i> If you set the value of <code>EvaluateTargetHealth</code> to <code>true</code> for the resource record set or sets in an alias, weighted alias, latency alias, or failover alias resource record set, and if you specify a value for <code> <a>HealthCheck$Id</a> </code> for every resource record set that is referenced by these alias resource record sets, the alias resource record sets inherit the health of the referenced resource record sets.</p> <p>In this configuration, when Amazon Route 53 receives a DNS query for an alias resource record set:</p> <ul> <li> <p>Amazon Route 53 looks at the resource record sets that are referenced by the alias resource record sets to determine which health checks they're using.</p> </li> <li> <p>Amazon Route 53 checks the current status of each health check. (Amazon Route 53 periodically checks the health of the endpoint that is specified in a health check; it doesn't perform the health check when the DNS query arrives.)</p> </li> <li> <p>Based on the status of the health checks, Amazon Route 53 determines which resource record sets are healthy. Unhealthy resource record sets are immediately removed from consideration. In addition, if all of the resource record sets that are referenced by an alias resource record set are unhealthy, that alias resource record set also is immediately removed from consideration.</p> </li> <li> <p>Based on the configuration of the alias resource record sets (weighted alias or latency alias, for example) and the configuration of the resource record sets that they reference, Amazon Route 53 chooses a resource record set from the healthy resource record sets, and responds to the query.</p> </li> </ul> <p>Note the following:</p> <ul> <li> <p>You can't set <code>EvaluateTargetHealth</code> to <code>true</code> when the alias target is a CloudFront distribution.</p> </li> <li> <p>If the AWS resource that you specify in <code>AliasTarget</code> is a resource record set or a group of resource record sets (for example, a group of weighted resource record sets), but it is not another alias resource record set, we recommend that you associate a health check with all of the resource record sets in the alias target.For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-complex-configs.html#dns-failover-complex-configs-hc-omitting\">What Happens When You Omit Health Checks?</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> <li> <p>If you specify an Elastic Beanstalk environment in <code>HostedZoneId</code> and <code>DNSName</code>, and if the environment contains an ELB load balancer, Elastic Load Balancing routes queries only to the healthy Amazon EC2 instances that are registered with the load balancer. (An environment automatically contains an ELB load balancer if it includes more than one EC2 instance.) If you set <code>EvaluateTargetHealth</code> to <code>true</code> and either no EC2 instances are healthy or the load balancer itself is unhealthy, Amazon Route 53 routes queries to other available resources that are healthy, if any.</p> <p>If the environment contains a single EC2 instance, there are no special requirements.</p> </li> <li> <p>If you specify an ELB load balancer in <code> <a>AliasTarget</a> </code>, Elastic Load Balancing routes queries only to the healthy EC2 instances that are registered with the load balancer. If no EC2 instances are healthy or if the load balancer itself is unhealthy, and if <code>EvaluateTargetHealth</code> is true for the corresponding alias resource record set, Amazon Route 53 routes queries to other resources. When you create a load balancer, you configure settings for Elastic Load Balancing health checks; they're not Amazon Route 53 health checks, but they perform a similar function. Do not create Amazon Route 53 health checks for the EC2 instances that you register with an ELB load balancer.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-complex-configs.html\">How Health Checks Work in More Complex Amazon Route 53 Configurations</a> in the <i>Amazon Route 53 Developers Guide</i>.</p> </li> <li> <p>We recommend that you set <code>EvaluateTargetHealth</code> to true only when you have enough idle capacity to handle the failure of one or more endpoints.</p> </li> </ul> <p>For more information and examples, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
+    #[doc="<p> <i>Applies only to alias, failover alias, geolocation alias, latency alias, and weighted alias resource record sets:</i> When <code>EvaluateTargetHealth</code> is <code>true</code>, an alias resource record set inherits the health of the referenced AWS resource, such as an ELB load balancer, or the referenced resource record set.</p> <p>Note the following:</p> <ul> <li> <p>You can't set <code>EvaluateTargetHealth</code> to <code>true</code> when the alias target is a CloudFront distribution.</p> </li> <li> <p>If the AWS resource that you specify in <code>AliasTarget</code> is a resource record set or a group of resource record sets (for example, a group of weighted resource record sets), but it is not another alias resource record set, we recommend that you associate a health check with all of the resource record sets in the alias target. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-complex-configs.html#dns-failover-complex-configs-hc-omitting\">What Happens When You Omit Health Checks?</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> <li> <p>If you specify an Elastic Beanstalk environment in <code>HostedZoneId</code> and <code>DNSName</code>, and if the environment contains an ELB load balancer, Elastic Load Balancing routes queries only to the healthy Amazon EC2 instances that are registered with the load balancer. (An environment automatically contains an ELB load balancer if it includes more than one EC2 instance.) If you set <code>EvaluateTargetHealth</code> to <code>true</code> and either no EC2 instances are healthy or the load balancer itself is unhealthy, Amazon Route 53 routes queries to other available resources that are healthy, if any.</p> <p>If the environment contains a single EC2 instance, there are no special requirements.</p> </li> <li> <p>If you specify an ELB load balancer in <code> <a>AliasTarget</a> </code>, ELB routes queries only to the healthy EC2 instances that are registered with the load balancer. If no EC2 instances are healthy or if the load balancer itself is unhealthy, and if <code>EvaluateTargetHealth</code> is true for the corresponding alias resource record set, Amazon Route 53 routes queries to other resources. When you create a load balancer, you configure settings for ELB health checks; they're not Amazon Route 53 health checks, but they perform a similar function. Do not create Amazon Route 53 health checks for the EC2 instances that you register with an ELB load balancer.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-complex-configs.html\">How Health Checks Work in More Complex Amazon Route 53 Configurations</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> <li> <p>We recommend that you set <code>EvaluateTargetHealth</code> to true only when you have enough idle capacity to handle the failure of one or more endpoints.</p> </li> </ul> <p>For more information and examples, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     pub evaluate_target_health: AliasHealthEnabled,
-    #[doc="<p> <i>Alias resource records sets only</i>: The value used depends on where the queries are routed:</p> <dl> <dt>A CloudFront distribution</dt> <dd> <p>Specify <code>Z2FDTNDATAQYW2</code>.</p> <note> <p>Alias resource record sets for CloudFront can't be created in a private zone.</p> </note> </dd> <dt>Elastic Beanstalk environment</dt> <dd> <p>Specify the hosted zone ID for the region in which you created the environment. The environment must have a regionalized subdomain. For a list of regions and the corresponding hosted zone IDs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#elasticbeanstalk_region\">AWS Elastic Beanstalk</a> in the Regions and Endpoints chapter of the <i>Amazon Web Services General Reference</i>.</p> </dd> <dt>ELB load balancer</dt> <dd> <p>Specify the value of the hosted zone ID for the load balancer. Use the following methods to get the hosted zone ID:</p> <ul> <li> <p>AWS Management Console: Go to the Amazon EC2 page, click <b>Load Balancers</b> in the navigation pane, select the load balancer, and get the value of the <b>Hosted zone</b> field on the <b>Description</b> tab. Use the same process to get the value of <b>DNS name</b>. (You specify the value of <b>DNS name</b> for <a>AliasTarget$DNSName</a>.)</p> </li> <li> <p> <i>Elastic Load Balancing API</i>: Use <code>DescribeLoadBalancers</code> to get the value of <code>CanonicalHostedZoneNameId</code> and <code>DNSName</code>. (You specify the value of <code>DNSName</code> for <a>AliasTarget$DNSName</a>.) For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancer: <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html\">DescribeLoadBalancers</a> </p> </li> <li> <p>Application Load Balancer: <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html\">DescribeLoadBalancers</a> </p> </li> </ul> </li> <li> <p>AWS CLI: Use <code> <a href=\"http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html\">describe-load-balancers</a> </code> to get the value of <code>CanonicalHostedZoneNameID</code> and <code>DNSName</code>. (You specify the value of <code>DNSName</code> for <a>AliasTarget$DNSName</a>.)</p> </li> </ul> </dd> <dt>An Amazon S3 bucket configured as a static website</dt> <dd> <p>Specify the hosted zone ID for the region that you created the bucket in. For more information about valid values, see the table <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region\">Amazon Simple Storage Service Website Endpoints</a> in the <i>Amazon Web Services General Reference</i>.</p> </dd> <dt>Another Amazon Route 53 resource record set in your hosted zone</dt> <dd> <p>Specify the hosted zone ID of your hosted zone. (An alias resource record set can't reference a resource record set in a different hosted zone.)</p> </dd> </dl>"]
+    #[doc="<p> <i>Alias resource records sets only</i>: The value used depends on where you want to route traffic:</p> <dl> <dt>CloudFront distribution</dt> <dd> <p>Specify <code>Z2FDTNDATAQYW2</code>.</p> <note> <p>Alias resource record sets for CloudFront can't be created in a private zone.</p> </note> </dd> <dt>Elastic Beanstalk environment</dt> <dd> <p>Specify the hosted zone ID for the region in which you created the environment. The environment must have a regionalized subdomain. For a list of regions and the corresponding hosted zone IDs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#elasticbeanstalk_region\">AWS Elastic Beanstalk</a> in the \"AWS Regions and Endpoints\" chapter of the <i>Amazon Web Services General Reference</i>.</p> </dd> <dt>ELB load balancer</dt> <dd> <p>Specify the value of the hosted zone ID for the load balancer. Use the following methods to get the hosted zone ID:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#elb_region\">Elastic Load Balancing</a> table in the \"AWS Regions and Endpoints\" chapter of the <i>Amazon Web Services General Reference</i>: Use the value in the \"Amazon Route 53 Hosted Zone ID\" column that corresponds with the region that you created your load balancer in.</p> </li> <li> <p> <b>AWS Management Console</b>: Go to the Amazon EC2 page, click <b>Load Balancers</b> in the navigation pane, select the load balancer, and get the value of the <b>Hosted zone</b> field on the <b>Description</b> tab.</p> </li> <li> <p> <b>Elastic Load Balancing API</b>: Use <code>DescribeLoadBalancers</code> to get the value of <code>CanonicalHostedZoneNameId</code>. For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancer: <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html\">DescribeLoadBalancers</a> </p> </li> <li> <p>Application Load Balancer: <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html\">DescribeLoadBalancers</a> </p> </li> </ul> </li> <li> <p> <b>AWS CLI</b>: Use <code> <a href=\"http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html\">describe-load-balancers</a> </code> to get the value of <code>CanonicalHostedZoneNameID</code>.</p> </li> </ul> </dd> <dt>An Amazon S3 bucket configured as a static website</dt> <dd> <p>Specify the hosted zone ID for the region that you created the bucket in. For more information about valid values, see the <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region\">Amazon Simple Storage Service Website Endpoints</a> table in the \"AWS Regions and Endpoints\" chapter of the <i>Amazon Web Services General Reference</i>.</p> </dd> <dt>Another Amazon Route 53 resource record set in your hosted zone</dt> <dd> <p>Specify the hosted zone ID of your hosted zone. (An alias resource record set can't reference a resource record set in a different hosted zone.)</p> </dd> </dl>"]
     pub hosted_zone_id: ResourceId,
 }
 
@@ -361,7 +361,7 @@ pub struct ChangeInfo {
     pub id: ResourceId,
     #[doc="<p>The current state of the request. <code>PENDING</code> indicates that this request has not yet been applied to all Amazon Route 53 DNS servers.</p>"]
     pub status: ChangeStatus,
-    #[doc="<p>The date and time the change request was submitted, in Coordinated Universal Time (UTC) format: <code>YYYY-MM-DDThh:mm:ssZ</code>. For more information, see the Wikipedia entry <a href=\"https://en.wikipedia.org/wiki/ISO_8601\">ISO 8601</a>.</p>"]
+    #[doc="<p>The date and time that the change request was submitted in <a href=\"https://en.wikipedia.org/wiki/ISO_8601\">ISO 8601 format</a> and Coordinated Universal Time (UTC). For example, the value <code>2017-03-27T17:48:16.751Z</code> represents March 27, 2017 at 17:48:16.751 UTC.</p>"]
     pub submitted_at: TimeStamp,
 }
 
@@ -496,7 +496,7 @@ impl ChangeStatusDeserializer {
 #[doc="<p>A complex type that contains information about the tags that you want to add, edit, or delete.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ChangeTagsForResourceRequest {
-    #[doc="<p>A complex type that contains a list of the tags that you want to add to the specified health check or hosted zone and/or the tags for which you want to edit the <code>Value</code> element.</p> <p>You can add a maximum of 10 tags to a health check or a hosted zone.</p>"]
+    #[doc="<p>A complex type that contains a list of the tags that you want to add to the specified health check or hosted zone and/or the tags that you want to edit <code>Value</code> for.</p> <p>You can add a maximum of 10 tags to a health check or a hosted zone.</p>"]
     pub add_tags: Option<TagList>,
     #[doc="<p>A complex type that contains a list of the tags that you want to delete from the specified health check or hosted zone. You can specify up to 10 keys.</p>"]
     pub remove_tag_keys: Option<TagKeyList>,
@@ -647,7 +647,7 @@ impl ChildHealthCheckListSerializer {
 pub struct CloudWatchAlarmConfiguration {
     #[doc="<p>For the metric that the CloudWatch alarm is associated with, the arithmetic operation that is used for the comparison.</p>"]
     pub comparison_operator: ComparisonOperator,
-    #[doc="<p>For the metric that the CloudWatch alarm is associated with, a complex type that contains information about the dimensions for the metric.For information, see <a href=\" http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CW_Support_For_AWS.html\">Amazon CloudWatch Namespaces, Dimensions, and Metrics Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
+    #[doc="<p>For the metric that the CloudWatch alarm is associated with, a complex type that contains information about the dimensions for the metric. For information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CW_Support_For_AWS.html\">Amazon CloudWatch Namespaces, Dimensions, and Metrics Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
     pub dimensions: Option<DimensionList>,
     #[doc="<p>For the metric that the CloudWatch alarm is associated with, the number of periods that the metric is compared to the threshold.</p>"]
     pub evaluation_periods: EvaluationPeriods,
@@ -779,7 +779,7 @@ impl ComparisonOperatorDeserializer {
 #[doc="<p>A complex type that contains the health check request information.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct CreateHealthCheckRequest {
-    #[doc="<p>A unique string that identifies the request and that allows failed <code>CreateHealthCheck</code> requests to be retried without the risk of executing the operation twice. You must use a unique <code>CallerReference</code> string every time you create a health check.</p>"]
+    #[doc="<p>A unique string that identifies the request and that allows you to retry a failed <code>CreateHealthCheck</code> request without the risk of creating two identical health checks:</p> <ul> <li> <p>If you send a <code>CreateHealthCheck</code> request with the same <code>CallerReference</code> and settings as a previous request, and if the health check doesn't exist, Amazon Route 53 creates the health check. If the health check does exist, Amazon Route 53 returns the settings for the existing health check.</p> </li> <li> <p>If you send a <code>CreateHealthCheck</code> request with the same <code>CallerReference</code> as a deleted health check, regardless of the settings, Amazon Route 53 returns a <code>HealthCheckAlreadyExists</code> error.</p> </li> <li> <p>If you send a <code>CreateHealthCheck</code> request with the same <code>CallerReference</code> as an existing health check but with different settings, Amazon Route 53 returns a <code>HealthCheckAlreadyExists</code> error.</p> </li> <li> <p>If you send a <code>CreateHealthCheck</code> request with a unique <code>CallerReference</code> but settings identical to an existing health check, Amazon Route 53 creates the health check.</p> </li> </ul>"]
     pub caller_reference: HealthCheckNonce,
     #[doc="<p>A complex type that contains the response to a <code>CreateHealthCheck</code> request. </p>"]
     pub health_check_config: HealthCheckConfig,
@@ -836,25 +836,25 @@ impl CreateHealthCheckResponseDeserializer {
 
     }
 }
-#[doc="<p>A complex type containing the hosted zone request information.</p>"]
+#[doc="<p>A complex type that contains information about the request to create a hosted zone.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct CreateHostedZoneRequest {
-    #[doc="<p>A unique string that identifies the request and that allows failed <code>CreateHostedZone</code> requests to be retried without the risk of executing the operation twice. You must use a unique <code>CallerReference</code> string every time you create a hosted zone. <code>CallerReference</code> can be any unique string, for example, a date/time stamp.</p>"]
+    #[doc="<p>A unique string that identifies the request and that allows failed <code>CreateHostedZone</code> requests to be retried without the risk of executing the operation twice. You must use a unique <code>CallerReference</code> string every time you submit a <code>CreateHostedZone</code> request. <code>CallerReference</code> can be any unique string, for example, a date/time stamp.</p>"]
     pub caller_reference: Nonce,
-    #[doc="<p>If you want to associate a reusable delegation set with this hosted zone, the ID that Amazon Route 53 assigned to the reusable delegation set when you created it. For more information about reusable delegation sets, see <a>CreateReusableDelegationSet</a>.</p> <dl> <dt>Type</dt> <dd> <p>String</p> </dd> <dt>Default</dt> <dd> <p>None</p> </dd> <dt>Parent</dt> <dd> <p> <code>CreatedHostedZoneRequest</code> </p> </dd> </dl>"]
+    #[doc="<p>If you want to associate a reusable delegation set with this hosted zone, the ID that Amazon Route 53 assigned to the reusable delegation set when you created it. For more information about reusable delegation sets, see <a>CreateReusableDelegationSet</a>.</p>"]
     pub delegation_set_id: Option<ResourceId>,
-    #[doc="<p> (Optional) A complex type that contains an optional comment about your hosted zone. If you don't want to specify a comment, omit both the <code>HostedZoneConfig</code> and <code>Comment</code> elements.</p>"]
+    #[doc="<p>(Optional) A complex type that contains the following optional values:</p> <ul> <li> <p>For public and private hosted zones, an optional comment</p> </li> <li> <p>For private hosted zones, an optional <code>PrivateZone</code> element</p> </li> </ul> <p>If you don't specify a comment or the <code>PrivateZone</code> element, omit <code>HostedZoneConfig</code> and the other elements.</p>"]
     pub hosted_zone_config: Option<HostedZoneConfig>,
-    #[doc="<p>The name of the domain. For resource record types that include a domain name, specify a fully qualified domain name, for example, <i>www.example.com</i>. The trailing dot is optional; Amazon Route 53 assumes that the domain name is fully qualified. This means that Amazon Route 53 treats <i>www.example.com</i> (without a trailing dot) and <i>www.example.com.</i> (with a trailing dot) as identical.</p> <p>If you're creating a public hosted zone, this is the name you have registered with your DNS registrar. If your domain name is registered with a registrar other than Amazon Route 53, change the name servers for your domain to the set of <code>NameServers</code> that <code>CreateHostedZone</code> returns in the DelegationSet element.</p>"]
+    #[doc="<p>The name of the domain. For resource record types that include a domain name, specify a fully qualified domain name, for example, <i>www.example.com</i>. The trailing dot is optional; Amazon Route 53 assumes that the domain name is fully qualified. This means that Amazon Route 53 treats <i>www.example.com</i> (without a trailing dot) and <i>www.example.com.</i> (with a trailing dot) as identical.</p> <p>If you're creating a public hosted zone, this is the name you have registered with your DNS registrar. If your domain name is registered with a registrar other than Amazon Route 53, change the name servers for your domain to the set of <code>NameServers</code> that <code>CreateHostedZone</code> returns in <code>DelegationSet</code>.</p>"]
     pub name: DNSName,
-    #[doc="<p>The VPC that you want your hosted zone to be associated with. By providing this parameter, your newly created hosted can't be resolved anywhere other than the given VPC.</p>"]
+    #[doc="<p>(Private hosted zones only) A complex type that contains information about the Amazon VPC that you're associating with this hosted zone.</p> <p>You can specify only one Amazon VPC when you create a private hosted zone. To associate additional Amazon VPCs with the hosted zone, use <a>AssociateVPCWithHostedZone</a> after you create a hosted zone.</p>"]
     pub vpc: Option<VPC>,
 }
 
 #[doc="<p>A complex type containing the response information for the hosted zone.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct CreateHostedZoneResponse {
-    #[doc="<p>A complex type that describes the changes made to your hosted zone.</p>"]
+    #[doc="<p>A complex type that contains information about the <code>CreateHostedZone</code> request.</p>"]
     pub change_info: ChangeInfo,
     #[doc="<p>A complex type that describes the name servers for this hosted zone.</p>"]
     pub delegation_set: DelegationSet,
@@ -1111,7 +1111,7 @@ impl CreateTrafficPolicyResponseDeserializer {
 
     }
 }
-#[doc="<p>A complex type that contains information about the traffic policy for which you want to create a new version.</p>"]
+#[doc="<p>A complex type that contains information about the traffic policy that you want to create a new version for.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct CreateTrafficPolicyVersionRequest {
     #[doc="<p>The comment that you specified in the <code>CreateTrafficPolicyVersion</code> request, if any.</p>"]
@@ -1184,7 +1184,7 @@ pub struct CreateVPCAssociationAuthorizationRequest {
     pub vpc: VPC,
 }
 
-#[doc="<p>A complex type that contains the response information from a CreateVPCAssociationAuthorization request.</p>"]
+#[doc="<p>A complex type that contains the response information from a <code>CreateVPCAssociationAuthorization</code> request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct CreateVPCAssociationAuthorizationResponse {
     #[doc="<p>The ID of the hosted zone that you authorized associating a VPC with.</p>"]
@@ -1280,14 +1280,14 @@ impl DNSRCodeDeserializer {
 
     }
 }
-#[doc="<p>A complex type that describes the name servers for this hosted zone.</p>"]
+#[doc="<p>A complex type that lists the name servers in a delegation set, as well as the <code>CallerReference</code> and the <code>ID</code> for the delegation set.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct DelegationSet {
-    #[doc="<p>A unique string that identifies the request, and that allows you to retry failed <code>CreateReusableDelegationSet</code> requests without the risk of executing the operation twice. You must use a unique <code>CallerReference</code> string every time you submit a <code>CreateReusableDelegationSet</code> request. <code>CallerReference</code> can be any unique string, for example, a date/time stamp.</p>"]
+    #[doc="<p>The value that you specified for <code>CallerReference</code> when you created the reusable delegation set.</p>"]
     pub caller_reference: Option<Nonce>,
     #[doc="<p>The ID that Amazon Route 53 assigns to a reusable delegation set.</p>"]
     pub id: Option<ResourceId>,
-    #[doc="<p>A complex type that contains a list of the authoritative name servers for the hosted zone.</p>"]
+    #[doc="<p>A complex type that contains a list of the authoritative name servers for a hosted zone or for a reusable delegation set.</p>"]
     pub name_servers: DelegationSetNameServers,
 }
 
@@ -1427,7 +1427,7 @@ impl DelegationSetsDeserializer {
 
     }
 }
-#[doc="<p>This action deletes a health check. Send a <code>DELETE</code> request to the <code>/2013-04-01/DeleteHealthCheckRequest</code> resource.</p>"]
+#[doc="<p>This action deletes a health check.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct DeleteHealthCheckRequest {
     #[doc="<p>The ID of the health check that you want to delete.</p>"]
@@ -1454,17 +1454,17 @@ impl DeleteHealthCheckResponseDeserializer {
 
     }
 }
-#[doc="<p>A complex type that contains information about the hosted zone that you want to delete.</p>"]
+#[doc="<p>A request to delete a hosted zone.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct DeleteHostedZoneRequest {
     #[doc="<p>The ID of the hosted zone you want to delete.</p>"]
     pub id: ResourceId,
 }
 
-#[doc="<p>A complex type containing the response information for the request.</p>"]
+#[doc="<p>A complex type that contains the response to a <code>DeleteHostedZone</code> request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct DeleteHostedZoneResponse {
-    #[doc="<p>A complex type that contains the ID, the status, and the date and time of your delete request.</p>"]
+    #[doc="<p>A complex type that contains the ID, the status, and the date and time of a request to delete a hosted zone.</p>"]
     pub change_info: ChangeInfo,
 }
 
@@ -1510,10 +1510,10 @@ impl DeleteHostedZoneResponseDeserializer {
 
     }
 }
-#[doc="<p>A complex type containing the information for the delete request.</p>"]
+#[doc="<p>A request to delete a reusable delegation set.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct DeleteReusableDelegationSetRequest {
-    #[doc="<p>The ID of the reusable delegation set you want to delete.</p>"]
+    #[doc="<p>The ID of the reusable delegation set that you want to delete.</p>"]
     pub id: ResourceId,
 }
 
@@ -1538,7 +1538,7 @@ impl DeleteReusableDelegationSetResponseDeserializer {
 
     }
 }
-#[doc="<p>A complex type that contains information about the traffic policy instance that you want to delete.</p>"]
+#[doc="<p>A request to delete a specified traffic policy instance.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct DeleteTrafficPolicyInstanceRequest {
     #[doc="<p>The ID of the traffic policy instance that you want to delete. </p> <important> <p>When you delete a traffic policy instance, Amazon Route 53 also deletes all of the resource record sets that were created when you created the traffic policy instance.</p> </important>"]
@@ -2229,7 +2229,7 @@ impl GeoLocationSubdivisionNameDeserializer {
 #[doc="<p>The input for a GetChange request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetChangeRequest {
-    #[doc="<p>The ID of the change batch request. The value that you specify here is the value that <code>ChangeResourceRecordSets</code> returned in the Id element when you submitted the request.</p>"]
+    #[doc="<p>The ID of the change batch request. The value that you specify here is the value that <code>ChangeResourceRecordSets</code> returned in the <code>Id</code> element when you submitted the request.</p>"]
     pub id: ResourceId,
 }
 
@@ -2282,14 +2282,11 @@ impl GetChangeResponseDeserializer {
 
     }
 }
-#[doc="<p>Empty request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetCheckerIpRangesRequest;
 
-#[doc="<p>A complex type that contains the <code>CheckerIpRanges</code> element.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetCheckerIpRangesResponse {
-    #[doc="<p>A complex type that contains sorted list of IP ranges in CIDR format for Amazon Route 53 health checkers.</p>"]
     pub checker_ip_ranges: CheckerIpRanges,
 }
 
@@ -2336,7 +2333,7 @@ impl GetCheckerIpRangesResponseDeserializer {
 
     }
 }
-#[doc="<p>A complex type that contains information about the request to get a geo location.</p>"]
+#[doc="<p>A request for information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetGeoLocationRequest {
     #[doc="<p>Amazon Route 53 supports the following continent codes:</p> <ul> <li> <p> <b>AF</b>: Africa</p> </li> <li> <p> <b>AN</b>: Antarctica</p> </li> <li> <p> <b>AS</b>: Asia</p> </li> <li> <p> <b>EU</b>: Europe</p> </li> <li> <p> <b>OC</b>: Oceania</p> </li> <li> <p> <b>NA</b>: North America</p> </li> <li> <p> <b>SA</b>: South America</p> </li> </ul>"]
@@ -2397,11 +2394,11 @@ impl GetGeoLocationResponseDeserializer {
 
     }
 }
-#[doc="<p>To retrieve a count of all your health checks, send a <code>GET</code> request to the <code>/2013-04-01/healthcheckcount</code> resource.</p>"]
+#[doc="<p>A request for the number of health checks that are associated with the current AWS account.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetHealthCheckCountRequest;
 
-#[doc="<p>A complex type that contains the response to a <code>healthcheckcount</code> request.</p>"]
+#[doc="<p>A complex type that contains the response to a <code>GetHealthCheckCount</code> request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetHealthCheckCountResponse {
     #[doc="<p>The number of health checks associated with the current AWS account.</p>"]
@@ -2451,7 +2448,7 @@ impl GetHealthCheckCountResponseDeserializer {
 
     }
 }
-#[doc="<p>This action gets the reason that a specified health check failed most recently.</p> <p>To get the reason for the last failure of a health check, send a GET request to the /2013-04-01/healthcheck/health check ID/lastfailurereason resource. </p> <p>For information about viewing the last failure reason for a health check using the Amazon Route 53 console, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-monitor-view-status.html\">Viewing Health Check Status and the Reason for Health Check Failures</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
+#[doc="<p>A request for the reason that a health check failed most recently.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetHealthCheckLastFailureReasonRequest {
     #[doc="<p>The ID for the health check for which you want the last failure reason. When you created the health check, <code>CreateHealthCheck</code> returned the ID in the response, in the <code>HealthCheckId</code> element.</p>"]
@@ -2509,7 +2506,7 @@ impl GetHealthCheckLastFailureReasonResponseDeserializer {
 
     }
 }
-#[doc="<p>This action gets information about a specified health check.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/gethealthcheckrequest</code> resource.</p> <p>For information about getting information about a health check using the Amazon Route 53 console, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
+#[doc="<p>A request to get information about a specified health check. </p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetHealthCheckRequest {
     #[doc="<p>The identifier that Amazon Route 53 assigned to the health check when you created it. When you add or update a resource record set, you use this value to specify which health check to use. The value can be up to 64 characters long.</p>"]
@@ -2565,10 +2562,10 @@ impl GetHealthCheckResponseDeserializer {
 
     }
 }
-#[doc="<p>A complex type that contains information about the request to get health check status for a health check.</p>"]
+#[doc="<p>A request to get the status for a health check.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetHealthCheckStatusRequest {
-    #[doc="<p>If you want Amazon Route 53 to return this resource record set in response to a DNS query only when a health check is passing, include the <code>HealthCheckId</code> element and specify the ID of the applicable health check.</p> <p>Amazon Route 53 determines whether a resource record set is healthy by periodically sending a request to the endpoint that is specified in the health check. If that endpoint returns an HTTP status code of 2xx or 3xx, the endpoint is healthy. If the endpoint returns an HTTP status code of 400 or greater, or if the endpoint doesn't respond for a certain amount of time, Amazon Route 53 considers the endpoint unhealthy and also considers the resource record set unhealthy.</p> <p>The <code>HealthCheckId</code> element is only useful when Amazon Route 53 is choosing between two or more resource record sets to respond to a DNS query, and you want Amazon Route 53 to base the choice in part on the status of a health check. Configuring health checks only makes sense in the following configurations:</p> <ul> <li> <p>You're checking the health of the resource record sets in a weighted, latency, geolocation, or failover resource record set, and you specify health check IDs for all of the resource record sets. If the health check for one resource record set specifies an endpoint that is not healthy, Amazon Route 53 stops responding to queries using the value for that resource record set.</p> </li> <li> <p>You set <code>EvaluateTargetHealth</code> to <code>true</code> for the resource record sets in an alias, weighted alias, latency alias, geolocation alias, or failover alias resource record set, and you specify health check IDs for all of the resource record sets that are referenced by the alias resource record sets. For more information about this configuration, see <code>EvaluateTargetHealth</code>.</p> <p>Amazon Route 53 doesn't check the health of the endpoint specified in the resource record set, for example, the endpoint specified by the IP address in the <code>Value</code> element. When you add a <code>HealthCheckId</code> element to a resource record set, Amazon Route 53 checks the health of the endpoint that you specified in the health check.</p> </li> </ul> <p>For geolocation resource record sets, if an endpoint is unhealthy, Amazon Route 53 looks for a resource record set for the larger, associated geographic region. For example, suppose you have resource record sets for a state in the United States, for the United States, for North America, and for all locations. If the endpoint for the state resource record set is unhealthy, Amazon Route 53 checks the resource record sets for the United States, for North America, and for all locations (a resource record set for which the value of CountryCode is <code>*</code>), in that order, until it finds a resource record set for which the endpoint is healthy.</p> <p>If your health checks specify the endpoint only by domain name, we recommend that you create a separate health check for each endpoint. For example, create a health check for each HTTP server that is serving content for www.example.com. For the value of <code>FullyQualifiedDomainName</code>, specify the domain name of the server (such as <code>us-east-1-www.example.com</code>), not the name of the resource record sets (example.com).</p> <important> <p>In this configuration, if you create a health check for which the value of <code>FullyQualifiedDomainName</code> matches the name of the resource record sets and then associate the health check with those resource record sets, health check results will be unpredictable.</p> </important>"]
+    #[doc="<p>The ID for the health check that you want the current status for. When you created the health check, <code>CreateHealthCheck</code> returned the ID in the response, in the <code>HealthCheckId</code> element.</p> <note> <p>If you want to check the status of a calculated health check, you must use the Amazon Route 53 console or the CloudWatch console. You can't use <code>GetHealthCheckStatus</code> to get the status of a calculated health check.</p> </note>"]
     pub health_check_id: HealthCheckId,
 }
 
@@ -2622,14 +2619,14 @@ impl GetHealthCheckStatusResponseDeserializer {
 
     }
 }
-#[doc="<p>To retrieve a count of all your hosted zones, send a <code>GET</code> request to the <code>/2013-04-01/hostedzonecount</code> resource.</p>"]
+#[doc="<p>A request to retrieve a count of all the hosted zones that are associated with the current AWS account.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetHostedZoneCountRequest;
 
-#[doc="<p>A complex type that contains the response to a <code>hostedzonecount</code> request.</p>"]
+#[doc="<p>A complex type that contains the response to a <code>GetHostedZoneCount</code> request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetHostedZoneCountResponse {
-    #[doc="<p>The total number of public and private hosted zones associated with the current AWS account.</p>"]
+    #[doc="<p>The total number of public and private hosted zones that are associated with the current AWS account.</p>"]
     pub hosted_zone_count: HostedZoneCount,
 }
 
@@ -2676,21 +2673,21 @@ impl GetHostedZoneCountResponseDeserializer {
 
     }
 }
-#[doc="<p>The input for a GetHostedZone request.</p>"]
+#[doc="<p>A request to get information about a specified hosted zone. </p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetHostedZoneRequest {
-    #[doc="<p>The ID of the hosted zone for which you want to get a list of the name servers in the delegation set.</p>"]
+    #[doc="<p>The ID of the hosted zone that you want to get information about.</p>"]
     pub id: ResourceId,
 }
 
-#[doc="<p>A complex type containing the response information for the hosted zone.</p>"]
+#[doc="<p>A complex type that contain the response to a <code>GetHostedZone</code> request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetHostedZoneResponse {
-    #[doc="<p>A complex type that describes the name servers for this hosted zone.</p>"]
+    #[doc="<p>A complex type that lists the Amazon Route 53 name servers for the specified hosted zone.</p>"]
     pub delegation_set: Option<DelegationSet>,
-    #[doc="<p>A complex type that contains general information about the hosted zone.</p>"]
+    #[doc="<p>A complex type that contains general information about the specified hosted zone.</p>"]
     pub hosted_zone: HostedZone,
-    #[doc="<p>A complex type that contains information about VPCs associated with the specified hosted zone.</p>"]
+    #[doc="<p>A complex type that contains information about the VPCs that are associated with the specified hosted zone.</p>"]
     pub vp_cs: Option<VPCs>,
 }
 
@@ -2744,10 +2741,10 @@ impl GetHostedZoneResponseDeserializer {
 
     }
 }
-#[doc="<p>The input for a <code>GetReusableDelegationSet</code> request.</p>"]
+#[doc="<p>A request to get information about a specified reusable delegation set.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetReusableDelegationSetRequest {
-    #[doc="<p>The ID of the reusable delegation set for which you want to get a list of the name server.</p>"]
+    #[doc="<p>The ID of the reusable delegation set that you want to get a list of name servers for.</p>"]
     pub id: ResourceId,
 }
 
@@ -2802,7 +2799,7 @@ impl GetReusableDelegationSetResponseDeserializer {
 
     }
 }
-#[doc="<p>To retrieve a count of all your traffic policy instances, send a <code>GET</code> request to the <code>/2013-04-01/trafficpolicyinstancecount</code> resource.</p>"]
+#[doc="<p>Request to get the number of traffic policy instances that are associated with the current AWS account.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetTrafficPolicyInstanceCountRequest;
 
@@ -2857,7 +2854,7 @@ impl GetTrafficPolicyInstanceCountResponseDeserializer {
 
     }
 }
-#[doc="<p>Gets information about a specified traffic policy instance.</p> <p>To get information about a traffic policy instance, send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance/<i>Id</i> </code> resource.</p>"]
+#[doc="<p>Gets information about a specified traffic policy instance.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetTrafficPolicyInstanceRequest {
     #[doc="<p>The ID of the traffic policy instance that you want to get information about.</p>"]
@@ -2915,7 +2912,7 @@ impl GetTrafficPolicyInstanceResponseDeserializer {
 
     }
 }
-#[doc="<p>Gets information about a specific traffic policy version. To get the information, send a GET request to the /2013-04-01/trafficpolicy resource, and specify the ID and the version of the traffic policy.</p>"]
+#[doc="<p>Gets information about a specific traffic policy version.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct GetTrafficPolicyRequest {
     #[doc="<p>The ID of the traffic policy that you want to get information about.</p>"]
@@ -3057,31 +3054,31 @@ pub struct HealthCheckConfig {
     pub child_health_checks: Option<ChildHealthCheckList>,
     #[doc="<p>Specify whether you want Amazon Route 53 to send the value of <code>FullyQualifiedDomainName</code> to the endpoint in the <code>client_hello</code> message during TLS negotiation. This allows the endpoint to respond to <code>HTTPS</code> health check requests with the applicable SSL/TLS certificate.</p> <p>Some endpoints require that <code>HTTPS</code> requests include the host name in the <code>client_hello</code> message. If you don't enable SNI, the status of the health check will be <code>SSL alert handshake_failure</code>. A health check can also have that status for other reasons. If SNI is enabled and you're still getting the error, check the SSL/TLS configuration on your endpoint and confirm that your certificate is valid.</p> <p>The SSL/TLS certificate on your endpoint includes a domain name in the <code>Common Name</code> field and possibly several more in the <code>Subject Alternative Names</code> field. One of the domain names in the certificate should match the value that you specify for <code>FullyQualifiedDomainName</code>. If the endpoint responds to the <code>client_hello</code> message with a certificate that does not include the domain name that you specified in <code>FullyQualifiedDomainName</code>, a health checker will retry the handshake. In the second attempt, the health checker will omit <code>FullyQualifiedDomainName</code> from the <code>client_hello</code> message.</p>"]
     pub enable_sni: Option<EnableSNI>,
-    #[doc="<p>The number of consecutive health checks that an endpoint must pass or fail for Amazon Route 53 to change the current status of the endpoint from unhealthy to healthy or vice versa. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html\">How Amazon Route 53 Determines Whether an Endpoint Is Healthy</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
+    #[doc="<p>The number of consecutive health checks that an endpoint must pass or fail for Amazon Route 53 to change the current status of the endpoint from unhealthy to healthy or vice versa. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html\">How Amazon Route 53 Determines Whether an Endpoint Is Healthy</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you don't specify a value for <code>FailureThreshold</code>, the default value is three health checks.</p>"]
     pub failure_threshold: Option<FailureThreshold>,
-    #[doc="<p>Amazon Route 53 behavior depends on whether you specify a value for <code>IPAddress</code>.</p> <p> <b>If you specify a value for</b> <code>IPAddress</code>:</p> <p>Amazon Route 53 sends health check requests to the specified IPv4 or IPv6 address and passes the value of <code>FullyQualifiedDomainName</code> in the <code>Host</code> header for all health checks except TCP health checks. This is typically the fully qualified DNS name of the endpoint on which you want Amazon Route 53 to perform health checks.</p> <p>When Amazon Route 53 checks the health of an endpoint, here is how it constructs the <code>Host</code> header:</p> <ul> <li> <p>If you specify a value of <code>80</code> for <code>Port</code> and <code>HTTP</code> or <code>HTTP_STR_MATCH</code> for <code>Type</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> to the endpoint in the Host header. </p> </li> <li> <p>If you specify a value of <code>443</code> for <code>Port</code> and <code>HTTPS</code> or <code>HTTPS_STR_MATCH</code> for <code>Type</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> to the endpoint in the <code>Host</code> header.</p> </li> <li> <p>If you specify another value for <code>Port</code> and any value except <code>TCP</code> for <code>Type</code>, Amazon Route 53 passes <code>FullyQualifiedDomainName:Port</code> to the endpoint in the <code>Host</code> header.</p> </li> </ul> <p>If you don't specify a value for <code>FullyQualifiedDomainName</code>, Amazon Route 53 substitutes the value of <code>IPAddress</code> in the <code>Host</code> header in each of the preceding cases.</p> <p> <b>If you don't specify a value for <code>IPAddress</code> </b>:</p> <p>Amazon Route 53 sends a DNS request to the domain that you specify for <code>FullyQualifiedDomainName</code> at the interval that you specify for <code>RequestInterval</code>. Using an IPv4 address that DNS returns, Amazon Route 53 then checks the health of the endpoint.</p> <note> <p>If you don't specify a value for <code>IPAddress</code>, Amazon Route 53 uses only IPv4 to send health checks to the endpoint. If there's no resource record set with a type of A for the name that you specify for <code>FullyQualifiedDomainName</code>, the health check fails with a \"DNS resolution failed\" error.</p> </note> <p>If you want to check the health of weighted, latency, or failover resource record sets and you choose to specify the endpoint only by <code>FullyQualifiedDomainName</code>, we recommend that you create a separate health check for each endpoint. For example, create a health check for each HTTP server that is serving content for www.example.com. For the value of <code>FullyQualifiedDomainName</code>, specify the domain name of the server (such as us-east-1-www.example.com), not the name of the resource record sets (www.example.com).</p> <important> <p>In this configuration, if you create a health check for which the value of <code>FullyQualifiedDomainName</code> matches the name of the resource record sets and you then associate the health check with those resource record sets, health check results will be unpredictable.</p> </important> <p>In addition, if the value that you specify for <code>Type</code> is <code>HTTP</code>, <code>HTTPS</code>, <code>HTTP_STR_MATCH</code>, or <code>HTTPS_STR_MATCH</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> in the <code>Host</code> header, as it does when you specify a value for <code>IPAddress</code>. If the value of <code>Type</code> is <code>TCP</code>, Amazon Route 53 doesn't pass a <code>Host</code> header.</p>"]
+    #[doc="<p>Amazon Route 53 behavior depends on whether you specify a value for <code>IPAddress</code>.</p> <p> <b>If you specify a value for</b> <code>IPAddress</code>:</p> <p>Amazon Route 53 sends health check requests to the specified IPv4 or IPv6 address and passes the value of <code>FullyQualifiedDomainName</code> in the <code>Host</code> header for all health checks except TCP health checks. This is typically the fully qualified DNS name of the endpoint on which you want Amazon Route 53 to perform health checks.</p> <p>When Amazon Route 53 checks the health of an endpoint, here is how it constructs the <code>Host</code> header:</p> <ul> <li> <p>If you specify a value of <code>80</code> for <code>Port</code> and <code>HTTP</code> or <code>HTTP_STR_MATCH</code> for <code>Type</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> to the endpoint in the Host header. </p> </li> <li> <p>If you specify a value of <code>443</code> for <code>Port</code> and <code>HTTPS</code> or <code>HTTPS_STR_MATCH</code> for <code>Type</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> to the endpoint in the <code>Host</code> header.</p> </li> <li> <p>If you specify another value for <code>Port</code> and any value except <code>TCP</code> for <code>Type</code>, Amazon Route 53 passes <code>FullyQualifiedDomainName:Port</code> to the endpoint in the <code>Host</code> header.</p> </li> </ul> <p>If you don't specify a value for <code>FullyQualifiedDomainName</code>, Amazon Route 53 substitutes the value of <code>IPAddress</code> in the <code>Host</code> header in each of the preceding cases.</p> <p> <b>If you don't specify a value for <code>IPAddress</code> </b>:</p> <p>Amazon Route 53 sends a DNS request to the domain that you specify for <code>FullyQualifiedDomainName</code> at the interval that you specify for <code>RequestInterval</code>. Using an IPv4 address that DNS returns, Amazon Route 53 then checks the health of the endpoint.</p> <note> <p>If you don't specify a value for <code>IPAddress</code>, Amazon Route 53 uses only IPv4 to send health checks to the endpoint. If there's no resource record set with a type of A for the name that you specify for <code>FullyQualifiedDomainName</code>, the health check fails with a \"DNS resolution failed\" error.</p> </note> <p>If you want to check the health of weighted, latency, or failover resource record sets and you choose to specify the endpoint only by <code>FullyQualifiedDomainName</code>, we recommend that you create a separate health check for each endpoint. For example, create a health check for each HTTP server that is serving content for www.example.com. For the value of <code>FullyQualifiedDomainName</code>, specify the domain name of the server (such as us-east-2-www.example.com), not the name of the resource record sets (www.example.com).</p> <important> <p>In this configuration, if you create a health check for which the value of <code>FullyQualifiedDomainName</code> matches the name of the resource record sets and you then associate the health check with those resource record sets, health check results will be unpredictable.</p> </important> <p>In addition, if the value that you specify for <code>Type</code> is <code>HTTP</code>, <code>HTTPS</code>, <code>HTTP_STR_MATCH</code>, or <code>HTTPS_STR_MATCH</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> in the <code>Host</code> header, as it does when you specify a value for <code>IPAddress</code>. If the value of <code>Type</code> is <code>TCP</code>, Amazon Route 53 doesn't pass a <code>Host</code> header.</p>"]
     pub fully_qualified_domain_name: Option<FullyQualifiedDomainName>,
     #[doc="<p>The number of child health checks that are associated with a <code>CALCULATED</code> health that Amazon Route 53 must consider healthy for the <code>CALCULATED</code> health check to be considered healthy. To specify the child health checks that you want to associate with a <code>CALCULATED</code> health check, use the <a>HealthCheckConfig$ChildHealthChecks</a> and <a>HealthCheckConfig$ChildHealthChecks</a> elements.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a number greater than the number of child health checks, Amazon Route 53 always considers this health check to be unhealthy.</p> </li> <li> <p>If you specify <code>0</code>, Amazon Route 53 always considers this health check to be healthy.</p> </li> </ul>"]
     pub health_threshold: Option<HealthThreshold>,
-    #[doc="<p>The IPv4 or IPv6 IP address of the endpoint that you want Amazon Route 53 to perform health checks on. If you don't specify a value for <code>IPAddress</code>, Amazon Route 53 sends a DNS request to resolve the domain name that you specify in <code>FullyQualifiedDomainName</code> at the interval that you specify in <code>RequestInterval</code>. Using an IP address returned by DNS, Amazon Route 53 then checks the health of the endpoint.</p> <p>If the endpoint is an EC2 instance, we recommend that you create an Elastic IP address, associate it with your EC2 instance, and specify the Elastic IP address for <code>IPAddress</code>. This ensures that the IP address of your instance will never change.</p> <p>For more information, see <a>HealthCheckConfig$FullyQualifiedDomainName</a>.</p> <p>Constraints: Amazon Route 53 can't check the health of endpoints for which the IP address is in local, private, non-routable, or multicast ranges. For more information about IP addresses for which you can't create health checks, see the following documents:</p> <ul> <li> <p> <a href=\"https://tools.ietf.org/html/rfc5735\">RFC 5735, Special Use IPv4 Addresses</a> </p> </li> <li> <p> <a href=\"https://tools.ietf.org/html/rfc6598\">RFC 6598, IANA-Reserved IPv4 Prefix for Shared Address Space</a> </p> </li> <li> <p> <a href=\"https://tools.ietf.org/html/rfc5156\">RFC 5156, Special-Use IPv6 Addresses</a> </p> </li> </ul> <p>When the value of <code>Type</code> is <code>CALCULATED</code> or <code>CLOUDWATCH_METRIC</code>, omit <code>IPAddress</code>.</p>"]
+    #[doc="<p>The IPv4 or IPv6 IP address of the endpoint that you want Amazon Route 53 to perform health checks on. If you don't specify a value for <code>IPAddress</code>, Amazon Route 53 sends a DNS request to resolve the domain name that you specify in <code>FullyQualifiedDomainName</code> at the interval that you specify in <code>RequestInterval</code>. Using an IP address returned by DNS, Amazon Route 53 then checks the health of the endpoint.</p> <p>Use one of the following formats for the value of <code>IPAddress</code>: </p> <ul> <li> <p> <b>IPv4 address</b>: four values between 0 and 255, separated by periods (.), for example, <code>192.0.2.44</code>.</p> </li> <li> <p> <b>IPv6 address</b>: eight groups of four hexadecimal values, separated by colons (:), for example, <code>2001:0db8:85a3:0000:0000:abcd:0001:2345</code>. You can also shorten IPv6 addresses as described in RFC 5952, for example, <code>2001:db8:85a3::abcd:1:2345</code>.</p> </li> </ul> <p>If the endpoint is an EC2 instance, we recommend that you create an Elastic IP address, associate it with your EC2 instance, and specify the Elastic IP address for <code>IPAddress</code>. This ensures that the IP address of your instance will never change.</p> <p>For more information, see <a>HealthCheckConfig$FullyQualifiedDomainName</a>.</p> <p>Constraints: Amazon Route 53 can't check the health of endpoints for which the IP address is in local, private, non-routable, or multicast ranges. For more information about IP addresses for which you can't create health checks, see the following documents:</p> <ul> <li> <p> <a href=\"https://tools.ietf.org/html/rfc5735\">RFC 5735, Special Use IPv4 Addresses</a> </p> </li> <li> <p> <a href=\"https://tools.ietf.org/html/rfc6598\">RFC 6598, IANA-Reserved IPv4 Prefix for Shared Address Space</a> </p> </li> <li> <p> <a href=\"https://tools.ietf.org/html/rfc5156\">RFC 5156, Special-Use IPv6 Addresses</a> </p> </li> </ul> <p>When the value of <code>Type</code> is <code>CALCULATED</code> or <code>CLOUDWATCH_METRIC</code>, omit <code>IPAddress</code>.</p>"]
     pub ip_address: Option<IPAddress>,
-    #[doc="<p>When CloudWatch has insufficient data about the metric to determine the alarm state, the status that you want Amazon Route 53 to assign to the health check:</p> <ul> <li> <p> <code>Healthy</code>: Amazon Route 53 considers the health check to be healthy.</p> </li> <li> <p> <code>Unhealthy</code>: Amazon Route 53 considers the health check to be unhealthy.</p> </li> <li> <p> <code>LastKnownStatus</code>: Amazon Route 53uses the status of the health check from the last time CloudWatch had sufficient data to determine the alarm state. For new health checks that have no last known status, the default status for the health check is healthy.</p> </li> </ul>"]
+    #[doc="<p>When CloudWatch has insufficient data about the metric to determine the alarm state, the status that you want Amazon Route 53 to assign to the health check:</p> <ul> <li> <p> <code>Healthy</code>: Amazon Route 53 considers the health check to be healthy.</p> </li> <li> <p> <code>Unhealthy</code>: Amazon Route 53 considers the health check to be unhealthy.</p> </li> <li> <p> <code>LastKnownStatus</code>: Amazon Route 53 uses the status of the health check from the last time that CloudWatch had sufficient data to determine the alarm state. For new health checks that have no last known status, the default status for the health check is healthy.</p> </li> </ul>"]
     pub insufficient_data_health_status: Option<InsufficientDataHealthStatus>,
     #[doc="<p>Specify whether you want Amazon Route 53 to invert the status of a health check, for example, to consider a health check unhealthy when it otherwise would be considered healthy.</p>"]
     pub inverted: Option<Inverted>,
     #[doc="<p>Specify whether you want Amazon Route 53 to measure the latency between health checkers in multiple AWS regions and your endpoint, and to display CloudWatch latency graphs on the <b>Health Checks</b> page in the Amazon Route 53 console.</p> <important> <p>You can't change the value of <code>MeasureLatency</code> after you create a health check.</p> </important>"]
     pub measure_latency: Option<MeasureLatency>,
-    #[doc="<p>The port on the endpoint on which you want Amazon Route 53 to perform health checks. Specify a value for Port only when you specify a value for <code>IPAddress</code>.</p>"]
+    #[doc="<p>The port on the endpoint on which you want Amazon Route 53 to perform health checks. Specify a value for <code>Port</code> only when you specify a value for <code>IPAddress</code>.</p>"]
     pub port: Option<Port>,
-    #[doc="<p>A complex type that contains one Region element for each region from which you want Amazon Route 53 health checkers to check the specified endpoint.</p>"]
+    #[doc="<p>A complex type that contains one <code>Region</code> element for each region from which you want Amazon Route 53 health checkers to check the specified endpoint.</p> <p>If you don't specify any regions, Amazon Route 53 health checkers automatically performs checks from all of the regions that are listed under <b>Valid Values</b>.</p> <p>If you update a health check to remove a region that has been performing health checks, Amazon Route 53 will briefly continue to perform checks from that region to ensure that some health checkers are always checking the endpoint (for example, if you replace three regions with four different regions). </p>"]
     pub regions: Option<HealthCheckRegionList>,
-    #[doc="<p>The number of seconds between the time that Amazon Route 53 gets a response from your endpoint and the time that it sends the next health-check request. Each Amazon Route 53 health checker makes requests at this interval.</p> <important> <p>You can't change the value of <code>RequestInterval</code> after you create a health check.</p> </important>"]
+    #[doc="<p>The number of seconds between the time that Amazon Route 53 gets a response from your endpoint and the time that it sends the next health check request. Each Amazon Route 53 health checker makes requests at this interval.</p> <important> <p>You can't change the value of <code>RequestInterval</code> after you create a health check.</p> </important> <p>If you don't specify a value for <code>RequestInterval</code>, the default value is <code>30</code> seconds.</p>"]
     pub request_interval: Option<RequestInterval>,
     #[doc="<p>The path, if any, that you want Amazon Route 53 to request when performing health checks. The path can be any value for which your endpoint will return an HTTP status code of 2xx or 3xx when the endpoint is healthy, for example, the file /docs/route53-health-check.html. </p>"]
     pub resource_path: Option<ResourcePath>,
     #[doc="<p>If the value of Type is <code>HTTP_STR_MATCH</code> or <code>HTTP_STR_MATCH</code>, the string that you want Amazon Route 53 to search for in the response body from the specified resource. If the string appears in the response body, Amazon Route 53 considers the resource healthy.</p> <p>Amazon Route 53 considers case when searching for <code>SearchString</code> in the response body. </p>"]
     pub search_string: Option<SearchString>,
-    #[doc="<p>The type of health check that you want to create, which indicates how Amazon Route 53 determines whether an endpoint is healthy.</p> <important> <p>You can't change the value of <code>Type</code> after you create a health check.</p> </important> <p>You can create the following types of health checks:</p> <ul> <li> <p> <b>HTTP</b>: Amazon Route 53 tries to establish a TCP connection. If successful, Amazon Route 53 submits an HTTP request and waits for an HTTP status code of 200 or greater and less than 400.</p> </li> <li> <p> <b>HTTPS</b>: Amazon Route 53 tries to establish a TCP connection. If successful, Amazon Route 53 submits an HTTPS request and waits for an HTTP status code of 200 or greater and less than 400.</p> <important> <p>If you specify <code>HTTPS</code> for the value of <code>Type</code>, the endpoint must support TLS v1.0 or later.</p> </important> </li> <li> <p> <b>HTTP_STR_MATCH</b>: Amazon Route 53 tries to establish a TCP connection. If successful, Amazon Route 53 submits an HTTP request and searches the first 5,120 bytes of the response body for the string that you specify in <code>SearchString</code>.</p> </li> <li> <p> <b>HTTPS_STR_MATCH</b>: Amazon Route 53 tries to establish a TCP connection. If successful, Amazon Route 53 submits an <code>HTTPS</code> request and searches the first 5,120 bytes of the response body for the string that you specify in <code>SearchString</code>.</p> </li> <li> <p> <b>TCP</b>: Amazon Route 53 tries to establish a TCP connection.</p> </li> <li> <p> <b>CLOUDWATCH_METRIC</b>: The health check is associated with a CloudWatch alarm. If the state of the alarm is <code>OK</code>, the health check is considered healthy. If the state is <code>ALARM</code>, the health check is considered unhealthy. If CloudWatch doesn't have sufficient data to determine whether the state is <code>OK</code> or <code>ALARM</code>, the health check status depends on the setting for <code>InsufficientDataHealthStatus</code>: <code>Healthy</code>, <code>Unhealthy</code>, or <code>LastKnownStatus</code>. </p> </li> <li> <p> <b>CALCULATED</b>: For health checks that monitor the status of other health checks, Amazon Route 53 adds up the number of health checks that Amazon Route 53 health checkers consider to be healthy and compares that number with the value of <code>HealthThreshold</code>. </p> </li> </ul> <p>For more information about how Amazon Route 53 determines whether an endpoint is healthy, see the introduction to this topic.</p>"]
+    #[doc="<p>The type of health check that you want to create, which indicates how Amazon Route 53 determines whether an endpoint is healthy.</p> <important> <p>You can't change the value of <code>Type</code> after you create a health check.</p> </important> <p>You can create the following types of health checks:</p> <ul> <li> <p> <b>HTTP</b>: Amazon Route 53 tries to establish a TCP connection. If successful, Amazon Route 53 submits an HTTP request and waits for an HTTP status code of 200 or greater and less than 400.</p> </li> <li> <p> <b>HTTPS</b>: Amazon Route 53 tries to establish a TCP connection. If successful, Amazon Route 53 submits an HTTPS request and waits for an HTTP status code of 200 or greater and less than 400.</p> <important> <p>If you specify <code>HTTPS</code> for the value of <code>Type</code>, the endpoint must support TLS v1.0 or later.</p> </important> </li> <li> <p> <b>HTTP_STR_MATCH</b>: Amazon Route 53 tries to establish a TCP connection. If successful, Amazon Route 53 submits an HTTP request and searches the first 5,120 bytes of the response body for the string that you specify in <code>SearchString</code>.</p> </li> <li> <p> <b>HTTPS_STR_MATCH</b>: Amazon Route 53 tries to establish a TCP connection. If successful, Amazon Route 53 submits an <code>HTTPS</code> request and searches the first 5,120 bytes of the response body for the string that you specify in <code>SearchString</code>.</p> </li> <li> <p> <b>TCP</b>: Amazon Route 53 tries to establish a TCP connection.</p> </li> <li> <p> <b>CLOUDWATCH_METRIC</b>: The health check is associated with a CloudWatch alarm. If the state of the alarm is <code>OK</code>, the health check is considered healthy. If the state is <code>ALARM</code>, the health check is considered unhealthy. If CloudWatch doesn't have sufficient data to determine whether the state is <code>OK</code> or <code>ALARM</code>, the health check status depends on the setting for <code>InsufficientDataHealthStatus</code>: <code>Healthy</code>, <code>Unhealthy</code>, or <code>LastKnownStatus</code>. </p> </li> <li> <p> <b>CALCULATED</b>: For health checks that monitor the status of other health checks, Amazon Route 53 adds up the number of health checks that Amazon Route 53 health checkers consider to be healthy and compares that number with the value of <code>HealthThreshold</code>. </p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html\">How Amazon Route 53 Determines Whether an Endpoint Is Healthy</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     pub type_: HealthCheckType,
 }
 
@@ -3325,7 +3322,7 @@ impl HealthCheckNonceSerializer {
 pub struct HealthCheckObservation {
     #[doc="<p>The IP address of the Amazon Route 53 health checker that provided the failure reason in <code>StatusReport</code>.</p>"]
     pub ip_address: Option<IPAddress>,
-    #[doc="<p>The region of the Amazon Route 53 health checker that provided the status in StatusReport.</p>"]
+    #[doc="<p>The region of the Amazon Route 53 health checker that provided the status in <code>StatusReport</code>.</p>"]
     pub region: Option<HealthCheckRegion>,
     #[doc="<p>A complex type that contains the last failure reason as reported by one Amazon Route 53 health checker and the time of the failed health check.</p>"]
     pub status_report: Option<StatusReport>,
@@ -3425,7 +3422,6 @@ impl HealthCheckObservationsDeserializer {
 
     }
 }
-#[doc="<p>An Amazon EC2 Region that you want Amazon Route 53 to use to perform health checks.</p>"]
 pub type HealthCheckRegion = String;
 struct HealthCheckRegionDeserializer;
 impl HealthCheckRegionDeserializer {
@@ -3967,7 +3963,7 @@ impl IsPrivateZoneSerializer {
     }
 }
 
-#[doc="<p>To get a list of geographic locations that Amazon Route 53 supports for geolocation, send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/geolocations</code> resource. The response to this request includes a <code>GeoLocationDetails</code> element for each location that Amazon Route 53 supports.</p> <p>Countries are listed first, and continents are listed last. If Amazon Route 53 supports subdivisions for a country (for example, states or provinces), the subdivisions for that country are listed in alphabetical order immediately after the corresponding country. </p>"]
+#[doc="<p>A request to get a list of geographic locations that Amazon Route 53 supports for geolocation resource record sets. </p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListGeoLocationsRequest {
     #[doc="<p>(Optional) The maximum number of geolocations to be included in the response body for this request. If more than <code>MaxItems</code> geolocations remain to be listed, then the value of the <code>IsTruncated</code> element in the response is <code>true</code>.</p>"]
@@ -3989,11 +3985,11 @@ pub struct ListGeoLocationsResponse {
     pub is_truncated: PageTruncated,
     #[doc="<p>The value that you specified for <code>MaxItems</code> in the request.</p>"]
     pub max_items: PageMaxItems,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, you can make a follow-up request to display more locations. Enter the value of <code>NextContinentCode</code> in the <code>StartContinentCode</code> parameter in another <code>GET</code> <code>ListGeoLocations</code> request.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, you can make a follow-up request to display more locations. Enter the value of <code>NextContinentCode</code> in the <code>StartContinentCode</code> parameter in another <code>ListGeoLocations</code> request.</p>"]
     pub next_continent_code: Option<GeoLocationContinentCode>,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, you can make a follow-up request to display more locations. Enter the value of <code>NextCountryCode</code> in the <code>StartCountryCode</code> parameter in another <code>GET</code> <code>ListGeoLocations</code> request.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, you can make a follow-up request to display more locations. Enter the value of <code>NextCountryCode</code> in the <code>StartCountryCode</code> parameter in another <code>ListGeoLocations</code> request.</p>"]
     pub next_country_code: Option<GeoLocationCountryCode>,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, you can make a follow-up request to display more locations. Enter the value of <code>NextSubdivisionCode</code> in the <code>StartSubdivisionCode</code> parameter in another <code>GET</code> <code>ListGeoLocations</code> request.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, you can make a follow-up request to display more locations. Enter the value of <code>NextSubdivisionCode</code> in the <code>StartSubdivisionCode</code> parameter in another <code>ListGeoLocations</code> request.</p>"]
     pub next_subdivision_code: Option<GeoLocationSubdivisionCode>,
 }
 
@@ -4059,12 +4055,12 @@ impl ListGeoLocationsResponseDeserializer {
 
     }
 }
-#[doc="<p>To retrieve a list of your health checks, send a <code>GET</code> request to the <code>/2013-04-01/healthcheck</code> resource. The response to this request includes a <code>HealthChecks</code> element with zero or more <code>HealthCheck</code> child elements. By default, the list of health checks is displayed on a single page. You can control the length of the page that is displayed by using the <code>MaxItems</code> parameter. You can use the <code>Marker</code> parameter to control the health check that the list begins with.</p> <note> <p> Amazon Route 53 returns a maximum of 100 items. If you set <code>MaxItems</code> to a value greater than 100, Amazon Route 53 returns only the first 100.</p> </note>"]
+#[doc="<p>A request to retrieve a list of the health checks that are associated with the current AWS account.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListHealthChecksRequest {
-    #[doc="<p>If the response to a <code>ListHealthChecks</code> is more than one page, marker is the health check ID for the first health check on the next page of results. For more information, see <a>ListHealthChecksResponse$MaxItems</a>.</p>"]
+    #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more health checks. To get another group, submit another <code>ListHealthChecks</code> request. </p> <p>For the value of <code>marker</code>, specify the value of <code>NextMarker</code> from the previous response, which is the ID of the first health check that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more health checks to get.</p>"]
     pub marker: Option<PageMarker>,
-    #[doc="<p>The maximum number of <code>HealthCheck</code> elements you want <code>ListHealthChecks</code> to return on each page of the response body. If the AWS account includes more <code>HealthCheck</code> elements than the value of <code>maxitems</code>, the response is broken into pages. Each page contains the number of <code>HealthCheck</code> elements specified by <code>maxitems</code>.</p> <p>For example, suppose you specify <code>10</code> for <code>maxitems</code> and the current AWS account has <code>51</code> health checks. In the response, <code>ListHealthChecks</code> sets <a>ListHealthChecksResponse$IsTruncated</a> to true and includes the <a>ListHealthChecksResponse$NextMarker</a> element. To access the second and subsequent pages, you resend the <code>GET</code> <code>ListHealthChecks</code> request, add the <a>ListHealthChecksResponse$Marker</a> parameter to the request, and specify the value of the <a>ListHealthChecksResponse$NextMarker</a> element from the previous response. On the last (sixth) page of the response, which contains only one HealthCheck element:</p> <ul> <li> <p>The value of <a>ListHealthChecksResponse$IsTruncated</a> is <code>false</code>.</p> </li> <li> <p> <a>ListHealthChecksResponse$NextMarker</a> is omitted.</p> </li> </ul>"]
+    #[doc="<p>The maximum number of health checks that you want <code>ListHealthChecks</code> to return in response to the current request. Amazon Route 53 returns a maximum of 100 items. If you set <code>MaxItems</code> to a value greater than 100, Amazon Route 53 returns only the first 100 health checks. </p>"]
     pub max_items: Option<PageMaxItems>,
 }
 
@@ -4073,13 +4069,13 @@ pub struct ListHealthChecksRequest {
 pub struct ListHealthChecksResponse {
     #[doc="<p>A complex type that contains one <code>HealthCheck</code> element for each health check that is associated with the current AWS account.</p>"]
     pub health_checks: HealthChecks,
-    #[doc="<p>A flag that indicates whether there are more health checks to be listed. If the response was truncated, you can get the next group of <code>maxitems</code> health checks by calling <code>ListHealthChecks</code> again and specifying the value of the <code>NextMarker</code> element in the marker parameter.</p> <p>Valid Values: <code>true</code> | <code>false</code> </p>"]
+    #[doc="<p>A flag that indicates whether there are more health checks to be listed. If the response was truncated, you can get the next group of health checks by submitting another <code>ListHealthChecks</code> request and specifying the value of <code>NextMarker</code> in the <code>marker</code> parameter.</p>"]
     pub is_truncated: PageTruncated,
-    #[doc="<p>For the second and subsequent calls to <code>ListHealthChecks</code>, <code>Marker</code> is the value that you specified for the marker parameter in the previous request.</p>"]
+    #[doc="<p>For the second and subsequent calls to <code>ListHealthChecks</code>, <code>Marker</code> is the value that you specified for the <code>marker</code> parameter in the previous request.</p>"]
     pub marker: PageMarker,
     #[doc="<p>The value that you specified for the <code>maxitems</code> parameter in the call to <code>ListHealthChecks</code> that produced the current response.</p>"]
     pub max_items: PageMaxItems,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, the value of <code>NextMarker</code> identifies the first health check in the next group of <code>maxitems</code> health checks. Call <code>ListHealthChecks</code> again and specify the value of <code>NextMarker</code> in the marker parameter.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, the value of <code>NextMarker</code> identifies the first health check that Amazon Route 53 returns if you submit another <code>ListHealthChecks</code> request and specify the value of <code>NextMarker</code> in the <code>marker</code> parameter.</p>"]
     pub next_marker: Option<PageMarker>,
 }
 
@@ -4141,7 +4137,7 @@ impl ListHealthChecksResponseDeserializer {
 
     }
 }
-#[doc="<p>To retrieve a list of your public and private hosted zones in ASCII order by domain name, send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/hostedzonesbyname</code> resource. The response to this request includes a <code>HostedZone</code> child element for each hosted zone that was created by the current AWS account. <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed, for example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for exämple.com, you specify <code>ex\\344mple.com</code> for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as: <code>com.ex\\344mple</code>. The labels are reversed, and it's alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Amazon Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help you navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, that you specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current Amazon Route 53 account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul>"]
+#[doc="<p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account in ASCII order by domain name. </p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListHostedZonesByNameRequest {
     #[doc="<p>(Optional) For your first request to <code>ListHostedZonesByName</code>, include the <code>dnsname</code> parameter only if you want to specify the name of the first hosted zone in the response. If you don't include the <code>dnsname</code> parameter, Amazon Route 53 returns all of the hosted zones that were created by the current AWS account, in ASCII order. For subsequent requests, include both <code>dnsname</code> and <code>hostedzoneid</code> parameters. For <code>dnsname</code>, specify the value of <code>NextDNSName</code> from the previous response.</p>"]
@@ -4239,14 +4235,14 @@ impl ListHostedZonesByNameResponseDeserializer {
 
     }
 }
-#[doc="<p>To retrieve a list of your public and private hosted zones, send a <code>GET</code> request to the <code>/2013-04-01/hostedzone</code> resource. The response to this request includes a HostedZone child element for each hosted zone that was created by the current AWS account.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the maxitems parameter to list them in groups of up to 100. The response includes four values that help you navigate from one group of maxitems hosted zones to the next:</p> <ul> <li> <p> <code>MaxItems</code> is the value that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more hosted zones associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last hosted zone that is associated with the current account.</p> </li> <li> <p> <code>NextMarker</code> is the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZones</code>, and specify the value of the <code>NextMarker</code> element in the marker parameter.</p> <p>If <code>IsTruncated</code> is <code>false</code>, the <code>NextMarker</code> element is omitted from the response.</p> </li> <li> <p>If you're making the second or subsequent call to <code>ListHostedZones</code>, the <code>Marker</code> element matches the value that you specified in the <code>marker</code> parameter in the previous request.</p> </li> </ul>"]
+#[doc="<p>A request to retrieve a list of the public and private hosted zones that are associated with the current AWS account.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListHostedZonesRequest {
     #[doc="<p>If you're using reusable delegation sets and you want to list all of the hosted zones that are associated with a reusable delegation set, specify the ID of that reusable delegation set. </p>"]
     pub delegation_set_id: Option<ResourceId>,
-    #[doc="<p>(Optional) If you have more hosted zones than the value of <code>maxitems</code>, <code>ListHostedZones</code> returns only the first <code>maxitems</code> hosted zones. To get the next group of <code>maxitems</code> hosted zones, submit another request to <code>ListHostedZones</code>. For the value of marker, specify the value of the <code>NextMarker</code> element that was returned in the previous response.</p> <p>Hosted zones are listed in the order in which they were created.</p>"]
+    #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more hosted zones. To get more hosted zones, submit another <code>ListHostedZones</code> request. </p> <p>For the value of <code>marker</code>, specify the value of <code>NextMarker</code> from the previous response, which is the ID of the first hosted zone that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more hosted zones to get.</p>"]
     pub marker: Option<PageMarker>,
-    #[doc="<p>(Optional) The maximum number of hosted zones to be included in the response body for this request. If you have more than <code>maxitems</code> hosted zones, the value of the <code>IsTruncated</code> element in the response is <code>true</code>, and the value of the <code>NextMarker</code> element is the hosted zone ID of the first hosted zone in the next group of <code>maxitems</code> hosted zones.</p>"]
+    #[doc="<p>(Optional) The maximum number of hosted zones that you want Amazon Route 53 to return. If you have more than <code>maxitems</code> hosted zones, the value of <code>IsTruncated</code> in the response is <code>true</code>, and the value of <code>NextMarker</code> is the hosted zone ID of the first hosted zone that Amazon Route 53 will return if you submit another request.</p>"]
     pub max_items: Option<PageMaxItems>,
 }
 
@@ -4254,13 +4250,13 @@ pub struct ListHostedZonesRequest {
 pub struct ListHostedZonesResponse {
     #[doc="<p>A complex type that contains general information about the hosted zone.</p>"]
     pub hosted_zones: HostedZones,
-    #[doc="<p>A flag indicating whether there are more hosted zones to be listed. If the response was truncated, you can get the next group of <code>maxitems</code> hosted zones by calling <code>ListHostedZones</code> again and specifying the value of the <code>NextMarker</code> element in the marker parameter.</p>"]
+    #[doc="<p>A flag indicating whether there are more hosted zones to be listed. If the response was truncated, you can get more hosted zones by submitting another <code>ListHostedZones</code> request and specifying the value of <code>NextMarker</code> in the <code>marker</code> parameter.</p>"]
     pub is_truncated: PageTruncated,
-    #[doc="<p>For the second and subsequent calls to <code>ListHostedZones</code>, <code>Marker</code> is the value that you specified for the marker parameter in the request that produced the current response.</p>"]
+    #[doc="<p>For the second and subsequent calls to <code>ListHostedZones</code>, <code>Marker</code> is the value that you specified for the <code>marker</code> parameter in the request that produced the current response.</p>"]
     pub marker: PageMarker,
     #[doc="<p>The value that you specified for the <code>maxitems</code> parameter in the call to <code>ListHostedZones</code> that produced the current response.</p>"]
     pub max_items: PageMaxItems,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, the value of <code>NextMarker</code> identifies the first hosted zone in the next group of <code>maxitems</code> hosted zones. Call <code>ListHostedZones</code> again and specify the value of <code>NextMarker</code> in the <code>marker</code> parameter.</p> <p>This element is present only if <code>IsTruncated</code> is <code>true</code>.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, the value of <code>NextMarker</code> identifies the first hosted zone in the next group of hosted zones. Submit another <code>ListHostedZones</code> request, and specify the value of <code>NextMarker</code> from the response in the <code>marker</code> parameter.</p> <p>This element is present only if <code>IsTruncated</code> is <code>true</code>.</p>"]
     pub next_marker: Option<PageMarker>,
 }
 
@@ -4322,16 +4318,16 @@ impl ListHostedZonesResponseDeserializer {
 
     }
 }
-#[doc="<p>The input for a ListResourceRecordSets request.</p>"]
+#[doc="<p>A request for the resource record sets that are associated with a specified hosted zone.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListResourceRecordSetsRequest {
-    #[doc="<p>The ID of the hosted zone that contains the resource record sets that you want to get.</p>"]
+    #[doc="<p>The ID of the hosted zone that contains the resource record sets that you want to list.</p>"]
     pub hosted_zone_id: ResourceId,
     #[doc="<p>(Optional) The maximum number of resource records sets to include in the response body for this request. If the response includes more than <code>maxitems</code> resource record sets, the value of the <code>IsTruncated</code> element in the response is <code>true</code>, and the values of the <code>NextRecordName</code> and <code>NextRecordType</code> elements in the response identify the first resource record set in the next group of <code>maxitems</code> resource record sets.</p>"]
     pub max_items: Option<PageMaxItems>,
     #[doc="<p> <i>Weighted resource record sets only:</i> If results were truncated for a given DNS name and type, specify the value of <code>NextRecordIdentifier</code> from the previous response to get the next resource record set that has the current DNS name and type.</p>"]
     pub start_record_identifier: Option<ResourceRecordSetIdentifier>,
-    #[doc="<p>The first name in the lexicographic ordering of domain names that you want the <code>ListResourceRecordSets</code> request to list.</p>"]
+    #[doc="<p>The first name in the lexicographic ordering of resource record sets that you want to list.</p>"]
     pub start_record_name: Option<DNSName>,
     #[doc="<p>The type of resource record set to begin the record listing from.</p> <p>Valid values for basic resource record sets: <code>A</code> | <code>AAAA</code> | <code>CNAME</code> | <code>MX</code> | <code>NAPTR</code> | <code>NS</code> | <code>PTR</code> | <code>SOA</code> | <code>SPF</code> | <code>SRV</code> | <code>TXT</code> </p> <p>Values for weighted, latency, geo, and failover resource record sets: <code>A</code> | <code>AAAA</code> | <code>CNAME</code> | <code>MX</code> | <code>NAPTR</code> | <code>PTR</code> | <code>SPF</code> | <code>SRV</code> | <code>TXT</code> </p> <p>Values for alias resource record sets: </p> <ul> <li> <p> <b>CloudFront distribution</b>: A or AAAA</p> </li> <li> <p> <b>Elastic Beanstalk environment that has a regionalized subdomain</b>: A</p> </li> <li> <p> <b>ELB load balancer</b>: A | AAAA</p> </li> <li> <p> <b>Amazon S3 bucket</b>: A</p> </li> </ul> <p>Constraint: Specifying <code>type</code> without specifying <code>name</code> returns an <code>InvalidInput</code> error.</p>"]
     pub start_record_type: Option<RRType>,
@@ -4418,12 +4414,12 @@ impl ListResourceRecordSetsResponseDeserializer {
 
     }
 }
-#[doc="<p>To retrieve a list of your reusable delegation sets, send a <code>GET</code> request to the <code>/2013-04-01/delegationset</code> resource. The response to this request includes a <code>DelegationSets</code> element with zero or more <code>DelegationSet</code> child elements. By default, the list of reusable delegation sets is displayed on a single page. You can control the length of the page that is displayed by using the <code>MaxItems</code> parameter. You can use the <code>Marker</code> parameter to control the delegation set that the list begins with.</p> <note> <p>Amazon Route 53 returns a maximum of 100 items. If you set <code>MaxItems</code> to a value greater than 100, Amazon Route 53 returns only the first 100.</p> </note>"]
+#[doc="<p>A request to get a list of the reusable delegation sets that are associated with the current AWS account.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListReusableDelegationSetsRequest {
-    #[doc="<p>If you're making the second or subsequent call to <code>ListReusableDelegationSets</code>, the <code>Marker</code> element matches the value that you specified in the <code>marker</code> parameter in the previous request.</p>"]
+    #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more reusable delegation sets. To get another group, submit another <code>ListReusableDelegationSets</code> request. </p> <p>For the value of <code>marker</code>, specify the value of <code>NextMarker</code> from the previous response, which is the ID of the first reusable delegation set that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more reusable delegation sets to get.</p>"]
     pub marker: Option<PageMarker>,
-    #[doc="<p>The value that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p>"]
+    #[doc="<p>The number of reusable delegation sets that you want Amazon Route 53 to return in the response to this request. If you specify a value greater than 100, Amazon Route 53 returns only the first 100 reusable delegation sets.</p>"]
     pub max_items: Option<PageMaxItems>,
 }
 
@@ -4432,13 +4428,13 @@ pub struct ListReusableDelegationSetsRequest {
 pub struct ListReusableDelegationSetsResponse {
     #[doc="<p>A complex type that contains one <code>DelegationSet</code> element for each reusable delegation set that was created by the current AWS account.</p>"]
     pub delegation_sets: DelegationSets,
-    #[doc="<p>A flag that indicates whether there are more reusable delegation sets to be listed. If the response is truncated, you can get the next group of <code>maxitems</code> reusable delegation sets by calling <code>ListReusableDelegationSets</code> again and specifying the value of the <code>NextMarker</code> element in the <code>marker</code> parameter.</p>"]
+    #[doc="<p>A flag that indicates whether there are more reusable delegation sets to be listed.</p>"]
     pub is_truncated: PageTruncated,
-    #[doc="<p>For the second and subsequent calls to <code>ListReusableDelegationSets</code>, <code>Marker</code> is the value that you specified for the marker parameter in the request that produced the current response.</p>"]
+    #[doc="<p>For the second and subsequent calls to <code>ListReusableDelegationSets</code>, <code>Marker</code> is the value that you specified for the <code>marker</code> parameter in the request that produced the current response.</p>"]
     pub marker: PageMarker,
     #[doc="<p>The value that you specified for the <code>maxitems</code> parameter in the call to <code>ListReusableDelegationSets</code> that produced the current response.</p>"]
     pub max_items: PageMaxItems,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, the value of <code>NextMarker</code> identifies the first reusable delegation set in the next group of <code>maxitems</code> reusable delegation sets. Call <code>ListReusableDelegationSets</code> again and specify the value of <code>NextMarker</code> in the <code>marker</code> parameter.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, the value of <code>NextMarker</code> identifies the next reusable delegation set that Amazon Route 53 will return if you submit another <code>ListReusableDelegationSets</code> request and specify the value of <code>NextMarker</code> in the <code>marker</code> parameter.</p>"]
     pub next_marker: Option<PageMarker>,
 }
 
@@ -4623,18 +4619,18 @@ impl ListTagsForResourcesResponseDeserializer {
 #[doc="<p>A complex type that contains the information about the request to list the traffic policies that are associated with the current AWS account.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListTrafficPoliciesRequest {
-    #[doc="<p>(Optional) The maximum number of traffic policies to be included in the response body for this request. If you have more than <code>MaxItems</code> traffic policies, the value of the <code>IsTruncated</code> element in the response is <code>true</code>, and the value of the <code>TrafficPolicyIdMarker</code> element is the ID of the first traffic policy in the next group of <code>MaxItems</code> traffic policies.</p>"]
+    #[doc="<p>(Optional) The maximum number of traffic policies that you want Amazon Route 53 to return in response to this request. If you have more than <code>MaxItems</code> traffic policies, the value of <code>IsTruncated</code> in the response is <code>true</code>, and the value of <code>TrafficPolicyIdMarker</code> is the ID of the first traffic policy that Amazon Route 53 will return if you submit another request.</p>"]
     pub max_items: Option<PageMaxItems>,
-    #[doc="<p>(Conditional) For your first request to <code>ListTrafficPolicies</code>, do not include the <code>TrafficPolicyIdMarker</code> parameter.</p> <p>If you have more traffic policies than the value of <code>MaxItems</code>, <code>ListTrafficPolicies</code> returns only the first <code>MaxItems</code> traffic policies. To get the next group of <code>MaxItems</code> policies, submit another request to <code>ListTrafficPolicies</code>. For the value of <code>TrafficPolicyIdMarker</code>, specify the value of the <code>TrafficPolicyIdMarker</code> element that was returned in the previous response.</p> <p>Policies are listed in the order in which they were created.</p>"]
+    #[doc="<p>(Conditional) For your first request to <code>ListTrafficPolicies</code>, don't include the <code>TrafficPolicyIdMarker</code> parameter.</p> <p>If you have more traffic policies than the value of <code>MaxItems</code>, <code>ListTrafficPolicies</code> returns only the first <code>MaxItems</code> traffic policies. To get the next group of policies, submit another request to <code>ListTrafficPolicies</code>. For the value of <code>TrafficPolicyIdMarker</code>, specify the value of <code>TrafficPolicyIdMarker</code> that was returned in the previous response.</p>"]
     pub traffic_policy_id_marker: Option<TrafficPolicyId>,
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListTrafficPoliciesResponse {
-    #[doc="<p>A flag that indicates whether there are more traffic policies to be listed. If the response was truncated, you can get the next group of <code>MaxItems</code> traffic policies by calling <code>ListTrafficPolicies</code> again and specifying the value of the <code>TrafficPolicyIdMarker</code> element in the <code>TrafficPolicyIdMarker</code> request parameter.</p> <p>Valid Values: <code>true</code> | <code>false</code> </p>"]
+    #[doc="<p>A flag that indicates whether there are more traffic policies to be listed. If the response was truncated, you can get the next group of traffic policies by submitting another <code>ListTrafficPolicies</code> request and specifying the value of <code>TrafficPolicyIdMarker</code> in the <code>TrafficPolicyIdMarker</code> request parameter.</p>"]
     pub is_truncated: PageTruncated,
-    #[doc="<p>The value that you specified for the <code>MaxItems</code> parameter in the call to <code>ListTrafficPolicies</code> that produced the current response.</p>"]
+    #[doc="<p>The value that you specified for the <code>MaxItems</code> parameter in the <code>ListTrafficPolicies</code> request that produced the current response.</p>"]
     pub max_items: PageMaxItems,
     #[doc="<p>If the value of <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyIdMarker</code> is the ID of the first traffic policy in the next group of <code>MaxItems</code> traffic policies.</p>"]
     pub traffic_policy_id_marker: TrafficPolicyId,
@@ -4701,26 +4697,26 @@ impl ListTrafficPoliciesResponseDeserializer {
 #[doc="<p>A request for the traffic policy instances that you created in a specified hosted zone.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListTrafficPolicyInstancesByHostedZoneRequest {
-    #[doc="<p>The ID of the hosted zone for which you want to list traffic policy instances.</p>"]
+    #[doc="<p>The ID of the hosted zone that you want to list traffic policy instances for.</p>"]
     pub hosted_zone_id: ResourceId,
-    #[doc="<p>The maximum number of traffic policy instances to be included in the response body for this request. If you have more than <code>MaxItems</code> traffic policy instances, the value of the <code>IsTruncated</code> element in the response is <code>true</code>, and the values of <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>"]
+    #[doc="<p>The maximum number of traffic policy instances to be included in the response body for this request. If you have more than <code>MaxItems</code> traffic policy instances, the value of the <code>IsTruncated</code> element in the response is <code>true</code>, and the values of <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> represent the first traffic policy instance that Amazon Route 53 will return if you submit another request.</p>"]
     pub max_items: Option<PageMaxItems>,
-    #[doc="<p>For the first request to <code>ListTrafficPolicyInstancesByHostedZone</code>, omit this value.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, <code>TrafficPolicyInstanceNameMarker</code> is the name of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get for this hosted zone.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, omit this value.</p>"]
+    #[doc="<p>If the value of <code>IsTruncated</code> in the previous response is true, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>trafficpolicyinstancename</code>, specify the value of <code>TrafficPolicyInstanceNameMarker</code> from the previous response, which is the name of the first traffic policy instance in the next group of traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
     pub traffic_policy_instance_name_marker: Option<DNSName>,
-    #[doc="<p>For the first request to <code>ListTrafficPolicyInstancesByHostedZone</code>, omit this value.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, <code>TrafficPolicyInstanceTypeMarker</code> is the DNS type of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get for this hosted zone.</p>"]
+    #[doc="<p>If the value of <code>IsTruncated</code> in the previous response is true, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>trafficpolicyinstancetype</code>, specify the value of <code>TrafficPolicyInstanceTypeMarker</code> from the previous response, which is the type of the first traffic policy instance in the next group of traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
     pub traffic_policy_instance_type_marker: Option<RRType>,
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListTrafficPolicyInstancesByHostedZoneResponse {
-    #[doc="<p>A flag that indicates whether there are more traffic policy instances to be listed. If the response was truncated, you can get the next group of <code>MaxItems</code> traffic policy instances by calling <code>ListTrafficPolicyInstancesByHostedZone</code> again and specifying the values of the <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> elements in the corresponding request parameters.</p>"]
+    #[doc="<p>A flag that indicates whether there are more traffic policy instances to be listed. If the response was truncated, you can get the next group of traffic policy instances by submitting another <code>ListTrafficPolicyInstancesByHostedZone</code> request and specifying the values of <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> in the corresponding request parameters.</p>"]
     pub is_truncated: PageTruncated,
-    #[doc="<p>The value that you specified for the <code>MaxItems</code> parameter in the call to <code>ListTrafficPolicyInstancesByHostedZone</code> that produced the current response. </p>"]
+    #[doc="<p>The value that you specified for the <code>MaxItems</code> parameter in the <code>ListTrafficPolicyInstancesByHostedZone</code> request that produced the current response.</p>"]
     pub max_items: PageMaxItems,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyInstanceNameMarker</code> is the name of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyInstanceNameMarker</code> is the name of the first traffic policy instance in the next group of traffic policy instances.</p>"]
     pub traffic_policy_instance_name_marker: Option<DNSName>,
-    #[doc="<p>If <code>IsTruncated</code> is true, <code>TrafficPolicyInstanceTypeMarker</code> is the DNS type of the resource record sets that are associated with the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is true, <code>TrafficPolicyInstanceTypeMarker</code> is the DNS type of the resource record sets that are associated with the first traffic policy instance in the next group of traffic policy instances.</p>"]
     pub traffic_policy_instance_type_marker: Option<RRType>,
     #[doc="<p>A list that contains one <code>TrafficPolicyInstance</code> element for each traffic policy instance that matches the elements in the request. </p>"]
     pub traffic_policy_instances: TrafficPolicyInstances,
@@ -4791,15 +4787,15 @@ impl ListTrafficPolicyInstancesByHostedZoneResponseDeserializer {
 #[doc="<p>A complex type that contains the information about the request to list your traffic policy instances.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListTrafficPolicyInstancesByPolicyRequest {
-    #[doc="<p>For the first request to <code>ListTrafficPolicyInstancesByPolicy</code>, omit this value.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, <code>HostedZoneIdMarker</code> is the ID of the hosted zone for the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get for this hosted zone.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, omit this value.</p>"]
+    #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstancesByPolicy</code> request. </p> <p>For the value of <code>hostedzoneid</code>, specify the value of <code>HostedZoneIdMarker</code> from the previous response, which is the hosted zone ID of the first traffic policy instance that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
     pub hosted_zone_id_marker: Option<ResourceId>,
-    #[doc="<p>The maximum number of traffic policy instances to be included in the response body for this request. If you have more than <code>MaxItems</code> traffic policy instances, the value of the <code>IsTruncated</code> element in the response is <code>true</code>, and the values of <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>"]
+    #[doc="<p>The maximum number of traffic policy instances to be included in the response body for this request. If you have more than <code>MaxItems</code> traffic policy instances, the value of the <code>IsTruncated</code> element in the response is <code>true</code>, and the values of <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> represent the first traffic policy instance that Amazon Route 53 will return if you submit another request.</p>"]
     pub max_items: Option<PageMaxItems>,
     #[doc="<p>The ID of the traffic policy for which you want to list traffic policy instances.</p>"]
     pub traffic_policy_id: TrafficPolicyId,
-    #[doc="<p>For the first request to <code>ListTrafficPolicyInstancesByPolicy</code>, omit this value.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, <code>TrafficPolicyInstanceNameMarker</code> is the name of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get for this hosted zone.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, omit this value.</p>"]
+    #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstancesByPolicy</code> request.</p> <p>For the value of <code>trafficpolicyinstancename</code>, specify the value of <code>TrafficPolicyInstanceNameMarker</code> from the previous response, which is the name of the first traffic policy instance that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
     pub traffic_policy_instance_name_marker: Option<DNSName>,
-    #[doc="<p>For the first request to <code>ListTrafficPolicyInstancesByPolicy</code>, omit this value.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, <code>TrafficPolicyInstanceTypeMarker</code> is the DNS type of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get for this hosted zone.</p>"]
+    #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstancesByPolicy</code> request.</p> <p>For the value of <code>trafficpolicyinstancetype</code>, specify the value of <code>TrafficPolicyInstanceTypeMarker</code> from the previous response, which is the name of the first traffic policy instance that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
     pub traffic_policy_instance_type_marker: Option<RRType>,
     #[doc="<p>The version of the traffic policy for which you want to list traffic policy instances. The version must be associated with the traffic policy that is specified by <code>TrafficPolicyId</code>.</p>"]
     pub traffic_policy_version: TrafficPolicyVersion,
@@ -4808,9 +4804,9 @@ pub struct ListTrafficPolicyInstancesByPolicyRequest {
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListTrafficPolicyInstancesByPolicyResponse {
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>HostedZoneIdMarker</code> is the ID of the hosted zone of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>HostedZoneIdMarker</code> is the ID of the hosted zone of the first traffic policy instance in the next group of traffic policy instances.</p>"]
     pub hosted_zone_id_marker: Option<ResourceId>,
-    #[doc="<p>A flag that indicates whether there are more traffic policy instances to be listed. If the response was truncated, you can get the next group of <code>MaxItems</code> traffic policy instances by calling <code>ListTrafficPolicyInstancesByPolicy</code> again and specifying the values of the <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> elements in the corresponding request parameters.</p>"]
+    #[doc="<p>A flag that indicates whether there are more traffic policy instances to be listed. If the response was truncated, you can get the next group of traffic policy instances by calling <code>ListTrafficPolicyInstancesByPolicy</code> again and specifying the values of the <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> elements in the corresponding request parameters.</p>"]
     pub is_truncated: PageTruncated,
     #[doc="<p>The value that you specified for the <code>MaxItems</code> parameter in the call to <code>ListTrafficPolicyInstancesByPolicy</code> that produced the current response.</p>"]
     pub max_items: PageMaxItems,
@@ -4889,31 +4885,31 @@ impl ListTrafficPolicyInstancesByPolicyResponseDeserializer {
 
     }
 }
-#[doc="<p>A complex type that contains the information about the request to list your traffic policy instances.</p>"]
+#[doc="<p>A request to get information about the traffic policy instances that you created by using the current AWS account.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListTrafficPolicyInstancesRequest {
-    #[doc="<p>For the first request to <code>ListTrafficPolicyInstances</code>, omit this value.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get the next group of <code>MaxItems</code> traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>HostedZoneIdMarker</code>, specify the value of <code>HostedZoneIdMarker</code> from the previous response, which is the hosted zone ID of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
+    #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>HostedZoneId</code>, specify the value of <code>HostedZoneIdMarker</code> from the previous response, which is the hosted zone ID of the first traffic policy instance in the next group of traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
     pub hosted_zone_id_marker: Option<ResourceId>,
-    #[doc="<p>The maximum number of traffic policy instances to be included in the response body for this request. If you have more than <code>MaxItems</code> traffic policy instances, the value of the <code>IsTruncated</code> element in the response is <code>true</code>, and the values of <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>"]
+    #[doc="<p>The maximum number of traffic policy instances that you want Amazon Route 53 to return in response to a <code>ListTrafficPolicyInstances</code> request. If you have more than <code>MaxItems</code> traffic policy instances, the value of the <code>IsTruncated</code> element in the response is <code>true</code>, and the values of <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>"]
     pub max_items: Option<PageMaxItems>,
-    #[doc="<p>For the first request to <code>ListTrafficPolicyInstances</code>, omit this value.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, <code>TrafficPolicyInstanceNameMarker</code> is the name of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
+    #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>trafficpolicyinstancename</code>, specify the value of <code>TrafficPolicyInstanceNameMarker</code> from the previous response, which is the name of the first traffic policy instance in the next group of traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
     pub traffic_policy_instance_name_marker: Option<DNSName>,
-    #[doc="<p>For the first request to <code>ListTrafficPolicyInstances</code>, omit this value.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, <code>TrafficPolicyInstanceTypeMarker</code> is the DNS type of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
+    #[doc="<p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>trafficpolicyinstancetype</code>, specify the value of <code>TrafficPolicyInstanceTypeMarker</code> from the previous response, which is the type of the first traffic policy instance in the next group of traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>"]
     pub traffic_policy_instance_type_marker: Option<RRType>,
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListTrafficPolicyInstancesResponse {
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>HostedZoneIdMarker</code> is the ID of the hosted zone of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>HostedZoneIdMarker</code> is the ID of the hosted zone of the first traffic policy instance that Amazon Route 53 will return if you submit another <code>ListTrafficPolicyInstances</code> request. </p>"]
     pub hosted_zone_id_marker: Option<ResourceId>,
-    #[doc="<p>A flag that indicates whether there are more traffic policy instances to be listed. If the response was truncated, you can get the next group of <code>MaxItems</code> traffic policy instances by calling <code>ListTrafficPolicyInstances</code> again and specifying the values of the <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> elements in the corresponding request parameters.</p>"]
+    #[doc="<p>A flag that indicates whether there are more traffic policy instances to be listed. If the response was truncated, you can get more traffic policy instances by calling <code>ListTrafficPolicyInstances</code> again and specifying the values of the <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> in the corresponding request parameters.</p>"]
     pub is_truncated: PageTruncated,
     #[doc="<p>The value that you specified for the <code>MaxItems</code> parameter in the call to <code>ListTrafficPolicyInstances</code> that produced the current response.</p>"]
     pub max_items: PageMaxItems,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyInstanceNameMarker</code> is the name of the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyInstanceNameMarker</code> is the name of the first traffic policy instance that Amazon Route 53 will return if you submit another <code>ListTrafficPolicyInstances</code> request. </p>"]
     pub traffic_policy_instance_name_marker: Option<DNSName>,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyInstanceTypeMarker</code> is the DNS type of the resource record sets that are associated with the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyInstanceTypeMarker</code> is the DNS type of the resource record sets that are associated with the first traffic policy instance that Amazon Route 53 will return if you submit another <code>ListTrafficPolicyInstances</code> request. </p>"]
     pub traffic_policy_instance_type_marker: Option<RRType>,
     #[doc="<p>A list that contains one <code>TrafficPolicyInstance</code> element for each traffic policy instance that matches the elements in the request.</p>"]
     pub traffic_policy_instances: TrafficPolicyInstances,
@@ -4991,22 +4987,22 @@ impl ListTrafficPolicyInstancesResponseDeserializer {
 pub struct ListTrafficPolicyVersionsRequest {
     #[doc="<p>Specify the value of <code>Id</code> of the traffic policy for which you want to list all versions.</p>"]
     pub id: TrafficPolicyId,
-    #[doc="<p>The maximum number of traffic policy versions that you want Amazon Route 53 to include in the response body for this request. If the specified traffic policy has more than <code>MaxItems</code> versions, the value of the <code>IsTruncated</code> element in the response is <code>true</code>, and the value of the <code>TrafficPolicyVersionMarker</code> element is the ID of the first version in the next group of <code>MaxItems</code> traffic policy versions.</p>"]
+    #[doc="<p>The maximum number of traffic policy versions that you want Amazon Route 53 to include in the response body for this request. If the specified traffic policy has more than <code>MaxItems</code> versions, the value of <code>IsTruncated</code> in the response is <code>true</code>, and the value of the <code>TrafficPolicyVersionMarker</code> element is the ID of the first version that Amazon Route 53 will return if you submit another request.</p>"]
     pub max_items: Option<PageMaxItems>,
-    #[doc="<p>For your first request to <code>ListTrafficPolicyVersions</code>, do not include the <code>TrafficPolicyVersionMarker</code> parameter.</p> <p>If you have more traffic policy versions than the value of <code>MaxItems</code>, <code>ListTrafficPolicyVersions</code> returns only the first group of <code>MaxItems</code> versions. To get the next group of <code>MaxItems</code> traffic policy versions, submit another request to <code>ListTrafficPolicyVersions</code>. For the value of <code>TrafficPolicyVersionMarker</code>, specify the value of the <code>TrafficPolicyVersionMarker</code> element that was returned in the previous response.</p> <p>Traffic policy versions are listed in sequential order.</p>"]
+    #[doc="<p>For your first request to <code>ListTrafficPolicyVersions</code>, don't include the <code>TrafficPolicyVersionMarker</code> parameter.</p> <p>If you have more traffic policy versions than the value of <code>MaxItems</code>, <code>ListTrafficPolicyVersions</code> returns only the first group of <code>MaxItems</code> versions. To get more traffic policy versions, submit another <code>ListTrafficPolicyVersions</code> request. For the value of <code>TrafficPolicyVersionMarker</code>, specify the value of <code>TrafficPolicyVersionMarker</code> in the previous response.</p>"]
     pub traffic_policy_version_marker: Option<TrafficPolicyVersionMarker>,
 }
 
 #[doc="<p>A complex type that contains the response information for the request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ListTrafficPolicyVersionsResponse {
-    #[doc="<p>A flag that indicates whether there are more traffic policies to be listed. If the response was truncated, you can get the next group of <code>maxitems</code> traffic policies by calling <code>ListTrafficPolicyVersions</code> again and specifying the value of the <code>NextMarker</code> element in the <code>marker</code> parameter.</p>"]
+    #[doc="<p>A flag that indicates whether there are more traffic policies to be listed. If the response was truncated, you can get the next group of traffic policies by submitting another <code>ListTrafficPolicyVersions</code> request and specifying the value of <code>NextMarker</code> in the <code>marker</code> parameter.</p>"]
     pub is_truncated: PageTruncated,
-    #[doc="<p>The value that you specified for the <code>maxitems</code> parameter in the call to <code>ListTrafficPolicyVersions</code> that produced the current response.</p>"]
+    #[doc="<p>The value that you specified for the <code>maxitems</code> parameter in the <code>ListTrafficPolicyVersions</code> request that produced the current response.</p>"]
     pub max_items: PageMaxItems,
     #[doc="<p>A list that contains one <code>TrafficPolicy</code> element for each traffic policy version that is associated with the specified traffic policy.</p>"]
     pub traffic_policies: TrafficPolicies,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, the value of <code>TrafficPolicyVersionMarker</code> identifies the first traffic policy in the next group of <code>MaxItems</code> traffic policies. Call <code>ListTrafficPolicyVersions</code> again and specify the value of <code>TrafficPolicyVersionMarker</code> in the <code>TrafficPolicyVersionMarker</code> request parameter.</p> <p>This element is present only if <code>IsTruncated</code> is <code>true</code>.</p>"]
+    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, the value of <code>TrafficPolicyVersionMarker</code> identifies the first traffic policy that Amazon Route 53 will return if you submit another request. Call <code>ListTrafficPolicyVersions</code> again and specify the value of <code>TrafficPolicyVersionMarker</code> in the <code>TrafficPolicyVersionMarker</code> request parameter.</p> <p>This element is present only if <code>IsTruncated</code> is <code>true</code>.</p>"]
     pub traffic_policy_version_marker: TrafficPolicyVersionMarker,
 }
 
@@ -5072,9 +5068,9 @@ impl ListTrafficPolicyVersionsResponseDeserializer {
 pub struct ListVPCAssociationAuthorizationsRequest {
     #[doc="<p>The ID of the hosted zone for which you want a list of VPCs that can be associated with the hosted zone.</p>"]
     pub hosted_zone_id: ResourceId,
-    #[doc="<p> <i>Optional</i>: An integer that specifies the maximum number of VPCs that you want Amazon Route 53 to return.</p>"]
+    #[doc="<p> <i>Optional</i>: An integer that specifies the maximum number of VPCs that you want Amazon Route 53 to return. If you don't specify a value for <code>MaxResults</code>, Amazon Route 53 returns up to 50 VPCs per page.</p>"]
     pub max_results: Option<MaxResults>,
-    #[doc="<p> <i>Optional</i>: If a response includes a <code>NextToken</code> element, there are more VPCs that can be associated with the specified hosted zone. To get the next page of results, submit another request, and include the value of the <code>NextToken</code> element in from the response in the <code>NextToken</code> parameter in another <code>ListVPCAssociationAuthorizations</code> request.</p>"]
+    #[doc="<p> <i>Optional</i>: If a response includes a <code>NextToken</code> element, there are more VPCs that can be associated with the specified hosted zone. To get the next page of results, submit another request, and include the value of <code>NextToken</code> from the response in the <code>nexttoken</code> parameter in another <code>ListVPCAssociationAuthorizations</code> request.</p>"]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -5083,7 +5079,7 @@ pub struct ListVPCAssociationAuthorizationsRequest {
 pub struct ListVPCAssociationAuthorizationsResponse {
     #[doc="<p>The ID of the hosted zone that you can associate the listed VPCs with.</p>"]
     pub hosted_zone_id: ResourceId,
-    #[doc="<p>When the response includes a <code>NextToken</code> element, there are more VPCs that can be associated with the specified hosted zone. To get the next page of VPCs, submit another <code>ListVPCAssociationAuthorizations</code> request, and include the value of the <code>NextToken</code> element from the response in the <code>NextToken</code> request parameter:</p> <p> <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation?MaxItems=<i>VPCs per page</i>&amp;NextToken=<i/> </code> </p>"]
+    #[doc="<p>When the response includes a <code>NextToken</code> element, there are more VPCs that can be associated with the specified hosted zone. To get the next page of VPCs, submit another <code>ListVPCAssociationAuthorizations</code> request, and include the value of the <code>NextToken</code> element from the response in the <code>nexttoken</code> request parameter.</p>"]
     pub next_token: Option<PaginationToken>,
     #[doc="<p>The list of VPCs that are authorized to be associated with the specified hosted zone.</p>"]
     pub vp_cs: VPCs,
@@ -5493,7 +5489,7 @@ impl RecordDataDeserializer {
 
     }
 }
-#[doc="<p>A value that Amazon Route 53 returned for this resource record set. A RecordDataEntry element is one of the following:</p> <ul> <li> <p>For non-alias resource record sets, a <code>RecordDataEntry</code> element contains one value in the resource record set. If the resource record set contains multiple values, the response includes one <code>RecordDataEntry</code> element for each value.</p> </li> <li> <p>For multiple resource record sets that have the same name and type, which includes weighted, latency, geolocation, and failover, a <code>RecordDataEntry</code> element contains the value from the appropriate resource record set based on the request.</p> </li> <li> <p>For alias resource record sets that refer to AWS resources other than another resource record set, the <code>RecordDataEntry</code> element contains an IP address or a domain name for the AWS resource, depending on the type of resource.</p> </li> <li> <p>For alias resource record sets that refer to other resource record sets, a <code>RecordDataEntry</code> element contains one value from the referenced resource record set. If the referenced resource record set contains multiple values, the response includes one <code>RecordDataEntry</code> element for each value.</p> </li> </ul>"]
+#[doc="<p>A value that Amazon Route 53 returned for this resource record set. A <code>RecordDataEntry</code> element is one of the following:</p> <ul> <li> <p>For non-alias resource record sets, a <code>RecordDataEntry</code> element contains one value in the resource record set. If the resource record set contains multiple values, the response includes one <code>RecordDataEntry</code> element for each value.</p> </li> <li> <p>For multiple resource record sets that have the same name and type, which includes weighted, latency, geolocation, and failover, a <code>RecordDataEntry</code> element contains the value from the appropriate resource record set based on the request.</p> </li> <li> <p>For alias resource record sets that refer to AWS resources other than another resource record set, the <code>RecordDataEntry</code> element contains an IP address or a domain name for the AWS resource, depending on the type of resource.</p> </li> <li> <p>For alias resource record sets that refer to other resource record sets, a <code>RecordDataEntry</code> element contains one value from the referenced resource record set. If the referenced resource record set contains multiple values, the response includes one <code>RecordDataEntry</code> element for each value.</p> </li> </ul>"]
 pub type RecordDataEntry = String;
 struct RecordDataEntryDeserializer;
 impl RecordDataEntryDeserializer {
@@ -5613,10 +5609,10 @@ impl ResourcePathSerializer {
     }
 }
 
-#[doc="<p>Information specific to the resource record.</p> <note> <p>If you are creating an alias resource record set, omit <code>ResourceRecord</code>.</p> </note>"]
+#[doc="<p>Information specific to the resource record.</p> <note> <p>If you're creating an alias resource record set, omit <code>ResourceRecord</code>.</p> </note>"]
 #[derive(Default,Clone,Debug)]
 pub struct ResourceRecord {
-    #[doc="<p>The current or new DNS record value, not to exceed 4,000 characters. In the case of a <code>DELETE</code> action, if the current value does not match the actual value, an error is returned. For descriptions about how to format <code>Value</code> for different record types, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/ResourceRecordTypes.html\">Supported DNS Resource Record Types</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>You can specify more than one value for all record types except <code>CNAME</code> and <code>SOA</code>. </p> <note> <p>If you are creating an alias resource record set, omit <code>Value</code>.</p> </note>"]
+    #[doc="<p>The current or new DNS record value, not to exceed 4,000 characters. In the case of a <code>DELETE</code> action, if the current value does not match the actual value, an error is returned. For descriptions about how to format <code>Value</code> for different record types, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/ResourceRecordTypes.html\">Supported DNS Resource Record Types</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>You can specify more than one value for all record types except <code>CNAME</code> and <code>SOA</code>. </p> <note> <p>If you're creating an alias resource record set, omit <code>Value</code>.</p> </note>"]
     pub value: RData,
 }
 
@@ -5676,23 +5672,23 @@ impl ResourceRecordSerializer {
 #[doc="<p>Information about the resource record set to create or delete.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct ResourceRecordSet {
-    #[doc="<p> <i>Alias resource record sets only:</i> Information about the CloudFront distribution, AWS Elastic Beanstalk environment, ELB load balancer, Amazon S3 bucket, or Amazon Route 53 resource record set to which you are redirecting queries. The AWS Elastic Beanstalk environment must have a regionalized subdomain.</p> <p>If you're creating resource records sets for a private hosted zone, note the following:</p> <ul> <li> <p>You can't create alias resource record sets for CloudFront distributions in a private hosted zone.</p> </li> <li> <p>Creating geolocation alias resource record sets or latency alias resource record sets in a private hosted zone is unsupported.</p> </li> <li> <p>For information about creating failover resource record sets in a private hosted zone, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html\">Configuring Failover in a Private Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> </ul>"]
+    #[doc="<p> <i>Alias resource record sets only:</i> Information about the CloudFront distribution, AWS Elastic Beanstalk environment, ELB load balancer, Amazon S3 bucket, or Amazon Route 53 resource record set to which you're redirecting queries. The AWS Elastic Beanstalk environment must have a regionalized subdomain.</p> <p>If you're creating resource records sets for a private hosted zone, note the following:</p> <ul> <li> <p>You can't create alias resource record sets for CloudFront distributions in a private hosted zone.</p> </li> <li> <p>Creating geolocation alias resource record sets or latency alias resource record sets in a private hosted zone is unsupported.</p> </li> <li> <p>For information about creating failover resource record sets in a private hosted zone, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html\">Configuring Failover in a Private Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> </ul>"]
     pub alias_target: Option<AliasTarget>,
-    #[doc="<p> <i>Failover resource record sets only:</i> To configure failover, you add the <code>Failover</code> element to two resource record sets. For one resource record set, you specify <code>PRIMARY</code> as the value for <code>Failover</code>; for the other resource record set, you specify <code>SECONDARY</code>. In addition, you include the <code>HealthCheckId</code> element and specify the health check that you want Amazon Route 53 to perform for each resource record set.</p> <p>Except where noted, the following failover behaviors assume that you have included the <code>HealthCheckId</code> element in both resource record sets:</p> <ul> <li> <p>When the primary resource record set is healthy, Amazon Route 53 responds to DNS queries with the applicable value from the primary resource record set regardless of the health of the secondary resource record set.</p> </li> <li> <p>When the primary resource record set is unhealthy and the secondary resource record set is healthy, Amazon Route 53 responds to DNS queries with the applicable value from the secondary resource record set.</p> </li> <li> <p>When the secondary resource record set is unhealthy, Amazon Route 53 responds to DNS queries with the applicable value from the primary resource record set regardless of the health of the primary resource record set.</p> </li> <li> <p>If you omit the <code>HealthCheckId</code> element for the secondary resource record set, and if the primary resource record set is unhealthy, Amazon Route 53 always responds to DNS queries with the applicable value from the secondary resource record set. This is true regardless of the health of the associated endpoint.</p> </li> </ul> <p>You can't create non-failover resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements as failover resource record sets.</p> <p>For failover alias resource record sets, you must also include the <code>EvaluateTargetHealth</code> element and set the value to true.</p> <p>For more information about configuring failover for Amazon Route 53, see the following topics in the <i>Amazon Route 53 Developer Guide</i>: </p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html\">Configuring Failover in a Private Hosted Zone</a> </p> </li> </ul> <p>Valid values: <code>PRIMARY</code> | <code>SECONDARY</code> </p>"]
+    #[doc="<p> <i>Failover resource record sets only:</i> To configure failover, you add the <code>Failover</code> element to two resource record sets. For one resource record set, you specify <code>PRIMARY</code> as the value for <code>Failover</code>; for the other resource record set, you specify <code>SECONDARY</code>. In addition, you include the <code>HealthCheckId</code> element and specify the health check that you want Amazon Route 53 to perform for each resource record set.</p> <p>Except where noted, the following failover behaviors assume that you have included the <code>HealthCheckId</code> element in both resource record sets:</p> <ul> <li> <p>When the primary resource record set is healthy, Amazon Route 53 responds to DNS queries with the applicable value from the primary resource record set regardless of the health of the secondary resource record set.</p> </li> <li> <p>When the primary resource record set is unhealthy and the secondary resource record set is healthy, Amazon Route 53 responds to DNS queries with the applicable value from the secondary resource record set.</p> </li> <li> <p>When the secondary resource record set is unhealthy, Amazon Route 53 responds to DNS queries with the applicable value from the primary resource record set regardless of the health of the primary resource record set.</p> </li> <li> <p>If you omit the <code>HealthCheckId</code> element for the secondary resource record set, and if the primary resource record set is unhealthy, Amazon Route 53 always responds to DNS queries with the applicable value from the secondary resource record set. This is true regardless of the health of the associated endpoint.</p> </li> </ul> <p>You can't create non-failover resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements as failover resource record sets.</p> <p>For failover alias resource record sets, you must also include the <code>EvaluateTargetHealth</code> element and set the value to true.</p> <p>For more information about configuring failover for Amazon Route 53, see the following topics in the <i>Amazon Route 53 Developer Guide</i>: </p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html\">Configuring Failover in a Private Hosted Zone</a> </p> </li> </ul>"]
     pub failover: Option<ResourceRecordSetFailover>,
     #[doc="<p> <i>Geo location resource record sets only:</i> A complex type that lets you control how Amazon Route 53 responds to DNS queries based on the geographic origin of the query. For example, if you want all queries from Africa to be routed to a web server with an IP address of <code>192.0.2.111</code>, create a resource record set with a <code>Type</code> of <code>A</code> and a <code>ContinentCode</code> of <code>AF</code>.</p> <note> <p>Creating geolocation and geolocation alias resource record sets in private hosted zones is not supported.</p> </note> <p>If you create separate resource record sets for overlapping geographic regions (for example, one resource record set for a continent and one for a country on the same continent), priority goes to the smallest geographic region. This allows you to route most queries for a continent to one resource and to route queries for a country on that continent to a different resource.</p> <p>You can't create two geolocation resource record sets that specify the same geographic location.</p> <p>The value <code>*</code> in the <code>CountryCode</code> element matches all geographic locations that aren't specified in other geolocation resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements.</p> <important> <p>Geolocation works by mapping IP addresses to locations. However, some IP addresses aren't mapped to geographic locations, so even if you create geolocation resource record sets that cover all seven continents, Amazon Route 53 will receive some DNS queries from locations that it can't identify. We recommend that you create a resource record set for which the value of <code>CountryCode</code> is <code>*</code>, which handles both queries that come from locations for which you haven't created geolocation resource record sets and queries from IP addresses that aren't mapped to a location. If you don't create a <code>*</code> resource record set, Amazon Route 53 returns a \"no answer\" response for queries from those locations.</p> </important> <p>You can't create non-geolocation resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements as geolocation resource record sets.</p>"]
     pub geo_location: Option<GeoLocation>,
-    #[doc="<p>If you want Amazon Route 53 to return this resource record set in response to a DNS query only when a health check is passing, include the <code>HealthCheckId</code> element and specify the ID of the applicable health check.</p> <p>Amazon Route 53 determines whether a resource record set is healthy based on one of the following:</p> <ul> <li> <p>By periodically sending a request to the endpoint that is specified in the health check</p> </li> <li> <p>By aggregating the status of a specified group of health checks (calculated health checks)</p> </li> <li> <p>By determining the current state of a CloudWatch alarm (CloudWatch metric health checks)</p> </li> </ul> <p>For information about how Amazon Route 53 determines whether a health check is healthy, see <a>CreateHealthCheck</a>.</p> <p>The <code>HealthCheckId</code> element is only useful when Amazon Route 53 is choosing between two or more resource record sets to respond to a DNS query, and you want Amazon Route 53 to base the choice in part on the status of a health check. Configuring health checks only makes sense in the following configurations:</p> <ul> <li> <p>You're checking the health of the resource record sets in a weighted, latency, geolocation, or failover resource record set, and you specify health check IDs for all of the resource record sets. If the health check for one resource record set specifies an endpoint that is not healthy, Amazon Route 53 stops responding to queries using the value for that resource record set.</p> </li> <li> <p>You set <code>EvaluateTargetHealth</code> to true for the resource record sets in an alias, weighted alias, latency alias, geolocation alias, or failover alias resource record set, and you specify health check IDs for all of the resource record sets that are referenced by the alias resource record sets.</p> </li> </ul> <important> <p>Amazon Route 53 doesn't check the health of the endpoint specified in the resource record set, for example, the endpoint specified by the IP address in the <code>Value</code> element. When you add a <code>HealthCheckId</code> element to a resource record set, Amazon Route 53 checks the health of the endpoint that you specified in the health check. </p> </important> <p>For geolocation resource record sets, if an endpoint is unhealthy, Amazon Route 53 looks for a resource record set for the larger, associated geographic region. For example, suppose you have resource record sets for a state in the United States, for the United States, for North America, and for all locations. If the endpoint for the state resource record set is unhealthy, Amazon Route 53 checks the resource record sets for the United States, for North America, and for all locations (a resource record set for which the value of <code>CountryCode</code> is <code>*</code>), in that order, until it finds a resource record set for which the endpoint is healthy. </p> <p>If your health checks specify the endpoint only by domain name, we recommend that you create a separate health check for each endpoint. For example, create a health check for each <code>HTTP</code> server that is serving content for <code>www.example.com</code>. For the value of <code>FullyQualifiedDomainName</code>, specify the domain name of the server (such as <code>us-east-1-www.example.com</code>), not the name of the resource record sets (example.com).</p> <important> <p>n this configuration, if you create a health check for which the value of <code>FullyQualifiedDomainName</code> matches the name of the resource record sets and then associate the health check with those resource record sets, health check results will be unpredictable.</p> </important> <p>For more information, see the following topics in the <i>Amazon Route 53 Developer Guide</i>:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html\">Configuring Failover in a Private Hosted Zone</a> </p> </li> </ul>"]
+    #[doc="<p>If you want Amazon Route 53 to return this resource record set in response to a DNS query only when a health check is passing, include the <code>HealthCheckId</code> element and specify the ID of the applicable health check.</p> <p>Amazon Route 53 determines whether a resource record set is healthy based on one of the following:</p> <ul> <li> <p>By periodically sending a request to the endpoint that is specified in the health check</p> </li> <li> <p>By aggregating the status of a specified group of health checks (calculated health checks)</p> </li> <li> <p>By determining the current state of a CloudWatch alarm (CloudWatch metric health checks)</p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html\">How Amazon Route 53 Determines Whether an Endpoint Is Healthy</a>.</p> <p>The <code>HealthCheckId</code> element is only useful when Amazon Route 53 is choosing between two or more resource record sets to respond to a DNS query, and you want Amazon Route 53 to base the choice in part on the status of a health check. Configuring health checks only makes sense in the following configurations:</p> <ul> <li> <p>You're checking the health of the resource record sets in a group of weighted, latency, geolocation, or failover resource record sets, and you specify health check IDs for all of the resource record sets. If the health check for one resource record set specifies an endpoint that is not healthy, Amazon Route 53 stops responding to queries using the value for that resource record set.</p> </li> <li> <p>You set <code>EvaluateTargetHealth</code> to true for the resource record sets in a group of alias, weighted alias, latency alias, geolocation alias, or failover alias resource record sets, and you specify health check IDs for all of the resource record sets that are referenced by the alias resource record sets.</p> </li> </ul> <important> <p>Amazon Route 53 doesn't check the health of the endpoint specified in the resource record set, for example, the endpoint specified by the IP address in the <code>Value</code> element. When you add a <code>HealthCheckId</code> element to a resource record set, Amazon Route 53 checks the health of the endpoint that you specified in the health check. </p> </important> <p>For geolocation resource record sets, if an endpoint is unhealthy, Amazon Route 53 looks for a resource record set for the larger, associated geographic region. For example, suppose you have resource record sets for a state in the United States, for the United States, for North America, and for all locations. If the endpoint for the state resource record set is unhealthy, Amazon Route 53 checks the resource record sets for the United States, for North America, and for all locations (a resource record set for which the value of <code>CountryCode</code> is <code>*</code>), in that order, until it finds a resource record set for which the endpoint is healthy. </p> <p>If your health checks specify the endpoint only by domain name, we recommend that you create a separate health check for each endpoint. For example, create a health check for each <code>HTTP</code> server that is serving content for <code>www.example.com</code>. For the value of <code>FullyQualifiedDomainName</code>, specify the domain name of the server (such as <code>us-east-2-www.example.com</code>), not the name of the resource record sets (example.com).</p> <important> <p>n this configuration, if you create a health check for which the value of <code>FullyQualifiedDomainName</code> matches the name of the resource record sets and then associate the health check with those resource record sets, health check results will be unpredictable.</p> </important> <p>For more information, see the following topics in the <i>Amazon Route 53 Developer Guide</i>:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html\">Configuring Failover in a Private Hosted Zone</a> </p> </li> </ul>"]
     pub health_check_id: Option<HealthCheckId>,
-    #[doc="<p>The name of the domain you want to perform the action on.</p> <p>Enter a fully qualified domain name, for example, <code>www.example.com</code>. You can optionally include a trailing dot. If you omit the trailing dot, Amazon Route 53 still assumes that the domain name that you specify is fully qualified. This means that Amazon Route 53 treats <code>www.example.com</code> (without a trailing dot) and <code>www.example.com.</code> (with a trailing dot) as identical.</p> <p>For information about how to specify characters other than <code>a-z</code>, <code>0-9</code>, and <code>-</code> (hyphen) and how to specify internationalized domain names, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>You can use the asterisk (*) wildcard to replace the leftmost label in a domain name. For example, <code>*.example.com</code>. Note the following:</p> <ul> <li> <p>The * must replace the entire label. For example, you can't specify <code>*prod.example.com</code> or <code>prod*.example.com</code>.</p> </li> <li> <p>The * can't replace any of the middle labels, for example, marketing.*.example.com.</p> </li> <li> <p>If you include * in any position other than the leftmost label in a domain name, DNS treats it as an * character (ASCII 42), not as a wildcard.</p> <important> <p>You can't use the * wildcard for resource records sets that have a type of NS.</p> </important> </li> </ul> <p>You can use the * wildcard as the leftmost label in a domain name, for example, <code>*.example.com</code>. You can't use an * for one of the middle labels, for example, <code>marketing.*.example.com</code>. In addition, the * must replace the entire label; for example, you can't specify <code>prod*.example.com</code>.</p>"]
+    #[doc="<p>The name of the domain you want to perform the action on.</p> <p>Enter a fully qualified domain name, for example, <code>www.example.com</code>. You can optionally include a trailing dot. If you omit the trailing dot, Amazon Route 53 still assumes that the domain name that you specify is fully qualified. This means that Amazon Route 53 treats <code>www.example.com</code> (without a trailing dot) and <code>www.example.com.</code> (with a trailing dot) as identical.</p> <p>For information about how to specify characters other than <code>a-z</code>, <code>0-9</code>, and <code>-</code> (hyphen) and how to specify internationalized domain names, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>You can use the asterisk (*) wildcard to replace the leftmost label in a domain name, for example, <code>*.example.com</code>. Note the following:</p> <ul> <li> <p>The * must replace the entire label. For example, you can't specify <code>*prod.example.com</code> or <code>prod*.example.com</code>.</p> </li> <li> <p>The * can't replace any of the middle labels, for example, marketing.*.example.com.</p> </li> <li> <p>If you include * in any position other than the leftmost label in a domain name, DNS treats it as an * character (ASCII 42), not as a wildcard.</p> <important> <p>You can't use the * wildcard for resource records sets that have a type of NS.</p> </important> </li> </ul> <p>You can use the * wildcard as the leftmost label in a domain name, for example, <code>*.example.com</code>. You can't use an * for one of the middle labels, for example, <code>marketing.*.example.com</code>. In addition, the * must replace the entire label; for example, you can't specify <code>prod*.example.com</code>.</p>"]
     pub name: DNSName,
-    #[doc="<p> <i>Latency-based resource record sets only:</i> The Amazon EC2 Region where the resource that is specified in this resource record set resides. The resource typically is an AWS resource, such as an EC2 instance or an ELB load balancer, and is referred to by an IP address or a DNS domain name, depending on the record type.</p> <note> <p>Creating latency and latency alias resource record sets in private hosted zones is not supported.</p> </note> <p>When Amazon Route 53 receives a DNS query for a domain name and type for which you have created latency resource record sets, Amazon Route 53 selects the latency resource record set that has the lowest latency between the end user and the associated Amazon EC2 Region. Amazon Route 53 then returns the value that is associated with the selected resource record set.</p> <p>Note the following:</p> <ul> <li> <p>You can only specify one <code>ResourceRecord</code> per latency resource record set.</p> </li> <li> <p>You can only create one latency resource record set for each Amazon EC2 Region.</p> </li> <li> <p>You are not required to create latency resource record sets for all Amazon EC2 Regions. Amazon Route 53 will choose the region with the best latency from among the regions for which you create latency resource record sets.</p> </li> <li> <p>You can't create non-latency resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements as latency resource record sets.</p> </li> </ul>"]
+    #[doc="<p> <i>Latency-based resource record sets only:</i> The Amazon EC2 Region where you created the resource that this resource record set refers to. The resource typically is an AWS resource, such as an EC2 instance or an ELB load balancer, and is referred to by an IP address or a DNS domain name, depending on the record type.</p> <note> <p>Creating latency and latency alias resource record sets in private hosted zones is not supported.</p> </note> <p>When Amazon Route 53 receives a DNS query for a domain name and type for which you have created latency resource record sets, Amazon Route 53 selects the latency resource record set that has the lowest latency between the end user and the associated Amazon EC2 Region. Amazon Route 53 then returns the value that is associated with the selected resource record set.</p> <p>Note the following:</p> <ul> <li> <p>You can only specify one <code>ResourceRecord</code> per latency resource record set.</p> </li> <li> <p>You can only create one latency resource record set for each Amazon EC2 Region.</p> </li> <li> <p>You aren't required to create latency resource record sets for all Amazon EC2 Regions. Amazon Route 53 will choose the region with the best latency from among the regions that you create latency resource record sets for.</p> </li> <li> <p>You can't create non-latency resource record sets that have the same values for the <code>Name</code> and <code>Type</code> elements as latency resource record sets.</p> </li> </ul>"]
     pub region: Option<ResourceRecordSetRegion>,
-    #[doc="<p>Information about the resource records to act upon.</p> <note> <p>If you are creating an alias resource record set, omit <code>ResourceRecords</code>.</p> </note>"]
+    #[doc="<p>Information about the resource records to act upon.</p> <note> <p>If you're creating an alias resource record set, omit <code>ResourceRecords</code>.</p> </note>"]
     pub resource_records: Option<ResourceRecords>,
     #[doc="<p> <i>Weighted, Latency, Geo, and Failover resource record sets only:</i> An identifier that differentiates among multiple resource record sets that have the same combination of DNS name and type. The value of <code>SetIdentifier</code> must be unique for each resource record set that has the same combination of DNS name and type. Omit <code>SetIdentifier</code> for any other types of record sets.</p>"]
     pub set_identifier: Option<ResourceRecordSetIdentifier>,
-    #[doc="<p>The resource record cache time to live (TTL), in seconds. Note the following:</p> <ul> <li> <p>If you're creating an alias resource record set, omit <code>TTL</code>. Amazon Route 53 uses the value of <code>TTL</code> for the alias target. </p> </li> <li> <p>If you're associating this resource record set with a health check (if you're adding a <code>HealthCheckId</code> element), we recommend that you specify a <code>TTL</code> of 60 seconds or less so clients respond quickly to changes in health status.</p> </li> <li> <p>All of the resource record sets in a group of weighted, latency, geolocation, or failover resource record sets must have the same value for <code>TTL</code>.</p> </li> <li> <p>If a group of weighted resource record sets includes one or more weighted alias resource record sets for which the alias target is an ELB load balancer, we recommend that you specify a <code>TTL</code> of 60 seconds for all of the non-alias weighted resource record sets that have the same name and type. Values other than 60 seconds (the TTL for load balancers) will change the effect of the values that you specify for <code>Weight</code>.</p> </li> </ul>"]
+    #[doc="<p>The resource record cache time to live (TTL), in seconds. Note the following:</p> <ul> <li> <p>If you're creating an alias resource record set, omit <code>TTL</code>. Amazon Route 53 uses the value of <code>TTL</code> for the alias target. </p> </li> <li> <p>If you're associating this resource record set with a health check (if you're adding a <code>HealthCheckId</code> element), we recommend that you specify a <code>TTL</code> of 60 seconds or less so clients respond quickly to changes in health status.</p> </li> <li> <p>All of the resource record sets in a group of weighted resource record sets must have the same value for <code>TTL</code>.</p> </li> <li> <p>If a group of weighted resource record sets includes one or more weighted alias resource record sets for which the alias target is an ELB load balancer, we recommend that you specify a <code>TTL</code> of 60 seconds for all of the non-alias weighted resource record sets that have the same name and type. Values other than 60 seconds (the TTL for load balancers) will change the effect of the values that you specify for <code>Weight</code>.</p> </li> </ul>"]
     pub ttl: Option<TTL>,
     #[doc="<p>When you create a traffic policy instance, Amazon Route 53 automatically creates a resource record set. <code>TrafficPolicyInstanceId</code> is the ID of the traffic policy instance that Amazon Route 53 created this resource record set for.</p> <important> <p>To delete the resource record set that is associated with a traffic policy instance, use <code>DeleteTrafficPolicyInstance</code>. Amazon Route 53 will delete the resource record set automatically. If you delete the resource record set by using <code>ChangeResourceRecordSets</code>, Amazon Route 53 doesn't automatically delete the traffic policy instance, and you'll continue to be charged for it even though it's no longer in use. </p> </important>"]
     pub traffic_policy_instance_id: Option<TrafficPolicyInstanceId>,
@@ -6203,7 +6199,7 @@ impl StatusDeserializer {
 #[doc="<p>A complex type that contains the status that one Amazon Route 53 health checker reports and the time of the health check.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct StatusReport {
-    #[doc="<p>The time at which the health checker performed the health check in <a href=\"https://en.wikipedia.org/wiki/ISO_8601\">ISO 8601 format</a> and Coordinated Universal Time (UTC). For example, the value <code>2014-10-27T17:48:16.751Z</code> represents October 27, 2014 at 17:48:16.751 UTC.</p>"]
+    #[doc="<p>The date and time that the health checker performed the health check in <a href=\"https://en.wikipedia.org/wiki/ISO_8601\">ISO 8601 format</a> and Coordinated Universal Time (UTC). For example, the value <code>2017-03-27T17:48:16.751Z</code> represents March 27, 2017 at 17:48:16.751 UTC.</p>"]
     pub checked_time: Option<TimeStamp>,
     #[doc="<p>A description of the status of the health check endpoint as reported by one of the Amazon Route 53 health checkers.</p>"]
     pub status: Option<Status>,
@@ -6297,7 +6293,7 @@ impl TTLSerializer {
 #[doc="<p>A complex type that contains information about a tag that you want to add or edit for the specified health check or hosted zone.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct Tag {
-    #[doc="<p>The value of <code>Key</code> depends on the operation that you want to perform:</p> <ul> <li> <p> <b>Add a tag to a health check or hosted zone</b>: <code>Key</code> is the name that you want to give the new tag.</p> </li> <li> <p> <b>Edit a tag</b>: <code>Key</code> is the name of the tag whose <code>Value</code> element you want to remove.</p> </li> <li> <p> <b> Delete a key</b>: <code>Key</code> is the name of the tag you want to remove.</p> </li> <li> <p> <b>Give a name to a health check</b>: Edit the default <code>Name</code> tag. In the Amazon Route 53 console, the list of your health checks includes a <b>Name</b> column that lets you see the name that you've given to each health check.</p> </li> </ul>"]
+    #[doc="<p>The value of <code>Key</code> depends on the operation that you want to perform:</p> <ul> <li> <p> <b>Add a tag to a health check or hosted zone</b>: <code>Key</code> is the name that you want to give the new tag.</p> </li> <li> <p> <b>Edit a tag</b>: <code>Key</code> is the name of the tag that you want to change the <code>Value</code> for.</p> </li> <li> <p> <b> Delete a key</b>: <code>Key</code> is the name of the tag you want to remove.</p> </li> <li> <p> <b>Give a name to a health check</b>: Edit the default <code>Name</code> tag. In the Amazon Route 53 console, the list of your health checks includes a <b>Name</b> column that lets you see the name that you've given to each health check.</p> </li> </ul>"]
     pub key: Option<TagKey>,
     #[doc="<p>The value of <code>Value</code> depends on the operation that you want to perform:</p> <ul> <li> <p> <b>Add a tag to a health check or hosted zone</b>: <code>Value</code> is the value that you want to give the new tag.</p> </li> <li> <p> <b>Edit a tag</b>: <code>Value</code> is the new value that you want to assign the tag.</p> </li> </ul>"]
     pub value: Option<TagValue>,
@@ -6558,12 +6554,12 @@ impl TagValueSerializer {
     }
 }
 
-#[doc="<p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p> <p> <b>Parameters</b> </p> <dl> <dt>hostedzoneid</dt> <dd> <p>The ID of the hosted zone that you want Amazon Route 53 to simulate a query for.</p> </dd> <dt>recordname</dt> <dd> <p>The name of the resource record set that you want Amazon Route 53 to simulate a query for.</p> </dd> <dt>recordtype</dt> <dd> <p>The type of the resource record set.</p> </dd> <dt>resolverip (optional)</dt> <dd> <p>If you want to simulate a request from a specific DNS resolver, specify the IP address for that resolver. If you omit this value, <code>TestDNSAnswer</code> uses the IP address of a DNS resolver in the AWS US East region. </p> </dd> <dt>edns0clientsubnetip (optional)</dt> <dd> <p>If the resolver that you specified for <code>resolverip</code> supports EDNS0, specify the IP address of a client in the applicable location. </p> </dd> <dt>edns0clientsubnetmask (optional)</dt> <dd> <p>If you specify an IP address for <code>edns0clientsubnetip</code>, you can optionally specify the number of bits of the IP address that you want the checking tool to include in the DNS query. For example, if you specify <code>192.0.2.44</code> for <code>edns0clientsubnetip</code> and <code>24</code> for <code>edns0clientsubnetmask</code>, the checking tool will simulate a request from <code>192.0.2.0/24</code>. The default value is 24 bits. </p> </dd> </dl>"]
+#[doc="<p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>"]
 #[derive(Default,Clone,Debug)]
 pub struct TestDNSAnswerRequest {
-    #[doc="<p>If the resolver that you specified for resolverip supports EDNS0, specify the IP address of a client in the applicable location.</p>"]
+    #[doc="<p>If the resolver that you specified for resolverip supports EDNS0, specify the IPv4 or IPv6 address of a client in the applicable location, for example, <code>192.0.2.44</code> or <code>2001:db8:85a3::8a2e:370:7334</code>.</p>"]
     pub edns0_client_subnet_ip: Option<IPAddress>,
-    #[doc="<p>If you specify an IP address for <code>edns0clientsubnetip</code>, you can optionally specify the number of bits of the IP address that you want the checking tool to include in the DNS query. For example, if you specify <code>192.0.2.44</code> for <code>edns0clientsubnetip</code> and <code>24</code> for <code>edns0clientsubnetmask</code>, the checking tool will simulate a request from 192.0.2.0/24. The default value is 24 bits.</p>"]
+    #[doc="<p>If you specify an IP address for <code>edns0clientsubnetip</code>, you can optionally specify the number of bits of the IP address that you want the checking tool to include in the DNS query. For example, if you specify <code>192.0.2.44</code> for <code>edns0clientsubnetip</code> and <code>24</code> for <code>edns0clientsubnetmask</code>, the checking tool will simulate a request from 192.0.2.0/24. The default value is 24 bits for IPv4 addresses and 64 bits for IPv6 addresses.</p>"]
     pub edns0_client_subnet_mask: Option<SubnetMask>,
     #[doc="<p>The ID of the hosted zone that you want Amazon Route 53 to simulate a query for.</p>"]
     pub hosted_zone_id: ResourceId,
@@ -6571,7 +6567,7 @@ pub struct TestDNSAnswerRequest {
     pub record_name: DNSName,
     #[doc="<p>The type of the resource record set.</p>"]
     pub record_type: RRType,
-    #[doc="<p>If you want to simulate a request from a specific DNS resolver, specify the IP address for that resolver. If you omit this value, <code>TestDnsAnswer</code> uses the IP address of a DNS resolver in the AWS US East region.</p>"]
+    #[doc="<p>If you want to simulate a request from a specific DNS resolver, specify the IP address for that resolver. If you omit this value, <code>TestDnsAnswer</code> uses the IP address of a DNS resolver in the AWS US East (N. Virginia) Region (<code>us-east-1</code>).</p>"]
     pub resolver_ip: Option<IPAddress>,
 }
 
@@ -7288,7 +7284,7 @@ impl TransportProtocolDeserializer {
 
     }
 }
-#[doc="<p>A complex type that contains the health check request information.</p>"]
+#[doc="<p>A complex type that contains information about a request to update a health check.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct UpdateHealthCheckRequest {
     pub alarm_identifier: Option<AlarmIdentifier>,
@@ -7296,17 +7292,17 @@ pub struct UpdateHealthCheckRequest {
     pub child_health_checks: Option<ChildHealthCheckList>,
     #[doc="<p>Specify whether you want Amazon Route 53 to send the value of <code>FullyQualifiedDomainName</code> to the endpoint in the <code>client_hello</code> message during <code>TLS</code> negotiation. This allows the endpoint to respond to <code>HTTPS</code> health check requests with the applicable SSL/TLS certificate.</p> <p>Some endpoints require that HTTPS requests include the host name in the <code>client_hello</code> message. If you don't enable SNI, the status of the health check will be SSL alert <code>handshake_failure</code>. A health check can also have that status for other reasons. If SNI is enabled and you're still getting the error, check the SSL/TLS configuration on your endpoint and confirm that your certificate is valid.</p> <p>The SSL/TLS certificate on your endpoint includes a domain name in the <code>Common Name</code> field and possibly several more in the <code>Subject Alternative Names</code> field. One of the domain names in the certificate should match the value that you specify for <code>FullyQualifiedDomainName</code>. If the endpoint responds to the <code>client_hello</code> message with a certificate that does not include the domain name that you specified in <code>FullyQualifiedDomainName</code>, a health checker will retry the handshake. In the second attempt, the health checker will omit <code>FullyQualifiedDomainName</code> from the <code>client_hello</code> message.</p>"]
     pub enable_sni: Option<EnableSNI>,
-    #[doc="<p>The number of consecutive health checks that an endpoint must pass or fail for Amazon Route 53 to change the current status of the endpoint from unhealthy to healthy or vice versa. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html\">How Amazon Route 53 Determines Whether an Endpoint Is Healthy</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
+    #[doc="<p>The number of consecutive health checks that an endpoint must pass or fail for Amazon Route 53 to change the current status of the endpoint from unhealthy to healthy or vice versa. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html\">How Amazon Route 53 Determines Whether an Endpoint Is Healthy</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you don't specify a value for <code>FailureThreshold</code>, the default value is three health checks.</p>"]
     pub failure_threshold: Option<FailureThreshold>,
-    #[doc="<p>Amazon Route 53 behavior depends on whether you specify a value for <code>IPAddress</code>.</p> <note> <p>If a health check already has a value for <code>IPAddress</code>, you can change the value. However, you can't update an existing health check to add or remove the value of <code>IPAddress</code>. </p> </note> <p> <b>If you specify a value for</b> <code>IPAddress</code>:</p> <p>Amazon Route 53 sends health check requests to the specified IPv4 or IPv6 address and passes the value of <code>FullyQualifiedDomainName</code> in the <code>Host</code> header for all health checks except TCP health checks. This is typically the fully qualified DNS name of the endpoint on which you want Amazon Route 53 to perform health checks.</p> <p>When Amazon Route 53 checks the health of an endpoint, here is how it constructs the <code>Host</code> header:</p> <ul> <li> <p>If you specify a value of <code>80</code> for <code>Port</code> and <code>HTTP</code> or <code>HTTP_STR_MATCH</code> for <code>Type</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> to the endpoint in the <code>Host</code> header.</p> </li> <li> <p>If you specify a value of <code>443</code> for <code>Port</code> and <code>HTTPS</code> or <code>HTTPS_STR_MATCH</code> for <code>Type</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> to the endpoint in the Host header.</p> </li> <li> <p>If you specify another value for <code>Port</code> and any value except <code>TCP</code> for <code>Type</code>, Amazon Route 53 passes <i> <code>FullyQualifiedDomainName</code>:<code>Port</code> </i> to the endpoint in the Host header.</p> </li> </ul> <p>If you don't specify a value for <code>FullyQualifiedDomainName</code>, Amazon Route 53 substitutes the value of <code>IPAddress</code> in the <code>Host</code> header in each of the above cases.</p> <p> <b>If you don't specify a value for</b> <code>IPAddress</code>:</p> <p>If you don't specify a value for <code>IPAddress</code>, Amazon Route 53 sends a DNS request to the domain that you specify in <code>FullyQualifiedDomainName</code> at the interval you specify in <code>RequestInterval</code>. Using an IPv4 address that is returned by DNS, Amazon Route 53 then checks the health of the endpoint.</p> <note> <p>If you don't specify a value for <code>IPAddress</code>, Amazon Route 53 uses only IPv4 to send health checks to the endpoint. If there's no resource record set with a type of A for the name that you specify for <code>FullyQualifiedDomainName</code>, the health check fails with a \"DNS resolution failed\" error.</p> </note> <p>If you want to check the health of weighted, latency, or failover resource record sets and you choose to specify the endpoint only by <code>FullyQualifiedDomainName</code>, we recommend that you create a separate health check for each endpoint. For example, create a health check for each HTTP server that is serving content for www.example.com. For the value of <code>FullyQualifiedDomainName</code>, specify the domain name of the server (such as <code>us-east-1-www.example.com</code>), not the name of the resource record sets (www.example.com).</p> <important> <p>In this configuration, if the value of <code>FullyQualifiedDomainName</code> matches the name of the resource record sets and you then associate the health check with those resource record sets, health check results will be unpredictable.</p> </important> <p>In addition, if the value of <code>Type</code> is <code>HTTP</code>, <code>HTTPS</code>, <code>HTTP_STR_MATCH</code>, or <code>HTTPS_STR_MATCH</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> in the <code>Host</code> header, as it does when you specify a value for <code>IPAddress</code>. If the value of <code>Type</code> is <code>TCP</code>, Amazon Route 53 doesn't pass a <code>Host</code> header.</p>"]
+    #[doc="<p>Amazon Route 53 behavior depends on whether you specify a value for <code>IPAddress</code>.</p> <note> <p>If a health check already has a value for <code>IPAddress</code>, you can change the value. However, you can't update an existing health check to add or remove the value of <code>IPAddress</code>. </p> </note> <p> <b>If you specify a value for</b> <code>IPAddress</code>:</p> <p>Amazon Route 53 sends health check requests to the specified IPv4 or IPv6 address and passes the value of <code>FullyQualifiedDomainName</code> in the <code>Host</code> header for all health checks except TCP health checks. This is typically the fully qualified DNS name of the endpoint on which you want Amazon Route 53 to perform health checks.</p> <p>When Amazon Route 53 checks the health of an endpoint, here is how it constructs the <code>Host</code> header:</p> <ul> <li> <p>If you specify a value of <code>80</code> for <code>Port</code> and <code>HTTP</code> or <code>HTTP_STR_MATCH</code> for <code>Type</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> to the endpoint in the <code>Host</code> header.</p> </li> <li> <p>If you specify a value of <code>443</code> for <code>Port</code> and <code>HTTPS</code> or <code>HTTPS_STR_MATCH</code> for <code>Type</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> to the endpoint in the <code>Host</code> header.</p> </li> <li> <p>If you specify another value for <code>Port</code> and any value except <code>TCP</code> for <code>Type</code>, Amazon Route 53 passes <i> <code>FullyQualifiedDomainName</code>:<code>Port</code> </i> to the endpoint in the <code>Host</code> header.</p> </li> </ul> <p>If you don't specify a value for <code>FullyQualifiedDomainName</code>, Amazon Route 53 substitutes the value of <code>IPAddress</code> in the <code>Host</code> header in each of the above cases.</p> <p> <b>If you don't specify a value for</b> <code>IPAddress</code>:</p> <p>If you don't specify a value for <code>IPAddress</code>, Amazon Route 53 sends a DNS request to the domain that you specify in <code>FullyQualifiedDomainName</code> at the interval you specify in <code>RequestInterval</code>. Using an IPv4 address that is returned by DNS, Amazon Route 53 then checks the health of the endpoint.</p> <note> <p>If you don't specify a value for <code>IPAddress</code>, Amazon Route 53 uses only IPv4 to send health checks to the endpoint. If there's no resource record set with a type of A for the name that you specify for <code>FullyQualifiedDomainName</code>, the health check fails with a \"DNS resolution failed\" error.</p> </note> <p>If you want to check the health of weighted, latency, or failover resource record sets and you choose to specify the endpoint only by <code>FullyQualifiedDomainName</code>, we recommend that you create a separate health check for each endpoint. For example, create a health check for each HTTP server that is serving content for www.example.com. For the value of <code>FullyQualifiedDomainName</code>, specify the domain name of the server (such as <code>us-east-2-www.example.com</code>), not the name of the resource record sets (www.example.com).</p> <important> <p>In this configuration, if the value of <code>FullyQualifiedDomainName</code> matches the name of the resource record sets and you then associate the health check with those resource record sets, health check results will be unpredictable.</p> </important> <p>In addition, if the value of <code>Type</code> is <code>HTTP</code>, <code>HTTPS</code>, <code>HTTP_STR_MATCH</code>, or <code>HTTPS_STR_MATCH</code>, Amazon Route 53 passes the value of <code>FullyQualifiedDomainName</code> in the <code>Host</code> header, as it does when you specify a value for <code>IPAddress</code>. If the value of <code>Type</code> is <code>TCP</code>, Amazon Route 53 doesn't pass a <code>Host</code> header.</p>"]
     pub fully_qualified_domain_name: Option<FullyQualifiedDomainName>,
     #[doc="<p>The ID for the health check for which you want detailed information. When you created the health check, <code>CreateHealthCheck</code> returned the ID in the response, in the <code>HealthCheckId</code> element.</p>"]
     pub health_check_id: HealthCheckId,
-    #[doc="<p>A sequential counter that Amazon Route 53 sets to <code>1</code> when you create a health check and increments by <code>1</code> each time you update settings for the health check.</p> <p>We recommend that you use <code>GetHealthCheck</code> or <code>ListHealthChecks</code> to get the current value of <code>HealthCheckVersion</code> for the health check that you want to update, and that you include that value in your <code>UpdateHealthCheck</code> request. This prevents Amazon Route 53 from overwriting an intervening update:</p> <ul> <li> <p>f the value in the <code>UpdateHealthCheck</code> request matches the value of <code>HealthCheckVersion</code> in the health check, Amazon Route 53 updates the health check with the new settings.</p> </li> <li> <p>If the value of <code>HealthCheckVersion</code> in the health check is greater, the health check was changed after you got the version number. Amazon Route 53 does not update the health check, and it returns a <code>HealthCheckVersionMismatch</code> error.</p> </li> </ul>"]
+    #[doc="<p>A sequential counter that Amazon Route 53 sets to <code>1</code> when you create a health check and increments by 1 each time you update settings for the health check.</p> <p>We recommend that you use <code>GetHealthCheck</code> or <code>ListHealthChecks</code> to get the current value of <code>HealthCheckVersion</code> for the health check that you want to update, and that you include that value in your <code>UpdateHealthCheck</code> request. This prevents Amazon Route 53 from overwriting an intervening update:</p> <ul> <li> <p>If the value in the <code>UpdateHealthCheck</code> request matches the value of <code>HealthCheckVersion</code> in the health check, Amazon Route 53 updates the health check with the new settings.</p> </li> <li> <p>If the value of <code>HealthCheckVersion</code> in the health check is greater, the health check was changed after you got the version number. Amazon Route 53 does not update the health check, and it returns a <code>HealthCheckVersionMismatch</code> error.</p> </li> </ul>"]
     pub health_check_version: Option<HealthCheckVersion>,
     #[doc="<p>The number of child health checks that are associated with a <code>CALCULATED</code> health that Amazon Route 53 must consider healthy for the <code>CALCULATED</code> health check to be considered healthy. To specify the child health checks that you want to associate with a <code>CALCULATED</code> health check, use the <code>ChildHealthChecks</code> and <code>ChildHealthCheck</code> elements.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a number greater than the number of child health checks, Amazon Route 53 always considers this health check to be unhealthy.</p> </li> <li> <p>If you specify <code>0</code>, Amazon Route 53 always considers this health check to be healthy.</p> </li> </ul>"]
     pub health_threshold: Option<HealthThreshold>,
-    #[doc="<p>The IPv4 or IPv6 IP address for the endpoint that you want Amazon Route 53 to perform health checks on. If you don't specify a value for <code>IPAddress</code>, Amazon Route 53 sends a DNS request to resolve the domain name that you specify in <code>FullyQualifiedDomainName</code> at the interval that you specify in <code>RequestInterval</code>. Using an IP address that is returned by DNS, Amazon Route 53 then checks the health of the endpoint.</p> <p>If the endpoint is an EC2 instance, we recommend that you create an Elastic IP address, associate it with your EC2 instance, and specify the Elastic IP address for <code>IPAddress</code>. This ensures that the IP address of your instance never changes. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses (EIP)</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <note> <p>If a health check already has a value for <code>IPAddress</code>, you can change the value. However, you can't update an existing health check to add or remove the value of <code>IPAddress</code>. </p> </note> <p>For more information, see <a>UpdateHealthCheckRequest$FullyQualifiedDomainName</a>.</p> <p>Constraints: Amazon Route 53 can't check the health of endpoints for which the IP address is in local, private, non-routable, or multicast ranges. For more information about IP addresses for which you can't create health checks, see the following documents:</p> <ul> <li> <p> <a href=\"https://tools.ietf.org/html/rfc5735\">RFC 5735, Special Use IPv4 Addresses</a> </p> </li> <li> <p> <a href=\"https://tools.ietf.org/html/rfc6598\">RFC 6598, IANA-Reserved IPv4 Prefix for Shared Address Space</a> </p> </li> <li> <p> <a href=\"https://tools.ietf.org/html/rfc5156\">RFC 5156, Special-Use IPv6 Addresses</a> </p> </li> </ul>"]
+    #[doc="<p>The IPv4 or IPv6 IP address for the endpoint that you want Amazon Route 53 to perform health checks on. If you don't specify a value for <code>IPAddress</code>, Amazon Route 53 sends a DNS request to resolve the domain name that you specify in <code>FullyQualifiedDomainName</code> at the interval that you specify in <code>RequestInterval</code>. Using an IP address that is returned by DNS, Amazon Route 53 then checks the health of the endpoint.</p> <p>Use one of the following formats for the value of <code>IPAddress</code>: </p> <ul> <li> <p> <b>IPv4 address</b>: four values between 0 and 255, separated by periods (.), for example, <code>192.0.2.44</code>.</p> </li> <li> <p> <b>IPv6 address</b>: eight groups of four hexadecimal values, separated by colons (:), for example, <code>2001:0db8:85a3:0000:0000:abcd:0001:2345</code>. You can also shorten IPv6 addresses as described in RFC 5952, for example, <code>2001:db8:85a3::abcd:1:2345</code>.</p> </li> </ul> <p>If the endpoint is an EC2 instance, we recommend that you create an Elastic IP address, associate it with your EC2 instance, and specify the Elastic IP address for <code>IPAddress</code>. This ensures that the IP address of your instance never changes. For more information, see the applicable documentation:</p> <ul> <li> <p>Linux: <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses (EIP)</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> </p> </li> <li> <p>Windows: <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses (EIP)</a> in the <i>Amazon EC2 User Guide for Windows Instances</i> </p> </li> </ul> <note> <p>If a health check already has a value for <code>IPAddress</code>, you can change the value. However, you can't update an existing health check to add or remove the value of <code>IPAddress</code>. </p> </note> <p>For more information, see <a>UpdateHealthCheckRequest$FullyQualifiedDomainName</a>.</p> <p>Constraints: Amazon Route 53 can't check the health of endpoints for which the IP address is in local, private, non-routable, or multicast ranges. For more information about IP addresses for which you can't create health checks, see the following documents:</p> <ul> <li> <p> <a href=\"https://tools.ietf.org/html/rfc5735\">RFC 5735, Special Use IPv4 Addresses</a> </p> </li> <li> <p> <a href=\"https://tools.ietf.org/html/rfc6598\">RFC 6598, IANA-Reserved IPv4 Prefix for Shared Address Space</a> </p> </li> <li> <p> <a href=\"https://tools.ietf.org/html/rfc5156\">RFC 5156, Special-Use IPv6 Addresses</a> </p> </li> </ul>"]
     pub ip_address: Option<IPAddress>,
     #[doc="<p>When CloudWatch has insufficient data about the metric to determine the alarm state, the status that you want Amazon Route 53 to assign to the health check:</p> <ul> <li> <p> <code>Healthy</code>: Amazon Route 53 considers the health check to be healthy.</p> </li> <li> <p> <code>Unhealthy</code>: Amazon Route 53 considers the health check to be unhealthy.</p> </li> <li> <p> <code>LastKnownStatus</code>: Amazon Route 53 uses the status of the health check from the last time CloudWatch had sufficient data to determine the alarm state. For new health checks that have no last known status, the default status for the health check is healthy.</p> </li> </ul>"]
     pub insufficient_data_health_status: Option<InsufficientDataHealthStatus>,
@@ -7314,7 +7310,7 @@ pub struct UpdateHealthCheckRequest {
     pub inverted: Option<Inverted>,
     #[doc="<p>The port on the endpoint on which you want Amazon Route 53 to perform health checks.</p>"]
     pub port: Option<Port>,
-    #[doc="<p>A complex type that contains one Region element for each region from which you want Amazon Route 53 health checkers to check the specified endpoint.</p>"]
+    #[doc="<p>A complex type that contains one <code>Region</code> element for each region that you want Amazon Route 53 health checkers to check the specified endpoint from.</p>"]
     pub regions: Option<HealthCheckRegionList>,
     #[doc="<p>The path that you want Amazon Route 53 to request when performing health checks. The path can be any value for which your endpoint will return an HTTP status code of 2xx or 3xx when the endpoint is healthy, for example the file /docs/route53-health-check.html. </p> <p>Specify this value only if you want to change it.</p>"]
     pub resource_path: Option<ResourcePath>,
@@ -7369,16 +7365,16 @@ impl UpdateHealthCheckResponseDeserializer {
 
     }
 }
-#[doc="<p>A complex type that contains the hosted zone request information.</p>"]
+#[doc="<p>A request to update the comment for a hosted zone.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct UpdateHostedZoneCommentRequest {
     #[doc="<p>The new comment for the hosted zone. If you don't specify a value for <code>Comment</code>, Amazon Route 53 deletes the existing value of the <code>Comment</code> element, if any.</p>"]
     pub comment: Option<ResourceDescription>,
-    #[doc="<p>The ID for the hosted zone for which you want to update the comment.</p>"]
+    #[doc="<p>The ID for the hosted zone that you want to update the comment for.</p>"]
     pub id: ResourceId,
 }
 
-#[doc="<p>A complex type that contains the response to the UpdateHostedZoneCommentRequest.</p>"]
+#[doc="<p>A complex type that contains the response to the <code>UpdateHostedZoneComment</code> request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct UpdateHostedZoneCommentResponse {
     pub hosted_zone: HostedZone,
@@ -7427,14 +7423,14 @@ impl UpdateHostedZoneCommentResponseDeserializer {
 
     }
 }
-#[doc="<p>A complex type that contains information about the traffic policy for which you want to update the comment.</p>"]
+#[doc="<p>A complex type that contains information about the traffic policy that you want to update the comment for.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct UpdateTrafficPolicyCommentRequest {
     #[doc="<p>The new comment for the specified traffic policy and version.</p>"]
     pub comment: TrafficPolicyComment,
-    #[doc="<p>The value of <code>Id</code> for the traffic policy for which you want to update the comment.</p>"]
+    #[doc="<p>The value of <code>Id</code> for the traffic policy that you want to update the comment for.</p>"]
     pub id: TrafficPolicyId,
-    #[doc="<p>The value of <code>Version</code> for the traffic policy for which you want to update the comment.</p>"]
+    #[doc="<p>The value of <code>Version</code> for the traffic policy that you want to update the comment for.</p>"]
     pub version: TrafficPolicyVersion,
 }
 
@@ -7553,11 +7549,11 @@ impl UpdateTrafficPolicyInstanceResponseDeserializer {
 
     }
 }
-#[doc="<p>A complex type that contains information about an Amazon VPC that is associated with a private hosted zone.</p>"]
+#[doc="<p>(Private hosted zones only) A complex type that contains information about an Amazon VPC.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct VPC {
     pub vpc_id: Option<VPCId>,
-    #[doc="<p>The region in which you created the VPC that you want to associate with the specified Amazon Route 53 hosted zone.</p>"]
+    #[doc="<p>(Private hosted zones only) The region in which you created an Amazon VPC.</p>"]
     pub vpc_region: Option<VPCRegion>,
 }
 
@@ -7623,7 +7619,7 @@ impl VPCSerializer {
     }
 }
 
-#[doc="<p>The ID of an Amazon VPC. </p>"]
+#[doc="<p>(Private hosted zones only) The ID of an Amazon VPC. </p>"]
 pub type VPCId = String;
 struct VPCIdDeserializer;
 impl VPCIdDeserializer {
@@ -7676,7 +7672,7 @@ impl VPCRegionSerializer {
     }
 }
 
-#[doc="<p>A list of <code>VPC</code> elements.</p>"]
+#[doc="<p>(Private hosted zones only) A list of <code>VPC</code> elements.</p>"]
 pub type VPCs = Vec<VPC>;
 struct VPCsDeserializer;
 impl VPCsDeserializer {
@@ -7906,7 +7902,7 @@ pub enum ChangeTagsForResourceError {
     NoSuchHostedZone(String),
     ///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
     PriorRequestNotComplete(String),
-    ///<p></p>
+    ///<p>The limit on the number of requests per second was exceeded.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7986,7 +7982,7 @@ impl Error for ChangeTagsForResourceError {
 /// Errors returned by CreateHealthCheck
 #[derive(Debug, PartialEq)]
 pub enum CreateHealthCheckError {
-    ///<p> The health check you're attempting to create already exists.</p> <p>Amazon Route 53 returns this error when a health check has already been created with the specified value for <code>CallerReference</code>.</p>
+    ///<p> The health check you're attempting to create already exists. Amazon Route 53 returns this error when you submit a request that has the following values:</p> <ul> <li> <p>The same value for <code>CallerReference</code> as an existing health check, and one or more values that differ from the existing health check that has the same caller reference.</p> </li> <li> <p>The same value for <code>CallerReference</code> as a health check that you created and later deleted, regardless of the other settings in the request.</p> </li> </ul>
     HealthCheckAlreadyExists(String),
     ///<p>The input is not valid.</p>
     InvalidInput(String),
@@ -8070,7 +8066,7 @@ pub enum CreateHostedZoneError {
     DelegationSetNotAvailable(String),
     ///<p>A reusable delegation set with the specified ID does not exist.</p>
     DelegationSetNotReusable(String),
-    ///<p>The hosted zone you are trying to create already exists. Amazon Route 53 returns this error when a hosted zone has already been created with the specified <code>CallerReference</code>.</p>
+    ///<p>The hosted zone you're trying to create already exists. Amazon Route 53 returns this error when a hosted zone has already been created with the specified <code>CallerReference</code>.</p>
     HostedZoneAlreadyExists(String),
     ///<p>The specified domain name is not valid.</p>
     InvalidDomainName(String),
@@ -8176,7 +8172,7 @@ pub enum CreateReusableDelegationSetError {
     DelegationSetNotAvailable(String),
     ///<p>The specified HostedZone can't be found.</p>
     HostedZoneNotFound(String),
-    ///<p>Parameter name and problem.</p>
+    ///<p>Parameter name is invalid.</p>
     InvalidArgument(String),
     ///<p>The input is not valid.</p>
     InvalidInput(String),
@@ -8508,6 +8504,8 @@ impl Error for CreateTrafficPolicyVersionError {
 /// Errors returned by CreateVPCAssociationAuthorization
 #[derive(Debug, PartialEq)]
 pub enum CreateVPCAssociationAuthorizationError {
+    ///<p>Another user submitted a request to update the object at the same time that you did. Retry the request. </p>
+    ConcurrentModification(String),
     ///<p>The input is not valid.</p>
     InvalidInput(String),
     ///<p>The VPC ID that you specified either isn't a valid ID or the current account is not authorized to access this VPC.</p>
@@ -8536,6 +8534,7 @@ impl CreateVPCAssociationAuthorizationError {
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => {
                 match &parsed_error.code[..] {
+                    "ConcurrentModification" => CreateVPCAssociationAuthorizationError::ConcurrentModification(String::from(parsed_error.message)),
                     "InvalidInput" => CreateVPCAssociationAuthorizationError::InvalidInput(String::from(parsed_error.message)),
                     "InvalidVPCId" => CreateVPCAssociationAuthorizationError::InvalidVPCId(String::from(parsed_error.message)),
                     "NoSuchHostedZone" => CreateVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(parsed_error.message)),
@@ -8572,6 +8571,7 @@ impl fmt::Display for CreateVPCAssociationAuthorizationError {
 impl Error for CreateVPCAssociationAuthorizationError {
     fn description(&self) -> &str {
         match *self {
+            CreateVPCAssociationAuthorizationError::ConcurrentModification(ref cause) => cause,
             CreateVPCAssociationAuthorizationError::InvalidInput(ref cause) => cause,
             CreateVPCAssociationAuthorizationError::InvalidVPCId(ref cause) => cause,
             CreateVPCAssociationAuthorizationError::NoSuchHostedZone(ref cause) => cause,
@@ -8994,6 +8994,8 @@ impl Error for DeleteTrafficPolicyInstanceError {
 /// Errors returned by DeleteVPCAssociationAuthorization
 #[derive(Debug, PartialEq)]
 pub enum DeleteVPCAssociationAuthorizationError {
+    ///<p>Another user submitted a request to update the object at the same time that you did. Retry the request. </p>
+    ConcurrentModification(String),
     ///<p>The input is not valid.</p>
     InvalidInput(String),
     ///<p>The VPC ID that you specified either isn't a valid ID or the current account is not authorized to access this VPC.</p>
@@ -9022,6 +9024,7 @@ impl DeleteVPCAssociationAuthorizationError {
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => {
                 match &parsed_error.code[..] {
+                    "ConcurrentModification" => DeleteVPCAssociationAuthorizationError::ConcurrentModification(String::from(parsed_error.message)),
                     "InvalidInput" => DeleteVPCAssociationAuthorizationError::InvalidInput(String::from(parsed_error.message)),
                     "InvalidVPCId" => DeleteVPCAssociationAuthorizationError::InvalidVPCId(String::from(parsed_error.message)),
                     "NoSuchHostedZone" => DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(parsed_error.message)),
@@ -9058,6 +9061,7 @@ impl fmt::Display for DeleteVPCAssociationAuthorizationError {
 impl Error for DeleteVPCAssociationAuthorizationError {
     fn description(&self) -> &str {
         match *self {
+            DeleteVPCAssociationAuthorizationError::ConcurrentModification(ref cause) => cause,
             DeleteVPCAssociationAuthorizationError::InvalidInput(ref cause) => cause,
             DeleteVPCAssociationAuthorizationError::InvalidVPCId(ref cause) => cause,
             DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(ref cause) => cause,
@@ -9370,7 +9374,7 @@ impl Error for GetGeoLocationError {
 /// Errors returned by GetHealthCheck
 #[derive(Debug, PartialEq)]
 pub enum GetHealthCheckError {
-    ///<p>The resource you are trying to access is unsupported on this Amazon Route 53 endpoint. Please consider using a newer endpoint or a tool that does so.</p>
+    ///<p>The resource you're trying to access is unsupported on this Amazon Route 53 endpoint.</p>
     IncompatibleVersion(String),
     ///<p>The input is not valid.</p>
     InvalidInput(String),
@@ -10156,7 +10160,7 @@ impl Error for ListGeoLocationsError {
 /// Errors returned by ListHealthChecks
 #[derive(Debug, PartialEq)]
 pub enum ListHealthChecksError {
-    ///<p>The resource you are trying to access is unsupported on this Amazon Route 53 endpoint. Please consider using a newer endpoint or a tool that does so.</p>
+    ///<p>The resource you're trying to access is unsupported on this Amazon Route 53 endpoint.</p>
     IncompatibleVersion(String),
     ///<p>The input is not valid.</p>
     InvalidInput(String),
@@ -10526,7 +10530,7 @@ pub enum ListTagsForResourceError {
     NoSuchHostedZone(String),
     ///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
     PriorRequestNotComplete(String),
-    ///<p></p>
+    ///<p>The limit on the number of requests per second was exceeded.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10614,7 +10618,7 @@ pub enum ListTagsForResourcesError {
     NoSuchHostedZone(String),
     ///<p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Amazon Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
     PriorRequestNotComplete(String),
-    ///<p></p>
+    ///<p>The limit on the number of requests per second was exceeded.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11523,14 +11527,14 @@ impl Error for UpdateTrafficPolicyInstanceError {
 }
 /// Trait representing the capabilities of the Route 53 API. Route 53 clients implement this trait.
 pub trait Route53 {
-    #[doc="<p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can't convert a public hosted zone into a private hosted zone.</p> </important> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/associatevpc</code> resource. The request body must include a document with an <code>AssociateVPCWithHostedZoneRequest</code> element. The response contains a <code>ChangeInfo</code> data type that you can use to track the progress of the request. </p> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note>"]
+    #[doc="<p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can't convert a public hosted zone into a private hosted zone.</p> </important> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note>"]
     fn associate_vpc_with_hosted_zone
         (&self,
          input: &AssociateVPCWithHostedZoneRequest)
          -> Result<AssociateVPCWithHostedZoneResponse, AssociateVPCWithHostedZoneError>;
 
 
-    #[doc="<p>Create, change, update, or delete authoritative DNS information on all Amazon Route 53 servers. Send a <code>POST</code> request to: </p> <p> <code>/2013-04-01/hostedzone/<i>Amazon Route 53 hosted Zone ID</i>/rrset</code> resource. </p> <p>The request body must include a document with a <code>ChangeResourceRecordSetsRequest</code> element. The request body contains a list of change items, known as a change batch. Change batches are considered transactional changes. When using the Amazon Route 53 API to change resource record sets, Amazon Route 53 either makes all or none of the changes in a change batch request. This ensures that Amazon Route 53 never partially implements the intended changes to the resource record sets in a hosted zone. </p> <p>For example, a change batch request that deletes the <code>CNAME</code> record for www.example.com and creates an alias resource record set for www.example.com. Amazon Route 53 deletes the first resource record set and creates the second resource record set in a single operation. If either the <code>DELETE</code> or the <code>CREATE</code> action fails, then both changes (plus any other changes in the batch) fail, and the original <code>CNAME</code> record continues to exist.</p> <important> <p>Due to the nature of transactional changes, you can't delete the same resource record set more than once in a single change batch. If you attempt to delete the same change batch more than once, Amazon Route 53 returns an <code>InvalidChangeBatch</code> error.</p> </important> <note> <p>To create resource record sets for complex routing configurations, use either the traffic flow visual editor in the Amazon Route 53 console or the API actions for traffic policies and traffic policy instances. Save the configuration as a traffic policy, then associate the traffic policy with one or more domain names (such as example.com) or subdomain names (such as www.example.com), in the same hosted zone or in multiple hosted zones. You can roll back the updates if the new configuration isn't performing as expected. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/traffic-flow.html\">Using Traffic Flow to Route DNS Traffic</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </note> <p>Use <code>ChangeResourceRecordsSetsRequest</code> to perform the following actions:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes an existing resource record set that has the specified values.</p> </li> <li> <p> <code>UPSERT</code>: If a resource record set does not already exist, AWS creates it. If a resource set does exist, Amazon Route 53 updates it with the values in the request. </p> </li> </ul> <p>The values that you need to include in the request depend on the type of resource record set that you're creating, deleting, or updating:</p> <p> <b>Basic resource record sets (excluding alias, failover, geolocation, latency, and weighted resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> </ul> <p> <b>Failover, geolocation, latency, or weighted resource record sets (excluding alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> <li> <p> <code>SetIdentifier</code> </p> </li> </ul> <p> <b>Alias resource record sets (including failover alias, geolocation alias, latency alias, and weighted alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>AliasTarget</code> (includes <code>DNSName</code>, <code>EvaluateTargetHealth</code>, and <code>HostedZoneId</code>)</p> </li> <li> <p> <code>SetIdentifier</code> (for failover, geolocation, latency, and weighted resource record sets)</p> </li> </ul> <p>When you submit a <code>ChangeResourceRecordSets</code> request, Amazon Route 53 propagates your changes to all of the Amazon Route 53 authoritative DNS servers. While your changes are propagating, <code>GetChange</code> returns a status of <code>PENDING</code>. When propagation is complete, <code>GetChange</code> returns a status of <code>INSYNC</code>. Changes generally propagate to all Amazon Route 53 name servers in a few minutes. In rare circumstances, propagation can take up to 30 minutes. For more information, see <a>GetChange</a> </p> <p>For information about the limits on a <code>ChangeResourceRecordSets</code> request, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html\">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
+    #[doc="<p>Creates, changes, or deletes a resource record set, which contains authoritative DNS information for a specified domain name or subdomain name. For example, you can use <code>ChangeResourceRecordSets</code> to create a resource record set that routes traffic for test.example.com to a web server that has an IP address of 192.0.2.44.</p> <p> <b>Change Batches and Transactional Changes</b> </p> <p>The request body must include a document with a <code>ChangeResourceRecordSetsRequest</code> element. The request body contains a list of change items, known as a change batch. Change batches are considered transactional changes. When using the Amazon Route 53 API to change resource record sets, Amazon Route 53 either makes all or none of the changes in a change batch request. This ensures that Amazon Route 53 never partially implements the intended changes to the resource record sets in a hosted zone. </p> <p>For example, a change batch request that deletes the <code>CNAME</code> record for www.example.com and creates an alias resource record set for www.example.com. Amazon Route 53 deletes the first resource record set and creates the second resource record set in a single operation. If either the <code>DELETE</code> or the <code>CREATE</code> action fails, then both changes (plus any other changes in the batch) fail, and the original <code>CNAME</code> record continues to exist.</p> <important> <p>Due to the nature of transactional changes, you can't delete the same resource record set more than once in a single change batch. If you attempt to delete the same change batch more than once, Amazon Route 53 returns an <code>InvalidChangeBatch</code> error.</p> </important> <p> <b>Traffic Flow</b> </p> <p>To create resource record sets for complex routing configurations, use either the traffic flow visual editor in the Amazon Route 53 console or the API actions for traffic policies and traffic policy instances. Save the configuration as a traffic policy, then associate the traffic policy with one or more domain names (such as example.com) or subdomain names (such as www.example.com), in the same hosted zone or in multiple hosted zones. You can roll back the updates if the new configuration isn't performing as expected. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/traffic-flow.html\">Using Traffic Flow to Route DNS Traffic</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p> <b>Create, Delete, and Upsert</b> </p> <p>Use <code>ChangeResourceRecordsSetsRequest</code> to perform the following actions:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes an existing resource record set that has the specified values.</p> </li> <li> <p> <code>UPSERT</code>: If a resource record set does not already exist, AWS creates it. If a resource set does exist, Amazon Route 53 updates it with the values in the request. </p> </li> </ul> <p> <b>Syntaxes for Creating, Updating, and Deleting Resource Record Sets</b> </p> <p>The syntax for a request depends on the type of resource record set that you want to create, delete, or update, such as weighted, alias, or failover. The XML elements in your request must appear in the order listed in the syntax. </p> <p>For an example for each type of resource record set, see \"Examples.\"</p> <p>Don't refer to the syntax in the \"Parameter Syntax\" section, which includes all of the elements for every kind of resource record set that you can create, delete, or update by using <code>ChangeResourceRecordSets</code>. </p> <p> <b>Change Propagation to Amazon Route 53 DNS Servers</b> </p> <p>When you submit a <code>ChangeResourceRecordSets</code> request, Amazon Route 53 propagates your changes to all of the Amazon Route 53 authoritative DNS servers. While your changes are propagating, <code>GetChange</code> returns a status of <code>PENDING</code>. When propagation is complete, <code>GetChange</code> returns a status of <code>INSYNC</code>. Changes generally propagate to all Amazon Route 53 name servers in a few minutes. In rare circumstances, propagation can take up to 30 minutes. For more information, see <a>GetChange</a>.</p> <p> <b>Limits on ChangeResourceRecordSets Requests</b> </p> <p>For information about the limits on a <code>ChangeResourceRecordSets</code> request, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html\">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     fn change_resource_record_sets
         (&self,
          input: &ChangeResourceRecordSetsRequest)
@@ -11544,46 +11548,46 @@ pub trait Route53 {
          -> Result<ChangeTagsForResourceResponse, ChangeTagsForResourceError>;
 
 
-    #[doc="<p>Creates a new health check.</p> <p>To create a new health check, send a <code>POST</code> request to the <code>/2013-04-01/healthcheck</code> resource. The request body must include a document with a <code>CreateHealthCheckRequest</code> element. The response returns the <code>CreateHealthCheckResponse</code> element, containing the health check ID specified when adding health check to a resource record set. For information about adding health checks to resource record sets, see <a>ResourceRecordSet$HealthCheckId</a> in <a>ChangeResourceRecordSets</a>. </p> <p>If you are registering EC2 instances with an Elastic Load Balancing (ELB) load balancer, do not create Amazon Route 53 health checks for the EC2 instances. When you register an EC2 instance with a load balancer, you configure settings for an ELB health check, which performs a similar function to an Amazon Route 53 health check.</p> <p>You can associate health checks with failover resource record sets in a private hosted zone. Note the following:</p> <ul> <li> <p>Amazon Route 53 health checkers are outside the VPC. To check the health of an endpoint within a VPC by IP address, you must assign a public IP address to the instance in the VPC.</p> </li> <li> <p>You can configure a health checker to check the health of an external resource that the instance relies on, such as a database server.</p> </li> <li> <p>You can create a CloudWatch metric, associate an alarm with the metric, and then create a health check that is based on the state of the alarm. For example, you might create a CloudWatch metric that checks the status of the Amazon EC2 <code>StatusCheckFailed</code> metric, add an alarm to the metric, and then create a health check that is based on the state of the alarm. For information about creating CloudWatch metrics and alarms by using the CloudWatch console, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatch.html\">Amazon CloudWatch User Guide</a>.</p> </li> </ul>"]
+    #[doc="<p>Creates a new health check.</p> <p>For information about adding health checks to resource record sets, see <a>ResourceRecordSet$HealthCheckId</a> in <a>ChangeResourceRecordSets</a>. </p> <p> <b>ELB Load Balancers</b> </p> <p>If you're registering EC2 instances with an Elastic Load Balancing (ELB) load balancer, do not create Amazon Route 53 health checks for the EC2 instances. When you register an EC2 instance with a load balancer, you configure settings for an ELB health check, which performs a similar function to an Amazon Route 53 health check.</p> <p> <b>Private Hosted Zones</b> </p> <p>You can associate health checks with failover resource record sets in a private hosted zone. Note the following:</p> <ul> <li> <p>Amazon Route 53 health checkers are outside the VPC. To check the health of an endpoint within a VPC by IP address, you must assign a public IP address to the instance in the VPC.</p> </li> <li> <p>You can configure a health checker to check the health of an external resource that the instance relies on, such as a database server.</p> </li> <li> <p>You can create a CloudWatch metric, associate an alarm with the metric, and then create a health check that is based on the state of the alarm. For example, you might create a CloudWatch metric that checks the status of the Amazon EC2 <code>StatusCheckFailed</code> metric, add an alarm to the metric, and then create a health check that is based on the state of the alarm. For information about creating CloudWatch metrics and alarms by using the CloudWatch console, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatch.html\">Amazon CloudWatch User Guide</a>.</p> </li> </ul>"]
     fn create_health_check(&self,
                            input: &CreateHealthCheckRequest)
                            -> Result<CreateHealthCheckResponse, CreateHealthCheckError>;
 
 
-    #[doc="<p>Creates a new public hosted zone, used to specify how the Domain Name System (DNS) routes traffic on the Internet for a domain, such as example.com, and its subdomains. </p> <important> <p>Public hosted zones can't be converted to a private hosted zone or vice versa. Instead, create a new hosted zone with the same name and create new resource record sets.</p> </important> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone</code> resource. The request body must include a document with a <code>CreateHostedZoneRequest</code> element. The response returns the <code>CreateHostedZoneResponse</code> element containing metadata about the hosted zone.</p> <p>Fore more information about charges for hosted zones, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> <p>Note the following:</p> <ul> <li> <p>You can't create a hosted zone for a top-level domain (TLD).</p> </li> <li> <p>Amazon Route 53 automatically creates a default SOA record and four NS records for the zone. For more information about SOA and NS records, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/SOA-NSrecords.html\">NS and SOA Records that Amazon Route 53 Creates for a Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> <li> <p>If your domain is registered with a registrar other than Amazon Route 53, you must update the name servers with your registrar to make Amazon Route 53 your DNS service. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/creating-migrating.html\">Configuring Amazon Route 53 as your DNS Service</a> in the <i>Amazon Route 53 Developer's Guide</i>.</p> </li> </ul> <p>After creating a zone, its initial status is <code>PENDING</code>. This means that it is not yet available on all DNS servers. The status of the zone changes to <code>INSYNC</code> when the NS and SOA records are available on all Amazon Route 53 DNS servers. </p> <p>When trying to create a hosted zone using a reusable delegation set, specify an optional DelegationSetId, and Amazon Route 53 would assign those 4 NS records for the zone, instead of allotting a new one.</p>"]
+    #[doc="<p>Creates a new public hosted zone, which you use to specify how the Domain Name System (DNS) routes traffic on the Internet for a domain, such as example.com, and its subdomains. </p> <important> <p>You can't convert a public hosted zones to a private hosted zone or vice versa. Instead, you must create a new hosted zone with the same name and create new resource record sets.</p> </important> <p>For more information about charges for hosted zones, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> <p>Note the following:</p> <ul> <li> <p>You can't create a hosted zone for a top-level domain (TLD).</p> </li> <li> <p>Amazon Route 53 automatically creates a default SOA record and four NS records for the zone. For more information about SOA and NS records, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/SOA-NSrecords.html\">NS and SOA Records that Amazon Route 53 Creates for a Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you want to use the same name servers for multiple hosted zones, you can optionally associate a reusable delegation set with the hosted zone. See the <code>DelegationSetId</code> element.</p> </li> <li> <p>If your domain is registered with a registrar other than Amazon Route 53, you must update the name servers with your registrar to make Amazon Route 53 your DNS service. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/creating-migrating.html\">Configuring Amazon Route 53 as your DNS Service</a> in the <i>Amazon Route 53 Developer Guide</i>. </p> </li> </ul> <p>When you submit a <code>CreateHostedZone</code> request, the initial status of the hosted zone is <code>PENDING</code>. This means that the NS and SOA records are not yet available on all Amazon Route 53 DNS servers. When the NS and SOA records are available, the status of the zone changes to <code>INSYNC</code>.</p>"]
     fn create_hosted_zone(&self,
                           input: &CreateHostedZoneRequest)
                           -> Result<CreateHostedZoneResponse, CreateHostedZoneError>;
 
 
-    #[doc="<p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/delegationset</code> resource. The request body must include a document with a <code>CreateReusableDelegationSetRequest</code> element.</p> <note> <p>A reusable delegation set can't be associated with a private hosted zone/</p> </note> <p>For more information, including a procedure on how to create and configure a reusable delegation set (also known as white label name servers), see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html\">Configuring White Label Name Servers</a>.</p>"]
+    #[doc="<p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable</p> <note> <p>A reusable delegation set can't be associated with a private hosted zone.</p> </note> <p>For information on how to use a reusable delegation set to configure white label name servers, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html\">Configuring White Label Name Servers</a>.</p>"]
     fn create_reusable_delegation_set
         (&self,
          input: &CreateReusableDelegationSetRequest)
          -> Result<CreateReusableDelegationSetResponse, CreateReusableDelegationSetError>;
 
 
-    #[doc="<p>Creates a traffic policy, which you use to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com).</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy</code> resource. The request body must include a document with a <code>CreateTrafficPolicyRequest</code> element. The response includes the <code>CreateTrafficPolicyResponse</code> element, which contains information about the new traffic policy.</p>"]
+    #[doc="<p>Creates a traffic policy, which you use to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com).</p>"]
     fn create_traffic_policy(&self,
                              input: &CreateTrafficPolicyRequest)
                              -> Result<CreateTrafficPolicyResponse, CreateTrafficPolicyError>;
 
 
-    #[doc="<p>Creates resource record sets in a specified hosted zone based on the settings in a specified traffic policy version. In addition, <code>CreateTrafficPolicyInstance</code> associates the resource record sets with a specified domain name (such as example.com) or subdomain name (such as www.example.com). Amazon Route 53 responds to DNS queries for the domain or subdomain name by using the resource record sets that <code>CreateTrafficPolicyInstance</code> created.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicyinstance</code> resource. The request body must include a document with a <code>CreateTrafficPolicyRequest</code> element. The response returns the <code>CreateTrafficPolicyInstanceResponse</code> element, which contains information about the traffic policy instance.</p>"]
+    #[doc="<p>Creates resource record sets in a specified hosted zone based on the settings in a specified traffic policy version. In addition, <code>CreateTrafficPolicyInstance</code> associates the resource record sets with a specified domain name (such as example.com) or subdomain name (such as www.example.com). Amazon Route 53 responds to DNS queries for the domain or subdomain name by using the resource record sets that <code>CreateTrafficPolicyInstance</code> created.</p>"]
     fn create_traffic_policy_instance
         (&self,
          input: &CreateTrafficPolicyInstanceRequest)
          -> Result<CreateTrafficPolicyInstanceResponse, CreateTrafficPolicyInstanceError>;
 
 
-    #[doc="<p>Creates a new version of an existing traffic policy. When you create a new version of a traffic policy, you specify the ID of the traffic policy that you want to update and a JSON-formatted document that describes the new version. You use traffic policies to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com). You can create a maximum of 1000 versions of a traffic policy. If you reach the limit and need to create another version, you'll need to start a new traffic policy.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy/</code> resource. The request body includes a document with a <code>CreateTrafficPolicyVersionRequest</code> element. The response returns the <code>CreateTrafficPolicyVersionResponse</code> element, which contains information about the new version of the traffic policy.</p>"]
+    #[doc="<p>Creates a new version of an existing traffic policy. When you create a new version of a traffic policy, you specify the ID of the traffic policy that you want to update and a JSON-formatted document that describes the new version. You use traffic policies to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com). You can create a maximum of 1000 versions of a traffic policy. If you reach the limit and need to create another version, you'll need to start a new traffic policy.</p>"]
     fn create_traffic_policy_version
         (&self,
          input: &CreateTrafficPolicyVersionRequest)
          -> Result<CreateTrafficPolicyVersionResponse, CreateTrafficPolicyVersionError>;
 
 
-    #[doc="<p>Authorizes the AWS account that created a specified VPC to submit an <code>AssociateVPCWithHostedZone</code> request to associate the VPC with a specified hosted zone that was created by a different account. To submit a <code>CreateVPCAssociationAuthorization</code> request, you must use the account that created the hosted zone. After you authorize the association, use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> <note> <p>If you want to associate multiple VPCs that you created by using one account with a hosted zone that you created by using a different account, you must submit one authorization request for each VPC.</p> </note> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation</code> resource. The request body must include a document with a <code>CreateVPCAssociationAuthorizationRequest</code> element. The response contains information about the authorization.</p>"]
+    #[doc="<p>Authorizes the AWS account that created a specified VPC to submit an <code>AssociateVPCWithHostedZone</code> request to associate the VPC with a specified hosted zone that was created by a different account. To submit a <code>CreateVPCAssociationAuthorization</code> request, you must use the account that created the hosted zone. After you authorize the association, use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> <note> <p>If you want to associate multiple VPCs that you created by using one account with a hosted zone that you created by using a different account, you must submit one authorization request for each VPC.</p> </note>"]
     fn create_vpc_association_authorization
         (&self,
          input: &CreateVPCAssociationAuthorizationRequest)
@@ -11591,39 +11595,39 @@ pub trait Route53 {
                    CreateVPCAssociationAuthorizationError>;
 
 
-    #[doc="<p>Deletes a health check. Send a <code>DELETE</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don't update the associated resource record sets, the future status of the health check can't be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html\">Replacing and Deleting Health Checks</a> in the Amazon Route 53 Developer Guide.</p> </important>"]
+    #[doc="<p>Deletes a health check.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don't update the associated resource record sets, the future status of the health check can't be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html\">Replacing and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </important>"]
     fn delete_health_check(&self,
                            input: &DeleteHealthCheckRequest)
                            -> Result<DeleteHealthCheckResponse, DeleteHealthCheckError>;
 
 
-    #[doc="<p>Deletes a hosted zone. Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/hostedzone/<i>hosted zone ID</i> </code> resource.</p> <important> <p>Delete a hosted zone only if there are no resource record sets other than the default SOA record and NS resource record sets. If the hosted zone contains other resource record sets, delete them before deleting the hosted zone. If you try to delete a hosted zone that contains other resource record sets, Amazon Route 53 denies your request with a <code>HostedZoneNotEmpty</code> error. For information about deleting records from your hosted zone, see <a>ChangeResourceRecordSets</a>.</p> </important>"]
+    #[doc="<p>Deletes a hosted zone.</p> <important> <p>If the name servers for the hosted zone are associated with a domain and if you want to make the domain unavailable on the Internet, we recommend that you delete the name servers from the domain to prevent future DNS queries from possibly being misrouted. If the domain is registered with Amazon Route 53, see <code>UpdateDomainNameservers</code>. If the domain is registered with another registrar, use the method provided by the registrar to delete name servers for the domain.</p> <p>Some domain registries don't allow you to remove all of the name servers for a domain. If the registry for your domain requires one or more name servers, we recommend that you delete the hosted zone only if you transfer DNS service to another service provider, and you replace the name servers for the domain with name servers from the new provider.</p> </important> <p>You can delete a hosted zone only if it contains only the default SOA record and NS resource record sets. If the hosted zone contains other resource record sets, you must delete them before you can delete the hosted zone. If you try to delete a hosted zone that contains other resource record sets, the request fails, and Amazon Route 53 returns a <code>HostedZoneNotEmpty</code> error. For information about deleting records from your hosted zone, see <a>ChangeResourceRecordSets</a>.</p> <p>To verify that the hosted zone has been deleted, do one of the following:</p> <ul> <li> <p>Use the <code>GetHostedZone</code> action to request information about the hosted zone.</p> </li> <li> <p>Use the <code>ListHostedZones</code> action to get a list of the hosted zones associated with the current AWS account.</p> </li> </ul>"]
     fn delete_hosted_zone(&self,
                           input: &DeleteHostedZoneRequest)
                           -> Result<DeleteHostedZoneResponse, DeleteHostedZoneError>;
 
 
-    #[doc="<p>Deletes a reusable delegation set. Send a <code>DELETE</code> request to the <code>/2013-04-01/delegationset/<i>delegation set ID</i> </code> resource.</p> <important> <p> You can delete a reusable delegation set only if there are no associated hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, run the <a>GetReusableDelegationSet</a> action and specify the ID of the reusable delegation set that you want to delete.</p>"]
+    #[doc="<p>Deletes a reusable delegation set.</p> <important> <p>You can delete a reusable delegation set only if it isn't associated with any hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, submit a <a>GetReusableDelegationSet</a> request and specify the ID of the reusable delegation set that you want to delete.</p>"]
     fn delete_reusable_delegation_set
         (&self,
          input: &DeleteReusableDelegationSetRequest)
          -> Result<DeleteReusableDelegationSetResponse, DeleteReusableDelegationSetError>;
 
 
-    #[doc="<p>Deletes a traffic policy.</p> <p>Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p>"]
+    #[doc="<p>Deletes a traffic policy.</p>"]
     fn delete_traffic_policy(&self,
                              input: &DeleteTrafficPolicyRequest)
                              -> Result<DeleteTrafficPolicyResponse, DeleteTrafficPolicyError>;
 
 
-    #[doc="<p>Deletes a traffic policy instance and all of the resource record sets that Amazon Route 53 created when you created the instance.</p> <p>Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy/<i>traffic policy instance ID</i> </code> resource.</p> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
+    #[doc="<p>Deletes a traffic policy instance and all of the resource record sets that Amazon Route 53 created when you created the instance.</p> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
     fn delete_traffic_policy_instance
         (&self,
          input: &DeleteTrafficPolicyInstanceRequest)
          -> Result<DeleteTrafficPolicyInstanceResponse, DeleteTrafficPolicyInstanceError>;
 
 
-    #[doc="<p>Removes authorization to submit an <code>AssociateVPCWithHostedZone</code> request to associate a specified VPC with a hosted zone that was created by a different account. You must use the account that created the hosted zone to submit a <code>DeleteVPCAssociationAuthorization</code> request.</p> <important> <p>Sending this request only prevents the AWS account that created the VPC from associating the VPC with the Amazon Route 53 hosted zone in the future. If the VPC is already associated with the hosted zone, <code>DeleteVPCAssociationAuthorization</code> won't disassociate the VPC from the hosted zone. If you want to delete an existing association, use <code>DisassociateVPCFromHostedZone</code>.</p> </important> <p>Send a <code>DELETE</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/deauthorizevpcassociation</code> resource. The request body must include a document with a <code>DeleteVPCAssociationAuthorizationRequest</code> element.</p>"]
+    #[doc="<p>Removes authorization to submit an <code>AssociateVPCWithHostedZone</code> request to associate a specified VPC with a hosted zone that was created by a different account. You must use the account that created the hosted zone to submit a <code>DeleteVPCAssociationAuthorization</code> request.</p> <important> <p>Sending this request only prevents the AWS account that created the VPC from associating the VPC with the Amazon Route 53 hosted zone in the future. If the VPC is already associated with the hosted zone, <code>DeleteVPCAssociationAuthorization</code> won't disassociate the VPC from the hosted zone. If you want to delete an existing association, use <code>DisassociateVPCFromHostedZone</code>.</p> </important>"]
     fn delete_vpc_association_authorization
         (&self,
          input: &DeleteVPCAssociationAuthorizationRequest)
@@ -11631,113 +11635,113 @@ pub trait Route53 {
                    DeleteVPCAssociationAuthorizationError>;
 
 
-    #[doc="<p>Disassociates a VPC from a Amazon Route 53 private hosted zone. </p> <note> <p>You can't disassociate the last VPC from a private hosted zone.</p> </note> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/disassociatevpc</code> resource. The request body must include a document with a <code>DisassociateVPCFromHostedZoneRequest</code> element. The response includes a <code>DisassociateVPCFromHostedZoneResponse</code> element.</p> <important> <p>You can't disassociate a VPC from a private hosted zone when only one VPC is associated with the hosted zone. You also can't convert a private hosted zone into a public hosted zone.</p> </important>"]
+    #[doc="<p>Disassociates a VPC from a Amazon Route 53 private hosted zone. </p> <note> <p>You can't disassociate the last VPC from a private hosted zone.</p> </note> <important> <p>You can't disassociate a VPC from a private hosted zone when only one VPC is associated with the hosted zone. You also can't convert a private hosted zone into a public hosted zone.</p> </important>"]
     fn disassociate_vpc_from_hosted_zone
         (&self,
          input: &DisassociateVPCFromHostedZoneRequest)
          -> Result<DisassociateVPCFromHostedZoneResponse, DisassociateVPCFromHostedZoneError>;
 
 
-    #[doc="<p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not replicated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have replicated to all Amazon Route 53 DNS servers. </p> </li> </ul>"]
+    #[doc="<p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not propagated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have propagated to all Amazon Route 53 DNS servers. </p> </li> </ul>"]
     fn get_change(&self, input: &GetChangeRequest) -> Result<GetChangeResponse, GetChangeError>;
 
 
-    #[doc="<p>Retrieves a list of the IP ranges used by Amazon Route 53 health checkers to check the health of your resources. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/checkeripranges</code> resource. Use these IP addresses to configure router and firewall rules to allow health checkers to check the health of your resources.</p>"]
+    #[doc="<p> <code>GetCheckerIpRanges</code> still works, but we recommend that you download ip-ranges.json, which includes IP address ranges for all AWS services. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/route-53-ip-addresses.html\">IP Address Ranges of Amazon Route 53 Servers</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     fn get_checker_ip_ranges(&self,
                              input: &GetCheckerIpRangesRequest)
                              -> Result<GetCheckerIpRangesResponse, GetCheckerIpRangesError>;
 
 
-    #[doc="<p>Retrieves a single geo location. Send a <code>GET</code> request to the <code>/2013-04-01/geolocation</code> resource with one of these options: continentcode | countrycode | countrycode and subdivisioncode.</p>"]
+    #[doc="<p>Gets information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p> <p>Use the following syntax to determine whether a continent is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?ContinentCode=<i>two-letter abbreviation for a continent</i> </code> </p> <p>Use the following syntax to determine whether a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?CountryCode=<i>two-character country code</i> </code> </p> <p>Use the following syntax to determine whether a subdivision of a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?CountryCode=<i>two-character country code</i>&amp;SubdivisionCode=<i>subdivision code</i> </code> </p>"]
     fn get_geo_location(&self,
                         input: &GetGeoLocationRequest)
                         -> Result<GetGeoLocationResponse, GetGeoLocationError>;
 
 
-    #[doc="<p>Gets information about a specified health check. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource. For more information about using the console to perform this operation, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a> in the Amazon Route 53 Developer Guide.</p>"]
+    #[doc="<p>Gets information about a specified health check.</p>"]
     fn get_health_check(&self,
                         input: &GetHealthCheckRequest)
                         -> Result<GetHealthCheckResponse, GetHealthCheckError>;
 
 
-    #[doc="<p>To retrieve a count of all your health checks, send a <code>GET</code> request to the <code>/2013-04-01/healthcheckcount</code> resource.</p>"]
+    #[doc="<p>Retrieves the number of health checks that are associated with the current AWS account.</p>"]
     fn get_health_check_count(&self,
                               input: &GetHealthCheckCountRequest)
                               -> Result<GetHealthCheckCountResponse, GetHealthCheckCountError>;
 
 
-    #[doc="<p>If you want to learn why a health check is currently failing or why it failed most recently (if at all), you can get the failure reason for the most recent failure. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/healthcheck/<i>health check ID</i>/lastfailurereason</code> resource.</p>"]
+    #[doc="<p>Gets the reason that a specified health check failed most recently.</p>"]
     fn get_health_check_last_failure_reason
         (&self,
          input: &GetHealthCheckLastFailureReasonRequest)
          -> Result<GetHealthCheckLastFailureReasonResponse, GetHealthCheckLastFailureReasonError>;
 
 
-    #[doc="<p>Gets status of a specified health check. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i>/status</code> resource. You can use this call to get a health check's current status. </p>"]
+    #[doc="<p>Gets status of a specified health check. </p>"]
     fn get_health_check_status
         (&self,
          input: &GetHealthCheckStatusRequest)
          -> Result<GetHealthCheckStatusResponse, GetHealthCheckStatusError>;
 
 
-    #[doc="<p>Retrieves the delegation set for a hosted zone, including the four name servers assigned to the hosted zone. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/hostedzone/<i>hosted zone ID</i> </code> resource. </p>"]
+    #[doc="<p>Gets information about a specified hosted zone including the four name servers assigned to the hosted zone.</p>"]
     fn get_hosted_zone(&self,
                        input: &GetHostedZoneRequest)
                        -> Result<GetHostedZoneResponse, GetHostedZoneError>;
 
 
-    #[doc="<p>Retrieves a count of all your hosted zones. Send a <code>GET</code> request to the <code>/2013-04-01/hostedzonecount</code> resource.</p>"]
+    #[doc="<p>Retrieves the number of hosted zones that are associated with the current AWS account.</p>"]
     fn get_hosted_zone_count(&self,
                              input: &GetHostedZoneCountRequest)
                              -> Result<GetHostedZoneCountResponse, GetHostedZoneCountError>;
 
 
-    #[doc="<p>Retrieves the reusable delegation set. Send a <code>GET</code> request to the <code>/2013-04-01/delegationset/<i>delegation set ID</i> </code> resource.</p>"]
+    #[doc="<p>Retrieves information about a specified reusable delegation set, including the four name servers that are assigned to the delegation set.</p>"]
     fn get_reusable_delegation_set
         (&self,
          input: &GetReusableDelegationSetRequest)
          -> Result<GetReusableDelegationSetResponse, GetReusableDelegationSetError>;
 
 
-    #[doc="<p>Gets information about a specific traffic policy version.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p>"]
+    #[doc="<p>Gets information about a specific traffic policy version.</p>"]
     fn get_traffic_policy(&self,
                           input: &GetTrafficPolicyRequest)
                           -> Result<GetTrafficPolicyResponse, GetTrafficPolicyError>;
 
 
-    #[doc="<p>Gets information about a specified traffic policy instance.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
+    #[doc="<p>Gets information about a specified traffic policy instance.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
     fn get_traffic_policy_instance
         (&self,
          input: &GetTrafficPolicyInstanceRequest)
          -> Result<GetTrafficPolicyInstanceResponse, GetTrafficPolicyInstanceError>;
 
 
-    #[doc="<p>Gets the number of traffic policy instances that are associated with the current AWS account.</p> <p>To get the number of traffic policy instances, send a <code>GET</code> request to the <code>/2013-04-01/trafficpolicyinstancecount</code> resource.</p>"]
+    #[doc="<p>Gets the number of traffic policy instances that are associated with the current AWS account.</p>"]
     fn get_traffic_policy_instance_count
         (&self,
          input: &GetTrafficPolicyInstanceCountRequest)
          -> Result<GetTrafficPolicyInstanceCountResponse, GetTrafficPolicyInstanceCountError>;
 
 
-    #[doc="<p>Retrieves a list of supported geo locations. Send a <code>GET</code> request to the <code>/2013-04-01/geolocations</code> resource. The response to this request includes a <code>GeoLocationDetailsList</code> element for each location that Amazon Route 53 supports.</p> <p>Countries are listed first, and continents are listed last. If Amazon Route 53 supports subdivisions for a country (for example, states or provinces), the subdivisions for that country are listed in alphabetical order immediately after the corresponding country. </p>"]
+    #[doc="<p>Retrieves a list of supported geo locations.</p> <p>Countries are listed first, and continents are listed last. If Amazon Route 53 supports subdivisions for a country (for example, states or provinces), the subdivisions for that country are listed in alphabetical order immediately after the corresponding country.</p>"]
     fn list_geo_locations(&self,
                           input: &ListGeoLocationsRequest)
                           -> Result<ListGeoLocationsResponse, ListGeoLocationsError>;
 
 
-    #[doc="<p>Retrieve a list of your health checks. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck</code> resource. The response to this request includes a <code>HealthChecks</code> element with zero or more <code>HealthCheck</code> child elements. By default, the list of health checks is displayed on a single page. You can control the length of the page that is displayed by using the <code>MaxItems</code> parameter. You can use the <code>Marker</code> parameter to control the health check that the list begins with.</p> <p>For information about listing health checks using the Amazon Route 53 console, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a>.</p>"]
+    #[doc="<p>Retrieve a list of the health checks that are associated with the current AWS account. </p>"]
     fn list_health_checks(&self,
                           input: &ListHealthChecksRequest)
                           -> Result<ListHealthChecksResponse, ListHealthChecksError>;
 
 
-    #[doc="<p>To retrieve a list of your public and private hosted zones, send a <code>GET</code> request to the <code>/2013-04-01/hostedzone</code> resource. The response to this request includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100. The response includes four values that help navigate from one group of <code>maxitems</code> hosted zones to the next:</p> <ul> <li> <p> <code>MaxItems</code> is the value specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> </li> <li> <p> <code>NextMarker</code> is the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZones</code>, and specify the value of the <code>NextMarker</code> element in the marker parameter. </p> <p>If <code>IsTruncated</code> is false, the <code>NextMarker</code> element is omitted from the response.</p> </li> <li> <p>If you're making the second or subsequent call to <code>ListHostedZones</code>, the <code>Marker</code> element matches the value that you specified in the <code>marker</code> parameter in the previous request.</p> </li> </ul>"]
+    #[doc="<p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account. The response includes a <code>HostedZones</code> child element for each hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p>"]
     fn list_hosted_zones(&self,
                          input: &ListHostedZonesRequest)
                          -> Result<ListHostedZonesResponse, ListHostedZonesError>;
 
 
-    #[doc="<p>Retrieves a list of your hosted zones in lexicographic order. Send a <code>GET</code> request to the <code>/2013-04-01/hostedzonesbyname</code> resource. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <ul> <li> <p> <code>com.example.www.</code> </p> </li> </ul> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for example.com, specify ex\\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <ul> <li> <p> <code>com.ex\\344mple.</code> </p> </li> </ul> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the Amazon Route 53 Developer Guide.</p> <p>Amazon Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul>"]
+    #[doc="<p>Retrieves a list of your hosted zones in lexicographic order. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for exämple.com, you specify ex\\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <p> <code>com.ex\\344mple.</code> </p> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Amazon Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul>"]
     fn list_hosted_zones_by_name
         (&self,
          input: &ListHostedZonesByNameRequest)
@@ -11751,7 +11755,7 @@ pub trait Route53 {
          -> Result<ListResourceRecordSetsResponse, ListResourceRecordSetsError>;
 
 
-    #[doc="<p>To retrieve a list of your reusable delegation sets, send a <code>GET</code> request to the <code>/2013-04-01/delegationset</code> resource. The response to this request includes a <code>DelegationSets</code> element with zero, one, or multiple <code>DelegationSet</code> child elements. By default, the list of delegation sets is displayed on a single page. You can control the length of the page that is displayed by using the <code>MaxItems</code> parameter. You can use the <code>Marker</code> parameter to control the delegation set that the list begins with. </p> <note> <p> Amazon Route 53 returns a maximum of 100 items. If you set MaxItems to a value greater than 100, Amazon Route 53 returns only the first 100.</p> </note>"]
+    #[doc="<p>Retrieves a list of the reusable delegation sets that are associated with the current AWS account.</p>"]
     fn list_reusable_delegation_sets
         (&self,
          input: &ListReusableDelegationSetsRequest)
@@ -11771,24 +11775,24 @@ pub trait Route53 {
          -> Result<ListTagsForResourcesResponse, ListTagsForResourcesError>;
 
 
-    #[doc="<p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policies, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p> <p>The response includes three values that help you navigate from one group of <code>maxitems</code> traffic policies to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policies associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy that is associated with the current account.</p> </li> <li> <p> <b>TrafficPolicyIdMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyIdMarker</code> is the ID of the first traffic policy in the next group of <code>MaxItems</code> traffic policies. If you want to list more traffic policies, make another call to <code>ListTrafficPolicies</code>, and specify the value of the <code>TrafficPolicyIdMarker</code> element from the response in the <code>TrafficPolicyIdMarker</code> request parameter.</p> <p>If <code>IsTruncated</code> is <code>false</code>, the <code>TrafficPolicyIdMarker</code> element is omitted from the response.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> </ul>"]
+    #[doc="<p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order in which they were created. </p>"]
     fn list_traffic_policies(&self,
                              input: &ListTrafficPoliciesRequest)
                              -> Result<ListTrafficPoliciesResponse, ListTrafficPoliciesError>;
 
 
-    #[doc="<p>Gets information about the traffic policy instances that you created by using the current AWS account.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes five values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy instances associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the current account.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>HostedZoneIdMarker</b>, <b>TrafficPolicyInstanceNameMarker</b>, and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these three values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstances</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
+    #[doc="<p>Gets information about the traffic policy instances that you created by using the current AWS account.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
     fn list_traffic_policy_instances
         (&self,
          input: &ListTrafficPolicyInstancesRequest)
          -> Result<ListTrafficPolicyInstancesResponse, ListTrafficPolicyInstancesError>;
 
 
-    #[doc="<p>Gets information about the traffic policy instances that you created in a specified hosted zone.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource and include the ID of the hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes four values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code/>IsTruncated in the response is <code>true</code>, there are more traffic policy instances associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the current account.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>TrafficPolicyInstanceNameMarker</b> and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these two values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstancesByHostedZone</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
+    #[doc="<p>Gets information about the traffic policy instances that you created in a specified hosted zone.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
     fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> Result<ListTrafficPolicyInstancesByHostedZoneResponse, ListTrafficPolicyInstancesByHostedZoneError>;
 
 
-    #[doc="<p>Gets information about the traffic policy instances that you created by using a specify traffic policy version.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Route 53 API version</i>/trafficpolicyinstance</code> resource and include the ID and version of the traffic policy.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes five values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy instances associated with the specified traffic policy.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the specified traffic policy.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>HostedZoneIdMarker</b>, <b>TrafficPolicyInstanceNameMarker</b>, and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstancesByPolicy</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
+    #[doc="<p>Gets information about the traffic policy instances that you created by using a specify traffic policy version.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
     fn list_traffic_policy_instances_by_policy
         (&self,
          input: &ListTrafficPolicyInstancesByPolicyRequest)
@@ -11796,14 +11800,14 @@ pub trait Route53 {
                    ListTrafficPolicyInstancesByPolicyError>;
 
 
-    #[doc="<p>Gets information about all of the versions for a specified traffic policy.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource and specify the ID of the traffic policy for which you want to list versions.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policies, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p> <p>The response includes three values that help you navigate from one group of <code>maxitems</code> traffic policies to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy versions associated with the specified traffic policy.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy version that is associated with the specified traffic policy.</p> </li> <li> <p> <b>TrafficPolicyVersionMarker</b> </p> <p>The ID of the next traffic policy version that is associated with the current AWS account. If you want to list more traffic policies, make another call to <code>ListTrafficPolicyVersions</code>, and specify the value of the <code>TrafficPolicyVersionMarker</code> element in the <code>TrafficPolicyVersionMarker</code> request parameter.</p> <p>If <code>IsTruncated</code> is <code>false</code>, Amazon Route 53 omits the <code>TrafficPolicyVersionMarker</code> element from the response.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> </ul>"]
+    #[doc="<p>Gets information about all of the versions for a specified traffic policy.</p> <p>Traffic policy versions are listed in numerical order by <code>VersionNumber</code>.</p>"]
     fn list_traffic_policy_versions
         (&self,
          input: &ListTrafficPolicyVersionsRequest)
          -> Result<ListTrafficPolicyVersionsResponse, ListTrafficPolicyVersionsError>;
 
 
-    #[doc="<p>Gets a list of the VPCs that were created by other accounts and that can be associated with a specified hosted zone because you've submitted one or more <code>CreateVPCAssociationAuthorization</code> requests. </p> <p>Send a <code>GET</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation</code> resource. The response to this request includes a <code>VPCs</code> element with a <code>VPC</code> child element for each VPC that can be associated with the hosted zone.</p> <p>Amazon Route 53 returns up to 50 VPCs per page. To return fewer VPCs per page, include the <code>MaxResults</code> parameter: </p> <p> <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation?MaxItems=<i>VPCs per page</i> </code> </p> <p>If the response includes a <code>NextToken</code> element, there are more VPCs to list. To get the next page of VPCs, submit another <code>ListVPCAssociationAuthorizations</code> request, and include the value of the <code>NextToken</code> element from the response in the <code>NextToken</code> request parameter:</p> <p> <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation?MaxItems=<i>VPCs per page</i>&amp;NextToken=<i/> </code> </p>"]
+    #[doc="<p>Gets a list of the VPCs that were created by other accounts and that can be associated with a specified hosted zone because you've submitted one or more <code>CreateVPCAssociationAuthorization</code> requests. </p> <p>The response includes a <code>VPCs</code> element with a <code>VPC</code> child element for each VPC that can be associated with the hosted zone.</p>"]
     fn list_vpc_association_authorizations
         (&self,
          input: &ListVPCAssociationAuthorizationsRequest)
@@ -11816,27 +11820,27 @@ pub trait Route53 {
                        -> Result<TestDNSAnswerResponse, TestDNSAnswerError>;
 
 
-    #[doc="<p>Updates an existing health check.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource. The request body must include a document with an <code>UpdateHealthCheckRequest</code> element. For more information about updating health checks, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html\">Creating, Updating, and Deleting Health Checks</a> in the Amazon Route 53 Developer Guide.</p>"]
+    #[doc="<p>Updates an existing health check. Note that some values can't be updated. </p> <p>For more information about updating health checks, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html\">Creating, Updating, and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     fn update_health_check(&self,
                            input: &UpdateHealthCheckRequest)
                            -> Result<UpdateHealthCheckResponse, UpdateHealthCheckError>;
 
 
-    #[doc="<p>Updates the hosted zone comment. Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i> </code> resource. </p>"]
+    #[doc="<p>Updates the comment for a specified hosted zone.</p>"]
     fn update_hosted_zone_comment
         (&self,
          input: &UpdateHostedZoneCommentRequest)
          -> Result<UpdateHostedZoneCommentResponse, UpdateHostedZoneCommentError>;
 
 
-    #[doc="<p>Updates the comment for a specified traffic policy version.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy/</code> resource.</p> <p>The request body must include a document with an <code>UpdateTrafficPolicyCommentRequest</code> element.</p>"]
+    #[doc="<p>Updates the comment for a specified traffic policy version.</p>"]
     fn update_traffic_policy_comment
         (&self,
          input: &UpdateTrafficPolicyCommentRequest)
          -> Result<UpdateTrafficPolicyCommentResponse, UpdateTrafficPolicyCommentError>;
 
 
-    #[doc="<p>Updates the resource record sets in a specified hosted zone that were created based on the settings in a specified traffic policy version.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicyinstance/<i>traffic policy ID</i> </code> resource. The request body must include a document with an <code>UpdateTrafficPolicyInstanceRequest</code> element.</p> <p>When you update a traffic policy instance, Amazon Route 53 continues to respond to DNS queries for the root resource record set name (such as example.com) while it replaces one group of resource record sets with another. Amazon Route 53 performs the following operations:</p> <ol> <li> <p>Amazon Route 53 creates a new group of resource record sets based on the specified traffic policy. This is true regardless of how substantial the differences are between the existing resource record sets and the new resource record sets. </p> </li> <li> <p>When all of the new resource record sets have been created, Amazon Route 53 starts to respond to DNS queries for the root resource record set name (such as example.com) by using the new resource record sets.</p> </li> <li> <p>Amazon Route 53 deletes the old group of resource record sets that are associated with the root resource record set name.</p> </li> </ol>"]
+    #[doc="<p>Updates the resource record sets in a specified hosted zone that were created based on the settings in a specified traffic policy version.</p> <p>When you update a traffic policy instance, Amazon Route 53 continues to respond to DNS queries for the root resource record set name (such as example.com) while it replaces one group of resource record sets with another. Amazon Route 53 performs the following operations:</p> <ol> <li> <p>Amazon Route 53 creates a new group of resource record sets based on the specified traffic policy. This is true regardless of how significant the differences are between the existing resource record sets and the new resource record sets. </p> </li> <li> <p>When all of the new resource record sets have been created, Amazon Route 53 starts to respond to DNS queries for the root resource record set name (such as example.com) by using the new resource record sets.</p> </li> <li> <p>Amazon Route 53 deletes the old group of resource record sets that are associated with the root resource record set name.</p> </li> </ol>"]
     fn update_traffic_policy_instance
         (&self,
          input: &UpdateTrafficPolicyInstanceRequest)
@@ -11869,7 +11873,7 @@ impl<P, D> Route53 for Route53Client<P, D>
     where P: ProvideAwsCredentials,
           D: DispatchSignedRequest
 {
-    #[doc="<p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can't convert a public hosted zone into a private hosted zone.</p> </important> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/associatevpc</code> resource. The request body must include a document with an <code>AssociateVPCWithHostedZoneRequest</code> element. The response contains a <code>ChangeInfo</code> data type that you can use to track the progress of the request. </p> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note>"]
+    #[doc="<p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can't convert a public hosted zone into a private hosted zone.</p> </important> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note>"]
     #[allow(unused_variables, warnings)]
     fn associate_vpc_with_hosted_zone
         (&self,
@@ -11917,7 +11921,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Create, change, update, or delete authoritative DNS information on all Amazon Route 53 servers. Send a <code>POST</code> request to: </p> <p> <code>/2013-04-01/hostedzone/<i>Amazon Route 53 hosted Zone ID</i>/rrset</code> resource. </p> <p>The request body must include a document with a <code>ChangeResourceRecordSetsRequest</code> element. The request body contains a list of change items, known as a change batch. Change batches are considered transactional changes. When using the Amazon Route 53 API to change resource record sets, Amazon Route 53 either makes all or none of the changes in a change batch request. This ensures that Amazon Route 53 never partially implements the intended changes to the resource record sets in a hosted zone. </p> <p>For example, a change batch request that deletes the <code>CNAME</code> record for www.example.com and creates an alias resource record set for www.example.com. Amazon Route 53 deletes the first resource record set and creates the second resource record set in a single operation. If either the <code>DELETE</code> or the <code>CREATE</code> action fails, then both changes (plus any other changes in the batch) fail, and the original <code>CNAME</code> record continues to exist.</p> <important> <p>Due to the nature of transactional changes, you can't delete the same resource record set more than once in a single change batch. If you attempt to delete the same change batch more than once, Amazon Route 53 returns an <code>InvalidChangeBatch</code> error.</p> </important> <note> <p>To create resource record sets for complex routing configurations, use either the traffic flow visual editor in the Amazon Route 53 console or the API actions for traffic policies and traffic policy instances. Save the configuration as a traffic policy, then associate the traffic policy with one or more domain names (such as example.com) or subdomain names (such as www.example.com), in the same hosted zone or in multiple hosted zones. You can roll back the updates if the new configuration isn't performing as expected. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/traffic-flow.html\">Using Traffic Flow to Route DNS Traffic</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </note> <p>Use <code>ChangeResourceRecordsSetsRequest</code> to perform the following actions:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes an existing resource record set that has the specified values.</p> </li> <li> <p> <code>UPSERT</code>: If a resource record set does not already exist, AWS creates it. If a resource set does exist, Amazon Route 53 updates it with the values in the request. </p> </li> </ul> <p>The values that you need to include in the request depend on the type of resource record set that you're creating, deleting, or updating:</p> <p> <b>Basic resource record sets (excluding alias, failover, geolocation, latency, and weighted resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> </ul> <p> <b>Failover, geolocation, latency, or weighted resource record sets (excluding alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> <li> <p> <code>SetIdentifier</code> </p> </li> </ul> <p> <b>Alias resource record sets (including failover alias, geolocation alias, latency alias, and weighted alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>AliasTarget</code> (includes <code>DNSName</code>, <code>EvaluateTargetHealth</code>, and <code>HostedZoneId</code>)</p> </li> <li> <p> <code>SetIdentifier</code> (for failover, geolocation, latency, and weighted resource record sets)</p> </li> </ul> <p>When you submit a <code>ChangeResourceRecordSets</code> request, Amazon Route 53 propagates your changes to all of the Amazon Route 53 authoritative DNS servers. While your changes are propagating, <code>GetChange</code> returns a status of <code>PENDING</code>. When propagation is complete, <code>GetChange</code> returns a status of <code>INSYNC</code>. Changes generally propagate to all Amazon Route 53 name servers in a few minutes. In rare circumstances, propagation can take up to 30 minutes. For more information, see <a>GetChange</a> </p> <p>For information about the limits on a <code>ChangeResourceRecordSets</code> request, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html\">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
+    #[doc="<p>Creates, changes, or deletes a resource record set, which contains authoritative DNS information for a specified domain name or subdomain name. For example, you can use <code>ChangeResourceRecordSets</code> to create a resource record set that routes traffic for test.example.com to a web server that has an IP address of 192.0.2.44.</p> <p> <b>Change Batches and Transactional Changes</b> </p> <p>The request body must include a document with a <code>ChangeResourceRecordSetsRequest</code> element. The request body contains a list of change items, known as a change batch. Change batches are considered transactional changes. When using the Amazon Route 53 API to change resource record sets, Amazon Route 53 either makes all or none of the changes in a change batch request. This ensures that Amazon Route 53 never partially implements the intended changes to the resource record sets in a hosted zone. </p> <p>For example, a change batch request that deletes the <code>CNAME</code> record for www.example.com and creates an alias resource record set for www.example.com. Amazon Route 53 deletes the first resource record set and creates the second resource record set in a single operation. If either the <code>DELETE</code> or the <code>CREATE</code> action fails, then both changes (plus any other changes in the batch) fail, and the original <code>CNAME</code> record continues to exist.</p> <important> <p>Due to the nature of transactional changes, you can't delete the same resource record set more than once in a single change batch. If you attempt to delete the same change batch more than once, Amazon Route 53 returns an <code>InvalidChangeBatch</code> error.</p> </important> <p> <b>Traffic Flow</b> </p> <p>To create resource record sets for complex routing configurations, use either the traffic flow visual editor in the Amazon Route 53 console or the API actions for traffic policies and traffic policy instances. Save the configuration as a traffic policy, then associate the traffic policy with one or more domain names (such as example.com) or subdomain names (such as www.example.com), in the same hosted zone or in multiple hosted zones. You can roll back the updates if the new configuration isn't performing as expected. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/traffic-flow.html\">Using Traffic Flow to Route DNS Traffic</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p> <b>Create, Delete, and Upsert</b> </p> <p>Use <code>ChangeResourceRecordsSetsRequest</code> to perform the following actions:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes an existing resource record set that has the specified values.</p> </li> <li> <p> <code>UPSERT</code>: If a resource record set does not already exist, AWS creates it. If a resource set does exist, Amazon Route 53 updates it with the values in the request. </p> </li> </ul> <p> <b>Syntaxes for Creating, Updating, and Deleting Resource Record Sets</b> </p> <p>The syntax for a request depends on the type of resource record set that you want to create, delete, or update, such as weighted, alias, or failover. The XML elements in your request must appear in the order listed in the syntax. </p> <p>For an example for each type of resource record set, see \"Examples.\"</p> <p>Don't refer to the syntax in the \"Parameter Syntax\" section, which includes all of the elements for every kind of resource record set that you can create, delete, or update by using <code>ChangeResourceRecordSets</code>. </p> <p> <b>Change Propagation to Amazon Route 53 DNS Servers</b> </p> <p>When you submit a <code>ChangeResourceRecordSets</code> request, Amazon Route 53 propagates your changes to all of the Amazon Route 53 authoritative DNS servers. While your changes are propagating, <code>GetChange</code> returns a status of <code>PENDING</code>. When propagation is complete, <code>GetChange</code> returns a status of <code>INSYNC</code>. Changes generally propagate to all Amazon Route 53 name servers in a few minutes. In rare circumstances, propagation can take up to 30 minutes. For more information, see <a>GetChange</a>.</p> <p> <b>Limits on ChangeResourceRecordSets Requests</b> </p> <p>For information about the limits on a <code>ChangeResourceRecordSets</code> request, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html\">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     #[allow(unused_variables, warnings)]
     fn change_resource_record_sets
         (&self,
@@ -12017,7 +12021,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Creates a new health check.</p> <p>To create a new health check, send a <code>POST</code> request to the <code>/2013-04-01/healthcheck</code> resource. The request body must include a document with a <code>CreateHealthCheckRequest</code> element. The response returns the <code>CreateHealthCheckResponse</code> element, containing the health check ID specified when adding health check to a resource record set. For information about adding health checks to resource record sets, see <a>ResourceRecordSet$HealthCheckId</a> in <a>ChangeResourceRecordSets</a>. </p> <p>If you are registering EC2 instances with an Elastic Load Balancing (ELB) load balancer, do not create Amazon Route 53 health checks for the EC2 instances. When you register an EC2 instance with a load balancer, you configure settings for an ELB health check, which performs a similar function to an Amazon Route 53 health check.</p> <p>You can associate health checks with failover resource record sets in a private hosted zone. Note the following:</p> <ul> <li> <p>Amazon Route 53 health checkers are outside the VPC. To check the health of an endpoint within a VPC by IP address, you must assign a public IP address to the instance in the VPC.</p> </li> <li> <p>You can configure a health checker to check the health of an external resource that the instance relies on, such as a database server.</p> </li> <li> <p>You can create a CloudWatch metric, associate an alarm with the metric, and then create a health check that is based on the state of the alarm. For example, you might create a CloudWatch metric that checks the status of the Amazon EC2 <code>StatusCheckFailed</code> metric, add an alarm to the metric, and then create a health check that is based on the state of the alarm. For information about creating CloudWatch metrics and alarms by using the CloudWatch console, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatch.html\">Amazon CloudWatch User Guide</a>.</p> </li> </ul>"]
+    #[doc="<p>Creates a new health check.</p> <p>For information about adding health checks to resource record sets, see <a>ResourceRecordSet$HealthCheckId</a> in <a>ChangeResourceRecordSets</a>. </p> <p> <b>ELB Load Balancers</b> </p> <p>If you're registering EC2 instances with an Elastic Load Balancing (ELB) load balancer, do not create Amazon Route 53 health checks for the EC2 instances. When you register an EC2 instance with a load balancer, you configure settings for an ELB health check, which performs a similar function to an Amazon Route 53 health check.</p> <p> <b>Private Hosted Zones</b> </p> <p>You can associate health checks with failover resource record sets in a private hosted zone. Note the following:</p> <ul> <li> <p>Amazon Route 53 health checkers are outside the VPC. To check the health of an endpoint within a VPC by IP address, you must assign a public IP address to the instance in the VPC.</p> </li> <li> <p>You can configure a health checker to check the health of an external resource that the instance relies on, such as a database server.</p> </li> <li> <p>You can create a CloudWatch metric, associate an alarm with the metric, and then create a health check that is based on the state of the alarm. For example, you might create a CloudWatch metric that checks the status of the Amazon EC2 <code>StatusCheckFailed</code> metric, add an alarm to the metric, and then create a health check that is based on the state of the alarm. For information about creating CloudWatch metrics and alarms by using the CloudWatch console, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatch.html\">Amazon CloudWatch User Guide</a>.</p> </li> </ul>"]
     #[allow(unused_variables, warnings)]
     fn create_health_check(&self,
                            input: &CreateHealthCheckRequest)
@@ -12070,7 +12074,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Creates a new public hosted zone, used to specify how the Domain Name System (DNS) routes traffic on the Internet for a domain, such as example.com, and its subdomains. </p> <important> <p>Public hosted zones can't be converted to a private hosted zone or vice versa. Instead, create a new hosted zone with the same name and create new resource record sets.</p> </important> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone</code> resource. The request body must include a document with a <code>CreateHostedZoneRequest</code> element. The response returns the <code>CreateHostedZoneResponse</code> element containing metadata about the hosted zone.</p> <p>Fore more information about charges for hosted zones, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> <p>Note the following:</p> <ul> <li> <p>You can't create a hosted zone for a top-level domain (TLD).</p> </li> <li> <p>Amazon Route 53 automatically creates a default SOA record and four NS records for the zone. For more information about SOA and NS records, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/SOA-NSrecords.html\">NS and SOA Records that Amazon Route 53 Creates for a Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> <li> <p>If your domain is registered with a registrar other than Amazon Route 53, you must update the name servers with your registrar to make Amazon Route 53 your DNS service. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/creating-migrating.html\">Configuring Amazon Route 53 as your DNS Service</a> in the <i>Amazon Route 53 Developer's Guide</i>.</p> </li> </ul> <p>After creating a zone, its initial status is <code>PENDING</code>. This means that it is not yet available on all DNS servers. The status of the zone changes to <code>INSYNC</code> when the NS and SOA records are available on all Amazon Route 53 DNS servers. </p> <p>When trying to create a hosted zone using a reusable delegation set, specify an optional DelegationSetId, and Amazon Route 53 would assign those 4 NS records for the zone, instead of allotting a new one.</p>"]
+    #[doc="<p>Creates a new public hosted zone, which you use to specify how the Domain Name System (DNS) routes traffic on the Internet for a domain, such as example.com, and its subdomains. </p> <important> <p>You can't convert a public hosted zones to a private hosted zone or vice versa. Instead, you must create a new hosted zone with the same name and create new resource record sets.</p> </important> <p>For more information about charges for hosted zones, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> <p>Note the following:</p> <ul> <li> <p>You can't create a hosted zone for a top-level domain (TLD).</p> </li> <li> <p>Amazon Route 53 automatically creates a default SOA record and four NS records for the zone. For more information about SOA and NS records, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/SOA-NSrecords.html\">NS and SOA Records that Amazon Route 53 Creates for a Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you want to use the same name servers for multiple hosted zones, you can optionally associate a reusable delegation set with the hosted zone. See the <code>DelegationSetId</code> element.</p> </li> <li> <p>If your domain is registered with a registrar other than Amazon Route 53, you must update the name servers with your registrar to make Amazon Route 53 your DNS service. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/creating-migrating.html\">Configuring Amazon Route 53 as your DNS Service</a> in the <i>Amazon Route 53 Developer Guide</i>. </p> </li> </ul> <p>When you submit a <code>CreateHostedZone</code> request, the initial status of the hosted zone is <code>PENDING</code>. This means that the NS and SOA records are not yet available on all Amazon Route 53 DNS servers. When the NS and SOA records are available, the status of the zone changes to <code>INSYNC</code>.</p>"]
     #[allow(unused_variables, warnings)]
     fn create_hosted_zone(&self,
                           input: &CreateHostedZoneRequest)
@@ -12123,7 +12127,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/delegationset</code> resource. The request body must include a document with a <code>CreateReusableDelegationSetRequest</code> element.</p> <note> <p>A reusable delegation set can't be associated with a private hosted zone/</p> </note> <p>For more information, including a procedure on how to create and configure a reusable delegation set (also known as white label name servers), see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html\">Configuring White Label Name Servers</a>.</p>"]
+    #[doc="<p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable</p> <note> <p>A reusable delegation set can't be associated with a private hosted zone.</p> </note> <p>For information on how to use a reusable delegation set to configure white label name servers, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html\">Configuring White Label Name Servers</a>.</p>"]
     #[allow(unused_variables, warnings)]
     fn create_reusable_delegation_set
         (&self,
@@ -12172,7 +12176,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Creates a traffic policy, which you use to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com).</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy</code> resource. The request body must include a document with a <code>CreateTrafficPolicyRequest</code> element. The response includes the <code>CreateTrafficPolicyResponse</code> element, which contains information about the new traffic policy.</p>"]
+    #[doc="<p>Creates a traffic policy, which you use to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com).</p>"]
     #[allow(unused_variables, warnings)]
     fn create_traffic_policy(&self,
                              input: &CreateTrafficPolicyRequest)
@@ -12223,7 +12227,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Creates resource record sets in a specified hosted zone based on the settings in a specified traffic policy version. In addition, <code>CreateTrafficPolicyInstance</code> associates the resource record sets with a specified domain name (such as example.com) or subdomain name (such as www.example.com). Amazon Route 53 responds to DNS queries for the domain or subdomain name by using the resource record sets that <code>CreateTrafficPolicyInstance</code> created.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicyinstance</code> resource. The request body must include a document with a <code>CreateTrafficPolicyRequest</code> element. The response returns the <code>CreateTrafficPolicyInstanceResponse</code> element, which contains information about the traffic policy instance.</p>"]
+    #[doc="<p>Creates resource record sets in a specified hosted zone based on the settings in a specified traffic policy version. In addition, <code>CreateTrafficPolicyInstance</code> associates the resource record sets with a specified domain name (such as example.com) or subdomain name (such as www.example.com). Amazon Route 53 responds to DNS queries for the domain or subdomain name by using the resource record sets that <code>CreateTrafficPolicyInstance</code> created.</p>"]
     #[allow(unused_variables, warnings)]
     fn create_traffic_policy_instance
         (&self,
@@ -12272,7 +12276,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Creates a new version of an existing traffic policy. When you create a new version of a traffic policy, you specify the ID of the traffic policy that you want to update and a JSON-formatted document that describes the new version. You use traffic policies to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com). You can create a maximum of 1000 versions of a traffic policy. If you reach the limit and need to create another version, you'll need to start a new traffic policy.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy/</code> resource. The request body includes a document with a <code>CreateTrafficPolicyVersionRequest</code> element. The response returns the <code>CreateTrafficPolicyVersionResponse</code> element, which contains information about the new version of the traffic policy.</p>"]
+    #[doc="<p>Creates a new version of an existing traffic policy. When you create a new version of a traffic policy, you specify the ID of the traffic policy that you want to update and a JSON-formatted document that describes the new version. You use traffic policies to create multiple DNS resource record sets for one domain name (such as example.com) or one subdomain name (such as www.example.com). You can create a maximum of 1000 versions of a traffic policy. If you reach the limit and need to create another version, you'll need to start a new traffic policy.</p>"]
     #[allow(unused_variables, warnings)]
     fn create_traffic_policy_version
         (&self,
@@ -12321,7 +12325,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Authorizes the AWS account that created a specified VPC to submit an <code>AssociateVPCWithHostedZone</code> request to associate the VPC with a specified hosted zone that was created by a different account. To submit a <code>CreateVPCAssociationAuthorization</code> request, you must use the account that created the hosted zone. After you authorize the association, use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> <note> <p>If you want to associate multiple VPCs that you created by using one account with a hosted zone that you created by using a different account, you must submit one authorization request for each VPC.</p> </note> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation</code> resource. The request body must include a document with a <code>CreateVPCAssociationAuthorizationRequest</code> element. The response contains information about the authorization.</p>"]
+    #[doc="<p>Authorizes the AWS account that created a specified VPC to submit an <code>AssociateVPCWithHostedZone</code> request to associate the VPC with a specified hosted zone that was created by a different account. To submit a <code>CreateVPCAssociationAuthorization</code> request, you must use the account that created the hosted zone. After you authorize the association, use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> <note> <p>If you want to associate multiple VPCs that you created by using one account with a hosted zone that you created by using a different account, you must submit one authorization request for each VPC.</p> </note>"]
     #[allow(unused_variables, warnings)]
     fn create_vpc_association_authorization
         (&self,
@@ -12370,7 +12374,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Deletes a health check. Send a <code>DELETE</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don't update the associated resource record sets, the future status of the health check can't be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html\">Replacing and Deleting Health Checks</a> in the Amazon Route 53 Developer Guide.</p> </important>"]
+    #[doc="<p>Deletes a health check.</p> <important> <p>Amazon Route 53 does not prevent you from deleting a health check even if the health check is associated with one or more resource record sets. If you delete a health check and you don't update the associated resource record sets, the future status of the health check can't be predicted and may change. This will affect the routing of DNS queries for your DNS failover configuration. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html#health-checks-deleting.html\">Replacing and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </important>"]
     #[allow(unused_variables, warnings)]
     fn delete_health_check(&self,
                            input: &DeleteHealthCheckRequest)
@@ -12422,7 +12426,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Deletes a hosted zone. Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/hostedzone/<i>hosted zone ID</i> </code> resource.</p> <important> <p>Delete a hosted zone only if there are no resource record sets other than the default SOA record and NS resource record sets. If the hosted zone contains other resource record sets, delete them before deleting the hosted zone. If you try to delete a hosted zone that contains other resource record sets, Amazon Route 53 denies your request with a <code>HostedZoneNotEmpty</code> error. For information about deleting records from your hosted zone, see <a>ChangeResourceRecordSets</a>.</p> </important>"]
+    #[doc="<p>Deletes a hosted zone.</p> <important> <p>If the name servers for the hosted zone are associated with a domain and if you want to make the domain unavailable on the Internet, we recommend that you delete the name servers from the domain to prevent future DNS queries from possibly being misrouted. If the domain is registered with Amazon Route 53, see <code>UpdateDomainNameservers</code>. If the domain is registered with another registrar, use the method provided by the registrar to delete name servers for the domain.</p> <p>Some domain registries don't allow you to remove all of the name servers for a domain. If the registry for your domain requires one or more name servers, we recommend that you delete the hosted zone only if you transfer DNS service to another service provider, and you replace the name servers for the domain with name servers from the new provider.</p> </important> <p>You can delete a hosted zone only if it contains only the default SOA record and NS resource record sets. If the hosted zone contains other resource record sets, you must delete them before you can delete the hosted zone. If you try to delete a hosted zone that contains other resource record sets, the request fails, and Amazon Route 53 returns a <code>HostedZoneNotEmpty</code> error. For information about deleting records from your hosted zone, see <a>ChangeResourceRecordSets</a>.</p> <p>To verify that the hosted zone has been deleted, do one of the following:</p> <ul> <li> <p>Use the <code>GetHostedZone</code> action to request information about the hosted zone.</p> </li> <li> <p>Use the <code>ListHostedZones</code> action to get a list of the hosted zones associated with the current AWS account.</p> </li> </ul>"]
     #[allow(unused_variables, warnings)]
     fn delete_hosted_zone(&self,
                           input: &DeleteHostedZoneRequest)
@@ -12474,7 +12478,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Deletes a reusable delegation set. Send a <code>DELETE</code> request to the <code>/2013-04-01/delegationset/<i>delegation set ID</i> </code> resource.</p> <important> <p> You can delete a reusable delegation set only if there are no associated hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, run the <a>GetReusableDelegationSet</a> action and specify the ID of the reusable delegation set that you want to delete.</p>"]
+    #[doc="<p>Deletes a reusable delegation set.</p> <important> <p>You can delete a reusable delegation set only if it isn't associated with any hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, submit a <a>GetReusableDelegationSet</a> request and specify the ID of the reusable delegation set that you want to delete.</p>"]
     #[allow(unused_variables, warnings)]
     fn delete_reusable_delegation_set
         (&self,
@@ -12522,7 +12526,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Deletes a traffic policy.</p> <p>Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p>"]
+    #[doc="<p>Deletes a traffic policy.</p>"]
     #[allow(unused_variables, warnings)]
     fn delete_traffic_policy(&self,
                              input: &DeleteTrafficPolicyRequest)
@@ -12573,7 +12577,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Deletes a traffic policy instance and all of the resource record sets that Amazon Route 53 created when you created the instance.</p> <p>Send a <code>DELETE</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy/<i>traffic policy instance ID</i> </code> resource.</p> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
+    #[doc="<p>Deletes a traffic policy instance and all of the resource record sets that Amazon Route 53 created when you created the instance.</p> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
     #[allow(unused_variables, warnings)]
     fn delete_traffic_policy_instance
         (&self,
@@ -12621,7 +12625,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Removes authorization to submit an <code>AssociateVPCWithHostedZone</code> request to associate a specified VPC with a hosted zone that was created by a different account. You must use the account that created the hosted zone to submit a <code>DeleteVPCAssociationAuthorization</code> request.</p> <important> <p>Sending this request only prevents the AWS account that created the VPC from associating the VPC with the Amazon Route 53 hosted zone in the future. If the VPC is already associated with the hosted zone, <code>DeleteVPCAssociationAuthorization</code> won't disassociate the VPC from the hosted zone. If you want to delete an existing association, use <code>DisassociateVPCFromHostedZone</code>.</p> </important> <p>Send a <code>DELETE</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/deauthorizevpcassociation</code> resource. The request body must include a document with a <code>DeleteVPCAssociationAuthorizationRequest</code> element.</p>"]
+    #[doc="<p>Removes authorization to submit an <code>AssociateVPCWithHostedZone</code> request to associate a specified VPC with a hosted zone that was created by a different account. You must use the account that created the hosted zone to submit a <code>DeleteVPCAssociationAuthorization</code> request.</p> <important> <p>Sending this request only prevents the AWS account that created the VPC from associating the VPC with the Amazon Route 53 hosted zone in the future. If the VPC is already associated with the hosted zone, <code>DeleteVPCAssociationAuthorization</code> won't disassociate the VPC from the hosted zone. If you want to delete an existing association, use <code>DisassociateVPCFromHostedZone</code>.</p> </important>"]
     #[allow(unused_variables, warnings)]
     fn delete_vpc_association_authorization
         (&self,
@@ -12670,7 +12674,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Disassociates a VPC from a Amazon Route 53 private hosted zone. </p> <note> <p>You can't disassociate the last VPC from a private hosted zone.</p> </note> <p>Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/disassociatevpc</code> resource. The request body must include a document with a <code>DisassociateVPCFromHostedZoneRequest</code> element. The response includes a <code>DisassociateVPCFromHostedZoneResponse</code> element.</p> <important> <p>You can't disassociate a VPC from a private hosted zone when only one VPC is associated with the hosted zone. You also can't convert a private hosted zone into a public hosted zone.</p> </important>"]
+    #[doc="<p>Disassociates a VPC from a Amazon Route 53 private hosted zone. </p> <note> <p>You can't disassociate the last VPC from a private hosted zone.</p> </note> <important> <p>You can't disassociate a VPC from a private hosted zone when only one VPC is associated with the hosted zone. You also can't convert a private hosted zone into a public hosted zone.</p> </important>"]
     #[allow(unused_variables, warnings)]
     fn disassociate_vpc_from_hosted_zone
         (&self,
@@ -12718,7 +12722,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not replicated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have replicated to all Amazon Route 53 DNS servers. </p> </li> </ul>"]
+    #[doc="<p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not propagated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have propagated to all Amazon Route 53 DNS servers. </p> </li> </ul>"]
     #[allow(unused_variables, warnings)]
     fn get_change(&self, input: &GetChangeRequest) -> Result<GetChangeResponse, GetChangeError> {
         let mut params = Params::new();
@@ -12764,7 +12768,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Retrieves a list of the IP ranges used by Amazon Route 53 health checkers to check the health of your resources. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/checkeripranges</code> resource. Use these IP addresses to configure router and firewall rules to allow health checkers to check the health of your resources.</p>"]
+    #[doc="<p> <code>GetCheckerIpRanges</code> still works, but we recommend that you download ip-ranges.json, which includes IP address ranges for all AWS services. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/route-53-ip-addresses.html\">IP Address Ranges of Amazon Route 53 Servers</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_checker_ip_ranges(&self,
                              input: &GetCheckerIpRangesRequest)
@@ -12816,7 +12820,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Retrieves a single geo location. Send a <code>GET</code> request to the <code>/2013-04-01/geolocation</code> resource with one of these options: continentcode | countrycode | countrycode and subdivisioncode.</p>"]
+    #[doc="<p>Gets information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p> <p>Use the following syntax to determine whether a continent is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?ContinentCode=<i>two-letter abbreviation for a continent</i> </code> </p> <p>Use the following syntax to determine whether a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?CountryCode=<i>two-character country code</i> </code> </p> <p>Use the following syntax to determine whether a subdivision of a country is supported for geolocation:</p> <p> <code>GET /2013-04-01/geolocation?CountryCode=<i>two-character country code</i>&amp;SubdivisionCode=<i>subdivision code</i> </code> </p>"]
     #[allow(unused_variables, warnings)]
     fn get_geo_location(&self,
                         input: &GetGeoLocationRequest)
@@ -12832,15 +12836,15 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
         if let Some(ref continent_code) = input.continent_code {
-            params.put("continentcode", &continent_code.to_string());
+            params.put("continentcode", continent_code);
         }
 
         if let Some(ref country_code) = input.country_code {
-            params.put("countrycode", &country_code.to_string());
+            params.put("countrycode", country_code);
         }
 
         if let Some(ref subdivision_code) = input.subdivision_code {
-            params.put("subdivisioncode", &subdivision_code.to_string());
+            params.put("subdivisioncode", subdivision_code);
         }
 
 
@@ -12879,7 +12883,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Gets information about a specified health check. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource. For more information about using the console to perform this operation, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a> in the Amazon Route 53 Developer Guide.</p>"]
+    #[doc="<p>Gets information about a specified health check.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_health_check(&self,
                         input: &GetHealthCheckRequest)
@@ -12931,7 +12935,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>To retrieve a count of all your health checks, send a <code>GET</code> request to the <code>/2013-04-01/healthcheckcount</code> resource.</p>"]
+    #[doc="<p>Retrieves the number of health checks that are associated with the current AWS account.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_health_check_count(&self,
                               input: &GetHealthCheckCountRequest)
@@ -12981,7 +12985,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>If you want to learn why a health check is currently failing or why it failed most recently (if at all), you can get the failure reason for the most recent failure. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/healthcheck/<i>health check ID</i>/lastfailurereason</code> resource.</p>"]
+    #[doc="<p>Gets the reason that a specified health check failed most recently.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_health_check_last_failure_reason
         (&self,
@@ -13030,7 +13034,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Gets status of a specified health check. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i>/status</code> resource. You can use this call to get a health check's current status. </p>"]
+    #[doc="<p>Gets status of a specified health check. </p>"]
     #[allow(unused_variables, warnings)]
     fn get_health_check_status
         (&self,
@@ -13081,7 +13085,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Retrieves the delegation set for a hosted zone, including the four name servers assigned to the hosted zone. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/hostedzone/<i>hosted zone ID</i> </code> resource. </p>"]
+    #[doc="<p>Gets information about a specified hosted zone including the four name servers assigned to the hosted zone.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_hosted_zone(&self,
                        input: &GetHostedZoneRequest)
@@ -13131,7 +13135,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Retrieves a count of all your hosted zones. Send a <code>GET</code> request to the <code>/2013-04-01/hostedzonecount</code> resource.</p>"]
+    #[doc="<p>Retrieves the number of hosted zones that are associated with the current AWS account.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_hosted_zone_count(&self,
                              input: &GetHostedZoneCountRequest)
@@ -13183,7 +13187,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Retrieves the reusable delegation set. Send a <code>GET</code> request to the <code>/2013-04-01/delegationset/<i>delegation set ID</i> </code> resource.</p>"]
+    #[doc="<p>Retrieves information about a specified reusable delegation set, including the four name servers that are assigned to the delegation set.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_reusable_delegation_set
         (&self,
@@ -13231,7 +13235,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Gets information about a specific traffic policy version.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p>"]
+    #[doc="<p>Gets information about a specific traffic policy version.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_traffic_policy(&self,
                           input: &GetTrafficPolicyRequest)
@@ -13284,7 +13288,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Gets information about a specified traffic policy instance.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
+    #[doc="<p>Gets information about a specified traffic policy instance.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <note> <p>In the Amazon Route 53 console, traffic policy instances are known as policy records.</p> </note>"]
     #[allow(unused_variables, warnings)]
     fn get_traffic_policy_instance
         (&self,
@@ -13332,7 +13336,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Gets the number of traffic policy instances that are associated with the current AWS account.</p> <p>To get the number of traffic policy instances, send a <code>GET</code> request to the <code>/2013-04-01/trafficpolicyinstancecount</code> resource.</p>"]
+    #[doc="<p>Gets the number of traffic policy instances that are associated with the current AWS account.</p>"]
     #[allow(unused_variables, warnings)]
     fn get_traffic_policy_instance_count
         (&self,
@@ -13380,7 +13384,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Retrieves a list of supported geo locations. Send a <code>GET</code> request to the <code>/2013-04-01/geolocations</code> resource. The response to this request includes a <code>GeoLocationDetailsList</code> element for each location that Amazon Route 53 supports.</p> <p>Countries are listed first, and continents are listed last. If Amazon Route 53 supports subdivisions for a country (for example, states or provinces), the subdivisions for that country are listed in alphabetical order immediately after the corresponding country. </p>"]
+    #[doc="<p>Retrieves a list of supported geo locations.</p> <p>Countries are listed first, and continents are listed last. If Amazon Route 53 supports subdivisions for a country (for example, states or provinces), the subdivisions for that country are listed in alphabetical order immediately after the corresponding country.</p>"]
     #[allow(unused_variables, warnings)]
     fn list_geo_locations(&self,
                           input: &ListGeoLocationsRequest)
@@ -13396,19 +13400,19 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
         if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", &max_items.to_string());
+            params.put("maxitems", max_items);
         }
 
         if let Some(ref start_continent_code) = input.start_continent_code {
-            params.put("startcontinentcode", &start_continent_code.to_string());
+            params.put("startcontinentcode", start_continent_code);
         }
 
         if let Some(ref start_country_code) = input.start_country_code {
-            params.put("startcountrycode", &start_country_code.to_string());
+            params.put("startcountrycode", start_country_code);
         }
 
         if let Some(ref start_subdivision_code) = input.start_subdivision_code {
-            params.put("startsubdivisioncode", &start_subdivision_code.to_string());
+            params.put("startsubdivisioncode", start_subdivision_code);
         }
 
 
@@ -13447,7 +13451,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Retrieve a list of your health checks. Send a <code>GET</code> request to the <code>/2013-04-01/healthcheck</code> resource. The response to this request includes a <code>HealthChecks</code> element with zero or more <code>HealthCheck</code> child elements. By default, the list of health checks is displayed on a single page. You can control the length of the page that is displayed by using the <code>MaxItems</code> parameter. You can use the <code>Marker</code> parameter to control the health check that the list begins with.</p> <p>For information about listing health checks using the Amazon Route 53 console, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html\">Amazon Route 53 Health Checks and DNS Failover</a>.</p>"]
+    #[doc="<p>Retrieve a list of the health checks that are associated with the current AWS account. </p>"]
     #[allow(unused_variables, warnings)]
     fn list_health_checks(&self,
                           input: &ListHealthChecksRequest)
@@ -13463,11 +13467,11 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
         if let Some(ref marker) = input.marker {
-            params.put("marker", &marker.to_string());
+            params.put("marker", marker);
         }
 
         if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", &max_items.to_string());
+            params.put("maxitems", max_items);
         }
 
 
@@ -13506,7 +13510,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>To retrieve a list of your public and private hosted zones, send a <code>GET</code> request to the <code>/2013-04-01/hostedzone</code> resource. The response to this request includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100. The response includes four values that help navigate from one group of <code>maxitems</code> hosted zones to the next:</p> <ul> <li> <p> <code>MaxItems</code> is the value specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> </li> <li> <p> <code>NextMarker</code> is the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZones</code>, and specify the value of the <code>NextMarker</code> element in the marker parameter. </p> <p>If <code>IsTruncated</code> is false, the <code>NextMarker</code> element is omitted from the response.</p> </li> <li> <p>If you're making the second or subsequent call to <code>ListHostedZones</code>, the <code>Marker</code> element matches the value that you specified in the <code>marker</code> parameter in the previous request.</p> </li> </ul>"]
+    #[doc="<p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account. The response includes a <code>HostedZones</code> child element for each hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of hosted zones, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p>"]
     #[allow(unused_variables, warnings)]
     fn list_hosted_zones(&self,
                          input: &ListHostedZonesRequest)
@@ -13522,15 +13526,15 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
         if let Some(ref delegation_set_id) = input.delegation_set_id {
-            params.put("delegationsetid", &delegation_set_id.to_string());
+            params.put("delegationsetid", delegation_set_id);
         }
 
         if let Some(ref marker) = input.marker {
-            params.put("marker", &marker.to_string());
+            params.put("marker", marker);
         }
 
         if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", &max_items.to_string());
+            params.put("maxitems", max_items);
         }
 
 
@@ -13569,7 +13573,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Retrieves a list of your hosted zones in lexicographic order. Send a <code>GET</code> request to the <code>/2013-04-01/hostedzonesbyname</code> resource. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <ul> <li> <p> <code>com.example.www.</code> </p> </li> </ul> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for example.com, specify ex\\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <ul> <li> <p> <code>com.ex\\344mple.</code> </p> </li> </ul> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the Amazon Route 53 Developer Guide.</p> <p>Amazon Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul>"]
+    #[doc="<p>Retrieves a list of your hosted zones in lexicographic order. The response includes a <code>HostedZones</code> child element for each hosted zone created by the current AWS account. </p> <p> <code>ListHostedZonesByName</code> sorts hosted zones by name with the labels reversed. For example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>If the domain name includes escape characters or Punycode, <code>ListHostedZonesByName</code> alphabetizes the domain name using the escaped or Punycoded value, which is the format that Amazon Route 53 saves in its database. For example, to create a hosted zone for exämple.com, you specify ex\\344mple.com for the domain name. <code>ListHostedZonesByName</code> alphabetizes it as:</p> <p> <code>com.ex\\344mple.</code> </p> <p>The labels are reversed and alphabetized using the escaped value. For more information about valid domain name formats, including internationalized domain names, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Amazon Route 53 returns up to 100 items in each response. If you have a lot of hosted zones, use the <code>MaxItems</code> parameter to list them in groups of up to 100. The response includes values that help navigate from one group of <code>MaxItems</code> hosted zones to the next:</p> <ul> <li> <p>The <code>DNSName</code> and <code>HostedZoneId</code> elements in the response contain the values, if any, specified for the <code>dnsname</code> and <code>hostedzoneid</code> parameters in the request that produced the current response.</p> </li> <li> <p>The <code>MaxItems</code> element in the response contains the value, if any, that you specified for the <code>maxitems</code> parameter in the request that produced the current response.</p> </li> <li> <p>If the value of <code>IsTruncated</code> in the response is true, there are more hosted zones associated with the current AWS account. </p> <p>If <code>IsTruncated</code> is false, this response includes the last hosted zone that is associated with the current account. The <code>NextDNSName</code> element and <code>NextHostedZoneId</code> elements are omitted from the response.</p> </li> <li> <p>The <code>NextDNSName</code> and <code>NextHostedZoneId</code> elements in the response contain the domain name and the hosted zone ID of the next hosted zone that is associated with the current AWS account. If you want to list more hosted zones, make another call to <code>ListHostedZonesByName</code>, and specify the value of <code>NextDNSName</code> and <code>NextHostedZoneId</code> in the <code>dnsname</code> and <code>hostedzoneid</code> parameters, respectively.</p> </li> </ul>"]
     #[allow(unused_variables, warnings)]
     fn list_hosted_zones_by_name
         (&self,
@@ -13586,15 +13590,15 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
         if let Some(ref dns_name) = input.dns_name {
-            params.put("dnsname", &dns_name.to_string());
+            params.put("dnsname", dns_name);
         }
 
         if let Some(ref hosted_zone_id) = input.hosted_zone_id {
-            params.put("hostedzoneid", &hosted_zone_id.to_string());
+            params.put("hostedzoneid", hosted_zone_id);
         }
 
         if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", &max_items.to_string());
+            params.put("maxitems", max_items);
         }
 
 
@@ -13648,19 +13652,19 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
         if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", &max_items.to_string());
+            params.put("maxitems", max_items);
         }
 
         if let Some(ref start_record_identifier) = input.start_record_identifier {
-            params.put("identifier", &start_record_identifier.to_string());
+            params.put("identifier", start_record_identifier);
         }
 
         if let Some(ref start_record_name) = input.start_record_name {
-            params.put("name", &start_record_name.to_string());
+            params.put("name", start_record_name);
         }
 
         if let Some(ref start_record_type) = input.start_record_type {
-            params.put("type", &start_record_type.to_string());
+            params.put("type", start_record_type);
         }
 
 
@@ -13697,7 +13701,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>To retrieve a list of your reusable delegation sets, send a <code>GET</code> request to the <code>/2013-04-01/delegationset</code> resource. The response to this request includes a <code>DelegationSets</code> element with zero, one, or multiple <code>DelegationSet</code> child elements. By default, the list of delegation sets is displayed on a single page. You can control the length of the page that is displayed by using the <code>MaxItems</code> parameter. You can use the <code>Marker</code> parameter to control the delegation set that the list begins with. </p> <note> <p> Amazon Route 53 returns a maximum of 100 items. If you set MaxItems to a value greater than 100, Amazon Route 53 returns only the first 100.</p> </note>"]
+    #[doc="<p>Retrieves a list of the reusable delegation sets that are associated with the current AWS account.</p>"]
     #[allow(unused_variables, warnings)]
     fn list_reusable_delegation_sets
         (&self,
@@ -13714,11 +13718,11 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
         if let Some(ref marker) = input.marker {
-            params.put("marker", &marker.to_string());
+            params.put("marker", marker);
         }
 
         if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", &max_items.to_string());
+            params.put("maxitems", max_items);
         }
 
 
@@ -13854,7 +13858,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policies, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p> <p>The response includes three values that help you navigate from one group of <code>maxitems</code> traffic policies to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policies associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy that is associated with the current account.</p> </li> <li> <p> <b>TrafficPolicyIdMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, <code>TrafficPolicyIdMarker</code> is the ID of the first traffic policy in the next group of <code>MaxItems</code> traffic policies. If you want to list more traffic policies, make another call to <code>ListTrafficPolicies</code>, and specify the value of the <code>TrafficPolicyIdMarker</code> element from the response in the <code>TrafficPolicyIdMarker</code> request parameter.</p> <p>If <code>IsTruncated</code> is <code>false</code>, the <code>TrafficPolicyIdMarker</code> element is omitted from the response.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> </ul>"]
+    #[doc="<p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order in which they were created. </p>"]
     #[allow(unused_variables, warnings)]
     fn list_traffic_policies(&self,
                              input: &ListTrafficPoliciesRequest)
@@ -13870,11 +13874,11 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
         if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", &max_items.to_string());
+            params.put("maxitems", max_items);
         }
 
         if let Some(ref traffic_policy_id_marker) = input.traffic_policy_id_marker {
-            params.put("trafficpolicyid", &traffic_policy_id_marker.to_string());
+            params.put("trafficpolicyid", traffic_policy_id_marker);
         }
 
 
@@ -13911,7 +13915,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Gets information about the traffic policy instances that you created by using the current AWS account.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes five values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy instances associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the current account.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>HostedZoneIdMarker</b>, <b>TrafficPolicyInstanceNameMarker</b>, and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these three values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstances</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
+    #[doc="<p>Gets information about the traffic policy instances that you created by using the current AWS account.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
     #[allow(unused_variables, warnings)]
     fn list_traffic_policy_instances
         (&self,
@@ -13928,23 +13932,23 @@ impl<P, D> Route53 for Route53Client<P, D>
 
 
         if let Some(ref hosted_zone_id_marker) = input.hosted_zone_id_marker {
-            params.put("hostedzoneid", &hosted_zone_id_marker.to_string());
+            params.put("hostedzoneid", hosted_zone_id_marker);
         }
 
         if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", &max_items.to_string());
+            params.put("maxitems", max_items);
         }
 
         if let Some(ref traffic_policy_instance_name_marker) =
             input.traffic_policy_instance_name_marker {
             params.put("trafficpolicyinstancename",
-                       &traffic_policy_instance_name_marker.to_string());
+                       traffic_policy_instance_name_marker);
         }
 
         if let Some(ref traffic_policy_instance_type_marker) =
             input.traffic_policy_instance_type_marker {
             params.put("trafficpolicyinstancetype",
-                       &traffic_policy_instance_type_marker.to_string());
+                       traffic_policy_instance_type_marker);
         }
 
 
@@ -13978,7 +13982,7 @@ impl<P, D> Route53 for Route53Client<P, D>
         }
     }
 
-    #[doc="<p>Gets information about the traffic policy instances that you created in a specified hosted zone.</p> <note> <p>After you submit an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicyinstance</code> resource and include the ID of the hosted zone.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes four values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code/>IsTruncated in the response is <code>true</code>, there are more traffic policy instances associated with the current AWS account.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the current account.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>TrafficPolicyInstanceNameMarker</b> and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these two values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstancesByHostedZone</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
+    #[doc="<p>Gets information about the traffic policy instances that you created in a specified hosted zone.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
     #[allow(unused_variables, warnings)]
 fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicyInstancesByHostedZoneRequest) -> Result<ListTrafficPolicyInstancesByHostedZoneResponse, ListTrafficPolicyInstancesByHostedZoneError>{
         let mut params = Params::new();
@@ -13990,22 +13994,22 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         let mut request = SignedRequest::new("GET", "route53", self.region, &request_uri);
 
 
-        params.put("id", &input.hosted_zone_id.to_string());
+        params.put("id", &input.hosted_zone_id);
 
         if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", &max_items.to_string());
+            params.put("maxitems", max_items);
         }
 
         if let Some(ref traffic_policy_instance_name_marker) =
             input.traffic_policy_instance_name_marker {
             params.put("trafficpolicyinstancename",
-                       &traffic_policy_instance_name_marker.to_string());
+                       traffic_policy_instance_name_marker);
         }
 
         if let Some(ref traffic_policy_instance_type_marker) =
             input.traffic_policy_instance_type_marker {
             params.put("trafficpolicyinstancetype",
-                       &traffic_policy_instance_type_marker.to_string());
+                       traffic_policy_instance_type_marker);
         }
 
 
@@ -14039,7 +14043,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         }
     }
 
-    #[doc="<p>Gets information about the traffic policy instances that you created by using a specify traffic policy version.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Send a <code>GET</code> request to the <code>/<i>Route 53 API version</i>/trafficpolicyinstance</code> resource and include the ID and version of the traffic policy.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p> <p>The response includes five values that help you navigate from one group of <code>MaxItems</code> traffic policy instances to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy instances associated with the specified traffic policy.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy instance that is associated with the specified traffic policy.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> <li> <p> <b>HostedZoneIdMarker</b>, <b>TrafficPolicyInstanceNameMarker</b>, and <b>TrafficPolicyInstanceTypeMarker</b> </p> <p>If <code>IsTruncated</code> is <code>true</code>, these values in the response represent the first traffic policy instance in the next group of <code>MaxItems</code> traffic policy instances. To list more traffic policy instances, make another call to <code>ListTrafficPolicyInstancesByPolicy</code>, and specify these values in the corresponding request parameters.</p> <p>If <code>IsTruncated</code> is <code>false</code>, all three elements are omitted from the response.</p> </li> </ul>"]
+    #[doc="<p>Gets information about the traffic policy instances that you created by using a specify traffic policy version.</p> <note> <p>After you submit a <code>CreateTrafficPolicyInstance</code> or an <code>UpdateTrafficPolicyInstance</code> request, there's a brief delay while Amazon Route 53 creates the resource record sets that are specified in the traffic policy definition. For more information, see the <code>State</code> response element.</p> </note> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policy instances, you can use the <code>MaxItems</code> parameter to list them in groups of up to 100.</p>"]
     #[allow(unused_variables, warnings)]
     fn list_traffic_policy_instances_by_policy
         (&self,
@@ -14057,26 +14061,26 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
         if let Some(ref hosted_zone_id_marker) = input.hosted_zone_id_marker {
-            params.put("hostedzoneid", &hosted_zone_id_marker.to_string());
+            params.put("hostedzoneid", hosted_zone_id_marker);
         }
 
         if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", &max_items.to_string());
+            params.put("maxitems", max_items);
         }
-        params.put("id", &input.traffic_policy_id.to_string());
+        params.put("id", &input.traffic_policy_id);
 
         if let Some(ref traffic_policy_instance_name_marker) =
             input.traffic_policy_instance_name_marker {
             params.put("trafficpolicyinstancename",
-                       &traffic_policy_instance_name_marker.to_string());
+                       traffic_policy_instance_name_marker);
         }
 
         if let Some(ref traffic_policy_instance_type_marker) =
             input.traffic_policy_instance_type_marker {
             params.put("trafficpolicyinstancetype",
-                       &traffic_policy_instance_type_marker.to_string());
+                       traffic_policy_instance_type_marker);
         }
-        params.put("version", &input.traffic_policy_version.to_string());
+        params.put("version", &input.traffic_policy_version);
 
 
         request.set_params(params);
@@ -14109,7 +14113,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         }
     }
 
-    #[doc="<p>Gets information about all of the versions for a specified traffic policy.</p> <p>Send a <code>GET</code> request to the <code>/<i>Amazon Route 53 API version</i>/trafficpolicy</code> resource and specify the ID of the traffic policy for which you want to list versions.</p> <p>Amazon Route 53 returns a maximum of 100 items in each response. If you have a lot of traffic policies, you can use the <code>maxitems</code> parameter to list them in groups of up to 100.</p> <p>The response includes three values that help you navigate from one group of <code>maxitems</code> traffic policies to the next:</p> <ul> <li> <p> <b>IsTruncated</b> </p> <p>If the value of <code>IsTruncated</code> in the response is <code>true</code>, there are more traffic policy versions associated with the specified traffic policy.</p> <p>If <code>IsTruncated</code> is <code>false</code>, this response includes the last traffic policy version that is associated with the specified traffic policy.</p> </li> <li> <p> <b>TrafficPolicyVersionMarker</b> </p> <p>The ID of the next traffic policy version that is associated with the current AWS account. If you want to list more traffic policies, make another call to <code>ListTrafficPolicyVersions</code>, and specify the value of the <code>TrafficPolicyVersionMarker</code> element in the <code>TrafficPolicyVersionMarker</code> request parameter.</p> <p>If <code>IsTruncated</code> is <code>false</code>, Amazon Route 53 omits the <code>TrafficPolicyVersionMarker</code> element from the response.</p> </li> <li> <p> <b>MaxItems</b> </p> <p>The value that you specified for the <code>MaxItems</code> parameter in the request that produced the current response.</p> </li> </ul>"]
+    #[doc="<p>Gets information about all of the versions for a specified traffic policy.</p> <p>Traffic policy versions are listed in numerical order by <code>VersionNumber</code>.</p>"]
     #[allow(unused_variables, warnings)]
     fn list_traffic_policy_versions
         (&self,
@@ -14126,12 +14130,11 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
         if let Some(ref max_items) = input.max_items {
-            params.put("maxitems", &max_items.to_string());
+            params.put("maxitems", max_items);
         }
 
         if let Some(ref traffic_policy_version_marker) = input.traffic_policy_version_marker {
-            params.put("trafficpolicyversion",
-                       &traffic_policy_version_marker.to_string());
+            params.put("trafficpolicyversion", traffic_policy_version_marker);
         }
 
 
@@ -14165,7 +14168,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         }
     }
 
-    #[doc="<p>Gets a list of the VPCs that were created by other accounts and that can be associated with a specified hosted zone because you've submitted one or more <code>CreateVPCAssociationAuthorization</code> requests. </p> <p>Send a <code>GET</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation</code> resource. The response to this request includes a <code>VPCs</code> element with a <code>VPC</code> child element for each VPC that can be associated with the hosted zone.</p> <p>Amazon Route 53 returns up to 50 VPCs per page. To return fewer VPCs per page, include the <code>MaxResults</code> parameter: </p> <p> <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation?MaxItems=<i>VPCs per page</i> </code> </p> <p>If the response includes a <code>NextToken</code> element, there are more VPCs to list. To get the next page of VPCs, submit another <code>ListVPCAssociationAuthorizations</code> request, and include the value of the <code>NextToken</code> element from the response in the <code>NextToken</code> request parameter:</p> <p> <code>/2013-04-01/hostedzone/<i>hosted zone ID</i>/authorizevpcassociation?MaxItems=<i>VPCs per page</i>&amp;NextToken=<i/> </code> </p>"]
+    #[doc="<p>Gets a list of the VPCs that were created by other accounts and that can be associated with a specified hosted zone because you've submitted one or more <code>CreateVPCAssociationAuthorization</code> requests. </p> <p>The response includes a <code>VPCs</code> element with a <code>VPC</code> child element for each VPC that can be associated with the hosted zone.</p>"]
     #[allow(unused_variables, warnings)]
     fn list_vpc_association_authorizations
         (&self,
@@ -14182,11 +14185,11 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
         if let Some(ref max_results) = input.max_results {
-            params.put("maxresults", &max_results.to_string());
+            params.put("maxresults", max_results);
         }
 
         if let Some(ref next_token) = input.next_token {
-            params.put("nexttoken", &next_token.to_string());
+            params.put("nexttoken", next_token);
         }
 
 
@@ -14236,19 +14239,18 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
 
         if let Some(ref edns0_client_subnet_ip) = input.edns0_client_subnet_ip {
-            params.put("edns0clientsubnetip", &edns0_client_subnet_ip.to_string());
+            params.put("edns0clientsubnetip", edns0_client_subnet_ip);
         }
 
         if let Some(ref edns0_client_subnet_mask) = input.edns0_client_subnet_mask {
-            params.put("edns0clientsubnetmask",
-                       &edns0_client_subnet_mask.to_string());
+            params.put("edns0clientsubnetmask", edns0_client_subnet_mask);
         }
-        params.put("hostedzoneid", &input.hosted_zone_id.to_string());
-        params.put("recordname", &input.record_name.to_string());
-        params.put("recordtype", &input.record_type.to_string());
+        params.put("hostedzoneid", &input.hosted_zone_id);
+        params.put("recordname", &input.record_name);
+        params.put("recordtype", &input.record_type);
 
         if let Some(ref resolver_ip) = input.resolver_ip {
-            params.put("resolverip", &resolver_ip.to_string());
+            params.put("resolverip", resolver_ip);
         }
 
 
@@ -14285,7 +14287,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         }
     }
 
-    #[doc="<p>Updates an existing health check.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/healthcheck/<i>health check ID</i> </code> resource. The request body must include a document with an <code>UpdateHealthCheckRequest</code> element. For more information about updating health checks, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html\">Creating, Updating, and Deleting Health Checks</a> in the Amazon Route 53 Developer Guide.</p>"]
+    #[doc="<p>Updates an existing health check. Note that some values can't be updated. </p> <p>For more information about updating health checks, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-deleting.html\">Creating, Updating, and Deleting Health Checks</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>"]
     #[allow(unused_variables, warnings)]
     fn update_health_check(&self,
                            input: &UpdateHealthCheckRequest)
@@ -14337,7 +14339,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         }
     }
 
-    #[doc="<p>Updates the hosted zone comment. Send a <code>POST</code> request to the <code>/2013-04-01/hostedzone/<i>hosted zone ID</i> </code> resource. </p>"]
+    #[doc="<p>Updates the comment for a specified hosted zone.</p>"]
     #[allow(unused_variables, warnings)]
     fn update_hosted_zone_comment
         (&self,
@@ -14385,7 +14387,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         }
     }
 
-    #[doc="<p>Updates the comment for a specified traffic policy version.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicy/</code> resource.</p> <p>The request body must include a document with an <code>UpdateTrafficPolicyCommentRequest</code> element.</p>"]
+    #[doc="<p>Updates the comment for a specified traffic policy version.</p>"]
     #[allow(unused_variables, warnings)]
     fn update_traffic_policy_comment
         (&self,
@@ -14434,7 +14436,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
         }
     }
 
-    #[doc="<p>Updates the resource record sets in a specified hosted zone that were created based on the settings in a specified traffic policy version.</p> <p>Send a <code>POST</code> request to the <code>/2013-04-01/trafficpolicyinstance/<i>traffic policy ID</i> </code> resource. The request body must include a document with an <code>UpdateTrafficPolicyInstanceRequest</code> element.</p> <p>When you update a traffic policy instance, Amazon Route 53 continues to respond to DNS queries for the root resource record set name (such as example.com) while it replaces one group of resource record sets with another. Amazon Route 53 performs the following operations:</p> <ol> <li> <p>Amazon Route 53 creates a new group of resource record sets based on the specified traffic policy. This is true regardless of how substantial the differences are between the existing resource record sets and the new resource record sets. </p> </li> <li> <p>When all of the new resource record sets have been created, Amazon Route 53 starts to respond to DNS queries for the root resource record set name (such as example.com) by using the new resource record sets.</p> </li> <li> <p>Amazon Route 53 deletes the old group of resource record sets that are associated with the root resource record set name.</p> </li> </ol>"]
+    #[doc="<p>Updates the resource record sets in a specified hosted zone that were created based on the settings in a specified traffic policy version.</p> <p>When you update a traffic policy instance, Amazon Route 53 continues to respond to DNS queries for the root resource record set name (such as example.com) while it replaces one group of resource record sets with another. Amazon Route 53 performs the following operations:</p> <ol> <li> <p>Amazon Route 53 creates a new group of resource record sets based on the specified traffic policy. This is true regardless of how significant the differences are between the existing resource record sets and the new resource record sets. </p> </li> <li> <p>When all of the new resource record sets have been created, Amazon Route 53 starts to respond to DNS queries for the root resource record set name (such as example.com) by using the new resource record sets.</p> </li> <li> <p>Amazon Route 53 deletes the old group of resource record sets that are associated with the root resource record set name.</p> </li> </ol>"]
     #[allow(unused_variables, warnings)]
     fn update_traffic_policy_instance
         (&self,

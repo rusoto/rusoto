@@ -3196,11 +3196,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
         let mut params = Params::new();
         match input.ascending {
-            Some(ref x) => params.put("Ascending", &x.to_string()),
+            Some(ref x) => params.put("Ascending", x),
             None => {}
         }
         match input.page_token {
-            Some(ref x) => params.put("PageToken", &x.to_string()),
+            Some(ref x) => params.put("PageToken", x),
             None => {}
         }
         request.set_params(params);
@@ -3243,11 +3243,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
         let mut params = Params::new();
         match input.ascending {
-            Some(ref x) => params.put("Ascending", &x.to_string()),
+            Some(ref x) => params.put("Ascending", x),
             None => {}
         }
         match input.page_token {
-            Some(ref x) => params.put("PageToken", &x.to_string()),
+            Some(ref x) => params.put("PageToken", x),
             None => {}
         }
         request.set_params(params);
@@ -3292,11 +3292,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
         let mut params = Params::new();
         match input.ascending {
-            Some(ref x) => params.put("Ascending", &x.to_string()),
+            Some(ref x) => params.put("Ascending", x),
             None => {}
         }
         match input.page_token {
-            Some(ref x) => params.put("PageToken", &x.to_string()),
+            Some(ref x) => params.put("PageToken", x),
             None => {}
         }
         request.set_params(params);
@@ -3341,11 +3341,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
         let mut params = Params::new();
         match input.ascending {
-            Some(ref x) => params.put("Ascending", &x.to_string()),
+            Some(ref x) => params.put("Ascending", x),
             None => {}
         }
         match input.page_token {
-            Some(ref x) => params.put("PageToken", &x.to_string()),
+            Some(ref x) => params.put("PageToken", x),
             None => {}
         }
         request.set_params(params);

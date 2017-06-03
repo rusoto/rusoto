@@ -27,6 +27,8 @@ enum DeserializerNext {
 #[doc="<p>Describes an AWS customer account authorized to restore a snapshot.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AccountWithRestoreAccess {
+    #[doc="<p>The identifier of an AWS support account authorized to restore a snapshot. For AWS support, the identifier is <code>amazon-redshift-support</code>. </p>"]
+    pub account_alias: Option<String>,
     #[doc="<p>The identifier of an AWS customer account authorized to restore a snapshot.</p>"]
     pub account_id: Option<String>,
 }
@@ -53,6 +55,10 @@ impl AccountWithRestoreAccessDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     match &name[..] {
+                        "AccountAlias" => {
+                            obj.account_alias = Some(try!(StringDeserializer::deserialize("AccountAlias",
+                                                                                          stack)));
+                        }
                         "AccountId" => {
                             obj.account_id = Some(try!(StringDeserializer::deserialize("AccountId",
                                                                                        stack)));
@@ -209,7 +215,7 @@ impl AuthorizeClusterSecurityGroupIngressResultDeserializer {
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone)]
 pub struct AuthorizeSnapshotAccessMessage {
-    #[doc="<p>The identifier of the AWS customer account authorized to restore the specified snapshot.</p>"]
+    #[doc="<p>The identifier of the AWS customer account authorized to restore the specified snapshot.</p> <p>To share a snapshot with AWS support, specify amazon-redshift-support.</p>"]
     pub account_with_restore_access: String,
     #[doc="<p>The identifier of the cluster the snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p>"]
     pub snapshot_cluster_identifier: Option<String>,
@@ -645,6 +651,68 @@ impl ClusterDeserializer {
                         }
                         "VpcSecurityGroups" => {
                             obj.vpc_security_groups = Some(try!(VpcSecurityGroupMembershipListDeserializer::deserialize("VpcSecurityGroups", stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+#[doc="<p>Temporary credentials with authorization to log in to an Amazon Redshift database. </p>"]
+#[derive(Default,Debug,Clone)]
+pub struct ClusterCredentials {
+    #[doc="<p>A temporary password that authorizes the user name returned by <code>DbUser</code> to log on to the database <code>DbName</code>. </p>"]
+    pub db_password: Option<SensitiveString>,
+    #[doc="<p>A database user name that is authorized to log on to the database <code>DbName</code> using the password <code>DbPassword</code>. If the <code>DbGroups</code> parameter is specifed, <code>DbUser</code> is added to the listed groups for the current session. The user name is prefixed with <code>IAM:</code> for an existing user name or <code>IAMA:</code> if the user was auto-created. </p>"]
+    pub db_user: Option<String>,
+    #[doc="<p>The date and time <code>DbPassword</code> expires.</p>"]
+    pub expiration: Option<TStamp>,
+}
+
+struct ClusterCredentialsDeserializer;
+impl ClusterCredentialsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ClusterCredentials, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ClusterCredentials::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "DbPassword" => {
+                            obj.db_password =
+                                Some(try!(SensitiveStringDeserializer::deserialize("DbPassword",
+                                                                                   stack)));
+                        }
+                        "DbUser" => {
+                            obj.db_user = Some(try!(StringDeserializer::deserialize("DbUser",
+                                                                                    stack)));
+                        }
+                        "Expiration" => {
+                            obj.expiration = Some(try!(TStampDeserializer::deserialize("Expiration",
+                                                                                       stack)));
                         }
                         _ => skip_tree(stack),
                     }
@@ -3106,6 +3174,19 @@ impl CreateTagsMessageSerializer {
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
         TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
 
+    }
+}
+
+pub type DbGroupList = Vec<String>;
+
+/// Serialize `DbGroupList` contents to a `SignedRequest`.
+struct DbGroupListSerializer;
+impl DbGroupListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DbGroupList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
     }
 }
 
@@ -5634,6 +5715,56 @@ impl EventsMessageDeserializer {
 
     }
 }
+#[doc="<p>The request parameters to get cluster credentials.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct GetClusterCredentialsMessage {
+    #[doc="<p>Create a database user with the name specified for <code>DbUser</code> if one does not exist.</p>"]
+    pub auto_create: Option<BooleanOptional>,
+    #[doc="<p>The unique identifier of the cluster that contains the database for which your are requesting credentials. This parameter is case sensitive.</p>"]
+    pub cluster_identifier: String,
+    #[doc="<p>A list of the names of existing database groups that <code>DbUser</code> will join for the current session. If not specified, the new user is added only to PUBLIC.</p>"]
+    pub db_groups: Option<DbGroupList>,
+    #[doc="<p>The name of a database that <code>DbUser</code> is authorized to log on to. If <code>DbName</code> is not specified, <code>DbUser</code> can log in to any existing database.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 64 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>"]
+    pub db_name: Option<String>,
+    #[doc="<p>The name of a database user. If a user name matching <code>DbUser</code> exists in the database, the temporary user credentials have the same permissions as the existing user. If <code>DbUser</code> doesn't exist in the database and <code>Autocreate</code> is <code>True</code>, a new user is created using the value for <code>DbUser</code> with PUBLIC permissions. If a database user matching the value for <code>DbUser</code> doesn't exist and <code>Autocreate</code> is <code>False</code>, then the command succeeds but the connection attempt will fail because the user doesn't exist in the database.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/http:/docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html\">CREATE USER</a> in the Amazon Redshift Database Developer Guide. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 128 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Must not contain a colon ( : ) or slash ( / ). </p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>"]
+    pub db_user: String,
+    #[doc="<p>The number of seconds until the returned temporary password expires.</p> <p>Constraint: minimum 900, maximum 3600.</p> <p>Default: 900</p>"]
+    pub duration_seconds: Option<IntegerOptional>,
+}
+
+
+/// Serialize `GetClusterCredentialsMessage` contents to a `SignedRequest`.
+struct GetClusterCredentialsMessageSerializer;
+impl GetClusterCredentialsMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetClusterCredentialsMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.auto_create {
+            params.put(&format!("{}{}", prefix, "AutoCreate"),
+                       &field_value.to_string());
+        }
+        params.put(&format!("{}{}", prefix, "ClusterIdentifier"),
+                   &obj.cluster_identifier);
+        if let Some(ref field_value) = obj.db_groups {
+            DbGroupListSerializer::serialize(params,
+                                             &format!("{}{}", prefix, "DbGroups"),
+                                             field_value);
+        }
+        if let Some(ref field_value) = obj.db_name {
+            params.put(&format!("{}{}", prefix, "DbName"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "DbUser"), &obj.db_user);
+        if let Some(ref field_value) = obj.duration_seconds {
+            params.put(&format!("{}{}", prefix, "DurationSeconds"),
+                       &field_value.to_string());
+        }
+
+    }
+}
+
 #[doc="<p>Returns information about an HSM client certificate. The certificate is stored in a secure Hardware Storage Module (HSM), and used by the Amazon Redshift cluster to encrypt data files.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct HsmClientCertificate {
@@ -8954,6 +9085,21 @@ impl RotateEncryptionKeyResultDeserializer {
             }
         }
 
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+pub type SensitiveString = String;
+struct SensitiveStringDeserializer;
+impl SensitiveStringDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<SensitiveString, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -13300,6 +13446,8 @@ impl Error for DescribeOrderableClusterOptionsError {
 /// Errors returned by DescribeReservedNodeOfferings
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedNodeOfferingsError {
+    ///<p>Your request cannot be completed because a dependent internal service is temporarily unavailable. Wait 30 to 60 seconds and try again.</p>
+    DependentServiceUnavailableFault(String),
     ///<p>Specified offering does not exist.</p>
     ReservedNodeOfferingNotFoundFault(String),
     ///<p>The requested operation isn't supported.</p>
@@ -13324,6 +13472,7 @@ impl DescribeReservedNodeOfferingsError {
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => {
                 match &parsed_error.code[..] {
+                    "DependentServiceUnavailableFault" => DescribeReservedNodeOfferingsError::DependentServiceUnavailableFault(String::from(parsed_error.message)),
                     "ReservedNodeOfferingNotFoundFault" => DescribeReservedNodeOfferingsError::ReservedNodeOfferingNotFoundFault(String::from(parsed_error.message)),
                     "UnsupportedOperationFault" => DescribeReservedNodeOfferingsError::UnsupportedOperationFault(String::from(parsed_error.message)),
                     _ => DescribeReservedNodeOfferingsError::Unknown(String::from(body)),
@@ -13358,6 +13507,9 @@ impl fmt::Display for DescribeReservedNodeOfferingsError {
 impl Error for DescribeReservedNodeOfferingsError {
     fn description(&self) -> &str {
         match *self {
+            DescribeReservedNodeOfferingsError::DependentServiceUnavailableFault(ref cause) => {
+                cause
+            }
             DescribeReservedNodeOfferingsError::ReservedNodeOfferingNotFoundFault(ref cause) => {
                 cause
             }
@@ -13374,6 +13526,8 @@ impl Error for DescribeReservedNodeOfferingsError {
 /// Errors returned by DescribeReservedNodes
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedNodesError {
+    ///<p>Your request cannot be completed because a dependent internal service is temporarily unavailable. Wait 30 to 60 seconds and try again.</p>
+    DependentServiceUnavailableFault(String),
     ///<p>The specified reserved compute node not found.</p>
     ReservedNodeNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
@@ -13396,6 +13550,7 @@ impl DescribeReservedNodesError {
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => {
                 match &parsed_error.code[..] {
+                    "DependentServiceUnavailableFault" => DescribeReservedNodesError::DependentServiceUnavailableFault(String::from(parsed_error.message)),
                     "ReservedNodeNotFoundFault" => DescribeReservedNodesError::ReservedNodeNotFoundFault(String::from(parsed_error.message)),
                     _ => DescribeReservedNodesError::Unknown(String::from(body)),
                 }
@@ -13429,6 +13584,7 @@ impl fmt::Display for DescribeReservedNodesError {
 impl Error for DescribeReservedNodesError {
     fn description(&self) -> &str {
         match *self {
+            DescribeReservedNodesError::DependentServiceUnavailableFault(ref cause) => cause,
             DescribeReservedNodesError::ReservedNodeNotFoundFault(ref cause) => cause,
             DescribeReservedNodesError::Validation(ref cause) => cause,
             DescribeReservedNodesError::Credentials(ref err) => err.description(),
@@ -14065,6 +14221,78 @@ impl Error for EnableSnapshotCopyError {
         }
     }
 }
+/// Errors returned by GetClusterCredentials
+#[derive(Debug, PartialEq)]
+pub enum GetClusterCredentialsError {
+    ///<p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    ///<p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetClusterCredentialsError {
+    pub fn from_body(body: &str) -> GetClusterCredentialsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "ClusterNotFoundFault" => GetClusterCredentialsError::ClusterNotFoundFault(String::from(parsed_error.message)),
+                    "UnsupportedOperationFault" => GetClusterCredentialsError::UnsupportedOperationFault(String::from(parsed_error.message)),
+                    _ => GetClusterCredentialsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetClusterCredentialsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetClusterCredentialsError {
+    fn from(err: XmlParseError) -> GetClusterCredentialsError {
+        let XmlParseError(message) = err;
+        GetClusterCredentialsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetClusterCredentialsError {
+    fn from(err: CredentialsError) -> GetClusterCredentialsError {
+        GetClusterCredentialsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetClusterCredentialsError {
+    fn from(err: HttpDispatchError) -> GetClusterCredentialsError {
+        GetClusterCredentialsError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetClusterCredentialsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetClusterCredentialsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetClusterCredentialsError::ClusterNotFoundFault(ref cause) => cause,
+            GetClusterCredentialsError::UnsupportedOperationFault(ref cause) => cause,
+            GetClusterCredentialsError::Validation(ref cause) => cause,
+            GetClusterCredentialsError::Credentials(ref err) => err.description(),
+            GetClusterCredentialsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetClusterCredentialsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ModifyCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterError {
@@ -14092,6 +14320,8 @@ pub enum ModifyClusterError {
     InvalidElasticIpFault(String),
     ///<p>The encryption key has exceeded its grant limit in AWS KMS.</p>
     LimitExceededFault(String),
+    ///<p>The operation would exceed the number of nodes allowed for a cluster.</p>
+    NumberOfNodesPerClusterLimitExceededFault(String),
     ///<p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     NumberOfNodesQuotaExceededFault(String),
     ///<p>Your account is not authorized to perform the requested operation.</p>
@@ -14134,6 +14364,7 @@ impl ModifyClusterError {
                     "LimitExceededFault" => {
                         ModifyClusterError::LimitExceededFault(String::from(parsed_error.message))
                     }
+                    "NumberOfNodesPerClusterLimitExceededFault" => ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(String::from(parsed_error.message)),
                     "NumberOfNodesQuotaExceededFault" => ModifyClusterError::NumberOfNodesQuotaExceededFault(String::from(parsed_error.message)),
                     "UnauthorizedOperation" => ModifyClusterError::UnauthorizedOperation(String::from(parsed_error.message)),
                     "UnsupportedOptionFault" => ModifyClusterError::UnsupportedOptionFault(String::from(parsed_error.message)),
@@ -14181,6 +14412,7 @@ impl Error for ModifyClusterError {
             ModifyClusterError::InvalidClusterStateFault(ref cause) => cause,
             ModifyClusterError::InvalidElasticIpFault(ref cause) => cause,
             ModifyClusterError::LimitExceededFault(ref cause) => cause,
+            ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(ref cause) => cause,
             ModifyClusterError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
             ModifyClusterError::UnauthorizedOperation(ref cause) => cause,
             ModifyClusterError::UnsupportedOptionFault(ref cause) => cause,
@@ -15623,6 +15855,12 @@ pub trait Redshift {
     fn enable_snapshot_copy(&self,
                             input: &EnableSnapshotCopyMessage)
                             -> Result<EnableSnapshotCopyResult, EnableSnapshotCopyError>;
+
+
+    #[doc="<p>Returns a database user name and temporary password with temporary authorization to log in to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log in. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see Generating IAM Database User Credentials in the Amazon Redshift Cluster Management Guide.</p> <p>The IAM user or role that executes GetClusterCredentials must have an IAM policy attached that allows the <code>redshift:GetClusterCredentials</code> action with access to the <code>dbuser</code> resource on the cluster. The user name specified for <code>dbuser</code> in the IAM policy and the user name specified for the <code>DbUser</code> parameter must match.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>"]
+    fn get_cluster_credentials(&self,
+                               input: &GetClusterCredentialsMessage)
+                               -> Result<ClusterCredentials, GetClusterCredentialsError>;
 
 
     #[doc="<p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>"]
@@ -17690,6 +17928,50 @@ impl<P, D> Redshift for RedshiftClient<P, D>
             _ => {
                 Err(EnableSnapshotCopyError::from_body(String::from_utf8_lossy(&response.body)
                                                            .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Returns a database user name and temporary password with temporary authorization to log in to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log in. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see Generating IAM Database User Credentials in the Amazon Redshift Cluster Management Guide.</p> <p>The IAM user or role that executes GetClusterCredentials must have an IAM policy attached that allows the <code>redshift:GetClusterCredentials</code> action with access to the <code>dbuser</code> resource on the cluster. The user name specified for <code>dbuser</code> in the IAM policy and the user name specified for the <code>DbUser</code> parameter must match.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>"]
+    fn get_cluster_credentials(&self,
+                               input: &GetClusterCredentialsMessage)
+                               -> Result<ClusterCredentials, GetClusterCredentialsError> {
+        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetClusterCredentials");
+        params.put("Version", "2012-12-01");
+        GetClusterCredentialsMessageSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ClusterCredentials::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ClusterCredentialsDeserializer::deserialize("GetClusterCredentialsResult",
+                                                                              &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(GetClusterCredentialsError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
             }
         }
     }

@@ -181,6 +181,8 @@ impl AllowedValuesDeserializer {
 #[doc="<p>The input for the <a>CancelUpdateStack</a> action.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct CancelUpdateStackInput {
+    #[doc="<p>A unique identifier for this <code>CancelUpdateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to cancel an update on a stack with the same name. You might retry <code>CancelUpdateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
+    pub client_request_token: Option<ClientRequestToken>,
     #[doc="<p>The name or the unique stack ID that is associated with the stack.</p>"]
     pub stack_name: StackName,
 }
@@ -195,6 +197,9 @@ impl CancelUpdateStackInputSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.client_request_token {
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+        }
         params.put(&format!("{}{}", prefix, "StackName"), &obj.stack_name);
 
     }
@@ -650,11 +655,28 @@ impl ChangesDeserializer {
 
     }
 }
+pub type ClientRequestToken = String;
+struct ClientRequestTokenDeserializer;
+impl ClientRequestTokenDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ClientRequestToken, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 pub type ClientToken = String;
 #[doc="<p>The input for the <a>ContinueUpdateRollback</a> action.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ContinueUpdateRollbackInput {
-    #[doc="<p>A list of the logical IDs of the resources that AWS CloudFormation skips during the continue update rollback operation. You can specify only resources that are in the <code>UPDATE_FAILED</code> state because a rollback failed. You can't specify resources that are in the <code>UPDATE_FAILED</code> state for other reasons, for example, because an update was canceled. To check why a resource update failed, use the <a>DescribeStackResources</a> action, and view the resource status reason. </p> <important> <p>Specify this property to skip rolling back resources that AWS CloudFormation can't successfully roll back. We recommend that you <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed\"> troubleshoot</a> resources before skipping them. AWS CloudFormation sets the status of the specified resources to <code>UPDATE_COMPLETE</code> and continues to roll back the stack. After the rollback is complete, the state of the skipped resources will be inconsistent with the state of the resources in the stack template. Before performing another stack update, you must update the stack or resources to be consistent with each other. If you don't, subsequent stack updates might fail, and the stack will become unrecoverable. </p> </important> <p>Specify the minimum number of resources required to successfully roll back your stack. For example, a failed resource update might cause dependent resources to fail. In this case, it might not be necessary to skip the dependent resources. </p> <p>To specify resources in a nested stack, use the following format: <code>NestedStackName.ResourceLogicalID</code>. You can specify a nested stack resource (the logical ID of an <code>AWS::CloudFormation::Stack</code> resource) only if it's in one of the following states: <code>DELETE_IN_PROGRESS</code>, <code>DELETE_COMPLETE</code>, or <code>DELETE_FAILED</code>. </p>"]
+    #[doc="<p>A unique identifier for this <code>ContinueUpdateRollback</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to continue the rollback to a stack with the same name. You might retry <code>ContinueUpdateRollback</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
+    pub client_request_token: Option<ClientRequestToken>,
+    #[doc="<p>A list of the logical IDs of the resources that AWS CloudFormation skips during the continue update rollback operation. You can specify only resources that are in the <code>UPDATE_FAILED</code> state because a rollback failed. You can't specify resources that are in the <code>UPDATE_FAILED</code> state for other reasons, for example, because an update was canceled. To check why a resource update failed, use the <a>DescribeStackResources</a> action, and view the resource status reason. </p> <important> <p>Specify this property to skip rolling back resources that AWS CloudFormation can't successfully roll back. We recommend that you <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed\"> troubleshoot</a> resources before skipping them. AWS CloudFormation sets the status of the specified resources to <code>UPDATE_COMPLETE</code> and continues to roll back the stack. After the rollback is complete, the state of the skipped resources will be inconsistent with the state of the resources in the stack template. Before performing another stack update, you must update the stack or resources to be consistent with each other. If you don't, subsequent stack updates might fail, and the stack will become unrecoverable. </p> </important> <p>Specify the minimum number of resources required to successfully roll back your stack. For example, a failed resource update might cause dependent resources to fail. In this case, it might not be necessary to skip the dependent resources. </p> <p>To specify resources in a nested stack, use the following format: <code>NestedStackName.ResourceLogicalID</code>. If the <code>ResourceLogicalID</code> is a stack resource (<code>Type: AWS::CloudFormation::Stack</code>), it must be in one of the following states: <code>DELETE_IN_PROGRESS</code>, <code>DELETE_COMPLETE</code>, or <code>DELETE_FAILED</code>. </p>"]
     pub resources_to_skip: Option<ResourcesToSkip>,
     #[doc="<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to roll back the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation always uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>"]
     pub role_arn: Option<RoleARN>,
@@ -672,6 +694,9 @@ impl ContinueUpdateRollbackInputSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.client_request_token {
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+        }
         if let Some(ref field_value) = obj.resources_to_skip {
             ResourcesToSkipSerializer::serialize(params,
                                                  &format!("{}{}", prefix, "ResourcesToSkip"),
@@ -859,9 +884,11 @@ impl CreateChangeSetOutputDeserializer {
 pub struct CreateStackInput {
     #[doc="<p>A list of values that you must specify before AWS CloudFormation can create certain stacks. Some stack templates might include resources that can affect permissions in your AWS account, for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge their capabilities by specifying this parameter.</p> <p>The only valid values are <code>CAPABILITY_IAM</code> and <code>CAPABILITY_NAMED_IAM</code>. The following resources require you to specify this parameter: <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html\"> AWS::IAM::AccessKey</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html\"> AWS::IAM::Group</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html\"> AWS::IAM::InstanceProfile</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html\"> AWS::IAM::Policy</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html\"> AWS::IAM::Role</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html\"> AWS::IAM::User</a>, and <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html\"> AWS::IAM::UserToGroupAddition</a>. If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <p>If you have IAM resources, you can specify either capability. If you have IAM resources with custom names, you must specify <code>CAPABILITY_NAMED_IAM</code>. If you don't specify this parameter, this action returns an <code>InsufficientCapabilities</code> error.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities\">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>"]
     pub capabilities: Option<Capabilities>,
+    #[doc="<p>A unique identifier for this <code>CreateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to create a stack with the same name. You might retry <code>CreateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
+    pub client_request_token: Option<ClientRequestToken>,
     #[doc="<p>Set to <code>true</code> to disable rollback of the stack if stack creation failed. You can specify either <code>DisableRollback</code> or <code>OnFailure</code>, but not both.</p> <p>Default: <code>false</code> </p>"]
     pub disable_rollback: Option<DisableRollback>,
-    #[doc="<p>The Simple Notification Service (SNS) topic ARNs to publish stack related events. You can find your SNS topic ARNs using the <a href=\"https://console.aws.amazon.com/sns\">SNS console</a> or your Command Line Interface (CLI).</p>"]
+    #[doc="<p>The Simple Notification Service (SNS) topic ARNs to publish stack related events. You can find your SNS topic ARNs using the SNS console or your Command Line Interface (CLI).</p>"]
     pub notification_ar_ns: Option<NotificationARNs>,
     #[doc="<p>Determines what action will be taken if stack creation fails. This must be one of: DO_NOTHING, ROLLBACK, or DELETE. You can specify either <code>OnFailure</code> or <code>DisableRollback</code>, but not both.</p> <p>Default: <code>ROLLBACK</code> </p>"]
     pub on_failure: Option<OnFailure>,
@@ -901,6 +928,9 @@ impl CreateStackInputSerializer {
             CapabilitiesSerializer::serialize(params,
                                               &format!("{}{}", prefix, "Capabilities"),
                                               field_value);
+        }
+        if let Some(ref field_value) = obj.client_request_token {
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
         }
         if let Some(ref field_value) = obj.disable_rollback {
             params.put(&format!("{}{}", prefix, "DisableRollback"),
@@ -1066,6 +1096,8 @@ impl DeleteChangeSetOutputDeserializer {
 #[doc="<p>The input for <a>DeleteStack</a> action.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DeleteStackInput {
+    #[doc="<p>A unique identifier for this <code>DeleteStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to delete a stack with the same name. You might retry <code>DeleteStack</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
+    pub client_request_token: Option<ClientRequestToken>,
     #[doc="<p>For stacks in the <code>DELETE_FAILED</code> state, a list of resource logical IDs that are associated with the resources you want to retain. During deletion, AWS CloudFormation deletes the stack but does not delete the retained resources.</p> <p>Retaining resources is useful when you cannot delete a resource, such as a non-empty S3 bucket, but you want to delete the stack.</p>"]
     pub retain_resources: Option<RetainResources>,
     #[doc="<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to delete the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>"]
@@ -1084,6 +1116,9 @@ impl DeleteStackInputSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.client_request_token {
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+        }
         if let Some(ref field_value) = obj.retain_resources {
             RetainResourcesSerializer::serialize(params,
                                                  &format!("{}{}", prefix, "RetainResources"),
@@ -1844,6 +1879,8 @@ impl EventIdDeserializer {
 pub struct ExecuteChangeSetInput {
     #[doc="<p>The name or ARN of the change set that you want use to update the specified stack.</p>"]
     pub change_set_name: ChangeSetNameOrId,
+    #[doc="<p>A unique identifier for this <code>ExecuteChangeSet</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to execute a change set to update a stack with the same name. You might retry <code>ExecuteChangeSet</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
+    pub client_request_token: Option<ClientRequestToken>,
     #[doc="<p>If you specified the name of a change set, specify the stack name or ID (ARN) that is associated with the change set you want to execute.</p>"]
     pub stack_name: Option<StackNameOrId>,
 }
@@ -1860,6 +1897,9 @@ impl ExecuteChangeSetInputSerializer {
 
         params.put(&format!("{}{}", prefix, "ChangeSetName"),
                    &obj.change_set_name);
+        if let Some(ref field_value) = obj.client_request_token {
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
+        }
         if let Some(ref field_value) = obj.stack_name {
             params.put(&format!("{}{}", prefix, "StackName"), &field_value);
         }
@@ -4208,6 +4248,8 @@ impl StackDeserializer {
 #[doc="<p>The StackEvent data type.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct StackEvent {
+    #[doc="<p>The token passed to the operation that generated this event.</p> <p>For example, if you execute a <code>CreateStack</code> operation with the token <code>token1</code>, then all the <code>StackEvents</code> generated by that operation will have <code>ClientRequestToken</code> set as <code>token1</code>.</p>"]
+    pub client_request_token: Option<ClientRequestToken>,
     #[doc="<p>The unique ID of this event.</p>"]
     pub event_id: EventId,
     #[doc="<p>The logical name of the resource specified in the template.</p>"]
@@ -4252,6 +4294,11 @@ impl StackEventDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     match &name[..] {
+                        "ClientRequestToken" => {
+                            obj.client_request_token =
+                                Some(try!(ClientRequestTokenDeserializer::deserialize("ClientRequestToken",
+                                                                                      stack)));
+                        }
                         "EventId" => {
                             obj.event_id = try!(EventIdDeserializer::deserialize("EventId", stack));
                         }
@@ -5455,6 +5502,8 @@ impl TransformsListDeserializer {
 pub struct UpdateStackInput {
     #[doc="<p>A list of values that you must specify before AWS CloudFormation can update certain stacks. Some stack templates might include resources that can affect permissions in your AWS account, for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge their capabilities by specifying this parameter.</p> <p>The only valid values are <code>CAPABILITY_IAM</code> and <code>CAPABILITY_NAMED_IAM</code>. The following resources require you to specify this parameter: <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html\"> AWS::IAM::AccessKey</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html\"> AWS::IAM::Group</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html\"> AWS::IAM::InstanceProfile</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html\"> AWS::IAM::Policy</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html\"> AWS::IAM::Role</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html\"> AWS::IAM::User</a>, and <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html\"> AWS::IAM::UserToGroupAddition</a>. If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <p>If you have IAM resources, you can specify either capability. If you have IAM resources with custom names, you must specify <code>CAPABILITY_NAMED_IAM</code>. If you don't specify this parameter, this action returns an <code>InsufficientCapabilities</code> error.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities\">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>"]
     pub capabilities: Option<Capabilities>,
+    #[doc="<p>A unique identifier for this <code>UpdateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to update a stack with the same name. You might retry <code>UpdateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
+    pub client_request_token: Option<ClientRequestToken>,
     #[doc="<p>Amazon Simple Notification Service topic Amazon Resource Names (ARNs) that AWS CloudFormation associates with the stack. Specify an empty list to remove all notification topics.</p>"]
     pub notification_ar_ns: Option<NotificationARNs>,
     #[doc="<p>A list of <code>Parameter</code> structures that specify input parameters for the stack. For more information, see the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html\">Parameter</a> data type.</p>"]
@@ -5475,11 +5524,11 @@ pub struct UpdateStackInput {
     pub stack_policy_url: Option<StackPolicyURL>,
     #[doc="<p>Key-value pairs to associate with this stack. AWS CloudFormation also propagates these tags to supported resources in the stack. You can specify a maximum number of 10 tags.</p> <p>If you don't specify this parameter, AWS CloudFormation doesn't modify the stack's tags. If you specify an empty value, AWS CloudFormation removes all associated tags.</p>"]
     pub tags: Option<Tags>,
-    #[doc="<p>Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes. (For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.)</p> <p>Conditional: You must specify either the <code>TemplateBody</code> or the <code>TemplateURL</code> parameter, but not both.</p>"]
+    #[doc="<p>Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes. (For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.)</p> <p>Conditional: You must specify only one of the following parameters: <code>TemplateBody</code>, <code>TemplateURL</code>, or set the <code>UsePreviousTemplate</code> to <code>true</code>.</p>"]
     pub template_body: Option<TemplateBody>,
-    #[doc="<p>Location of file containing the template body. The URL must point to a template that is located in an Amazon S3 bucket. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must specify either the <code>TemplateBody</code> or the <code>TemplateURL</code> parameter, but not both.</p>"]
+    #[doc="<p>Location of file containing the template body. The URL must point to a template that is located in an Amazon S3 bucket. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must specify only one of the following parameters: <code>TemplateBody</code>, <code>TemplateURL</code>, or set the <code>UsePreviousTemplate</code> to <code>true</code>.</p>"]
     pub template_url: Option<TemplateURL>,
-    #[doc="<p>Reuse the existing template that is associated with the stack that you are updating.</p>"]
+    #[doc="<p>Reuse the existing template that is associated with the stack that you are updating.</p> <p>Conditional: You must specify only one of the following parameters: <code>TemplateBody</code>, <code>TemplateURL</code>, or set the <code>UsePreviousTemplate</code> to <code>true</code>.</p>"]
     pub use_previous_template: Option<UsePreviousTemplate>,
 }
 
@@ -5497,6 +5546,9 @@ impl UpdateStackInputSerializer {
             CapabilitiesSerializer::serialize(params,
                                               &format!("{}{}", prefix, "Capabilities"),
                                               field_value);
+        }
+        if let Some(ref field_value) = obj.client_request_token {
+            params.put(&format!("{}{}", prefix, "ClientRequestToken"), &field_value);
         }
         if let Some(ref field_value) = obj.notification_ar_ns {
             NotificationARNsSerializer::serialize(params,
@@ -5753,6 +5805,8 @@ impl VersionDeserializer {
 /// Errors returned by CancelUpdateStack
 #[derive(Debug, PartialEq)]
 pub enum CancelUpdateStackError {
+    ///<p>A client request token already exists.</p>
+    TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -5773,6 +5827,7 @@ impl CancelUpdateStackError {
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => {
                 match &parsed_error.code[..] {
+                    "TokenAlreadyExistsException" => CancelUpdateStackError::TokenAlreadyExists(String::from(parsed_error.message)),
                     _ => CancelUpdateStackError::Unknown(String::from(body)),
                 }
             }
@@ -5805,6 +5860,7 @@ impl fmt::Display for CancelUpdateStackError {
 impl Error for CancelUpdateStackError {
     fn description(&self) -> &str {
         match *self {
+            CancelUpdateStackError::TokenAlreadyExists(ref cause) => cause,
             CancelUpdateStackError::Validation(ref cause) => cause,
             CancelUpdateStackError::Credentials(ref err) => err.description(),
             CancelUpdateStackError::HttpDispatch(ref dispatch_error) => {
@@ -5817,6 +5873,8 @@ impl Error for CancelUpdateStackError {
 /// Errors returned by ContinueUpdateRollback
 #[derive(Debug, PartialEq)]
 pub enum ContinueUpdateRollbackError {
+    ///<p>A client request token already exists.</p>
+    TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -5837,6 +5895,7 @@ impl ContinueUpdateRollbackError {
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => {
                 match &parsed_error.code[..] {
+                    "TokenAlreadyExistsException" => ContinueUpdateRollbackError::TokenAlreadyExists(String::from(parsed_error.message)),
                     _ => ContinueUpdateRollbackError::Unknown(String::from(body)),
                 }
             }
@@ -5869,6 +5928,7 @@ impl fmt::Display for ContinueUpdateRollbackError {
 impl Error for ContinueUpdateRollbackError {
     fn description(&self) -> &str {
         match *self {
+            ContinueUpdateRollbackError::TokenAlreadyExists(ref cause) => cause,
             ContinueUpdateRollbackError::Validation(ref cause) => cause,
             ContinueUpdateRollbackError::Credentials(ref err) => err.description(),
             ContinueUpdateRollbackError::HttpDispatch(ref dispatch_error) => {
@@ -5965,6 +6025,8 @@ pub enum CreateStackError {
     InsufficientCapabilities(String),
     ///<p>Quota for the resource has already been reached.</p>
     LimitExceeded(String),
+    ///<p>A client request token already exists.</p>
+    TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -5991,6 +6053,9 @@ impl CreateStackError {
                     "InsufficientCapabilitiesException" => CreateStackError::InsufficientCapabilities(String::from(parsed_error.message)),
                     "LimitExceededException" => {
                         CreateStackError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "TokenAlreadyExistsException" => {
+                        CreateStackError::TokenAlreadyExists(String::from(parsed_error.message))
                     }
                     _ => CreateStackError::Unknown(String::from(body)),
                 }
@@ -6027,6 +6092,7 @@ impl Error for CreateStackError {
             CreateStackError::AlreadyExists(ref cause) => cause,
             CreateStackError::InsufficientCapabilities(ref cause) => cause,
             CreateStackError::LimitExceeded(ref cause) => cause,
+            CreateStackError::TokenAlreadyExists(ref cause) => cause,
             CreateStackError::Validation(ref cause) => cause,
             CreateStackError::Credentials(ref err) => err.description(),
             CreateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -6103,6 +6169,8 @@ impl Error for DeleteChangeSetError {
 /// Errors returned by DeleteStack
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackError {
+    ///<p>A client request token already exists.</p>
+    TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -6123,6 +6191,9 @@ impl DeleteStackError {
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => {
                 match &parsed_error.code[..] {
+                    "TokenAlreadyExistsException" => {
+                        DeleteStackError::TokenAlreadyExists(String::from(parsed_error.message))
+                    }
                     _ => DeleteStackError::Unknown(String::from(body)),
                 }
             }
@@ -6155,6 +6226,7 @@ impl fmt::Display for DeleteStackError {
 impl Error for DeleteStackError {
     fn description(&self) -> &str {
         match *self {
+            DeleteStackError::TokenAlreadyExists(ref cause) => cause,
             DeleteStackError::Validation(ref cause) => cause,
             DeleteStackError::Credentials(ref err) => err.description(),
             DeleteStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -6621,6 +6693,8 @@ pub enum ExecuteChangeSetError {
     InsufficientCapabilities(String),
     ///<p>The specified change set cannot be used to update the stack. For example, the change set status might be <code>CREATE_IN_PROGRESS</code> or the stack status might be <code>UPDATE_IN_PROGRESS</code>.</p>
     InvalidChangeSetStatus(String),
+    ///<p>A client request token already exists.</p>
+    TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -6646,6 +6720,7 @@ impl ExecuteChangeSetError {
                     }
                     "InsufficientCapabilitiesException" => ExecuteChangeSetError::InsufficientCapabilities(String::from(parsed_error.message)),
                     "InvalidChangeSetStatusException" => ExecuteChangeSetError::InvalidChangeSetStatus(String::from(parsed_error.message)),
+                    "TokenAlreadyExistsException" => ExecuteChangeSetError::TokenAlreadyExists(String::from(parsed_error.message)),
                     _ => ExecuteChangeSetError::Unknown(String::from(body)),
                 }
             }
@@ -6681,6 +6756,7 @@ impl Error for ExecuteChangeSetError {
             ExecuteChangeSetError::ChangeSetNotFound(ref cause) => cause,
             ExecuteChangeSetError::InsufficientCapabilities(ref cause) => cause,
             ExecuteChangeSetError::InvalidChangeSetStatus(ref cause) => cause,
+            ExecuteChangeSetError::TokenAlreadyExists(ref cause) => cause,
             ExecuteChangeSetError::Validation(ref cause) => cause,
             ExecuteChangeSetError::Credentials(ref err) => err.description(),
             ExecuteChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -7323,6 +7399,8 @@ impl Error for SignalResourceError {
 pub enum UpdateStackError {
     ///<p>The template contains resources with capabilities that were not specified in the Capabilities parameter.</p>
     InsufficientCapabilities(String),
+    ///<p>A client request token already exists.</p>
+    TokenAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -7344,6 +7422,9 @@ impl UpdateStackError {
             Ok(parsed_error) => {
                 match &parsed_error.code[..] {
                     "InsufficientCapabilitiesException" => UpdateStackError::InsufficientCapabilities(String::from(parsed_error.message)),
+                    "TokenAlreadyExistsException" => {
+                        UpdateStackError::TokenAlreadyExists(String::from(parsed_error.message))
+                    }
                     _ => UpdateStackError::Unknown(String::from(body)),
                 }
             }
@@ -7377,6 +7458,7 @@ impl Error for UpdateStackError {
     fn description(&self) -> &str {
         match *self {
             UpdateStackError::InsufficientCapabilities(ref cause) => cause,
+            UpdateStackError::TokenAlreadyExists(ref cause) => cause,
             UpdateStackError::Validation(ref cause) => cause,
             UpdateStackError::Credentials(ref err) => err.description(),
             UpdateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -7461,7 +7543,7 @@ pub trait CloudFormation {
          -> Result<ContinueUpdateRollbackOutput, ContinueUpdateRollbackError>;
 
 
-    #[doc="<p>Creates a list of changes for a stack. AWS CloudFormation generates the change set by comparing the template's information with the information that you submit. A change set can help you understand which resources AWS CloudFormation will change, and how it will change them, before you update your stack. Change sets allow you to check before making a change to avoid deleting or replacing critical resources.</p> <p>AWS CloudFormation doesn't make any changes to the stack when you create a change set. To make the specified changes, you must execute the change set by using the <a>ExecuteChangeSet</a> action.</p> <p>After the call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set, use the <a>DescribeChangeSet</a> action.</p>"]
+    #[doc="<p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>"]
     fn create_change_set(&self,
                          input: &CreateChangeSetInput)
                          -> Result<CreateChangeSetOutput, CreateChangeSetError>;
@@ -7699,7 +7781,7 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
     }
 
 
-    #[doc="<p>Creates a list of changes for a stack. AWS CloudFormation generates the change set by comparing the template's information with the information that you submit. A change set can help you understand which resources AWS CloudFormation will change, and how it will change them, before you update your stack. Change sets allow you to check before making a change to avoid deleting or replacing critical resources.</p> <p>AWS CloudFormation doesn't make any changes to the stack when you create a change set. To make the specified changes, you must execute the change set by using the <a>ExecuteChangeSet</a> action.</p> <p>After the call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set, use the <a>DescribeChangeSet</a> action.</p>"]
+    #[doc="<p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>"]
     fn create_change_set(&self,
                          input: &CreateChangeSetInput)
                          -> Result<CreateChangeSetOutput, CreateChangeSetError> {

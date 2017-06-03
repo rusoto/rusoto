@@ -70,7 +70,7 @@ pub struct AddTagsToResourceResult;
 
 pub type AgentErrorCode = String;
 pub type ApproveAfterDays = i64;
-#[doc="<p>Describes an association of an SSM document and an instance.</p>"]
+#[doc="<p>Describes an association of a Systems Manager document and an instance.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Association {
     #[doc="<p>The ID created by the system when you create an association. An association is a binding between a document and a set of targets with a schedule.</p>"]
@@ -172,7 +172,7 @@ pub struct AssociationOverview {
     #[doc="<p>A detailed status of the association.</p>"]
     #[serde(rename="DetailedStatus")]
     pub detailed_status: Option<StatusName>,
-    #[doc="<p>The status of the association. Status can be: <code>Pending</code>, <code>Success</code>, or <code>Failed</code>.</p>"]
+    #[doc="<p>The status of the association. Status can be: Pending, Success, or Failed.</p>"]
     #[serde(rename="Status")]
     pub status: Option<StatusName>,
 }
@@ -226,7 +226,7 @@ pub struct AutomationExecution {
     #[doc="<p>The list of execution outputs as defined in the automation document.</p>"]
     #[serde(rename="Outputs")]
     pub outputs: Option<AutomationParameterMap>,
-    #[doc="<p>The key-value map of execution parameters, which were supplied when calling <code>StartAutomationExecution</code>.</p>"]
+    #[doc="<p>The key-value map of execution parameters, which were supplied when calling StartAutomationExecution.</p>"]
     #[serde(rename="Parameters")]
     pub parameters: Option<AutomationParameterMap>,
     #[doc="<p>A list of details about the current state of all steps that comprise an execution. An Automation document contains a list of steps that are executed in order.</p>"]
@@ -319,13 +319,13 @@ pub struct Command {
     #[doc="<p>User-specified information about the command, such as a brief description of what the command should do.</p>"]
     #[serde(rename="Comment")]
     pub comment: Option<Comment>,
-    #[doc="<p>The number of targets for which the command invocation reached a terminal state. Terminal states include the following: <code>Success</code>, <code>Failed</code>, <code>Execution Timed Out</code>, <code>Delivery Timed Out</code>, <code>Canceled</code>, <code>Terminated</code>, or <code>Undeliverable</code>.</p>"]
+    #[doc="<p>The number of targets for which the command invocation reached a terminal state. Terminal states include the following: Success, Failed, Execution Timed Out, Delivery Timed Out, Canceled, Terminated, or Undeliverable.</p>"]
     #[serde(rename="CompletedCount")]
     pub completed_count: Option<CompletedCount>,
-    #[doc="<p>The name of the SSM document requested for execution.</p>"]
+    #[doc="<p>The name of the document requested for execution.</p>"]
     #[serde(rename="DocumentName")]
     pub document_name: Option<DocumentName>,
-    #[doc="<p>The number of targets for which the status is <code>Failed</code> or <code>Execution Timed Out</code>.</p>"]
+    #[doc="<p>The number of targets for which the status is Failed or Execution Timed Out.</p>"]
     #[serde(rename="ErrorCount")]
     pub error_count: Option<ErrorCount>,
     #[doc="<p>If this time is reached and the command has not already started executing, it will not execute. Calculated based on the ExpiresAfter user input provided as part of the SendCommand API.</p>"]
@@ -334,12 +334,12 @@ pub struct Command {
     #[doc="<p>The instance IDs against which this command was requested.</p>"]
     #[serde(rename="InstanceIds")]
     pub instance_ids: Option<InstanceIdList>,
-    #[doc="<p>The maximum number of instances that are allowed to execute the command at the same time. You can specify a number of instances, such as 10, or a percentage of instances, such as 10%. The default value is 50. For more information about how to use <code>MaxConcurrency</code>, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows). </p>"]
+    #[doc="<p>The maximum number of instances that are allowed to execute the command at the same time. You can specify a number of instances, such as 10, or a percentage of instances, such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="MaxConcurrency")]
-    pub max_concurrency: Option<VelocityConstraint>,
-    #[doc="<p>The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors, such as 10, or a percentage or errors, such as 10%. The default value is 50. For more information about how to use <code>MaxErrors</code>, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>"]
+    pub max_concurrency: Option<MaxConcurrency>,
+    #[doc="<p>The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors, such as 10, or a percentage or errors, such as 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="MaxErrors")]
-    pub max_errors: Option<VelocityConstraint>,
+    pub max_errors: Option<MaxErrors>,
     #[doc="<p>Configurations for sending notifications about command status changes. </p>"]
     #[serde(rename="NotificationConfig")]
     pub notification_config: Option<NotificationConfig>,
@@ -352,7 +352,7 @@ pub struct Command {
     #[doc="<p>The region where the Amazon Simple Storage Service (Amazon S3) output bucket is located. The default value is the region where Run Command is being called.</p>"]
     #[serde(rename="OutputS3Region")]
     pub output_s3_region: Option<S3Region>,
-    #[doc="<p>The parameter values to be inserted in the SSM document when executing the command.</p>"]
+    #[doc="<p>The parameter values to be inserted in the document when executing the command.</p>"]
     #[serde(rename="Parameters")]
     pub parameters: Option<Parameters>,
     #[doc="<p>The date and time the command was requested.</p>"]
@@ -364,13 +364,13 @@ pub struct Command {
     #[doc="<p>The status of the command.</p>"]
     #[serde(rename="Status")]
     pub status: Option<CommandStatus>,
-    #[doc="<p>A detailed status of the command execution. <code>StatusDetails</code> includes more information than <code>Status</code> because it includes states resulting from error and concurrency control parameters. <code>StatusDetails</code> can show different results than <code>Status</code>. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-commands.html\">Monitor Commands</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/monitor-commands.html\">Monitor Commands</a> (Windows). <code>StatusDetails</code> can be one of the following values:</p> <ul> <li> <p>Pending – The command has not been sent to any instances.</p> </li> <li> <p>In Progress – The command has been sent to at least one instance but has not reached a final state on all instances.</p> </li> <li> <p>Success – The command successfully executed on all invocations. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out – The value of <code>MaxErrors</code> or more command invocations shows a status of <code>Delivery Timed Out</code>. This is a terminal state.</p> </li> <li> <p>Execution Timed Out – The value of <code>MaxErrors</code> or more command invocations shows a status of <code>Execution Timed Out</code>. This is a terminal state.</p> </li> <li> <p>Failed – The value of <code>MaxErrors</code> or more command invocations shows a status of <code>Failed</code>. This is a terminal state.</p> </li> <li> <p>Incomplete – The command was attempted on all instances and one or more invocations does not have a value of <code>Success</code> but not enough invocations failed for the status to be <code>Failed</code>. This is a terminal state.</p> </li> <li> <p>Canceled – The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Rate Exceeded – The number of instances targeted by the command exceeded the account limit for pending invocations. The system has canceled the command before executing it on any instance. This is a terminal state.</p> </li> </ul>"]
+    #[doc="<p>A detailed status of the command execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to any instances.</p> </li> <li> <p>In Progress: The command has been sent to at least one instance but has not reached a final state on all instances.</p> </li> <li> <p>Success: The command successfully executed on all invocations. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The value of MaxErrors or more command invocations shows a status of Delivery Timed Out. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The value of MaxErrors or more command invocations shows a status of Execution Timed Out. This is a terminal state.</p> </li> <li> <p>Failed: The value of MaxErrors or more command invocations shows a status of Failed. This is a terminal state.</p> </li> <li> <p>Incomplete: The command was attempted on all instances and one or more invocations does not have a value of Success but not enough invocations failed for the status to be Failed. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Rate Exceeded: The number of instances targeted by the command exceeded the account limit for pending invocations. The system has canceled the command before executing it on any instance. This is a terminal state.</p> </li> </ul>"]
     #[serde(rename="StatusDetails")]
     pub status_details: Option<StatusDetails>,
     #[doc="<p>The number of targets for the command.</p>"]
     #[serde(rename="TargetCount")]
     pub target_count: Option<TargetCount>,
-    #[doc="<p>An array of search criteria that targets instances using a <code>Key</code>;<code>Value</code> combination that you specify. <code>Targets</code> is required if you don't provide one or more instance IDs in the call.</p>"]
+    #[doc="<p>An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call.</p>"]
     #[serde(rename="Targets")]
     pub targets: Option<Targets>,
 }
@@ -407,7 +407,7 @@ pub struct CommandInvocation {
     #[doc="<p>The instance ID in which this invocation was requested.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: Option<InstanceId>,
-    #[doc="<p>The name of the invocation target. For Amazon EC2 instances this is the value for the <code>aws:Name</code> tag. For on-premises instances, this is the name of the instance.</p>"]
+    #[doc="<p>The name of the invocation target. For Amazon EC2 instances this is the value for the aws:Name tag. For on-premises instances, this is the name of the instance.</p>"]
     #[serde(rename="InstanceName")]
     pub instance_name: Option<InstanceTagName>,
     #[doc="<p>Configurations for sending notifications about command status changes on a per instance basis.</p>"]
@@ -419,16 +419,16 @@ pub struct CommandInvocation {
     #[doc="<p>The IAM service role that Run Command uses to act on your behalf when sending notifications about command status changes on a per instance basis.</p>"]
     #[serde(rename="ServiceRole")]
     pub service_role: Option<ServiceRole>,
-    #[doc="<p>The URL to the plugin’s StdErr file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, <code>StandardErrorUrl</code> is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>"]
+    #[doc="<p>The URL to the plugin's StdErr file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, StandardErrorUrl is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>"]
     #[serde(rename="StandardErrorUrl")]
     pub standard_error_url: Option<Url>,
-    #[doc="<p>The URL to the plugin’s StdOut file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, <code>StandardOutputUrl</code> is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>"]
+    #[doc="<p>The URL to the plugin's StdOut file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, StandardOutputUrl is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>"]
     #[serde(rename="StandardOutputUrl")]
     pub standard_output_url: Option<Url>,
     #[doc="<p>Whether or not the invocation succeeded, failed, or is pending.</p>"]
     #[serde(rename="Status")]
     pub status: Option<CommandInvocationStatus>,
-    #[doc="<p>A detailed status of the command execution for each invocation (each instance targeted by the command). <code>StatusDetails</code> includes more information than <code>Status</code> because it includes states resulting from error and concurrency control parameters. <code>StatusDetails</code> can show different results than <code>Status</code>. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-commands.html\">Monitor Commands</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/monitor-commands.html\">Monitor Commands</a> (Windows). <code>StatusDetails</code> can be one of the following values: </p> <ul> <li> <p>Pending – The command has not been sent to the instance.</p> </li> <li> <p>In Progress – The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success – The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out – The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command’s <code>MaxErrors</code> limit, but they do contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Execution Timed Out – Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed – The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled – The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable – The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command’s <code>MaxErrors</code> limit and don't contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Terminated – The parent command exceeded its <code>MaxErrors</code> limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
+    #[doc="<p>A detailed status of the command execution for each invocation (each instance targeted by the command). StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit and don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
     #[serde(rename="StatusDetails")]
     pub status_details: Option<StatusDetails>,
     #[doc="<p> Gets the trace output sent by the agent. </p>"]
@@ -449,10 +449,10 @@ pub struct CommandPlugin {
     #[doc="<p>Output of the plugin execution.</p>"]
     #[serde(rename="Output")]
     pub output: Option<CommandPluginOutput>,
-    #[doc="<p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> <code>test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript</code> </p> <p> <code>test_folder</code> is the name of the Amazon S3 bucket;</p> <p> <code>ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix</code> is the name of the S3 prefix;</p> <p> <code>i-1234567876543</code> is the instance ID;</p> <p> <code>awsrunShellScript</code> is the name of the plugin.</p>"]
+    #[doc="<p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the Amazon S3 bucket;</p> <p> ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>"]
     #[serde(rename="OutputS3BucketName")]
     pub output_s3_bucket_name: Option<S3BucketName>,
-    #[doc="<p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> <code>test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript</code> </p> <p> <code>test_folder</code> is the name of the Amazon S3 bucket;</p> <p> <code>ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix</code> is the name of the S3 prefix;</p> <p> <code>i-1234567876543</code> is the instance ID;</p> <p> <code>awsrunShellScript</code> is the name of the plugin.</p>"]
+    #[doc="<p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the Amazon S3 bucket;</p> <p> ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>"]
     #[serde(rename="OutputS3KeyPrefix")]
     pub output_s3_key_prefix: Option<S3KeyPrefix>,
     #[doc="<p>The name of the region where the output is stored in Amazon S3.</p>"]
@@ -476,7 +476,7 @@ pub struct CommandPlugin {
     #[doc="<p>The status of this plugin. You can execute a document with multiple plugins.</p>"]
     #[serde(rename="Status")]
     pub status: Option<CommandPluginStatus>,
-    #[doc="<p>A detailed status of the plugin execution. <code>StatusDetails</code> includes more information than <code>Status</code> because it includes states resulting from error and concurrency control parameters. <code>StatusDetails</code> can show different results than <code>Status</code>. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-commands.html\">Monitor Commands</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/monitor-commands.html\">Monitor Commands</a> (Windows). <code>StatusDetails</code> can be one of the following values:</p> <ul> <li> <p>Pending – The command has not been sent to the instance.</p> </li> <li> <p>In Progress – The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success – The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out – The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command’s <code>MaxErrors</code> limit, but they do contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Execution Timed Out – Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed – The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled – The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable – The command can't be delivered to the instance. The instance might not exist, or it might not be responding. Undeliverable invocations don't count against the parent command’s <code>MaxErrors</code> limit, and they don't contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Terminated – The parent command exceeded its <code>MaxErrors</code> limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
+    #[doc="<p>A detailed status of the plugin execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist, or it might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit, and they don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
     #[serde(rename="StatusDetails")]
     pub status_details: Option<StatusDetails>,
 }
@@ -494,7 +494,7 @@ pub struct CreateActivationRequest {
     #[doc="<p>The name of the registered, managed instance as it will appear in the Amazon EC2 console or when you use the AWS command line tools to list EC2 resources.</p>"]
     #[serde(rename="DefaultInstanceName")]
     pub default_instance_name: Option<DefaultInstanceName>,
-    #[doc="<p>A user-defined description of the resource that you want to register with Amazon EC2. </p>"]
+    #[doc="<p>A userdefined description of the resource that you want to register with Amazon EC2. </p>"]
     #[serde(rename="Description")]
     pub description: Option<ActivationDescription>,
     #[doc="<p>The date by which this activation request should expire. The default value is 24 hours.</p>"]
@@ -526,16 +526,16 @@ pub struct CreateAssociationBatchRequest {
 }
 
 pub type CreateAssociationBatchRequestEntries = Vec<CreateAssociationBatchRequestEntry>;
-#[doc="<p> Describes the association of an SSM document and an instance. </p>"]
+#[doc="<p>Describes the association of a Systems Manager document and an instance.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CreateAssociationBatchRequestEntry {
     #[doc="<p>The document version.</p>"]
     #[serde(rename="DocumentVersion")]
     pub document_version: Option<DocumentVersion>,
-    #[doc="<p> The ID of the instance. </p>"]
+    #[doc="<p>The ID of the instance. </p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: Option<InstanceId>,
-    #[doc="<p> The name of the configuration document. </p>"]
+    #[doc="<p>The name of the configuration document. </p>"]
     #[serde(rename="Name")]
     pub name: DocumentName,
     #[doc="<p>An Amazon S3 bucket where you want to store the results of this request.</p>"]
@@ -570,19 +570,19 @@ pub struct CreateAssociationRequest {
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: Option<InstanceId>,
-    #[doc="<p>The name of the SSM document.</p>"]
+    #[doc="<p>The name of the Systems Manager document.</p>"]
     #[serde(rename="Name")]
     pub name: DocumentName,
-    #[doc="<p>An Amazon S3 bucket where you want to store the output details of the request. For example:</p> <p> <code>\"{ \\\"S3Location\\\": { \\\"OutputS3Region\\\": \\\"&lt;region&gt;\\\", \\\"OutputS3BucketName\\\": \\\"bucket name\\\", \\\"OutputS3KeyPrefix\\\": \\\"folder name\\\" } }\"</code> </p>"]
+    #[doc="<p>An Amazon S3 bucket where you want to store the output details of the request.</p>"]
     #[serde(rename="OutputLocation")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
     #[doc="<p>The parameters for the documents runtime configuration. </p>"]
     #[serde(rename="Parameters")]
     pub parameters: Option<Parameters>,
-    #[doc="<p>A cron expression when the association will be applied to the target(s). Supported expressions are every half, 1, 2, 4, 8 or 12 hour(s); every specified day and time of the week. For example: cron(0 0/30 * 1/1 * ? *) to run every thirty minutes; cron(0 0 0/4 1/1 * ? *) to run every four hours; and cron(0 0 10 ? * SUN *) to run every Sunday at 10 a.m.</p>"]
+    #[doc="<p>A cron expression when the association will be applied to the target(s).</p>"]
     #[serde(rename="ScheduleExpression")]
     pub schedule_expression: Option<ScheduleExpression>,
-    #[doc="<p>The targets (either instances or tags) for the association. Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>"]
+    #[doc="<p>The targets (either instances or tags) for the association.</p>"]
     #[serde(rename="Targets")]
     pub targets: Option<Targets>,
 }
@@ -602,14 +602,14 @@ pub struct CreateDocumentRequest {
     #[doc="<p>The type of document to create. Valid document types include: Policy, Automation, and Command.</p>"]
     #[serde(rename="DocumentType")]
     pub document_type: Option<DocumentType>,
-    #[doc="<p>A name for the SSM document.</p>"]
+    #[doc="<p>A name for the Systems Manager document.</p>"]
     #[serde(rename="Name")]
     pub name: DocumentName,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateDocumentResult {
-    #[doc="<p>Information about the SSM document.</p>"]
+    #[doc="<p>Information about the Systems Manager document.</p>"]
     #[serde(rename="DocumentDescription")]
     pub document_description: Option<DocumentDescription>,
 }
@@ -651,7 +651,7 @@ pub struct CreatePatchBaselineRequest {
     #[doc="<p>A list of explicitly approved patches for the baseline.</p>"]
     #[serde(rename="ApprovedPatches")]
     pub approved_patches: Option<PatchIdList>,
-    #[doc="<p>Caller-provided idempotency token.</p>"]
+    #[doc="<p>User-provided idempotency token.</p>"]
     #[serde(rename="ClientToken")]
     pub client_token: Option<ClientToken>,
     #[doc="<p>A description of the patch baseline.</p>"]
@@ -697,7 +697,7 @@ pub struct DeleteAssociationRequest {
     #[doc="<p>The ID of the instance.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: Option<InstanceId>,
-    #[doc="<p>The name of the SSM document.</p>"]
+    #[doc="<p>The name of the Systems Manager document.</p>"]
     #[serde(rename="Name")]
     pub name: Option<DocumentName>,
 }
@@ -707,7 +707,7 @@ pub struct DeleteAssociationResult;
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteDocumentRequest {
-    #[doc="<p>The name of the SSM document.</p>"]
+    #[doc="<p>The name of the document.</p>"]
     #[serde(rename="Name")]
     pub name: DocumentName,
 }
@@ -1056,7 +1056,7 @@ pub struct DescribeInstanceInformationResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeInstancePatchStatesForPatchGroupRequest {
-    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string 1 ≤ length ≤ 200)</p> <p> Values (array containing a single string)</p> <p> Type (string “Equal”, “NotEqual”, “LessThan”, “GreaterThan”)</p>"]
+    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string between 1 and 200 characters)</p> <p> Values (array containing a single string)</p> <p> Type (string \"Equal\", \"NotEqual\", \"LessThan\", \"GreaterThan\")</p>"]
     #[serde(rename="Filters")]
     pub filters: Option<InstancePatchStateFilterList>,
     #[doc="<p>The maximum number of patches to return (per page).</p>"]
@@ -1105,7 +1105,7 @@ pub struct DescribeInstancePatchStatesResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeInstancePatchesRequest {
-    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string, 1 ≤ length ≤ 128)</p> <p>Values (array of strings 1 ≤ length ≤ 256)</p>"]
+    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string between 1 and 256 characters)</p>"]
     #[serde(rename="Filters")]
     pub filters: Option<PatchOrchestratorFilterList>,
     #[doc="<p>The ID of the instance whose patch state information should be retrieved.</p>"]
@@ -1124,7 +1124,7 @@ pub struct DescribeInstancePatchesResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
     pub next_token: Option<NextToken>,
-    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Title (string)</p> <p>KBId (string)</p> <p>Classification (string)</p> <p>Severity (string)</p> <p>State (string – “INSTALLED”, “INSTALLED_OTHER”, “MISSING”, “NOT_APPLICABLE”, “FAILED”)</p> <p>InstalledTime (DateTime)</p> <p>InstalledBy (string)</p>"]
+    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Title (string)</p> <p>KBId (string)</p> <p>Classification (string)</p> <p>Severity (string)</p> <p>State (string: \"INSTALLED\", \"INSTALLED OTHER\", \"MISSING\", \"NOT APPLICABLE\", \"FAILED\")</p> <p>InstalledTime (DateTime)</p> <p>InstalledBy (string)</p>"]
     #[serde(rename="Patches")]
     pub patches: Option<PatchComplianceDataList>,
 }
@@ -1187,7 +1187,7 @@ pub struct DescribeMaintenanceWindowExecutionTasksResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeMaintenanceWindowExecutionsRequest {
-    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string, 1 ≤ length ≤ 128)</p> <p>Values (array of strings 1 ≤ length ≤ 256)</p> <p>The supported Keys are <code>ExecutedBefore</code> and <code>ExecutedAfter</code> with the value being a date/time string such as 2016-11-04T05:00:00Z.</p>"]
+    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string is between 1 and 256 characters)</p> <p>The supported Keys are ExecutedBefore and ExecutedAfter with the value being a date/time string such as 2016-11-04T05:00:00Z.</p>"]
     #[serde(rename="Filters")]
     pub filters: Option<MaintenanceWindowFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
@@ -1213,7 +1213,7 @@ pub struct DescribeMaintenanceWindowExecutionsResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeMaintenanceWindowTargetsRequest {
-    #[doc="<p>Optional filters that can be used to narrow down the scope of the returned window targets. The supported filter keys are <code>Type</code>, <code>WindowTargetId</code> and <code>OwnerInformation</code>.</p>"]
+    #[doc="<p>Optional filters that can be used to narrow down the scope of the returned window targets. The supported filter keys are Type, WindowTargetId and OwnerInformation.</p>"]
     #[serde(rename="Filters")]
     pub filters: Option<MaintenanceWindowFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
@@ -1239,7 +1239,7 @@ pub struct DescribeMaintenanceWindowTargetsResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeMaintenanceWindowTasksRequest {
-    #[doc="<p>Optional filters used to narrow down the scope of the returned tasks. The supported filter keys are <code>WindowTaskId</code>, <code>TaskArn</code>, <code>Priority</code>, and <code>TaskType</code>.</p>"]
+    #[doc="<p>Optional filters used to narrow down the scope of the returned tasks. The supported filter keys are WindowTaskId, TaskArn, Priority, and TaskType.</p>"]
     #[serde(rename="Filters")]
     pub filters: Option<MaintenanceWindowFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
@@ -1265,7 +1265,7 @@ pub struct DescribeMaintenanceWindowTasksResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeMaintenanceWindowsRequest {
-    #[doc="<p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are <code>Name</code> and <code>Enabled</code>.</p>"]
+    #[doc="<p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are Name and Enabled.</p>"]
     #[serde(rename="Filters")]
     pub filters: Option<MaintenanceWindowFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
@@ -1311,7 +1311,7 @@ pub struct DescribeParametersResult {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribePatchBaselinesRequest {
-    #[doc="<p>Each element in the array is a structure containing: </p> <p>Key: (string, “NAME_PREFIX” or “OWNER”)</p> <p>Value: (array of strings, exactly 1 entry, 1 ≤ length ≤ 255)</p>"]
+    #[doc="<p>Each element in the array is a structure containing: </p> <p>Key: (string, \"NAME_PREFIX\" or \"OWNER\")</p> <p>Value: (array of strings, exactly 1 entry, between 1 and 255 characters)</p>"]
     #[serde(rename="Filters")]
     pub filters: Option<PatchOrchestratorFilterList>,
     #[doc="<p>The maximum number of patch baselines to return (per page).</p>"]
@@ -1347,7 +1347,7 @@ pub struct DescribePatchGroupStateResult {
     #[doc="<p>The number of instances with patches from the patch baseline that failed to install.</p>"]
     #[serde(rename="InstancesWithFailedPatches")]
     pub instances_with_failed_patches: Option<Integer>,
-    #[doc="<p>The number of instances with patches installed that aren’t defined in the patch baseline.</p>"]
+    #[doc="<p>The number of instances with patches installed that aren't defined in the patch baseline.</p>"]
     #[serde(rename="InstancesWithInstalledOtherPatches")]
     pub instances_with_installed_other_patches: Option<Integer>,
     #[doc="<p>The number of instances with installed patches.</p>"]
@@ -1356,7 +1356,7 @@ pub struct DescribePatchGroupStateResult {
     #[doc="<p>The number of instances with missing patches from the patch baseline.</p>"]
     #[serde(rename="InstancesWithMissingPatches")]
     pub instances_with_missing_patches: Option<Integer>,
-    #[doc="<p>The number of instances with patches that aren’t applicable.</p>"]
+    #[doc="<p>The number of instances with patches that aren't applicable.</p>"]
     #[serde(rename="InstancesWithNotApplicablePatches")]
     pub instances_with_not_applicable_patches: Option<Integer>,
 }
@@ -1373,7 +1373,7 @@ pub struct DescribePatchGroupsRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribePatchGroupsResult {
-    #[doc="<p>Each entry in the array contains:</p> <p>PatchGroup: string (1 ≤ length ≤ 256, Regex: ^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$)</p> <p>PatchBaselineIdentity: A PatchBaselineIdentity element. </p>"]
+    #[doc="<p>Each entry in the array contains:</p> <p>PatchGroup: string (between 1 and 256 characters, Regex: ^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$)</p> <p>PatchBaselineIdentity: A PatchBaselineIdentity element. </p>"]
     #[serde(rename="Mappings")]
     pub mappings: Option<PatchGroupPatchBaselineMappingList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
@@ -1395,16 +1395,16 @@ pub struct DocumentDefaultVersionDescription {
     pub name: Option<DocumentName>,
 }
 
-#[doc="<p> Describes an SSM document. </p>"]
+#[doc="<p>Describes an SSM document. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DocumentDescription {
-    #[doc="<p> The date when the SSM document was created. </p>"]
+    #[doc="<p>The date when the document was created.</p>"]
     #[serde(rename="CreatedDate")]
     pub created_date: Option<DateTime>,
     #[doc="<p>The default version.</p>"]
     #[serde(rename="DefaultVersion")]
     pub default_version: Option<DocumentVersion>,
-    #[doc="<p> A description of the document. </p>"]
+    #[doc="<p>A description of the document. </p>"]
     #[serde(rename="Description")]
     pub description: Option<DescriptionInDocument>,
     #[doc="<p>The type of document. </p>"]
@@ -1487,7 +1487,7 @@ pub struct DocumentIdentifier {
 pub type DocumentIdentifierList = Vec<DocumentIdentifier>;
 pub type DocumentName = String;
 pub type DocumentOwner = String;
-#[doc="<p>Parameters specified in the SSM document that execute on the server when the command is run. </p>"]
+#[doc="<p>Parameters specified in a System Manager document that execute on the server when the command is run. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DocumentParameter {
     #[doc="<p>If specified, the default values for the parameters. Parameters without a default value are required. Parameters with a default value are optional.</p>"]
@@ -1499,7 +1499,7 @@ pub struct DocumentParameter {
     #[doc="<p>The name of the parameter.</p>"]
     #[serde(rename="Name")]
     pub name: Option<DocumentParameterName>,
-    #[doc="<p>The type of parameter. The type can be either “String” or “StringList”.</p>"]
+    #[doc="<p>The type of parameter. The type can be either String or StringList.</p>"]
     #[serde(rename="Type")]
     pub type_: Option<DocumentParameterType>,
 }
@@ -1565,10 +1565,24 @@ pub struct FailedCreateAssociation {
 }
 
 pub type FailedCreateAssociationList = Vec<FailedCreateAssociation>;
+#[doc="<p>Information about an Automation failure.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct FailureDetails {
+    #[doc="<p>Detailed information about the Automation step failure.</p>"]
+    #[serde(rename="Details")]
+    pub details: Option<AutomationParameterMap>,
+    #[doc="<p>The stage of the Automation execution when the failure occurred. The stages include the following: InputValidation, PreVerification, Invocation, PostVerification.</p>"]
+    #[serde(rename="FailureStage")]
+    pub failure_stage: Option<String>,
+    #[doc="<p>The type of Automation failure. Failure types include the following: Action, Permission, Throttling, Verification, Internal.</p>"]
+    #[serde(rename="FailureType")]
+    pub failure_type: Option<String>,
+}
+
 pub type Fault = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetAutomationExecutionRequest {
-    #[doc="<p>The unique identifier for an existing automation execution to examine. The execution ID is returned by <code>StartAutomationExecution</code> when the execution of an Automation document is initiated.</p>"]
+    #[doc="<p>The unique identifier for an existing automation execution to examine. The execution ID is returned by StartAutomationExecution when the execution of an Automation document is initiated.</p>"]
     #[serde(rename="AutomationExecutionId")]
     pub automation_execution_id: AutomationExecutionId,
 }
@@ -1588,7 +1602,7 @@ pub struct GetCommandInvocationRequest {
     #[doc="<p>(Required) The ID of the managed instance targeted by the command. A managed instance can be an Amazon EC2 instance or an instance in your hybrid environment that is configured for Systems Manager.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: InstanceId,
-    #[doc="<p>(Optional) The name of the plugin for which you want detailed results. If the SSM document contains only one plugin, the name can be omitted and the details will be returned.</p>"]
+    #[doc="<p>(Optional) The name of the plugin for which you want detailed results. If the document contains only one plugin, the name can be omitted and the details will be returned.</p>"]
     #[serde(rename="PluginName")]
     pub plugin_name: Option<CommandPluginName>,
 }
@@ -1601,10 +1615,10 @@ pub struct GetCommandInvocationResult {
     #[doc="<p>The comment text for the command.</p>"]
     #[serde(rename="Comment")]
     pub comment: Option<Comment>,
-    #[doc="<p>The name of the SSM document that was executed. For example, AWS-RunShellScript is an SSM document.</p>"]
+    #[doc="<p>The name of the document that was executed. For example, AWS-RunShellScript.</p>"]
     #[serde(rename="DocumentName")]
     pub document_name: Option<DocumentName>,
-    #[doc="<p>Duration since <code>ExecutionStartDateTime</code>.</p>"]
+    #[doc="<p>Duration since ExecutionStartDateTime.</p>"]
     #[serde(rename="ExecutionElapsedTime")]
     pub execution_elapsed_time: Option<StringDateTime>,
     #[doc="<p>The date and time the plugin was finished executing. Date and time are written in ISO 8601 format. For example, August 28, 2016 is represented as 2016-08-28. If the plugin has not started to execute, the string is empty.</p>"]
@@ -1619,7 +1633,7 @@ pub struct GetCommandInvocationResult {
     #[doc="<p>The name of the plugin for which you want detailed results. For example, aws:RunShellScript is a plugin.</p>"]
     #[serde(rename="PluginName")]
     pub plugin_name: Option<CommandPluginName>,
-    #[doc="<p>The error level response code for the plugin script. If the response code is <code>-1</code>, then the command has not started executing on the instance, or it was not received by the instance.</p>"]
+    #[doc="<p>The error level response code for the plugin script. If the response code is -1, then the command has not started executing on the instance, or it was not received by the instance.</p>"]
     #[serde(rename="ResponseCode")]
     pub response_code: Option<ResponseCode>,
     #[doc="<p>The first 8,000 characters written by the plugin to stderr. If the command has not finished executing, then this string is empty.</p>"]
@@ -1628,16 +1642,16 @@ pub struct GetCommandInvocationResult {
     #[doc="<p>The URL for the complete text written by the plugin to stderr. If the command has not finished executing, then this string is empty.</p>"]
     #[serde(rename="StandardErrorUrl")]
     pub standard_error_url: Option<Url>,
-    #[doc="<p>The first 24,000 characters written by the plugin to stdout. If the command has not finished executing, if <code>ExecutionStatus</code> is neither <code>Succeeded</code> nor <code>Failed</code>, then this string is empty.</p>"]
+    #[doc="<p>The first 24,000 characters written by the plugin to stdout. If the command has not finished executing, if ExecutionStatus is neither Succeeded nor Failed, then this string is empty.</p>"]
     #[serde(rename="StandardOutputContent")]
     pub standard_output_content: Option<StandardOutputContent>,
     #[doc="<p>The URL for the complete text written by the plugin to stdout in Amazon S3. If an Amazon S3 bucket was not specified, then this string is empty.</p>"]
     #[serde(rename="StandardOutputUrl")]
     pub standard_output_url: Option<Url>,
-    #[doc="<p>The status of the parent command for this invocation. This status can be different than <code>StatusDetails</code>.</p>"]
+    #[doc="<p>The status of the parent command for this invocation. This status can be different than StatusDetails.</p>"]
     #[serde(rename="Status")]
     pub status: Option<CommandInvocationStatus>,
-    #[doc="<p>A detailed status of the command execution for an invocation. <code>StatusDetails</code> includes more information than <code>Status</code> because it includes states resulting from error and concurrency control parameters. <code>StatusDetails</code> can show different results than <code>Status</code>. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-commands.html\">Monitor Commands</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/monitor-commands.html\">Monitor Commands</a> (Windows). <code>StatusDetails</code> can be one of the following values: </p> <ul> <li> <p>Pending – The command has not been sent to the instance.</p> </li> <li> <p>In Progress – The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed – The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, the instance was stopped, etc. The system will try to deliver the command again.</p> </li> <li> <p>Success – The command or plugin was executed successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out – The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command’s <code>MaxErrors</code> limit, but they do contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Execution Timed Out – The command started to execute on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed – The command wasn't executed successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled – The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable – The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command’s <code>MaxErrors</code> limit and don't contribute to whether the parent command status is <code>Success</code> or <code>Incomplete</code>. This is a terminal state.</p> </li> <li> <p>Terminated – The parent command exceeded its <code>MaxErrors</code> limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
+    #[doc="<p>A detailed status of the command execution for an invocation. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed: The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, the instance was stopped, etc. The system will try to deliver the command again.</p> </li> <li> <p>Success: The command or plugin was executed successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The command started to execute on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command wasn't executed successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit and don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
     #[serde(rename="StatusDetails")]
     pub status_details: Option<StatusDetails>,
 }
@@ -1797,10 +1811,10 @@ pub struct GetMaintenanceWindowExecutionTaskResult {
     pub end_time: Option<DateTime>,
     #[doc="<p>The defined maximum number of task executions that could be run in parallel.</p>"]
     #[serde(rename="MaxConcurrency")]
-    pub max_concurrency: Option<VelocityConstraint>,
+    pub max_concurrency: Option<MaxConcurrency>,
     #[doc="<p>The defined maximum number of task execution errors allowed before scheduling of the task execution would have been stopped.</p>"]
     #[serde(rename="MaxErrors")]
-    pub max_errors: Option<VelocityConstraint>,
+    pub max_errors: Option<MaxErrors>,
     #[doc="<p>The priority of the task.</p>"]
     #[serde(rename="Priority")]
     pub priority: Option<MaintenanceWindowTaskPriority>,
@@ -1822,7 +1836,7 @@ pub struct GetMaintenanceWindowExecutionTaskResult {
     #[doc="<p>The ID of the specific task execution in the Maintenance Window task that was retrieved.</p>"]
     #[serde(rename="TaskExecutionId")]
     pub task_execution_id: Option<MaintenanceWindowExecutionTaskId>,
-    #[doc="<p>The parameters passed to the task when it was executed. The map has the following format:</p> <p>Key: string, 1 ≤ length ≤ 255</p> <p>Value: an array of strings where each string 1 ≤ length ≤ 255</p>"]
+    #[doc="<p>The parameters passed to the task when it was executed. The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>"]
     #[serde(rename="TaskParameters")]
     pub task_parameters: Option<MaintenanceWindowTaskParametersList>,
     #[doc="<p>The type of task executed.</p>"]
@@ -1916,7 +1930,7 @@ pub struct GetParametersResult {
     #[doc="<p>A list of parameters that are not formatted correctly or do not run when executed.</p>"]
     #[serde(rename="InvalidParameters")]
     pub invalid_parameters: Option<ParameterNameList>,
-    #[doc="<p>A list of parameters used by the AWS account.</p>"]
+    #[doc="<p>A list of details for a parameter.</p>"]
     #[serde(rename="Parameters")]
     pub parameters: Option<ParameterList>,
 }
@@ -2072,7 +2086,7 @@ pub struct InstanceInformation {
     #[doc="<p>The activation ID created by Systems Manager when the server or VM was registered.</p>"]
     #[serde(rename="ActivationId")]
     pub activation_id: Option<ActivationId>,
-    #[doc="<p>The version of the SSM agent running on your Linux instance. </p>"]
+    #[doc="<p>The version of the SSM Agent running on your Linux instance. </p>"]
     #[serde(rename="AgentVersion")]
     pub agent_version: Option<Version>,
     #[doc="<p>Information about the association.</p>"]
@@ -2093,7 +2107,7 @@ pub struct InstanceInformation {
     #[doc="<p>The instance ID. </p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: Option<InstanceId>,
-    #[doc="<p>Indicates whether latest version of the SSM agent is running on your instance. </p>"]
+    #[doc="<p>Indicates whether latest version of the SSM Agent is running on your instance. </p>"]
     #[serde(rename="IsLatestVersion")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub is_latest_version: Option<Boolean>,
@@ -2109,7 +2123,7 @@ pub struct InstanceInformation {
     #[doc="<p>The name of the managed instance.</p>"]
     #[serde(rename="Name")]
     pub name: Option<String>,
-    #[doc="<p>Connection status of the SSM agent. </p>"]
+    #[doc="<p>Connection status of the SSM Agent. </p>"]
     #[serde(rename="PingStatus")]
     pub ping_status: Option<PingStatus>,
     #[doc="<p>The name of the operating system platform running on your instance. </p>"]
@@ -2148,7 +2162,7 @@ pub type InstanceInformationList = Vec<InstanceInformation>;
 #[doc="<p>The filters to describe or get information about your managed instances.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct InstanceInformationStringFilter {
-    #[doc="<p>The filter key name to describe your instances. For example:</p> <p>\"InstanceIds\"|\"AgentVersion\"|\"PingStatus\"|\"PlatformTypes\"|\"ActivationIds\"|\"IamRole\"|\"ResourceType\"|”AssociationStatus”|”Tag Key”</p>"]
+    #[doc="<p>The filter key name to describe your instances. For example:</p> <p>\"InstanceIds\"|\"AgentVersion\"|\"PingStatus\"|\"PlatformTypes\"|\"ActivationIds\"|\"IamRole\"|\"ResourceType\"|\"AssociationStatus\"|\"Tag Key\"</p>"]
     #[serde(rename="Key")]
     pub key: InstanceInformationStringFilterKey,
     #[doc="<p>The filter values.</p>"]
@@ -2176,10 +2190,10 @@ pub struct InstancePatchState {
     #[doc="<p>The ID of the managed instance the high-level patch compliance information was collected for.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: InstanceId,
-    #[doc="<p>The number of patches from the patch baseline that are applicable for the instance but aren’t currently installed.</p>"]
+    #[doc="<p>The number of patches from the patch baseline that are applicable for the instance but aren't currently installed.</p>"]
     #[serde(rename="MissingCount")]
     pub missing_count: Option<PatchMissingCount>,
-    #[doc="<p>The number of patches from the patch baseline that aren’t applicable for the instance and hence aren’t installed on the instance.</p>"]
+    #[doc="<p>The number of patches from the patch baseline that aren't applicable for the instance and hence aren't installed on the instance.</p>"]
     #[serde(rename="NotApplicableCount")]
     pub not_applicable_count: Option<PatchNotApplicableCount>,
     #[doc="<p>The type of patching operation that was performed: SCAN (assess patch compliance state) or INSTALL (install missing patches).</p>"]
@@ -2253,13 +2267,13 @@ pub struct InventoryItem {
     #[doc="<p>The inventory data of the inventory type.</p>"]
     #[serde(rename="Content")]
     pub content: Option<InventoryItemEntryList>,
-    #[doc="<p>MD5 hash of the inventory item type contents. The content hash is used to determine whether to update inventory information. The <code>PutInventory</code> API does not update the inventory item type contents if the MD5 hash has not changed since last update. </p>"]
+    #[doc="<p>MD5 hash of the inventory item type contents. The content hash is used to determine whether to update inventory information. The PutInventory API does not update the inventory item type contents if the MD5 hash has not changed since last update. </p>"]
     #[serde(rename="ContentHash")]
     pub content_hash: Option<InventoryItemContentHash>,
     #[doc="<p>The schema version for the inventory item.</p>"]
     #[serde(rename="SchemaVersion")]
     pub schema_version: InventoryItemSchemaVersion,
-    #[doc="<p>The name of the inventory type. Default inventory item type names start with <code>AWS</code>. Custom inventory type names will start with <code>Custom</code>. Default inventory item types include the following: <code>AWS:AWSComponent</code>, <code>AWS:Application</code>, <code>AWS:InstanceInformation</code>, <code>AWS:Network</code>, and <code>AWS:WindowsUpdate</code>.</p>"]
+    #[doc="<p>The name of the inventory type. Default inventory item type names start with AWS. Custom inventory type names will start with Custom. Default inventory item types include the following: AWS:AWSComponent, AWS:Application, AWS:InstanceInformation, AWS:Network, and AWS:WindowsUpdate.</p>"]
     #[serde(rename="TypeName")]
     pub type_name: InventoryItemTypeName,
 }
@@ -2288,7 +2302,7 @@ pub struct InventoryItemSchema {
     #[doc="<p>The schema attributes for inventory. This contains data type and attribute name.</p>"]
     #[serde(rename="Attributes")]
     pub attributes: InventoryItemAttributeList,
-    #[doc="<p>The name of the inventory type. Default inventory item type names start with <code>AWS</code>. Custom inventory type names will start with <code>Custom</code>. Default inventory item types include the following: <code>AWS:AWSComponent</code>, <code>AWS:Application</code>, <code>AWS:InstanceInformation</code>, <code>AWS:Network</code>, and <code>AWS:WindowsUpdate</code>.</p>"]
+    #[doc="<p>The name of the inventory type. Default inventory item type names start with AWS. Custom inventory type names will start with Custom. Default inventory item types include the following: AWS:AWSComponent, AWS:Application, AWS:InstanceInformation, AWS:Network, and AWS:WindowsUpdate.</p>"]
     #[serde(rename="TypeName")]
     pub type_name: InventoryItemTypeName,
     #[doc="<p>The schema version for the inventory item.</p>"]
@@ -2323,7 +2337,7 @@ pub struct InventoryResultItem {
     #[doc="<p>Contains all the inventory data of the item type. Results include attribute names and values. </p>"]
     #[serde(rename="Content")]
     pub content: InventoryItemEntryList,
-    #[doc="<p>MD5 hash of the inventory item type contents. The content hash is used to determine whether to update inventory information. The <code>PutInventory</code> API does not update the inventory item type contents if the MD5 hash has not changed since last update. </p>"]
+    #[doc="<p>MD5 hash of the inventory item type contents. The content hash is used to determine whether to update inventory information. The PutInventory API does not update the inventory item type contents if the MD5 hash has not changed since last update. </p>"]
     #[serde(rename="ContentHash")]
     pub content_hash: Option<InventoryItemContentHash>,
     #[doc="<p>The schema version for the inventory result item/</p>"]
@@ -2720,10 +2734,10 @@ pub struct MaintenanceWindowTask {
     pub logging_info: Option<LoggingInfo>,
     #[doc="<p>The maximum number of targets this task can be run for in parallel.</p>"]
     #[serde(rename="MaxConcurrency")]
-    pub max_concurrency: Option<VelocityConstraint>,
+    pub max_concurrency: Option<MaxConcurrency>,
     #[doc="<p>The maximum number of errors allowed before this task stops being scheduled.</p>"]
     #[serde(rename="MaxErrors")]
-    pub max_errors: Option<VelocityConstraint>,
+    pub max_errors: Option<MaxErrors>,
     #[doc="<p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>"]
     #[serde(rename="Priority")]
     pub priority: Option<MaintenanceWindowTaskPriority>,
@@ -2772,6 +2786,8 @@ pub type MaintenanceWindowTaskPriority = i64;
 pub type MaintenanceWindowTaskTargetId = String;
 pub type MaintenanceWindowTaskType = String;
 pub type ManagedInstanceId = String;
+pub type MaxConcurrency = String;
+pub type MaxErrors = String;
 pub type MaxResults = i64;
 pub type MaxResultsEC2Compatible = i64;
 #[derive(Default,Debug,Clone,Serialize)]
@@ -2802,7 +2818,7 @@ pub struct NotificationConfig {
     #[doc="<p>An Amazon Resource Name (ARN) for a Simple Notification Service (SNS) topic. Run Command pushes notifications about command status changes to this topic.</p>"]
     #[serde(rename="NotificationArn")]
     pub notification_arn: Option<NotificationArn>,
-    #[doc="<p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitor-commands.html\">Monitoring Commands</a> in the <i>Amazon Elastic Compute Cloud User Guide </i>.</p>"]
+    #[doc="<p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html\">Setting Up Events and Notifications</a> in the <i>Amazon EC2 Systems Manager User Guide</i>.</p>"]
     #[serde(rename="NotificationEvents")]
     pub notification_events: Option<NotificationEventList>,
     #[doc="<p>Command: Receive notification when the status of a command changes. Invocation: For commands sent to multiple instances, receive notification on a per-instance basis when the status of a command changes. </p>"]
@@ -2923,7 +2939,7 @@ pub struct Patch {
     #[doc="<p>The Microsoft Knowledge Base ID of the patch.</p>"]
     #[serde(rename="KbNumber")]
     pub kb_number: Option<PatchKbNumber>,
-    #[doc="<p>The language of the patch if it’s language-specific.</p>"]
+    #[doc="<p>The language of the patch if it's language-specific.</p>"]
     #[serde(rename="Language")]
     pub language: Option<PatchLanguage>,
     #[doc="<p>The ID of the MSRC bulletin the patch is related to.</p>"]
@@ -3130,7 +3146,7 @@ pub struct PutParameterRequest {
     #[doc="<p>The name of the parameter that you want to add to the system.</p>"]
     #[serde(rename="Name")]
     pub name: PSParameterName,
-    #[doc="<p>Overwrite an existing parameter.</p>"]
+    #[doc="<p>Overwrite an existing parameter. If not specified, will default to \"false\".</p>"]
     #[serde(rename="Overwrite")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub overwrite: Option<Boolean>,
@@ -3215,10 +3231,10 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     pub logging_info: Option<LoggingInfo>,
     #[doc="<p>The maximum number of targets this task can be run for in parallel.</p>"]
     #[serde(rename="MaxConcurrency")]
-    pub max_concurrency: VelocityConstraint,
+    pub max_concurrency: MaxConcurrency,
     #[doc="<p>The maximum number of errors allowed before this task stops being scheduled.</p>"]
     #[serde(rename="MaxErrors")]
-    pub max_errors: VelocityConstraint,
+    pub max_errors: MaxErrors,
     #[doc="<p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>"]
     #[serde(rename="Priority")]
     pub priority: Option<MaintenanceWindowTaskPriority>,
@@ -3274,7 +3290,7 @@ pub type ResponseCode = i64;
 #[doc="<p>The inventory item result attribute.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ResultAttribute {
-    #[doc="<p>Name of the inventory item type. Valid value: “AWS:InstanceInformation”. Default Value: “AWS:InstanceInformation”.</p>"]
+    #[doc="<p>Name of the inventory item type. Valid value: AWS:InstanceInformation. Default Value: AWS:InstanceInformation.</p>"]
     #[serde(rename="TypeName")]
     pub type_name: InventoryItemTypeName,
 }
@@ -3317,18 +3333,18 @@ pub struct SendCommandRequest {
     #[doc="<p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note>"]
     #[serde(rename="DocumentHashType")]
     pub document_hash_type: Option<DocumentHashType>,
-    #[doc="<p>Required. The name of the SSM document to execute. This can be an SSM public document or a custom document.</p>"]
+    #[doc="<p>Required. The name of the Systems Manager document to execute. This can be a public document or a custom document.</p>"]
     #[serde(rename="DocumentName")]
     pub document_name: DocumentARN,
-    #[doc="<p>Required. The instance IDs where the command should execute. You can specify a maximum of 50 IDs.</p>"]
+    #[doc="<p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags.</p>"]
     #[serde(rename="InstanceIds")]
     pub instance_ids: Option<InstanceIdList>,
-    #[doc="<p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as “10” or a percentage such as “10%”. The default value is 50. For more information about how to use <code>MaxConcurrency</code>, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>"]
+    #[doc="<p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as 10 or a percentage such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="MaxConcurrency")]
-    pub max_concurrency: Option<VelocityConstraint>,
-    #[doc="<p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of <code>MaxErrors</code>, the systems stops sending the command to additional targets. You can specify a number like “10” or a percentage like “10%”. The default value is 50. For more information about how to use <code>MaxErrors</code>, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>"]
+    pub max_concurrency: Option<MaxConcurrency>,
+    #[doc="<p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="MaxErrors")]
-    pub max_errors: Option<VelocityConstraint>,
+    pub max_errors: Option<MaxErrors>,
     #[doc="<p>Configurations for sending notifications.</p>"]
     #[serde(rename="NotificationConfig")]
     pub notification_config: Option<NotificationConfig>,
@@ -3341,13 +3357,13 @@ pub struct SendCommandRequest {
     #[doc="<p>(Optional) The region where the Amazon Simple Storage Service (Amazon S3) output bucket is located. The default value is the region where Run Command is being called.</p>"]
     #[serde(rename="OutputS3Region")]
     pub output_s3_region: Option<S3Region>,
-    #[doc="<p>The required and optional parameters specified in the SSM document being executed.</p>"]
+    #[doc="<p>The required and optional parameters specified in the document being executed.</p>"]
     #[serde(rename="Parameters")]
     pub parameters: Option<Parameters>,
     #[doc="<p>The IAM role that Systems Manager uses to send notifications. </p>"]
     #[serde(rename="ServiceRoleArn")]
     pub service_role_arn: Option<ServiceRole>,
-    #[doc="<p>(Optional) An array of search criteria that targets instances using a <code>Key</code>;<code>Value</code> combination that you specify. <code>Targets</code> is required if you don't provide one or more instance IDs in the call. For more information about how to use <code>Targets</code>, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>"]
+    #[doc="<p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="Targets")]
     pub targets: Option<Targets>,
     #[doc="<p>If this time is reached and the command has not already started executing, it will not execute.</p>"]
@@ -3400,9 +3416,12 @@ pub struct StepExecution {
     #[doc="<p>If a step has finished execution, this contains the time the execution ended. If the step has not yet concluded, this field is not populated.</p>"]
     #[serde(rename="ExecutionEndTime")]
     pub execution_end_time: Option<DateTime>,
-    #[doc="<p>If a step has begun execution, this contains the time the step started. If the step is in <code>Pending</code> status, this field is not populated.</p>"]
+    #[doc="<p>If a step has begun execution, this contains the time the step started. If the step is in Pending status, this field is not populated.</p>"]
     #[serde(rename="ExecutionStartTime")]
     pub execution_start_time: Option<DateTime>,
+    #[doc="<p>Information about the Automation failure.</p>"]
+    #[serde(rename="FailureDetails")]
+    pub failure_details: Option<FailureDetails>,
     #[doc="<p>If a step failed, this message explains why the execution failed.</p>"]
     #[serde(rename="FailureMessage")]
     pub failure_message: Option<String>,
@@ -3421,7 +3440,7 @@ pub struct StepExecution {
     #[doc="<p>The name of this execution step.</p>"]
     #[serde(rename="StepName")]
     pub step_name: Option<String>,
-    #[doc="<p>The execution status for this step. Valid values include: <code>Pending</code>, <code>InProgress</code>, <code>Success</code>, <code>Cancelled</code>, <code>Failed</code>, and <code>TimedOut</code>.</p>"]
+    #[doc="<p>The execution status for this step. Valid values include: Pending, InProgress, Success, Cancelled, Failed, and TimedOut.</p>"]
     #[serde(rename="StepStatus")]
     pub step_status: Option<AutomationExecutionStatus>,
 }
@@ -3453,13 +3472,13 @@ pub struct Tag {
 pub type TagKey = String;
 pub type TagList = Vec<Tag>;
 pub type TagValue = String;
-#[doc="<p>An array of search criteria that targets instances using a <code>Key</code>;<code>Value</code> combination that you specify. <code>Targets</code> is required if you don't provide one or more instance IDs in the call.</p>"]
+#[doc="<p>An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Target {
-    #[doc="<p>User-defined criteria for sending commands that target instances that meet the criteria. <code>Key</code> can be <code>tag:&lt;Amazon EC2 tag&gt;</code> or <code>name:&lt;Amazon EC2 instance ID&gt;</code>. For example, <code>tag:ServerRole</code> or <code>name:0123456789012345</code>. For more information about how to send commands that target instances using <code>Key</code>;<code>Value</code> parameters, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>"]
+    #[doc="<p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="Key")]
     pub key: Option<TargetKey>,
-    #[doc="<p>User-defined criteria that maps to <code>Key</code>. For example, if you specified <code>tag:ServerRole</code>, you could specify <code>value:WebServer</code> to execute a command on instances that include Amazon EC2 tags of ServerRole;WebServer. For more information about how to send commands that target instances using <code>Key</code>;<code>Value</code> parameters, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Linux) or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/run-command.html\">Executing a Command Using Amazon EC2 Run Command</a> (Windows).</p>"]
+    #[doc="<p>User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to execute a command on instances that include Amazon EC2 tags of ServerRole,WebServer. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="Values")]
     pub values: Option<TargetValues>,
 }
@@ -3478,15 +3497,21 @@ pub struct UpdateAssociationRequest {
     #[doc="<p>The document version you want update for the association. </p>"]
     #[serde(rename="DocumentVersion")]
     pub document_version: Option<DocumentVersion>,
-    #[doc="<p>An Amazon S3 bucket where you want to store the results of this request.</p> <p> <code>\"{ \\\"S3Location\\\": { \\\"OutputS3Region\\\": \\\"&lt;region&gt;\\\", \\\"OutputS3BucketName\\\": \\\"bucket name\\\", \\\"OutputS3KeyPrefix\\\": \\\"folder name\\\" } }\"</code> </p>"]
+    #[doc="<p>The name of the association document.</p>"]
+    #[serde(rename="Name")]
+    pub name: Option<DocumentName>,
+    #[doc="<p>An Amazon S3 bucket where you want to store the results of this request.</p>"]
     #[serde(rename="OutputLocation")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
     #[doc="<p>The parameters you want to update for the association. If you create a parameter using Parameter Store, you can reference the parameter using {{ssm:parameter-name}}</p>"]
     #[serde(rename="Parameters")]
     pub parameters: Option<Parameters>,
-    #[doc="<p>The cron expression used to schedule the association that you want to update. Supported expressions are every half, 1, 2, 4, 8 or 12 hour(s); every specified day and time of the week. For example: cron(0 0/30 * 1/1 * ? *) to run every thirty minutes; cron(0 0 0/4 1/1 * ? *) to run every four hours; and cron(0 0 10 ? * SUN *) to run every Sunday at 10 a.m.</p>"]
+    #[doc="<p>The cron expression used to schedule the association that you want to update.</p>"]
     #[serde(rename="ScheduleExpression")]
     pub schedule_expression: Option<ScheduleExpression>,
+    #[doc="<p>The targets of the association.</p>"]
+    #[serde(rename="Targets")]
+    pub targets: Option<Targets>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -3677,7 +3702,6 @@ pub struct UpdatePatchBaselineResult {
 }
 
 pub type Url = String;
-pub type VelocityConstraint = String;
 pub type Version = String;
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
@@ -3688,7 +3712,7 @@ pub enum AddTagsToResourceError {
     InvalidResourceId(String),
     ///<p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
-    ///<p>The <code>Targets</code> parameter includes too many tags. Remove one or more tags and try the command again.</p>
+    ///<p>The Targets parameter includes too many tags. Remove one or more tags and try the command again.</p>
     TooManyTagsError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3782,7 +3806,7 @@ pub enum CancelCommandError {
     InternalServerError(String),
     ///
     InvalidCommandId(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3952,7 +3976,7 @@ pub enum CreateAssociationError {
     InvalidDocument(String),
     ///<p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
@@ -3962,7 +3986,7 @@ pub enum CreateAssociationError {
     InvalidSchedule(String),
     ///<p>The target is not valid or does not exist. It might not be configured for EC2 Systems Manager or you might not have permission to perform the operation.</p>
     InvalidTarget(String),
-    ///<p>The document does not support the platform type of the given instance ID(s). For example, you sent an SSM document for a Windows instance to a Linux instance.</p>
+    ///<p>The document does not support the platform type of the given instance ID(s). For example, you sent an document for a Windows instance to a Linux instance.</p>
     UnsupportedPlatformType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4084,7 +4108,7 @@ pub enum CreateAssociationBatchError {
     InvalidDocument(String),
     ///<p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
@@ -4094,7 +4118,7 @@ pub enum CreateAssociationBatchError {
     InvalidSchedule(String),
     ///<p>The target is not valid or does not exist. It might not be configured for EC2 Systems Manager or you might not have permission to perform the operation.</p>
     InvalidTarget(String),
-    ///<p>The document does not support the platform type of the given instance ID(s). For example, you sent an SSM document for a Windows instance to a Linux instance.</p>
+    ///<p>The document does not support the platform type of the given instance ID(s). For example, you sent an document for a Windows instance to a Linux instance.</p>
     UnsupportedPlatformType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4198,17 +4222,17 @@ impl Error for CreateAssociationBatchError {
 /// Errors returned by CreateDocument
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentError {
-    ///<p>The specified SSM document already exists.</p>
+    ///<p>The specified document already exists.</p>
     DocumentAlreadyExists(String),
     ///<p>You can have at most 200 active SSM documents.</p>
     DocumentLimitExceeded(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The content for the SSM document is not valid.</p>
+    ///<p>The content for the document is not valid.</p>
     InvalidDocumentContent(String),
     ///<p>The version of the document schema is not supported.</p>
     InvalidDocumentSchemaVersion(String),
-    ///<p>The size limit of an SSM document is 64 KB.</p>
+    ///<p>The size limit of a document is 64 KB.</p>
     MaxDocumentSizeExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4300,7 +4324,7 @@ impl Error for CreateDocumentError {
 /// Errors returned by CreateMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum CreateMaintenanceWindowError {
-    ///<p>Error returned when an idempotent operation is retried and the parameters don’t match the original call to the API with the same idempotency token. </p>
+    ///<p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -4382,7 +4406,7 @@ impl Error for CreateMaintenanceWindowError {
 /// Errors returned by CreatePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum CreatePatchBaselineError {
-    ///<p>Error returned when an idempotent operation is retried and the parameters don’t match the original call to the API with the same idempotency token. </p>
+    ///<p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -4560,7 +4584,7 @@ pub enum DeleteAssociationError {
     InternalServerError(String),
     ///<p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>There are concurrent updates for a resource that supports one update at a time.</p>
     TooManyUpdates(String),
@@ -4654,7 +4678,7 @@ impl Error for DeleteAssociationError {
 /// Errors returned by DeleteDocument
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentError {
-    ///<p>You must disassociate an SSM document from all instances before you can delete it.</p>
+    ///<p>You must disassociate a document from all instances before you can delete it.</p>
     AssociatedInstances(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -4984,7 +5008,7 @@ impl Error for DeletePatchBaselineError {
 pub enum DeregisterManagedInstanceError {
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5139,7 +5163,7 @@ impl Error for DeregisterPatchBaselineForPatchGroupError {
 /// Errors returned by DeregisterTargetFromMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTargetFromMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -5218,7 +5242,7 @@ impl Error for DeregisterTargetFromMaintenanceWindowError {
 /// Errors returned by DeregisterTaskFromMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTaskFromMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -5391,7 +5415,7 @@ pub enum DescribeAssociationError {
     InternalServerError(String),
     ///<p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5799,7 +5823,7 @@ impl Error for DescribeDocumentPermissionError {
 pub enum DescribeEffectiveInstanceAssociationsError {
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -5880,7 +5904,7 @@ impl Error for DescribeEffectiveInstanceAssociationsError {
 /// Errors returned by DescribeEffectivePatchesForPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum DescribeEffectivePatchesForPatchBaselineError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -5964,7 +5988,7 @@ impl Error for DescribeEffectivePatchesForPatchBaselineError {
 pub enum DescribeInstanceAssociationsStatusError {
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -6049,7 +6073,7 @@ pub enum DescribeInstanceInformationError {
     InternalServerError(String),
     ///<p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>The specified filter value is not valid.</p>
     InvalidInstanceInformationFilterValue(String),
@@ -6301,7 +6325,7 @@ pub enum DescribeInstancePatchesError {
     InternalServerError(String),
     ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -6389,7 +6413,7 @@ impl Error for DescribeInstancePatchesError {
 /// Errors returned by DescribeMaintenanceWindowExecutionTaskInvocations
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionTaskInvocationsError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -6471,7 +6495,7 @@ impl Error for DescribeMaintenanceWindowExecutionTaskInvocationsError {
 /// Errors returned by DescribeMaintenanceWindowExecutionTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionTasksError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -6622,7 +6646,7 @@ impl Error for DescribeMaintenanceWindowExecutionsError {
 /// Errors returned by DescribeMaintenanceWindowTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowTargetsError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -6700,7 +6724,7 @@ impl Error for DescribeMaintenanceWindowTargetsError {
 /// Errors returned by DescribeMaintenanceWindowTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowTasksError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -7252,7 +7276,7 @@ pub enum GetCommandInvocationError {
     InternalServerError(String),
     ///
     InvalidCommandId(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>The plugin name is not valid.</p>
     InvalidPluginName(String),
@@ -7767,7 +7791,7 @@ impl Error for GetInventorySchemaError {
 /// Errors returned by GetMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -7849,7 +7873,7 @@ impl Error for GetMaintenanceWindowError {
 /// Errors returned by GetMaintenanceWindowExecution
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -7927,7 +7951,7 @@ impl Error for GetMaintenanceWindowExecutionError {
 /// Errors returned by GetMaintenanceWindowExecutionTask
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionTaskError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -8168,7 +8192,7 @@ impl Error for GetParametersError {
 /// Errors returned by GetPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum GetPatchBaselineError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -8414,7 +8438,7 @@ pub enum ListCommandInvocationsError {
     InvalidCommandId(String),
     ///<p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -8512,7 +8536,7 @@ pub enum ListCommandsError {
     InvalidCommandId(String),
     ///<p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -8782,7 +8806,7 @@ pub enum ListInventoryEntriesError {
     InternalServerError(String),
     ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>The specified token is not valid.</p>
     InvalidNextToken(String),
@@ -9062,7 +9086,7 @@ pub enum PutInventoryError {
     CustomSchemaCountLimitExceeded(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>One or more content items is not valid.</p>
     InvalidItemContent(String),
@@ -9074,7 +9098,7 @@ pub enum PutInventoryError {
     ItemSizeLimitExceeded(String),
     ///<p>The size of inventory data has exceeded the total size limit for the resource.</p>
     TotalSizeLimitExceeded(String),
-    ///<p>Inventory item type schema version has to match supported versions in the service. Check output of <code>GetInventorySchema</code> to see the available schema version for each type.</p>
+    ///<p>Inventory item type schema version has to match supported versions in the service. Check output of GetInventorySchema to see the available schema version for each type.</p>
     UnsupportedInventorySchemaVersion(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9278,7 +9302,7 @@ impl Error for PutParameterError {
 /// Errors returned by RegisterDefaultPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum RegisterDefaultPatchBaselineError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -9364,7 +9388,7 @@ impl Error for RegisterDefaultPatchBaselineError {
 pub enum RegisterPatchBaselineForPatchGroupError {
     ///<p>Error returned if an attempt is made to register a patch group with a patch baseline that is already registered with a different patch baseline.</p>
     AlreadyExists(String),
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -9453,9 +9477,9 @@ impl Error for RegisterPatchBaselineForPatchGroupError {
 /// Errors returned by RegisterTargetWithMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum RegisterTargetWithMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>Error returned when an idempotent operation is retried and the parameters don’t match the original call to the API with the same idempotency token. </p>
+    ///<p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -9542,9 +9566,9 @@ impl Error for RegisterTargetWithMaintenanceWindowError {
 /// Errors returned by RegisterTaskWithMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum RegisterTaskWithMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>Error returned when an idempotent operation is retried and the parameters don’t match the original call to the API with the same idempotency token. </p>
+    ///<p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -9719,7 +9743,7 @@ pub enum SendCommandError {
     InternalServerError(String),
     ///<p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>One or more configuration items is not valid. Verify that a valid Amazon Resource Name (ARN) was provided for an Amazon SNS topic.</p>
     InvalidNotificationConfig(String),
@@ -9727,11 +9751,11 @@ pub enum SendCommandError {
     InvalidOutputFolder(String),
     ///<p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
     InvalidParameters(String),
-    ///<p>The role name can't contain invalid characters. Also verify that you specified an IAM role for notifications that includes the required trust policy. For information about configuring the IAM role for Run Command notifications, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/rc-sns.html">Getting Amazon SNS Notifications When a Command Changes Status</a> in the <i>Amazon Elastic Compute Cloud User Guide </i>.</p>
+    ///<p>The role name can't contain invalid characters. Also verify that you specified an IAM role for notifications that includes the required trust policy. For information about configuring the IAM role for Run Command notifications, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/rc-sns-notifications.html">Configuring Amazon SNS Notifications for Run Command</a> in the <i>Amazon EC2 Systems Manager User Guide</i>.</p>
     InvalidRole(String),
-    ///<p>The size limit of an SSM document is 64 KB.</p>
+    ///<p>The size limit of a document is 64 KB.</p>
     MaxDocumentSizeExceeded(String),
-    ///<p>The document does not support the platform type of the given instance ID(s). For example, you sent an SSM document for a Windows instance to a Linux instance.</p>
+    ///<p>The document does not support the platform type of the given instance ID(s). For example, you sent an document for a Windows instance to a Linux instance.</p>
     UnsupportedPlatformType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10011,6 +10035,8 @@ pub enum UpdateAssociationError {
     AssociationDoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
+    ///<p>The specified document does not exist.</p>
+    InvalidDocument(String),
     ///<p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
     ///<p>The output location is not valid or does not exist.</p>
@@ -10019,6 +10045,8 @@ pub enum UpdateAssociationError {
     InvalidParameters(String),
     ///<p>The schedule is invalid. Verify your cron or rate expression and try again.</p>
     InvalidSchedule(String),
+    ///<p>The target is not valid or does not exist. It might not be configured for EC2 Systems Manager or you might not have permission to perform the operation.</p>
+    InvalidTarget(String),
     ///<p>The update is not valid.</p>
     InvalidUpdate(String),
     ///<p>There are concurrent updates for a resource that supports one update at a time.</p>
@@ -10053,6 +10081,9 @@ impl UpdateAssociationError {
                     "InternalServerError" => {
                         UpdateAssociationError::InternalServerError(String::from(error_message))
                     }
+                    "InvalidDocument" => {
+                        UpdateAssociationError::InvalidDocument(String::from(error_message))
+                    }
                     "InvalidDocumentVersion" => {
                         UpdateAssociationError::InvalidDocumentVersion(String::from(error_message))
                     }
@@ -10064,6 +10095,9 @@ impl UpdateAssociationError {
                     }
                     "InvalidSchedule" => {
                         UpdateAssociationError::InvalidSchedule(String::from(error_message))
+                    }
+                    "InvalidTarget" => {
+                        UpdateAssociationError::InvalidTarget(String::from(error_message))
                     }
                     "InvalidUpdate" => {
                         UpdateAssociationError::InvalidUpdate(String::from(error_message))
@@ -10107,10 +10141,12 @@ impl Error for UpdateAssociationError {
         match *self {
             UpdateAssociationError::AssociationDoesNotExist(ref cause) => cause,
             UpdateAssociationError::InternalServerError(ref cause) => cause,
+            UpdateAssociationError::InvalidDocument(ref cause) => cause,
             UpdateAssociationError::InvalidDocumentVersion(ref cause) => cause,
             UpdateAssociationError::InvalidOutputLocation(ref cause) => cause,
             UpdateAssociationError::InvalidParameters(ref cause) => cause,
             UpdateAssociationError::InvalidSchedule(ref cause) => cause,
+            UpdateAssociationError::InvalidTarget(ref cause) => cause,
             UpdateAssociationError::InvalidUpdate(ref cause) => cause,
             UpdateAssociationError::TooManyUpdates(ref cause) => cause,
             UpdateAssociationError::Validation(ref cause) => cause,
@@ -10131,7 +10167,7 @@ pub enum UpdateAssociationStatusError {
     InternalServerError(String),
     ///<p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     ///<p>The updated status is the same as the current status.</p>
     StatusUnchanged(String),
@@ -10235,13 +10271,13 @@ pub enum UpdateDocumentError {
     InternalServerError(String),
     ///<p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The content for the SSM document is not valid.</p>
+    ///<p>The content for the document is not valid.</p>
     InvalidDocumentContent(String),
     ///<p>The version of the document schema is not supported.</p>
     InvalidDocumentSchemaVersion(String),
     ///<p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    ///<p>The size limit of an SSM document is 64 KB.</p>
+    ///<p>The size limit of a document is 64 KB.</p>
     MaxDocumentSizeExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10425,7 +10461,7 @@ impl Error for UpdateDocumentDefaultVersionError {
 /// Errors returned by UpdateMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10507,7 +10543,7 @@ impl Error for UpdateMaintenanceWindowError {
 pub enum UpdateManagedInstanceRoleError {
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM agent is not running. On managed instances and Linux instances, verify that the SSM agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10583,7 +10619,7 @@ impl Error for UpdateManagedInstanceRoleError {
 /// Errors returned by UpdatePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePatchBaselineError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn’t exist.</p>
+    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10664,7 +10700,7 @@ impl Error for UpdatePatchBaselineError {
 }
 /// Trait representing the capabilities of the Amazon SSM API. Amazon SSM clients implement this trait.
 pub trait Ssm {
-    #[doc="<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test. Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the Amazon EC2 User Guide. </p>"]
+    #[doc="<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>"]
     fn add_tags_to_resource(&self,
                             input: &AddTagsToResourceRequest)
                             -> Result<AddTagsToResourceResult, AddTagsToResourceError>;
@@ -10676,26 +10712,26 @@ pub trait Ssm {
                       -> Result<CancelCommandResult, CancelCommandError>;
 
 
-    #[doc="<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managed-instances.html\">Setting Up Managed Instances (Linux)</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/managed-instances.html\">Setting Up Managed Instances (Windows)</a> in the Amazon EC2 User Guide. </p>"]
+    #[doc="<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html\">Setting Up Systems Manager in Hybrid Environments</a>.</p>"]
     fn create_activation(&self,
                          input: &CreateActivationRequest)
                          -> Result<CreateActivationResult, CreateActivationError>;
 
 
-    #[doc="<p>Associates the specified SSM document with the specified instances or targets.</p> <p>When you associate an SSM document with one or more instances using instance IDs or tags, the SSM agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
+    #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
     fn create_association(&self,
                           input: &CreateAssociationRequest)
                           -> Result<CreateAssociationResult, CreateAssociationError>;
 
 
-    #[doc="<p>Associates the specified SSM document with the specified instances or targets.</p> <p>When you associate an SSM document with one or more instances using instance IDs or tags, the SSM agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
+    #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
     fn create_association_batch
         (&self,
          input: &CreateAssociationBatchRequest)
          -> Result<CreateAssociationBatchResult, CreateAssociationBatchError>;
 
 
-    #[doc="<p>Creates an SSM document.</p> <p>After you create an SSM document, you can use CreateAssociation to associate it with one or more running instances.</p>"]
+    #[doc="<p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>"]
     fn create_document(&self,
                        input: &CreateDocumentRequest)
                        -> Result<CreateDocumentResult, CreateDocumentError>;
@@ -10720,13 +10756,13 @@ pub trait Ssm {
                          -> Result<DeleteActivationResult, DeleteActivationError>;
 
 
-    #[doc="<p>Disassociates the specified SSM document from the specified instance.</p> <p>When you disassociate an SSM document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>"]
+    #[doc="<p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>"]
     fn delete_association(&self,
                           input: &DeleteAssociationRequest)
                           -> Result<DeleteAssociationResult, DeleteAssociationError>;
 
 
-    #[doc="<p>Deletes the SSM document and all instance associations to the document.</p> <p>Before you delete the SSM document, we recommend that you use DeleteAssociation to disassociate all instances that are associated with the document.</p>"]
+    #[doc="<p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>"]
     fn delete_document(&self,
                        input: &DeleteDocumentRequest)
                        -> Result<DeleteDocumentResult, DeleteDocumentError>;
@@ -10751,7 +10787,7 @@ pub trait Ssm {
                              -> Result<DeletePatchBaselineResult, DeletePatchBaselineError>;
 
 
-    #[doc="<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don’t plan to use Run Command on the server, we suggest uninstalling the SSM agent first.</p>"]
+    #[doc="<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>"]
     fn deregister_managed_instance
         (&self,
          input: &DeregisterManagedInstanceRequest)
@@ -10784,7 +10820,7 @@ pub trait Ssm {
                             -> Result<DescribeActivationsResult, DescribeActivationsError>;
 
 
-    #[doc="<p>Describes the associations for the specified SSM document or instance.</p>"]
+    #[doc="<p>Describes the associations for the specified Systems Manager document or instance.</p>"]
     fn describe_association(&self,
                             input: &DescribeAssociationRequest)
                             -> Result<DescribeAssociationResult, DescribeAssociationError>;
@@ -10810,7 +10846,7 @@ pub trait Ssm {
                          -> Result<DescribeDocumentResult, DescribeDocumentError>;
 
 
-    #[doc="<p>Describes the permissions for an SSM document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user’s AWS account ID) or publicly (<i>All</i>). </p>"]
+    #[doc="<p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>"]
     fn describe_document_permission
         (&self,
          input: &DescribeDocumentPermissionRequest)
@@ -10833,7 +10869,7 @@ pub trait Ssm {
                    DescribeInstanceAssociationsStatusError>;
 
 
-    #[doc="<p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>"]
+    #[doc="<p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>"]
     fn describe_instance_information
         (&self,
          input: &DescribeInstanceInformationRequest)
@@ -10989,7 +11025,7 @@ pub trait Ssm {
                              -> Result<GetParameterHistoryResult, GetParameterHistoryError>;
 
 
-    #[doc="<p>Get a list of parameters used by the AWS account.&gt;</p>"]
+    #[doc="<p>Get details of a parameter.</p>"]
     fn get_parameters(&self,
                       input: &GetParametersRequest)
                       -> Result<GetParametersResult, GetParametersError>;
@@ -11008,7 +11044,7 @@ pub trait Ssm {
          -> Result<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError>;
 
 
-    #[doc="<p>Lists the associations for the specified SSM document or instance.</p>"]
+    #[doc="<p>Lists the associations for the specified Systems Manager document or instance.</p>"]
     fn list_associations(&self,
                          input: &ListAssociationsRequest)
                          -> Result<ListAssociationsResult, ListAssociationsError>;
@@ -11051,7 +11087,7 @@ pub trait Ssm {
                               -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
 
 
-    #[doc="<p>Share a document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>"]
+    #[doc="<p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>"]
     fn modify_document_permission
         (&self,
          input: &ModifyDocumentPermissionRequest)
@@ -11133,7 +11169,7 @@ pub trait Ssm {
                           -> Result<UpdateAssociationResult, UpdateAssociationError>;
 
 
-    #[doc="<p>Updates the status of the SSM document associated with the specified instance.</p>"]
+    #[doc="<p>Updates the status of the Systems Manager document associated with the specified instance.</p>"]
     fn update_association_status
         (&self,
          input: &UpdateAssociationStatusRequest)
@@ -11199,7 +11235,7 @@ impl<P, D> Ssm for SsmClient<P, D>
     where P: ProvideAwsCredentials,
           D: DispatchSignedRequest
 {
-    #[doc="<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test. Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the Amazon EC2 User Guide. </p>"]
+    #[doc="<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>"]
     fn add_tags_to_resource(&self,
                             input: &AddTagsToResourceRequest)
                             -> Result<AddTagsToResourceResult, AddTagsToResourceError> {
@@ -11252,7 +11288,7 @@ impl<P, D> Ssm for SsmClient<P, D>
     }
 
 
-    #[doc="<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/managed-instances.html\">Setting Up Managed Instances (Linux)</a> or <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/managed-instances.html\">Setting Up Managed Instances (Windows)</a> in the Amazon EC2 User Guide. </p>"]
+    #[doc="<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html\">Setting Up Systems Manager in Hybrid Environments</a>.</p>"]
     fn create_activation(&self,
                          input: &CreateActivationRequest)
                          -> Result<CreateActivationResult, CreateActivationError> {
@@ -11279,7 +11315,7 @@ impl<P, D> Ssm for SsmClient<P, D>
     }
 
 
-    #[doc="<p>Associates the specified SSM document with the specified instances or targets.</p> <p>When you associate an SSM document with one or more instances using instance IDs or tags, the SSM agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
+    #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
     fn create_association(&self,
                           input: &CreateAssociationRequest)
                           -> Result<CreateAssociationResult, CreateAssociationError> {
@@ -11306,7 +11342,7 @@ impl<P, D> Ssm for SsmClient<P, D>
     }
 
 
-    #[doc="<p>Associates the specified SSM document with the specified instances or targets.</p> <p>When you associate an SSM document with one or more instances using instance IDs or tags, the SSM agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
+    #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
     fn create_association_batch
         (&self,
          input: &CreateAssociationBatchRequest)
@@ -11334,7 +11370,7 @@ impl<P, D> Ssm for SsmClient<P, D>
     }
 
 
-    #[doc="<p>Creates an SSM document.</p> <p>After you create an SSM document, you can use CreateAssociation to associate it with one or more running instances.</p>"]
+    #[doc="<p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>"]
     fn create_document(&self,
                        input: &CreateDocumentRequest)
                        -> Result<CreateDocumentResult, CreateDocumentError> {
@@ -11440,7 +11476,7 @@ impl<P, D> Ssm for SsmClient<P, D>
     }
 
 
-    #[doc="<p>Disassociates the specified SSM document from the specified instance.</p> <p>When you disassociate an SSM document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>"]
+    #[doc="<p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>"]
     fn delete_association(&self,
                           input: &DeleteAssociationRequest)
                           -> Result<DeleteAssociationResult, DeleteAssociationError> {
@@ -11467,7 +11503,7 @@ impl<P, D> Ssm for SsmClient<P, D>
     }
 
 
-    #[doc="<p>Deletes the SSM document and all instance associations to the document.</p> <p>Before you delete the SSM document, we recommend that you use DeleteAssociation to disassociate all instances that are associated with the document.</p>"]
+    #[doc="<p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>"]
     fn delete_document(&self,
                        input: &DeleteDocumentRequest)
                        -> Result<DeleteDocumentResult, DeleteDocumentError> {
@@ -11573,7 +11609,7 @@ impl<P, D> Ssm for SsmClient<P, D>
     }
 
 
-    #[doc="<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don’t plan to use Run Command on the server, we suggest uninstalling the SSM agent first.</p>"]
+    #[doc="<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>"]
     fn deregister_managed_instance
         (&self,
          input: &DeregisterManagedInstanceRequest)
@@ -11702,7 +11738,7 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
     }
 
 
-    #[doc="<p>Describes the associations for the specified SSM document or instance.</p>"]
+    #[doc="<p>Describes the associations for the specified Systems Manager document or instance.</p>"]
     fn describe_association(&self,
                             input: &DescribeAssociationRequest)
                             -> Result<DescribeAssociationResult, DescribeAssociationError> {
@@ -11806,7 +11842,7 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
     }
 
 
-    #[doc="<p>Describes the permissions for an SSM document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user’s AWS account ID) or publicly (<i>All</i>). </p>"]
+    #[doc="<p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>"]
     fn describe_document_permission
         (&self,
          input: &DescribeDocumentPermissionRequest)
@@ -11904,7 +11940,7 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
     }
 
 
-    #[doc="<p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>"]
+    #[doc="<p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>"]
     fn describe_instance_information
         (&self,
          input: &DescribeInstanceInformationRequest)
@@ -12542,7 +12578,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
-    #[doc="<p>Get a list of parameters used by the AWS account.&gt;</p>"]
+    #[doc="<p>Get details of a parameter.</p>"]
     fn get_parameters(&self,
                       input: &GetParametersRequest)
                       -> Result<GetParametersResult, GetParametersError> {
@@ -12620,7 +12656,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
-    #[doc="<p>Lists the associations for the specified SSM document or instance.</p>"]
+    #[doc="<p>Lists the associations for the specified Systems Manager document or instance.</p>"]
     fn list_associations(&self,
                          input: &ListAssociationsRequest)
                          -> Result<ListAssociationsResult, ListAssociationsError> {
@@ -12808,7 +12844,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
-    #[doc="<p>Share a document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>"]
+    #[doc="<p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>"]
     fn modify_document_permission
         (&self,
          input: &ModifyDocumentPermissionRequest)
@@ -13119,7 +13155,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
-    #[doc="<p>Updates the status of the SSM document associated with the specified instance.</p>"]
+    #[doc="<p>Updates the status of the Systems Manager document associated with the specified instance.</p>"]
     fn update_association_status
         (&self,
          input: &UpdateAssociationStatusRequest)

@@ -20,6 +20,18 @@ pub struct AccountSettings {
     #[doc="<p>The AWS account number specified in the <code>AccountSettings</code> container.</p>"]
     #[serde(rename="awsAccountNumber")]
     pub aws_account_number: Option<AWSAccountNumber>,
+    #[doc="<p>The default number of minutes (at the account level) a test run will execute before it times out. Default value is 60 minutes.</p>"]
+    #[serde(rename="defaultJobTimeoutMinutes")]
+    pub default_job_timeout_minutes: Option<JobTimeoutMinutes>,
+    #[doc="<p>The maximum number of minutes a test run will execute before it times out.</p>"]
+    #[serde(rename="maxJobTimeoutMinutes")]
+    pub max_job_timeout_minutes: Option<JobTimeoutMinutes>,
+    #[doc="<p>The maximum number of device slots that the AWS account can purchase. Each maximum is expressed as an <code>offering-id:number</code> pair, where the <code>offering-id</code> represents one of the IDs returned by the <code>ListOfferings</code> command.</p>"]
+    #[serde(rename="maxSlots")]
+    pub max_slots: Option<MaxSlotMap>,
+    #[doc="<p>Information about an AWS account's usage of free trial device minutes.</p>"]
+    #[serde(rename="trialMinutes")]
+    pub trial_minutes: Option<TrialMinutes>,
     #[doc="<p>Returns the unmetered devices you have purchased or want to purchase.</p>"]
     #[serde(rename="unmeteredDevices")]
     pub unmetered_devices: Option<PurchasedDevicesMap>,
@@ -28,8 +40,10 @@ pub struct AccountSettings {
     pub unmetered_remote_access_devices: Option<PurchasedDevicesMap>,
 }
 
+pub type AccountsCleanup = bool;
 pub type AmazonResourceName = String;
 pub type AmazonResourceNames = Vec<AmazonResourceName>;
+pub type AppPackagesCleanup = bool;
 #[doc="<p>Represents the output of a test. Examples of artifacts include logs and screenshots.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Artifact {
@@ -121,9 +135,59 @@ pub struct CreateDevicePoolResult {
     pub device_pool: Option<DevicePool>,
 }
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct CreateNetworkProfileRequest {
+    #[doc="<p>The description of the network profile.</p>"]
+    #[serde(rename="description")]
+    pub description: Option<Message>,
+    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
+    #[serde(rename="downlinkBandwidthBits")]
+    pub downlink_bandwidth_bits: Option<Long>,
+    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="downlinkDelayMs")]
+    pub downlink_delay_ms: Option<Long>,
+    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="downlinkJitterMs")]
+    pub downlink_jitter_ms: Option<Long>,
+    #[doc="<p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>"]
+    #[serde(rename="downlinkLossPercent")]
+    pub downlink_loss_percent: Option<PercentInteger>,
+    #[doc="<p>The name you wish to specify for the new network profile.</p>"]
+    #[serde(rename="name")]
+    pub name: Name,
+    #[doc="<p>The Amazon Resource Name (ARN) of the project for which you want to create a network profile.</p>"]
+    #[serde(rename="projectArn")]
+    pub project_arn: AmazonResourceName,
+    #[doc="<p>The type of network profile you wish to create. Valid values are listed below.</p>"]
+    #[serde(rename="type")]
+    pub type_: Option<NetworkProfileType>,
+    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
+    #[serde(rename="uplinkBandwidthBits")]
+    pub uplink_bandwidth_bits: Option<Long>,
+    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="uplinkDelayMs")]
+    pub uplink_delay_ms: Option<Long>,
+    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="uplinkJitterMs")]
+    pub uplink_jitter_ms: Option<Long>,
+    #[doc="<p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>"]
+    #[serde(rename="uplinkLossPercent")]
+    pub uplink_loss_percent: Option<PercentInteger>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct CreateNetworkProfileResult {
+    #[doc="<p>The network profile that is returned by the create network profile request.</p>"]
+    #[serde(rename="networkProfile")]
+    pub network_profile: Option<NetworkProfile>,
+}
+
 #[doc="<p>Represents a request to the create project operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateProjectRequest {
+    #[doc="<p>Sets the execution timeout value (in minutes) for a project. All test runs in this project will use the specified execution timeout value unless overridden when scheduling a run.</p>"]
+    #[serde(rename="defaultJobTimeoutMinutes")]
+    pub default_job_timeout_minutes: Option<JobTimeoutMinutes>,
     #[doc="<p>The project's name.</p>"]
     #[serde(rename="name")]
     pub name: Name,
@@ -208,6 +272,16 @@ pub struct DeleteDevicePoolRequest {
 #[doc="<p>Represents the result of a delete device pool request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeleteDevicePoolResult;
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DeleteNetworkProfileRequest {
+    #[doc="<p>The Amazon Resource Name (ARN) of the network profile you want to delete.</p>"]
+    #[serde(rename="arn")]
+    pub arn: AmazonResourceName,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DeleteNetworkProfileResult;
 
 #[doc="<p>Represents a request to the delete project operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -309,6 +383,7 @@ pub struct Device {
     #[serde(rename="remoteAccessEnabled")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub remote_access_enabled: Option<Boolean>,
+    #[doc="<p>The resolution of the device.</p>"]
     #[serde(rename="resolution")]
     pub resolution: Option<Resolution>,
 }
@@ -357,6 +432,7 @@ pub struct DevicePoolCompatibilityResult {
     #[serde(rename="compatible")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub compatible: Option<Boolean>,
+    #[doc="<p>The device (phone or tablet) that you wish to return information about.</p>"]
     #[serde(rename="device")]
     pub device: Option<Device>,
     #[doc="<p>Information about the compatibility.</p>"]
@@ -369,6 +445,22 @@ pub type DevicePoolType = String;
 pub type DevicePools = Vec<DevicePool>;
 pub type Devices = Vec<Device>;
 pub type Double = f64;
+#[doc="<p>Represents configuration information about a test run, such as the execution timeout (in minutes).</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ExecutionConfiguration {
+    #[doc="<p>True if account cleanup is enabled at the beginning of the test; otherwise, false.</p>"]
+    #[serde(rename="accountsCleanup")]
+    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    pub accounts_cleanup: Option<AccountsCleanup>,
+    #[doc="<p>True if app package cleanup is enabled at the beginning of the test; otherwise, false.</p>"]
+    #[serde(rename="appPackagesCleanup")]
+    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    pub app_packages_cleanup: Option<AppPackagesCleanup>,
+    #[doc="<p>The number of minutes a test run will execute before it times out.</p>"]
+    #[serde(rename="jobTimeoutMinutes")]
+    pub job_timeout_minutes: Option<JobTimeoutMinutes>,
+}
+
 pub type ExecutionResult = String;
 pub type ExecutionStatus = String;
 pub type Filter = String;
@@ -379,6 +471,7 @@ pub struct GetAccountSettingsRequest;
 #[doc="<p>Represents the account settings return values from the <code>GetAccountSettings</code> request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetAccountSettingsResult {
+    #[doc="<p>The account settings.</p>"]
     #[serde(rename="accountSettings")]
     pub account_settings: Option<AccountSettings>,
 }
@@ -392,6 +485,9 @@ pub struct GetDevicePoolCompatibilityRequest {
     #[doc="<p>The device pool's ARN.</p>"]
     #[serde(rename="devicePoolArn")]
     pub device_pool_arn: AmazonResourceName,
+    #[doc="<p>Information about the uploaded test to be run against the device pool.</p>"]
+    #[serde(rename="test")]
+    pub test: Option<ScheduleRunTest>,
     #[doc="<p>The test type for the specified device pool.</p> <p>Allowed values include the following:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>"]
     #[serde(rename="testType")]
     pub test_type: Option<TestType>,
@@ -419,6 +515,7 @@ pub struct GetDevicePoolRequest {
 #[doc="<p>Represents the result of a get device pool request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetDevicePoolResult {
+    #[doc="<p>An object containing information about the requested device pool.</p>"]
     #[serde(rename="devicePool")]
     pub device_pool: Option<DevicePool>,
 }
@@ -434,6 +531,7 @@ pub struct GetDeviceRequest {
 #[doc="<p>Represents the result of a get device request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetDeviceResult {
+    #[doc="<p>An object containing information about the requested device.</p>"]
     #[serde(rename="device")]
     pub device: Option<Device>,
 }
@@ -449,8 +547,23 @@ pub struct GetJobRequest {
 #[doc="<p>Represents the result of a get job request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetJobResult {
+    #[doc="<p>An object containing information about the requested job.</p>"]
     #[serde(rename="job")]
     pub job: Option<Job>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetNetworkProfileRequest {
+    #[doc="<p>The Amazon Resource Name (ARN) of the network profile you want to return information about.</p>"]
+    #[serde(rename="arn")]
+    pub arn: AmazonResourceName,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GetNetworkProfileResult {
+    #[doc="<p>The network profile.</p>"]
+    #[serde(rename="networkProfile")]
+    pub network_profile: Option<NetworkProfile>,
 }
 
 #[doc="<p>Represents the request to retrieve the offering status for the specified customer or account.</p>"]
@@ -486,6 +599,7 @@ pub struct GetProjectRequest {
 #[doc="<p>Represents the result of a get project request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetProjectResult {
+    #[doc="<p>The project you wish to get information about.</p>"]
     #[serde(rename="project")]
     pub project: Option<Project>,
 }
@@ -517,6 +631,7 @@ pub struct GetRunRequest {
 #[doc="<p>Represents the result of a get run request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetRunResult {
+    #[doc="<p>The run you wish to get results from.</p>"]
     #[serde(rename="run")]
     pub run: Option<Run>,
 }
@@ -532,6 +647,7 @@ pub struct GetSuiteRequest {
 #[doc="<p>Represents the result of a get suite request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetSuiteResult {
+    #[doc="<p>A collection of one or more tests.</p>"]
     #[serde(rename="suite")]
     pub suite: Option<Suite>,
 }
@@ -547,6 +663,7 @@ pub struct GetTestRequest {
 #[doc="<p>Represents the result of a get test request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetTestResult {
+    #[doc="<p>A test condition that is evaluated.</p>"]
     #[serde(rename="test")]
     pub test: Option<Test>,
 }
@@ -562,6 +679,7 @@ pub struct GetUploadRequest {
 #[doc="<p>Represents the result of a get upload request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetUploadResult {
+    #[doc="<p>An app or a set of one or more tests to upload or that have been uploaded.</p>"]
     #[serde(rename="upload")]
     pub upload: Option<Upload>,
 }
@@ -572,7 +690,7 @@ pub struct IncompatibilityMessage {
     #[doc="<p>A message about the incompatibility.</p>"]
     #[serde(rename="message")]
     pub message: Option<Message>,
-    #[doc="<p>The type of incompatibility.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> </ul>"]
+    #[doc="<p>The type of incompatibility.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> <li> <p>REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.</p> </li> <li> <p>APPIUM_VERSION: The Appium version for the test.</p> </li> </ul>"]
     #[serde(rename="type")]
     pub type_: Option<DeviceAttribute>,
 }
@@ -592,6 +710,7 @@ pub struct InstallToRemoteAccessSessionRequest {
 #[doc="<p>Represents the response from the server after AWS Device Farm makes a request to install to a remote access session.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct InstallToRemoteAccessSessionResult {
+    #[doc="<p>An app to upload or that has been uploaded.</p>"]
     #[serde(rename="appUpload")]
     pub app_upload: Option<Upload>,
 }
@@ -609,6 +728,7 @@ pub struct Job {
     #[doc="<p>When the job was created.</p>"]
     #[serde(rename="created")]
     pub created: Option<DateTime>,
+    #[doc="<p>The device (phone or tablet).</p>"]
     #[serde(rename="device")]
     pub device: Option<Device>,
     #[doc="<p>Represents the total (metered or unmetered) minutes used by the job.</p>"]
@@ -637,6 +757,7 @@ pub struct Job {
     pub type_: Option<TestType>,
 }
 
+pub type JobTimeoutMinutes = i64;
 pub type Jobs = Vec<Job>;
 #[doc="<p>Represents a request to the list artifacts operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -730,6 +851,46 @@ pub struct ListJobsResult {
     #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
     #[serde(rename="nextToken")]
     pub next_token: Option<PaginationToken>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListNetworkProfilesRequest {
+    #[doc="<p>The Amazon Resource Name (ARN) of the project for which you want to list network profiles.</p>"]
+    #[serde(rename="arn")]
+    pub arn: AmazonResourceName,
+    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
+    #[serde(rename="nextToken")]
+    pub next_token: Option<PaginationToken>,
+    #[doc="<p>The type of network profile you wish to return information about. Valid values are listed below.</p>"]
+    #[serde(rename="type")]
+    pub type_: Option<NetworkProfileType>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListNetworkProfilesResult {
+    #[doc="<p>A list of the available network profiles.</p>"]
+    #[serde(rename="networkProfiles")]
+    pub network_profiles: Option<NetworkProfiles>,
+    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
+    #[serde(rename="nextToken")]
+    pub next_token: Option<PaginationToken>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListOfferingPromotionsRequest {
+    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
+    #[serde(rename="nextToken")]
+    pub next_token: Option<PaginationToken>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListOfferingPromotionsResult {
+    #[doc="<p>An identifier to be used in the next call to this operation, to return the next set of items in the list.</p>"]
+    #[serde(rename="nextToken")]
+    pub next_token: Option<PaginationToken>,
+    #[doc="<p>Information about the offering promotions.</p>"]
+    #[serde(rename="offeringPromotions")]
+    pub offering_promotions: Option<OfferingPromotions>,
 }
 
 #[doc="<p>Represents the request to list the offering transaction history.</p>"]
@@ -958,6 +1119,7 @@ pub struct Location {
 }
 
 pub type Long = i64;
+pub type MaxSlotMap = ::std::collections::HashMap<String, Integer>;
 pub type Message = String;
 pub type Metadata = String;
 #[doc="<p>A number representing the monetary amount for an offering or transaction.</p>"]
@@ -972,6 +1134,49 @@ pub struct MonetaryAmount {
 }
 
 pub type Name = String;
+#[doc="<p>An array of settings that describes characteristics of a network profile.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct NetworkProfile {
+    #[doc="<p>The Amazon Resource Name (ARN) of the network profile.</p>"]
+    #[serde(rename="arn")]
+    pub arn: Option<AmazonResourceName>,
+    #[doc="<p>The description of the network profile.</p>"]
+    #[serde(rename="description")]
+    pub description: Option<Message>,
+    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
+    #[serde(rename="downlinkBandwidthBits")]
+    pub downlink_bandwidth_bits: Option<Long>,
+    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="downlinkDelayMs")]
+    pub downlink_delay_ms: Option<Long>,
+    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="downlinkJitterMs")]
+    pub downlink_jitter_ms: Option<Long>,
+    #[doc="<p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>"]
+    #[serde(rename="downlinkLossPercent")]
+    pub downlink_loss_percent: Option<PercentInteger>,
+    #[doc="<p>The name of the network profile.</p>"]
+    #[serde(rename="name")]
+    pub name: Option<Name>,
+    #[doc="<p>The type of network profile. Valid values are listed below.</p>"]
+    #[serde(rename="type")]
+    pub type_: Option<NetworkProfileType>,
+    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
+    #[serde(rename="uplinkBandwidthBits")]
+    pub uplink_bandwidth_bits: Option<Long>,
+    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="uplinkDelayMs")]
+    pub uplink_delay_ms: Option<Long>,
+    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="uplinkJitterMs")]
+    pub uplink_jitter_ms: Option<Long>,
+    #[doc="<p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>"]
+    #[serde(rename="uplinkLossPercent")]
+    pub uplink_loss_percent: Option<PercentInteger>,
+}
+
+pub type NetworkProfileType = String;
+pub type NetworkProfiles = Vec<NetworkProfile>;
 #[doc="<p>Represents the metadata of a device offering.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Offering {
@@ -993,6 +1198,19 @@ pub struct Offering {
 }
 
 pub type OfferingIdentifier = String;
+#[doc="<p>Represents information about an offering promotion.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct OfferingPromotion {
+    #[doc="<p>A string describing the offering promotion.</p>"]
+    #[serde(rename="description")]
+    pub description: Option<Message>,
+    #[doc="<p>The ID of the offering promotion.</p>"]
+    #[serde(rename="id")]
+    pub id: Option<OfferingPromotionIdentifier>,
+}
+
+pub type OfferingPromotionIdentifier = String;
+pub type OfferingPromotions = Vec<OfferingPromotion>;
 #[doc="<p>The status of the offering.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct OfferingStatus {
@@ -1020,6 +1238,9 @@ pub struct OfferingTransaction {
     #[doc="<p>The date on which an offering transaction was created.</p>"]
     #[serde(rename="createdOn")]
     pub created_on: Option<DateTime>,
+    #[doc="<p>The ID that corresponds to a device offering promotion.</p>"]
+    #[serde(rename="offeringPromotionId")]
+    pub offering_promotion_id: Option<OfferingPromotionIdentifier>,
     #[doc="<p>The status of an offering transaction.</p>"]
     #[serde(rename="offeringStatus")]
     pub offering_status: Option<OfferingStatus>,
@@ -1033,6 +1254,7 @@ pub type OfferingTransactions = Vec<OfferingTransaction>;
 pub type OfferingType = String;
 pub type Offerings = Vec<Offering>;
 pub type PaginationToken = String;
+pub type PercentInteger = i64;
 #[doc="<p>Represents a specific warning or failure.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Problem {
@@ -1080,6 +1302,9 @@ pub struct Project {
     #[doc="<p>When the project was created.</p>"]
     #[serde(rename="created")]
     pub created: Option<DateTime>,
+    #[doc="<p>The default number of minutes (at the project level) a test run will execute before it times out. Default value is 60 minutes.</p>"]
+    #[serde(rename="defaultJobTimeoutMinutes")]
+    pub default_job_timeout_minutes: Option<JobTimeoutMinutes>,
     #[doc="<p>The project's name.</p>"]
     #[serde(rename="name")]
     pub name: Option<Name>,
@@ -1092,6 +1317,9 @@ pub struct PurchaseOfferingRequest {
     #[doc="<p>The ID of the offering.</p>"]
     #[serde(rename="offeringId")]
     pub offering_id: Option<OfferingIdentifier>,
+    #[doc="<p>The ID of the offering promotion to be applied to the purchase.</p>"]
+    #[serde(rename="offeringPromotionId")]
+    pub offering_promotion_id: Option<OfferingPromotionIdentifier>,
     #[doc="<p>The number of device slots you wish to purchase in an offering request.</p>"]
     #[serde(rename="quantity")]
     pub quantity: Option<Integer>,
@@ -1152,8 +1380,10 @@ pub struct RemoteAccessSession {
     #[doc="<p>The date and time the remote access session was created.</p>"]
     #[serde(rename="created")]
     pub created: Option<DateTime>,
+    #[doc="<p>The device (phone or tablet) used in the remote access session.</p>"]
     #[serde(rename="device")]
     pub device: Option<Device>,
+    #[doc="<p>The number of minutes a device is used in a remote access sesssion (including setup and teardown minutes).</p>"]
     #[serde(rename="deviceMinutes")]
     pub device_minutes: Option<DeviceMinutes>,
     #[doc="<p>The endpoint for the remote access sesssion.</p>"]
@@ -1213,10 +1443,10 @@ pub struct Resolution {
 #[doc="<p>Represents a condition for a device pool.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Rule {
-    #[doc="<p>The rule's stringified attribute. For example, specify the value as <code>\"\\\"abc\\\"\"</code>.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> </ul>"]
+    #[doc="<p>The rule's stringified attribute. For example, specify the value as <code>\"\\\"abc\\\"\"</code>.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> <li> <p>REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.</p> </li> <li> <p>APPIUM_VERSION: The Appium version for the test.</p> </li> </ul>"]
     #[serde(rename="attribute")]
     pub attribute: Option<DeviceAttribute>,
-    #[doc="<p>The rule's operator.</p> <ul> <li> <p>EQUALS: The equals operator.</p> </li> <li> <p>GREATER_THAN: The greater-than operator.</p> </li> <li> <p>IN: The in operator.</p> </li> <li> <p>LESS_THAN: The less-than operator.</p> </li> <li> <p>NOT_IN: The not-in operator.</p> </li> </ul>"]
+    #[doc="<p>The rule's operator.</p> <ul> <li> <p>EQUALS: The equals operator.</p> </li> <li> <p>GREATER_THAN: The greater-than operator.</p> </li> <li> <p>IN: The in operator.</p> </li> <li> <p>LESS_THAN: The less-than operator.</p> </li> <li> <p>NOT_IN: The not-in operator.</p> </li> <li> <p>CONTAINS: The contains operator.</p> </li> </ul>"]
     #[serde(rename="operator")]
     pub operator: Option<RuleOperator>,
     #[doc="<p>The rule's value.</p>"]
@@ -1253,6 +1483,9 @@ pub struct Run {
     #[doc="<p>The run's name.</p>"]
     #[serde(rename="name")]
     pub name: Option<Name>,
+    #[doc="<p>The network profile being used for a test run.</p>"]
+    #[serde(rename="networkProfile")]
+    pub network_profile: Option<NetworkProfile>,
     #[doc="<p>The run's platform.</p> <p>Allowed values include:</p> <ul> <li> <p>ANDROID: The Android platform.</p> </li> <li> <p>IOS: The iOS platform.</p> </li> </ul>"]
     #[serde(rename="platform")]
     pub platform: Option<DevicePlatform>,
@@ -1331,6 +1564,9 @@ pub struct ScheduleRunRequest {
     #[doc="<p>The ARN of the device pool for the run to be scheduled.</p>"]
     #[serde(rename="devicePoolArn")]
     pub device_pool_arn: AmazonResourceName,
+    #[doc="<p>Specifies configuration information about a test run, such as the execution timeout (in minutes).</p>"]
+    #[serde(rename="executionConfiguration")]
+    pub execution_configuration: Option<ExecutionConfiguration>,
     #[doc="<p>The name for the run to be scheduled.</p>"]
     #[serde(rename="name")]
     pub name: Option<Name>,
@@ -1356,7 +1592,7 @@ pub struct ScheduleRunTest {
     #[doc="<p>The test's filter.</p>"]
     #[serde(rename="filter")]
     pub filter: Option<Filter>,
-    #[doc="<p>The test's parameters, such as test framework parameters and fixture settings.</p>"]
+    #[doc="<p>The test's parameters, such as the following test framework parameters and fixture settings:</p> <p>For Calabash tests:</p> <ul> <li> <p>profile: A cucumber profile, for example, \"my_profile_name\".</p> </li> <li> <p>tags: You can limit execution to features or scenarios that have (or don't have) certain tags, for example, \"@smoke\" or \"@smoke,~@wip\".</p> </li> </ul> <p>For Appium tests (all types):</p> <ul> <li> <p>appium_version: The Appium version. Currently supported values are \"1.4.16\", \"1.6.3\", \"latest\", and \"default\".</p> <ul> <li> <p>“latest” will run the latest Appium version supported by Device Farm (1.6.3).</p> </li> <li> <p>For “default”, Device Farm will choose a compatible version of Appium for the device. The current behavior is to run 1.4.16 on Android devices and iOS 9 and earlier, 1.6.3 for iOS 10 and later.</p> </li> <li> <p>This behavior is subject to change.</p> </li> </ul> </li> </ul> <p>For Fuzz tests (Android only):</p> <ul> <li> <p>event_count: The number of events, between 1 and 10000, that the UI fuzz test should perform.</p> </li> <li> <p>throttle: The time, in ms, between 0 and 1000, that the UI fuzz test should wait between events.</p> </li> <li> <p>seed: A seed to use for randomizing the UI fuzz test. Using the same seed value between tests ensures identical event sequences.</p> </li> </ul> <p>For Explorer tests:</p> <ul> <li> <p>username: A username to use if the Explorer encounters a login form. If not supplied, no username will be inserted.</p> </li> <li> <p>password: A password to use if the Explorer encounters a login form. If not supplied, no password will be inserted.</p> </li> </ul> <p>For Instrumentation:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test case: \"com.android.abc.Test1\"</p> </li> <li> <p>Running a single test: \"com.android.abc.Test1#smoke\"</p> </li> <li> <p>Running multiple tests: \"com.android.abc.Test1,com.android.abc.Test2\"</p> </li> </ul> </li> </ul> <p>For XCTest and XCTestUI:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test class: \"LoginTests\"</p> </li> <li> <p>Running a multiple test classes: \"LoginTests,SmokeTests\"</p> </li> <li> <p>Running a single test: \"LoginTests/testValid\"</p> </li> <li> <p>Running multiple tests: \"LoginTests/testValid,LoginTests/testInvalid\"</p> </li> </ul> </li> </ul> <p>For UIAutomator:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test case: \"com.android.abc.Test1\"</p> </li> <li> <p>Running a single test: \"com.android.abc.Test1#smoke\"</p> </li> <li> <p>Running multiple tests: \"com.android.abc.Test1,com.android.abc.Test2\"</p> </li> </ul> </li> </ul>"]
     #[serde(rename="parameters")]
     pub parameters: Option<TestParameters>,
     #[doc="<p>The ARN of the uploaded test that will be run.</p>"]
@@ -1394,6 +1630,7 @@ pub struct StopRunRequest {
 #[doc="<p>Represents the results of your stop run attempt.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StopRunResult {
+    #[doc="<p>The run that was stopped.</p>"]
     #[serde(rename="run")]
     pub run: Option<Run>,
 }
@@ -1479,6 +1716,17 @@ pub type TestParameters = ::std::collections::HashMap<String, String>;
 pub type TestType = String;
 pub type Tests = Vec<Test>;
 pub type TransactionIdentifier = String;
+#[doc="<p>Represents information about free trial device minutes for an AWS account.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct TrialMinutes {
+    #[doc="<p>The number of free trial minutes remaining in the account.</p>"]
+    #[serde(rename="remaining")]
+    pub remaining: Option<Double>,
+    #[doc="<p>The total number of free trial minutes that the account started with.</p>"]
+    #[serde(rename="total")]
+    pub total: Option<Double>,
+}
+
 pub type URL = String;
 #[doc="<p>A collection of one or more problems, grouped by their result.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1514,8 +1762,56 @@ pub struct UpdateDevicePoolRequest {
 #[doc="<p>Represents the result of an update device pool request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateDevicePoolResult {
+    #[doc="<p>The device pool you just updated.</p>"]
     #[serde(rename="devicePool")]
     pub device_pool: Option<DevicePool>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct UpdateNetworkProfileRequest {
+    #[doc="<p>The Amazon Resource Name (ARN) of the project that you wish to update network profile settings.</p>"]
+    #[serde(rename="arn")]
+    pub arn: AmazonResourceName,
+    #[doc="<p>The descriptoin of the network profile about which you are returning information.</p>"]
+    #[serde(rename="description")]
+    pub description: Option<Message>,
+    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
+    #[serde(rename="downlinkBandwidthBits")]
+    pub downlink_bandwidth_bits: Option<Long>,
+    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="downlinkDelayMs")]
+    pub downlink_delay_ms: Option<Long>,
+    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="downlinkJitterMs")]
+    pub downlink_jitter_ms: Option<Long>,
+    #[doc="<p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>"]
+    #[serde(rename="downlinkLossPercent")]
+    pub downlink_loss_percent: Option<PercentInteger>,
+    #[doc="<p>The name of the network profile about which you are returning information.</p>"]
+    #[serde(rename="name")]
+    pub name: Option<Name>,
+    #[doc="<p>The type of network profile you wish to return information about. Valid values are listed below.</p>"]
+    #[serde(rename="type")]
+    pub type_: Option<NetworkProfileType>,
+    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
+    #[serde(rename="uplinkBandwidthBits")]
+    pub uplink_bandwidth_bits: Option<Long>,
+    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="uplinkDelayMs")]
+    pub uplink_delay_ms: Option<Long>,
+    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
+    #[serde(rename="uplinkJitterMs")]
+    pub uplink_jitter_ms: Option<Long>,
+    #[doc="<p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>"]
+    #[serde(rename="uplinkLossPercent")]
+    pub uplink_loss_percent: Option<PercentInteger>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct UpdateNetworkProfileResult {
+    #[doc="<p>A list of the available network profiles.</p>"]
+    #[serde(rename="networkProfile")]
+    pub network_profile: Option<NetworkProfile>,
 }
 
 #[doc="<p>Represents a request to the update project operation.</p>"]
@@ -1524,6 +1820,9 @@ pub struct UpdateProjectRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the project whose name you wish to update.</p>"]
     #[serde(rename="arn")]
     pub arn: AmazonResourceName,
+    #[doc="<p>The number of minutes a test run in the project will execute before it times out.</p>"]
+    #[serde(rename="defaultJobTimeoutMinutes")]
+    pub default_job_timeout_minutes: Option<JobTimeoutMinutes>,
     #[doc="<p>A string representing the new name of the project that you are updating.</p>"]
     #[serde(rename="name")]
     pub name: Option<Name>,
@@ -1532,6 +1831,7 @@ pub struct UpdateProjectRequest {
 #[doc="<p>Represents the result of an update project request.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateProjectResult {
+    #[doc="<p>The project you wish to update.</p>"]
     #[serde(rename="project")]
     pub project: Option<Project>,
 }
@@ -1660,6 +1960,100 @@ impl Error for CreateDevicePoolError {
             CreateDevicePoolError::Credentials(ref err) => err.description(),
             CreateDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateDevicePoolError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateNetworkProfile
+#[derive(Debug, PartialEq)]
+pub enum CreateNetworkProfileError {
+    ///<p>An invalid argument was specified.</p>
+    Argument(String),
+    ///<p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    ///<p>The specified entity was not found.</p>
+    NotFound(String),
+    ///<p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl CreateNetworkProfileError {
+    pub fn from_body(body: &str) -> CreateNetworkProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        CreateNetworkProfileError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateNetworkProfileError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        CreateNetworkProfileError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        CreateNetworkProfileError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateNetworkProfileError::Validation(error_message.to_string())
+                    }
+                    _ => CreateNetworkProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateNetworkProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateNetworkProfileError {
+    fn from(err: serde_json::error::Error) -> CreateNetworkProfileError {
+        CreateNetworkProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateNetworkProfileError {
+    fn from(err: CredentialsError) -> CreateNetworkProfileError {
+        CreateNetworkProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateNetworkProfileError {
+    fn from(err: HttpDispatchError) -> CreateNetworkProfileError {
+        CreateNetworkProfileError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for CreateNetworkProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateNetworkProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateNetworkProfileError::Argument(ref cause) => cause,
+            CreateNetworkProfileError::LimitExceeded(ref cause) => cause,
+            CreateNetworkProfileError::NotFound(ref cause) => cause,
+            CreateNetworkProfileError::ServiceAccount(ref cause) => cause,
+            CreateNetworkProfileError::Validation(ref cause) => cause,
+            CreateNetworkProfileError::Credentials(ref err) => err.description(),
+            CreateNetworkProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateNetworkProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2026,6 +2420,100 @@ impl Error for DeleteDevicePoolError {
             DeleteDevicePoolError::Credentials(ref err) => err.description(),
             DeleteDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteDevicePoolError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteNetworkProfile
+#[derive(Debug, PartialEq)]
+pub enum DeleteNetworkProfileError {
+    ///<p>An invalid argument was specified.</p>
+    Argument(String),
+    ///<p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    ///<p>The specified entity was not found.</p>
+    NotFound(String),
+    ///<p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DeleteNetworkProfileError {
+    pub fn from_body(body: &str) -> DeleteNetworkProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        DeleteNetworkProfileError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        DeleteNetworkProfileError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        DeleteNetworkProfileError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        DeleteNetworkProfileError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteNetworkProfileError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteNetworkProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteNetworkProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteNetworkProfileError {
+    fn from(err: serde_json::error::Error) -> DeleteNetworkProfileError {
+        DeleteNetworkProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteNetworkProfileError {
+    fn from(err: CredentialsError) -> DeleteNetworkProfileError {
+        DeleteNetworkProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteNetworkProfileError {
+    fn from(err: HttpDispatchError) -> DeleteNetworkProfileError {
+        DeleteNetworkProfileError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DeleteNetworkProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteNetworkProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteNetworkProfileError::Argument(ref cause) => cause,
+            DeleteNetworkProfileError::LimitExceeded(ref cause) => cause,
+            DeleteNetworkProfileError::NotFound(ref cause) => cause,
+            DeleteNetworkProfileError::ServiceAccount(ref cause) => cause,
+            DeleteNetworkProfileError::Validation(ref cause) => cause,
+            DeleteNetworkProfileError::Credentials(ref err) => err.description(),
+            DeleteNetworkProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteNetworkProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2838,6 +3326,100 @@ impl Error for GetJobError {
             GetJobError::Credentials(ref err) => err.description(),
             GetJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetJobError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetNetworkProfile
+#[derive(Debug, PartialEq)]
+pub enum GetNetworkProfileError {
+    ///<p>An invalid argument was specified.</p>
+    Argument(String),
+    ///<p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    ///<p>The specified entity was not found.</p>
+    NotFound(String),
+    ///<p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetNetworkProfileError {
+    pub fn from_body(body: &str) -> GetNetworkProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        GetNetworkProfileError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        GetNetworkProfileError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        GetNetworkProfileError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        GetNetworkProfileError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetNetworkProfileError::Validation(error_message.to_string())
+                    }
+                    _ => GetNetworkProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetNetworkProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetNetworkProfileError {
+    fn from(err: serde_json::error::Error) -> GetNetworkProfileError {
+        GetNetworkProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetNetworkProfileError {
+    fn from(err: CredentialsError) -> GetNetworkProfileError {
+        GetNetworkProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetNetworkProfileError {
+    fn from(err: HttpDispatchError) -> GetNetworkProfileError {
+        GetNetworkProfileError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetNetworkProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetNetworkProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            GetNetworkProfileError::Argument(ref cause) => cause,
+            GetNetworkProfileError::LimitExceeded(ref cause) => cause,
+            GetNetworkProfileError::NotFound(ref cause) => cause,
+            GetNetworkProfileError::ServiceAccount(ref cause) => cause,
+            GetNetworkProfileError::Validation(ref cause) => cause,
+            GetNetworkProfileError::Credentials(ref err) => err.description(),
+            GetNetworkProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetNetworkProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3910,6 +4492,200 @@ impl Error for ListJobsError {
             ListJobsError::Credentials(ref err) => err.description(),
             ListJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListJobsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListNetworkProfiles
+#[derive(Debug, PartialEq)]
+pub enum ListNetworkProfilesError {
+    ///<p>An invalid argument was specified.</p>
+    Argument(String),
+    ///<p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    ///<p>The specified entity was not found.</p>
+    NotFound(String),
+    ///<p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListNetworkProfilesError {
+    pub fn from_body(body: &str) -> ListNetworkProfilesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        ListNetworkProfilesError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        ListNetworkProfilesError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        ListNetworkProfilesError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        ListNetworkProfilesError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListNetworkProfilesError::Validation(error_message.to_string())
+                    }
+                    _ => ListNetworkProfilesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListNetworkProfilesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListNetworkProfilesError {
+    fn from(err: serde_json::error::Error) -> ListNetworkProfilesError {
+        ListNetworkProfilesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListNetworkProfilesError {
+    fn from(err: CredentialsError) -> ListNetworkProfilesError {
+        ListNetworkProfilesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListNetworkProfilesError {
+    fn from(err: HttpDispatchError) -> ListNetworkProfilesError {
+        ListNetworkProfilesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListNetworkProfilesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListNetworkProfilesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListNetworkProfilesError::Argument(ref cause) => cause,
+            ListNetworkProfilesError::LimitExceeded(ref cause) => cause,
+            ListNetworkProfilesError::NotFound(ref cause) => cause,
+            ListNetworkProfilesError::ServiceAccount(ref cause) => cause,
+            ListNetworkProfilesError::Validation(ref cause) => cause,
+            ListNetworkProfilesError::Credentials(ref err) => err.description(),
+            ListNetworkProfilesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListNetworkProfilesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListOfferingPromotions
+#[derive(Debug, PartialEq)]
+pub enum ListOfferingPromotionsError {
+    ///<p>An invalid argument was specified.</p>
+    Argument(String),
+    ///<p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    ///<p>Exception gets thrown when a user is not eligible to perform the specified transaction.</p>
+    NotEligible(String),
+    ///<p>The specified entity was not found.</p>
+    NotFound(String),
+    ///<p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListOfferingPromotionsError {
+    pub fn from_body(body: &str) -> ListOfferingPromotionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        ListOfferingPromotionsError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        ListOfferingPromotionsError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotEligibleException" => {
+                        ListOfferingPromotionsError::NotEligible(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        ListOfferingPromotionsError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        ListOfferingPromotionsError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListOfferingPromotionsError::Validation(error_message.to_string())
+                    }
+                    _ => ListOfferingPromotionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListOfferingPromotionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListOfferingPromotionsError {
+    fn from(err: serde_json::error::Error) -> ListOfferingPromotionsError {
+        ListOfferingPromotionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListOfferingPromotionsError {
+    fn from(err: CredentialsError) -> ListOfferingPromotionsError {
+        ListOfferingPromotionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListOfferingPromotionsError {
+    fn from(err: HttpDispatchError) -> ListOfferingPromotionsError {
+        ListOfferingPromotionsError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListOfferingPromotionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListOfferingPromotionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListOfferingPromotionsError::Argument(ref cause) => cause,
+            ListOfferingPromotionsError::LimitExceeded(ref cause) => cause,
+            ListOfferingPromotionsError::NotEligible(ref cause) => cause,
+            ListOfferingPromotionsError::NotFound(ref cause) => cause,
+            ListOfferingPromotionsError::ServiceAccount(ref cause) => cause,
+            ListOfferingPromotionsError::Validation(ref cause) => cause,
+            ListOfferingPromotionsError::Credentials(ref err) => err.description(),
+            ListOfferingPromotionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListOfferingPromotionsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5383,6 +6159,100 @@ impl Error for UpdateDevicePoolError {
         }
     }
 }
+/// Errors returned by UpdateNetworkProfile
+#[derive(Debug, PartialEq)]
+pub enum UpdateNetworkProfileError {
+    ///<p>An invalid argument was specified.</p>
+    Argument(String),
+    ///<p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    ///<p>The specified entity was not found.</p>
+    NotFound(String),
+    ///<p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl UpdateNetworkProfileError {
+    pub fn from_body(body: &str) -> UpdateNetworkProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        UpdateNetworkProfileError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        UpdateNetworkProfileError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        UpdateNetworkProfileError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        UpdateNetworkProfileError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateNetworkProfileError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateNetworkProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateNetworkProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateNetworkProfileError {
+    fn from(err: serde_json::error::Error) -> UpdateNetworkProfileError {
+        UpdateNetworkProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateNetworkProfileError {
+    fn from(err: CredentialsError) -> UpdateNetworkProfileError {
+        UpdateNetworkProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateNetworkProfileError {
+    fn from(err: HttpDispatchError) -> UpdateNetworkProfileError {
+        UpdateNetworkProfileError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for UpdateNetworkProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateNetworkProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateNetworkProfileError::Argument(ref cause) => cause,
+            UpdateNetworkProfileError::LimitExceeded(ref cause) => cause,
+            UpdateNetworkProfileError::NotFound(ref cause) => cause,
+            UpdateNetworkProfileError::ServiceAccount(ref cause) => cause,
+            UpdateNetworkProfileError::Validation(ref cause) => cause,
+            UpdateNetworkProfileError::Credentials(ref err) => err.description(),
+            UpdateNetworkProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateNetworkProfileError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateProject
 #[derive(Debug, PartialEq)]
 pub enum UpdateProjectError {
@@ -5483,6 +6353,12 @@ pub trait DeviceFarm {
                           -> Result<CreateDevicePoolResult, CreateDevicePoolError>;
 
 
+    #[doc="<p>Creates a network profile.</p>"]
+    fn create_network_profile(&self,
+                              input: &CreateNetworkProfileRequest)
+                              -> Result<CreateNetworkProfileResult, CreateNetworkProfileError>;
+
+
     #[doc="<p>Creates a new project.</p>"]
     fn create_project(&self,
                       input: &CreateProjectRequest)
@@ -5506,6 +6382,12 @@ pub trait DeviceFarm {
     fn delete_device_pool(&self,
                           input: &DeleteDevicePoolRequest)
                           -> Result<DeleteDevicePoolResult, DeleteDevicePoolError>;
+
+
+    #[doc="<p>Deletes a network profile.</p>"]
+    fn delete_network_profile(&self,
+                              input: &DeleteNetworkProfileRequest)
+                              -> Result<DeleteNetworkProfileResult, DeleteNetworkProfileError>;
 
 
     #[doc="<p>Deletes an AWS Device Farm project, given the project ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>"]
@@ -5556,6 +6438,12 @@ pub trait DeviceFarm {
 
     #[doc="<p>Gets information about a job.</p>"]
     fn get_job(&self, input: &GetJobRequest) -> Result<GetJobResult, GetJobError>;
+
+
+    #[doc="<p>Returns information about a network profile.</p>"]
+    fn get_network_profile(&self,
+                           input: &GetNetworkProfileRequest)
+                           -> Result<GetNetworkProfileResult, GetNetworkProfileError>;
 
 
     #[doc="<p>Gets the current status and future status of all offerings purchased by an AWS account. The response indicates how many offerings are currently available and the offerings that will be available in the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
@@ -5618,6 +6506,19 @@ pub trait DeviceFarm {
 
     #[doc="<p>Gets information about jobs.</p>"]
     fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResult, ListJobsError>;
+
+
+    #[doc="<p>Returns the list of available network profiles.</p>"]
+    fn list_network_profiles(&self,
+                             input: &ListNetworkProfilesRequest)
+                             -> Result<ListNetworkProfilesResult, ListNetworkProfilesError>;
+
+
+    #[doc="<p>Returns a list of offering promotions. Each offering promotion record contains the ID and description of the promotion. The API returns a <code>NotEligible</code> error if the caller is not permitted to invoke the operation. Contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
+    fn list_offering_promotions
+        (&self,
+         input: &ListOfferingPromotionsRequest)
+         -> Result<ListOfferingPromotionsResult, ListOfferingPromotionsError>;
 
 
     #[doc="<p>Returns a list of all historical purchases, renewals, and system renewal transactions for an AWS account. The list is paginated and ordered by a descending timestamp (most recent transactions are first). The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
@@ -5711,6 +6612,12 @@ pub trait DeviceFarm {
                           -> Result<UpdateDevicePoolResult, UpdateDevicePoolError>;
 
 
+    #[doc="<p>Updates the network profile with specific settings.</p>"]
+    fn update_network_profile(&self,
+                              input: &UpdateNetworkProfileRequest)
+                              -> Result<UpdateNetworkProfileResult, UpdateNetworkProfileError>;
+
+
     #[doc="<p>Modifies the specified project name, given the project ARN and a new name.</p>"]
     fn update_project(&self,
                       input: &UpdateProjectRequest)
@@ -5765,6 +6672,33 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             _ => {
                 Err(CreateDevicePoolError::from_body(String::from_utf8_lossy(&response.body)
                                                          .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Creates a network profile.</p>"]
+    fn create_network_profile(&self,
+                              input: &CreateNetworkProfileRequest)
+                              -> Result<CreateNetworkProfileResult, CreateNetworkProfileError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.CreateNetworkProfile");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<CreateNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(CreateNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
             }
         }
     }
@@ -5870,6 +6804,33 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             _ => {
                 Err(DeleteDevicePoolError::from_body(String::from_utf8_lossy(&response.body)
                                                          .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Deletes a network profile.</p>"]
+    fn delete_network_profile(&self,
+                              input: &DeleteNetworkProfileRequest)
+                              -> Result<DeleteNetworkProfileResult, DeleteNetworkProfileError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteNetworkProfile");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<DeleteNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(DeleteNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
             }
         }
     }
@@ -6100,6 +7061,33 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
                            .unwrap())
             }
             _ => Err(GetJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Returns information about a network profile.</p>"]
+    fn get_network_profile(&self,
+                           input: &GetNetworkProfileRequest)
+                           -> Result<GetNetworkProfileResult, GetNetworkProfileError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.GetNetworkProfile");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<GetNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(GetNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
+            }
         }
     }
 
@@ -6400,6 +7388,61 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
                            .unwrap())
             }
             _ => Err(ListJobsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Returns the list of available network profiles.</p>"]
+    fn list_network_profiles(&self,
+                             input: &ListNetworkProfilesRequest)
+                             -> Result<ListNetworkProfilesResult, ListNetworkProfilesError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.ListNetworkProfiles");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<ListNetworkProfilesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(ListNetworkProfilesError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Returns a list of offering promotions. Each offering promotion record contains the ID and description of the promotion. The API returns a <code>NotEligible</code> error if the caller is not permitted to invoke the operation. Contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
+    fn list_offering_promotions
+        (&self,
+         input: &ListOfferingPromotionsRequest)
+         -> Result<ListOfferingPromotionsResult, ListOfferingPromotionsError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.ListOfferingPromotions");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<ListOfferingPromotionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(ListOfferingPromotionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
+            }
         }
     }
 
@@ -6802,6 +7845,33 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             _ => {
                 Err(UpdateDevicePoolError::from_body(String::from_utf8_lossy(&response.body)
                                                          .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Updates the network profile with specific settings.</p>"]
+    fn update_network_profile(&self,
+                              input: &UpdateNetworkProfileRequest)
+                              -> Result<UpdateNetworkProfileResult, UpdateNetworkProfileError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateNetworkProfile");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<UpdateNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(UpdateNetworkProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
             }
         }
     }

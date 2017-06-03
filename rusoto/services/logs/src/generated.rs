@@ -217,7 +217,7 @@ pub struct DescribeLogStreamsRequest {
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="nextToken")]
     pub next_token: Option<NextToken>,
-    #[doc="<p>If the value is <code>LogStreamName</code>, the results are ordered by log stream name. If the value is <code>LastEventTime</code>, the results are ordered by the event time. The default value is <code>LogStreamName</code>.</p> <p>If you order the results by event time, you cannot specify the <code>logStreamNamePrefix</code> parameter.</p>"]
+    #[doc="<p>If the value is <code>LogStreamName</code>, the results are ordered by log stream name. If the value is <code>LastEventTime</code>, the results are ordered by the event time. The default value is <code>LogStreamName</code>.</p> <p>If you order the results by event time, you cannot specify the <code>logStreamNamePrefix</code> parameter.</p> <p>lastEventTimestamp represents the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. lastEventTimeStamp updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>"]
     #[serde(rename="orderBy")]
     pub order_by: Option<OrderBy>,
 }
@@ -296,7 +296,7 @@ pub struct Destination {
     #[doc="<p>The ARN of this destination.</p>"]
     #[serde(rename="arn")]
     pub arn: Option<Arn>,
-    #[doc="<p>The creation time of the destination.</p>"]
+    #[doc="<p>The creation time of the destination, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
     pub creation_time: Option<Timestamp>,
     #[doc="<p>The name of the destination.</p>"]
@@ -355,10 +355,10 @@ pub struct ExportTask {
 #[doc="<p>Represents the status of an export task.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ExportTaskExecutionInfo {
-    #[doc="<p>The completion time of the export task.</p>"]
+    #[doc="<p>The completion time of the export task, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="completionTime")]
     pub completion_time: Option<Timestamp>,
-    #[doc="<p>The creation time of the export task.</p>"]
+    #[doc="<p>The creation time of the export task, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
     pub creation_time: Option<Timestamp>,
 }
@@ -432,7 +432,7 @@ pub struct FilteredLogEvent {
     #[doc="<p>The ID of the event.</p>"]
     #[serde(rename="eventId")]
     pub event_id: Option<EventId>,
-    #[doc="<p>The time the event was ingested.</p>"]
+    #[doc="<p>The time the event was ingested, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="ingestionTime")]
     pub ingestion_time: Option<Timestamp>,
     #[doc="<p>The name of the log stream this event belongs to.</p>"]
@@ -521,7 +521,7 @@ pub struct LogGroup {
     #[doc="<p>The Amazon Resource Name (ARN) of the log group.</p>"]
     #[serde(rename="arn")]
     pub arn: Option<Arn>,
-    #[doc="<p>The creation time of the log group.</p>"]
+    #[doc="<p>The creation time of the log group, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
     pub creation_time: Option<Timestamp>,
     #[doc="<p>The name of the log group.</p>"]
@@ -545,16 +545,16 @@ pub struct LogStream {
     #[doc="<p>The Amazon Resource Name (ARN) of the log stream.</p>"]
     #[serde(rename="arn")]
     pub arn: Option<Arn>,
-    #[doc="<p>The creation time of the stream.</p>"]
+    #[doc="<p>The creation time of the stream, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
     pub creation_time: Option<Timestamp>,
     #[doc="<p>The time of the first event, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="firstEventTimestamp")]
     pub first_event_timestamp: Option<Timestamp>,
-    #[doc="<p>The time of the last event, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
+    #[doc="<p> the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. lastEventTime updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>"]
     #[serde(rename="lastEventTimestamp")]
     pub last_event_timestamp: Option<Timestamp>,
-    #[doc="<p>The ingestion time.</p>"]
+    #[doc="<p>The ingestion time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="lastIngestionTime")]
     pub last_ingestion_time: Option<Timestamp>,
     #[doc="<p>The name of the log stream.</p>"]
@@ -574,7 +574,7 @@ pub type LogStreams = Vec<LogStream>;
 #[doc="<p>Metric filters express how CloudWatch Logs would extract metric observations from ingested log events and transform them into metric data in a CloudWatch metric.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct MetricFilter {
-    #[doc="<p>The creation time of the metric filter.</p>"]
+    #[doc="<p>The creation time of the metric filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
     pub creation_time: Option<Timestamp>,
     #[doc="<p>The name of the metric filter.</p>"]
@@ -635,7 +635,7 @@ pub type OrderBy = String;
 #[doc="<p>Represents a log event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct OutputLogEvent {
-    #[doc="<p>The time the event was ingested.</p>"]
+    #[doc="<p>The time the event was ingested, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="ingestionTime")]
     pub ingestion_time: Option<Timestamp>,
     #[doc="<p>The data contained in the log event.</p>"]
@@ -736,7 +736,7 @@ pub struct PutSubscriptionFilterRequest {
     #[doc="<p>The method used to distribute log data to the destination, when the destination is an Amazon Kinesis stream. By default, log data is grouped by log stream. For a more even distribution, you can group log data randomly.</p>"]
     #[serde(rename="distribution")]
     pub distribution: Option<Distribution>,
-    #[doc="<p>A name for the subscription filter.</p>"]
+    #[doc="<p>A name for the subscription filter. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group. To find the name of the filter currently associated with a log group, use <a>DescribeSubscriptionFilters</a>.</p>"]
     #[serde(rename="filterName")]
     pub filter_name: FilterName,
     #[doc="<p>A filter pattern for subscribing to a filtered stream of log events.</p>"]
@@ -784,7 +784,7 @@ pub type StoredBytes = i64;
 #[doc="<p>Represents a subscription filter.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SubscriptionFilter {
-    #[doc="<p>The creation time of the subscription filter.</p>"]
+    #[doc="<p>The creation time of the subscription filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
     pub creation_time: Option<Timestamp>,
     #[doc="<p>The Amazon Resource Name (ARN) of the destination.</p>"]
@@ -3494,7 +3494,7 @@ pub trait CloudWatchLogs {
                             -> Result<(), PutRetentionPolicyError>;
 
 
-    #[doc="<p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group.</p>"]
+    #[doc="<p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group.</p>"]
     fn put_subscription_filter(&self,
                                input: &PutSubscriptionFilterRequest)
                                -> Result<(), PutSubscriptionFilterError>;
@@ -4154,7 +4154,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
     }
 
 
-    #[doc="<p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group.</p>"]
+    #[doc="<p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group.</p>"]
     fn put_subscription_filter(&self,
                                input: &PutSubscriptionFilterRequest)
                                -> Result<(), PutSubscriptionFilterError> {
