@@ -3195,13 +3195,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         let mut params = Params::new();
-        match input.ascending {
-            Some(ref x) => params.put("Ascending", x),
-            None => {}
+        if let Some(ref x) = input.ascending {
+            params.put("Ascending", x);
         }
-        match input.page_token {
-            Some(ref x) => params.put("PageToken", x),
-            None => {}
+        if let Some(ref x) = input.page_token {
+            params.put("PageToken", x);
         }
         request.set_params(params);
 
@@ -3242,13 +3240,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         let mut params = Params::new();
-        match input.ascending {
-            Some(ref x) => params.put("Ascending", x),
-            None => {}
+        if let Some(ref x) = input.ascending {
+            params.put("Ascending", x);
         }
-        match input.page_token {
-            Some(ref x) => params.put("PageToken", x),
-            None => {}
+        if let Some(ref x) = input.page_token {
+            params.put("PageToken", x);
         }
         request.set_params(params);
 
@@ -3291,13 +3287,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         let mut params = Params::new();
-        match input.ascending {
-            Some(ref x) => params.put("Ascending", x),
-            None => {}
+        if let Some(ref x) = input.ascending {
+            params.put("Ascending", x);
         }
-        match input.page_token {
-            Some(ref x) => params.put("PageToken", x),
-            None => {}
+        if let Some(ref x) = input.page_token {
+            params.put("PageToken", x);
         }
         request.set_params(params);
 
@@ -3340,13 +3334,11 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
         let mut params = Params::new();
-        match input.ascending {
-            Some(ref x) => params.put("Ascending", x),
-            None => {}
+        if let Some(ref x) = input.ascending {
+            params.put("Ascending", x);
         }
-        match input.page_token {
-            Some(ref x) => params.put("PageToken", x),
-            None => {}
+        if let Some(ref x) = input.page_token {
+            params.put("PageToken", x);
         }
         request.set_params(params);
 

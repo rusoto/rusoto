@@ -60,9 +60,3 @@ impl ToParam for String {
         self.clone()
     }
 }
-
-impl<T> ToParam for Vec<T> where T: ToParam {
-    fn to_param(&self) -> String {
-        self.iter().map(|x| x.to_param()).collect::<Vec<_>>().join(",")
-    }
-}

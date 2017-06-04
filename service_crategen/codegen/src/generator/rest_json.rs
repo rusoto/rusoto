@@ -2,7 +2,7 @@ use std::io::Write;
 use inflector::Inflector;
 use regex::{Captures, Regex};
 use hyper::status::StatusCode;
-use botocore::{Member, Operation, Service, Shape};
+use botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::{GenerateProtocol, error_type_name, FileWriter, IoResult};
 
 pub struct RestJsonGenerator;
@@ -55,7 +55,7 @@ impl GenerateProtocol for RestJsonGenerator {
             // Construct a list of strings which will be used to load request
             // parameters from the input struct into a `Params` vec, which will
             // then be added to the request.
-            let member_param_strings = generate_shape_member_param_strings(input_shape);
+            let member_param_strings = generate_shape_member_param_strings(service, input_shape);
 
             writeln!(writer,"
                 {documentation}
@@ -231,38 +231,77 @@ fn generate_params_loading_string(param_strings: &[String]) -> String {
     }
 }
 
-fn generate_shape_member_param_strings(shape: &Shape) -> Vec<String> {
+fn generate_shape_member_param_strings(service: &Service, shape: &Shape) -> Vec<String> {
     shape.members
         .as_ref()
         .unwrap()
         .iter()
-        .filter_map(|(member_name, member)| if !member.deprecated() {
-            generate_param_load_string(member_name, member, shape.required(member_name))
-        } else {
-            None
+        .filter_map(|(member_name, member)| {
+            member.location.as_ref().and_then(|loc| {
+                if !member.deprecated() && loc == "querystring" {
+                    let member_shape = service.shape_for_member(member).unwrap();
+                    Some(generate_param_load_string(member_name, member_shape, shape.required(member_name)))
+                } else {
+                    None
+                }
+            })
         })
         .collect::<Vec<String>>()
 }
 
-fn generate_param_load_string(member_name: &str, member: &Member, is_required: bool) -> Option<String> {
-    match member.location {
-        Some(ref x) if x == "querystring" => {
-            if is_required {
-                Some(format!("params.put(\"{member_name}\", &input.{field_name});",
-                        member_name = member_name,
-                        field_name = member_name.to_snake_case()))
-            } else {
-                Some(format!(
-                    "match input.{field_name} {{
-                        Some(ref x) => params.put(\"{member_name}\", x),
-                        None => {{}},
-                    }}",
-                    member_name = member_name,
-                    field_name = member_name.to_snake_case(),
-                ))
-            }
+fn generate_param_load_string(member_name: &str, member_shape: &Shape, is_required: bool) -> String {
+    match (member_shape.shape_type, is_required) {
+        (ShapeType::List, true) => {
+            format!(
+                "for item in input.{field_name}.iter() {{
+                    params.put(\"{member_name}\", item);
+                }}",
+                member_name = member_name,
+                field_name = member_name.to_snake_case())
+        },
+        (ShapeType::List, false) => {
+            format!(
+                "if let Some(ref x) = input.{field_name} {{
+                    for item in x.iter() {{
+                        params.put(\"{member_name}\", item);
+                    }}
+                }}",
+                member_name = member_name,
+                field_name = member_name.to_snake_case(),
+            )
+        },
+        (ShapeType::Map, true) => {
+            format!(
+                "for (key, val) in input.{field_name}.iter() {{
+                    params.put(key, val);
+                }}",
+                field_name = member_name.to_snake_case())
+        },
+        (ShapeType::Map, false) => {
+            format!(
+                "if let Some(ref x) = input.{field_name} {{
+                    for (key, val) in x.iter() {{
+                        params.put(key, val);
+                    }}
+                }}",
+                field_name = member_name.to_snake_case(),
+            )
+        },
+        (_, true) => {
+            format!(
+                "params.put(\"{member_name}\", &input.{field_name});",
+                member_name = member_name,
+                field_name = member_name.to_snake_case())
+        },
+        (_, false) => {
+            format!(
+                "if let Some(ref x) = input.{field_name} {{
+                    params.put(\"{member_name}\", x);
+                }}",
+                member_name = member_name,
+                field_name = member_name.to_snake_case(),
+            )
         }
-        Some(_) | None => None,
     }
 }
 

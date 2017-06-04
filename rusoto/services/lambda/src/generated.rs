@@ -3735,9 +3735,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         request.set_payload(Some(encoded.into_bytes()));
         let mut params = Params::new();
-        match input.qualifier {
-            Some(ref x) => params.put("Qualifier", x),
-            None => {}
+        if let Some(ref x) = input.qualifier {
+            params.put("Qualifier", x);
         }
         request.set_params(params);
 
@@ -3981,9 +3980,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         let mut params = Params::new();
-        match input.qualifier {
-            Some(ref x) => params.put("Qualifier", x),
-            None => {}
+        if let Some(ref x) = input.qualifier {
+            params.put("Qualifier", x);
         }
         request.set_params(params);
 
@@ -4141,9 +4139,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         let mut params = Params::new();
-        match input.qualifier {
-            Some(ref x) => params.put("Qualifier", x),
-            None => {}
+        if let Some(ref x) = input.qualifier {
+            params.put("Qualifier", x);
         }
         request.set_params(params);
 
@@ -4188,9 +4185,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         let mut params = Params::new();
-        match input.qualifier {
-            Some(ref x) => params.put("Qualifier", x),
-            None => {}
+        if let Some(ref x) = input.qualifier {
+            params.put("Qualifier", x);
         }
         request.set_params(params);
 
@@ -4235,9 +4231,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         let mut params = Params::new();
-        match input.qualifier {
-            Some(ref x) => params.put("Qualifier", x),
-            None => {}
+        if let Some(ref x) = input.qualifier {
+            params.put("Qualifier", x);
         }
         request.set_params(params);
 
@@ -4279,9 +4274,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         request.set_payload(Some(encoded.into_bytes()));
         let mut params = Params::new();
-        match input.qualifier {
-            Some(ref x) => params.put("Qualifier", x),
-            None => {}
+        if let Some(ref x) = input.qualifier {
+            params.put("Qualifier", x);
         }
         request.set_params(params);
 
@@ -4366,17 +4360,14 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         let mut params = Params::new();
-        match input.function_version {
-            Some(ref x) => params.put("FunctionVersion", x),
-            None => {}
+        if let Some(ref x) = input.function_version {
+            params.put("FunctionVersion", x);
         }
-        match input.marker {
-            Some(ref x) => params.put("Marker", x),
-            None => {}
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
         }
-        match input.max_items {
-            Some(ref x) => params.put("MaxItems", x),
-            None => {}
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
         }
         request.set_params(params);
 
@@ -4420,21 +4411,17 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         let mut params = Params::new();
-        match input.event_source_arn {
-            Some(ref x) => params.put("EventSourceArn", x),
-            None => {}
+        if let Some(ref x) = input.event_source_arn {
+            params.put("EventSourceArn", x);
         }
-        match input.function_name {
-            Some(ref x) => params.put("FunctionName", x),
-            None => {}
+        if let Some(ref x) = input.function_name {
+            params.put("FunctionName", x);
         }
-        match input.marker {
-            Some(ref x) => params.put("Marker", x),
-            None => {}
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
         }
-        match input.max_items {
-            Some(ref x) => params.put("MaxItems", x),
-            None => {}
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
         }
         request.set_params(params);
 
@@ -4478,13 +4465,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         let mut params = Params::new();
-        match input.marker {
-            Some(ref x) => params.put("Marker", x),
-            None => {}
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
         }
-        match input.max_items {
-            Some(ref x) => params.put("MaxItems", x),
-            None => {}
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
         }
         request.set_params(params);
 
@@ -4567,13 +4552,11 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         let mut params = Params::new();
-        match input.marker {
-            Some(ref x) => params.put("Marker", x),
-            None => {}
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
         }
-        match input.max_items {
-            Some(ref x) => params.put("MaxItems", x),
-            None => {}
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
         }
         request.set_params(params);
 
@@ -4659,9 +4642,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         let mut params = Params::new();
-        match input.qualifier {
-            Some(ref x) => params.put("Qualifier", x),
-            None => {}
+        if let Some(ref x) = input.qualifier {
+            params.put("Qualifier", x);
         }
         request.set_params(params);
 
@@ -4732,7 +4714,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
         let mut params = Params::new();
-        params.put("TagKeys", &input.tag_keys);
+        for item in input.tag_keys.iter() {
+            params.put("TagKeys", item);
+        }
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
