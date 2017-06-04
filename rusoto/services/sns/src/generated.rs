@@ -6388,18 +6388,6 @@ mod protocol_tests {
     }
 
     #[test]
-    fn test_parse_valid_sns_subscribe() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sns-subscribe.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = SubscribeInput::default();
-        let result = client.subscribe(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
     fn test_parse_valid_sns_add_permission() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "sns-add-permission.xml");
@@ -6407,42 +6395,6 @@ mod protocol_tests {
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = AddPermissionInput::default();
         let result = client.add_permission(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_sns_create_topic() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sns-create-topic.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateTopicInput::default();
-        let result = client.create_topic(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_sns_get_topic_attributes() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sns-get-topic-attributes.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetTopicAttributesInput::default();
-        let result = client.get_topic_attributes(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_sns_list_subscriptions() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sns-list-subscriptions.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListSubscriptionsInput::default();
-        let result = client.list_subscriptions(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6460,13 +6412,13 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_sns_list_topics() {
+    fn test_parse_valid_sns_create_topic() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sns-list-topics.xml");
+                                                              "sns-create-topic.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListTopicsInput::default();
-        let result = client.list_topics(&request);
+        let request = CreateTopicInput::default();
+        let result = client.create_topic(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6484,6 +6436,18 @@ mod protocol_tests {
 
 
     #[test]
+    fn test_parse_valid_sns_get_topic_attributes() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-get-topic-attributes.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = GetTopicAttributesInput::default();
+        let result = client.get_topic_attributes(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
     fn test_parse_valid_sns_list_subscriptions_by_topic() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "sns-list-subscriptions-by-topic.xml");
@@ -6496,6 +6460,30 @@ mod protocol_tests {
 
 
     #[test]
+    fn test_parse_valid_sns_list_subscriptions() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-list-subscriptions.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ListSubscriptionsInput::default();
+        let result = client.list_subscriptions(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sns_list_topics() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-list-topics.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = ListTopicsInput::default();
+        let result = client.list_topics(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
     fn test_parse_valid_sns_publish() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
                                                               "sns-publish.xml");
@@ -6503,6 +6491,18 @@ mod protocol_tests {
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = PublishInput::default();
         let result = client.publish(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sns_subscribe() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sns-subscribe.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = SubscribeInput::default();
+        let result = client.subscribe(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

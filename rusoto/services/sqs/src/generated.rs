@@ -4109,37 +4109,25 @@ mod protocol_tests {
     }
 
     #[test]
-    fn test_parse_valid_sqs_list_queues() {
+    fn test_parse_valid_sqs_add_permission() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sqs-list-queues.xml");
+                                                              "sqs-add-permission.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListQueuesRequest::default();
-        let result = client.list_queues(&request);
+        let request = AddPermissionRequest::default();
+        let result = client.add_permission(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
 
     #[test]
-    fn test_parse_valid_sqs_send_message_batch() {
+    fn test_parse_valid_sqs_change_message_visibility_batch() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sqs-send-message-batch.xml");
+                                                              "sqs-change-message-visibility-batch.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = SendMessageBatchRequest::default();
-        let result = client.send_message_batch(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_sqs_send_message() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sqs-send-message.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = SendMessageRequest::default();
-        let result = client.send_message(&request);
+        let request = ChangeMessageVisibilityBatchRequest::default();
+        let result = client.change_message_visibility_batch(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4157,13 +4145,13 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_sqs_change_message_visibility_batch() {
+    fn test_parse_valid_sqs_delete_message_batch() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sqs-change-message-visibility-batch.xml");
+                                                              "sqs-delete-message-batch.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ChangeMessageVisibilityBatchRequest::default();
-        let result = client.change_message_visibility_batch(&request);
+        let request = DeleteMessageBatchRequest::default();
+        let result = client.delete_message_batch(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4193,25 +4181,13 @@ mod protocol_tests {
 
 
     #[test]
-    fn test_parse_valid_sqs_add_permission() {
+    fn test_parse_valid_sqs_list_queues() {
         let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sqs-add-permission.xml");
+                                                              "sqs-list-queues.xml");
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = AddPermissionRequest::default();
-        let result = client.add_permission(&request);
-        assert!(result.is_ok(), "parse error: {:?}", result);
-    }
-
-
-    #[test]
-    fn test_parse_valid_sqs_delete_message_batch() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "sqs-delete-message-batch.xml");
-        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DeleteMessageBatchRequest::default();
-        let result = client.delete_message_batch(&request);
+        let request = ListQueuesRequest::default();
+        let result = client.list_queues(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -4224,6 +4200,30 @@ mod protocol_tests {
         let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ReceiveMessageRequest::default();
         let result = client.receive_message(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sqs_send_message_batch() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-send-message-batch.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = SendMessageBatchRequest::default();
+        let result = client.send_message_batch(&request);
+        assert!(result.is_ok(), "parse error: {:?}", result);
+    }
+
+
+    #[test]
+    fn test_parse_valid_sqs_send_message() {
+        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
+                                                              "sqs-send-message.xml");
+        let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
+        let client = SqsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = SendMessageRequest::default();
+        let result = client.send_message(&request);
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

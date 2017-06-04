@@ -166,10 +166,15 @@ impl Response {
 pub fn find_responses_in_dir(dir_path: &Path) -> Vec<Response> {
     let dir = fs::read_dir(dir_path).expect("read_dir");
 
-    dir.filter_map(|e| e.ok())
+    let mut responses = dir
+        .filter_map(|e| e.ok())
         .filter(|d| d.path().extension().map(|ex| ex == "xml").unwrap_or(false))
         .filter_map(|d| Response::from_response_path(&d.path()))
-        .collect()
+        .collect::<Vec<_>>();
+    
+    responses.sort_by_key(|e| e.full_path.clone());
+
+    responses
 }
 
 pub fn find_error_responses_for_service(service: &Service) -> Vec<Response> {
