@@ -52,7 +52,7 @@ fn get_dependencies(service: &Service, config: &ServiceConfig) -> BTreeMap<Strin
             dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
         },
         "query" | "ec2" => {
-            dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.3".into()));
+            dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.6".into()));
         },
         "rest-json" => {
             dependencies.insert("log".to_owned(), cargo::Dependency::Simple("0.3.6".into()));
@@ -61,7 +61,7 @@ fn get_dependencies(service: &Service, config: &ServiceConfig) -> BTreeMap<Strin
             dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
         },
         "rest-xml" => {
-            dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.3".into()));
+            dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.6".into()));
         },
         protocol => panic!("Unknown protocol {}", protocol),
     }

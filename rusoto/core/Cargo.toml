@@ -34,7 +34,7 @@ serde = "1.0.2"
 serde_derive = "1.0.2"
 time = "0.1.35"
 url = "1.2.0"
-xml-rs = "0.3"
+xml-rs = "0.6"
 
 [dependencies.rusoto_credential]
 path = "../credential"

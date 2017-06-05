@@ -16,7 +16,7 @@ homepage = "https://www.rusoto.org/"
 hyper = "0.10.0"
 md5 = "0.3.2"
 rustc-serialize = "0.3.19"
-xml-rs = "0.3"
+xml-rs = "0.6"
 
 [dependencies.rusoto_core]
 version = "0.25.0"

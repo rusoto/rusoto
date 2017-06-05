@@ -14,7 +14,7 @@ homepage = "https://www.rusoto.org/"
 
 [dependencies]
 hyper = "0.10.0"
-xml-rs = "0.3"
+xml-rs = "0.6"
 
 [dependencies.rusoto_core]
 version = "0.25.0"
