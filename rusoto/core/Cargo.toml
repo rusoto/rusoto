@@ -47,6 +47,7 @@ version = "0.0"
 [dev-dependencies]
 env_logger = "0.4.0"
 rand = "^0.3.14"
+serde_json = "1.0.1"
 
 [features]
 nightly-testing = ["clippy", "rusoto_credential/nightly-testing"]
