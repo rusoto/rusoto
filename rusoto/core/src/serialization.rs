@@ -5,8 +5,8 @@ use rustc_serialize::base64::{FromBase64, STANDARD, ToBase64};
 use serde::{Deserializer, Serializer};
 use serde::de::{Error as SerdeError, Visitor};
 
-pub trait SerdeBlob: Sized {
-    fn deserialize_blob<'de, D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer<'de>;
+pub trait SerdeBlob<'de>: Sized {
+    fn deserialize_blob<D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer<'de>;
 
     fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer;
 }
@@ -26,8 +26,8 @@ impl<'de> Visitor<'de> for BlobVisitor {
     }
 }
 
-impl SerdeBlob for Vec<u8> {
-    fn deserialize_blob<'de, D>(deserializer: D) -> Result<Vec<u8>, D::Error>
+impl<'de> SerdeBlob<'de> for Vec<u8> {
+    fn deserialize_blob<D>(deserializer: D) -> Result<Vec<u8>, D::Error>
         where D: Deserializer<'de> {
         deserializer.deserialize_any(BlobVisitor)
     }
@@ -58,8 +58,8 @@ impl<'de> Visitor<'de> for OptionalBlobVisitor {
     }
 }
 
-impl SerdeBlob for Option<Vec<u8>> {
-    fn deserialize_blob<'de, D>(deserializer: D) -> Result<Option<Vec<u8>>, D::Error>
+impl<'de> SerdeBlob<'de> for Option<Vec<u8>> {
+    fn deserialize_blob<D>(deserializer: D) -> Result<Option<Vec<u8>>, D::Error>
         where D: Deserializer<'de> {
         deserializer.deserialize_option(OptionalBlobVisitor)
     }
@@ -162,7 +162,7 @@ mod tests {
         assert_eq!("hello world!".as_bytes().to_vec(), deserialized);
     }
 
-    fn serialize_blob_helper<B: SerdeBlob>(blob: B) -> String {
+    fn serialize_blob_helper<'de, B: SerdeBlob<'de>>(blob: B) -> String {
         let mut serialized_data = Vec::new();
         {
             let mut json_serializer = serde_json::Serializer::new(&mut serialized_data);
@@ -171,7 +171,7 @@ mod tests {
         String::from_utf8_lossy(&serialized_data).into_owned()
     }
 
-    fn deserialize_blob_helper<B: SerdeBlob>(s: &str) -> Result<B, <&mut serde_json::de::Deserializer<serde_json::de::StrRead> as serde::Deserializer>::Error> {
+    fn deserialize_blob_helper<'de, B: SerdeBlob<'de>>(s: &'de str) -> Result<B, <&mut serde_json::de::Deserializer<serde_json::de::StrRead> as serde::Deserializer>::Error> {
         let reader = serde_json::de::StrRead::new(s);
         let mut deserializer = serde_json::de::Deserializer::new(reader);
         B::deserialize_blob(&mut deserializer)
