@@ -67,7 +67,7 @@ impl <'de> SerdeBlob<'de> for Option<Vec<u8>> {
     fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
         where S: Serializer {
         match *self {
-            Some(ref vec) => serializer.serialize_some(vec),
+            Some(ref vec) => SerdeBlob::serialize_blob(vec, serializer),
             None => serializer.serialize_none(),
         }
     }
