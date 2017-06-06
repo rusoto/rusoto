@@ -1,6 +1,8 @@
 use std::collections::BTreeMap;
 use std::io::Write;
-use codegen::botocore::{Operation, Service};
+
+use ::Service;
+use codegen::botocore::{Operation};
 use super::{IoResult, FileWriter, error_type_name};
 
 /// Examines the error types described in the botocore definition for an operation
@@ -16,13 +18,13 @@ pub trait GenerateErrorTypes {
         // botocore presents errors as structs.  we filter those out in generate_types.
         let mut error_documentation = BTreeMap::new();
 
-        for (name, shape) in &service.shapes {
+        for (name, shape) in service.shapes().iter() {
             if shape.exception() && shape.documentation.is_some() {
                 error_documentation.insert(name, shape.documentation.as_ref().unwrap());
             }
         }
 
-        for (operation_name, operation) in &service.operations {
+        for (operation_name, operation) in service.operations().iter() {
             self.generate_error_type(writer, &operation_name, &operation, &error_documentation)?;
         }
         Ok(())

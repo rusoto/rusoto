@@ -3,7 +3,8 @@ use std::io::{Write, BufWriter};
 
 use inflector::Inflector;
 
-use codegen::botocore::{Service, Shape, ShapeType};
+use ::Service;
+use codegen::botocore::{ServiceDefinition, Shape, ShapeType};
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
 use self::rest_json::RestJsonGenerator;
@@ -62,7 +63,7 @@ pub fn generate_source(service: &Service, writer: &mut FileWriter) -> IoResult {
     // EC2 service protocol is similar to query but not the same.  Rusoto is able to generate Rust code
     // from the service definition through the same QueryGenerator, but botocore uses a special class.
     // See https://github.com/boto/botocore/blob/dff99fdf2666accf6b448aef7f03fe3d66dd38fa/botocore/serialize.py#L259-L266 .
-    match &service.metadata.protocol[..] {
+    match service.protocol() {
         "json" => generate(writer, service, JsonGenerator, JsonErrorTypes),
         "query" | "ec2" => generate(writer, service, QueryGenerator, XmlErrorTypes),
         "rest-json" => generate(writer, service, RestJsonGenerator, JsonErrorTypes),
@@ -124,11 +125,6 @@ fn generate<P, E>(writer: &mut FileWriter, service: &Service, protocol_generator
 fn generate_client<P>(writer: &mut FileWriter, service: &Service, protocol_generator: &P) -> IoResult
     where P: GenerateProtocol
 {
-    let service_name = match &service.metadata.service_abbreviation {
-        &Some(ref service_abbreviation) => service_abbreviation.as_str(),
-        &None => service.metadata.service_full_name.as_ref()
-    };
-
     // If the struct name is changed, the links in each service documentation should change.
     // See https://github.com/rusoto/rusoto/issues/519
     writeln!(writer,
@@ -136,7 +132,7 @@ fn generate_client<P>(writer: &mut FileWriter, service: &Service, protocol_gener
         pub trait {trait_name} {{
         ",
         trait_name = service.service_type_name(),
-        service_name = service_name
+        service_name = service.name()
     )?;
 
     protocol_generator.generate_method_signatures(writer, service)?;
@@ -163,7 +159,7 @@ fn generate_client<P>(writer: &mut FileWriter, service: &Service, protocol_gener
 
         impl<P, D> {trait_name} for {type_name}<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {{
         ",
-        service_name = service_name,
+        service_name = service.name(),
         type_name = service.client_type_name(),
         trait_name = service.service_type_name(),
     )?;
@@ -229,7 +225,7 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
 
     let (serialized_types, deserialized_types) = filter_types(service);
 
-    for (name, shape) in &service.shapes {
+    for (name, shape) in service.shapes().iter() {
             let type_name = mutate_type_name(&name);
 
             // We generate enums for error types, so no need to create model objects for them

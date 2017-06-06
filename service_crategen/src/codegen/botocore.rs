@@ -11,120 +11,26 @@ use codegen::serialization::{ShapesMap, ShapeName};
 const BOTOCORE_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/botocore/data/");
 
 #[derive(Debug, Deserialize)]
-pub struct Service {
+pub struct ServiceDefinition {
     pub documentation: Option<String>,
     pub examples: Option<BTreeMap<String, String>>,
     pub metadata: Metadata,
     pub operations: BTreeMap<String, Operation>,
     #[serde(deserialize_with="ShapesMap::deserialize_shapes_map")]
     pub shapes: BTreeMap<String, Shape>,
-    pub version: Option<String>,
+    pub version: Option<String>
 }
 
-impl Service {
-    pub fn load(name: &str, version: &str) -> Result<Self, Box<error::Error>> {
+impl ServiceDefinition {
+    pub fn load(name: &str, protocol_version: &str) -> Result<Self, Box<error::Error>> {
         let input_path = Path::new(BOTOCORE_DIR)
-            .join(format!("{}/{}/service-2.json", name, version));
+            .join(format!("{}/{}/service-2.json", name, protocol_version));
 
         let input_file = BufReader::new(File::open(&input_path)?);
 
-        let service: Service = serde_json::from_reader(input_file)?;
+        let service: ServiceDefinition = serde_json::from_reader(input_file)?;
 
         Ok(service)
-    }
-
-    pub fn client_type_name(&self) -> String {
-        format!("{}Client", self.service_type_name())
-    }
-
-    pub fn service_type_name(&self) -> &str {
-        match &self.metadata.service_full_name[..] {
-            "AWS Certificate Manager" => "Acm",
-            "AWS CloudFormation" => "CloudFormation",
-            "AWS CloudTrail" => "CloudTrail",
-            "AWS CodeCommit" => "CodeCommit",
-            "AWS CodeDeploy" => "CodeDeploy",
-            "AWS CodePipeline" => "CodePipeline",
-            "AWS Config" => "ConfigService",
-            "AWS Data Pipeline" => "DataPipeline",
-            "AWS Device Farm" => "DeviceFarm",
-            "AWS Direct Connect" => "DirectConnect",
-            "AWS Directory Service" => "DirectoryService",
-            "AWS Elastic Beanstalk" => "ElasticBeanstalk",
-            "AWS Identity and Access Management" => "Iam",
-            "AWS Import/Export" => "ImportExport",
-            "AWS IoT Data Plane" => "IotDataPlane",
-            "AWS IoT" => "Iot",
-            "AWS Key Management Service" => "Kms",
-            "AWS Lambda" => "Lambda",
-            "AWS Marketplace Commerce Analytics" => "MarketplaceCommerceAnalytics",
-            "AWS OpsWorks" => "OpsWorks",
-            "AWS Organizations" => "Organizations",
-            "AWS Security Token Service" => "Sts",
-            "AWS Storage Gateway" => "StorageGateway",
-            "AWS Support" => "Support",
-            "AWS WAF" => "Waf",
-            "Amazon API Gateway" => "ApiGateway",
-            "Amazon CloudFront" => "CloudFront",
-            "Amazon CloudHSM" => "CloudHsm",
-            "Amazon CloudSearch Domain" => "CloudSearchDomain",
-            "Amazon CloudSearch" => "CloudSearch",
-            "Amazon CloudWatch Events" => "CloudWatchEvents",
-            "Amazon CloudWatch Logs" => "CloudWatchLogs",
-            "Amazon CloudWatch" => "CloudWatch",
-            "Amazon Cognito Identity" => "CognitoIdentity",
-            "Amazon Cognito Sync" => "CognitoSync",
-            "Amazon DynamoDB Streams" => "DynamoDbStreams",
-            "Amazon DynamoDB" => "DynamoDb",
-            "Amazon EC2 Container Registry" => "Ecr",
-            "Amazon EC2 Container Service" => "Ecs",
-            "Amazon ElastiCache" => "ElastiCache",
-            "Amazon Elastic Compute Cloud" => "Ec2",
-            "Amazon Elastic File System" => "Efs",
-            "Amazon Elastic MapReduce" => "Emr",
-            "Amazon Elastic Transcoder" => "Ets",
-            "Amazon Elasticsearch Service" => "ElasticsearchService",
-            "Amazon GameLift" => "GameLift",
-            "Amazon Glacier" => "Glacier",
-            "Amazon Inspector" => "Inspector",
-            "Amazon Kinesis Firehose" => "KinesisFirehose",
-            "Amazon Kinesis" => "Kinesis",
-            "Amazon Machine Learning" => "MachineLearning",
-            "Amazon Redshift" => "Redshift",
-            "Amazon Relational Database Service" => "Rds",
-            "Amazon Route 53 Domains" => "Route53Domains",
-            "Amazon Route 53" => "Route53",
-            "Amazon Simple Email Service" => "Ses",
-            "Amazon Simple Notification Service" => "Sns",
-            "Amazon Simple Queue Service" => "Sqs",
-            "Amazon Simple Storage Service" => "S3",
-            "Amazon Simple Systems Manager (SSM)" => "Ssm",
-            "Amazon Simple Workflow Service" => "Swf",
-            "Amazon SimpleDB" => "SimpleDb",
-            "Amazon WorkSpaces" => "Workspaces",
-            "Auto Scaling" => "Autoscaling",
-            "Elastic Load Balancing" => "Elb",
-            name => panic!("Unknown service full name: {}", name),
-        }
-    }
-
-    pub fn shape_for_value<'a>(&'a self, value: &Value) -> Option<&'a Shape> {
-        self.shapes.get(&value.shape)
-    }
-
-    pub fn shape_for_member<'a>(&'a self, member: &Member) -> Option<&'a Shape> {
-        self.shapes.get(&member.shape)
-    }
-
-    pub fn shape_type_for_member<'a>(&'a self, member: &Member) -> Option<ShapeType> {
-        self.shapes.get(&member.shape).map(|ref shape| shape.shape_type)
-    }
-
-    pub fn signing_name(&self) -> String {
-        match self.metadata.signing_name {
-            Some(ref signing_name) => signing_name.to_string(),
-            None => self.metadata.endpoint_prefix.to_string(),
-        }
     }
 }
 

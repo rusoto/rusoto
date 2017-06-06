@@ -1,14 +1,15 @@
 use std::io::Write;
 use inflector::Inflector;
 
-use codegen::botocore::{Operation, Service};
+use ::Service;
+use codegen::botocore::Operation;
 use super::{GenerateProtocol, error_type_name, IoResult, FileWriter};
 
 pub struct JsonGenerator;
 
 impl GenerateProtocol for JsonGenerator {
     fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        for (operation_name, operation) in service.operations.iter() {
+        for (operation_name, operation) in service.operations().iter() {
             let output_type = operation.output_shape_or("()");
 
             writeln!(writer,"
@@ -25,7 +26,7 @@ impl GenerateProtocol for JsonGenerator {
     }
 
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        for (operation_name, operation) in service.operations.iter() {
+        for (operation_name, operation) in service.operations().iter() {
 
             let output_type = operation.output_shape_or("()");
 

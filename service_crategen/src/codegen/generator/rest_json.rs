@@ -2,19 +2,21 @@ use std::io::Write;
 use inflector::Inflector;
 use regex::{Captures, Regex};
 use hyper::status::StatusCode;
-use codegen::botocore::{Member, Operation, Service, Shape, ShapeType};
+
+use ::Service;
+use codegen::botocore::{Member, Operation, Shape, ShapeType};
 use super::{GenerateProtocol, error_type_name, FileWriter, IoResult};
 
 pub struct RestJsonGenerator;
 
 impl GenerateProtocol for RestJsonGenerator {
     fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        for (operation_name, operation) in service.operations.iter() {
+        for (operation_name, operation) in service.operations().iter() {
             let input_type = operation.input_shape();
             let output_type = operation.output_shape_or("()");
 
             // Retrieve the `Shape` for the input for this operation.
-            let input_shape = &service.shapes[input_type];
+            let input_shape = &service.shapes()[input_type];
 
             writeln!(writer,"
                 {documentation}
@@ -30,12 +32,12 @@ impl GenerateProtocol for RestJsonGenerator {
     }
 
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        for (operation_name, operation) in service.operations.iter() {
+        for (operation_name, operation) in service.operations().iter() {
             let input_type = operation.input_shape();
             let output_type = operation.output_shape_or("()");
 
             // Retrieve the `Shape` for the input for this operation.
-            let input_shape = &service.shapes[input_type];
+            let input_shape = &service.shapes()[input_type];
 
             // Construct a list of format strings which will be used to format
             // the request URI, mapping the input struct to the URI arguments.

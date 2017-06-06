@@ -1,5 +1,7 @@
 use inflector::Inflector;
-use codegen::botocore::{Service, Operation, Shape, ShapeType, Member};
+
+use ::Service;
+use codegen::botocore::{Operation, Shape, ShapeType, Member};
 
 pub fn generate_response_headers_parser(service: &Service,
                                         operation: &Operation)

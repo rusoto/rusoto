@@ -2,207 +2,248 @@
   "acm": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-12-08"
+    "protocolVersion": "2015-12-08",
+    "baseTypeName": "Acm"
   },
   "autoscaling": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2011-01-01"
+    "protocolVersion": "2011-01-01",
+    "baseTypeName": "Autoscaling"
   },
   "cloudformation": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2010-05-15"
+    "protocolVersion": "2010-05-15",
+    "baseTypeName": "CloudFormation"
   },
   "cloudfront": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2016-11-25"
+    "protocolVersion": "2016-11-25",
+    "baseTypeName": "CloudFront"
   },
   "cloudhsm": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2014-05-30"
+    "protocolVersion": "2014-05-30",
+    "baseTypeName": "CloudHsm"
   },
   "cloudsearch": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2013-01-01"
+    "protocolVersion": "2013-01-01",
+    "baseTypeName": "CloudSearch"
   },
   "cloudtrail": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2013-11-01"
+    "protocolVersion": "2013-11-01",
+    "baseTypeName": "CloudTrail"
   },
   "cloudwatch": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2010-08-01"
+    "protocolVersion": "2010-08-01",
+    "baseTypeName": "CloudWatch"
   },
   "codecommit": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-04-13"
+    "protocolVersion": "2015-04-13",
+    "baseTypeName": "CodeCommit"
   },
   "codedeploy": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2014-10-06"
+    "protocolVersion": "2014-10-06",
+    "baseTypeName": "CodeDeploy"
   },
   "codepipeline": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-07-09"
+    "protocolVersion": "2015-07-09",
+    "baseTypeName": "CodePipeline"
   },
   "cognito-identity": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2014-06-30"
+    "protocolVersion": "2014-06-30",
+    "baseTypeName": "CognitoIdentity"
   },
   "config": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2014-11-12"
+    "protocolVersion": "2014-11-12",
+    "baseTypeName": "Config"
   },
   "datapipeline": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2012-10-29"
+    "protocolVersion": "2012-10-29",
+    "baseTypeName": "DataPipeline"
   },
   "devicefarm": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-06-23"
+    "protocolVersion": "2015-06-23",
+    "baseTypeName": "DeviceFarm"
   },
   "directconnect": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2012-10-25"
+    "protocolVersion": "2012-10-25",
+    "baseTypeName": "DirectConnect"
   },
   "ds": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-04-16"
+    "protocolVersion": "2015-04-16",
+    "baseTypeName": "DirectoryService"
   },
   "dynamodb": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2012-08-10"
+    "protocolVersion": "2012-08-10",
+    "baseTypeName": "DynamoDb"
   },
   "dynamodbstreams": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2012-08-10"
+    "protocolVersion": "2012-08-10",
+    "baseTypeName": "DynamoDbStreams"
   },
   "ec2": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2016-11-15"
+    "protocolVersion": "2016-11-15",
+    "baseTypeName": "Ec2"
   },
   "ecr": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-09-21"
+    "protocolVersion": "2015-09-21",
+    "baseTypeName": "Ecr"
   },
   "ecs": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2014-11-13"
+    "protocolVersion": "2014-11-13",
+    "baseTypeName": "Ecs"
   },
   "elasticache": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-02-02"
+    "protocolVersion": "2015-02-02",
+    "baseTypeName": "Elasticache"
   },
   "elasticbeanstalk": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2010-12-01"
+    "protocolVersion": "2010-12-01",
+    "baseTypeName": "ElasticBeanstalk"
   },
   "elastictranscoder": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2012-09-25"
+    "protocolVersion": "2012-09-25",
+    "baseTypeName": "ElasticTranscoder"
   },
   "elb": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2012-06-01"
+    "protocolVersion": "2012-06-01",
+    "baseTypeName": "Elb"
   },
   "elbv2": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-12-01"
+    "protocolVersion": "2015-12-01",
+    "baseTypeName": "Elb"
   },
   "emr": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2009-03-31"
+    "protocolVersion": "2009-03-31",
+    "baseTypeName": "Emr"
   },
   "events": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-10-07"
+    "protocolVersion": "2015-10-07",
+    "baseTypeName": "CloudWatchEvents"
   },
   "firehose": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-08-04"
+    "protocolVersion": "2015-08-04",
+    "baseTypeName": "KinesisFirehose"
   },
   "iam": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2010-05-08"
+    "protocolVersion": "2010-05-08",
+    "baseTypeName": "Iam"
   },
   "importexport": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2010-06-01"
+    "protocolVersion": "2010-06-01",
+    "baseTypeName": "ImportExport"
   },
   "inspector": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2016-02-16"
+    "protocolVersion": "2016-02-16",
+    "baseTypeName": "Inspector"
   },
   "iot": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-05-28"
+    "protocolVersion": "2015-05-28",
+    "baseTypeName": "IoT"
   },
   "kinesis": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2013-12-02"
+    "protocolVersion": "2013-12-02",
+    "baseTypeName": "Kinesis"
   },
   "kms": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2014-11-01"
+    "protocolVersion": "2014-11-01",
+    "baseTypeName": "Kms"
   },
   "lambda": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-03-31"
+    "protocolVersion": "2015-03-31",
+    "baseTypeName": "Lambda"
   },
   "logs": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2014-03-28"
+    "protocolVersion": "2014-03-28",
+    "baseTypeName": "CloudWatchLogs"
   },
   "machinelearning": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2014-12-12"
+    "protocolVersion": "2014-12-12",
+    "baseTypeName": "MachineLearning"
   },
   "marketplacecommerceanalytics": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-07-01"
+    "protocolVersion": "2015-07-01",
+    "baseTypeName": "MarketplaceCommerceAnalytics"
   },
   "opsworks": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2013-02-18"
+    "protocolVersion": "2013-02-18",
+    "baseTypeName": "OpsWorks"
   },
   "organizations": {
     "version": "0.25.0",
@@ -212,22 +253,26 @@
   "rds": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2014-10-31"
+    "protocolVersion": "2014-10-31",
+    "baseTypeName": "Rds"
   },
   "redshift": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2012-12-01"
+    "protocolVersion": "2012-12-01",
+    "baseTypeName": "RedShift"
   },
   "route53": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2013-04-01"
+    "protocolVersion": "2013-04-01",
+    "baseTypeName": "Route53"
   },
   "route53domains": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2014-05-15"
+    "protocolVersion": "2014-05-15",
+    "baseTypeName": "Route53Domains"
   },
   "s3": {
     "version": "0.25.0",
@@ -236,37 +281,44 @@
     "customDependencies": {
       "md5": "0.3.2",
       "rustc-serialize": "0.3.19"
-    }
+    },
+    "baseTypeName": "S3"
   },
   "sdb": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2009-04-15"
+    "protocolVersion": "2009-04-15",
+    "baseTypeName": "SimpleDb"
   },
   "ses": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2010-12-01"
+    "protocolVersion": "2010-12-01",
+    "baseTypeName": "Ses"
   },
   "sns": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2010-03-31"
+    "protocolVersion": "2010-03-31",
+    "baseTypeName": "Sns"
   },
   "sqs": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2012-11-05"
+    "protocolVersion": "2012-11-05",
+    "baseTypeName": "Sqs"
   },
   "ssm": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2014-11-06"
+    "protocolVersion": "2014-11-06",
+    "baseTypeName": "Ssm"
   },
   "storagegateway": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2013-06-30"
+    "protocolVersion": "2013-06-30",
+    "baseTypeName": "StorageGateway"
   },
   "sts": {
     "version": "0.25.0",
@@ -274,21 +326,25 @@
     "protocolVersion": "2011-06-15",
     "customDependencies": {
       "chrono": "0.2.25"
-    }
+    },
+    "baseTypeName": "Sts"
   },
   "swf": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2012-01-25"
+    "protocolVersion": "2012-01-25",
+    "baseTypeName": "Swf"
   },
   "waf": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-08-24"
+    "protocolVersion": "2015-08-24",
+    "baseTypeName": "Waf"
   },
   "workspaces": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2015-04-08"
+    "protocolVersion": "2015-04-08",
+    "baseTypeName": "Workspaces"
   }
 }
