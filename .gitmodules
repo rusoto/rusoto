@@ -1,3 +1,3 @@
-[submodule "service_crategen/codegen/botocore"]
-	path = service_crategen/codegen/botocore
+[submodule "service_crategen/botocore"]
+	path = service_crategen/botocore
 	url = https://github.com/boto/botocore.git

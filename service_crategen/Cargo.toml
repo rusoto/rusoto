@@ -1,17 +1,33 @@
 [package]
-authors = ["Matt Jones <mthjones@gmail.com>"]
+authors = [
+    "Matt Jones <mthjones@gmail.com>",
+    "Anthony DiMarco <ocramida@gmail.com>",
+    "Jimmy Cuadra <jimmy@jimmycuadra.com>",
+    "Matthew Mayer <matthewkmayer@gmail.com>",
+    "Nikita Pekin <contact@nikitapek.in>"
+]
 description = "Generates crates for AWS services for the rusoto project"
 name = "rusoto_service_crategen"
+license = "MIT"
 version = "0.1.0"
 
 [dependencies]
+Inflector = "0.7.0"
 clap = "2.23.3"
+hyper = "0.10.0"
+lazy_static = "0.2.1"
 rayon = "0.7.0"
+regex = "0.2.1"
+rustfmt = "0.8.4"
 serde = "1.0.0"
 serde_derive = "1.0.0"
 serde_json = "1.0.0"
 toml = "0.4.0"
-rustfmt = "0.8.4"
 
-[dependencies.rusoto_codegen]
-path = "codegen"
+[dependencies.clippy]
+optional = true
+version = "0.0"
+
+[features]
+nightly-testing = ["clippy"]
+unstable = []

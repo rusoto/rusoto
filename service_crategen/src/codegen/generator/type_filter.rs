@@ -1,5 +1,5 @@
 use std::collections::BTreeSet;
-use botocore::{Service, ShapeType, Shape};
+use codegen::botocore::{Service, ShapeType, Shape};
 use super::mutate_type_name;
 
 pub fn filter_types(service: &Service) -> (BTreeSet<String>, BTreeSet<String>) {

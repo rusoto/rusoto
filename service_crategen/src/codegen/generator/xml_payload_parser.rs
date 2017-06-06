@@ -1,6 +1,6 @@
 use inflector::Inflector;
 
-use botocore::{Member, Operation, Service, Shape, ShapeType};
+use codegen::botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::{generate_field_name, mutate_type_name};
 
 pub fn generate_struct_attributes(_deserialized: bool) -> String {
